@@ -1,0 +1,2 @@
+TRUNCATE TABLE infrastructure_network.infrastructure_network_types CASCADE;
+TRUNCATE TABLE infrastructure_network.infrastructure_links CASCADE;

@@ -15,13 +15,38 @@
     <description>Import legacy data from Jore 3</description>
     <properties>
         <java.version>11</java.version>
+
+        <!-- Library versions -->
+        <guava.version>30.1-jre</guava.version>
+        <vavr.version>0.10.3</vavr.version>
+        <immutables.version>2.8.2</immutables.version>
+        <geotools.version>25-RC</geotools.version>
+        <postgresql.version>42.2.19</postgresql.version>
+
+        <!-- Maven plugins -->
+        <maven-properties.plugin.version>1.0.0</maven-properties.plugin.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>osgeo</id>
+            <name>OSGeo Release Repository</name>
+            <url>https://repo.osgeo.org/repository/release/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-batch</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -32,23 +57,322 @@
             <artifactId>mssql-jdbc</artifactId>
             <scope>runtime</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.batch</groupId>
             <artifactId>spring-batch-test</artifactId>
             <scope>test</scope>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+            <version>${vavr.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.immutables</groupId>
+            <artifactId>value</artifactId>
+            <version>${immutables.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-main</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-referencing</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-epsg-wkt</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+
+        <!-- If possible, replace this with an actual MS SQL server running in docker -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Flyway migrations are only run through Java during local development! -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+
+        <!--jOOQ-->
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+        </dependency>
+
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <build.profile.id>dev</build.profile.id>
+                <build.property.file>profiles/dev/config.properties</build.property.file>
+            </properties>
+            <build>
+                <filters>
+                    <filter>${build.property.file}</filter>
+                </filters>
+            </build>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+
     <build>
+
+        <resources>
+            <!-- Resolve @some.key@ placeholders-->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <!-- Only copy other resources -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/*.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <testResources>
+            <!-- Resolve @some.key@ placeholders-->
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </testResource>
+            <!-- Only copy other resources -->
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/*.properties</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- Read properties files -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>${maven-properties.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>${build.property.file}</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Run migrations against the test database -->
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+
+                <configuration>
+                    <driver>${init.db.driver}</driver>
+                    <url>${init.db.url}</url>
+                    <user>${init.db.username}</user>
+                    <password>${init.db.password}</password>
+                </configuration>
+
+                <executions>
+                    <!-- Flyway doesn't seem to have a "drop schemas" functionality so let's do it manually -->
+                    <execution>
+                        <id>flyway-clean</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Exclude the public schema (at least for now), because it contains -->
+                            <schemas>
+                                <schema>infrastructure_network</schema>
+                            </schemas>
+                            <initSql>
+                                DROP SCHEMA IF EXISTS infrastructure_network CASCADE;
+                                DROP TABLE IF EXISTS public.flyway_schema_history CASCADE;
+                            </initSql>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>flyway-migrate</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <!-- from spring-boot-dependencies-<VERSION>.RELEASE.pom -->
+                        <version>${postgresql.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <!-- jOOQ generator scans the empty DB to detect the tables created by
+                 the liquibase migration -->
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <version>${jooq.version}</version>
+
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <!-- from spring-boot-dependencies-<VERSION>.RELEASE.pom -->
+                        <version>${postgresql.version}</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+                    <jdbc>
+                        <driver>${init.db.driver}</driver>
+                        <url>${init.db.url}</url>
+                        <user>${init.db.username}</user>
+                        <password>${init.db.password}</password>
+                    </jdbc>
+                    <generator>
+                        <name>org.jooq.codegen.JavaGenerator</name>
+                        <database>
+                            <name>${jooq.generator.db.dialect}</name>
+                            <includes>infrastructure_network.*</includes>
+                            <excludes>
+                                (_*)ST_.*
+                                | DATABASECHANGELOG.*
+                                | FLYWAY_SCHEMA_HISTORY.*
+                                | PGP_.*
+                                | SPRING.*
+                                | SKEYS
+                                | SVALS
+                                | EACH
+                                | PUBLIC.*
+                                | TIGER.*
+                                | TOPOLOGY.*
+                            </excludes>
+                            <!-- <inputSchema>${jooq.generator.input.schema}</inputSchema> -->
+                            <includeTables>true</includeTables>
+                            <includeInvisibleColumns>false</includeInvisibleColumns>
+                            <includeEmbeddables>false</includeEmbeddables>
+                            <includeRoutines>false</includeRoutines>
+                            <includePackages>false</includePackages>
+                            <includePackageRoutines>false</includePackageRoutines>
+                            <includePackageUDTs>false</includePackageUDTs>
+                            <includePackageConstants>false</includePackageConstants>
+                            <includeUDTs>false</includeUDTs>
+                            <includeDomains>false</includeDomains>
+                            <includeSequences>true</includeSequences>
+                            <includePrimaryKeys>true</includePrimaryKeys>
+                            <includeUniqueKeys>true</includeUniqueKeys>
+                            <includeForeignKeys>true</includeForeignKeys>
+                            <includeCheckConstraints>false</includeCheckConstraints>
+                            <includeSystemCheckConstraints>false</includeSystemCheckConstraints>
+                            <includeIndexes>false</includeIndexes>
+                            <includeSystemIndexes>false</includeSystemIndexes>
+                            <forcedTypes>
+                                <forcedType>
+                                    <userType>org.locationtech.jts.geom.LineString</userType>
+                                    <converter>fi.hsl.jore.importer.config.jooq.converter.geometry.LineStringBinding</converter>
+                                    <includeExpression>.*\.infrastructure_link_geog</includeExpression>
+                                </forcedType>
+                            </forcedTypes>
+                        </database>
+                        <target>
+                            <packageName>fi.hsl.jore.importer.jooq</packageName>
+                            <directory>${project.build.directory}/generated-sources/jooq</directory>
+                        </target>
+                    </generator>
+                </configuration>
             </plugin>
         </plugins>
     </build>
