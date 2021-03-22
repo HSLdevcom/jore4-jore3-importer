@@ -47,7 +47,7 @@ fi
 if [[ ${COMMAND} == "recreate" ]]; then
   docker-compose -f ./docker/docker-compose.dev.yml -f ./docker/docker-compose.test.yml stop
   docker-compose -f ./docker/docker-compose.dev.yml -f ./docker/docker-compose.test.yml rm -f
-  docker-compose -f ./docker/docker-compose.dev.yml -f ./docker/docker-compose.test.yml up -d
+  docker-compose -f ./docker/docker-compose.dev.yml -f ./docker/docker-compose.test.yml up --build -d
   exit 0
 fi
 

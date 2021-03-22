@@ -128,13 +128,6 @@
             <version>${geotools.version}</version>
         </dependency>
 
-        <!-- If possible, replace this with an actual MS SQL server running in docker -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <!-- Flyway migrations are only run through Java during local development! -->
         <dependency>
             <groupId>org.flywaydb</groupId>

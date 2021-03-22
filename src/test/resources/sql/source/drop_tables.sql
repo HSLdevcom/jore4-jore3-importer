@@ -1,0 +1,2 @@
+TRUNCATE TABLE jr_linkki
+TRUNCATE TABLE jr_solmu
