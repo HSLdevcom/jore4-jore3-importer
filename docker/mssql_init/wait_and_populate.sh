@@ -2,9 +2,13 @@
 
 set -eu
 
-echo "Waiting 15s for MS SQL to start.."
+echo "Waiting for MS SQL to start.."
 
-sleep 15s
+/usr/src/app/wait-for-it.sh --host=localhost --port=1433 --timeout=30
+
+# We must wait a few additional seconds, otherwise login might fail
+# with "Error: 18456, Severity: 14, State: 7."
+sleep 5s
 
 echo "Initialize the MS SQL database contents.."
 
