@@ -11,6 +11,7 @@ ENV ACCEPT_EULA Y
 ENV MSSQL_PID Developer
 
 COPY ./mssql_init/ /usr/src/app
+COPY ./wait-for-it.sh /usr/src/app/
 
 RUN chmod +x /usr/src/app/wait_and_populate.sh
 
