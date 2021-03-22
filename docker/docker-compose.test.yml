@@ -11,3 +11,11 @@ services:
       - POSTGRES_PASSWORD=testdestinationdb
     ports:
       - "17000:5432"
+
+  importer-test-source-database:
+    container_name: importer-test-source-database
+    build:
+      context: .
+      dockerfile: Dockerfile_mssql
+    ports:
+      - "17001:1433"
