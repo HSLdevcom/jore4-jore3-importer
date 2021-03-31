@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 public class NodeRepositoryTest extends IntegrationTest {
 
@@ -60,7 +61,7 @@ public class NodeRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    public void upsertNode() {
+    public void upsertNodeWithNewGeometry() {
         assertThat("repository should be empty in the beginning",
                    nodeRepository.empty(),
                    is(true));
@@ -108,8 +109,66 @@ public class NodeRepositoryTest extends IntegrationTest {
         assertThat("Node id should not change",
                    keys.toSet(),
                    is(keys2.toSet()));
-        assertThat("Updated node should be identical to the original node, except for the geometry",
+        // Updated node should be identical to the original node..
+        assertThat(updatedNode.pk(),
+                   is(originalNode.pk()));
+        assertThat(updatedNode.externalId(),
+                   is(originalNode.externalId()));
+        // .. except for the geometry and the system time
+        assertThat(updatedNode.location(),
+                   is(not(originalNode.location())));
+        assertThat(updatedNode.systemTime(),
+                   is(not(originalNode.systemTime())));
+    }
+
+    @Test
+    public void upsertNodeWithSameGeometry() {
+        assertThat("repository should be empty in the beginning",
+                   nodeRepository.empty(),
+                   is(true));
+
+        final ExternalId extId = ExternalId.of("a");
+        final PersistableNode nodeToInsert = PersistableNode.of(extId, NodeType.CROSSROADS, GEOM);
+
+        final List<NodePK> keys = nodeRepository.upsert(List.of(
+                nodeToInsert
+        ));
+
+        final List<Node> nodesFromDb = nodeRepository.findAll();
+
+        assertThat("Repository should contain a single node",
+                   nodesFromDb.size(),
+                   is(1));
+
+        final Node originalNode = nodesFromDb.get(0);
+
+        assertThat("Node should have the initial geometry",
+                   GEOM,
+                   is(originalNode.location()));
+        assertThat("Upsert and find() should return the same keys",
+                   nodesFromDb.map(IHasPK::pk).toSet(),
+                   is(keys.toSet()));
+
+        final List<NodePK> keys2 = nodeRepository.upsert(List.of(
+                nodeToInsert
+        ));
+
+        final List<Node> nodesFromDb2 = nodeRepository.findAll();
+
+        assertThat("Repository should contain a single node",
+                   nodesFromDb.size(),
+                   is(1));
+
+        final Node updatedNode = nodesFromDb2.get(0);
+
+        assertThat("Upsert and find() should return the same keys",
+                   nodesFromDb2.map(IHasPK::pk).toSet(),
+                   is(keys2.toSet()));
+        assertThat("Node id should not change",
+                   keys.toSet(),
+                   is(keys2.toSet()));
+        assertThat("Updated node should be identical to the original node",
                    updatedNode,
-                   is(originalNode.withLocation(GEOM2)));
+                   is(originalNode));
     }
 }

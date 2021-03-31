@@ -9,7 +9,9 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeRepository;
 import fi.hsl.jore.importer.feature.jore.util.JoreGeometryUtil;
 import io.vavr.collection.List;
+import io.vavr.control.Option;
 import org.junit.jupiter.api.Test;
+import org.locationtech.jts.geom.Point;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -53,11 +55,12 @@ public class ImportNodesStepTest extends BatchIntegrationTest {
                    is(true));
 
         final ExternalId extId = ExternalId.of("d");
+        final Point originalPoint = JoreGeometryUtil.fromDbCoordinates(61.4463974,
+                                                                       23.8525307);
         final List<NodePK> nodeIds = nodeRepository.upsert(List.of(
                 PersistableNode.of(extId,
                                    NodeType.CROSSROADS,
-                                   JoreGeometryUtil.fromDbCoordinates(61.4463974,
-                                                                      23.8525307))
+                                   originalPoint)
         ));
         final NodePK targetId = nodeIds.get(0);
 
@@ -77,6 +80,21 @@ public class ImportNodesStepTest extends BatchIntegrationTest {
                    updated.location(),
                    is(JoreGeometryUtil.fromDbCoordinates(10,
                                                          10)));
+        assertThat(updated.alive(),
+                   is(true));
+
+        final Option<Node> maybeOldNode = nodeRepository.findFromHistory()
+                                                        .find(node -> node.externalId().equals(extId));
+        assertThat("Earlier version is still accessible",
+                   maybeOldNode.isDefined(),
+                   is(true));
+        final Node oldNode = maybeOldNode.get();
+
+        assertThat(oldNode.location(),
+                   is(originalPoint));
+        assertThat("Earlier version is no longer alive",
+                   oldNode.alive(),
+                   is(false));
     }
 
 }
