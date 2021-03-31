@@ -6,6 +6,7 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodesWithHistory;
 import io.vavr.collection.List;
 import org.jooq.DSLContext;
 import org.locationtech.jts.geom.Point;
@@ -24,6 +25,7 @@ import java.util.UUID;
 public class NodeRepository implements INodeRepository {
 
     private static final InfrastructureNodes NODE = InfrastructureNodes.INFRASTRUCTURE_NODES;
+    private static final InfrastructureNodesWithHistory HISTORY_VIEW = InfrastructureNodesWithHistory.INFRASTRUCTURE_NODES_WITH_HISTORY;
 
     private final DSLContext db;
 
@@ -116,7 +118,32 @@ public class NodeRepository implements INodeRepository {
 
     @Override
     @Transactional(readOnly = true)
+    public int countHistory() {
+        //noinspection ConstantConditions
+        return db.selectCount()
+                 .from(HISTORY_VIEW)
+                 .fetchOne(0, int.class);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public boolean empty() {
         return count() == 0;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean emptyHistory() {
+        return countHistory() == 0;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Node> findFromHistory() {
+        return db.selectFrom(HISTORY_VIEW)
+                 .orderBy(HISTORY_VIEW.INFRASTRUCTURE_NODE_SYS_PERIOD.asc())
+                 .fetchStream()
+                 .map(Node::of)
+                 .collect(List.collector());
     }
 }

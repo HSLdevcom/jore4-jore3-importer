@@ -9,6 +9,7 @@ import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkReposito
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.util.GeometryUtil;
 import io.vavr.collection.List;
+import io.vavr.control.Option;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
@@ -87,6 +88,22 @@ public class ImportLinksStepTest extends BatchIntegrationTest {
                            new Coordinate(10, 10, 0),
                            new Coordinate(10, 10, 0)
                    )));
+
+        assertThat(updated.alive(),
+                   is(true));
+
+        final Option<Link> maybeOldLink = linkRepository.findFromHistory()
+                                                        .find(link -> link.externalId().equals(extId));
+        assertThat("Earlier version is still accessible",
+                   maybeOldLink.isDefined(),
+                   is(true));
+        final Link oldLink = maybeOldLink.get();
+
+        assertThat(oldLink.geometry(),
+                   is(GEOM));
+        assertThat("Earlier version is no longer alive",
+                   oldLink.alive(),
+                   is(false));
     }
 
 }

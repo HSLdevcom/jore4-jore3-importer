@@ -7,6 +7,7 @@ import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.PersistableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinks;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinksWithHistory;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureLinksRecord;
 import io.vavr.collection.List;
 import org.jooq.BatchBindStep;
@@ -28,6 +29,7 @@ public class LinkRepository
         implements ILinkRepository {
 
     private static final InfrastructureLinks LINKS = InfrastructureLinks.INFRASTRUCTURE_LINKS;
+    private static final InfrastructureLinksWithHistory HISTORY_VIEW = InfrastructureLinksWithHistory.INFRASTRUCTURE_LINKS_WITH_HISTORY;
 
     private final DSLContext db;
 
@@ -148,7 +150,32 @@ public class LinkRepository
 
     @Override
     @Transactional(readOnly = true)
+    public int countHistory() {
+        //noinspection ConstantConditions
+        return db.selectCount()
+                 .from(HISTORY_VIEW)
+                 .fetchOne(0, int.class);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public boolean empty() {
         return count() == 0;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean emptyHistory() {
+        return countHistory() == 0;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Link> findFromHistory() {
+        return db.selectFrom(HISTORY_VIEW)
+                 .orderBy(HISTORY_VIEW.INFRASTRUCTURE_LINK_SYS_PERIOD.asc())
+                 .fetchStream()
+                 .map(Link::of)
+                 .collect(List.collector());
     }
 }
