@@ -28,7 +28,37 @@ JORE_IMPORTER_MIGRATE=true \
 
 ## Triggering the batch job
 
-At the moment the batch job triggers automatically once the application starts. Later, mechanisms for manually triggering the batch job over e.g. HTTP will be added.
+The import can be triggered using a HTTP API. The `POST /job/import/start` endpoint will start the job and return its status. If a previous job instance was already running, a new job is not started and the return value will reflect the status of the running job.
+
+```shell
+$ curl -X POST http://localhost:8080/job/import/start/
+{"id":0,"batchStatus":"STARTING","exitCode":"UNKNOWN","exitDescription":null,"startTime":null,"endTime":null}
+```
+
+### Querying the status of the latest import
+
+The `GET /job/import/status` endpoint returns information about the latest import. If no import has been performed, a HTTP 204 status is returned.
+
+While the import is running:
+
+```shell
+$ curl http://localhost:8080/job/import/status/
+{"id":5,"batchStatus":"STARTED","exitCode":"UNKNOWN","exitDescription":null,"startTime":"2021-04-09T08:35:51.560Z","endTime":null}
+```
+
+After the import is complete:
+
+```shell
+$ curl http://localhost:8080/job/import/status/
+{"id":5,"batchStatus":"COMPLETED","exitCode":"COMPLETED","exitDescription":null,"startTime":"2021-04-09T08:35:51.560Z","endTime":"2021-04-09T08:36:11.308Z"}
+```
+
+If an error occurs:
+
+```shell
+$ curl  http://localhost:8080/job/import/status/
+{"id":5,"batchStatus":"FAILED","exitCode":"FAILED","exitDescription":"<here's a really long Java stack trace>","startTime":"2021-04-09T08:39:47.698Z","endTime":"2021-04-09T08:41:17.761Z"}
+```
 
 ## Import job(s)
 
