@@ -29,11 +29,13 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration
 public class JobConfig extends BatchConfig {
 
+    public static final String JOB_NAME = "importJoreJob";
+
     @Bean
     public Job importJob(final Step importNodesStep,
                          final Step importLinksStep,
                          final Step importLinkPointsStep) {
-        return jobs.get("importJoreJob")
+        return jobs.get(JOB_NAME)
                    .start(importNodesStep)
                    .next(importLinksStep)
                    .next(importLinkPointsStep)
@@ -44,6 +46,7 @@ public class JobConfig extends BatchConfig {
     public Step importNodesStep(final NodeReader nodeReader,
                                 final INodeRepository nodeRepository) {
         return steps.get("importNodesStep")
+                    .allowStartIfComplete(true)
                     .<JrNode, PersistableNode>chunk(NodeWriter.BLOCK_SIZE)
                     .reader(nodeReader.build())
                     .processor(new NodeProcessor())
@@ -55,6 +58,7 @@ public class JobConfig extends BatchConfig {
     public Step importLinksStep(final LinkRowReader linkReader,
                                 final ILinkRepository linkRepository) {
         return steps.get("importLinksStep")
+                    .allowStartIfComplete(true)
                     .<LinkRow, PersistableLink>chunk(LinkWriter.BLOCK_SIZE)
                     .reader(linkReader.build())
                     .processor(new LinkRowProcessor())
@@ -66,6 +70,7 @@ public class JobConfig extends BatchConfig {
     public Step importLinkPointsStep(final PointReader pointReader,
                                      final ILinkRepository linkRepository) {
         return steps.get("importLinkPointsStep")
+                    .allowStartIfComplete(true)
                     .<LinkPoints, LinkGeometry>chunk(LinkGeometryWriter.BLOCK_SIZE)
                     .reader(new LinkPointReader(pointReader.build()))
                     .processor(new LinkPointProcessor())
