@@ -2,13 +2,16 @@ package fi.hsl.jore.importer.feature.infrastructure.link.repository;
 
 import com.google.common.collect.Lists;
 import fi.hsl.jore.importer.config.jooq.converter.geometry.LineStringConverter;
+import fi.hsl.jore.importer.feature.batch.point.dto.LinkGeometry;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.PersistableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinks;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureLinksRecord;
 import io.vavr.collection.List;
+import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.locationtech.jts.geom.LineString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.Deque;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,7 +41,8 @@ public class LinkRepository
     public LinkPK insertLink(final PersistableLink link) {
         final InfrastructureLinksRecord record = db.newRecord(LINKS);
 
-        record.setInfrastructureNetworkTypeId(link.networkTypePk().value());
+        record.setInfrastructureLinkExtId(link.externalId().value());
+        record.setInfrastructureNetworkType(link.networkType().label());
         record.setInfrastructureLinkGeog(link.geometry());
 
         record.store();
@@ -49,11 +52,22 @@ public class LinkRepository
 
     @Override
     @Transactional
-    public List<LinkPK> insertLinks(final Iterable<? extends PersistableLink> links) {
+    public List<LinkPK> upsert(final Iterable<? extends PersistableLink> links) {
         final String sql = db.insertInto(LINKS,
-                                         LINKS.INFRASTRUCTURE_NETWORK_TYPE_ID,
+                                         LINKS.INFRASTRUCTURE_LINK_EXT_ID,
+                                         LINKS.INFRASTRUCTURE_NETWORK_TYPE,
                                          LINKS.INFRASTRUCTURE_LINK_GEOG)
-                             .values((UUID) null, null)
+                             // parameters 1-3
+                             .values((String) null, null, null)
+                             .onConflict(LINKS.INFRASTRUCTURE_LINK_EXT_ID,
+                                         LINKS.INFRASTRUCTURE_NETWORK_TYPE)
+                             .doUpdate()
+                             // parameter 4
+                             .set(LINKS.INFRASTRUCTURE_LINK_GEOG, (LineString) null)
+                             // parameter 5
+                             .where(LINKS.INFRASTRUCTURE_LINK_EXT_ID.eq((String) null)
+                                                                    // parameter 6
+                                                                    .and(LINKS.INFRASTRUCTURE_NETWORK_TYPE.eq((String) null)))
                              .returningResult(LINKS.INFRASTRUCTURE_LINK_ID)
                              .getSQL();
 
@@ -64,8 +78,17 @@ public class LinkRepository
         db.connection(conn -> {
             try (final PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 for (final PersistableLink link : links) {
-                    stmt.setObject(1, link.networkTypePk().value());
-                    stmt.setObject(2, LineStringConverter.INSTANCE.to(link.geometry()), Types.OTHER);
+                    final Object geom = LineStringConverter.INSTANCE.to(link.geometry());
+                    // The raw sql statement produced by jOOQ contains '?' placeholders (e.g. "VALUES (?, ?, ?::geometry)"),
+                    // which we must populate with the corresponding values. Because they are anonymous and positional,
+                    // we may need to submit the same value multiple times (once for each placeholder).
+                    stmt.setString(1, link.externalId().value());
+                    stmt.setString(2, link.networkType().label());
+                    stmt.setObject(3, geom);
+                    stmt.setObject(4, geom);
+                    stmt.setString(5, link.externalId().value());
+                    stmt.setString(6, link.networkType().label());
+
                     stmt.addBatch();
                 }
 
@@ -99,5 +122,33 @@ public class LinkRepository
                  .fetchStream()
                  .map(Link::of)
                  .collect(List.collector());
+    }
+
+    @Override
+    @Transactional
+    public void updateLinkPoints(final Iterable<? extends LinkGeometry> geometries) {
+        final BatchBindStep batch = db.batch(db.update(LINKS)
+                                               .set(LINKS.INFRASTRUCTURE_LINK_POINTS, (LineString) null)
+                                               .where(LINKS.INFRASTRUCTURE_LINK_EXT_ID.eq((String) null))
+                                               .and(LINKS.INFRASTRUCTURE_NETWORK_TYPE.eq((String) null)));
+        geometries.forEach(linkGeometry -> batch.bind(linkGeometry.geometry(),
+                                                      linkGeometry.externalId().value(),
+                                                      linkGeometry.networkType().label()));
+        batch.execute();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public int count() {
+        //noinspection ConstantConditions
+        return db.selectCount()
+                 .from(LINKS)
+                 .fetchOne(0, int.class);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean empty() {
+        return count() == 0;
     }
 }

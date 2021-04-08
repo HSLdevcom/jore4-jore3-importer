@@ -1,14 +1,11 @@
 package fi.hsl.jore.importer.feature.infrastructure.network_type.repository;
 
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
-import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.generated.NetworkTypePK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNetworkTypes;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Objects;
 
 @Repository
 public class NetworkTypeRepository
@@ -24,20 +21,11 @@ public class NetworkTypeRepository
     }
 
     @Transactional
-    public NetworkTypePK findOrCreate(final NetworkType type) {
+    public void createIfMissing(final NetworkType type) {
         db.insertInto(TYPES)
-          .columns(TYPES.INFRASTRUCTURE_NETWORK_TYPE_NAME)
-          .values(type.getLabel())
+          .columns(TYPES.INFRASTRUCTURE_NETWORK_TYPE)
+          .values(type.label())
           .onConflictDoNothing()
           .execute();
-
-        return NetworkTypePK.of(
-                Objects.requireNonNull(
-                        db.select(TYPES.INFRASTRUCTURE_NETWORK_TYPE_ID)
-                          .from(TYPES)
-                          .where(TYPES.INFRASTRUCTURE_NETWORK_TYPE_NAME.eq(type.getLabel()))
-                          .fetchOne(TYPES.INFRASTRUCTURE_NETWORK_TYPE_ID)
-                )
-        );
     }
 }

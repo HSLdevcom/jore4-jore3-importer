@@ -1,0 +1,47 @@
+@startuml
+
+control importLinkPointsStep as step
+participant LinkPointReader as linkpoint_reader
+participant PointReader as point_reader
+database SourceDb as sdb
+participant LinkPointProcessor as processor
+participant LinkGeometryWriter as writer
+database DestinationDb as ddb
+
+group Read and process chunk of N elements
+
+    step -> linkpoint_reader : //read()//
+    activate linkpoint_reader
+
+    group Repeat until all points for a link are read
+        linkpoint_reader -> point_reader : //read()//
+
+        activate point_reader
+
+        point_reader -> sdb : ""import_points.sql""
+        point_reader <- sdb : ""ResultSet""
+
+        linkpoint_reader <-- point_reader : ""PointRow"" | ""null""
+        deactivate point_reader
+
+        linkpoint_reader -> linkpoint_reader : store to ""ReaderState""
+    end
+
+    step <- linkpoint_reader :""LinkPoints"" | "null"
+    deactivate linkpoint_reader
+
+    step -> processor : //process(//""LinkPoints""//)//
+    activate processor
+    processor -> processor : build geometry
+    step <-- processor : ""LinkGeometry""
+    deactivate processor
+
+end
+
+step -> writer : //write(//""Chunk<LinkGeometry>""//)//
+activate writer
+writer -> ddb : JDBC batch update
+step <-- writer
+deactivate writer
+
+@enduml

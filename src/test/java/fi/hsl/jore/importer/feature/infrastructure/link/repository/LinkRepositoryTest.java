@@ -1,13 +1,12 @@
 package fi.hsl.jore.importer.feature.infrastructure.link.repository;
 
 import fi.hsl.jore.importer.IntegrationTest;
+import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.PersistableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
-import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.generated.NetworkTypePK;
-import fi.hsl.jore.importer.feature.infrastructure.network_type.repository.INetworkTypeRepository;
 import fi.hsl.jore.importer.feature.util.GeometryUtil;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,6 @@ import static org.hamcrest.Matchers.is;
 
 public class LinkRepositoryTest extends IntegrationTest {
 
-    private final INetworkTypeRepository networkTypeRepository;
     private final ILinkRepository linkRepository;
 
     private static final LineString GEOM = GeometryUtil.toLineString(
@@ -35,19 +33,15 @@ public class LinkRepositoryTest extends IntegrationTest {
             new Coordinate(60.158896355, 24.935549266, 0)
     );
 
-    public LinkRepositoryTest(@Autowired final INetworkTypeRepository networkTypeRepository,
-                              @Autowired final ILinkRepository linkRepository) {
-        this.networkTypeRepository = networkTypeRepository;
+    public LinkRepositoryTest(@Autowired final ILinkRepository linkRepository) {
         this.linkRepository = linkRepository;
     }
 
     @Test
     public void insertSingleLink() {
-        final NetworkTypePK typeId = networkTypeRepository.findOrCreate(NetworkType.BUS);
+        final PersistableLink link = PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, GEOM);
 
-        final PersistableLink link = PersistableLink.of(typeId, GEOM);
-
-        assertThat(linkRepository.findAll().isEmpty(),
+        assertThat(linkRepository.empty(),
                    is(true));
 
         final LinkPK linkId = linkRepository.insertLink(link);
@@ -64,14 +58,12 @@ public class LinkRepositoryTest extends IntegrationTest {
 
     @Test
     public void insertMultipleLinks() {
-        final NetworkTypePK typeId = networkTypeRepository.findOrCreate(NetworkType.BUS);
-
-        assertThat(linkRepository.findAll().isEmpty(),
+        assertThat(linkRepository.empty(),
                    is(true));
 
-        final List<LinkPK> keys = linkRepository.insertLinks(List.of(
-                PersistableLink.of(typeId, GEOM),
-                PersistableLink.of(typeId, GEOM2)
+        final List<LinkPK> keys = linkRepository.upsert(List.of(
+                PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, GEOM),
+                PersistableLink.of(ExternalId.of("b"), NetworkType.ROAD, GEOM2)
         ));
 
         final List<Link> linksFromDb = linkRepository.findAll();

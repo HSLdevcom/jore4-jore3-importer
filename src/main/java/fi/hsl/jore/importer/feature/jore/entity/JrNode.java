@@ -55,14 +55,14 @@ public interface JrNode
     }
 
     static JrNode of(final NodeId nodeId,
-                     final NodeType type,
+                     final NodeType nodeType,
                      final double latitude,
                      final double longitude,
                      final double projectedLatitude,
                      final double projectedLongitude) {
         return ImmutableJrNode.builder()
                               .nodeId(nodeId)
-                              .nodeType(type)
+                              .nodeType(nodeType)
                               .latitude(latitude)
                               .longitude(longitude)
                               .projectedLatitude(projectedLatitude)

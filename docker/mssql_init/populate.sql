@@ -68,3 +68,25 @@ CREATE TABLE jr_linkki
 GO
 CREATE UNIQUE CLUSTERED INDEX jr_linkki_cind ON jr_linkki (lnkverkko, lnkalkusolmu, lnkloppusolmu)
 GO
+--
+-- Create jr_piste
+--
+CREATE TABLE jr_piste
+(
+    lnkverkko     CHAR    NOT NULL,
+    lnkalkusolmu  CHAR(7) NOT NULL,
+    lnkloppusolmu CHAR(7) NOT NULL,
+    pisjarjnro    INT     NOT NULL,
+    pisid         INT     NOT NULL,
+    pisx          NUMERIC(7),
+    pisy          NUMERIC(7),
+    pismx         NUMERIC(8, 6),
+    pismy         NUMERIC(8, 6),
+    piskuka       VARCHAR(20),
+    pisviimpvm    DATETIME2(3)
+)
+GO
+CREATE CLUSTERED INDEX jr_piste_cind ON jr_piste (lnkverkko, lnkalkusolmu, lnkloppusolmu, pisjarjnro)
+GO
+CREATE UNIQUE INDEX jr_piste_uind ON jr_piste (pisid)
+GO
