@@ -29,3 +29,15 @@ JORE_IMPORTER_MIGRATE=true \
 ## Triggering the batch job
 
 At the moment the batch job triggers automatically once the application starts. Later, mechanisms for manually triggering the batch job over e.g. HTTP will be added.
+
+## Import job(s)
+
+### Importing Jore 3 data (`importJoreJob`)
+
+#### Importing nodes (`jr_solmu`)
+
+#### Importing links (`jr_linkki`)
+
+#### Importing points (`jr_piste`)
+
+![Overview](images/import_points_step.svg "Step overview")
