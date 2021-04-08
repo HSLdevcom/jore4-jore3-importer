@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="375px" preserveAspectRatio="none" style="width:265px;height:375px;" version="1.1" viewBox="0 0 265 375" width="265.5px" zoomAndPan="magnify"><defs><filter height="300%" id="fbdmhhx81u5wg" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="3.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="6.0" dy="6.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><ellipse cx="128.25" cy="30" fill="#000000" filter="url(#fbdmhhx81u5wg)" rx="15" ry="15" style="stroke:none;stroke-width:1.5;"/><rect fill="#FEFECE" filter="url(#fbdmhhx81u5wg)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="187.5" x="34.5" y="75"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="157.5" x="49.5" y="106.7298">importNodesStep</text><rect fill="#FEFECE" filter="url(#fbdmhhx81u5wg)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="178.5" x="39" y="155.9804"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="148.5" x="54" y="187.7102">importLinksStep</text><rect fill="#FEFECE" filter="url(#fbdmhhx81u5wg)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="223.5" x="16.5" y="236.9608"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="193.5" x="31.5" y="268.6906">importLinkPointsStep</text><ellipse cx="128.25" cy="334.4412" fill="#FFFFFF" filter="url(#fbdmhhx81u5wg)" rx="16.5" ry="16.5" style="stroke:#000000;stroke-width:1.5;"/><ellipse cx="128.25" cy="334.4412" fill="#000000" rx="9" ry="9" style="stroke:#7F7F7F;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="128.25" x2="128.25" y1="45" y2="75"/><polygon fill="#A80036" points="122.25,60,128.25,75,134.25,60,128.25,66" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="128.25" x2="128.25" y1="125.9804" y2="155.9804"/><polygon fill="#A80036" points="122.25,140.9804,128.25,155.9804,134.25,140.9804,128.25,146.9804" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="128.25" x2="128.25" y1="206.9608" y2="236.9608"/><polygon fill="#A80036" points="122.25,221.9608,128.25,236.9608,134.25,221.9608,128.25,227.9608" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="128.25" x2="128.25" y1="287.9412" y2="317.9412"/><polygon fill="#A80036" points="122.25,302.9412,128.25,317.9412,134.25,302.9412,128.25,308.9412" style="stroke:#A80036;stroke-width:1.5;"/><!--MD5=[b7beeb77e3c1cce98d5cb3973367f703]
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+
+:importNodesStep;
+:importLinksStep;
+:importLinkPointsStep;
+
+stop
+
+@enduml
+
+@startuml
+
+start
+
+:importNodesStep;
+:importLinksStep;
+:importLinkPointsStep;
+
+stop
+
+@enduml
+
+PlantUML version 1.2021.5(Sun Apr 25 14:20:28 EEST 2021)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: Dynamic Code Evolution 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

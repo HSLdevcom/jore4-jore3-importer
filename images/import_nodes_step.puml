@@ -1,0 +1,34 @@
+@startuml
+
+control importNodesStep as step
+participant NodeReader as reader
+database SourceDb as sdb
+participant NodeProcessor as processor
+participant NodeWriter as writer
+database DestinationDb as ddb
+
+group Read and process chunk of N elements
+
+    step -> reader : //read()//
+    activate reader
+
+    reader -> sdb : ""import_nodes.sql""
+    reader <- sdb : ""ResultSet""
+
+    step <- reader :""JrNode"" | "null"
+    deactivate reader
+
+    step -> processor : //process(//""JrNode""//)//
+    activate processor
+    step <-- processor : ""PersistableNode""
+    deactivate processor
+
+end
+
+step -> writer : //write(//""Chunk<PersistableNode>""//)//
+activate writer
+writer -> ddb : JDBC batch update
+step <-- writer
+deactivate writer
+
+@enduml

@@ -42,8 +42,6 @@ public interface LinkRow {
     default LineString geometry() {
         return GeometryUtil.toLineString(srid(),
                                          from().location(),
-                                         from().projectedLocation(),
-                                         to().projectedLocation(),
                                          to().location());
     }
 

@@ -1,2 +1,3 @@
 TRUNCATE TABLE jr_linkki
 TRUNCATE TABLE jr_solmu
+TRUNCATE TABLE jr_piste

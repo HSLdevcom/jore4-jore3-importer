@@ -8,6 +8,7 @@ import org.locationtech.jts.geom.LineString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LineStringConverterTest {
 
@@ -41,6 +42,18 @@ public class LineStringConverterTest {
 
         assertThat(output,
                    is(expected));
+    }
+
+    @Test
+    public void pointWkbThrows() {
+        final String ewkb = "01010000A0E6100000E9254A6BA1154E404A9E1B3507F338400000000000000000";
+
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            CONVERTER.from(ewkb);
+        });
+
+        assertThat(exception.getMessage(),
+                   is("Unsupported geometry type : Point"));
     }
 
     @Test

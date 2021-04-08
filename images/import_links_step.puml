@@ -1,0 +1,34 @@
+@startuml
+
+control importLinksStep as step
+participant LinkRowReader as reader
+database SourceDb as sdb
+participant LinkRowProcessor as processor
+participant LinkWriter as writer
+database DestinationDb as ddb
+
+group Read and process chunk of N elements
+
+    step -> reader : //read()//
+    activate reader
+
+    reader -> sdb : ""import_links.sql""
+    reader <- sdb : ""ResultSet""
+
+    step <- reader :""LinkRow"" | "null"
+    deactivate reader
+
+    step -> processor : //process(//""LinkRow""//)//
+    activate processor
+    step <-- processor : ""PersistableLink""
+    deactivate processor
+
+end
+
+step -> writer : //write(//""Chunk<PersistableLink>""//)//
+activate writer
+writer -> ddb : JDBC batch update
+step <-- writer
+deactivate writer
+
+@enduml

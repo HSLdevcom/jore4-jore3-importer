@@ -1,0 +1,39 @@
+package fi.hsl.jore.importer.feature.batch.point;
+
+import fi.hsl.jore.importer.feature.batch.point.dto.LinkEndpoints;
+import fi.hsl.jore.importer.feature.batch.point.dto.PointRow;
+import fi.hsl.jore.importer.feature.jore.entity.JrPoint;
+import fi.hsl.jore.importer.feature.jore.field.TransitType;
+import fi.hsl.jore.importer.feature.jore.field.generated.NodeId;
+import org.springframework.jdbc.core.RowMapper;
+
+import javax.annotation.Nullable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getDoubleOrThrow;
+import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getIntOrThrow;
+import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
+
+public class PointRowMapper implements RowMapper<PointRow> {
+
+    public static final String SQL_PATH = "classpath:import/import_points.sql";
+
+    @Override
+    @Nullable
+    public PointRow mapRow(final ResultSet rs,
+                           final int rowNum) throws SQLException {
+        return PointRow.of(
+                JrPoint.of(TransitType.of(getStringOrThrow(rs, "lnkverkko")).orElse(TransitType.UNKNOWN),
+                           NodeId.of(getStringOrThrow(rs, "lnkalkusolmu")),
+                           NodeId.of(getStringOrThrow(rs, "lnkloppusolmu")),
+                           getIntOrThrow(rs, "pisid"),
+                           getIntOrThrow(rs, "pisjarjnro"),
+                           getDoubleOrThrow(rs, "pismx"),
+                           getDoubleOrThrow(rs, "pismy")),
+                LinkEndpoints.of(getDoubleOrThrow(rs, "alkusolmux"),
+                                 getDoubleOrThrow(rs, "alkusolmuy"),
+                                 getDoubleOrThrow(rs, "loppusolmux"),
+                                 getDoubleOrThrow(rs, "loppusolmuy")));
+    }
+}

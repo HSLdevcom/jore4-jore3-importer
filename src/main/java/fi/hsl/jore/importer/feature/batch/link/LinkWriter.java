@@ -29,7 +29,7 @@ public class LinkWriter implements ItemWriter<PersistableLink> {
     @Override
     public void write(final List<? extends PersistableLink> items) {
         counter += items.size();
-        repository.insertLinks(items);
+        repository.upsert(items);
     }
 
     @SuppressWarnings("unused")
