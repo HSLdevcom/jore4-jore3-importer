@@ -7,7 +7,7 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
-import fi.hsl.jore.importer.feature.util.GeometryUtil;
+import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;

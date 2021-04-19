@@ -1,4 +1,4 @@
-package fi.hsl.jore.importer.feature.util;
+package fi.hsl.jore.importer.feature.batch.util;
 
 import org.springframework.core.io.Resource;
 import org.springframework.util.FileCopyUtils;

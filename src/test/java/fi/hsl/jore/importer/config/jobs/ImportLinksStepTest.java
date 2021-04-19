@@ -7,7 +7,7 @@ import fi.hsl.jore.importer.feature.infrastructure.link.dto.PersistableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
 import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkRepository;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
-import fi.hsl.jore.importer.feature.util.GeometryUtil;
+import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Test;

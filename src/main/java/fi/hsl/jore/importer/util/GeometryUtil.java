@@ -1,4 +1,4 @@
-package fi.hsl.jore.importer.feature.util;
+package fi.hsl.jore.importer.util;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.node;
 
+import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
 import fi.hsl.jore.importer.feature.jore.entity.JrNode;
-import fi.hsl.jore.importer.feature.util.ResourceUtil;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;

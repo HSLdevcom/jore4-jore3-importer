@@ -8,7 +8,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.jore.entity.JrPoint;
 import fi.hsl.jore.importer.feature.jore.key.JrLinkPk;
-import fi.hsl.jore.importer.feature.util.GeometryUtil;
+import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.List;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;

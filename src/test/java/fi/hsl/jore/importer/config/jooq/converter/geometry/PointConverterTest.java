@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.config.jooq.converter.geometry;
 
-import fi.hsl.jore.importer.feature.util.GeometryUtil;
+import fi.hsl.jore.importer.util.GeometryUtil;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
