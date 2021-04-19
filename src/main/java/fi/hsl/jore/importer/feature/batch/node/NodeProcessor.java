@@ -4,7 +4,7 @@ import fi.hsl.jore.importer.feature.batch.node.support.NodeTypeMapper;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
-import fi.hsl.jore.importer.feature.jore.entity.JrNode;
+import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
 import org.springframework.batch.item.ItemProcessor;
 
 import javax.annotation.Nullable;

@@ -17,7 +17,7 @@ import fi.hsl.jore.importer.feature.infrastructure.link.dto.PersistableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkRepository;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeRepository;
-import fi.hsl.jore.importer.feature.jore.entity.JrNode;
+import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

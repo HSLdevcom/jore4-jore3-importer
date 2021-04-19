@@ -7,7 +7,7 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeRepository;
-import fi.hsl.jore.importer.feature.jore.util.JoreGeometryUtil;
+import fi.hsl.jore.importer.feature.jore3.util.JoreGeometryUtil;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Test;

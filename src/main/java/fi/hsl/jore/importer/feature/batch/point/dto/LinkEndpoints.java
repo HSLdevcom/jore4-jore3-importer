@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.point.dto;
 
-import fi.hsl.jore.importer.feature.jore.util.JoreGeometryUtil;
+import fi.hsl.jore.importer.feature.jore3.util.JoreGeometryUtil;
 import org.immutables.value.Value;
 import org.locationtech.jts.geom.Point;
 

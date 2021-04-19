@@ -2,9 +2,9 @@ package fi.hsl.jore.importer.feature.batch.point;
 
 import fi.hsl.jore.importer.feature.batch.point.dto.LinkEndpoints;
 import fi.hsl.jore.importer.feature.batch.point.dto.PointRow;
-import fi.hsl.jore.importer.feature.jore.entity.JrPoint;
-import fi.hsl.jore.importer.feature.jore.field.TransitType;
-import fi.hsl.jore.importer.feature.jore.field.generated.NodeId;
+import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
+import fi.hsl.jore.importer.feature.jore3.field.TransitType;
+import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.annotation.Nullable;

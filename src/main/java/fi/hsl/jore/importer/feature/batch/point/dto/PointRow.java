@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.point.dto;
 
 
-import fi.hsl.jore.importer.feature.jore.entity.JrPoint;
+import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
 import org.immutables.value.Value;
 
 @Value.Immutable

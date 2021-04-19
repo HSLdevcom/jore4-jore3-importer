@@ -1,9 +1,9 @@
 package fi.hsl.jore.importer.feature.batch.link.dto;
 
 import com.google.common.base.Preconditions;
-import fi.hsl.jore.importer.feature.jore.entity.JrLink;
-import fi.hsl.jore.importer.feature.jore.entity.JrNode;
-import fi.hsl.jore.importer.feature.jore.style.JoreDtoStyle;
+import fi.hsl.jore.importer.feature.jore3.entity.JrLink;
+import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
+import fi.hsl.jore.importer.feature.jore3.style.JoreDtoStyle;
 import fi.hsl.jore.importer.util.GeometryUtil;
 import org.immutables.value.Value;
 import org.locationtech.jts.geom.LineString;

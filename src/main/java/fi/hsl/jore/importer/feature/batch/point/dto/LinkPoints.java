@@ -1,9 +1,9 @@
 package fi.hsl.jore.importer.feature.batch.point.dto;
 
 import com.google.common.base.Preconditions;
-import fi.hsl.jore.importer.feature.jore.entity.JrPoint;
-import fi.hsl.jore.importer.feature.jore.field.TransitType;
-import fi.hsl.jore.importer.feature.jore.key.JrLinkPk;
+import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
+import fi.hsl.jore.importer.feature.jore3.field.TransitType;
+import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
 import io.vavr.collection.List;
 import org.immutables.value.Value;
 
