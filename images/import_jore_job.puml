@@ -3,9 +3,23 @@
 
 start
 
-:importNodesStep;
-:importLinksStep;
-:importLinkPointsStep;
+partition importNodesFlow {
+    :prepareNodesStep;
+    :importNodesStep;
+    :commitNodesStep;
+}
+
+partition importLinksFlow {
+    :prepareLinksStep;
+    :importLinksStep;
+    :commitLinksStep;
+}
+
+partition importLinkPointsFlow {
+    :prepareLinkPointsStep;
+    :importLinkPointsStep;
+    :commitLinkPointsStep;
+}
 
 stop
 

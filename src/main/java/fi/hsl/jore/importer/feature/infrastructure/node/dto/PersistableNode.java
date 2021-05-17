@@ -7,8 +7,7 @@ import org.locationtech.jts.geom.Point;
 
 @Value.Immutable
 public interface PersistableNode
-        extends ModifiableFields<PersistableNode>,
-                IHasNodeExternalId {
+        extends CommonFields<PersistableNode> {
 
     static PersistableNode of(final ExternalId externalId,
                               final NodeType nodeType,

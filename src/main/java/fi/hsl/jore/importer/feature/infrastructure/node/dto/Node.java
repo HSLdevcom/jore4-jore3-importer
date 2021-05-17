@@ -11,9 +11,8 @@ import org.immutables.value.Value;
 @Value.Immutable
 public interface Node
         extends IHasPK<NodePK>,
-                IHasNodeExternalId,
                 IHasSystemTime,
-                ModifiableFields<Node> {
+                CommonFields<Node> {
 
     static Node of(final InfrastructureNodesRecord record) {
         return ImmutableNode.builder()

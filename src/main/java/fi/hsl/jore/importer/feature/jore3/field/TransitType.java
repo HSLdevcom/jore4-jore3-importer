@@ -23,6 +23,10 @@ public enum TransitType {
         this.jrValue = val;
     }
 
+    public int value() {
+        return jrValue;
+    }
+
     public static Optional<TransitType> of(final int i) {
         return Arrays.stream(values())
                      .filter(transitType -> transitType.jrValue == i)

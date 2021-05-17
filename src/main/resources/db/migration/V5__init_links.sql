@@ -18,8 +18,31 @@ CREATE TABLE infrastructure_network.infrastructure_links
 CREATE INDEX infrastructure_links_infrastructure_network_type_fkey
     ON infrastructure_network.infrastructure_links (infrastructure_network_type);
 
-CREATE UNIQUE INDEX idx_infrastructure_links_ext_id_type
-    ON infrastructure_network.infrastructure_links (infrastructure_link_ext_id, infrastructure_network_type);
+CREATE UNIQUE INDEX idx_infrastructure_links_ext_id
+    ON infrastructure_network.infrastructure_links (infrastructure_link_ext_id);
+
+-- Staging table used for link import
+
+CREATE TABLE infrastructure_network.infrastructure_links_staging
+(
+    -- id and sys_period are omitted
+    infrastructure_link_ext_id  TEXT                         NOT NULL,
+    infrastructure_link_geog    geography(LinestringZ, 4326) NOT NULL,
+    infrastructure_network_type text                         NOT NULL REFERENCES infrastructure_network.infrastructure_network_types (infrastructure_network_type),
+
+    PRIMARY KEY (infrastructure_link_ext_id)
+);
+
+-- Staging table used for link point import
+
+CREATE TABLE infrastructure_network.infrastructure_link_points_staging
+(
+    infrastructure_link_ext_id  TEXT                         NOT NULL,
+    infrastructure_network_type text                         NOT NULL REFERENCES infrastructure_network.infrastructure_network_types (infrastructure_network_type),
+    infrastructure_link_points  geography(LinestringZ, 4326) NOT NULL,
+
+    PRIMARY KEY (infrastructure_link_ext_id)
+);
 
 -- VERSIONED LINKS
 

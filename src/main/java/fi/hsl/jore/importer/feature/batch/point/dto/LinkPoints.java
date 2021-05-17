@@ -2,7 +2,6 @@ package fi.hsl.jore.importer.feature.batch.point.dto;
 
 import com.google.common.base.Preconditions;
 import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
-import fi.hsl.jore.importer.feature.jore3.field.TransitType;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
 import io.vavr.collection.List;
 import org.immutables.value.Value;
@@ -15,11 +14,6 @@ public interface LinkPoints {
     LinkEndpoints endpoints();
 
     List<JrPoint> points();
-
-    @Value.Derived
-    default TransitType transitType() {
-        return points().get(0).transitType();
-    }
 
     @Value.Check
     default void checkLinkPoints() {

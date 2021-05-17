@@ -1,12 +1,26 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="375px" preserveAspectRatio="none" style="width:265px;height:375px;" version="1.1" viewBox="0 0 265 375" width="265.5px" zoomAndPan="magnify"><defs><filter height="300%" id="fbdmhhx81u5wg" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="3.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="6.0" dy="6.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><ellipse cx="128.25" cy="30" fill="#000000" filter="url(#fbdmhhx81u5wg)" rx="15" ry="15" style="stroke:none;stroke-width:1.5;"/><rect fill="#FEFECE" filter="url(#fbdmhhx81u5wg)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="187.5" x="34.5" y="75"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="157.5" x="49.5" y="106.7298">importNodesStep</text><rect fill="#FEFECE" filter="url(#fbdmhhx81u5wg)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="178.5" x="39" y="155.9804"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="148.5" x="54" y="187.7102">importLinksStep</text><rect fill="#FEFECE" filter="url(#fbdmhhx81u5wg)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="223.5" x="16.5" y="236.9608"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="193.5" x="31.5" y="268.6906">importLinkPointsStep</text><ellipse cx="128.25" cy="334.4412" fill="#FFFFFF" filter="url(#fbdmhhx81u5wg)" rx="16.5" ry="16.5" style="stroke:#000000;stroke-width:1.5;"/><ellipse cx="128.25" cy="334.4412" fill="#000000" rx="9" ry="9" style="stroke:#7F7F7F;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="128.25" x2="128.25" y1="45" y2="75"/><polygon fill="#A80036" points="122.25,60,128.25,75,134.25,60,128.25,66" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="128.25" x2="128.25" y1="125.9804" y2="155.9804"/><polygon fill="#A80036" points="122.25,140.9804,128.25,155.9804,134.25,140.9804,128.25,146.9804" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="128.25" x2="128.25" y1="206.9608" y2="236.9608"/><polygon fill="#A80036" points="122.25,221.9608,128.25,236.9608,134.25,221.9608,128.25,227.9608" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="128.25" x2="128.25" y1="287.9412" y2="317.9412"/><polygon fill="#A80036" points="122.25,302.9412,128.25,317.9412,134.25,302.9412,128.25,308.9412" style="stroke:#A80036;stroke-width:1.5;"/><!--MD5=[b7beeb77e3c1cce98d5cb3973367f703]
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="1033.5px" preserveAspectRatio="none" style="width:306px;height:1033px;" version="1.1" viewBox="0 0 306 1033" width="306px" zoomAndPan="magnify"><defs><filter height="300%" id="f1nqw1p9sezn42" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="3.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="6.0" dy="6.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><ellipse cx="148.5" cy="30" fill="#000000" filter="url(#f1nqw1p9sezn42)" rx="15" ry="15" style="stroke:none;stroke-width:1.5;"/><rect fill="#FFFFFF" filter="url(#f1nqw1p9sezn42)" height="285.3865" style="stroke:#000000;stroke-width:3.0;" width="228" x="34.5" y="60"/><path d="M234,60 L234,73.9453 L219,88.9453 L34.5,88.9453 " fill="none" style="stroke:#000000;stroke-width:3.0;"/><text fill="#000000" font-family="sans-serif" font-size="21" lengthAdjust="spacing" textLength="184.5" x="39" y="80.9927">importNodesFlow</text><rect fill="#FEFECE" filter="url(#f1nqw1p9sezn42)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="198" x="49.5" y="114.4453"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="168" x="64.5" y="146.1751">prepareNodesStep</text><rect fill="#FEFECE" filter="url(#f1nqw1p9sezn42)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="187.5" x="54.75" y="195.4257"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="157.5" x="69.75" y="227.1555">importNodesStep</text><rect fill="#FEFECE" filter="url(#f1nqw1p9sezn42)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="196.5" x="50.25" y="276.4061"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="166.5" x="65.25" y="308.1359">commitNodesStep</text><rect fill="#FFFFFF" filter="url(#f1nqw1p9sezn42)" height="285.3865" style="stroke:#000000;stroke-width:3.0;" width="219" x="39" y="360.3865"/><path d="M226.5,360.3865 L226.5,374.3318 L211.5,389.3318 L39,389.3318 " fill="none" style="stroke:#000000;stroke-width:3.0;"/><text fill="#000000" font-family="sans-serif" font-size="21" lengthAdjust="spacing" textLength="172.5" x="43.5" y="381.3792">importLinksFlow</text><rect fill="#FEFECE" filter="url(#f1nqw1p9sezn42)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="189" x="54" y="414.8318"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="159" x="69" y="446.5616">prepareLinksStep</text><rect fill="#FEFECE" filter="url(#f1nqw1p9sezn42)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="178.5" x="59.25" y="495.8123"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="148.5" x="74.25" y="527.542">importLinksStep</text><rect fill="#FEFECE" filter="url(#f1nqw1p9sezn42)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="187.5" x="54.75" y="576.7927"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="157.5" x="69.75" y="608.5224">commitLinksStep</text><rect fill="#FFFFFF" filter="url(#f1nqw1p9sezn42)" height="285.3865" style="stroke:#000000;stroke-width:3.0;" width="264" x="16.5" y="660.7731"/><path d="M256.5,660.7731 L256.5,674.7184 L241.5,689.7184 L16.5,689.7184 " fill="none" style="stroke:#000000;stroke-width:3.0;"/><text fill="#000000" font-family="sans-serif" font-size="21" lengthAdjust="spacing" textLength="225" x="21" y="681.7657">importLinkPointsFlow</text><rect fill="#FEFECE" filter="url(#f1nqw1p9sezn42)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="234" x="31.5" y="715.2184"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="204" x="46.5" y="746.9481">prepareLinkPointsStep</text><rect fill="#FEFECE" filter="url(#f1nqw1p9sezn42)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="223.5" x="36.75" y="796.1988"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="193.5" x="51.75" y="827.9286">importLinkPointsStep</text><rect fill="#FEFECE" filter="url(#f1nqw1p9sezn42)" height="50.9804" rx="18.75" ry="18.75" style="stroke:#A80036;stroke-width:2.25;" width="232.5" x="32.25" y="877.1792"/><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="202.5" x="47.25" y="908.909">commitLinkPointsStep</text><ellipse cx="148.5" cy="992.6596" fill="#FFFFFF" filter="url(#f1nqw1p9sezn42)" rx="16.5" ry="16.5" style="stroke:#000000;stroke-width:1.5;"/><ellipse cx="148.5" cy="992.6596" fill="#000000" rx="9" ry="9" style="stroke:#7F7F7F;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="148.5" x2="148.5" y1="165.4257" y2="195.4257"/><polygon fill="#A80036" points="142.5,180.4257,148.5,195.4257,154.5,180.4257,148.5,186.4257" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="148.5" x2="148.5" y1="246.4061" y2="276.4061"/><polygon fill="#A80036" points="142.5,261.4061,148.5,276.4061,154.5,261.4061,148.5,267.4061" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="148.5" x2="148.5" y1="45" y2="114.4453"/><polygon fill="#A80036" points="142.5,99.4453,148.5,114.4453,154.5,99.4453,148.5,105.4453" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="148.5" x2="148.5" y1="465.8123" y2="495.8123"/><polygon fill="#A80036" points="142.5,480.8123,148.5,495.8123,154.5,480.8123,148.5,486.8123" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="148.5" x2="148.5" y1="546.7927" y2="576.7927"/><polygon fill="#A80036" points="142.5,561.7927,148.5,576.7927,154.5,561.7927,148.5,567.7927" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="148.5" x2="148.5" y1="327.3865" y2="414.8318"/><polygon fill="#A80036" points="142.5,399.8318,148.5,414.8318,154.5,399.8318,148.5,405.8318" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="148.5" x2="148.5" y1="766.1988" y2="796.1988"/><polygon fill="#A80036" points="142.5,781.1988,148.5,796.1988,154.5,781.1988,148.5,787.1988" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="148.5" x2="148.5" y1="847.1792" y2="877.1792"/><polygon fill="#A80036" points="142.5,862.1792,148.5,877.1792,154.5,862.1792,148.5,868.1792" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="148.5" x2="148.5" y1="627.7731" y2="715.2184"/><polygon fill="#A80036" points="142.5,700.2184,148.5,715.2184,154.5,700.2184,148.5,706.2184" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:2.25;" x1="148.5" x2="148.5" y1="928.1596" y2="976.1596"/><polygon fill="#A80036" points="142.5,961.1596,148.5,976.1596,154.5,961.1596,148.5,967.1596" style="stroke:#A80036;stroke-width:1.5;"/><!--MD5=[c10de953f0549ff435d59a391cc37f41]
 @startuml
 'https://plantuml.com/activity-diagram-beta
 
 start
 
-:importNodesStep;
-:importLinksStep;
-:importLinkPointsStep;
+partition importNodesFlow {
+    :prepareNodesStep;
+    :importNodesStep;
+    :commitNodesStep;
+}
+
+partition importLinksFlow {
+    :prepareLinksStep;
+    :importLinksStep;
+    :commitLinksStep;
+}
+
+partition importLinkPointsFlow {
+    :prepareLinkPointsStep;
+    :importLinkPointsStep;
+    :commitLinkPointsStep;
+}
 
 stop
 
@@ -16,9 +30,23 @@ stop
 
 start
 
-:importNodesStep;
-:importLinksStep;
-:importLinkPointsStep;
+partition importNodesFlow {
+    :prepareNodesStep;
+    :importNodesStep;
+    :commitNodesStep;
+}
+
+partition importLinksFlow {
+    :prepareLinksStep;
+    :importLinksStep;
+    :commitLinksStep;
+}
+
+partition importLinkPointsFlow {
+    :prepareLinkPointsStep;
+    :importLinkPointsStep;
+    :commitLinkPointsStep;
+}
 
 stop
 

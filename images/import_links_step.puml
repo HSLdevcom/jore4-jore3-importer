@@ -1,34 +1,63 @@
 @startuml
 
-control importLinksStep as step
+control importLinksFlow as flow
+control prepareLinksStep as prepare_step
+control importLinksStep as import_step
+control commitLinksStep as commit_step
 participant LinkRowReader as reader
 database SourceDb as sdb
 participant LinkRowProcessor as processor
-participant LinkWriter as writer
-database DestinationDb as ddb
+participant GenericImportWriter as writer
+database StagingTable as staging_table
+database TargetTable as target_table
 
-group Read and process chunk of N elements
+flow -> prepare_step
+activate prepare_step
 
-    step -> reader : //read()//
-    activate reader
+prepare_step -> staging_table : //truncate//
+deactivate prepare_step
 
-    reader -> sdb : ""import_links.sql""
-    reader <- sdb : ""ResultSet""
+flow -> import_step
+activate import_step
 
-    step <- reader :""LinkRow"" | "null"
-    deactivate reader
+group Read all rows in chunks
 
-    step -> processor : //process(//""LinkRow""//)//
-    activate processor
-    step <-- processor : ""PersistableLink""
-    deactivate processor
+    group Read and process chunk of N elements
+
+        import_step -> reader : //read()//
+        activate reader
+
+        reader -> sdb : ""import_links.sql""
+        reader <- sdb : ""ResultSet""
+
+        import_step <- reader :""LinkRow"" | "null"
+        deactivate reader
+
+        import_step -> processor : //process(//""LinkRow""//)//
+        activate processor
+        import_step <-- processor : ""PersistableLink""
+        deactivate processor
+
+    end
+
+    import_step -> writer : //write(//""Chunk<PersistableLink>""//)//
+    activate writer
+    writer -> staging_table : JDBC batch insert
+    import_step <-- writer
+    deactivate writer
 
 end
 
-step -> writer : //write(//""Chunk<PersistableLink>""//)//
-activate writer
-writer -> ddb : JDBC batch update
-step <-- writer
-deactivate writer
+deactivate import_step
+
+flow -> commit_step
+activate commit_step
+
+commit_step -> staging_table : //commit//
+staging_table -> target_table : //insert/update/delete//
+commit_step <- target_table : inserted/updated/deleted ""LinkPK""s
+
+commit_step -> staging_table : //truncate//
+deactivate commit_step
 
 @enduml

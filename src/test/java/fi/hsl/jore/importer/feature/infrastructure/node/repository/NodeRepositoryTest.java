@@ -3,6 +3,7 @@ package fi.hsl.jore.importer.feature.infrastructure.node.repository;
 import fi.hsl.jore.importer.IntegrationTest;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
+import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImmutablePersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
@@ -89,7 +90,8 @@ public class NodeRepositoryTest extends IntegrationTest {
                    is(keys.toSet()));
 
         final List<NodePK> keys2 = nodeRepository.upsert(List.of(
-                nodeToInsert.withLocation(GEOM2)
+                ImmutablePersistableNode.copyOf(nodeToInsert)
+                                        .withLocation(GEOM2)
         ));
 
         final List<Node> nodesFromDb2 = nodeRepository.findAll();

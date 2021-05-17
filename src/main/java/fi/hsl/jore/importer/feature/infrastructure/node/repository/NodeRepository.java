@@ -2,12 +2,15 @@ package fi.hsl.jore.importer.feature.infrastructure.node.repository;
 
 import com.google.common.collect.Lists;
 import fi.hsl.jore.importer.config.jooq.converter.geometry.PointConverter;
+import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodesWithHistory;
+import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
+import io.vavr.collection.Set;
 import org.jooq.DSLContext;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,15 +46,12 @@ public class NodeRepository implements INodeRepository {
                                          NODE.INFRASTRUCTURE_NODE_LOCATION)
                              // parameters 1-3
                              .values((String) null, null, null)
-                             .onConflict(NODE.INFRASTRUCTURE_NODE_EXT_ID,
-                                         NODE.INFRASTRUCTURE_NODE_TYPE)
+                             .onConflict(NODE.INFRASTRUCTURE_NODE_EXT_ID)
                              .doUpdate()
                              // parameter 4
                              .set(NODE.INFRASTRUCTURE_NODE_LOCATION, (Point) null)
                              // parameter 5
-                             .where(NODE.INFRASTRUCTURE_NODE_EXT_ID.eq((String) null)
-                                                                   // parameter 6
-                                                                   .and(NODE.INFRASTRUCTURE_NODE_TYPE.eq((String) null)))
+                             .where(NODE.INFRASTRUCTURE_NODE_EXT_ID.eq((String) null))
                              .returningResult(NODE.INFRASTRUCTURE_NODE_ID)
                              .getSQL();
 
@@ -71,7 +71,6 @@ public class NodeRepository implements INodeRepository {
                     stmt.setObject(3, location);
                     stmt.setObject(4, location);
                     stmt.setObject(5, node.externalId().value());
-                    stmt.setObject(6, node.nodeType().value());
                     stmt.addBatch();
                 }
 
@@ -100,11 +99,31 @@ public class NodeRepository implements INodeRepository {
 
     @Override
     @Transactional(readOnly = true)
+    public Optional<Node> findByExternalId(final ExternalId externalId) {
+        return db.selectFrom(NODE)
+                 .where(NODE.INFRASTRUCTURE_NODE_EXT_ID.eq(externalId.value()))
+                 .fetchStream()
+                 .map(Node::of)
+                 .findFirst();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Node> findAll() {
         return db.selectFrom(NODE)
                  .fetchStream()
                  .map(Node::of)
                  .collect(List.collector());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Set<NodePK> findAllIds() {
+        return db.select(NODE.INFRASTRUCTURE_NODE_ID)
+                 .from(NODE)
+                 .fetchStream()
+                 .map(row -> NodePK.of(row.value1()))
+                 .collect(HashSet.collector());
     }
 
     @Override

@@ -4,6 +4,7 @@ import fi.hsl.jore.importer.feature.batch.link.support.TransitTypeToNetworkTypeM
 import fi.hsl.jore.importer.feature.batch.point.dto.LinkEndpoints;
 import fi.hsl.jore.importer.feature.batch.point.dto.LinkGeometry;
 import fi.hsl.jore.importer.feature.batch.point.dto.LinkPoints;
+import fi.hsl.jore.importer.feature.batch.util.ExternalIdUtil;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
@@ -30,10 +31,8 @@ public class LinkPointProcessor implements ItemProcessor<LinkPoints, LinkGeometr
     @Override
     public LinkGeometry process(final LinkPoints linkPoints) {
         final JrLinkPk parentLink = linkPoints.link();
-        final ExternalId externalId = ExternalId.of(String.format("%s-%s",
-                                                                  parentLink.startNode().value(),
-                                                                  parentLink.endNode().value()));
-        final NetworkType networkType = TransitTypeToNetworkTypeMapper.resolveNetworkType(linkPoints.transitType());
+        final ExternalId externalId = ExternalIdUtil.forLink(parentLink);
+        final NetworkType networkType = TransitTypeToNetworkTypeMapper.resolveNetworkType(parentLink.transitType());
         return LinkGeometry.of(externalId,
                                networkType,
                                geometry(linkPoints.endpoints(),
