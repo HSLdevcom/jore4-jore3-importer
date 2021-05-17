@@ -10,7 +10,7 @@ import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
-import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeRepository;
+import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
 import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,8 +25,8 @@ import static org.hamcrest.Matchers.is;
 
 public class LinkRepositoryTest extends IntegrationTest {
 
-    private final ILinkRepository linkRepository;
-    private final INodeRepository nodeRepository;
+    private final ILinkTestRepository linkRepository;
+    private final INodeTestRepository nodeRepository;
 
     private static final LineString GEOM = GeometryUtil.toLineString(
             GeometryUtil.SRID_WGS84,
@@ -50,8 +50,8 @@ public class LinkRepositoryTest extends IntegrationTest {
             new Coordinate(60.158988620, 24.939328727, 0)
     );
 
-    public LinkRepositoryTest(@Autowired final ILinkRepository linkRepository,
-                              @Autowired final INodeRepository nodeRepository) {
+    public LinkRepositoryTest(@Autowired final ILinkTestRepository linkRepository,
+                              @Autowired final INodeTestRepository nodeRepository) {
         this.linkRepository = linkRepository;
         this.nodeRepository = nodeRepository;
     }
@@ -68,11 +68,9 @@ public class LinkRepositoryTest extends IntegrationTest {
 
     @Test
     public void insertSingleLink() {
-        final List<NodePK> nodeIds = nodeRepository.upsert(
-                List.of(
-                        PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
-                        PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2)
-                )
+        final List<NodePK> nodeIds = nodeRepository.insert(
+                PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
+                PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2)
         );
         final NodePK startNode = nodeIds.get(0);
         final NodePK endNode = nodeIds.get(1);
@@ -82,7 +80,7 @@ public class LinkRepositoryTest extends IntegrationTest {
         assertThat(linkRepository.empty(),
                    is(true));
 
-        final LinkPK linkId = linkRepository.insertLink(link);
+        final LinkPK linkId = linkRepository.insert(link);
 
         final Link linkFromDb = linkRepository.findById(linkId).orElseThrow();
 
@@ -100,19 +98,17 @@ public class LinkRepositoryTest extends IntegrationTest {
 
     @Test
     public void insertMultipleLinks() {
-        final List<NodePK> nodeIds = nodeRepository.upsert(
-                List.of(
-                        PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
-                        PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2)
-                )
+        final List<NodePK> nodeIds = nodeRepository.insert(
+                PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
+                PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2)
         );
         final NodePK startNode = nodeIds.get(0);
         final NodePK endNode = nodeIds.get(1);
 
-        final List<LinkPK> keys = linkRepository.upsert(List.of(
+        final List<LinkPK> keys = linkRepository.insert(
                 PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, GEOM, startNode, endNode),
                 PersistableLink.of(ExternalId.of("b"), NetworkType.ROAD, GEOM2, startNode, endNode)
-        ));
+        );
 
         final List<Link> linksFromDb = linkRepository.findAll();
 

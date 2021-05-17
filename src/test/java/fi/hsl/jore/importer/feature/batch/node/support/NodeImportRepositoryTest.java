@@ -8,7 +8,7 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
-import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeRepository;
+import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
 import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.HashSet;
@@ -39,10 +39,10 @@ public class NodeImportRepositoryTest extends IntegrationTest {
     );
 
     private final INodeImportRepository importRepository;
-    private final INodeRepository targetRepository;
+    private final INodeTestRepository targetRepository;
 
     public NodeImportRepositoryTest(@Autowired final INodeImportRepository importRepository,
-                                    @Autowired final INodeRepository targetRepository) {
+                                    @Autowired final INodeTestRepository targetRepository) {
         this.importRepository = importRepository;
         this.targetRepository = targetRepository;
     }
@@ -92,11 +92,9 @@ public class NodeImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenStagedRowsWithChangesAndCommit_andTargetNotEmpty_thenReturnResultWithUpdatedId() {
-        final List<NodePK> existing = targetRepository.upsert(
-                List.of(PersistableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, POINT_1))
+        final NodePK existingId = targetRepository.insert(
+                PersistableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, POINT_1)
         );
-
-        final NodePK existingId = existing.get(0);
 
         assertThat("Target repository should now contain a single row",
                    targetRepository.findAllIds(),
@@ -133,11 +131,9 @@ public class NodeImportRepositoryTest extends IntegrationTest {
     public void whenStagedRowsWithNoChangesAndCommit_andTargetNotEmpty_thenReturnEmptyResult() {
         final PersistableNode sourceNode = PersistableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, POINT_1);
 
-        final List<NodePK> existing = targetRepository.upsert(
-                List.of(sourceNode)
+        final NodePK existingId = targetRepository.insert(
+                sourceNode
         );
-
-        final NodePK existingId = existing.get(0);
 
         assertThat("Target repository should now contain a single row",
                    targetRepository.findAllIds(),
@@ -172,13 +168,8 @@ public class NodeImportRepositoryTest extends IntegrationTest {
         final PersistableNode firstNode = PersistableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, POINT_1);
         final PersistableNode secondNode = PersistableNode.of(ExternalId.of("b"), NodeType.CROSSROADS, POINT_2);
 
-        final List<NodePK> existing = targetRepository.upsert(
-                List.of(firstNode,
-                        secondNode)
-        );
-
-        final NodePK firstId = existing.get(0);
-        final NodePK secondId = existing.get(1);
+        final NodePK firstId = targetRepository.insert(firstNode);
+        final NodePK secondId = targetRepository.insert(secondNode);
 
         // We submit only the latter node as-is, simulating the case where the first node is removed at the source
         importRepository.submitToStaging(

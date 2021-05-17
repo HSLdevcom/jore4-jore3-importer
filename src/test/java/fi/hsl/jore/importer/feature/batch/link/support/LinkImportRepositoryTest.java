@@ -7,12 +7,12 @@ import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.PersistableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
-import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkRepository;
+import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkTestRepository;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
-import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeRepository;
+import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
 import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.HashSet;
@@ -64,12 +64,12 @@ public class LinkImportRepositoryTest extends IntegrationTest {
     );
 
     private final ILinkImportRepository importRepository;
-    private final ILinkRepository targetRepository;
-    private final INodeRepository nodeRepository;
+    private final ILinkTestRepository targetRepository;
+    private final INodeTestRepository nodeRepository;
 
     public LinkImportRepositoryTest(@Autowired final ILinkImportRepository importRepository,
-                                    @Autowired final ILinkRepository targetRepository,
-                                    @Autowired final INodeRepository nodeRepository) {
+                                    @Autowired final ILinkTestRepository targetRepository,
+                                    @Autowired final INodeTestRepository nodeRepository) {
         this.importRepository = importRepository;
         this.targetRepository = targetRepository;
         this.nodeRepository = nodeRepository;
@@ -90,12 +90,12 @@ public class LinkImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenNewStagedRowsAndCommit_andTargetDbContainsNodes_thenReturnResultWithInsertedIdAndNodeRefs() {
-        final List<NodePK> nodeIds = nodeRepository.upsert(
-                List.of(PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
-                        PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2))
+        final NodePK firstNodeId = nodeRepository.insert(
+                PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1)
         );
-        final NodePK firstNodeId = nodeIds.get(0);
-        final NodePK secondNodeId = nodeIds.get(1);
+        final NodePK secondNodeId = nodeRepository.insert(
+                PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2)
+        );
 
         importRepository.submitToStaging(
                 List.of(ImportableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1, ExternalId.of("1"), ExternalId.of("2")))
@@ -130,18 +130,16 @@ public class LinkImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenStagedRowsWithChangesAndCommit_andTargetNotEmpty_thenReturnResultWithUpdatedId() {
-        final List<NodePK> nodeIds = nodeRepository.upsert(
-                List.of(PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
-                        PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2))
+        final NodePK startNode = nodeRepository.insert(
+                PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1)
         );
-        final NodePK startNode = nodeIds.get(0);
-        final NodePK endNode = nodeIds.get(1);
-
-        final List<LinkPK> existing = targetRepository.upsert(
-                List.of(PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1, startNode, endNode))
+        final NodePK endNode = nodeRepository.insert(
+                PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2)
         );
 
-        final LinkPK existingId = existing.get(0);
+        final LinkPK existingId = targetRepository.insert(
+                PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1, startNode, endNode)
+        );
 
         assertThat("Target repository should now contain a single row",
                    targetRepository.findAllIds(),
@@ -180,20 +178,17 @@ public class LinkImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenStagedRowsWithNoChangesAndCommit_andTargetNotEmpty_thenReturnEmptyResult() {
-        final List<NodePK> nodeIds = nodeRepository.upsert(
-                List.of(PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
-                        PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2))
+        final NodePK startNode = nodeRepository.insert(
+                PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1)
         );
-        final NodePK startNode = nodeIds.get(0);
-        final NodePK endNode = nodeIds.get(1);
-
+        final NodePK endNode = nodeRepository.insert(
+                PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2)
+        );
         final PersistableLink sourceLink = PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1, startNode, endNode);
 
-        final List<LinkPK> existing = targetRepository.upsert(
-                List.of(sourceLink)
+        final LinkPK existingId = targetRepository.insert(
+                sourceLink
         );
-
-        final LinkPK existingId = existing.get(0);
 
         assertThat("Target repository should now contain a single row",
                    targetRepository.findAllIds(),
@@ -231,24 +226,18 @@ public class LinkImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenStagedRowsAndCommit_andTargetContainsExtraRows_thenReturnResultWithDeletedId() {
-        final List<NodePK> nodeIds = nodeRepository.upsert(
-                List.of(PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
-                        PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2),
-                        PersistableNode.of(ExternalId.of("3"), NodeType.CROSSROADS, POINT_3),
-                        PersistableNode.of(ExternalId.of("4"), NodeType.CROSSROADS, POINT_4))
+        final List<NodePK> nodeIds = nodeRepository.insert(
+                PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
+                PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2),
+                PersistableNode.of(ExternalId.of("3"), NodeType.CROSSROADS, POINT_3),
+                PersistableNode.of(ExternalId.of("4"), NodeType.CROSSROADS, POINT_4)
         );
-
         // Insert two links into the target table (as if imported previously)
         final PersistableLink firstLink = PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1, nodeIds.get(0), nodeIds.get(1));
         final PersistableLink secondLink = PersistableLink.of(ExternalId.of("b"), NetworkType.ROAD, LINE_2, nodeIds.get(2), nodeIds.get(3));
 
-        final List<LinkPK> existing = targetRepository.upsert(
-                List.of(firstLink,
-                        secondLink)
-        );
-
-        final LinkPK firstId = existing.get(0);
-        final LinkPK secondId = existing.get(1);
+        final LinkPK firstId = targetRepository.insert(firstLink);
+        final LinkPK secondId = targetRepository.insert(secondLink);
 
         // We submit only the latter link as-is, simulating the case where the first link is removed at the source
         importRepository.submitToStaging(

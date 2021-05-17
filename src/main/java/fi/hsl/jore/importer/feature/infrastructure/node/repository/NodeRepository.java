@@ -1,31 +1,25 @@
 package fi.hsl.jore.importer.feature.infrastructure.node.repository;
 
-import com.google.common.collect.Lists;
-import fi.hsl.jore.importer.config.jooq.converter.geometry.PointConverter;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodesWithHistory;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNodesRecord;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
 import org.jooq.DSLContext;
-import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Deque;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public class NodeRepository implements INodeRepository {
+public class NodeRepository
+        implements INodeTestRepository {
 
     private static final InfrastructureNodes NODE = InfrastructureNodes.INFRASTRUCTURE_NODES;
     private static final InfrastructureNodesWithHistory HISTORY_VIEW = InfrastructureNodesWithHistory.INFRASTRUCTURE_NODES_WITH_HISTORY;
@@ -39,52 +33,58 @@ public class NodeRepository implements INodeRepository {
 
     @Override
     @Transactional
-    public List<NodePK> upsert(final Iterable<? extends PersistableNode> nodes) {
-        final String sql = db.insertInto(NODE,
-                                         NODE.INFRASTRUCTURE_NODE_EXT_ID,
-                                         NODE.INFRASTRUCTURE_NODE_TYPE,
-                                         NODE.INFRASTRUCTURE_NODE_LOCATION)
-                             // parameters 1-3
-                             .values((String) null, null, null)
-                             .onConflict(NODE.INFRASTRUCTURE_NODE_EXT_ID)
-                             .doUpdate()
-                             // parameter 4
-                             .set(NODE.INFRASTRUCTURE_NODE_LOCATION, (Point) null)
-                             // parameter 5
-                             .where(NODE.INFRASTRUCTURE_NODE_EXT_ID.eq((String) null))
-                             .returningResult(NODE.INFRASTRUCTURE_NODE_ID)
-                             .getSQL();
+    public NodePK insert(final PersistableNode node) {
+        final InfrastructureNodesRecord r = db.newRecord(NODE);
 
-        final Deque<NodePK> keys = Lists.newLinkedList();
+        r.setInfrastructureNodeExtId(node.externalId().value());
+        r.setInfrastructureNodeType(node.nodeType().value());
+        r.setInfrastructureNodeLocation(node.location());
+        r.setInfrastructureNodeProjectedLocation(node.projectedLocation().orElse(null));
 
-        // jOOQ doesn't support returning keys from batch operations (https://github.com/jOOQ/jOOQ/issues/3327),
-        // so for now we have to resort to JDBC
-        db.connection(conn -> {
-            try (final PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                for (final PersistableNode node : nodes) {
-                    final Object location = PointConverter.INSTANCE.to(node.location());
-                    // The raw sql statement produced by jOOQ contains '?' placeholders (e.g. "VALUES (?, ?, ?::geometry)"),
-                    // which we must populate with the corresponding values. Because they are anonymous and positional,
-                    // we may need to submit the same value multiple times (once for each placeholder).
-                    stmt.setObject(1, node.externalId().value());
-                    stmt.setObject(2, node.nodeType().value());
-                    stmt.setObject(3, location);
-                    stmt.setObject(4, location);
-                    stmt.setObject(5, node.externalId().value());
-                    stmt.addBatch();
-                }
+        r.store();
 
-                stmt.executeBatch();
+        return NodePK.of(r.getInfrastructureNodeId());
+    }
 
-                try (final ResultSet rs = stmt.getGeneratedKeys()) {
-                    while (rs.next()) {
-                        keys.add(NodePK.of(rs.getObject(1, UUID.class)));
-                    }
-                }
-            }
-        });
+    @Override
+    @Transactional
+    public List<NodePK> insert(final List<PersistableNode> entities) {
+        return entities.map(this::insert);
+    }
 
-        return List.ofAll(keys);
+    @Override
+    @Transactional
+    public List<NodePK> insert(final PersistableNode... entities) {
+        return insert(List.of(entities));
+    }
+
+    @Override
+    @Transactional
+    public NodePK update(final Node node) {
+        final InfrastructureNodesRecord r =
+                Optional.ofNullable(db.selectFrom(NODE)
+                                      .where(NODE.INFRASTRUCTURE_NODE_ID.eq(node.pk().value()))
+                                      .fetchAny())
+                        .orElseThrow();
+
+        r.setInfrastructureNodeLocation(node.location());
+        r.setInfrastructureNodeProjectedLocation(node.projectedLocation().orElse(null));
+
+        r.store();
+
+        return NodePK.of(r.getInfrastructureNodeId());
+    }
+
+    @Override
+    @Transactional
+    public List<NodePK> update(final List<Node> entities) {
+        return entities.map(this::update);
+    }
+
+    @Override
+    @Transactional
+    public List<NodePK> update(final Node... entities) {
+        return update(List.of(entities));
     }
 
     @Override

@@ -4,7 +4,7 @@ import fi.hsl.jore.importer.BatchIntegrationTest;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
-import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeRepository;
+import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
 import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class ImportNodesStepTest extends BatchIntegrationTest {
                                                       "commitNodesStep");
 
     @Autowired
-    private INodeRepository nodeRepository;
+    private INodeTestRepository nodeRepository;
 
     @Test
     public void givenSampleDataInSourceDatabase_andAnEmptyTargetDatabase_whenImportNodeStepsAreRun_thenNodesCAndDAreImported() {
