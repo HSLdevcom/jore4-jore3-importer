@@ -8,7 +8,7 @@ import io.vavr.collection.Set;
 
 import java.util.Optional;
 
-public interface IBasicCrudRepository<ID extends PK, ENTITY extends IHasPK<ID>> {
+public interface IBasicCrudRepository<ID extends PK, ENTITY extends IHasPK<ID>, PERSISTABLE> {
     List<ENTITY> findAll();
 
     Set<ID> findAllIds();
@@ -20,4 +20,18 @@ public interface IBasicCrudRepository<ID extends PK, ENTITY extends IHasPK<ID>> 
     int count();
 
     boolean empty();
+
+    ID insert(PERSISTABLE entity);
+
+    List<ID> insert(List<PERSISTABLE> entities);
+
+    @SuppressWarnings("unchecked")
+    List<ID> insert(PERSISTABLE... entities);
+
+    ID update(ENTITY entity);
+
+    List<ID> update(List<ENTITY> entities);
+
+    @SuppressWarnings("unchecked")
+    List<ID> update(ENTITY... entities);
 }

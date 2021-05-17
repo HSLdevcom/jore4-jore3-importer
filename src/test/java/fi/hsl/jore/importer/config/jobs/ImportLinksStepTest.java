@@ -3,7 +3,7 @@ package fi.hsl.jore.importer.config.jobs;
 import fi.hsl.jore.importer.BatchIntegrationTest;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
-import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkRepository;
+import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkTestRepository;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.List;
@@ -37,7 +37,7 @@ public class ImportLinksStepTest extends BatchIntegrationTest {
                                                       "commitLinksStep");
 
     @Autowired
-    private ILinkRepository linkRepository;
+    private ILinkTestRepository linkRepository;
 
     @Test
     public void givenSampleDataInSourceDatabase_andAnEmptyDatabase_whenImportLinksStepsAreRun_thenLinkBetweenNodeCAndNodeDIsImported() {

@@ -3,13 +3,15 @@ package fi.hsl.jore.importer.feature.infrastructure.node.repository;
 import fi.hsl.jore.importer.IntegrationTest;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
-import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImmutablePersistableNode;
+import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImmutableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.util.GeometryUtil;
+import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
+import io.vavr.collection.Set;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
@@ -21,7 +23,7 @@ import static org.hamcrest.Matchers.not;
 
 public class NodeRepositoryTest extends IntegrationTest {
 
-    private final INodeRepository nodeRepository;
+    private final INodeTestRepository nodeRepository;
 
     private static final Point GEOM = GeometryUtil.toPoint(
             GeometryUtil.SRID_WGS84,
@@ -33,7 +35,7 @@ public class NodeRepositoryTest extends IntegrationTest {
             new Coordinate(60.158988620, 24.939328727, 0)
     );
 
-    public NodeRepositoryTest(@Autowired final INodeRepository nodeRepository) {
+    public NodeRepositoryTest(@Autowired final INodeTestRepository nodeRepository) {
         this.nodeRepository = nodeRepository;
     }
 
@@ -42,10 +44,10 @@ public class NodeRepositoryTest extends IntegrationTest {
         assertThat(nodeRepository.empty(),
                    is(true));
 
-        final List<NodePK> keys = nodeRepository.upsert(List.of(
+        final List<NodePK> keys = nodeRepository.insert(
                 PersistableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, GEOM),
                 PersistableNode.of(ExternalId.of("b"), NodeType.CROSSROADS, GEOM2)
-        ));
+        );
 
         final List<Node> nodesFromDb = nodeRepository.findAll();
 
@@ -62,17 +64,15 @@ public class NodeRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    public void upsertNodeWithNewGeometry() {
+    public void updateNodeWithNewGeometry() {
         assertThat("repository should be empty in the beginning",
                    nodeRepository.empty(),
                    is(true));
 
         final ExternalId extId = ExternalId.of("a");
         final PersistableNode nodeToInsert = PersistableNode.of(extId, NodeType.CROSSROADS, GEOM);
-
-        final List<NodePK> keys = nodeRepository.upsert(List.of(
-                nodeToInsert
-        ));
+        final NodePK id = nodeRepository.insert(nodeToInsert);
+        final Node insertedNode = nodeRepository.findById(id).orElseThrow();
 
         final List<Node> nodesFromDb = nodeRepository.findAll();
 
@@ -85,14 +85,14 @@ public class NodeRepositoryTest extends IntegrationTest {
         assertThat("Node should have the initial geometry",
                    GEOM,
                    is(originalNode.location()));
-        assertThat("Upsert and find() should return the same keys",
+        assertThat("Insert and find() should return the same keys",
                    nodesFromDb.map(IHasPK::pk).toSet(),
-                   is(keys.toSet()));
+                   is(HashSet.of(id)));
 
-        final List<NodePK> keys2 = nodeRepository.upsert(List.of(
-                ImmutablePersistableNode.copyOf(nodeToInsert)
-                                        .withLocation(GEOM2)
-        ));
+        final Set<NodePK> keys2 = HashSet.of(
+                nodeRepository.update(ImmutableNode.copyOf(insertedNode)
+                                                   .withLocation(GEOM2))
+        );
 
         final List<Node> nodesFromDb2 = nodeRepository.findAll();
 
@@ -105,12 +105,12 @@ public class NodeRepositoryTest extends IntegrationTest {
         assertThat("Node geometry should have been updated",
                    GEOM2,
                    is(nodesFromDb2.get(0).location()));
-        assertThat("Upsert and find() should return the same keys",
+        assertThat("Update and find() should return the same keys",
                    nodesFromDb2.map(IHasPK::pk).toSet(),
-                   is(keys2.toSet()));
+                   is(keys2));
         assertThat("Node id should not change",
-                   keys.toSet(),
-                   is(keys2.toSet()));
+                   HashSet.of(id),
+                   is(keys2));
         // Updated node should be identical to the original node..
         assertThat(updatedNode.pk(),
                    is(originalNode.pk()));
@@ -124,7 +124,7 @@ public class NodeRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    public void upsertNodeWithSameGeometry() {
+    public void updateNodeWithSameGeometry() {
         assertThat("repository should be empty in the beginning",
                    nodeRepository.empty(),
                    is(true));
@@ -132,9 +132,8 @@ public class NodeRepositoryTest extends IntegrationTest {
         final ExternalId extId = ExternalId.of("a");
         final PersistableNode nodeToInsert = PersistableNode.of(extId, NodeType.CROSSROADS, GEOM);
 
-        final List<NodePK> keys = nodeRepository.upsert(List.of(
-                nodeToInsert
-        ));
+        final NodePK id = nodeRepository.insert(nodeToInsert);
+        final Node insertedNode = nodeRepository.findById(id).orElseThrow();
 
         final List<Node> nodesFromDb = nodeRepository.findAll();
 
@@ -147,13 +146,13 @@ public class NodeRepositoryTest extends IntegrationTest {
         assertThat("Node should have the initial geometry",
                    GEOM,
                    is(originalNode.location()));
-        assertThat("Upsert and find() should return the same keys",
+        assertThat("Insert and find() should return the same keys",
                    nodesFromDb.map(IHasPK::pk).toSet(),
-                   is(keys.toSet()));
+                   is(HashSet.of(id)));
 
-        final List<NodePK> keys2 = nodeRepository.upsert(List.of(
-                nodeToInsert
-        ));
+        final Set<NodePK> keys2 = HashSet.of(
+                nodeRepository.update(insertedNode)
+        );
 
         final List<Node> nodesFromDb2 = nodeRepository.findAll();
 
@@ -163,12 +162,12 @@ public class NodeRepositoryTest extends IntegrationTest {
 
         final Node updatedNode = nodesFromDb2.get(0);
 
-        assertThat("Upsert and find() should return the same keys",
+        assertThat("Update and find() should return the same keys",
                    nodesFromDb2.map(IHasPK::pk).toSet(),
-                   is(keys2.toSet()));
+                   is(keys2));
         assertThat("Node id should not change",
-                   keys.toSet(),
-                   is(keys2.toSet()));
+                   HashSet.of(id),
+                   is(keys2));
         assertThat("Updated node should be identical to the original node",
                    updatedNode,
                    is(originalNode));

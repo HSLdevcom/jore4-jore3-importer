@@ -1,8 +1,5 @@
 package fi.hsl.jore.importer.feature.infrastructure.link.repository;
 
-import com.google.common.collect.Lists;
-import fi.hsl.jore.importer.config.jooq.converter.geometry.LineStringConverter;
-import fi.hsl.jore.importer.feature.batch.point.dto.LinkGeometry;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.PersistableLink;
@@ -13,23 +10,16 @@ import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.Infrastru
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
-import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
-import org.locationtech.jts.geom.LineString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Deque;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public class LinkRepository
-        implements ILinkRepository {
+        implements ILinkTestRepository {
 
     private static final InfrastructureLinks LINKS = InfrastructureLinks.INFRASTRUCTURE_LINKS;
     private static final InfrastructureLinksWithHistory HISTORY_VIEW = InfrastructureLinksWithHistory.INFRASTRUCTURE_LINKS_WITH_HISTORY;
@@ -43,14 +33,14 @@ public class LinkRepository
 
     @Override
     @Transactional
-    public LinkPK insertLink(final PersistableLink link) {
+    public LinkPK insert(final PersistableLink entity) {
         final InfrastructureLinksRecord record = db.newRecord(LINKS);
 
-        record.setInfrastructureLinkExtId(link.externalId().value());
-        record.setInfrastructureNetworkType(link.networkType().label());
-        record.setInfrastructureLinkGeog(link.geometry());
-        record.setInfrastructureLinkStartNode(link.fromNode().value());
-        record.setInfrastructureLinkEndNode(link.toNode().value());
+        record.setInfrastructureLinkExtId(entity.externalId().value());
+        record.setInfrastructureNetworkType(entity.networkType().label());
+        record.setInfrastructureLinkGeog(entity.geometry());
+        record.setInfrastructureLinkStartNode(entity.fromNode().value());
+        record.setInfrastructureLinkEndNode(entity.toNode().value());
 
         record.store();
 
@@ -59,57 +49,44 @@ public class LinkRepository
 
     @Override
     @Transactional
-    public List<LinkPK> upsert(final Iterable<? extends PersistableLink> links) {
-        final String sql = db.insertInto(LINKS,
-                                         LINKS.INFRASTRUCTURE_LINK_EXT_ID,
-                                         LINKS.INFRASTRUCTURE_NETWORK_TYPE,
-                                         LINKS.INFRASTRUCTURE_LINK_GEOG,
-                                         LINKS.INFRASTRUCTURE_LINK_START_NODE,
-                                         LINKS.INFRASTRUCTURE_LINK_END_NODE)
-                             // parameters 1-5
-                             .values((String) null, null, null, null, null)
-                             .onConflict(LINKS.INFRASTRUCTURE_LINK_EXT_ID)
-                             .doUpdate()
-                             // parameter 6
-                             .set(LINKS.INFRASTRUCTURE_LINK_GEOG, (LineString) null)
-                             // parameter 7
-                             .where(LINKS.INFRASTRUCTURE_LINK_EXT_ID.eq((String) null))
-                             .returningResult(LINKS.INFRASTRUCTURE_LINK_ID)
-                             .getSQL();
+    public List<LinkPK> insert(final List<PersistableLink> entities) {
+        return entities.map(this::insert);
+    }
 
-        final Deque<LinkPK> keys = Lists.newLinkedList();
+    @Override
+    @Transactional
+    public List<LinkPK> insert(final PersistableLink... entities) {
+        return insert(List.of(entities));
+    }
 
-        // jOOQ doesn't support returning keys from batch operations (https://github.com/jOOQ/jOOQ/issues/3327),
-        // so for now we have to resort to JDBC
-        db.connection(conn -> {
-            try (final PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                for (final PersistableLink link : links) {
-                    final Object geom = LineStringConverter.INSTANCE.to(link.geometry());
-                    // The raw sql statement produced by jOOQ contains '?' placeholders (e.g. "VALUES (?, ?, ?::geometry)"),
-                    // which we must populate with the corresponding values. Because they are anonymous and positional,
-                    // we may need to submit the same value multiple times (once for each placeholder).
-                    stmt.setString(1, link.externalId().value());
-                    stmt.setString(2, link.networkType().label());
-                    stmt.setObject(3, geom);
-                    stmt.setObject(4, link.fromNode().value());
-                    stmt.setObject(5, link.toNode().value());
-                    stmt.setObject(6, geom);
-                    stmt.setString(7, link.externalId().value());
+    @Override
+    @Transactional
+    public LinkPK update(final Link link) {
+        final InfrastructureLinksRecord r =
+                Optional.ofNullable(db.selectFrom(LINKS)
+                                      .where(LINKS.INFRASTRUCTURE_LINK_ID.eq(link.pk().value()))
+                                      .fetchAny())
+                        .orElseThrow();
 
-                    stmt.addBatch();
-                }
+        r.setInfrastructureLinkGeog(link.geometry());
+        r.setInfrastructureLinkStartNode(link.startNode().value());
+        r.setInfrastructureLinkEndNode(link.endNode().value());
 
-                stmt.executeBatch();
+        r.store();
 
-                try (final ResultSet rs = stmt.getGeneratedKeys()) {
-                    while (rs.next()) {
-                        keys.add(LinkPK.of(rs.getObject(1, UUID.class)));
-                    }
-                }
-            }
-        });
+        return LinkPK.of(r.getInfrastructureLinkId());
+    }
 
-        return List.ofAll(keys);
+    @Override
+    @Transactional
+    public List<LinkPK> update(final List<Link> entities) {
+        return entities.map(this::update);
+    }
+
+    @Override
+    @Transactional
+    public List<LinkPK> update(final Link... entities) {
+        return update(List.of(entities));
     }
 
     @Override
@@ -149,17 +126,6 @@ public class LinkRepository
                  .fetchStream()
                  .map(row -> LinkPK.of(row.value1()))
                  .collect(HashSet.collector());
-    }
-
-    @Override
-    @Transactional
-    public void updateLinkPoints(final Iterable<? extends LinkGeometry> geometries) {
-        final BatchBindStep batch = db.batch(db.update(LINKS)
-                                               .set(LINKS.INFRASTRUCTURE_LINK_POINTS, (LineString) null)
-                                               .where(LINKS.INFRASTRUCTURE_LINK_EXT_ID.eq((String) null)));
-        geometries.forEach(linkGeometry -> batch.bind(linkGeometry.geometry(),
-                                                      linkGeometry.externalId().value()));
-        batch.execute();
     }
 
     @Override

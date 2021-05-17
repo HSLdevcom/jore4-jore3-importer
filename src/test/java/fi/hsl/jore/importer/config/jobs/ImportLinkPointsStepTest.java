@@ -3,7 +3,7 @@ package fi.hsl.jore.importer.config.jobs;
 import fi.hsl.jore.importer.BatchIntegrationTest;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
-import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkRepository;
+import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkTestRepository;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class ImportLinkPointsStepTest extends BatchIntegrationTest {
                                                       "commitLinkPointsStep");
 
     @Autowired
-    private ILinkRepository linkRepository;
+    private ILinkTestRepository linkRepository;
 
     @Test
     public void givenSampleDataInSourceDatabase_andAnEmptyDatabase_whenImportLinkPointsStepsAreRun_thenLinkPointsForLinkIsImported() {
