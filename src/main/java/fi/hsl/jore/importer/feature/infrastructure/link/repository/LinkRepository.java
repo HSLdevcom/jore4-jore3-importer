@@ -3,13 +3,16 @@ package fi.hsl.jore.importer.feature.infrastructure.link.repository;
 import com.google.common.collect.Lists;
 import fi.hsl.jore.importer.config.jooq.converter.geometry.LineStringConverter;
 import fi.hsl.jore.importer.feature.batch.point.dto.LinkGeometry;
+import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.PersistableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinks;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinksWithHistory;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureLinksRecord;
+import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
+import io.vavr.collection.Set;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.locationtech.jts.geom.LineString;
@@ -119,11 +122,31 @@ public class LinkRepository
 
     @Override
     @Transactional(readOnly = true)
+    public Optional<Link> findByExternalId(final ExternalId externalId) {
+        return db.selectFrom(LINKS)
+                 .where(LINKS.INFRASTRUCTURE_LINK_EXT_ID.eq(externalId.value()))
+                 .fetchStream()
+                 .map(Link::of)
+                 .findFirst();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Link> findAll() {
         return db.selectFrom(LINKS)
                  .fetchStream()
                  .map(Link::of)
                  .collect(List.collector());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Set<LinkPK> findAllIds() {
+        return db.select(LINKS.INFRASTRUCTURE_LINK_ID)
+                 .from(LINKS)
+                 .fetchStream()
+                 .map(row -> LinkPK.of(row.value1()))
+                 .collect(HashSet.collector());
     }
 
     @Override

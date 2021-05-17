@@ -8,7 +8,7 @@ import org.locationtech.jts.geom.LineString;
 
 @Value.Immutable
 public interface PersistableLink
-        extends ModifiableFields<PersistableLink>,
+        extends CommonFields,
                 IHasLinkExternalId {
 
     static PersistableLink of(final ExternalId externalId,

@@ -6,18 +6,10 @@ import org.locationtech.jts.geom.LineString;
 import java.util.Optional;
 
 
-public interface ModifiableFields<T> {
+public interface CommonFields {
     NetworkType networkType();
 
     LineString geometry();
 
     Optional<LineString> points();
-
-    T withNetworkType(NetworkType networkType);
-
-    T withGeometry(LineString geometry);
-
-    T withPoints(Optional<? extends LineString> points);
-
-    T withPoints(LineString points);
 }

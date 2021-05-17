@@ -16,7 +16,7 @@ public interface Link
         extends IHasPK<LinkPK>,
                 IHasLinkExternalId,
                 IHasSystemTime,
-                ModifiableFields<Link> {
+                CommonFields {
 
     static Link of(final InfrastructureLinksRecord record) {
         return ImmutableLink.builder()

@@ -1,0 +1,38 @@
+@startuml
+
+skinparam defaultFontName monospaced
+
+object "importJob : <color:gray>o.s.batch.core.</color>Job" as job
+object "importFlow : <color:gray>o.s.batch.core.job.</color>flow.Flow" as flow
+object "prepareStep : <color:gray>o.s.batch.core.</color>Step" as pstep
+object "importStep : <color:gray>o.s.batch.core.</color>Step" as istep
+object "commitStep : <color:gray>o.s.batch.core.</color>Step" as cstep
+
+object "writer : GenericImportWriter<ENTITY, KEY>" as writer
+object "cleanupTasklet : GenericCleanupTasklet" as cleanup
+object "commitTasklet : GenericCommitTasklet" as commit
+
+object "reader : <color:gray>o.s.batch.item.database.</color>JdbcCursorItemReader<ROW>" as reader
+object "processor : <color:gray>o.s.batch.item.</color>ItemProcessor<ROW, ENTITY>" as processor
+
+object "repository : IImportRepository<ENTITY, KEY>" as repository
+
+job *-- flow
+flow *-- pstep
+flow *-- istep
+flow *-- cstep
+
+pstep *-- cleanup
+istep *-- reader
+istep *-- processor
+istep *-- writer
+cstep *-- commit
+
+reader ..> processor
+processor ..> writer
+
+cleanup --> repository : "clearStagingTable()"
+writer --> repository  : "submitToStaging(Iterable<ENTITY>)"
+commit --> repository : "commitStagingToTarget()"
+
+@enduml
