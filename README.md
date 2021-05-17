@@ -66,6 +66,10 @@ $ curl  http://localhost:8080/job/import/status/
 
 ![Overview](images/import_jore_job.svg "Job overview")
 
+### Overview of a Generic Job
+
+![objectDiagram](images/job_diagram.svg "Object diagram of a generic job")
+
 #### Importing nodes (`jr_solmu`)
 
 ![Overview](images/import_nodes_step.svg "Step overview")

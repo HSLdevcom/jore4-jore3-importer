@@ -33,6 +33,19 @@ CREATE INDEX ON infrastructure_network.infrastructure_nodes (infrastructure_node
 CREATE UNIQUE INDEX idx_infrastructure_nodes_ext_id_type
     ON infrastructure_network.infrastructure_nodes (infrastructure_node_ext_id, infrastructure_node_type);
 
+-- Staging table used for node import
+
+CREATE TABLE infrastructure_network.infrastructure_nodes_staging
+(
+    -- id and sys_period are omitted
+    infrastructure_node_ext_id             TEXT                   NOT NULL,
+    infrastructure_node_type               TEXT                   NOT NULL REFERENCES infrastructure_network.infrastructure_node_types (infrastructure_node_type_value),
+    infrastructure_node_location           geometry(PointZ, 4326) NOT NULL,
+    infrastructure_node_projected_location geometry(PointZ, 4326),
+
+    PRIMARY KEY (infrastructure_node_ext_id, infrastructure_node_type)
+);
+
 -- VERSIONED NODES
 
 CREATE TABLE infrastructure_network.infrastructure_nodes_history

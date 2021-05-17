@@ -1,47 +1,77 @@
 @startuml
 
-control importLinkPointsStep as step
+control importLinkPointsFlow as flow
+control prepareLinkPointsStep as prepare_step
+control importLinkPointsStep as import_step
+control commitLinkPointsStep as commit_step
 participant LinkPointReader as linkpoint_reader
 participant PointReader as point_reader
 database SourceDb as sdb
 participant LinkPointProcessor as processor
-participant LinkGeometryWriter as writer
-database DestinationDb as ddb
+participant GenericImportWriter as writer
+database DestinationDb as staging_table
+database TargetTable as target_table
 
-group Read and process chunk of N elements
+flow -> prepare_step
+activate prepare_step
 
-    step -> linkpoint_reader : //read()//
-    activate linkpoint_reader
+prepare_step -> staging_table : //truncate//
+deactivate prepare_step
 
-    group Repeat until all points for a link are read
-        linkpoint_reader -> point_reader : //read()//
+flow -> import_step
+activate import_step
 
-        activate point_reader
+group Read all rows in chunks
 
-        point_reader -> sdb : ""import_points.sql""
-        point_reader <- sdb : ""ResultSet""
+    group Read and process chunk of N elements
 
-        linkpoint_reader <-- point_reader : ""PointRow"" | ""null""
-        deactivate point_reader
+        import_step -> linkpoint_reader : //read()//
+        activate linkpoint_reader
 
-        linkpoint_reader -> linkpoint_reader : store to ""ReaderState""
+        group Repeat until all points for a link are read
+            linkpoint_reader -> point_reader : //read()//
+
+            activate point_reader
+
+            point_reader -> sdb : ""import_points.sql""
+            point_reader <- sdb : ""ResultSet""
+
+            linkpoint_reader <-- point_reader : ""PointRow"" | ""null""
+            deactivate point_reader
+
+            linkpoint_reader -> linkpoint_reader : store to ""ReaderState""
+        end
+
+        import_step <- linkpoint_reader :""LinkPoints"" | "null"
+        deactivate linkpoint_reader
+
+        import_step -> processor : //process(//""LinkPoints""//)//
+        activate processor
+        processor -> processor : build geometry
+        import_step <-- processor : ""LinkGeometry""
+        deactivate processor
+
     end
 
-    step <- linkpoint_reader :""LinkPoints"" | "null"
-    deactivate linkpoint_reader
-
-    step -> processor : //process(//""LinkPoints""//)//
-    activate processor
-    processor -> processor : build geometry
-    step <-- processor : ""LinkGeometry""
-    deactivate processor
+    import_step -> writer : //write(//""Chunk<LinkGeometry>""//)//
+    activate writer
+    writer -> staging_table : JDBC batch insert
+    import_step <-- writer
+    deactivate writer
 
 end
 
-step -> writer : //write(//""Chunk<LinkGeometry>""//)//
-activate writer
-writer -> ddb : JDBC batch update
-step <-- writer
-deactivate writer
+deactivate import_step
+
+flow -> commit_step
+activate commit_step
+
+commit_step -> staging_table : //commit//
+staging_table -> target_table : //update//
+commit_step <- target_table : updated ""LinkPK""s
+
+commit_step -> staging_table : //truncate//
+deactivate commit_step
+
 
 @enduml

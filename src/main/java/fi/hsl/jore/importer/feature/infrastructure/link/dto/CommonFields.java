@@ -6,7 +6,7 @@ import org.locationtech.jts.geom.LineString;
 import java.util.Optional;
 
 
-public interface ModifiableFields<T> {
+public interface CommonFields<T> {
     NetworkType networkType();
 
     LineString geometry();

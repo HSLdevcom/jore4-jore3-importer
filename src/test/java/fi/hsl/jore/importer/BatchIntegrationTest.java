@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.test.JobLauncherTestUtils;
@@ -16,6 +17,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @ExtendWith(SpringExtension.class)
 @SpringBatchTest
@@ -47,5 +51,25 @@ public class BatchIntegrationTest {
             LOG.error("Failed to construct JobLauncher for tests", e);
         }
         return launcher;
+    }
+
+    /**
+     * The {@link org.springframework.batch.test.JobLauncherTestUtils} does not support starting
+     * {@link org.springframework.batch.core.job.flow.Flow flows}, so we must manually run all the steps
+     * ourselves.
+     *
+     * @param steps Names of the steps to run
+     */
+    protected void runSteps(final Iterable<String> steps) {
+        steps.forEach(
+                stepName -> {
+                    final JobExecution stepExecution = jobLauncherTestUtils.launchStep(stepName);
+
+                    assertThat(String.format("Step %s should complete successfully", stepName),
+                               stepExecution.getExitStatus().getExitCode(),
+                               is("COMPLETED"));
+
+                }
+        );
     }
 }

@@ -1,11 +1,12 @@
 package fi.hsl.jore.importer.feature.infrastructure.node.dto;
 
+import fi.hsl.jore.importer.feature.common.dto.mixin.IHasExternalId;
 import org.locationtech.jts.geom.Point;
 
 import java.util.Optional;
 
 
-public interface ModifiableFields<T> {
+public interface CommonFields<T> extends IHasExternalId {
     NodeType nodeType();
 
     Point location();
