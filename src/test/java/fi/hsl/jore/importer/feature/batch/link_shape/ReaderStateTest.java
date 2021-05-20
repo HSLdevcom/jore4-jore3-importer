@@ -5,7 +5,7 @@ import fi.hsl.jore.importer.feature.batch.link_shape.dto.LinkPoints;
 import fi.hsl.jore.importer.feature.batch.link_shape.dto.PointRow;
 import fi.hsl.jore.importer.feature.jore3.entity.ImmutableJrPoint;
 import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
-import fi.hsl.jore.importer.feature.jore3.field.TransitType;
+import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
 import io.vavr.collection.List;

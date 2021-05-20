@@ -1,35 +1,44 @@
-package fi.hsl.jore.importer.feature.jore3.field;
+package fi.hsl.jore.importer.feature.jore3.enumerated;
 
+import fi.hsl.jore.importer.feature.jore3.mapping.JoreEnumeration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Optional;
 
+@JoreEnumeration(name = "Verkko")
 public enum TransitType {
-    BUS(1),
-    SUBWAY(2),
-    TRAM(3),
-    TRAIN(4),
-    FERRY(7),
-    UNKNOWN(-1),
+    BUS(1, "Linja-auto verkko"),
+    SUBWAY(2, "Metroverkko"),
+    TRAM(3, "Raitiovaunuverkko"),
+    TRAIN(4, "Junaverkko"),
+    FERRY(7, "Vesitieverkko"),
+
+    UNKNOWN(-1, "Unknown"),
     ;
 
     private static final Logger LOG = LoggerFactory.getLogger(TransitType.class);
 
-    private final int jrValue;
+    private final int value;
+    private final String description;
 
-    TransitType(final int val) {
-        this.jrValue = val;
+    TransitType(final int value, final String description) {
+        this.value = value;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public int value() {
-        return jrValue;
+        return value;
     }
 
     public static Optional<TransitType> of(final int i) {
         return Arrays.stream(values())
-                     .filter(transitType -> transitType.jrValue == i)
+                     .filter(transitType -> transitType.value == i)
                      .findFirst();
     }
 

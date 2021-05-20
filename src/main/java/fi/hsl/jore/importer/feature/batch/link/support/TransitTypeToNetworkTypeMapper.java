@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.link.support;
 
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
-import fi.hsl.jore.importer.feature.jore3.field.TransitType;
+import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 

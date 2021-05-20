@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.feature.jore3.entity;
 
-import fi.hsl.jore.importer.feature.jore3.field.TransitType;
+import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrPointPk;
