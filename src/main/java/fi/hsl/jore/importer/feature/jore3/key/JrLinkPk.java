@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.jore3.key;
 
 
-import fi.hsl.jore.importer.feature.jore3.field.TransitType;
+import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import fi.hsl.jore.importer.feature.jore3.mixin.IHasNodes;
 import fi.hsl.jore.importer.feature.jore3.mixin.IHasTransitType;
