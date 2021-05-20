@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer;
 
 import fi.hsl.jore.importer.config.DatasourceConfig;
+import fi.hsl.jore.importer.config.jackson.VavrModuleConfig;
 import fi.hsl.jore.importer.config.profile.Profiles;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +25,10 @@ import static org.hamcrest.Matchers.is;
 @ExtendWith(SpringExtension.class)
 @SpringBatchTest
 @ComponentScan(basePackages = "fi.hsl.jore.importer.feature")
-@ContextConfiguration(classes = DatasourceConfig.class)
+@ContextConfiguration(classes = {
+        DatasourceConfig.class,
+        VavrModuleConfig.class
+})
 @ActiveProfiles(Profiles.TEST_DATABASE)
 public class BatchIntegrationTest {
 
