@@ -3,7 +3,7 @@ package fi.hsl.jore.importer.feature.batch.link_shape;
 import fi.hsl.jore.importer.feature.batch.link_shape.dto.LinkEndpoints;
 import fi.hsl.jore.importer.feature.batch.link_shape.dto.PointRow;
 import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
-import fi.hsl.jore.importer.feature.jore3.field.TransitType;
+import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import org.springframework.jdbc.core.RowMapper;
 
