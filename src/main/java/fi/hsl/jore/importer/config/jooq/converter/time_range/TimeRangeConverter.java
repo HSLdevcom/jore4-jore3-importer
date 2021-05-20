@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.config.jooq.converter.time_range;
 
-import com.google.common.collect.Range;
+import fi.hsl.jore.importer.config.jooq.converter.util.RangeUtil;
 import org.jooq.Converter;
 
 import javax.annotation.Nullable;
@@ -101,36 +101,9 @@ public class TimeRangeConverter implements Converter<Object, TimeRange> {
         if (TimeRangeUtil.UNBOUNDED.equals(u)) {
             return "(,)";
         }
-        final Range<Instant> range = u.range();
-        final StringBuilder sb = new StringBuilder(64);
-        if (range.hasLowerBound()) {
-            switch (range.lowerBoundType()) {
-                case OPEN:
-                    sb.append('(');
-                    break;
-                case CLOSED:
-                    sb.append('[');
-                    break;
-            }
-            sb.append(toString(range.lowerEndpoint()));
-        } else {
-            sb.append('(');
-        }
-        sb.append(',');
-        if (range.hasUpperBound()) {
-            sb.append(toString(range.upperEndpoint()));
-            switch (range.upperBoundType()) {
-                case OPEN:
-                    sb.append(')');
-                    break;
-                case CLOSED:
-                    sb.append(']');
-                    break;
-            }
-        } else {
-            sb.append(')');
-        }
-        return sb.toString();
+
+        return RangeUtil.render(u.range(),
+                                TimeRangeConverter::toString);
     }
 
     @Override
