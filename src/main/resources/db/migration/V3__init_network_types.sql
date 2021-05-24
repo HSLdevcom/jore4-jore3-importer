@@ -11,4 +11,5 @@ VALUES ('road'),
        ('railway'),
        ('tram_track'),
        ('metro_track'),
-       ('waterway');
+       ('waterway'),
+       ('unknown');
