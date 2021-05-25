@@ -19,6 +19,8 @@ public class LinkRowProcessor implements ItemProcessor<LinkRow, ImportableLink> 
         final NetworkType type = TransitTypeToNetworkTypeMapper.resolveNetworkType(item.link().transitType());
         return ImportableLink.of(id,
                                  type,
-                                 item.geometry());
+                                 item.geometry(),
+                                 ExternalIdUtil.forNode(item.from()),
+                                 ExternalIdUtil.forNode(item.to()));
     }
 }

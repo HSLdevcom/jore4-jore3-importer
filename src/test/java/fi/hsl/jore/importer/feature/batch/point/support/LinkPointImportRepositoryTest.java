@@ -9,6 +9,10 @@ import fi.hsl.jore.importer.feature.infrastructure.link.dto.PersistableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
 import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkRepository;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
+import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
+import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
+import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
+import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeRepository;
 import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.HashSet;
@@ -18,6 +22,7 @@ import io.vavr.collection.Set;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -51,13 +56,36 @@ public class LinkPointImportRepositoryTest extends IntegrationTest {
             new Coordinate(60.158896355, 24.935549266, 0)
     );
 
+    private static final Point POINT_1 = GeometryUtil.toPoint(
+            GeometryUtil.SRID_WGS84,
+            new Coordinate(60.168988620, 24.949328727, 0)
+    );
+
+    private static final Point POINT_2 = GeometryUtil.toPoint(
+            GeometryUtil.SRID_WGS84,
+            new Coordinate(60.158988620, 24.939328727, 0)
+    );
+
+    private static final Point POINT_3 = GeometryUtil.toPoint(
+            GeometryUtil.SRID_WGS84,
+            new Coordinate(60.168988620, 24.949328727, 0)
+    );
+
+    private static final Point POINT_4 = GeometryUtil.toPoint(
+            GeometryUtil.SRID_WGS84,
+            new Coordinate(60.158988620, 24.939328727, 0)
+    );
+
     private final ILinkPointImportRepository importRepository;
     private final ILinkRepository targetRepository;
+    private final INodeRepository nodeRepository;
 
     public LinkPointImportRepositoryTest(@Autowired final ILinkPointImportRepository importRepository,
-                                         @Autowired final ILinkRepository targetRepository) {
+                                         @Autowired final ILinkRepository targetRepository,
+                                         @Autowired final INodeRepository nodeRepository) {
         this.importRepository = importRepository;
         this.targetRepository = targetRepository;
+        this.nodeRepository = nodeRepository;
     }
 
     @Test
@@ -72,10 +100,19 @@ public class LinkPointImportRepositoryTest extends IntegrationTest {
                    targetRepository.empty(),
                    is(true));
 
+        final List<NodePK> nodeIds = nodeRepository.upsert(
+                List.of(
+                        PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
+                        PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2),
+                        PersistableNode.of(ExternalId.of("4"), NodeType.CROSSROADS, POINT_3),
+                        PersistableNode.of(ExternalId.of("5"), NodeType.CROSSROADS, POINT_4)
+                )
+        );
+
         // Insert the real links (without linkpoints)
         final List<LinkPK> inserted = targetRepository.upsert(
-                List.of(PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1),
-                        PersistableLink.of(ExternalId.of("b"), NetworkType.ROAD, LINE_2))
+                List.of(PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1, nodeIds.get(0), nodeIds.get(1)),
+                        PersistableLink.of(ExternalId.of("b"), NetworkType.ROAD, LINE_2, nodeIds.get(2), nodeIds.get(3)))
         );
         final LinkPK targetLink = inserted.get(0);
 
@@ -120,10 +157,19 @@ public class LinkPointImportRepositoryTest extends IntegrationTest {
                    targetRepository.empty(),
                    is(true));
 
+        final List<NodePK> nodeIds = nodeRepository.upsert(
+                List.of(
+                        PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
+                        PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2),
+                        PersistableNode.of(ExternalId.of("4"), NodeType.CROSSROADS, POINT_3),
+                        PersistableNode.of(ExternalId.of("5"), NodeType.CROSSROADS, POINT_4)
+                )
+        );
+
         // Insert the real links (without linkpoints)
         final List<LinkPK> inserted = targetRepository.upsert(
-                List.of(PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1),
-                        PersistableLink.of(ExternalId.of("b"), NetworkType.ROAD, LINE_2))
+                List.of(PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1, nodeIds.get(0), nodeIds.get(1)),
+                        PersistableLink.of(ExternalId.of("b"), NetworkType.ROAD, LINE_2, nodeIds.get(2), nodeIds.get(3)))
         );
         final LinkPK targetLink = inserted.get(0);
 

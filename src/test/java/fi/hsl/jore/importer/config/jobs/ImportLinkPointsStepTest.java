@@ -25,7 +25,10 @@ import static org.hamcrest.Matchers.is;
 @Sql(scripts = "/sql/destination/drop_tables.sql")
 public class ImportLinkPointsStepTest extends BatchIntegrationTest {
 
-    private static final List<String> STEPS = List.of("prepareLinksStep",
+    private static final List<String> STEPS = List.of("prepareNodesStep",
+                                                      "importNodesStep",
+                                                      "commitNodesStep",
+                                                      "prepareLinksStep",
                                                       "importLinksStep",
                                                       "commitLinksStep",
                                                       "prepareLinkPointsStep",

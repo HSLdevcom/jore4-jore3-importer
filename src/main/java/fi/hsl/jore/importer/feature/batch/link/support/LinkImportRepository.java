@@ -5,6 +5,7 @@ import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinks;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinksStaging;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 import org.jooq.BatchBindStep;
@@ -29,6 +30,7 @@ public class LinkImportRepository implements ILinkImportRepository {
 
     private static final InfrastructureLinksStaging STAGING_TABLE = InfrastructureLinksStaging.INFRASTRUCTURE_LINKS_STAGING;
     private static final InfrastructureLinks TARGET_TABLE = InfrastructureLinks.INFRASTRUCTURE_LINKS;
+    private static final InfrastructureNodes NODES_TABLE = InfrastructureNodes.INFRASTRUCTURE_NODES;
 
     private final DSLContext db;
 
@@ -53,12 +55,16 @@ public class LinkImportRepository implements ILinkImportRepository {
         final BatchBindStep batch = db.batch(db.insertInto(STAGING_TABLE,
                                                            STAGING_TABLE.INFRASTRUCTURE_LINK_EXT_ID,
                                                            STAGING_TABLE.INFRASTRUCTURE_NETWORK_TYPE,
-                                                           STAGING_TABLE.INFRASTRUCTURE_LINK_GEOG)
-                                               .values((String) null, null, null));
+                                                           STAGING_TABLE.INFRASTRUCTURE_LINK_GEOG,
+                                                           STAGING_TABLE.INFRASTRUCTURE_LINK_START_NODE_EXT_ID,
+                                                           STAGING_TABLE.INFRASTRUCTURE_LINK_END_NODE_EXT_ID)
+                                               .values((String) null, null, null, null, null));
 
         links.forEach(link -> batch.bind(link.externalId().value(),
                                          link.networkType().label(),
-                                         link.geometry()));
+                                         link.geometry(),
+                                         link.fromNode().value(),
+                                         link.toNode().value()));
 
         batch.execute();
     }
@@ -80,16 +86,24 @@ public class LinkImportRepository implements ILinkImportRepository {
         final Field<String> insertStatusField = DSL.inline(RowStatus.INSERTED.value())
                                                    .as(statusName);
 
+        final InfrastructureNodes nodeFromTable = NODES_TABLE.as("node_from");
+        final InfrastructureNodes nodeToTable = NODES_TABLE.as("node_to");
         // A basic insert from one table to another
         // Ignores rows which already exist (e.g. same ext id & network type)
         final String insertSql = db.insertInto(TARGET_TABLE)
                                    .columns(TARGET_TABLE.INFRASTRUCTURE_LINK_EXT_ID,
                                             TARGET_TABLE.INFRASTRUCTURE_NETWORK_TYPE,
-                                            TARGET_TABLE.INFRASTRUCTURE_LINK_GEOG)
+                                            TARGET_TABLE.INFRASTRUCTURE_LINK_GEOG,
+                                            TARGET_TABLE.INFRASTRUCTURE_LINK_START_NODE,
+                                            TARGET_TABLE.INFRASTRUCTURE_LINK_END_NODE)
                                    .select(db.select(STAGING_TABLE.INFRASTRUCTURE_LINK_EXT_ID,
                                                      STAGING_TABLE.INFRASTRUCTURE_NETWORK_TYPE,
-                                                     STAGING_TABLE.INFRASTRUCTURE_LINK_GEOG)
+                                                     STAGING_TABLE.INFRASTRUCTURE_LINK_GEOG,
+                                                     nodeFromTable.INFRASTRUCTURE_NODE_ID,
+                                                     nodeToTable.INFRASTRUCTURE_NODE_ID)
                                              .from(STAGING_TABLE)
+                                             .leftJoin(nodeFromTable).on(nodeFromTable.INFRASTRUCTURE_NODE_EXT_ID.eq(STAGING_TABLE.INFRASTRUCTURE_LINK_START_NODE_EXT_ID))
+                                             .leftJoin(nodeToTable).on(nodeToTable.INFRASTRUCTURE_NODE_EXT_ID.eq(STAGING_TABLE.INFRASTRUCTURE_LINK_END_NODE_EXT_ID))
                                              .whereNotExists(selectOne()
                                                                      .from(TARGET_TABLE)
                                                                      .where(TARGET_TABLE.INFRASTRUCTURE_LINK_EXT_ID.eq(STAGING_TABLE.INFRASTRUCTURE_LINK_EXT_ID))))
