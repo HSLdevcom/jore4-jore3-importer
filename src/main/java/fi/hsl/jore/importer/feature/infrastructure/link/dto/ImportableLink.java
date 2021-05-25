@@ -11,13 +11,21 @@ public interface ImportableLink
         extends CommonFields,
                 IHasLinkExternalId {
 
+    ExternalId fromNode();
+
+    ExternalId toNode();
+
     static ImportableLink of(final ExternalId externalId,
                              final NetworkType networkType,
-                             final LineString geometry) {
+                             final LineString geometry,
+                             final ExternalId fromNode,
+                             final ExternalId toNode) {
         return ImmutableImportableLink.builder()
                                       .externalId(externalId)
                                       .networkType(networkType)
                                       .geometry(geometry)
+                                      .fromNode(fromNode)
+                                      .toNode(toNode)
                                       .build();
     }
 }

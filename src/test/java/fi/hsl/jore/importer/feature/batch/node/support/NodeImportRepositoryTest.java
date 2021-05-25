@@ -15,6 +15,7 @@ import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
@@ -46,6 +47,13 @@ public class NodeImportRepositoryTest extends IntegrationTest {
         this.targetRepository = targetRepository;
     }
 
+    @BeforeEach
+    public void beforeEach() {
+        assertThat("Target repository should be empty at the start of the test",
+                   targetRepository.empty(),
+                   is(true));
+    }
+
     @Test
     public void whenNoStagedRowsAndCommit_thenReturnEmptyResult() {
         assertThat(importRepository.commitStagingToTarget(),
@@ -54,10 +62,6 @@ public class NodeImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenNewStagedRowsAndCommit_andTargetDbEmpty_thenReturnResultWithInsertedId() {
-        assertThat("Target repository should be empty before import",
-                   targetRepository.empty(),
-                   is(true));
-
         importRepository.submitToStaging(
                 List.of(ImportableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, POINT_1))
         );
@@ -88,10 +92,6 @@ public class NodeImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenStagedRowsWithChangesAndCommit_andTargetNotEmpty_thenReturnResultWithUpdatedId() {
-        assertThat("Target repository should be empty before import",
-                   targetRepository.empty(),
-                   is(true));
-
         final List<NodePK> existing = targetRepository.upsert(
                 List.of(PersistableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, POINT_1))
         );
@@ -131,10 +131,6 @@ public class NodeImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenStagedRowsWithNoChangesAndCommit_andTargetNotEmpty_thenReturnEmptyResult() {
-        assertThat("Target repository should be empty before import",
-                   targetRepository.empty(),
-                   is(true));
-
         final PersistableNode sourceNode = PersistableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, POINT_1);
 
         final List<NodePK> existing = targetRepository.upsert(
@@ -172,10 +168,6 @@ public class NodeImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenNoStagedRowsAndCommit_andTargetNotEmpty_thenReturnResultWithDeletedId() {
-        assertThat("Target repository should be empty before import",
-                   targetRepository.empty(),
-                   is(true));
-
         // Insert two nodes into the target table (as if imported previously)
         final PersistableNode firstNode = PersistableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, POINT_1);
         final PersistableNode secondNode = PersistableNode.of(ExternalId.of("b"), NodeType.CROSSROADS, POINT_2);

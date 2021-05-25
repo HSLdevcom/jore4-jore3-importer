@@ -49,6 +49,8 @@ public class LinkRepository
         record.setInfrastructureLinkExtId(link.externalId().value());
         record.setInfrastructureNetworkType(link.networkType().label());
         record.setInfrastructureLinkGeog(link.geometry());
+        record.setInfrastructureLinkStartNode(link.fromNode().value());
+        record.setInfrastructureLinkEndNode(link.toNode().value());
 
         record.store();
 
@@ -61,14 +63,16 @@ public class LinkRepository
         final String sql = db.insertInto(LINKS,
                                          LINKS.INFRASTRUCTURE_LINK_EXT_ID,
                                          LINKS.INFRASTRUCTURE_NETWORK_TYPE,
-                                         LINKS.INFRASTRUCTURE_LINK_GEOG)
-                             // parameters 1-3
-                             .values((String) null, null, null)
+                                         LINKS.INFRASTRUCTURE_LINK_GEOG,
+                                         LINKS.INFRASTRUCTURE_LINK_START_NODE,
+                                         LINKS.INFRASTRUCTURE_LINK_END_NODE)
+                             // parameters 1-5
+                             .values((String) null, null, null, null, null)
                              .onConflict(LINKS.INFRASTRUCTURE_LINK_EXT_ID)
                              .doUpdate()
-                             // parameter 4
+                             // parameter 6
                              .set(LINKS.INFRASTRUCTURE_LINK_GEOG, (LineString) null)
-                             // parameter 5
+                             // parameter 7
                              .where(LINKS.INFRASTRUCTURE_LINK_EXT_ID.eq((String) null))
                              .returningResult(LINKS.INFRASTRUCTURE_LINK_ID)
                              .getSQL();
@@ -87,8 +91,10 @@ public class LinkRepository
                     stmt.setString(1, link.externalId().value());
                     stmt.setString(2, link.networkType().label());
                     stmt.setObject(3, geom);
-                    stmt.setObject(4, geom);
-                    stmt.setString(5, link.externalId().value());
+                    stmt.setObject(4, link.fromNode().value());
+                    stmt.setObject(5, link.toNode().value());
+                    stmt.setObject(6, geom);
+                    stmt.setString(7, link.externalId().value());
 
                     stmt.addBatch();
                 }
