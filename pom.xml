@@ -23,6 +23,9 @@
         <geotools.version>25-RC</geotools.version>
         <postgresql.version>42.2.19</postgresql.version>
 
+        <!-- Test library version -->
+        <quicktheories.version>0.26</quicktheories.version>
+
         <!-- Maven plugins -->
         <maven-properties.plugin.version>1.0.0</maven-properties.plugin.version>
     </properties>
@@ -146,6 +149,13 @@
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq-codegen</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.quicktheories</groupId>
+            <artifactId>quicktheories</artifactId>
+            <version>${quicktheories.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
