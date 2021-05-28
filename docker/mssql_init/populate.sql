@@ -90,3 +90,27 @@ CREATE CLUSTERED INDEX jr_piste_cind ON jr_piste (lnkverkko, lnkalkusolmu, lnklo
 GO
 CREATE UNIQUE INDEX jr_piste_uind ON jr_piste (pisid)
 GO
+--
+-- Create jr_linja
+--
+CREATE TABLE jr_linja
+(
+    lintunnus      VARCHAR(6) NOT NULL,
+    linperusreitti VARCHAR(6),
+    linvoimast     DATETIME2(3),
+    linvoimviimpvm DATETIME2(3),
+    linjoukkollaji VARCHAR(2),
+    lintilorg      VARCHAR(3),
+    linverkko      VARCHAR,
+    linryhma       VARCHAR(3),
+    linkuka        VARCHAR(20),
+    linviimpvm     DATETIME2(3),
+    linjlkohde     VARCHAR(6),
+    id             VARCHAR(4),
+    vaihtoaika     INT,
+    linkorvtyyppi  VARCHAR(2),
+    puhelinnumero  VARCHAR(20)
+)
+GO
+CREATE UNIQUE CLUSTERED INDEX jr_linja_cind ON jr_linja (lintunnus)
+GO

@@ -21,6 +21,12 @@ partition importLinkPointsFlow {
     :commitLinkPointsStep;
 }
 
+partition importLinesFlow {
+    :prepareLinesStep;
+    :importLinesStep;
+    :commitLinesStep;
+}
+
 stop
 
 @enduml

@@ -51,4 +51,10 @@ public final class JdbcUtil {
         throwOnNull(rs, column);
         return val.trim();
     }
+
+    public static Optional<String> getOptionalString(final ResultSet rs,
+                                                     final String column) throws SQLException {
+        final String val = rs.getString(column);
+        return rs.wasNull() ? Optional.empty() : Optional.of(val);
+    }
 }

@@ -278,9 +278,11 @@
                             <!-- Exclude the public schema (at least for now), because it contains -->
                             <schemas>
                                 <schema>infrastructure_network</schema>
+                                <schema>network</schema>
                             </schemas>
                             <initSql>
                                 DROP SCHEMA IF EXISTS infrastructure_network CASCADE;
+                                DROP SCHEMA IF EXISTS network CASCADE;
                                 DROP SCHEMA IF EXISTS temporal CASCADE;
                                 DROP TABLE IF EXISTS public.flyway_schema_history CASCADE;
                             </initSql>
@@ -341,7 +343,7 @@
                         <name>org.jooq.codegen.JavaGenerator</name>
                         <database>
                             <name>${jooq.generator.db.dialect}</name>
-                            <includes>infrastructure_network.*</includes>
+                            <includes>infrastructure_network.* | network.*</includes>
                             <excludes>
                                 (_*)ST_.*
                                 | DATABASECHANGELOG.*

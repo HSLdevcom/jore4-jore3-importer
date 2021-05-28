@@ -1,8 +1,8 @@
 package fi.hsl.jore.importer.feature.batch.link;
 
 import fi.hsl.jore.importer.feature.batch.link.dto.LinkRow;
-import fi.hsl.jore.importer.feature.batch.link.support.TransitTypeToNetworkTypeMapper;
 import fi.hsl.jore.importer.feature.batch.util.ExternalIdUtil;
+import fi.hsl.jore.importer.feature.batch.util.TransitTypeToNetworkTypeMapper;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
