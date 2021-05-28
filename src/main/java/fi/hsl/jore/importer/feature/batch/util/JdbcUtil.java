@@ -2,6 +2,8 @@ package fi.hsl.jore.importer.feature.batch.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public final class JdbcUtil {
@@ -56,5 +58,12 @@ public final class JdbcUtil {
                                                      final String column) throws SQLException {
         final String val = rs.getString(column);
         return rs.wasNull() ? Optional.empty() : Optional.of(val);
+    }
+
+    public static LocalDateTime getLocalDateTimeOrThrow(final ResultSet rs,
+                                                        final String column) throws SQLException {
+        final Timestamp val = rs.getTimestamp(column);
+        throwOnNull(rs, column);
+        return val.toLocalDateTime();
     }
 }
