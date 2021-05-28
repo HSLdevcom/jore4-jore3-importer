@@ -81,3 +81,7 @@ $ curl  http://localhost:8080/job/import/status/
 #### Importing points (`jr_piste`)
 
 ![Overview](images/import_points_step.svg "Step overview")
+
+#### Importing lines (`jr_linja`)
+
+![Overview](images/import_lines_step.svg "Step overview")

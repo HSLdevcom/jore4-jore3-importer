@@ -1,4 +1,4 @@
-package fi.hsl.jore.importer.feature.infrastructure.common.repository;
+package fi.hsl.jore.importer.feature.common.repository;
 
 import fi.hsl.jore.importer.feature.common.dto.field.PK;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;

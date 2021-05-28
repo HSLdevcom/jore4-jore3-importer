@@ -1,0 +1,63 @@
+@startuml
+
+control importLinesFlow as flow
+control prepareLinesStep as prepare_step
+control importLinesStep as import_step
+control commitLinesStep as commit_step
+participant LineRowReader as reader
+database SourceDb as sdb
+participant LineProcessor as processor
+participant LineWriter as writer
+database StagingTable as staging_table
+database TargetTable as target_table
+
+flow -> prepare_step
+activate prepare_step
+
+prepare_step -> staging_table : //truncate//
+deactivate prepare_step
+
+flow -> import_step
+activate import_step
+
+group Read all rows in chunks
+
+    group Read and process chunk of N elements
+
+        import_step -> reader : //read()//
+        activate reader
+
+        reader -> sdb : ""import_lines.sql""
+        reader <- sdb : ""ResultSet""
+
+        import_step <- reader :""LineRow"" | "null"
+        deactivate reader
+
+        import_step -> processor : //process(//""LineRow""//)//
+        activate processor
+        import_step <-- processor : ""PersistableLine""
+        deactivate processor
+
+    end
+
+    import_step -> writer : //write(//""Chunk<PersistableLine>""//)//
+    activate writer
+    writer -> staging_table : JDBC batch insert
+    import_step <-- writer
+    deactivate writer
+
+end
+
+deactivate import_step
+
+flow -> commit_step
+activate commit_step
+
+commit_step -> staging_table : //commit//
+staging_table -> target_table : //insert/update/delete//
+commit_step <- target_table : inserted/updated/deleted ""LinePK""s
+
+commit_step -> staging_table : //truncate//
+deactivate commit_step
+
+@enduml

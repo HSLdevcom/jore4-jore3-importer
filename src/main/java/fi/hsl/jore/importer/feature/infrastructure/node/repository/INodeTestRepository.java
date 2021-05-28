@@ -1,8 +1,8 @@
 package fi.hsl.jore.importer.feature.infrastructure.node.repository;
 
 import com.google.common.annotations.VisibleForTesting;
-import fi.hsl.jore.importer.feature.infrastructure.common.repository.IBasicCrudRepository;
-import fi.hsl.jore.importer.feature.infrastructure.common.repository.IHistoryRepository;
+import fi.hsl.jore.importer.feature.common.repository.IBasicCrudRepository;
+import fi.hsl.jore.importer.feature.common.repository.IHistoryRepository;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
