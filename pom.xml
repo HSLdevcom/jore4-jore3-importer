@@ -393,6 +393,12 @@
                                     <includeExpression>.*\..*_SYS_PERIOD.*</includeExpression>
                                     <includeTypes>.*</includeTypes>
                                 </forcedType>
+                                <forcedType>
+                                    <userType>fi.hsl.jore.importer.config.jooq.converter.date_range.DateRange</userType>
+                                    <converter>fi.hsl.jore.importer.config.jooq.converter.date_range.DateRangeBinding</converter>
+                                    <includeExpression>.*\..*_DATE_RANGE</includeExpression>
+                                    <includeTypes>.*</includeTypes>
+                                </forcedType>
                             </forcedTypes>
                         </database>
                         <target>

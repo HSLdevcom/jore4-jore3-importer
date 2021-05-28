@@ -10,3 +10,6 @@ TRUNCATE TABLE infrastructure_network.infrastructure_nodes_staging CASCADE;
 TRUNCATE TABLE network.network_lines CASCADE;
 TRUNCATE TABLE network.network_lines_history CASCADE;
 TRUNCATE TABLE network.network_lines_staging CASCADE;
+TRUNCATE TABLE network.network_line_headers CASCADE;
+TRUNCATE TABLE network.network_line_headers_history CASCADE;
+TRUNCATE TABLE network.network_line_headers_staging CASCADE;

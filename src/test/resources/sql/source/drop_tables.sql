@@ -2,3 +2,4 @@ TRUNCATE TABLE jr_linkki
 TRUNCATE TABLE jr_solmu
 TRUNCATE TABLE jr_piste
 TRUNCATE TABLE jr_linja
+TRUNCATE TABLE jr_linjannimet
