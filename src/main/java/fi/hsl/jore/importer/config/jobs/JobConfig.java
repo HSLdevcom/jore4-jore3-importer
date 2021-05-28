@@ -3,6 +3,9 @@ package fi.hsl.jore.importer.config.jobs;
 import fi.hsl.jore.importer.feature.batch.common.GenericCleanupTasklet;
 import fi.hsl.jore.importer.feature.batch.common.GenericCommitTasklet;
 import fi.hsl.jore.importer.feature.batch.common.GenericImportWriter;
+import fi.hsl.jore.importer.feature.batch.line.LineProcessor;
+import fi.hsl.jore.importer.feature.batch.line.LineRowReader;
+import fi.hsl.jore.importer.feature.batch.line.support.ILineImportRepository;
 import fi.hsl.jore.importer.feature.batch.link.LinkRowProcessor;
 import fi.hsl.jore.importer.feature.batch.link.LinkRowReader;
 import fi.hsl.jore.importer.feature.batch.link.dto.LinkRow;
@@ -18,7 +21,9 @@ import fi.hsl.jore.importer.feature.batch.node.support.INodeImportRepository;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImportableNode;
+import fi.hsl.jore.importer.feature.jore3.entity.JrLine;
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
+import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.FlowBuilder;
@@ -38,11 +43,13 @@ public class JobConfig extends BatchConfig {
     @Bean
     public Job importJob(final Flow importNodesFlow,
                          final Flow importLinksFlow,
-                         final Flow importLinkPointsFlow) {
+                         final Flow importLinkPointsFlow,
+                         final Flow importLinesFlow) {
         return jobs.get(JOB_NAME)
                    .start(importNodesFlow)
                    .next(importLinksFlow)
                    .next(importLinkPointsFlow)
+                   .next(importLinesFlow)
                    .end()
                    .build();
     }
@@ -167,6 +174,47 @@ public class JobConfig extends BatchConfig {
         return steps.get("commitLinkPointsStep")
                     .allowStartIfComplete(true)
                     .tasklet(new GenericCommitTasklet<>(linkPointImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Flow importLinesFlow(final Step prepareLinesStep,
+                                final Step importLinesStep,
+                                final Step commitLinesStep) {
+
+        return new FlowBuilder<SimpleFlow>("importLinesFlow")
+                .start(prepareLinesStep)
+                .next(importLinesStep)
+                .next(commitLinesStep)
+                .build();
+    }
+
+    @Bean
+    public Step prepareLinesStep(final ILineImportRepository lineImportRepository) {
+        return steps.get("prepareLinesStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCleanupTasklet<>(lineImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step importLinesStep(final LineRowReader lineReader,
+                                final ILineImportRepository lineImportRepository) {
+        final int chunkSize = 1000;
+        return steps.get("importLinesStep")
+                    .allowStartIfComplete(true)
+                    .<JrLine, PersistableLine>chunk(chunkSize)
+                    .reader(lineReader.build())
+                    .processor(new LineProcessor())
+                    .writer(new GenericImportWriter<>(lineImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step commitLinesStep(final ILineImportRepository lineImportRepository) {
+        return steps.get("commitLinesStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCommitTasklet<>(lineImportRepository))
                     .build();
     }
 }

@@ -1,10 +1,13 @@
 package fi.hsl.jore.importer.feature.batch.util;
 
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
+import fi.hsl.jore.importer.feature.jore3.entity.JrLine;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLink;
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
+import fi.hsl.jore.importer.feature.jore3.field.LineId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
+import fi.hsl.jore.importer.feature.jore3.key.JrLinePk;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrNodePk;
 
@@ -42,5 +45,17 @@ public final class ExternalIdUtil {
 
     public static ExternalId forLink(final JrLink link) {
         return forLink(link.pk());
+    }
+
+    public static ExternalId forLine(final LineId lineId) {
+        return ExternalId.of(lineId.originalValue());
+    }
+
+    public static ExternalId forLine(final JrLinePk linePk) {
+        return forLine(linePk.lineId());
+    }
+
+    public static ExternalId forLine(final JrLine line) {
+        return forLine(line.pk());
     }
 }

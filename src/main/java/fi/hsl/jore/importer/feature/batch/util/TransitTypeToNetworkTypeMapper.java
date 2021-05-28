@@ -1,4 +1,4 @@
-package fi.hsl.jore.importer.feature.batch.link.support;
+package fi.hsl.jore.importer.feature.batch.util;
 
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
