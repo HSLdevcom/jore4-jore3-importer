@@ -16,7 +16,8 @@ import static org.hamcrest.Matchers.is;
         "/sql/source/populate_nodes.sql",
         "/sql/source/populate_links.sql",
         "/sql/source/populate_points.sql",
-        "/sql/source/populate_lines.sql"
+        "/sql/source/populate_lines.sql",
+        "/sql/source/populate_line_headers.sql"
 },
      config = @SqlConfig(dataSource = "sourceDataSource"))
 @Sql(scripts = "/sql/destination/drop_tables.sql")

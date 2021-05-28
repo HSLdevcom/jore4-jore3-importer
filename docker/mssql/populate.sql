@@ -114,3 +114,28 @@ CREATE TABLE jr_linja
 GO
 CREATE UNIQUE CLUSTERED INDEX jr_linja_cind ON jr_linja (lintunnus)
 GO
+--
+-- Create jr_linjannimet
+--
+CREATE TABLE jr_linjannimet
+(
+    lintunnus   VARCHAR(6)   NOT NULL,
+    linalkupvm  DATETIME2(3) NOT NULL,
+    linloppupvm DATETIME2(3),
+    linnimi     VARCHAR(60)  NOT NULL,
+    linnimilyh  VARCHAR(20),
+    linnimir    VARCHAR(60),
+    linnimilyhr VARCHAR(20),
+    linlahtop1  VARCHAR(30),
+    linlahtop1r VARCHAR(30),
+    linlahtop2  VARCHAR(30),
+    linlahtop2r VARCHAR(30),
+    linkuka     VARCHAR(20),
+    linviimpvm  DATETIME2(3),
+    linlijpvm   DATETIME2(3)
+)
+GO
+CREATE UNIQUE CLUSTERED INDEX jr_linjannimet_cind ON jr_linjannimet (lintunnus, linalkupvm)
+GO
+CREATE INDEX jr_linjannimet_mind1 ON jr_linjannimet (linnimi, linalkupvm)
+GO

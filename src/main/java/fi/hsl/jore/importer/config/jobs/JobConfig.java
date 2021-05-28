@@ -6,6 +6,9 @@ import fi.hsl.jore.importer.feature.batch.common.GenericImportWriter;
 import fi.hsl.jore.importer.feature.batch.line.LineProcessor;
 import fi.hsl.jore.importer.feature.batch.line.LineRowReader;
 import fi.hsl.jore.importer.feature.batch.line.support.ILineImportRepository;
+import fi.hsl.jore.importer.feature.batch.line_header.LineHeaderProcessor;
+import fi.hsl.jore.importer.feature.batch.line_header.LineHeaderReader;
+import fi.hsl.jore.importer.feature.batch.line_header.support.ILineHeaderImportRepository;
 import fi.hsl.jore.importer.feature.batch.link.LinkRowProcessor;
 import fi.hsl.jore.importer.feature.batch.link.LinkRowReader;
 import fi.hsl.jore.importer.feature.batch.link.dto.LinkRow;
@@ -22,8 +25,10 @@ import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImportableNode;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLine;
+import fi.hsl.jore.importer.feature.jore3.entity.JrLineHeader;
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
+import fi.hsl.jore.importer.feature.network.line_header.dto.ImportableLineHeader;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.FlowBuilder;
@@ -44,12 +49,14 @@ public class JobConfig extends BatchConfig {
     public Job importJob(final Flow importNodesFlow,
                          final Flow importLinksFlow,
                          final Flow importLinkPointsFlow,
-                         final Flow importLinesFlow) {
+                         final Flow importLinesFlow,
+                         final Flow importLineHeadersFlow) {
         return jobs.get(JOB_NAME)
                    .start(importNodesFlow)
                    .next(importLinksFlow)
                    .next(importLinkPointsFlow)
                    .next(importLinesFlow)
+                   .next(importLineHeadersFlow)
                    .end()
                    .build();
     }
@@ -215,6 +222,47 @@ public class JobConfig extends BatchConfig {
         return steps.get("commitLinesStep")
                     .allowStartIfComplete(true)
                     .tasklet(new GenericCommitTasklet<>(lineImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Flow importLineHeadersFlow(final Step prepareLineHeadersStep,
+                                      final Step importLineHeadersStep,
+                                      final Step commitLineHeadersStep) {
+
+        return new FlowBuilder<SimpleFlow>("importLineHeadersFlow")
+                .start(prepareLineHeadersStep)
+                .next(importLineHeadersStep)
+                .next(commitLineHeadersStep)
+                .build();
+    }
+
+    @Bean
+    public Step prepareLineHeadersStep(final ILineHeaderImportRepository lineHeaderImportRepository) {
+        return steps.get("prepareLineHeadersStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCleanupTasklet<>(lineHeaderImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step importLineHeadersStep(final LineHeaderReader lineHeaderReader,
+                                      final ILineHeaderImportRepository lineHeaderImportRepository) {
+        final int chunkSize = 1000;
+        return steps.get("importLineHeadersStep")
+                    .allowStartIfComplete(true)
+                    .<JrLineHeader, ImportableLineHeader>chunk(chunkSize)
+                    .reader(lineHeaderReader.build())
+                    .processor(new LineHeaderProcessor())
+                    .writer(new GenericImportWriter<>(lineHeaderImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step commitLineHeadersStep(final ILineHeaderImportRepository lineHeaderImportRepository) {
+        return steps.get("commitLineHeadersStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCommitTasklet<>(lineHeaderImportRepository))
                     .build();
     }
 }
