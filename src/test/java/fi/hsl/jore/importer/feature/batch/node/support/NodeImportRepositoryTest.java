@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.node.support;
 
 import fi.hsl.jore.importer.IntegrationTest;
+import fi.hsl.jore.importer.TestGeometryUtil;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImportableNode;
@@ -9,7 +10,6 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
-import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
@@ -17,26 +17,19 @@ import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
+import static fi.hsl.jore.importer.TestGeometryUtil.geometriesMatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class NodeImportRepositoryTest extends IntegrationTest {
 
-    private static final Point POINT_1 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.168988620, 24.949328727, 0)
-    );
-
-    private static final Point POINT_2 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.158988620, 24.939328727, 0)
-    );
+    private static final Point POINT_1 = TestGeometryUtil.randomPoint();
+    private static final Point POINT_2 = TestGeometryUtil.randomPoint();
 
     private final INodeImportRepository importRepository;
     private final INodeTestRepository targetRepository;
@@ -123,8 +116,8 @@ public class NodeImportRepositoryTest extends IntegrationTest {
         final Node node = targetRepository.findById(existingId).orElseThrow();
 
         assertThat("The updated rows location was changed",
-                   node.location(),
-                   is(POINT_2));
+                   geometriesMatch(node.location(), POINT_2),
+                   is(true));
     }
 
     @Test
@@ -158,8 +151,8 @@ public class NodeImportRepositoryTest extends IntegrationTest {
 
         final Node node = targetRepository.findById(existingId).orElseThrow();
         assertThat("The target row was not changed",
-                   node.location(),
-                   is(POINT_1));
+                   geometriesMatch(node.location(), POINT_1),
+                   is(true));
     }
 
     @Test

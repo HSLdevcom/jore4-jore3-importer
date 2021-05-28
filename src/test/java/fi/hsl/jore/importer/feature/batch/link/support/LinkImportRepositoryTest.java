@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.link.support;
 
 import fi.hsl.jore.importer.IntegrationTest;
+import fi.hsl.jore.importer.TestGeometryUtil;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
@@ -13,7 +14,6 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
-import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
@@ -21,47 +21,22 @@ import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static fi.hsl.jore.importer.TestGeometryUtil.geometriesMatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class LinkImportRepositoryTest extends IntegrationTest {
 
-    private static final LineString LINE_1 = GeometryUtil.toLineString(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.168988620, 24.949328727, 0),
-            new Coordinate(60.168896355, 24.945549266, 0)
-    );
-
-    private static final LineString LINE_2 = GeometryUtil.toLineString(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.158988620, 24.939328727, 0),
-            new Coordinate(60.158896355, 24.935549266, 0)
-    );
-
-    private static final Point POINT_1 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.168988620, 24.949328727, 0)
-    );
-
-    private static final Point POINT_2 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.158988620, 24.939328727, 0)
-    );
-
-    private static final Point POINT_3 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.128988620, 24.239328727, 0)
-    );
-
-    private static final Point POINT_4 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.138988620, 24.339328727, 0)
-    );
+    private static final LineString LINE_1 = TestGeometryUtil.randomLine();
+    private static final LineString LINE_2 = TestGeometryUtil.randomLine();
+    private static final Point POINT_1 = TestGeometryUtil.randomPoint();
+    private static final Point POINT_2 = TestGeometryUtil.randomPoint();
+    private static final Point POINT_3 = TestGeometryUtil.randomPoint();
+    private static final Point POINT_4 = TestGeometryUtil.randomPoint();
 
     private final ILinkImportRepository importRepository;
     private final ILinkTestRepository targetRepository;
@@ -168,8 +143,8 @@ public class LinkImportRepositoryTest extends IntegrationTest {
         final Link link = targetRepository.findById(existingId).orElseThrow();
 
         assertThat("The updated rows location was changed",
-                   link.geometry(),
-                   is(LINE_2));
+                   geometriesMatch(link.geometry(), LINE_2),
+                   is(true));
         assertThat(link.startNode(),
                    is(startNode));
         assertThat(link.endNode(),
@@ -216,8 +191,8 @@ public class LinkImportRepositoryTest extends IntegrationTest {
         final Link link = targetRepository.findById(existingId).orElseThrow();
 
         assertThat("The target row was not changed",
-                   link.geometry(),
-                   is(LINE_1));
+                   geometriesMatch(link.geometry(), LINE_1),
+                   is(true));
         assertThat(link.startNode(),
                    is(startNode));
         assertThat(link.endNode(),

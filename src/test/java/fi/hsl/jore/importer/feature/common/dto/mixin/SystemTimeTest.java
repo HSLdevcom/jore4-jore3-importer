@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.common.dto.mixin;
 
 import com.google.common.collect.Range;
 import fi.hsl.jore.importer.IntegrationTest;
+import fi.hsl.jore.importer.TestGeometryUtil;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImmutableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Node;
@@ -10,10 +11,8 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
 import fi.hsl.jore.importer.feature.system.repository.ISystemRepository;
-import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.Test;
-import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,20 +28,9 @@ public class SystemTimeTest extends IntegrationTest {
 
     private final ISystemRepository systemRepository;
 
-    private static final Point GEOM = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.168988620, 24.949328727, 0)
-    );
-
-    private static final Point GEOM2 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(61.168988620, 25.949328727, 0)
-    );
-
-    private static final Point GEOM3 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(62.168988620, 26.949328727, 0)
-    );
+    private static final Point GEOM = TestGeometryUtil.randomPoint();
+    private static final Point GEOM2 = TestGeometryUtil.randomPoint();
+    private static final Point GEOM3 = TestGeometryUtil.randomPoint();
 
     public SystemTimeTest(@Autowired final INodeTestRepository nodeRepository,
                           @Autowired final ISystemRepository systemRepository) {

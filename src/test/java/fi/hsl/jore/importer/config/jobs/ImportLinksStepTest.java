@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
+import static fi.hsl.jore.importer.TestGeometryUtil.geometriesMatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -56,8 +57,9 @@ public class ImportLinksStepTest extends BatchIntegrationTest {
         final LineString expectedGeometry = GeometryUtil.toLineString(GeometryUtil.SRID_WGS84,
                                                                       List.of(nodeC,
                                                                               nodeD));
-        assertThat(link.geometry(),
-                   is(expectedGeometry));
+        assertThat(geometriesMatch(link.geometry(),
+                                   expectedGeometry),
+                   is(true));
         assertThat(link.networkType(),
                    is(NetworkType.ROAD));
         assertThat(link.points().isEmpty(),

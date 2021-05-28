@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.infrastructure.link.repository;
 
 import fi.hsl.jore.importer.IntegrationTest;
+import fi.hsl.jore.importer.TestGeometryUtil;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
@@ -15,11 +16,11 @@ import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static fi.hsl.jore.importer.TestGeometryUtil.geometriesMatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -28,27 +29,10 @@ public class LinkRepositoryTest extends IntegrationTest {
     private final ILinkTestRepository linkRepository;
     private final INodeTestRepository nodeRepository;
 
-    private static final LineString GEOM = GeometryUtil.toLineString(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.168988620, 24.949328727, 0),
-            new Coordinate(60.168896355, 24.945549266, 0)
-    );
-
-    private static final LineString GEOM2 = GeometryUtil.toLineString(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.158988620, 24.939328727, 0),
-            new Coordinate(60.158896355, 24.935549266, 0)
-    );
-
-    private static final Point POINT_1 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.168988620, 24.949328727, 0)
-    );
-
-    private static final Point POINT_2 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.158988620, 24.939328727, 0)
-    );
+    private static final LineString GEOM = TestGeometryUtil.randomLine();
+    private static final LineString GEOM2 = TestGeometryUtil.randomLine();
+    private static final Point POINT_1 = TestGeometryUtil.randomPoint();
+    private static final Point POINT_2 = TestGeometryUtil.randomPoint();
 
     public LinkRepositoryTest(@Autowired final ILinkTestRepository linkRepository,
                               @Autowired final INodeTestRepository nodeRepository) {
@@ -84,8 +68,8 @@ public class LinkRepositoryTest extends IntegrationTest {
 
         final Link linkFromDb = linkRepository.findById(linkId).orElseThrow();
 
-        assertThat(linkFromDb.geometry(),
-                   is(GEOM));
+        assertThat(geometriesMatch(linkFromDb.geometry(), GEOM),
+                   is(true));
         assertThat(linkFromDb.geometry().getSRID(),
                    is(GEOM.getSRID()));
         assertThat(linkFromDb.geometry().getSRID(),
@@ -124,9 +108,9 @@ public class LinkRepositoryTest extends IntegrationTest {
                        is(endNode));
         }
 
-        assertThat(linksFromDb.get(0).geometry(),
-                   is(GEOM));
-        assertThat(linksFromDb.get(1).geometry(),
-                   is(GEOM2));
+        assertThat(geometriesMatch(linksFromDb.get(0).geometry(), GEOM),
+                   is(true));
+        assertThat(geometriesMatch(linksFromDb.get(1).geometry(), GEOM2),
+                   is(true));
     }
 }

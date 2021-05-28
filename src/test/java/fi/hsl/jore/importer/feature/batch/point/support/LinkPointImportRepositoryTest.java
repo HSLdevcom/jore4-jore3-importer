@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.point.support;
 
 import fi.hsl.jore.importer.IntegrationTest;
+import fi.hsl.jore.importer.TestGeometryUtil;
 import fi.hsl.jore.importer.feature.batch.point.dto.LinkGeometry;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
@@ -14,68 +15,30 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
-import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 import org.junit.jupiter.api.Test;
-import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static fi.hsl.jore.importer.TestGeometryUtil.geometriesMatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class LinkPointImportRepositoryTest extends IntegrationTest {
 
-    private static final LineString LINE_1 = GeometryUtil.toLineString(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.168988620, 24.949328727, 0),
-            new Coordinate(60.168896355, 24.945549266, 0)
-    );
-
-    private static final LineString LINEPOINTS_1 = GeometryUtil.toLineString(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.168988620, 24.949328727, 0),
-            new Coordinate(60.168990620, 24.946028727, 0),
-            new Coordinate(60.168896355, 24.945549266, 0)
-    );
-
-    private static final LineString LINE_2 = GeometryUtil.toLineString(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.158988620, 24.939328727, 0),
-            new Coordinate(60.158896355, 24.935549266, 0)
-    );
-
-    private static final LineString LINEPOINTS_2 = GeometryUtil.toLineString(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.158988620, 24.939328727, 0),
-            new Coordinate(60.158908620, 24.937328727, 0),
-            new Coordinate(60.158896355, 24.935549266, 0)
-    );
-
-    private static final Point POINT_1 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.168988620, 24.949328727, 0)
-    );
-
-    private static final Point POINT_2 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.158988620, 24.939328727, 0)
-    );
-
-    private static final Point POINT_3 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.168988620, 24.949328727, 0)
-    );
-
-    private static final Point POINT_4 = GeometryUtil.toPoint(
-            GeometryUtil.SRID_WGS84,
-            new Coordinate(60.158988620, 24.939328727, 0)
-    );
+    private static final LineString LINE_1 = TestGeometryUtil.randomLine();
+    private static final LineString LINEPOINTS_1 = TestGeometryUtil.randomLine(5);
+    private static final LineString LINE_2 = TestGeometryUtil.randomLine();
+    private static final LineString LINEPOINTS_2 = TestGeometryUtil.randomLine(5);
+    private static final Point POINT_1 = TestGeometryUtil.randomPoint();
+    private static final Point POINT_2 = TestGeometryUtil.randomPoint();
+    private static final Point POINT_3 = TestGeometryUtil.randomPoint();
+    private static final Point POINT_4 = TestGeometryUtil.randomPoint();
 
     private final ILinkPointImportRepository importRepository;
     private final ILinkTestRepository targetRepository;
@@ -140,14 +103,14 @@ public class LinkPointImportRepositoryTest extends IntegrationTest {
         final Link link = targetRepository.findById(id).orElseThrow();
 
         assertThat("Target link should have the original geometry",
-                   link.geometry(),
-                   is(LINE_1));
+                   geometriesMatch(link.geometry(), LINE_1),
+                   is(true));
         assertThat("Target link should have line points",
                    link.points().isPresent(),
                    is(true));
         assertThat("Target link should have the correct line points",
-                   link.points().get(),
-                   is(LINEPOINTS_1));
+                   geometriesMatch(link.points().get(), LINEPOINTS_1),
+                   is(true));
     }
 
     @Test
@@ -202,13 +165,13 @@ public class LinkPointImportRepositoryTest extends IntegrationTest {
         final Link link = targetRepository.findById(id).orElseThrow();
 
         assertThat("Target link should have the original geometry",
-                   link.geometry(),
-                   is(LINE_1));
+                   geometriesMatch(link.geometry(), LINE_1),
+                   is(true));
         assertThat("Target link should have line points",
                    link.points().isPresent(),
                    is(true));
         assertThat("Target link should have the updated line points",
-                   link.points().get(),
-                   is(LINEPOINTS_2));
+                   geometriesMatch(link.points().get(), LINEPOINTS_2),
+                   is(true));
     }
 }
