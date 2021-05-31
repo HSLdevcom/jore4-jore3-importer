@@ -3,3 +3,4 @@ TRUNCATE TABLE jr_solmu
 TRUNCATE TABLE jr_piste
 TRUNCATE TABLE jr_linja
 TRUNCATE TABLE jr_linjannimet
+TRUNCATE TABLE jr_reitti

@@ -21,14 +21,19 @@ import fi.hsl.jore.importer.feature.batch.link_shape.support.ILinkShapeImportRep
 import fi.hsl.jore.importer.feature.batch.node.NodeProcessor;
 import fi.hsl.jore.importer.feature.batch.node.NodeReader;
 import fi.hsl.jore.importer.feature.batch.node.support.INodeImportRepository;
+import fi.hsl.jore.importer.feature.batch.route.RouteProcessor;
+import fi.hsl.jore.importer.feature.batch.route.RouteReader;
+import fi.hsl.jore.importer.feature.batch.route.support.IRouteImportRepository;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImportableNode;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLine;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLineHeader;
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
+import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line_header.dto.ImportableLineHeader;
+import fi.hsl.jore.importer.feature.network.route.dto.ImportableRoute;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.FlowBuilder;
@@ -50,13 +55,15 @@ public class JobConfig extends BatchConfig {
                          final Flow importLinksFlow,
                          final Flow importLinkPointsFlow,
                          final Flow importLinesFlow,
-                         final Flow importLineHeadersFlow) {
+                         final Flow importLineHeadersFlow,
+                         final Flow importRoutesFlow) {
         return jobs.get(JOB_NAME)
                    .start(importNodesFlow)
                    .next(importLinksFlow)
                    .next(importLinkPointsFlow)
                    .next(importLinesFlow)
                    .next(importLineHeadersFlow)
+                   .next(importRoutesFlow)
                    .end()
                    .build();
     }
@@ -263,6 +270,47 @@ public class JobConfig extends BatchConfig {
         return steps.get("commitLineHeadersStep")
                     .allowStartIfComplete(true)
                     .tasklet(new GenericCommitTasklet<>(lineHeaderImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Flow importRoutesFlow(final Step prepareRoutesStep,
+                                 final Step importRoutesStep,
+                                 final Step commitRoutesStep) {
+
+        return new FlowBuilder<SimpleFlow>("importRoutesFlow")
+                .start(prepareRoutesStep)
+                .next(importRoutesStep)
+                .next(commitRoutesStep)
+                .build();
+    }
+
+    @Bean
+    public Step prepareRoutesStep(final IRouteImportRepository routeImportRepository) {
+        return steps.get("prepareRoutesStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCleanupTasklet<>(routeImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step importRoutesStep(final RouteReader routeReader,
+                                 final IRouteImportRepository routeImportRepository) {
+        final int chunkSize = 1000;
+        return steps.get("importRoutesStep")
+                    .allowStartIfComplete(true)
+                    .<JrRoute, ImportableRoute>chunk(chunkSize)
+                    .reader(routeReader.build())
+                    .processor(new RouteProcessor())
+                    .writer(new GenericImportWriter<>(routeImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step commitRoutesStep(final IRouteImportRepository routeImportRepository) {
+        return steps.get("commitRoutesStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCommitTasklet<>(routeImportRepository))
                     .build();
     }
 }
