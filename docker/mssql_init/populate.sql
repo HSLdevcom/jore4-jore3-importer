@@ -139,3 +139,17 @@ CREATE UNIQUE CLUSTERED INDEX jr_linjannimet_cind ON jr_linjannimet (lintunnus, 
 GO
 CREATE INDEX jr_linjannimet_mind1 ON jr_linjannimet (linnimi, linalkupvm)
 GO
+CREATE TABLE jr_reitti
+(
+    reitunnus   VARCHAR(6) NOT NULL,
+    reinimi     VARCHAR(60),
+    reinimilyh  VARCHAR(20),
+    reinimir    VARCHAR(60),
+    reinimilyhr VARCHAR(20),
+    lintunnus   VARCHAR(6) NOT NULL,
+    reikuka     VARCHAR(20),
+    reiviimpvm  DATETIME2(3)
+)
+GO
+CREATE UNIQUE CLUSTERED INDEX jr_reitti_cind ON jr_reitti (reitunnus)
+GO

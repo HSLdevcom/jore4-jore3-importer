@@ -5,13 +5,16 @@ import fi.hsl.jore.importer.feature.jore3.entity.JrLine;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLineHeader;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLink;
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
+import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.LineId;
+import fi.hsl.jore.importer.feature.jore3.field.RouteId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import fi.hsl.jore.importer.feature.jore3.key.JrLineHeaderPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinePk;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrNodePk;
+import fi.hsl.jore.importer.feature.jore3.key.JrRoutePk;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -80,5 +83,17 @@ public final class ExternalIdUtil {
 
     public static ExternalId forLineHeader(final JrLineHeader lineHeader) {
         return forLineHeader(lineHeader.pk());
+    }
+
+    public static ExternalId forRoute(final RouteId routeId) {
+        return ExternalId.of(routeId.originalValue());
+    }
+
+    public static ExternalId forRoute(final JrRoutePk routePk) {
+        return forRoute(routePk.routeId());
+    }
+
+    public static ExternalId forRoute(final JrRoute route) {
+        return forRoute(route.pk());
     }
 }
