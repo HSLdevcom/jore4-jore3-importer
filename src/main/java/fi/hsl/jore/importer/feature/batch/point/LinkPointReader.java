@@ -54,7 +54,7 @@ public class LinkPointReader
             }
             final PointRow item = delegate.read();
             final ReaderState nextState =
-                    stateRef.getAndUpdate(oldState -> oldState.onItem(item));
+                    stateRef.updateAndGet(oldState -> oldState.onItem(item));
 
             //noinspection VariableNotUsedInsideIf
             if (item != null) {
