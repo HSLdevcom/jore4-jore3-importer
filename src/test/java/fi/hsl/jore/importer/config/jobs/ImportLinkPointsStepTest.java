@@ -68,8 +68,7 @@ public class ImportLinkPointsStepTest extends BatchIntegrationTest {
                                                                             poCD2,
                                                                             nodeD));
 
-        // FIXME: The order is broken due to a bug in LinkPointReader!
         assertThat(geometriesMatch(link.points().orElseThrow(), expectedPoints),
-                   is(false));
+                   is(true));
     }
 }

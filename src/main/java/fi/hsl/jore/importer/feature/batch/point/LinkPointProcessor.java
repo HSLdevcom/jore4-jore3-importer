@@ -21,9 +21,11 @@ public class LinkPointProcessor implements ItemProcessor<LinkPoints, LinkGeometr
     private static LineString geometry(final LinkEndpoints endpoints,
                                        final List<JrPoint> items) {
         final int srid = items.get(0).location().getSRID();
-        final List<Coordinate> coordinates = List.of(endpoints.startLocation())
-                                                 .pushAll(items.map(JrPoint::location))
-                                                 .push(endpoints.endLocation())
+        final List<Coordinate> coordinates = List.ofAll(items.map(JrPoint::location))
+                                                 // Add the start point to the beginning
+                                                 .prepend(endpoints.startLocation())
+                                                 // Add the end point to the end
+                                                 .append(endpoints.endLocation())
                                                  .map(Point::getCoordinate);
         return GeometryUtil.toLineString(srid, coordinates);
     }
