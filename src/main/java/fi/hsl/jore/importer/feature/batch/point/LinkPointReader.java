@@ -6,6 +6,8 @@ import fi.hsl.jore.importer.feature.batch.point.dto.PointRow;
 import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
 import io.vavr.collection.List;
+import io.vavr.collection.SortedMap;
+import io.vavr.collection.TreeMap;
 import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,6 +83,35 @@ public class LinkPointReader
     }
 
     @Value.Immutable
+    public interface Accumulator {
+
+        // Store points in a map ordered by the point order
+        @Value.Default
+        default SortedMap<Integer, JrPoint> contents() {
+            return TreeMap.empty();
+        }
+
+        // Mutator
+        Accumulator withContents(SortedMap<Integer, JrPoint> contents);
+
+        static Accumulator empty() {
+            return ImmutableAccumulator.builder().build();
+        }
+
+        default Accumulator insert(final JrPoint point) {
+            return withContents(contents().put(point.orderNumber(), point));
+        }
+
+        static Accumulator ofOnly(final JrPoint point) {
+            return empty().insert(point);
+        }
+
+        default List<JrPoint> asList() {
+            return contents().values().toList();
+        }
+    }
+
+    @Value.Immutable
     public interface ReaderState {
 
         Optional<JrLinkPk> link();
@@ -88,8 +119,8 @@ public class LinkPointReader
         Optional<LinkEndpoints> endpoints();
 
         @Value.Default
-        default List<JrPoint> queue() {
-            return List.empty();
+        default Accumulator accumulator() {
+            return Accumulator.empty();
         }
 
         @Value.Lazy
@@ -97,7 +128,7 @@ public class LinkPointReader
             return (link().isPresent() && endpoints().isPresent()) ?
                     Optional.of(LinkPoints.of(link().orElseThrow(),
                                               endpoints().orElseThrow(),
-                                              queue())) :
+                                              accumulator().asList())) :
                     Optional.empty();
         }
 
@@ -127,20 +158,20 @@ public class LinkPointReader
                 return ImmutableReaderState.copyOf(this)
                                            .withLink(point.fkLink())
                                            .withEndpoints(endpoints)
-                                           .withQueue(List.of(point));
+                                           .withAccumulator(Accumulator.ofOnly(point));
             }
             final JrLinkPk previous = link().get();
             if (previous.equals(point.fkLink())) {
                 // This point belongs to the current link
                 return ImmutableReaderState.copyOf(this)
-                                           .withQueue(queue().append(point))
+                                           .withAccumulator(accumulator().insert(point))
                                            .withResult(Optional.empty());
             }
             // This point belongs to a new link
             return ImmutableReaderState.copyOf(this)
                                        .withLink(point.fkLink())
                                        .withEndpoints(endpoints)
-                                       .withQueue(List.of(point))
+                                       .withAccumulator(Accumulator.ofOnly(point))
                                        .withResult(pendingResult());
         }
     }
