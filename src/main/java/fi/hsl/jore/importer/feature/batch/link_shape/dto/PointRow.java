@@ -1,4 +1,4 @@
-package fi.hsl.jore.importer.feature.batch.point.dto;
+package fi.hsl.jore.importer.feature.batch.link_shape.dto;
 
 
 import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
