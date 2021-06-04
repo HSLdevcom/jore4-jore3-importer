@@ -2,8 +2,8 @@ package fi.hsl.jore.importer.config.jobs;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
-import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
-import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkTestRepository;
+import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.LinkShape;
+import fi.hsl.jore.importer.feature.infrastructure.link_shape.repository.ILinkShapeTestRepository;
 import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.Test;
@@ -40,22 +40,19 @@ public class ImportLinkPointsStepTest extends BatchIntegrationTest {
                                                       "commitLinkPointsStep");
 
     @Autowired
-    private ILinkTestRepository linkRepository;
+    private ILinkShapeTestRepository shapeRepository;
 
     @Test
-    public void givenSampleDataInSourceDatabase_andAnEmptyDatabase_whenImportLinkPointsStepsAreRun_thenLinkPointsForLinkIsImported() {
-        assertThat(linkRepository.empty(),
+    public void givenSampleDataInSourceDatabase_andAnEmptyDatabase_whenImportLinkPointsStepsAreRun_thenLinkShapeForLinkIsImported() {
+        assertThat(shapeRepository.empty(),
                    is(true));
 
         runSteps(STEPS);
 
-        assertThat(linkRepository.count(),
+        assertThat(shapeRepository.count(),
                    is(1));
 
-        final Link link = linkRepository.findByExternalId(ExternalId.of("1-c-d")).orElseThrow();
-
-        assertThat(link.points().isPresent(),
-                   is(true));
+        final LinkShape shape = shapeRepository.findByExternalId(ExternalId.of("1-c-d")).orElseThrow();
 
         final Coordinate nodeC = new Coordinate(13, 12);
         final Coordinate poCD1 = new Coordinate(14.5, 14.1);
@@ -68,7 +65,7 @@ public class ImportLinkPointsStepTest extends BatchIntegrationTest {
                                                                             poCD2,
                                                                             nodeD));
 
-        assertThat(geometriesMatch(link.points().orElseThrow(), expectedPoints),
+        assertThat(geometriesMatch(shape.geometry(), expectedPoints),
                    is(true));
     }
 }

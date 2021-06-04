@@ -372,7 +372,7 @@
                                 <forcedType>
                                     <userType>org.locationtech.jts.geom.LineString</userType>
                                     <converter>fi.hsl.jore.importer.config.jooq.converter.geometry.LineStringBinding</converter>
-                                    <includeExpression>.*\.infrastructure_link_geog|.*\.infrastructure_link_points</includeExpression>
+                                    <includeExpression>.*\.infrastructure_link_geog|.*\.infrastructure_link_shape</includeExpression>
                                 </forcedType>
                                 <forcedType>
                                     <userType>org.locationtech.jts.geom.Point</userType>

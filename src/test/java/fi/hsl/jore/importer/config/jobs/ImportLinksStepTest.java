@@ -62,7 +62,5 @@ public class ImportLinksStepTest extends BatchIntegrationTest {
                    is(true));
         assertThat(link.networkType(),
                    is(NetworkType.ROAD));
-        assertThat(link.points().isEmpty(),
-                   is(true));
     }
 }

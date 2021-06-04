@@ -10,8 +10,6 @@ import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.Infrastru
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureLinksWithHistoryRecord;
 import org.immutables.value.Value;
 
-import java.util.Optional;
-
 @Value.Immutable
 public interface Link
         extends IHasPK<LinkPK>,
@@ -31,7 +29,6 @@ public interface Link
                             .startNode(NodePK.of(record.getInfrastructureLinkStartNode()))
                             .endNode(NodePK.of(record.getInfrastructureLinkEndNode()))
                             .geometry(record.getInfrastructureLinkGeog())
-                            .points(Optional.ofNullable(record.getInfrastructureLinkPoints()))
                             .systemTime(record.getInfrastructureLinkSysPeriod())
                             .build();
     }
@@ -44,7 +41,6 @@ public interface Link
                             .startNode(NodePK.of(record.getInfrastructureLinkStartNode()))
                             .endNode(NodePK.of(record.getInfrastructureLinkEndNode()))
                             .geometry(record.getInfrastructureLinkGeog())
-                            .points(Optional.ofNullable(record.getInfrastructureLinkPoints()))
                             .systemTime(record.getInfrastructureLinkSysPeriod())
                             .build();
     }

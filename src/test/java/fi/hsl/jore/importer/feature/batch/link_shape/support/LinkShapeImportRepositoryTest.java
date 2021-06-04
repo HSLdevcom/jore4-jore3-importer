@@ -1,15 +1,18 @@
-package fi.hsl.jore.importer.feature.batch.point.support;
+package fi.hsl.jore.importer.feature.batch.link_shape.support;
 
 import fi.hsl.jore.importer.IntegrationTest;
 import fi.hsl.jore.importer.TestGeometryUtil;
-import fi.hsl.jore.importer.feature.batch.point.dto.LinkGeometry;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
-import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImmutableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.PersistableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
 import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkTestRepository;
+import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
+import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.LinkShape;
+import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.PersistableLinkShape;
+import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.generated.LinkShapePK;
+import fi.hsl.jore.importer.feature.infrastructure.link_shape.repository.ILinkShapeTestRepository;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
@@ -20,6 +23,7 @@ import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
@@ -29,7 +33,7 @@ import static fi.hsl.jore.importer.TestGeometryUtil.geometriesMatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class LinkPointImportRepositoryTest extends IntegrationTest {
+public class LinkShapeImportRepositoryTest extends IntegrationTest {
 
     private static final LineString LINE_1 = TestGeometryUtil.randomLine();
     private static final LineString LINEPOINTS_1 = TestGeometryUtil.randomLine(5);
@@ -40,16 +44,26 @@ public class LinkPointImportRepositoryTest extends IntegrationTest {
     private static final Point POINT_3 = TestGeometryUtil.randomPoint();
     private static final Point POINT_4 = TestGeometryUtil.randomPoint();
 
-    private final ILinkPointImportRepository importRepository;
-    private final ILinkTestRepository targetRepository;
+    private final ILinkShapeImportRepository importRepository;
+    private final ILinkShapeTestRepository targetRepository;
+    private final ILinkTestRepository linkRepository;
     private final INodeTestRepository nodeRepository;
 
-    public LinkPointImportRepositoryTest(@Autowired final ILinkPointImportRepository importRepository,
-                                         @Autowired final ILinkTestRepository targetRepository,
+    public LinkShapeImportRepositoryTest(@Autowired final ILinkShapeImportRepository importRepository,
+                                         @Autowired final ILinkShapeTestRepository targetRepository,
+                                         @Autowired final ILinkTestRepository linkRepository,
                                          @Autowired final INodeTestRepository nodeRepository) {
         this.importRepository = importRepository;
         this.targetRepository = targetRepository;
+        this.linkRepository = linkRepository;
         this.nodeRepository = nodeRepository;
+    }
+
+    @BeforeEach
+    public void beforeEach() {
+        assertThat("Target repository should be empty at the start of the test",
+                   targetRepository.empty(),
+                   is(true));
     }
 
     @Test
@@ -60,10 +74,6 @@ public class LinkPointImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenStagedRowsAndCommit_andTargetLinkHasNoPoints_thenReturnResultWithUpdatedId() {
-        assertThat("Target repository should be empty before import",
-                   targetRepository.empty(),
-                   is(true));
-
         final List<NodePK> nodeIds = nodeRepository.insert(
                 PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
                 PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2),
@@ -72,53 +82,38 @@ public class LinkPointImportRepositoryTest extends IntegrationTest {
         );
 
         // Insert the real links (without linkpoints)
-        final List<LinkPK> inserted = targetRepository.insert(
+        final List<LinkPK> inserted = linkRepository.insert(
                 PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1, nodeIds.get(0), nodeIds.get(1)),
                 PersistableLink.of(ExternalId.of("b"), NetworkType.ROAD, LINE_2, nodeIds.get(2), nodeIds.get(3))
         );
-        final LinkPK targetLink = inserted.get(0);
+        final LinkPK parentLinkPk = inserted.get(0);
+        final Link parentLink = linkRepository.findById(parentLinkPk).orElseThrow();
 
         importRepository.submitToStaging(
-                List.of(LinkGeometry.of(ExternalId.of("a"), NetworkType.ROAD, LINEPOINTS_1))
+                List.of(ImportableLinkShape.of(parentLink.externalId(), LINEPOINTS_1))
         );
 
-        final Map<RowStatus, Set<LinkPK>> result = importRepository.commitStagingToTarget();
+        final Map<RowStatus, Set<LinkShapePK>> result = importRepository.commitStagingToTarget();
 
-        assertThat("Only UPDATEs should occur",
+        assertThat("Only INSERTs should occur",
                    result.keySet(),
-                   is(HashSet.of(RowStatus.UPDATED)));
+                   is(HashSet.of(RowStatus.INSERTED)));
 
-        final Set<LinkPK> ids = result.get(RowStatus.UPDATED).get();
+        final Set<LinkShapePK> ids = result.get(RowStatus.INSERTED).get();
 
-        assertThat("Update should target the original link",
-                   ids,
-                   is(HashSet.of(targetLink)));
+        assertThat("Only a single shape is inserted",
+                   ids.size(),
+                   is(1));
 
-        final LinkPK id = ids.get();
-
-        assertThat("Target repository should contain both links",
-                   targetRepository.findAllIds(),
-                   is(HashSet.ofAll(inserted)));
-
-        final Link link = targetRepository.findById(id).orElseThrow();
+        final LinkShape shape = targetRepository.findById(ids.get()).orElseThrow();
 
         assertThat("Target link should have the original geometry",
-                   geometriesMatch(link.geometry(), LINE_1),
-                   is(true));
-        assertThat("Target link should have line points",
-                   link.points().isPresent(),
-                   is(true));
-        assertThat("Target link should have the correct line points",
-                   geometriesMatch(link.points().get(), LINEPOINTS_1),
+                   geometriesMatch(shape.geometry(), LINEPOINTS_1),
                    is(true));
     }
 
     @Test
     public void whenStagedRowsAndCommit_andTargetLinkHasPoints_thenReturnResultWithUpdatedId() {
-        assertThat("Target repository should be empty before import",
-                   targetRepository.empty(),
-                   is(true));
-
         final List<NodePK> nodeIds = nodeRepository.insert(
                 PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
                 PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2),
@@ -127,51 +122,43 @@ public class LinkPointImportRepositoryTest extends IntegrationTest {
         );
 
         // Insert the real links (without linkpoints)
-        final List<LinkPK> inserted = targetRepository.insert(
+        final List<LinkPK> inserted = linkRepository.insert(
                 PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1, nodeIds.get(0), nodeIds.get(1)),
                 PersistableLink.of(ExternalId.of("b"), NetworkType.ROAD, LINE_2, nodeIds.get(2), nodeIds.get(3))
         );
-        final LinkPK targetLink = inserted.get(0);
+        final LinkPK parentLinkPk = inserted.get(0);
+        final Link parentLink = linkRepository.findById(parentLinkPk).orElseThrow();
 
-        // Assign some points to the first link directly
-        targetRepository.update(
-                ImmutableLink.copyOf(targetRepository.findById(targetLink).orElseThrow())
-                             .withPoints(LINEPOINTS_1)
+        // Assign a shape to the first link directly
+
+        targetRepository.insert(
+                PersistableLinkShape.of(parentLink.pk(),
+                                        parentLink.externalId(),
+                                        LINEPOINTS_1)
         );
 
         // Stage some new points for the same link
         importRepository.submitToStaging(
-                List.of(LinkGeometry.of(ExternalId.of("a"), NetworkType.ROAD, LINEPOINTS_2))
+                List.of(ImportableLinkShape.of(parentLink.externalId(), LINEPOINTS_2))
         );
 
-        final Map<RowStatus, Set<LinkPK>> result = importRepository.commitStagingToTarget();
+        final Map<RowStatus, Set<LinkShapePK>> result = importRepository.commitStagingToTarget();
 
         assertThat("Only UPDATEs should occur",
                    result.keySet(),
                    is(HashSet.of(RowStatus.UPDATED)));
 
-        final Set<LinkPK> ids = result.get(RowStatus.UPDATED).get();
+        final Set<LinkShapePK> ids = result.get(RowStatus.UPDATED).get();
 
-        assertThat("Update should target the original link",
-                   ids,
-                   is(HashSet.of(targetLink)));
+        assertThat("Only a single shape is updated",
+                   ids.size(),
+                   is(1));
 
-        final LinkPK id = ids.get();
+        final LinkShapePK shapeId = ids.get();
+        final LinkShape updatedShape = targetRepository.findById(shapeId).orElseThrow();
 
-        assertThat("Target repository should contain both links",
-                   targetRepository.findAllIds(),
-                   is(HashSet.ofAll(inserted)));
-
-        final Link link = targetRepository.findById(id).orElseThrow();
-
-        assertThat("Target link should have the original geometry",
-                   geometriesMatch(link.geometry(), LINE_1),
-                   is(true));
-        assertThat("Target link should have line points",
-                   link.points().isPresent(),
-                   is(true));
-        assertThat("Target link should have the updated line points",
-                   geometriesMatch(link.points().get(), LINEPOINTS_2),
+        assertThat("Target shape should have the updated line points",
+                   geometriesMatch(updatedShape.geometry(), LINEPOINTS_2),
                    is(true));
     }
 }

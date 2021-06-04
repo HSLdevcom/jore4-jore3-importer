@@ -7,16 +7,16 @@ import fi.hsl.jore.importer.feature.batch.link.LinkRowProcessor;
 import fi.hsl.jore.importer.feature.batch.link.LinkRowReader;
 import fi.hsl.jore.importer.feature.batch.link.dto.LinkRow;
 import fi.hsl.jore.importer.feature.batch.link.support.ILinkImportRepository;
+import fi.hsl.jore.importer.feature.batch.link_shape.LinkPointProcessor;
+import fi.hsl.jore.importer.feature.batch.link_shape.LinkPointReader;
+import fi.hsl.jore.importer.feature.batch.link_shape.PointReader;
+import fi.hsl.jore.importer.feature.batch.link_shape.dto.LinkPoints;
+import fi.hsl.jore.importer.feature.batch.link_shape.support.ILinkShapeImportRepository;
 import fi.hsl.jore.importer.feature.batch.node.NodeProcessor;
 import fi.hsl.jore.importer.feature.batch.node.NodeReader;
 import fi.hsl.jore.importer.feature.batch.node.support.INodeImportRepository;
-import fi.hsl.jore.importer.feature.batch.point.LinkPointProcessor;
-import fi.hsl.jore.importer.feature.batch.point.LinkPointReader;
-import fi.hsl.jore.importer.feature.batch.point.PointReader;
-import fi.hsl.jore.importer.feature.batch.point.dto.LinkGeometry;
-import fi.hsl.jore.importer.feature.batch.point.dto.LinkPoints;
-import fi.hsl.jore.importer.feature.batch.point.support.ILinkPointImportRepository;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
+import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImportableNode;
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
 import org.springframework.batch.core.Job;
@@ -142,7 +142,7 @@ public class JobConfig extends BatchConfig {
     }
 
     @Bean
-    public Step prepareLinkPointsStep(final ILinkPointImportRepository linkPointImportRepository) {
+    public Step prepareLinkPointsStep(final ILinkShapeImportRepository linkPointImportRepository) {
         return steps.get("prepareLinkPointsStep")
                     .allowStartIfComplete(true)
                     .tasklet(new GenericCleanupTasklet<>(linkPointImportRepository))
@@ -151,11 +151,11 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step importLinkPointsStep(final PointReader pointReader,
-                                     final ILinkPointImportRepository linkPointImportRepository) {
+                                     final ILinkShapeImportRepository linkPointImportRepository) {
         final int chunkSize = 100;
         return steps.get("importLinkPointsStep")
                     .allowStartIfComplete(true)
-                    .<LinkPoints, LinkGeometry>chunk(chunkSize)
+                    .<LinkPoints, ImportableLinkShape>chunk(chunkSize)
                     .reader(new LinkPointReader(pointReader.build()))
                     .processor(new LinkPointProcessor())
                     .writer(new GenericImportWriter<>(linkPointImportRepository))
@@ -163,7 +163,7 @@ public class JobConfig extends BatchConfig {
     }
 
     @Bean
-    public Step commitLinkPointsStep(final ILinkPointImportRepository linkPointImportRepository) {
+    public Step commitLinkPointsStep(final ILinkShapeImportRepository linkPointImportRepository) {
         return steps.get("commitLinkPointsStep")
                     .allowStartIfComplete(true)
                     .tasklet(new GenericCommitTasklet<>(linkPointImportRepository))

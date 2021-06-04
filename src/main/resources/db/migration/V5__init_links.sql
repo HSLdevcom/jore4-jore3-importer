@@ -9,8 +9,6 @@ CREATE TABLE infrastructure_network.infrastructure_links
     infrastructure_link_ext_id     TEXT                                                 NOT NULL,
     -- Link shape directly from start->end
     infrastructure_link_geog       geography(LinestringZ, 4326)                         NOT NULL,
-    -- Link shape from start->...->end (including intermediate points).
-    infrastructure_link_points     geography(LinestringZ, 4326),
     infrastructure_network_type    text                                                 NOT NULL REFERENCES infrastructure_network.infrastructure_network_types (infrastructure_network_type),
     infrastructure_link_sys_period tstzrange DEFAULT tstzrange(current_timestamp, null) NOT NULL,
     infrastructure_link_start_node uuid                                                 NOT NULL REFERENCES infrastructure_network.infrastructure_nodes (infrastructure_node_id) ON DELETE CASCADE,
@@ -33,17 +31,6 @@ CREATE TABLE infrastructure_network.infrastructure_links_staging
     infrastructure_network_type           text                         NOT NULL REFERENCES infrastructure_network.infrastructure_network_types (infrastructure_network_type),
     infrastructure_link_start_node_ext_id TEXT                         NOT NULL,
     infrastructure_link_end_node_ext_id   TEXT                         NOT NULL,
-
-    PRIMARY KEY (infrastructure_link_ext_id)
-);
-
--- Staging table used for link point import
-
-CREATE TABLE infrastructure_network.infrastructure_link_points_staging
-(
-    infrastructure_link_ext_id  TEXT                         NOT NULL,
-    infrastructure_network_type text                         NOT NULL REFERENCES infrastructure_network.infrastructure_network_types (infrastructure_network_type),
-    infrastructure_link_points  geography(LinestringZ, 4326) NOT NULL,
 
     PRIMARY KEY (infrastructure_link_ext_id)
 );

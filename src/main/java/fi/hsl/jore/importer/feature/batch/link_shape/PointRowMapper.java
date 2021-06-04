@@ -1,7 +1,7 @@
-package fi.hsl.jore.importer.feature.batch.point;
+package fi.hsl.jore.importer.feature.batch.link_shape;
 
-import fi.hsl.jore.importer.feature.batch.point.dto.LinkEndpoints;
-import fi.hsl.jore.importer.feature.batch.point.dto.PointRow;
+import fi.hsl.jore.importer.feature.batch.link_shape.dto.LinkEndpoints;
+import fi.hsl.jore.importer.feature.batch.link_shape.dto.PointRow;
 import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
 import fi.hsl.jore.importer.feature.jore3.field.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
