@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.node;
 
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
-import fi.hsl.jore.importer.feature.jore3.field.NodeType;
+import fi.hsl.jore.importer.feature.jore3.enumerated.NodeType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import org.springframework.jdbc.core.RowMapper;
 

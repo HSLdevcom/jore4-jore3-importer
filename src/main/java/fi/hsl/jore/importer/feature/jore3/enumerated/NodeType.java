@@ -1,10 +1,14 @@
-package fi.hsl.jore.importer.feature.jore3.field;
+package fi.hsl.jore.importer.feature.jore3.enumerated;
+
+import fi.hsl.jore.importer.feature.jore3.mapping.JoreEnumeration;
 
 import java.util.Arrays;
 import java.util.Optional;
 
+@JoreEnumeration(name = "Solmutyyppi (P/E)")
 public enum NodeType {
     BUS_STOP('P'),
+    BUS_STOP_NOT_IN_USE('E'), // Appears only in jr_reitinlinkki
     CROSSROADS('X'),
     MUNICIPAL_BORDER('-'),
     UNKNOWN('?');

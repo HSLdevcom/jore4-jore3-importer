@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.jore3.entity;
 
 
-import fi.hsl.jore.importer.feature.jore3.field.NodeType;
+import fi.hsl.jore.importer.feature.jore3.enumerated.NodeType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import fi.hsl.jore.importer.feature.jore3.key.JrNodePk;
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreColumn;
