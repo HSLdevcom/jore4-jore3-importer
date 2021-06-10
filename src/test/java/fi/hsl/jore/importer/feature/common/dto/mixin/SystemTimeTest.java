@@ -6,6 +6,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeRepository;
+import fi.hsl.jore.importer.feature.system.repository.ISystemRepository;
 import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,8 @@ public class SystemTimeTest extends IntegrationTest {
     // Let's use Nodes as an example entity with system time
     private final INodeRepository nodeRepository;
 
+    private final ISystemRepository systemRepository;
+
     private static final Point GEOM = GeometryUtil.toPoint(
             GeometryUtil.SRID_WGS84,
             new Coordinate(60.168988620, 24.949328727, 0)
@@ -38,19 +41,21 @@ public class SystemTimeTest extends IntegrationTest {
             new Coordinate(62.168988620, 26.949328727, 0)
     );
 
-    public SystemTimeTest(@Autowired final INodeRepository nodeRepository) {
+    public SystemTimeTest(@Autowired final INodeRepository nodeRepository,
+                          @Autowired final ISystemRepository systemRepository) {
         this.nodeRepository = nodeRepository;
+        this.systemRepository = systemRepository;
     }
 
     @Test
     public void testSystemTimeAfterInsert() {
-        final Instant before = Instant.now();
+        final Instant before = systemRepository.currentTimestamp();
 
         nodeRepository.upsert(List.of(
                 PersistableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, GEOM)
         ));
 
-        final Instant after = Instant.now();
+        final Instant after = systemRepository.currentTimestamp();
 
         assertThat("Sanity check: upserting the entity was not instantaneous",
                    after.isAfter(before));
@@ -87,25 +92,25 @@ public class SystemTimeTest extends IntegrationTest {
 
     @Test
     public void testSystemTimeAfterUpdate() {
-        final Instant before = Instant.now();
+        final Instant before = systemRepository.currentTimestamp();
 
         nodeRepository.upsert(List.of(
                 PersistableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, GEOM)
         ));
 
-        final Instant afterFirstInsert = Instant.now();
+        final Instant afterFirstInsert = systemRepository.currentTimestamp();
 
         nodeRepository.upsert(List.of(
                 PersistableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, GEOM2)
         ));
 
-        final Instant afterSecondInsert = Instant.now();
+        final Instant afterSecondInsert = systemRepository.currentTimestamp();
 
         nodeRepository.upsert(List.of(
                 PersistableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, GEOM3)
         ));
 
-        final Instant afterThirdInsert = Instant.now();
+        final Instant afterThirdInsert = systemRepository.currentTimestamp();
 
 
         final List<? extends IHasSystemTime> entities = nodeRepository.findAll();
