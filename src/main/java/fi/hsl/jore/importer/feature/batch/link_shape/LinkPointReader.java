@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.link_shape;
 
+import fi.hsl.jore.importer.feature.batch.common.DelegatingReader;
 import fi.hsl.jore.importer.feature.batch.link_shape.dto.LinkEndpoints;
 import fi.hsl.jore.importer.feature.batch.link_shape.dto.LinkPoints;
 import fi.hsl.jore.importer.feature.batch.link_shape.dto.PointRow;
@@ -9,77 +10,21 @@ import io.vavr.collection.List;
 import io.vavr.collection.SortedMap;
 import io.vavr.collection.TreeMap;
 import org.immutables.value.Value;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.annotation.AfterStep;
-import org.springframework.batch.core.annotation.BeforeStep;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.database.JdbcCursorItemReader;
+import org.springframework.batch.item.ItemStreamReader;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * Spring Batch doesn't directly support grouping items, but we can achieve that
- * by wrapping a reader within another reader.
- */
 public class LinkPointReader
-        implements ItemReader<LinkPoints> {
+        extends DelegatingReader<LinkPoints, PointRow> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LinkPointReader.class);
-
-    private final JdbcCursorItemReader<PointRow> delegate;
-
-    private final AtomicReference<ReaderState> stateRef =
-            new AtomicReference<>(ReaderState.init());
-
-    private int counter;
-
-    public LinkPointReader(final JdbcCursorItemReader<PointRow> delegate) {
-        this.delegate = delegate;
-    }
-
-    @BeforeStep
-    public void beforeStep(final StepExecution stepExecution) {
-        delegate.open(stepExecution.getExecutionContext());
+    public LinkPointReader(final ItemStreamReader<PointRow> delegate) {
+        super(delegate);
     }
 
     @Override
-    public LinkPoints read() throws Exception {
-        while (true) {
-            if (stateRef.get().exhausted()) {
-                LOG.info("Delegate reader is exhausted");
-                return null;
-            }
-            final PointRow item = delegate.read();
-            final ReaderState nextState =
-                    stateRef.updateAndGet(oldState -> oldState.onItem(item));
-
-            //noinspection VariableNotUsedInsideIf
-            if (item != null) {
-                counter += 1;
-            }
-
-            // Keep reading until the ReaderState produces a result
-            if (nextState.result().isPresent()) {
-                return nextState.result().orElseThrow();
-            }
-        }
-    }
-
-    @AfterStep
-    public ExitStatus afterStep(final StepExecution stepExecution) {
-        delegate.close();
-
-        LOG.info("Read {} rows", counter);
-
-        counter = 0;
-        stateRef.set(ReaderState.init());
-
-        return stepExecution.getExitStatus();
+    protected AbstractReaderState<LinkPoints, PointRow> initialState() {
+        return ReaderState.init();
     }
 
     @Value.Immutable
@@ -112,7 +57,8 @@ public class LinkPointReader
     }
 
     @Value.Immutable
-    public interface ReaderState {
+    public interface ReaderState
+            extends DelegatingReader.AbstractReaderState<LinkPoints, PointRow> {
 
         Optional<JrLinkPk> link();
 
@@ -132,17 +78,11 @@ public class LinkPointReader
                     Optional.empty();
         }
 
-        Optional<LinkPoints> result();
-
         static ReaderState init() {
             return ImmutableReaderState.builder().build();
         }
 
-        @Value.Default
-        default boolean exhausted() {
-            return false;
-        }
-
+        @Override
         default ReaderState onItem(@Nullable final PointRow ctx) {
             if (ctx == null) {
                 // This is the last point in the database
