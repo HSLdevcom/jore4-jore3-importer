@@ -182,3 +182,35 @@ CREATE TABLE jr_reitinsuunta
 GO
 CREATE UNIQUE CLUSTERED INDEX jr_reitinsuunta_cind ON jr_reitinsuunta (reitunnus, suusuunta, suuvoimast)
 GO
+CREATE TABLE jr_reitinlinkki
+(
+    reitunnus      VARCHAR(6)   NOT NULL,
+    suusuunta      CHAR         NOT NULL,
+    suuvoimast     DATETIME2(3) NOT NULL,
+    reljarjnro     SMALLINT     NOT NULL,
+    relid          INT          NOT NULL,
+    relmatkaik     VARCHAR,
+    relohaikpys    VARCHAR,
+    relvpistaikpys VARCHAR,
+    relpysakki     VARCHAR,
+    lnkverkko      CHAR         NOT NULL,
+    lnkalkusolmu   CHAR(7)      NOT NULL,
+    lnkloppusolmu  CHAR(7)      NOT NULL,
+    relkuka        CHAR(20),
+    relviimpvm     DATETIME2(3),
+    pyssade        INT,
+    ajantaspys     VARCHAR,
+    liityntapys    VARCHAR,
+    paikka         VARCHAR,
+    kirjaan        VARCHAR,
+    nettiin        VARCHAR,
+    kirjasarake    INT,
+    nettisarake    INT
+)
+GO
+CREATE CLUSTERED INDEX jr_reitinlinkki_cind ON jr_reitinlinkki (reitunnus, suusuunta, suuvoimast, reljarjnro)
+GO
+CREATE INDEX jr_reitinlinkki_mind1 ON jr_reitinlinkki (lnkalkusolmu)
+GO
+CREATE UNIQUE INDEX jr_reitinlinkki_uind ON jr_reitinlinkki (relid)
+GO
