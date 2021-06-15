@@ -66,4 +66,11 @@ public final class JdbcUtil {
         throwOnNull(rs, column);
         return val.toLocalDateTime();
     }
+
+    public static boolean getBooleanOrThrow(final ResultSet rs,
+                                            final String column) throws SQLException {
+        final boolean val = rs.getBoolean(column);
+        throwOnNull(rs, column);
+        return val;
+    }
 }

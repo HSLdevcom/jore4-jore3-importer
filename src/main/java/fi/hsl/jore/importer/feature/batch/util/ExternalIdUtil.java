@@ -7,16 +7,19 @@ import fi.hsl.jore.importer.feature.jore3.entity.JrLink;
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
+import fi.hsl.jore.importer.feature.jore3.entity.JrRouteLink;
 import fi.hsl.jore.importer.feature.jore3.enumerated.Direction;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.LineId;
 import fi.hsl.jore.importer.feature.jore3.field.RouteId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
+import fi.hsl.jore.importer.feature.jore3.field.generated.RouteLinkId;
 import fi.hsl.jore.importer.feature.jore3.key.JrLineHeaderPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinePk;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrNodePk;
 import fi.hsl.jore.importer.feature.jore3.key.JrRouteDirectionPk;
+import fi.hsl.jore.importer.feature.jore3.key.JrRouteLinkPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrRoutePk;
 
 import java.time.LocalDate;
@@ -117,5 +120,35 @@ public final class ExternalIdUtil {
 
     public static ExternalId forRouteDirection(final JrRouteDirection routeDirection) {
         return forRouteDirection(routeDirection.pk());
+    }
+
+    public static ExternalId forRouteLink(final RouteLinkId routeLinkId) {
+        return ExternalId.of(routeLinkId.value().toString());
+    }
+
+    public static ExternalId forRouteLink(final JrRouteLinkPk routeLinkPk) {
+        return forRouteLink(routeLinkPk.routeLinkId());
+    }
+
+    public static ExternalId forRouteLink(final JrRouteLink routeLink) {
+        return forRouteLink(routeLink.pk());
+    }
+
+    private static ExternalId forRouteLinkNode(final JrRouteLink routeLink,
+                                               final NodeId nodeId) {
+        return ExternalId.of(
+                String.format("%s-%s",
+                              forRouteLink(routeLink.pk()),
+                              forNode(nodeId)));
+    }
+
+    public static ExternalId forRouteLinkStartNode(final JrRouteLink routeLink) {
+        return forRouteLinkNode(routeLink,
+                                routeLink.startNode());
+    }
+
+    public static ExternalId forRouteLinkEndNode(final JrRouteLink routeLink) {
+        return forRouteLinkNode(routeLink,
+                                routeLink.endNode());
     }
 }

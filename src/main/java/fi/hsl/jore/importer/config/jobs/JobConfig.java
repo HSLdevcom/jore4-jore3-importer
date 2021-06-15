@@ -27,6 +27,15 @@ import fi.hsl.jore.importer.feature.batch.route.support.IRouteImportRepository;
 import fi.hsl.jore.importer.feature.batch.route_direction.RouteDirectionProcessor;
 import fi.hsl.jore.importer.feature.batch.route_direction.RouteDirectionReader;
 import fi.hsl.jore.importer.feature.batch.route_direction.support.IRouteDirectionImportRepository;
+import fi.hsl.jore.importer.feature.batch.route_link.RouteLinkReader;
+import fi.hsl.jore.importer.feature.batch.route_link.RouteLinksProcessor;
+import fi.hsl.jore.importer.feature.batch.route_link.RouteLinksReader;
+import fi.hsl.jore.importer.feature.batch.route_link.RouteLinksWriter;
+import fi.hsl.jore.importer.feature.batch.route_link.dto.ImportableRoutePointsAndLinks;
+import fi.hsl.jore.importer.feature.batch.route_link.dto.RouteLinksAndAttributes;
+import fi.hsl.jore.importer.feature.batch.route_link.support.IRouteLinkImportRepository;
+import fi.hsl.jore.importer.feature.batch.route_link.support.IRoutePointImportRepository;
+import fi.hsl.jore.importer.feature.batch.route_link.support.IRouteStopPointImportRepository;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImportableNode;
@@ -62,7 +71,8 @@ public class JobConfig extends BatchConfig {
                          final Flow importLinesFlow,
                          final Flow importLineHeadersFlow,
                          final Flow importRoutesFlow,
-                         final Flow importRouteDirectionsFlow) {
+                         final Flow importRouteDirectionsFlow,
+                         final Flow importRouteLinksFlow) {
         return jobs.get(JOB_NAME)
                    .start(importNodesFlow)
                    .next(importLinksFlow)
@@ -71,6 +81,7 @@ public class JobConfig extends BatchConfig {
                    .next(importLineHeadersFlow)
                    .next(importRoutesFlow)
                    .next(importRouteDirectionsFlow)
+                   .next(importRouteLinksFlow)
                    .end()
                    .build();
     }
@@ -359,6 +370,92 @@ public class JobConfig extends BatchConfig {
         return steps.get("commitRouteDirectionsStep")
                     .allowStartIfComplete(true)
                     .tasklet(new GenericCommitTasklet<>(routeDirectionImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Flow importRouteLinksFlow(final Step prepareRoutePointsStep,
+                                     final Step prepareRouteStopPointsStep,
+                                     final Step prepareRouteLinksStep,
+                                     final Step importRouteLinksStep,
+                                     final Step commitRoutePointsStep,
+                                     final Step commitRouteStopPointsStep,
+                                     final Step commitRouteLinksStep) {
+
+        return new FlowBuilder<SimpleFlow>("importRouteLinksFlow")
+                .start(prepareRoutePointsStep)
+                .next(prepareRouteStopPointsStep)
+                .next(prepareRouteLinksStep)
+                .next(importRouteLinksStep)
+                .next(commitRoutePointsStep)
+                .next(commitRouteStopPointsStep)
+                .next(commitRouteLinksStep)
+                .build();
+    }
+
+    @Bean
+    public Step prepareRoutePointsStep(final IRoutePointImportRepository routePointImportRepository) {
+        return steps.get("prepareRoutePointsStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCleanupTasklet<>(routePointImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step prepareRouteStopPointsStep(final IRouteStopPointImportRepository routeStopPointImportRepository) {
+        return steps.get("prepareRouteStopPointsStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCleanupTasklet<>(routeStopPointImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step prepareRouteLinksStep(final IRouteLinkImportRepository routeLinkImportRepository) {
+        return steps.get("prepareRouteLinksStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCleanupTasklet<>(routeLinkImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step importRouteLinksStep(final RouteLinkReader routeLinkReader,
+                                     final IRoutePointImportRepository routePointImportRepository,
+                                     final IRouteStopPointImportRepository routeStopPointImportRepository,
+                                     final IRouteLinkImportRepository routeLinkImportRepository) {
+        final int chunkSize = 100;
+        return steps.get("importRouteLinksStep")
+                    .allowStartIfComplete(true)
+                    .<RouteLinksAndAttributes, ImportableRoutePointsAndLinks>chunk(chunkSize)
+                    .reader(new RouteLinksReader(routeLinkReader.build()))
+                    .processor(new RouteLinksProcessor())
+                    // Note how we write the route points, stop points, and route links to three different repositories
+                    .writer(new RouteLinksWriter(routePointImportRepository,
+                                                 routeStopPointImportRepository,
+                                                 routeLinkImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step commitRoutePointsStep(final IRoutePointImportRepository routePointImportRepository) {
+        return steps.get("commitRoutePointsStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCommitTasklet<>(routePointImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step commitRouteStopPointsStep(final IRouteStopPointImportRepository routeStopPointImportRepository) {
+        return steps.get("commitRouteStopPointsStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCommitTasklet<>(routeStopPointImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step commitRouteLinksStep(final IRouteLinkImportRepository routeLinkImportRepository) {
+        return steps.get("commitRouteLinksStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCommitTasklet<>(routeLinkImportRepository))
                     .build();
     }
 }
