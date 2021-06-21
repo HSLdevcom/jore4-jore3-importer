@@ -1,6 +1,5 @@
 package fi.hsl.jore.importer.feature.batch.common;
 
-import fi.hsl.jore.importer.feature.batch.util.IImportRepository;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.PK;
 import io.vavr.collection.Map;
