@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.batch.link.support;
 
 import fi.hsl.jore.importer.IntegrationTest;
 import fi.hsl.jore.importer.TestGeometryUtil;
+import fi.hsl.jore.importer.feature.batch.util.ExternalIdUtil;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
@@ -14,6 +15,8 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
+import fi.hsl.jore.importer.feature.jore3.field.TransitType;
+import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
@@ -24,6 +27,8 @@ import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Optional;
 
 import static fi.hsl.jore.importer.TestGeometryUtil.geometriesMatch;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -65,15 +70,24 @@ public class LinkImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenNewStagedRowsAndCommit_andTargetDbContainsNodes_thenReturnResultWithInsertedIdAndNodeRefs() {
-        final NodePK firstNodeId = nodeRepository.insert(
-                PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1)
+        final NodeId startNodeId = NodeId.of("1");
+        final ExternalId startNodeExtId = ExternalIdUtil.forNode(startNodeId);
+        final NodePK startNodePk = nodeRepository.insert(
+                PersistableNode.of(startNodeExtId, NodeType.CROSSROADS, POINT_1)
         );
-        final NodePK secondNodeId = nodeRepository.insert(
-                PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2)
+        final NodeId endNodeId = NodeId.of("2");
+        final ExternalId endNodeExtId = ExternalIdUtil.forNode(endNodeId);
+        final NodePK endNodePk = nodeRepository.insert(
+                PersistableNode.of(endNodeExtId, NodeType.CROSSROADS, POINT_2)
         );
 
+        final TransitType transitType = TransitType.BUS;
+        final NetworkType networkType = NetworkType.ROAD;
+        final ExternalId externalId = ExternalIdUtil.forLink(transitType,
+                                                             startNodeId,
+                                                             endNodeId);
         importRepository.submitToStaging(
-                List.of(ImportableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1, ExternalId.of("1"), ExternalId.of("2")))
+                List.of(ImportableLink.of(externalId, networkType, LINE_1, startNodeExtId, endNodeExtId))
         );
 
         final Map<RowStatus, Set<LinkPK>> result = importRepository.commitStagingToTarget();
@@ -97,23 +111,32 @@ public class LinkImportRepositoryTest extends IntegrationTest {
         final Link link = targetRepository.findById(id).orElseThrow();
 
         assertThat(link.startNode(),
-                   is(firstNodeId));
+                   is(startNodePk));
 
         assertThat(link.endNode(),
-                   is(secondNodeId));
+                   is(endNodePk));
     }
 
     @Test
     public void whenStagedRowsWithChangesAndCommit_andTargetNotEmpty_thenReturnResultWithUpdatedId() {
-        final NodePK startNode = nodeRepository.insert(
-                PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1)
+        final NodeId startNodeId = NodeId.of("1");
+        final ExternalId startNodeExtId = ExternalIdUtil.forNode(startNodeId);
+        final NodePK startNodePk = nodeRepository.insert(
+                PersistableNode.of(startNodeExtId, NodeType.CROSSROADS, POINT_1)
         );
-        final NodePK endNode = nodeRepository.insert(
-                PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2)
+        final NodeId endNodeId = NodeId.of("2");
+        final ExternalId endNodeExtId = ExternalIdUtil.forNode(endNodeId);
+        final NodePK endNodePk = nodeRepository.insert(
+                PersistableNode.of(endNodeExtId, NodeType.CROSSROADS, POINT_2)
         );
 
+        final TransitType transitType = TransitType.BUS;
+        final NetworkType networkType = NetworkType.ROAD;
+        final ExternalId externalId = ExternalIdUtil.forLink(transitType,
+                                                             startNodeId,
+                                                             endNodeId);
         final LinkPK existingId = targetRepository.insert(
-                PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1, startNode, endNode)
+                PersistableLink.of(externalId, networkType, LINE_1, startNodePk, endNodePk)
         );
 
         assertThat("Target repository should now contain a single row",
@@ -121,7 +144,7 @@ public class LinkImportRepositoryTest extends IntegrationTest {
                    is(HashSet.of(existingId)));
 
         importRepository.submitToStaging(
-                List.of(ImportableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_2, ExternalId.of("1"), ExternalId.of("2")))
+                List.of(ImportableLink.of(externalId, networkType, LINE_2, startNodeExtId, endNodeExtId))
         );
 
         final Map<RowStatus, Set<LinkPK>> result = importRepository.commitStagingToTarget();
@@ -146,20 +169,30 @@ public class LinkImportRepositoryTest extends IntegrationTest {
                    geometriesMatch(link.geometry(), LINE_2),
                    is(true));
         assertThat(link.startNode(),
-                   is(startNode));
+                   is(startNodePk));
         assertThat(link.endNode(),
-                   is(endNode));
+                   is(endNodePk));
     }
 
     @Test
     public void whenStagedRowsWithNoChangesAndCommit_andTargetNotEmpty_thenReturnEmptyResult() {
-        final NodePK startNode = nodeRepository.insert(
-                PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1)
+        final NodeId startNodeId = NodeId.of("1");
+        final ExternalId startNodeExtId = ExternalIdUtil.forNode(startNodeId);
+        final NodePK startNodePk = nodeRepository.insert(
+                PersistableNode.of(startNodeExtId, NodeType.CROSSROADS, POINT_1)
         );
-        final NodePK endNode = nodeRepository.insert(
-                PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2)
+        final NodeId endNodeId = NodeId.of("2");
+        final ExternalId endNodeExtId = ExternalIdUtil.forNode(endNodeId);
+        final NodePK endNodePk = nodeRepository.insert(
+                PersistableNode.of(endNodeExtId, NodeType.CROSSROADS, POINT_2)
         );
-        final PersistableLink sourceLink = PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1, startNode, endNode);
+
+        final TransitType transitType = TransitType.BUS;
+        final NetworkType networkType = NetworkType.ROAD;
+        final ExternalId externalId = ExternalIdUtil.forLink(transitType,
+                                                             startNodeId,
+                                                             endNodeId);
+        final PersistableLink sourceLink = PersistableLink.of(externalId, networkType, LINE_1, startNodePk, endNodePk);
 
         final LinkPK existingId = targetRepository.insert(
                 sourceLink
@@ -174,8 +207,8 @@ public class LinkImportRepositoryTest extends IntegrationTest {
                 List.of(ImportableLink.of(sourceLink.externalId(),
                                           sourceLink.networkType(),
                                           sourceLink.geometry(),
-                                          ExternalId.of("1"),
-                                          ExternalId.of("2")))
+                                          startNodeExtId,
+                                          endNodeExtId))
         );
 
         final Map<RowStatus, Set<LinkPK>> result = importRepository.commitStagingToTarget();
@@ -194,22 +227,115 @@ public class LinkImportRepositoryTest extends IntegrationTest {
                    geometriesMatch(link.geometry(), LINE_1),
                    is(true));
         assertThat(link.startNode(),
-                   is(startNode));
+                   is(startNodePk));
         assertThat(link.endNode(),
-                   is(endNode));
+                   is(endNodePk));
+    }
+
+    @Test
+    public void whenStagedRowsWithExternalIdChangesAndCommit_andTargetNotEmpty_thenReturnDeleteAndInsertResult() {
+        final NodeId startNodeId = NodeId.of("1");
+        final ExternalId startNodeExtId = ExternalIdUtil.forNode(startNodeId);
+        final NodePK startNodePk = nodeRepository.insert(
+                PersistableNode.of(startNodeExtId, NodeType.CROSSROADS, POINT_1)
+        );
+        final NodeId endNodeId = NodeId.of("2");
+        final ExternalId endNodeExtId = ExternalIdUtil.forNode(endNodeId);
+        final NodePK endNodePk = nodeRepository.insert(
+                PersistableNode.of(endNodeExtId, NodeType.CROSSROADS, POINT_2)
+        );
+
+        final TransitType transitType = TransitType.BUS;
+        final NetworkType networkType = NetworkType.ROAD;
+        final ExternalId externalId = ExternalIdUtil.forLink(transitType,
+                                                             startNodeId,
+                                                             endNodeId);
+        final PersistableLink sourceLink = PersistableLink.of(externalId, networkType, LINE_1, startNodePk, endNodePk);
+
+        final LinkPK existingId = targetRepository.insert(
+                sourceLink
+        );
+
+        assertThat("Target repository should now contain a single row",
+                   targetRepository.findAllIds(),
+                   is(HashSet.of(existingId)));
+
+        // We submit the same link, but with new jore transit type (and hence new external id)
+        final TransitType newTransitType = TransitType.TRAIN;
+        final NetworkType newNetworkType = NetworkType.RAILWAY;
+        final ExternalId newExternalId = ExternalIdUtil.forLink(newTransitType,
+                                                                startNodeId,
+                                                                endNodeId);
+        importRepository.submitToStaging(
+                List.of(ImportableLink.of(newExternalId,
+                                          newNetworkType,
+                                          sourceLink.geometry(),
+                                          startNodeExtId,
+                                          endNodeExtId))
+        );
+
+        final Map<RowStatus, Set<LinkPK>> result = importRepository.commitStagingToTarget();
+
+        assertThat("Only INSERT and DELETE operations should occur",
+                   result.keySet(),
+                   is(HashSet.of(RowStatus.INSERTED,
+                                 RowStatus.DELETED)));
+
+        assertThat("The original link is deleted",
+                   result.get(RowStatus.DELETED).get(),
+                   is(HashSet.of(existingId)));
+
+        final Optional<Link> oldLink = targetRepository.findById(existingId);
+
+        assertThat("The original link is deleted",
+                   oldLink.isEmpty(),
+                   is(true));
+
+        assertThat("A single link exists in the target repository",
+                   targetRepository.count(),
+                   is(1));
+
+        final Link modifiedLink = targetRepository.findAll().get(0);
+
+        assertThat("The target row was not changed",
+                   geometriesMatch(modifiedLink.geometry(), LINE_1),
+                   is(true));
+        assertThat(modifiedLink.startNode(),
+                   is(startNodePk));
+        assertThat(modifiedLink.endNode(),
+                   is(endNodePk));
     }
 
     @Test
     public void whenStagedRowsAndCommit_andTargetContainsExtraRows_thenReturnResultWithDeletedId() {
+
+        final NodeId firstNodeId = NodeId.of("1");
+        final NodeId secondNodeId = NodeId.of("2");
+        final NodeId thirdNodeId = NodeId.of("3");
+        final NodeId fourthNodeId = NodeId.of("4");
+
+        final ExternalId firstNodeExtId = ExternalIdUtil.forNode(firstNodeId);
+        final ExternalId secondNodeExtId = ExternalIdUtil.forNode(secondNodeId);
+        final ExternalId thirdNodeExtId = ExternalIdUtil.forNode(thirdNodeId);
+        final ExternalId fourthNodeExtId = ExternalIdUtil.forNode(fourthNodeId);
+
         final List<NodePK> nodeIds = nodeRepository.insert(
-                PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
-                PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2),
-                PersistableNode.of(ExternalId.of("3"), NodeType.CROSSROADS, POINT_3),
-                PersistableNode.of(ExternalId.of("4"), NodeType.CROSSROADS, POINT_4)
+                PersistableNode.of(firstNodeExtId, NodeType.CROSSROADS, POINT_1),
+                PersistableNode.of(secondNodeExtId, NodeType.CROSSROADS, POINT_2),
+                PersistableNode.of(thirdNodeExtId, NodeType.CROSSROADS, POINT_3),
+                PersistableNode.of(fourthNodeExtId, NodeType.CROSSROADS, POINT_4)
         );
         // Insert two links into the target table (as if imported previously)
-        final PersistableLink firstLink = PersistableLink.of(ExternalId.of("a"), NetworkType.ROAD, LINE_1, nodeIds.get(0), nodeIds.get(1));
-        final PersistableLink secondLink = PersistableLink.of(ExternalId.of("b"), NetworkType.ROAD, LINE_2, nodeIds.get(2), nodeIds.get(3));
+        final TransitType transitType = TransitType.BUS;
+        final NetworkType networkType = NetworkType.ROAD;
+        final ExternalId firstLinkExternalId = ExternalIdUtil.forLink(transitType,
+                                                                      firstNodeId,
+                                                                      secondNodeId);
+        final ExternalId secondLinkExternalId = ExternalIdUtil.forLink(transitType,
+                                                                       thirdNodeId,
+                                                                       fourthNodeId);
+        final PersistableLink firstLink = PersistableLink.of(firstLinkExternalId, networkType, LINE_1, nodeIds.get(0), nodeIds.get(1));
+        final PersistableLink secondLink = PersistableLink.of(secondLinkExternalId, networkType, LINE_2, nodeIds.get(2), nodeIds.get(3));
 
         final LinkPK firstId = targetRepository.insert(firstLink);
         final LinkPK secondId = targetRepository.insert(secondLink);
@@ -219,8 +345,8 @@ public class LinkImportRepositoryTest extends IntegrationTest {
                 List.of(ImportableLink.of(secondLink.externalId(),
                                           secondLink.networkType(),
                                           secondLink.geometry(),
-                                          ExternalId.of("3"),
-                                          ExternalId.of("4")))
+                                          thirdNodeExtId,
+                                          fourthNodeExtId))
         );
 
         final Map<RowStatus, Set<LinkPK>> result = importRepository.commitStagingToTarget();
