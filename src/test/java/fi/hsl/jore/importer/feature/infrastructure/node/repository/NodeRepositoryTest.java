@@ -13,6 +13,7 @@ import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +34,15 @@ public class NodeRepositoryTest extends IntegrationTest {
         this.nodeRepository = nodeRepository;
     }
 
+    @BeforeEach
+    public void beforeEach() {
+        assertThat("Node repository should be empty at the start of the test",
+                   nodeRepository.empty(),
+                   is(true));
+    }
+
     @Test
     public void insertMultipleNodes() {
-        assertThat(nodeRepository.empty(),
-                   is(true));
-
         final List<NodePK> keys = nodeRepository.insert(
                 PersistableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, GEOM),
                 PersistableNode.of(ExternalId.of("b"), NodeType.CROSSROADS, GEOM2)
@@ -59,10 +64,6 @@ public class NodeRepositoryTest extends IntegrationTest {
 
     @Test
     public void updateNodeWithNewGeometry() {
-        assertThat("repository should be empty in the beginning",
-                   nodeRepository.empty(),
-                   is(true));
-
         final ExternalId extId = ExternalId.of("a");
         final PersistableNode nodeToInsert = PersistableNode.of(extId, NodeType.CROSSROADS, GEOM);
         final NodePK id = nodeRepository.insert(nodeToInsert);
@@ -119,10 +120,6 @@ public class NodeRepositoryTest extends IntegrationTest {
 
     @Test
     public void updateNodeWithSameGeometry() {
-        assertThat("repository should be empty in the beginning",
-                   nodeRepository.empty(),
-                   is(true));
-
         final ExternalId extId = ExternalId.of("a");
         final PersistableNode nodeToInsert = PersistableNode.of(extId, NodeType.CROSSROADS, GEOM);
 
