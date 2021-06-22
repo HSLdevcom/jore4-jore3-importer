@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.common;
 
+import fi.hsl.jore.importer.feature.batch.util.PeriodicWriteStatisticsLogger;
 import fi.hsl.jore.importer.feature.common.dto.field.PK;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,16 +17,24 @@ public class GenericImportWriter<ENTITY, KEY extends PK> implements ItemWriter<E
     private static final Logger LOG = LoggerFactory.getLogger(GenericImportWriter.class);
 
     private final IImportRepository<ENTITY, KEY> importRepository;
+    private final PeriodicWriteStatisticsLogger statistics;
 
     private int counter;
 
     public GenericImportWriter(final IImportRepository<ENTITY, KEY> importRepository) {
         this.importRepository = importRepository;
+        statistics = new PeriodicWriteStatisticsLogger(importRepository.getClass());
     }
 
     @Override
     public void write(final List<? extends ENTITY> items) {
+        if (counter == 0) {
+            statistics.reset();
+        }
+
         counter += items.size();
+
+        statistics.updateCounterAndLog(counter);
 
         importRepository.submitToStaging(items);
     }
@@ -36,6 +45,7 @@ public class GenericImportWriter<ENTITY, KEY extends PK> implements ItemWriter<E
         LOG.info("Staged {} items", counter);
 
         counter = 0;
+        statistics.reset();
         return stepExecution.getExitStatus();
     }
 }
