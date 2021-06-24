@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.infrastructure.node.dto;
 
+import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasSystemTime;
@@ -7,6 +8,9 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNodesRecord;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNodesWithHistoryRecord;
 import org.immutables.value.Value;
+import org.locationtech.jts.geom.Point;
+
+import java.util.Optional;
 
 @Value.Immutable
 public interface Node
@@ -14,23 +18,41 @@ public interface Node
                 IHasSystemTime,
                 CommonFields<Node> {
 
-    static Node of(final InfrastructureNodesRecord record) {
+    static Node of(final NodePK pk,
+                   final ExternalId externalId,
+                   final NodeType nodeType,
+                   final Point location,
+                   final Optional<Point> projectedLocation,
+                   final TimeRange systemTime) {
         return ImmutableNode.builder()
-                            .pk(NodePK.of(record.getInfrastructureNodeId()))
-                            .externalId(ExternalId.of(record.getInfrastructureNodeExtId()))
-                            .nodeType(NodeType.of(record.getInfrastructureNodeType()))
-                            .location(record.getInfrastructureNodeLocation())
-                            .systemTime(record.getInfrastructureNodeSysPeriod())
+                            .pk(pk)
+                            .externalId(externalId)
+                            .nodeType(nodeType)
+                            .location(location)
+                            .projectedLocation(projectedLocation)
+                            .systemTime(systemTime)
                             .build();
     }
 
-    static Node of(final InfrastructureNodesWithHistoryRecord record) {
-        return ImmutableNode.builder()
-                            .pk(NodePK.of(record.getInfrastructureNodeId()))
-                            .externalId(ExternalId.of(record.getInfrastructureNodeExtId()))
-                            .nodeType(NodeType.of(record.getInfrastructureNodeType()))
-                            .location(record.getInfrastructureNodeLocation())
-                            .systemTime(record.getInfrastructureNodeSysPeriod())
-                            .build();
+    static Node from(final InfrastructureNodesRecord record) {
+        return of(
+                NodePK.of(record.getInfrastructureNodeId()),
+                ExternalId.of(record.getInfrastructureNodeExtId()),
+                NodeType.of(record.getInfrastructureNodeType()),
+                record.getInfrastructureNodeLocation(),
+                Optional.ofNullable(record.getInfrastructureNodeProjectedLocation()),
+                record.getInfrastructureNodeSysPeriod()
+        );
+    }
+
+    static Node from(final InfrastructureNodesWithHistoryRecord record) {
+        return of(
+                NodePK.of(record.getInfrastructureNodeId()),
+                ExternalId.of(record.getInfrastructureNodeExtId()),
+                NodeType.of(record.getInfrastructureNodeType()),
+                record.getInfrastructureNodeLocation(),
+                Optional.ofNullable(record.getInfrastructureNodeProjectedLocation()),
+                record.getInfrastructureNodeSysPeriod()
+        );
     }
 }
