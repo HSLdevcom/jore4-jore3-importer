@@ -11,11 +11,13 @@ import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
 import org.jooq.DSLContext;
+import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class LinkShapeRepository
@@ -23,6 +25,7 @@ public class LinkShapeRepository
 
     private static final InfrastructureLinkShapes SHAPES = InfrastructureLinkShapes.INFRASTRUCTURE_LINK_SHAPES;
     private static final InfrastructureLinkShapesWithHistory HISTORY_VIEW = InfrastructureLinkShapesWithHistory.INFRASTRUCTURE_LINK_SHAPES_WITH_HISTORY;
+    private static final TableField<InfrastructureLinkShapesRecord, UUID> PRIMARY_KEY = SHAPES.INFRASTRUCTURE_LINK_SHAPE_ID;
 
     private final DSLContext db;
 
@@ -62,7 +65,7 @@ public class LinkShapeRepository
     public LinkShapePK update(final LinkShape shape) {
         final InfrastructureLinkShapesRecord r =
                 Optional.ofNullable(db.selectFrom(SHAPES)
-                                      .where(SHAPES.INFRASTRUCTURE_LINK_SHAPE_ID.eq(shape.pk().value()))
+                                      .where(PRIMARY_KEY.eq(shape.pk().value()))
                                       .fetchAny())
                         .orElseThrow();
 
@@ -89,7 +92,7 @@ public class LinkShapeRepository
     @Transactional(readOnly = true)
     public Optional<LinkShape> findById(final LinkShapePK shapeId) {
         return db.selectFrom(SHAPES)
-                 .where(SHAPES.INFRASTRUCTURE_LINK_SHAPE_ID.eq(shapeId.value()))
+                 .where(PRIMARY_KEY.eq(shapeId.value()))
                  .fetchStream()
                  .map(LinkShape::from)
                  .findFirst();
@@ -124,7 +127,7 @@ public class LinkShapeRepository
     @Override
     @Transactional(readOnly = true)
     public Set<LinkShapePK> findAllIds() {
-        return db.select(SHAPES.INFRASTRUCTURE_LINK_SHAPE_ID)
+        return db.select(PRIMARY_KEY)
                  .from(SHAPES)
                  .fetchStream()
                  .map(row -> LinkShapePK.of(row.value1()))
