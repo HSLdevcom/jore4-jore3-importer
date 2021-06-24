@@ -6,6 +6,8 @@ import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkTestRepository;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.util.GeometryUtil;
+import io.vavr.Tuple;
+import io.vavr.Tuple3;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
@@ -37,6 +39,33 @@ public class ImportLinksStepTest extends BatchIntegrationTest {
                                                       "importLinksStep",
                                                       "commitLinksStep");
 
+    // Note that links always point to the actual location, not the projected location (when dealing with bus stops)
+    private static final Coordinate NODE_C = new Coordinate(6, 5);
+    private static final Coordinate NODE_D = new Coordinate(17, 16);
+    private static final Coordinate NODE_E = new Coordinate(19, 18);
+    private static final Coordinate NODE_F = new Coordinate(8, 7);
+
+    // External ID of the link,
+    // The line geometry
+    // and the link network type
+    private static final List<Tuple3<ExternalId, LineString, NetworkType>> LINKS = List.of(
+            Tuple.of(ExternalId.of("1-c-d"),
+                     GeometryUtil.toLineString(GeometryUtil.SRID_WGS84,
+                                               List.of(NODE_C,
+                                                       NODE_D)),
+                     NetworkType.ROAD),
+            Tuple.of(ExternalId.of("1-d-e"),
+                     GeometryUtil.toLineString(GeometryUtil.SRID_WGS84,
+                                               List.of(NODE_D,
+                                                       NODE_E)),
+                     NetworkType.ROAD),
+            Tuple.of(ExternalId.of("1-e-f"),
+                     GeometryUtil.toLineString(GeometryUtil.SRID_WGS84,
+                                               List.of(NODE_E,
+                                                       NODE_F)),
+                     NetworkType.ROAD)
+    );
+
     @Autowired
     private ILinkTestRepository linkRepository;
 
@@ -48,19 +77,19 @@ public class ImportLinksStepTest extends BatchIntegrationTest {
         runSteps(STEPS);
 
         assertThat(linkRepository.count(),
-                   is(1));
+                   is(LINKS.size()));
 
-        final Link link = linkRepository.findByExternalId(ExternalId.of("1-c-d")).orElseThrow();
+        LINKS.forEach(expectedLinkParams -> {
+            final ExternalId externalId = expectedLinkParams._1;
+            final Link link = linkRepository.findByExternalId(externalId).orElseThrow();
 
-        final Coordinate nodeC = new Coordinate(13, 12);
-        final Coordinate nodeD = new Coordinate(17, 16);
-        final LineString expectedGeometry = GeometryUtil.toLineString(GeometryUtil.SRID_WGS84,
-                                                                      List.of(nodeC,
-                                                                              nodeD));
-        assertThat(geometriesMatch(link.geometry(),
-                                   expectedGeometry),
-                   is(true));
-        assertThat(link.networkType(),
-                   is(NetworkType.ROAD));
+            assertThat(String.format("link %s should have correct geometry", externalId),
+                       geometriesMatch(link.geometry(),
+                                       expectedLinkParams._2),
+                       is(true));
+            assertThat(String.format("link %s should have correct network type", externalId),
+                       link.networkType(),
+                       is(expectedLinkParams._3));
+        });
     }
 }
