@@ -11,11 +11,13 @@ import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
 import org.jooq.DSLContext;
+import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class LinkRepository
@@ -23,6 +25,7 @@ public class LinkRepository
 
     private static final InfrastructureLinks LINKS = InfrastructureLinks.INFRASTRUCTURE_LINKS;
     private static final InfrastructureLinksWithHistory HISTORY_VIEW = InfrastructureLinksWithHistory.INFRASTRUCTURE_LINKS_WITH_HISTORY;
+    private static final TableField<InfrastructureLinksRecord, UUID> PRIMARY_KEY = LINKS.INFRASTRUCTURE_LINK_ID;
 
     private final DSLContext db;
 
@@ -64,7 +67,7 @@ public class LinkRepository
     public LinkPK update(final Link link) {
         final InfrastructureLinksRecord r =
                 Optional.ofNullable(db.selectFrom(LINKS)
-                                      .where(LINKS.INFRASTRUCTURE_LINK_ID.eq(link.pk().value()))
+                                      .where(PRIMARY_KEY.eq(link.pk().value()))
                                       .fetchAny())
                         .orElseThrow();
 
@@ -93,7 +96,7 @@ public class LinkRepository
     @Transactional(readOnly = true)
     public Optional<Link> findById(final LinkPK linkId) {
         return db.selectFrom(LINKS)
-                 .where(LINKS.INFRASTRUCTURE_LINK_ID.eq(linkId.value()))
+                 .where(PRIMARY_KEY.eq(linkId.value()))
                  .fetchStream()
                  .map(Link::of)
                  .findFirst();
@@ -121,7 +124,7 @@ public class LinkRepository
     @Override
     @Transactional(readOnly = true)
     public Set<LinkPK> findAllIds() {
-        return db.select(LINKS.INFRASTRUCTURE_LINK_ID)
+        return db.select(PRIMARY_KEY)
                  .from(LINKS)
                  .fetchStream()
                  .map(row -> LinkPK.of(row.value1()))
