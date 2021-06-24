@@ -96,7 +96,7 @@ public class NodeRepository
         return db.selectFrom(NODE)
                  .where(PRIMARY_KEY.eq(id.value()))
                  .fetchStream()
-                 .map(Node::of)
+                 .map(Node::from)
                  .findFirst();
     }
 
@@ -106,7 +106,7 @@ public class NodeRepository
         return db.selectFrom(NODE)
                  .where(NODE.INFRASTRUCTURE_NODE_EXT_ID.eq(externalId.value()))
                  .fetchStream()
-                 .map(Node::of)
+                 .map(Node::from)
                  .findFirst();
     }
 
@@ -115,7 +115,7 @@ public class NodeRepository
     public List<Node> findAll() {
         return db.selectFrom(NODE)
                  .fetchStream()
-                 .map(Node::of)
+                 .map(Node::from)
                  .collect(List.collector());
     }
 
@@ -165,7 +165,7 @@ public class NodeRepository
         return db.selectFrom(HISTORY_VIEW)
                  .orderBy(HISTORY_VIEW.INFRASTRUCTURE_NODE_SYS_PERIOD.asc())
                  .fetchStream()
-                 .map(Node::of)
+                 .map(Node::from)
                  .collect(List.collector());
     }
 }
