@@ -85,3 +85,32 @@ $ curl  http://localhost:8080/job/import/status/
 #### Importing lines (`jr_linja`)
 
 ![Overview](images/import_lines_step.svg "Step overview")
+
+## TODO
+
+### Destination database
+
+- The schema/table/column names in the destination database might need some renaming
+- We might do some postprocessing after the import by using _materialized views_ to calculate derived data. For example:
+    - Construct _route direction_ geometries by traversing the _route links_->_infrastructure links_->_infrastructure link shapes_ and concatenating the link-wise linestrings into a single linestring.
+
+### Import job
+
+- At the moment we fetch all the data, regardless of how old it is. Most of the time this is not a problem, but for some larger tables the amount of stale old data is significant (e.g. `jr_reitinlinkki` has 3M rows, of which 150k are actually active).
+- The Spring Batch jobs/step data is not persisted. See `fi.hsl.jore.importer.config.jobs.BatchConfig`.
+- Some of our constraints on the incoming Jore3 data are stricter than the constraints in Jore3 itself. For example, we do not allow multiple _line headers_ to be active for the same _line_ at the same time. So far there have been only a few isolated cases where incorrect data in Jore3 has triggered these constraints and halted the import. This may become an issue when Jore3 and Jore4 are running in production side-by-side and the import is run periodically.
+- We use the derived _WGS84_ coordinates (`solomx`, `solstmx`,..) when importing data from Jore 3, instead of the original KKJ2 coordinates (`solx`, `solstx`,..). This might be ok, or it might be better to read the KKJ2 coordinates and convert them ourselves (either in Java or in Postgis). I tried implementing the conversion using `jts` and a few other GIS libraries, but the results were wildly inaccurate.
+
+### Tests
+
+- The integration tests for the import job steps (e.g. `fi.hsl.jore.importer.config.jobs.ImportLinesStepTest`) all create their own Spring test context => A lot of time is spent building and tearing down the context. At the moment the tests use the same starting conditions (the target tables are empty, the source tables are populated with identical data), so we could just run the full import job once and then assert the state of each target table.
+- The integration tests for the import job/steps have very little data (`src/test/resources/sql/source/populate_??.sql`).
+
+### Test repositories
+
+- Most of the test repositories (e.g. `fi.hsl.jore.importer.feature.network.line.repository.LineRepository`) have quite a lot of similar code. Using an abstract base class might reduce the amount of duplication but also increase unwanted coupling between the repositories.
+- It might be a good idea to implement simple _jOOQ converters_ for the different primary key fields (e.g. `fi.hsl.jore.importer.feature.network.line.dto._LinePK`), which convert the raw `UUID` fields to the corresponding key (`LinePK`). At the moment we do this conversion manually in the repositories (e.g. `.map(row -> LinePK.of(row.value1()))`), but there's always the risk we accidentally `SELECT` the wrong UUID column.
+
+### Misc
+
+- The _plantuml_ charts above do not cover all the import steps.
