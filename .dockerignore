@@ -2,6 +2,7 @@
 **
 
 # Reenable some...
+!/build-jdbc-urls.sh
 !/src
 !/profiles
 !/pom.xml

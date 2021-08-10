@@ -6,7 +6,9 @@ services:
     build: .
     restart: "unless-stopped"
     environment:
-      - SOURCE_DB_URL=jdbc:sqlserver://importer-test-source-database:1433;database=testsourcedb;applicationIntent=ReadOnly
+      - SOURCE_DB_HOSTNAME=importer-test-source-database
+      - SOURCE_DB_PORT=1433
+      - SOURCE_DB_DATABASE=testsourcedb
       - SOURCE_DB_USERNAME=sa
       - SOURCE_DB_PASSWORD=testSOURCEdb123
       - DESTINATION_DB_URL=jdbc:postgresql://importer-jooq-database:5432/devdb?stringtype=unspecified
