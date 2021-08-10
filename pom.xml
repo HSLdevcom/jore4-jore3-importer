@@ -28,6 +28,10 @@
 
         <!-- Maven plugins -->
         <maven-properties.plugin.version>1.0.0</maven-properties.plugin.version>
+
+        <!-- Packaging -->
+        <build.profile.id>dev</build.profile.id>
+        <build.property.file>profiles/${build.profile.id}/config.properties</build.property.file>
     </properties>
 
     <repositories>
@@ -174,18 +178,23 @@
     <profiles>
         <profile>
             <id>dev</id>
-            <properties>
-                <build.profile.id>dev</build.profile.id>
-                <build.property.file>profiles/dev/config.properties</build.property.file>
-            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <filters>
                     <filter>${build.property.file}</filter>
                 </filters>
             </build>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+            <properties>
+                <build.property.file>profiles/${build.profile.id}/config.${user.name}.properties</build.property.file>
+            </properties>
+        </profile>
+        <profile>
+            <id>ci</id>
+            <properties>
+                <build.profile.id>ci</build.profile.id>
+            </properties>
         </profile>
     </profiles>
 
