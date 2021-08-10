@@ -10,9 +10,6 @@ ENV SA_PASSWORD testSOURCEdb123
 ENV ACCEPT_EULA Y
 ENV MSSQL_PID Developer
 
-COPY ./mssql_init/ /usr/src/app
-COPY ./wait-for-it.sh /usr/src/app/
-
-RUN chmod +x /usr/src/app/wait_and_populate.sh
+COPY . /usr/src/app
 
 CMD /bin/bash ./entrypoint.sh
