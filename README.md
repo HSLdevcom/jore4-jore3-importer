@@ -38,6 +38,13 @@ JORE_IMPORTER_MIGRATE=true \
 
 The importer will be available through http://localhost:8080. See instructions below on how to trigger importing through the HTTP API.
 
+## Running the app in docker-compose
+
+You may wish to test whether the application works as a container in a docker network. Spin up the dependencies and 
+the app itself with `development.sh start`
+
+The importer will be available through http://localhost:3200. See instructions below on how to trigger importing through the HTTP API.
+
 ## Building the app
 
 The application is using jooq for ORM. To (re)generate the mapping classes, you need to have the ORM source database to
@@ -48,6 +55,29 @@ Note that the `dev` profile is only meant for use in your local development envi
 ```
 mvn clean package spring-boot:repackage -Pprod
 ```
+
+## Docker reference
+
+The application uses spring boot which allows overwriting configuration properties as described
+[here](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config.typesafe-configuration-properties.relaxed-binding.environment-variables).
+The docker container is also able to
+[read secrets](https://github.com/HSLdevcom/jore4-tools#read-secretssh) and expose
+them as environment variables.
+
+The following configuration properties are to be defined for each environment:
+
+| Config property            | Environment variable       | Secret name                | Example                 | Description                                           |
+| ----------------------  | ----------------------- | ----------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| -                       | SECRET_STORE_BASE_PATH  | -                       | /run/secrets                                                                    | Directory containing the docker secrets                                          |
+| source.db.url           | SOURCE_DB_URL           | source-db-url           | jdbc:sqlserver://localhost:1433;database=testsourcedb;applicationIntent=ReadOnly| The jdbc url of the Jore3 MSSQL database                                         |
+| source.db.username      | SOURCE_DB_USERNAME      | source-db-username      | sa                                                                              | Username for the Jore3 MSSQL databaseThe full URL to which to return after login |
+| source.db.password      | SOURCE_DB_PASSWORD      | source-db-password      | ****                                                                            | The full URL to which to return after logout                                     |
+| destination.db.url      | DESTINATION_DB_URL      | destination-db-url      | jdbc:postgresql://localhost:5432/devdb?stringtype=unspecified                   | The jdbc url of the Jore4 postgresql database                                     |
+| destination.db.username | DESTINATION_DB_USERNAME | destination-db-username | sa                                                                              | Username for the Jore3 MSSQL databaseThe full URL to which to return after login  |
+| destination.db.password | DESTINATION_DB_PASSWORD | destination-db-password | ****                                                                            | The full URL to which to return after logout                                      |
+| jore.importer.migrate   | JORE_IMPORTER_MIGRATE   | jore-importer-migrate   | false                                                                           | Should the importer should run its own migrations (for local development only)    |
+
+More properties can be found from `/profiles/prod/config.properties`
 
 ## Running tests
 
