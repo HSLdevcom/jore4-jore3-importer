@@ -1,0 +1,39 @@
+---
+version: "3.8"
+services:
+  importer-jooq-database:
+    image: postgis/postgis:12-3.1-alpine
+    container_name: importer-database
+    restart: "unless-stopped"
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devdb
+      - POSTGRES_PASSWORD=devdb
+    ports:
+      - "127.0.0.1:16000:5432"
+    networks:
+      - jore4
+
+  importer-test-destination-database:
+    image: postgis/postgis:12-3.1-alpine
+    container_name: importer-test-destination-database
+    environment:
+      - POSTGRES_DB=testdestinationdb
+      - POSTGRES_USER=testdestinationdb
+      - POSTGRES_PASSWORD=testdestinationdb
+    ports:
+      - "127.0.0.1:17000:5432"
+    networks:
+      - jore4
+
+  importer-test-source-database:
+    container_name: importer-test-source-database
+    build:
+      context: docker/mssql
+    ports:
+      - "127.0.0.1:17001:1433"
+    networks:
+      - jore4
+
+networks:
+    jore4:
