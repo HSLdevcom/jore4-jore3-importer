@@ -15,8 +15,9 @@ instruct_and_exit() {
   echo "Usage: ${0} <command>"
   echo ""
   echo "Available commands:"
-  echo "start               Start the dependencies"
-  echo "stop                Stop the dependencies"
+  echo "start               Start the dependencies and the dockerized application"
+  echo "start:deps          Start the dependencies only"
+  echo "stop                Stop the dependencies and the dockerized application"
   echo "recreate            Remove and recreate the dependencies, removing all data"
   echo "list                List running dependencies"
   echo "logs (service-name) Attach to log output of all or specified service"
@@ -31,6 +32,11 @@ fi
 
 if [[ ${COMMAND} == "start" ]]; then
   docker-compose up -d
+  exit 0
+fi
+
+if [[ ${COMMAND} == "start:deps" ]]; then
+  docker-compose up -d importer-jooq-database importer-test-destination-database importer-test-source-database
   exit 0
 fi
 
