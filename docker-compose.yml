@@ -5,6 +5,13 @@ services:
     container_name: importer
     build: .
     restart: "unless-stopped"
+    environment:
+      - SOURCE_DB_URL=jdbc:sqlserver://importer-test-source-database:1433;database=testsourcedb;applicationIntent=ReadOnly
+      - SOURCE_DB_USERNAME=sa
+      - SOURCE_DB_PASSWORD=testSOURCEdb123
+      - DESTINATION_DB_URL=jdbc:postgresql://importer-jooq-database:5432/devdb?stringtype=unspecified
+      - DESTINATION_DB_USERNAME=devdb
+      - DESTINATION_DB_PASSWORD=devdb
     networks:
       - jore4
     ports:
