@@ -32,6 +32,8 @@
         <!-- Packaging -->
         <build.profile.id>dev</build.profile.id>
         <build.property.file>profiles/${build.profile.id}/config.properties</build.property.file>
+        <skip.jooq.generation>false</skip.jooq.generation>
+        <skip.flyway.migration>false</skip.flyway.migration>
     </properties>
 
     <repositories>
@@ -194,6 +196,8 @@
             <id>prod</id>
             <properties>
                 <build.profile.id>prod</build.profile.id>
+                <skip.jooq.generation>true</skip.jooq.generation>
+                <skip.flyway.migration>true</skip.flyway.migration>
             </properties>
         </profile>
     </profiles>
@@ -269,6 +273,7 @@
                 <artifactId>flyway-maven-plugin</artifactId>
 
                 <configuration>
+                    <skip>${skip.flyway.migration}</skip>
                     <driver>${init.db.driver}</driver>
                     <url>${init.db.url}</url>
                     <user>${init.db.username}</user>
@@ -342,6 +347,7 @@
                 </dependencies>
 
                 <configuration>
+                    <skip>${skip.jooq.generation}</skip>
                     <jdbc>
                         <driver>${init.db.driver}</driver>
                         <url>${init.db.url}</url>
@@ -412,10 +418,30 @@
                         </database>
                         <target>
                             <packageName>fi.hsl.jore.importer.jooq</packageName>
-                            <directory>${project.build.directory}/generated-sources/jooq</directory>
+                            <directory>${project.build.sourceDirectory}/generated-sources/jooq</directory>
                         </target>
                     </generator>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.sourceDirectory}/generated-sources</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

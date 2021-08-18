@@ -1,0 +1,21 @@
+name: Generate jooq
+
+on:
+  push:
+  pull_request:
+    branches: [master]
+
+jobs:
+  verify-doctoc:
+    name: Verifies whether generated jooq classes have been updated
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run jooq class generation
+        run: ./development.sh generate:jooq
+
+      - name: Verify that generate command made no changes, so generated classes are up to date
+        run: '[ -z "$(git status --porcelain)" ]'
