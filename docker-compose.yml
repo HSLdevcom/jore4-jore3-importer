@@ -12,6 +12,7 @@ services:
       - DESTINATION_DB_URL=jdbc:postgresql://importer-jooq-database:5432/devdb?stringtype=unspecified
       - DESTINATION_DB_USERNAME=devdb
       - DESTINATION_DB_PASSWORD=devdb
+      - JORE_IMPORTER_MIGRATE=true
     networks:
       - jore4
     ports:
