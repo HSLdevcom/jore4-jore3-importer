@@ -33,5 +33,5 @@ jobs:
           # We depend on both PostgreSQL and MS SQL, but the latter is the slow one
           command: "curl --fail http://localhost:17001 --output /dev/null --silent"
 
-      - name: Build with Maven
+      - name: Run tests and try building a package
         run: mvn --batch-mode verify
