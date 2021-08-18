@@ -34,6 +34,7 @@
         <build.property.file>profiles/${build.profile.id}/config.properties</build.property.file>
         <skip.jooq.generation>false</skip.jooq.generation>
         <skip.flyway.migration>false</skip.flyway.migration>
+        <skip.integration.tests>false</skip.integration.tests>
     </properties>
 
     <repositories>
@@ -198,6 +199,7 @@
                 <build.profile.id>prod</build.profile.id>
                 <skip.jooq.generation>true</skip.jooq.generation>
                 <skip.flyway.migration>true</skip.flyway.migration>
+                <skip.integration.tests>true</skip.integration.tests>
             </properties>
         </profile>
     </profiles>
@@ -424,6 +426,7 @@
                 </configuration>
             </plugin>
 
+            <!-- include generated sources in build -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -442,6 +445,20 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!-- skip integration tests on build -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <configuration>
+                    <groups>integrationTest</groups>
+                    <includes>
+                        <include>**/*Test</include>
+                        <include>**/*Tests</include>
+                    </includes>
+                    <skipTests>${skip.integration.tests}</skipTests>
+                </configuration>
             </plugin>
         </plugins>
     </build>
