@@ -81,6 +81,16 @@ More properties can be found from `/profiles/prod/config.properties`
 
 ## Running tests
 
+For running the tests, you need to have the test databases up an running:
+```sh
+./development shart:deps
+```
+
+Then start the tests with:
+```sh
+mvn --batch-mode verify
+```
+
 ## Triggering the batch job
 
 The import can be triggered using a HTTP API. The `POST /job/import/start` endpoint will start the job and return its status. If a previous job instance was already running, a new job is not started and the return value will reflect the status of the running job.
