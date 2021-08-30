@@ -18,16 +18,16 @@ public interface LinkShape
                 IHasSystemTime,
                 CommonFields<LinkShape> {
 
-    LinkPK link();
+    LinkPK linkId();
 
     static LinkShape of(final LinkShapePK pk,
-                        final LinkPK link,
+                        final LinkPK linkId,
                         final ExternalId linkExternalId,
                         final LineString geometry,
                         final TimeRange systemTime) {
         return ImmutableLinkShape.builder()
                                  .pk(pk)
-                                 .link(link)
+                                 .linkId(linkId)
                                  .linkExternalId(linkExternalId)
                                  .geometry(geometry)
                                  .systemTime(systemTime)
@@ -37,7 +37,7 @@ public interface LinkShape
     static LinkShape from(final InfrastructureLinkShapesRecord record) {
         return of(
                 LinkShapePK.of(record.getInfrastructureLinkShapeId()),
-                LinkPK.of(record.getInfrastructureLinkLinkId()),
+                LinkPK.of(record.getInfrastructureLinkId()),
                 ExternalId.of(record.getInfrastructureLinkExtId()),
                 record.getInfrastructureLinkShape(),
                 record.getInfrastructureLinkShapeSysPeriod()
@@ -47,7 +47,7 @@ public interface LinkShape
     static LinkShape from(final InfrastructureLinkShapesWithHistoryRecord record) {
         return of(
                 LinkShapePK.of(record.getInfrastructureLinkShapeId()),
-                LinkPK.of(record.getInfrastructureLinkLinkId()),
+                LinkPK.of(record.getInfrastructureLinkId()),
                 ExternalId.of(record.getInfrastructureLinkExtId()),
                 record.getInfrastructureLinkShape(),
                 record.getInfrastructureLinkShapeSysPeriod()

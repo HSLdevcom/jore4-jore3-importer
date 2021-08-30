@@ -73,7 +73,7 @@ public class LinkShapeImportRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    public void whenStagedRowsAndCommit_andTargetLinkHasNoPoints_thenReturnResultWithUpdatedId() {
+    public void whenStagedRowsAndCommit_andTargetLinkHasNoPoints_thenReturnResultWithUpdatedShape() {
         final List<NodePK> nodeIds = nodeRepository.insert(
                 PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
                 PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2),
@@ -113,7 +113,7 @@ public class LinkShapeImportRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    public void whenStagedRowsAndCommit_andTargetLinkHasPoints_thenReturnResultWithUpdatedId() {
+    public void whenStagedRowsAndCommit_andTargetLinkHasPoints_thenReturnResultWithUpdatedShape() {
         final List<NodePK> nodeIds = nodeRepository.insert(
                 PersistableNode.of(ExternalId.of("1"), NodeType.CROSSROADS, POINT_1),
                 PersistableNode.of(ExternalId.of("2"), NodeType.CROSSROADS, POINT_2),

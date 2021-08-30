@@ -37,7 +37,7 @@ public class LinkShapeRepository
         final InfrastructureLinkShapesRecord record = db.newRecord(SHAPES);
 
         record.setInfrastructureLinkExtId(entity.linkExternalId().value());
-        record.setInfrastructureLinkLinkId(entity.link().value());
+        record.setInfrastructureLinkId(entity.linkId().value());
         record.setInfrastructureLinkShape(entity.geometry());
 
         record.store();

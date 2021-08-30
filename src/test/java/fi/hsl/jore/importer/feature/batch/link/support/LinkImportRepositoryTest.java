@@ -252,9 +252,7 @@ public class LinkImportRepositoryTest extends IntegrationTest {
                                                              endNodeId);
         final PersistableLink sourceLink = PersistableLink.of(externalId, networkType, LINE_1, startNodePk, endNodePk);
 
-        final LinkPK existingId = targetRepository.insert(
-                sourceLink
-        );
+        final LinkPK existingId = targetRepository.insert(sourceLink);
 
         assertThat("Target repository should now contain a single row",
                    targetRepository.findAllIds(),
