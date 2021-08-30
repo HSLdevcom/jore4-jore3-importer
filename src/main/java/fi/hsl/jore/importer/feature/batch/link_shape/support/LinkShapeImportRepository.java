@@ -84,7 +84,7 @@ public class LinkShapeImportRepository implements ILinkShapeImportRepository {
         // Ignores rows which already exist (e.g. same ext id & type)
         final String insertSql = db.insertInto(TARGET_TABLE)
                                    .columns(TARGET_TABLE.INFRASTRUCTURE_LINK_EXT_ID,
-                                            TARGET_TABLE.INFRASTRUCTURE_LINK_LINK_ID,
+                                            TARGET_TABLE.INFRASTRUCTURE_LINK_ID,
                                             TARGET_TABLE.INFRASTRUCTURE_LINK_SHAPE)
                                    .select(db.select(STAGING_TABLE.INFRASTRUCTURE_LINK_EXT_ID,
                                                      LINKS_TABLE.INFRASTRUCTURE_LINK_ID,

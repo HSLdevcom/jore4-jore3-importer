@@ -7,7 +7,7 @@ CREATE TABLE infrastructure_network.infrastructure_link_shapes
 (
     infrastructure_link_shape_id         uuid      DEFAULT gen_random_uuid() PRIMARY KEY,
     infrastructure_link_ext_id           TEXT                                                 NOT NULL,
-    infrastructure_link_link_id          uuid                                                 NOT NULL REFERENCES infrastructure_network.infrastructure_links (infrastructure_link_id) ON DELETE CASCADE,
+    infrastructure_link_id          uuid                                                 NOT NULL REFERENCES infrastructure_network.infrastructure_links (infrastructure_link_id) ON DELETE CASCADE,
     -- Link shape from start->...->end (including intermediate points).
     infrastructure_link_shape            geography(LinestringZ, 4326)                         NOT NULL,
     infrastructure_link_shape_sys_period tstzrange DEFAULT tstzrange(current_timestamp, null) NOT NULL

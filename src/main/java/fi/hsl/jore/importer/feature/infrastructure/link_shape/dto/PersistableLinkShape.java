@@ -10,13 +10,13 @@ import org.locationtech.jts.geom.LineString;
 public interface PersistableLinkShape
         extends CommonFields<PersistableLinkShape> {
 
-    LinkPK link();
+    LinkPK linkId();
 
-    static PersistableLinkShape of(final LinkPK link,
+    static PersistableLinkShape of(final LinkPK linkId,
                                    final ExternalId linkExternalId,
                                    final LineString geometry) {
         return ImmutablePersistableLinkShape.builder()
-                                            .link(link)
+                                            .linkId(linkId)
                                             .linkExternalId(linkExternalId)
                                             .geometry(geometry)
                                             .build();
