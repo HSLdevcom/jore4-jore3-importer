@@ -46,6 +46,9 @@ public class DateRangeConverterTest {
         assertThat(CONVERTER.from("(2004-10-19,2005-10-20)"),
                    is(DateRange.of(Range.open(LocalDate.parse("2004-10-19"),
                                               LocalDate.parse("2005-10-20")))));
+        assertThat(CONVERTER.from("(\"2004-10-19\",\"2005-10-20\")"),
+                is(DateRange.of(Range.open(LocalDate.parse("2004-10-19"),
+                        LocalDate.parse("2005-10-20")))));
     }
 
     @Test
@@ -58,6 +61,8 @@ public class DateRangeConverterTest {
                    is(DateRange.of(Range.lessThan(LocalDate.parse("2005-10-19")))));
         assertThat(CONVERTER.from("(,2005-10-19]"),
                    is(DateRange.of(Range.atMost(LocalDate.parse("2005-10-19")))));
+        assertThat(CONVERTER.from("(,\"2005-10-19\"]"),
+                is(DateRange.of(Range.atMost(LocalDate.parse("2005-10-19")))));
     }
 
     @Test

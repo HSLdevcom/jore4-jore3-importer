@@ -22,18 +22,18 @@ public class DateRangeConverterGenerativeTest {
         private Generators() {
         }
 
-        public static Gen<LocalDate> timestamp(final LocalDate start,
+        public static Gen<LocalDate> timestamp(final LocalDate end,
                                                final Duration range) {
-            final long now = start.toEpochDay();
+            final long now = end.toEpochDay();
             final long diff = range.toDaysPart();
             return Generate.longRange(now - diff, now)
                            .map(LocalDate::ofEpochDay);
         }
 
-        public static Gen<Optional<LocalDate>> maybeTimestamp(final LocalDate start,
+        public static Gen<Optional<LocalDate>> maybeTimestamp(final LocalDate end,
                                                               final Duration range) {
             return Generate.oneOf(Generate.constant(Optional.empty()),
-                                  timestamp(start, range)
+                                  timestamp(end, range)
                                           .map(Optional::of));
         }
 
