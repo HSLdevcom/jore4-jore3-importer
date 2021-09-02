@@ -24,7 +24,7 @@ public enum PublicTransportDestination {
     REGIONAL_SIUNTIO(9315, "Seutuliikenne Siuntio"),
     REGIONAL_TOWARDS_ESPOO(9320, "Seutu, Espoon suunta"),
     REGIONAL_TOWARDS_VANTAA(9321, "Seutu, Vantaan suunta"),
-    REGIONAL_ORTHOGONAL(9322, "Seutu, poikittais"),
+    REGIONAL_TRANSVERSE(9322, "Seutu, poikittais"),
     LOCAL(9410, "Lähiseutuliikenne"),
     U_TRANSPORT_CAPITAL(9510, "U-liikenne PKS"),
     U_TRANSPORT_KIRKKONUMMI(9511, "U-liikenne Kirkkonummi"),
