@@ -107,8 +107,8 @@ public class LinkImportRepository
                                    nodeFromTable.INFRASTRUCTURE_NODE_ID,
                                    nodeToTable.INFRASTRUCTURE_NODE_ID)
                            .from(STAGING_TABLE)
-                           .leftJoin(nodeFromTable).on(nodeFromTable.INFRASTRUCTURE_NODE_EXT_ID.eq(STAGING_TABLE.INFRASTRUCTURE_LINK_START_NODE_EXT_ID))
-                           .leftJoin(nodeToTable).on(nodeToTable.INFRASTRUCTURE_NODE_EXT_ID.eq(STAGING_TABLE.INFRASTRUCTURE_LINK_END_NODE_EXT_ID))
+                           .innerJoin(nodeFromTable).on(nodeFromTable.INFRASTRUCTURE_NODE_EXT_ID.eq(STAGING_TABLE.INFRASTRUCTURE_LINK_START_NODE_EXT_ID))
+                           .innerJoin(nodeToTable).on(nodeToTable.INFRASTRUCTURE_NODE_EXT_ID.eq(STAGING_TABLE.INFRASTRUCTURE_LINK_END_NODE_EXT_ID))
                            .whereNotExists(selectOne()
                                                    .from(TARGET_TABLE)
                                                    .where(TARGET_TABLE.INFRASTRUCTURE_LINK_EXT_ID.eq(STAGING_TABLE.INFRASTRUCTURE_LINK_EXT_ID))))
