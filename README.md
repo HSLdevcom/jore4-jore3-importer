@@ -40,6 +40,10 @@ The importer will be available through http://localhost:8080. See instructions b
 
 ## Building the app
 
+The application is using jooq for ORM. To (re)generate the mapping classes, you need to have the ORM source database to
+be up and running and jooq connecting to it. `./development.sh generate:jooq` spins up the database and generates the
+ORM classes.
+
 Note that the `dev` profile is only meant for use in your local development environment. To create a build to be used for deployment, compile and create a package using the `prod` profile:
 ```
 mvn clean package spring-boot:repackage -Pprod
