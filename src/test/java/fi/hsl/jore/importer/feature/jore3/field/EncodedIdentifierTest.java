@@ -98,22 +98,22 @@ public class EncodedIdentifierTest {
                                      final String displayId,
                                      final boolean isPrimary,
                                      final boolean isTest) {
-        final LineId lane = LineId.from(id);
+        final LineId lineId = LineId.from(id);
 
         assertThat("destination is correct",
-                   lane.destination(),
+                   lineId.destination(),
                    is(destination));
 
         assertThat("displayed identifier is correct",
-                   lane.displayId(),
+                   lineId.displayId(),
                    is(displayId));
 
         assertThat("priority flag is correct",
-                   lane.primary(),
+                   lineId.primary(),
                    is(isPrimary));
 
         assertThat("test flag is correct",
-                   lane.test(),
+                   lineId.test(),
                    is(isTest));
     }
 }
