@@ -20,7 +20,7 @@ import static fi.hsl.jore.importer.feature.jore3.field.LegacyPublicTransportDest
  *     </ul>
  *     <li>B: Line number
  *     <ul>
- *         <li>Typically a number between 1-999 (for busses)
+ *         <li>Typically a number between 1-999 (for buses)
  *         <li>Interpreted differently for train or metro lines
  *     </ul>
  *     <li>C: First variant field (optional)
