@@ -85,3 +85,12 @@ $ curl  http://localhost:8080/job/import/status/
 #### Importing lines (`jr_linja`)
 
 ![Overview](images/import_lines_step.svg "Step overview")
+
+## Known Problems
+
+### Test case fails because a database object isn't found
+
+If a test case fails because the `com.microsoft.sqlserver.jdbc.SQLServerException` is thrown and
+the error message says that it cannot find a database object, the problem is that the script which
+creates the source MSSQL database (_docker/mssql_init/populate.sql_) was changed. You can solve this problem by running the command: `./dev_deps.sh recreate`
+at command prompt.
