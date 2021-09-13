@@ -4,6 +4,10 @@
 package fi.hsl.jore.importer.jooq.network;
 
 
+import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
@@ -15,6 +19,26 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesWithHistory;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
+
+    /**
+     * The table <code>network.network_line_headers</code>.
+     */
+    public static final NetworkLineHeaders NETWORK_LINE_HEADERS = NetworkLineHeaders.NETWORK_LINE_HEADERS;
+
+    /**
+     * The table <code>network.network_line_headers_history</code>.
+     */
+    public static final NetworkLineHeadersHistory NETWORK_LINE_HEADERS_HISTORY = NetworkLineHeadersHistory.NETWORK_LINE_HEADERS_HISTORY;
+
+    /**
+     * The table <code>network.network_line_headers_staging</code>.
+     */
+    public static final NetworkLineHeadersStaging NETWORK_LINE_HEADERS_STAGING = NetworkLineHeadersStaging.NETWORK_LINE_HEADERS_STAGING;
+
+    /**
+     * The table <code>network.network_line_headers_with_history</code>.
+     */
+    public static final NetworkLineHeadersWithHistory NETWORK_LINE_HEADERS_WITH_HISTORY = NetworkLineHeadersWithHistory.NETWORK_LINE_HEADERS_WITH_HISTORY;
 
     /**
      * The table <code>network.network_lines</code>.

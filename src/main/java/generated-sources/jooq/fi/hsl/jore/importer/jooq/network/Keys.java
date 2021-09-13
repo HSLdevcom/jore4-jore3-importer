@@ -6,8 +6,12 @@ package fi.hsl.jore.importer.jooq.network;
 
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNetworkTypes;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNetworkTypesRecord;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
+import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLineHeadersRecord;
+import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLineHeadersStagingRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesStagingRecord;
 
@@ -29,6 +33,8 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<NetworkLineHeadersRecord> NETWORK_LINE_HEADERS_PKEY = Internal.createUniqueKey(NetworkLineHeaders.NETWORK_LINE_HEADERS, DSL.name("network_line_headers_pkey"), new TableField[] { NetworkLineHeaders.NETWORK_LINE_HEADERS.NETWORK_LINE_HEADER_ID }, true);
+    public static final UniqueKey<NetworkLineHeadersStagingRecord> NETWORK_LINE_HEADERS_STAGING_PKEY = Internal.createUniqueKey(NetworkLineHeadersStaging.NETWORK_LINE_HEADERS_STAGING, DSL.name("network_line_headers_staging_pkey"), new TableField[] { NetworkLineHeadersStaging.NETWORK_LINE_HEADERS_STAGING.NETWORK_LINE_HEADER_EXT_ID }, true);
     public static final UniqueKey<NetworkLinesRecord> NETWORK_LINES_PKEY = Internal.createUniqueKey(NetworkLines.NETWORK_LINES, DSL.name("network_lines_pkey"), new TableField[] { NetworkLines.NETWORK_LINES.NETWORK_LINE_ID }, true);
     public static final UniqueKey<NetworkLinesStagingRecord> NETWORK_LINES_STAGING_PKEY = Internal.createUniqueKey(NetworkLinesStaging.NETWORK_LINES_STAGING, DSL.name("network_lines_staging_pkey"), new TableField[] { NetworkLinesStaging.NETWORK_LINES_STAGING.NETWORK_LINE_EXT_ID }, true);
 
@@ -36,6 +42,7 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<NetworkLineHeadersRecord, NetworkLinesRecord> NETWORK_LINE_HEADERS__NETWORK_LINE_HEADERS_NETWORK_LINE_ID_FKEY = Internal.createForeignKey(NetworkLineHeaders.NETWORK_LINE_HEADERS, DSL.name("network_line_headers_network_line_id_fkey"), new TableField[] { NetworkLineHeaders.NETWORK_LINE_HEADERS.NETWORK_LINE_ID }, Keys.NETWORK_LINES_PKEY, new TableField[] { NetworkLines.NETWORK_LINES.NETWORK_LINE_ID }, true);
     public static final ForeignKey<NetworkLinesRecord, InfrastructureNetworkTypesRecord> NETWORK_LINES__NETWORK_LINES_INFRASTRUCTURE_NETWORK_TYPE_FKEY = Internal.createForeignKey(NetworkLines.NETWORK_LINES, DSL.name("network_lines_infrastructure_network_type_fkey"), new TableField[] { NetworkLines.NETWORK_LINES.INFRASTRUCTURE_NETWORK_TYPE }, fi.hsl.jore.importer.jooq.infrastructure_network.Keys.INFRASTRUCTURE_NETWORK_TYPES_PKEY, new TableField[] { InfrastructureNetworkTypes.INFRASTRUCTURE_NETWORK_TYPES.INFRASTRUCTURE_NETWORK_TYPE }, true);
     public static final ForeignKey<NetworkLinesStagingRecord, InfrastructureNetworkTypesRecord> NETWORK_LINES_STAGING__NETWORK_LINES_STAGING_INFRASTRUCTURE_NETWORK_TYPE_FKEY = Internal.createForeignKey(NetworkLinesStaging.NETWORK_LINES_STAGING, DSL.name("network_lines_staging_infrastructure_network_type_fkey"), new TableField[] { NetworkLinesStaging.NETWORK_LINES_STAGING.INFRASTRUCTURE_NETWORK_TYPE }, fi.hsl.jore.importer.jooq.infrastructure_network.Keys.INFRASTRUCTURE_NETWORK_TYPES_PKEY, new TableField[] { InfrastructureNetworkTypes.INFRASTRUCTURE_NETWORK_TYPES.INFRASTRUCTURE_NETWORK_TYPE }, true);
 }

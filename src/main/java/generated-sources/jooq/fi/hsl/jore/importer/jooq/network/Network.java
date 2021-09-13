@@ -5,6 +5,10 @@ package fi.hsl.jore.importer.jooq.network;
 
 
 import fi.hsl.jore.importer.jooq.DefaultCatalog;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
@@ -30,6 +34,26 @@ public class Network extends SchemaImpl {
      * The reference instance of <code>network</code>
      */
     public static final Network NETWORK = new Network();
+
+    /**
+     * The table <code>network.network_line_headers</code>.
+     */
+    public final NetworkLineHeaders NETWORK_LINE_HEADERS = NetworkLineHeaders.NETWORK_LINE_HEADERS;
+
+    /**
+     * The table <code>network.network_line_headers_history</code>.
+     */
+    public final NetworkLineHeadersHistory NETWORK_LINE_HEADERS_HISTORY = NetworkLineHeadersHistory.NETWORK_LINE_HEADERS_HISTORY;
+
+    /**
+     * The table <code>network.network_line_headers_staging</code>.
+     */
+    public final NetworkLineHeadersStaging NETWORK_LINE_HEADERS_STAGING = NetworkLineHeadersStaging.NETWORK_LINE_HEADERS_STAGING;
+
+    /**
+     * The table <code>network.network_line_headers_with_history</code>.
+     */
+    public final NetworkLineHeadersWithHistory NETWORK_LINE_HEADERS_WITH_HISTORY = NetworkLineHeadersWithHistory.NETWORK_LINE_HEADERS_WITH_HISTORY;
 
     /**
      * The table <code>network.network_lines</code>.
@@ -67,6 +91,10 @@ public class Network extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
+            NetworkLineHeaders.NETWORK_LINE_HEADERS,
+            NetworkLineHeadersHistory.NETWORK_LINE_HEADERS_HISTORY,
+            NetworkLineHeadersStaging.NETWORK_LINE_HEADERS_STAGING,
+            NetworkLineHeadersWithHistory.NETWORK_LINE_HEADERS_WITH_HISTORY,
             NetworkLines.NETWORK_LINES,
             NetworkLinesHistory.NETWORK_LINES_HISTORY,
             NetworkLinesStaging.NETWORK_LINES_STAGING,
