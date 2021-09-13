@@ -127,7 +127,7 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    public void whenStagedRowsWithChangesAndCommit_andTargetNotEmpty_thenReturnResultWithUpdatedId() {
+    public void whenStagedRowsWithChangesAndCommit_andTargetNotEmpty_thenReturnResultWithIdOfUpdatedRow() {
         // Insert the parent line
         final LinePK lineId = lineRepository.insert(
                 PersistableLine.of(LINE_EXT_ID,
