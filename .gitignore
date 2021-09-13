@@ -29,3 +29,5 @@ build/
 
 ### VS Code ###
 .vscode/
+run.sh
+profiles/dev/config.*.properties

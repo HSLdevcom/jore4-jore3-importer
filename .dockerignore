@@ -1,0 +1,7 @@
+# Deny everything.
+**
+
+# Reenable some...
+!/src
+!/profiles
+!/pom.xml

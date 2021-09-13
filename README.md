@@ -1,16 +1,29 @@
-# Jore 3 => Jore 4 -importer
+# Jore 3 => Jore 4 importer
 
 This tool implements a batch job for importing data from a Jore 3 database to a Jore 4 database.
 
 ## Running the app locally
 
-The `dev_deps.sh` is a simple utility script for starting the development and test dependencies (e.g. databases). The dependencies must be up-and-running for both running this app locally or running the tests.
+### Setup
 
-Most of the runtime environment is configured in `profiles/dev/config.properties`. However, some values must be supplied manually:
+1. Install preliminaries
+  - OpenJDK 11
+1. Make a copy of the maven `dev`-profile for your user:
+    ```
+    cp profiles/dev/config.properties profiles/dev/config.<my-username>.properties
+    ```
+1. Adjust the `source.db.*` properties in `profiles/dev/config.<my-username>.properties` to your needs. Other configuration for destination database and test database may also be found from here.
+1. If you wish to connect to the original JORE3 database, follow the instructions [here](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#creating-an-ssh-configuration-entry) on how to create a tunnel and connect to the database. After the tunnel is created, the jore3 database will be available on localhost:56239. Ask for the username and password from the project team. 
+
+### Run 
+
+The `development.sh` is a simple utility script for starting the development and test dependencies (e.g. databases).
+
+The dependencies must be up and running for both running this app locally or for running tests. Note that for generating the jooq classes for build, the test database must be running. Run `./development.sh start:deps`
+
+Most of the runtime environment is configured in `profiles/dev/config.<my-username>.properties`. However, some values must be supplied manually:
 
 - `JORE_IMPORTER_MIGRATE`: At the moment this app requires that the destination database is already up-to-date (e.g. database migrations are handled by another party). If `JORE_IMPORTER_MIGRATE` is set to `true`, this app will perform the migrations. This should only be enabled in local development when using the dockerized local database!
-- `SOURCE_DB_USERNAME`: Username for the Jore 3 database.
-- `SOURCE_DB_PASSWORD`: Password for the Jore 3 database.
 
 You can create a local `run.sh` script for supplying these arguments:
 
@@ -20,10 +33,62 @@ You can create a local `run.sh` script for supplying these arguments:
 set -euo pipefail
 
 JORE_IMPORTER_MIGRATE=true \
-  SOURCE_DB_USERNAME=change_this \
-  SOURCE_DB_PASSWORD=change_this \
   mvn clean spring-boot:run -Dspring-boot.run.jvmArguments="-Xmx128m"
+```
 
+The importer will be available through http://localhost:8080. See instructions below on how to trigger importing through the HTTP API.
+
+## Running the app in docker-compose
+
+You may wish to test whether the application works as a container in a docker network. Spin up the dependencies and 
+the app itself with `development.sh start`
+
+The importer will be available through http://localhost:3200. See instructions below on how to trigger importing through the HTTP API.
+
+## Building the app
+
+The application is using jooq for ORM. To (re)generate the mapping classes, you need to have the ORM source database to
+be up and running and jooq connecting to it. `./development.sh generate:jooq` spins up the database and generates the
+ORM classes.
+
+Note that the `dev` profile is only meant for use in your local development environment. To create a build to be used for deployment, compile and create a package using the `prod` profile:
+```
+mvn clean package spring-boot:repackage -Pprod
+```
+
+## Docker reference
+
+The application uses spring boot which allows overwriting configuration properties as described
+[here](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config.typesafe-configuration-properties.relaxed-binding.environment-variables).
+The docker container is also able to
+[read secrets](https://github.com/HSLdevcom/jore4-tools#read-secretssh) and expose
+them as environment variables.
+
+The following configuration properties are to be defined for each environment:
+
+| Config property            | Environment variable       | Secret name                | Example                 | Description                                           |
+| ----------------------  | ----------------------- | ----------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| -                       | SECRET_STORE_BASE_PATH  | -                       | /run/secrets                                                                    | Directory containing the docker secrets                                          |
+| source.db.url           | SOURCE_DB_URL           | source-db-url           | jdbc:sqlserver://localhost:1433;database=testsourcedb;applicationIntent=ReadOnly| The jdbc url of the Jore3 MSSQL database                                         |
+| source.db.username      | SOURCE_DB_USERNAME      | source-db-username      | sa                                                                              | Username for the Jore3 MSSQL databaseThe full URL to which to return after login |
+| source.db.password      | SOURCE_DB_PASSWORD      | source-db-password      | ****                                                                            | The full URL to which to return after logout                                     |
+| destination.db.url      | DESTINATION_DB_URL      | destination-db-url      | jdbc:postgresql://localhost:5432/devdb?stringtype=unspecified                   | The jdbc url of the Jore4 postgresql database                                     |
+| destination.db.username | DESTINATION_DB_USERNAME | destination-db-username | sa                                                                              | Username for the Jore3 MSSQL databaseThe full URL to which to return after login  |
+| destination.db.password | DESTINATION_DB_PASSWORD | destination-db-password | ****                                                                            | The full URL to which to return after logout                                      |
+| jore.importer.migrate   | JORE_IMPORTER_MIGRATE   | jore-importer-migrate   | false                                                                           | Should the importer should run its own migrations (for local development only)    |
+
+More properties can be found from `/profiles/prod/config.properties`
+
+## Running tests
+
+For running the tests, you need to have the test databases up an running:
+```sh
+./development.sh start:deps
+```
+
+Then start the tests with:
+```sh
+mvn --batch-mode clean verify
 ```
 
 ## Triggering the batch job
@@ -56,7 +121,7 @@ $ curl http://localhost:8080/job/import/status/
 If an error occurs:
 
 ```shell
-$ curl  http://localhost:8080/job/import/status/
+$ curl http://localhost:8080/job/import/status/
 {"id":5,"batchStatus":"FAILED","exitCode":"FAILED","exitDescription":"<here's a really long Java stack trace>","startTime":"2021-04-09T08:39:47.698Z","endTime":"2021-04-09T08:41:17.761Z"}
 ```
 
