@@ -12,6 +12,10 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesWithHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesWithHistory;
 
 
 /**
@@ -59,4 +63,24 @@ public class Tables {
      * The table <code>network.network_lines_with_history</code>.
      */
     public static final NetworkLinesWithHistory NETWORK_LINES_WITH_HISTORY = NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY;
+
+    /**
+     * The table <code>network.network_routes</code>.
+     */
+    public static final NetworkRoutes NETWORK_ROUTES = NetworkRoutes.NETWORK_ROUTES;
+
+    /**
+     * The table <code>network.network_routes_history</code>.
+     */
+    public static final NetworkRoutesHistory NETWORK_ROUTES_HISTORY = NetworkRoutesHistory.NETWORK_ROUTES_HISTORY;
+
+    /**
+     * The table <code>network.network_routes_staging</code>.
+     */
+    public static final NetworkRoutesStaging NETWORK_ROUTES_STAGING = NetworkRoutesStaging.NETWORK_ROUTES_STAGING;
+
+    /**
+     * The table <code>network.network_routes_with_history</code>.
+     */
+    public static final NetworkRoutesWithHistory NETWORK_ROUTES_WITH_HISTORY = NetworkRoutesWithHistory.NETWORK_ROUTES_WITH_HISTORY;
 }
