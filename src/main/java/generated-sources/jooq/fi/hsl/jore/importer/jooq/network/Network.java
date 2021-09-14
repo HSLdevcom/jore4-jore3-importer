@@ -13,6 +13,10 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesWithHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesWithHistory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -76,6 +80,26 @@ public class Network extends SchemaImpl {
     public final NetworkLinesWithHistory NETWORK_LINES_WITH_HISTORY = NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY;
 
     /**
+     * The table <code>network.network_routes</code>.
+     */
+    public final NetworkRoutes NETWORK_ROUTES = NetworkRoutes.NETWORK_ROUTES;
+
+    /**
+     * The table <code>network.network_routes_history</code>.
+     */
+    public final NetworkRoutesHistory NETWORK_ROUTES_HISTORY = NetworkRoutesHistory.NETWORK_ROUTES_HISTORY;
+
+    /**
+     * The table <code>network.network_routes_staging</code>.
+     */
+    public final NetworkRoutesStaging NETWORK_ROUTES_STAGING = NetworkRoutesStaging.NETWORK_ROUTES_STAGING;
+
+    /**
+     * The table <code>network.network_routes_with_history</code>.
+     */
+    public final NetworkRoutesWithHistory NETWORK_ROUTES_WITH_HISTORY = NetworkRoutesWithHistory.NETWORK_ROUTES_WITH_HISTORY;
+
+    /**
      * No further instances allowed
      */
     private Network() {
@@ -98,6 +122,10 @@ public class Network extends SchemaImpl {
             NetworkLines.NETWORK_LINES,
             NetworkLinesHistory.NETWORK_LINES_HISTORY,
             NetworkLinesStaging.NETWORK_LINES_STAGING,
-            NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY);
+            NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY,
+            NetworkRoutes.NETWORK_ROUTES,
+            NetworkRoutesHistory.NETWORK_ROUTES_HISTORY,
+            NetworkRoutesStaging.NETWORK_ROUTES_STAGING,
+            NetworkRoutesWithHistory.NETWORK_ROUTES_WITH_HISTORY);
     }
 }
