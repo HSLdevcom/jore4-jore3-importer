@@ -127,11 +127,41 @@ $ curl http://localhost:8080/job/import/status/
 
 ## Import job(s)
 
+The import jobs are implemented by using Spring Batch. If you are not familiar with Spring Batch, you should take a
+look a the [Spring Batch reference documentation](https://docs.spring.io/spring-batch/docs/4.3.x/reference/html/index.html).
+
 ### Importing Jore 3 data (`importJoreJob`)
+
+An import job which imports data from the Jore 3 database has the following steps:
+
+* The `prepareStep` cleans the data found from the staging tables.
+* The `importStep` reads the imported data from the source MSSQL database and inserts the imported data into the 
+  staging table found from the target PostgreSQL database.
+* The `commitStep` moves the data from the staging table to the actual target table.
+
+The following figure identifies the steps of the import jobs:
 
 ![Overview](images/import_jore_job.svg "Job overview")
 
 ### Overview of a Generic Job
+
+A single Spring Batch job consists of the following components:
+
+* A `Job` contains the steps which are invoked when a batch job is run.
+* The `GenericCleanupTasklet` cleans the staging tables before the import process is run. This step 
+  is called the prepare step.
+* The `JdbcCursorItemReader<ROW>` class reads the imported data from the source MSSQL database by using an SQL
+  script which is found from _src/main/resources/import_ directory. This component is run during the import step.
+* An implementation of the `ItemProcessor<ROW, ENTITY>` interface transforms the source data into a format which can be inserted into the
+  staging table found from the target PostgreSQL database. This component is run during the import step.
+* The `GenericImportWriter<ENTITY, KEY>` class writes the imported data into the staging table which is found
+  from the target PostgreSQL database. The actual insert logic is found from the implementation of the 
+  `IImportRepository<ENTITY,KEY>` interface. This component is also run during the import step.
+* The `GenericCommitTasklet` class moves the data from the staging table to the real target table. The logic which moves
+  the imported data is found from the implementation of the `IImportRepository<ENTITY,KEY>` interface. This
+  component is run during the import step.
+
+The following figure illustrates the responsibilities of these components:
 
 ![objectDiagram](images/job_diagram.svg "Object diagram of a generic job")
 
@@ -151,11 +181,17 @@ $ curl http://localhost:8080/job/import/status/
 
 ![Overview](images/import_lines_step.svg "Step overview")
 
+## The Structure of the Project
+
+The directory structure of this project follows the [Maven directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html).
+
+
+
 ## Known Problems
 
 ### Test case fails because a database object isn't found
 
 If a test case fails because the `com.microsoft.sqlserver.jdbc.SQLServerException` is thrown and
 the error message says that it cannot find a database object, the problem is that the script which
-creates the source MSSQL database (_docker/mssql_init/populate.sql_) was changed. You can solve this problem by running the command: `./dev_deps.sh recreate`
-at command prompt.
+creates the source MSSQL database (_docker/mssql_init/populate.sql_) was changed. You can solve this problem by running the command: 
+`./development.sh recreate` at command prompt.
