@@ -39,7 +39,7 @@ public interface JrRoute
                 example = "Olympiaterminaali - Kamppi (M) - Ooppera")
     Optional<String> name();
 
-    @JoreColumn(name = "reinimilyh",
+    @JoreColumn(name = "reinimir",
                 nullable = true,
                 example = "Olympiaterminalen - Kampen (M) - Operan")
     Optional<String> nameSwedish();
