@@ -44,6 +44,8 @@ public interface JrRoute
                 example = "Olympiaterminalen - Kampen (M) - Operan")
     Optional<String> nameSwedish();
 
+    //reinimilyh and reinimilyhr are missing because they are deprecated.
+
     static JrRoute of(final RouteId routeId,
                       final LineId lineId,
                       final Optional<String> name,
