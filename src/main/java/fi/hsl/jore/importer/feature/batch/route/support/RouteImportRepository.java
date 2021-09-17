@@ -76,9 +76,15 @@ public class RouteImportRepository
 
     protected Set<RoutePK> update() {
         return db.update(TARGET_TABLE)
-                 // What fields to update
+                 // Only the name of the route is updated because changing
+                 // the other field values would either change the line of
+                 // the route or change the identity of the route.
+                 // Also, the value of the route_number column is parsed
+                 // from the value of the network_route_ext_id column. Thus,
+                 // both of them must be updated at the same time.
                  .set(TARGET_TABLE.NETWORK_ROUTE_NAME,
                       STAGING_TABLE.NETWORK_ROUTE_NAME)
+
                  .from(STAGING_TABLE)
                  // Find source rows..
                  .where(TARGET_TABLE.NETWORK_ROUTE_EXT_ID

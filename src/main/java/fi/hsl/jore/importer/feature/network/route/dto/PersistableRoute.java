@@ -6,6 +6,10 @@ import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
 import org.immutables.value.Value;
 
+/**
+ * The reinimilyh and reinimilyhr fields are missing
+ * because they are deprecated.
+ */
 @Value.Immutable
 public interface PersistableRoute
         extends CommonFields<PersistableRoute> {

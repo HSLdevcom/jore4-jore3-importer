@@ -25,6 +25,8 @@ public class RouteMapper implements RowMapper<JrRoute> {
                 LineId.from(getStringOrThrow(rs, "lintunnus")),
                 getOptionalString(rs, "reinimi"),
                 getOptionalString(rs, "reinimir")
+                //reinimilyh and reinimilyhr are missing from JrRoute class
+                //because they are deprecated.
         );
     }
 }
