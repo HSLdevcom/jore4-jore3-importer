@@ -191,7 +191,42 @@ The following figure illustrates the responsibilities of these components:
 
 The directory structure of this project follows the [Maven directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html).
 
+The package structure of this application is described in the following:
 
+* The `fi.hsl.jore.importer.config` package contains the configuration classes which configure the Spring context
+  which is started when this application is run. It has the following sub packages:
+  * The `fi.hsl.jore.importer.config.jackson` package configures the [Jackson datatype module for Vavr](https://github.com/vavr-io/vavr-jackson).
+  * The `fi.hsl.jore.importer.config.jobs` package configures the Spring Batch jobs which import data from the Jore 3 database
+    to the Jore 4 database.
+  * The `fi.hsl.jore.importer.config.jooq` package configures the jOOQ integration of Spring Boot.
+  * The `fi.hsl.jore.importer.config.migration` package configures Flyway which is used to the database migration scripts.
+  * The `fi.hsl.jore.importer.config.profile` package specifies the different Spring profiles used by this application.
+  * The `fi.hsl.jore.importer.config.properties` package contains configuration read from the properties files.
+* The `fi.hsl.jore.importer.feature` package contains the implementation of the import jobs. It has the following
+  sub packages:
+  * The `fi.hsl.jore.importer.feature.api` package contains the implementation of the REST api which allows you to
+    start the import job and query the status of the previous import job.
+  * The `fi.hsl.jore.importer.feature.batch` package contains the custom components which are used by Spring Batch.
+    These components include tasklets, row mappers, item processors, and item readers.
+  * The `fi.hsl.jore.importer.feature.common` package contains general utility code which is used by several other classes.
+  * The `fi.hsl.jore.importer.feature.infrastructure` package contains repositories which insert infrastructure data 
+    into the target database.
+  * The `fi.hsl.jore.importer.feature.jore3` package contains classes which contain the information that's read from the source 
+   database.
+  * The `fi.hsl.jore.importer.feature.network` package contains repositories which insert network data into the
+    target database.
+  * The `fi.hsl.jore.importer.feature.system.repository` package contains a repository which allows you to current
+    date and time information from the database.
+* The `fi.hsl.jore.importer.util` package provide factory methods which allow you to instantiate classes 
+  provided by the [JTS topogy suite](https://github.com/locationtech/jts).
+
+The content of the _src/main/resources_ directory is described in the following:
+
+* The _configuration_ directory contains properties files which configure the used database connections 
+  and the jOOQ integration of Spring Boot.
+* The _db/migration_ directory contains the Flyway database migrations.
+* The _import_ directory contains the SQL scripts which read the imported data from the
+  source MSSQL database.
 
 ## Known Problems
 
