@@ -47,7 +47,7 @@ The placeholders found from the next examples are described in the following:
 
 * The `[host]` contains the host of the database.
 * The `[port]` contains the port of the database.
-* The `[username]` contains the username of the database.
+* The `[username]` contains the name of the database user.
 * The `[database]` contains the name of the database.
 
 ### Infrastructure Nodes
