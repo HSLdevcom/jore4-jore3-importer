@@ -28,10 +28,18 @@ The test scripts found from this directory are tools which must be run manually 
 ensure that the import job has finished successfully. In other words, these test scripts assume that:
 
 * You have access to a Microsoft SQL server database which contains the source data (Jore3 data) and you have configured the import
-  job to read the imported data from this database.
+  job to read the imported data from this database. If you want to use Jore3 dev database as a source database, you must [connect to the Azure environment via bastion host](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#connecting-to-the-azure-environment-via-bastion-host)
+  before you run the `sqlcmd` command.
 * You have access to a PostgreSQL database which contains  the Jore4 data model and you have configured the import job
   to write the processed data to this database.
 * [You have invoked the batch job](https://github.com/HSLdevcom/jore4-jore3-importer/blob/main/README.md) which reads data from the Jore3 database and writes data to the Jore4 database.
+
+The placeholders found from the next examples are described in the following:
+
+* The `[host]` contains the host of the database.
+* The `[port]` contains the port of the database.
+* The `[username]` contains the username of the database.
+* The `[database]` contains the name of the database.
 
 ### Infrastructure Nodes
 
@@ -52,15 +60,6 @@ n.solomx AS solomx,n.solomy AS solomy,n.solstmx AS solstmx,n.solstmy AS solstmy 
 WHERE n.solomx IS NOT NULL AND n.solomy IS NOT NULL AND n.solstmx IS NOT NULL AND n.solstmy IS NOT NULL 
 ORDER BY n.soltunnus ASC" -o "infrastructure_nodes_source.csv" -s"," -w 700 -W
 ```
-The placeholders found from the example command are described in the following:
-
-* The `[host]` contains the host of the source database.
-* The `[port]` contains the port o the source database.
-* The `[username]` contains the username of the source database.
-* The `[database]` contains the name of the source database.
-
-**If you want to use Jore3 dev database as a source database, you must [connect to the Azure environment via bastion host](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#connecting-to-the-azure-environment-via-bastion-host)
-before you run the `sqlcmd` command.**
 
 **Second**, you have to export the imported node objects from the target database to a CSV file. You can do this by 
 running the following command at command prompt when you are in the _testing_ directory:
@@ -72,13 +71,6 @@ ST_X(infrastructure_node_location) AS solomy, ST_Y(infrastructure_node_projected
 ST_X(infrastructure_node_projected_location) AS solstmy FROM infrastructure_network.infrastructure_nodes 
 ORDER BY infrastructure_node_ext_id ASC" > infrastructure_nodes_target.csv
 ```
-
-The placeholders found from the example command are described in the following:
-
-* The `[host]` contains the host of the target database.
-* The `[port]` contains the port o the target database.
-* The `[username]` contains the username of the target database.
-* The `[database]` contains the name of the target database.
 
 **Third**, you have to run the test script which ensures that the expected data was imported to the target database. This
 script compares the contents of the CSV file exported from the source database with the
@@ -108,16 +100,6 @@ AND sa.solstmy IS NOT NULL AND sb.solomx IS NOT NULL AND sb.solomy IS NOT NULL A
 ORDER BY lnk_id ASC;" -o "infrastructure_links_source.csv" -s"," -w 700 -W
 ```
 
-The placeholders found from the example command are described in the following:
-
-* The `[host]` contains the host of the source database.
-* The `[port]` contains the port o the source database.
-* The `[username]` contains the username of the source database.
-* The `[database]` contains the name of the source database.
-
-**If you want to use Jore3 dev database as a source database, you must [connect to the Azure environment via bastion host](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#connecting-to-the-azure-environment-via-bastion-host)
-before you run the `sqlcmd` command.**
-
 **Second**, you have to export the imported link objects from the target database to a CSV file. You can do this by
 running the following command at command prompt when you are in the _testing_ directory:
 
@@ -132,13 +114,6 @@ JOIN infrastructure_network.infrastructure_nodes nb ON (nb.infrastructure_node_i
 JOIN infrastructure_network.infrastructure_nodes ne ON (ne.infrastructure_node_id=l.infrastructure_link_end_node) 
 ORDER BY infrastructure_link_ext_id ASC" > infrastructure_links_target.csv
 ```
-
-The placeholders found from the example command are described in the following:
-
-* The `[host]` contains the host of the target database.
-* The `[port]` contains the port o the target database.
-* The `[username]` contains the username of the target database.
-* The `[database]` contains the name of the target database.
 
 **Third**, you have to run the test script which ensures that the expected data was imported to the target database. This
 script compares the contents of the CSV file exported from the source database with the
