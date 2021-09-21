@@ -4,5 +4,5 @@ VALUES (
         '579db108-1f52-4364-9815-5f17c84ce3fb',
         '1001',
         '1',
-        '{"fi_FI": "Keskustori - Etelä-Hervants","sv_SE": "Central torget - Södra Hervants"}'
+        '{"fi_FI": "Keskustori - Etelä-Hervanta vanha","sv_SE": "Central torget - Södra Hervanta gamla"}'
 );
