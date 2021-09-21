@@ -6,12 +6,14 @@ package fi.hsl.jore.importer.jooq.network;
 
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNetworkTypes;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNetworkTypesRecord;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkDirectionTypes;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesStaging;
+import fi.hsl.jore.importer.jooq.network.tables.records.NetworkDirectionTypesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLineHeadersRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLineHeadersStagingRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesRecord;
@@ -37,6 +39,7 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<NetworkDirectionTypesRecord> NETWORK_DIRECTION_TYPES_PKEY = Internal.createUniqueKey(NetworkDirectionTypes.NETWORK_DIRECTION_TYPES, DSL.name("network_direction_types_pkey"), new TableField[] { NetworkDirectionTypes.NETWORK_DIRECTION_TYPES.NETWORK_DIRECTION_TYPE }, true);
     public static final UniqueKey<NetworkLineHeadersRecord> NETWORK_LINE_HEADERS_PKEY = Internal.createUniqueKey(NetworkLineHeaders.NETWORK_LINE_HEADERS, DSL.name("network_line_headers_pkey"), new TableField[] { NetworkLineHeaders.NETWORK_LINE_HEADERS.NETWORK_LINE_HEADER_ID }, true);
     public static final UniqueKey<NetworkLineHeadersStagingRecord> NETWORK_LINE_HEADERS_STAGING_PKEY = Internal.createUniqueKey(NetworkLineHeadersStaging.NETWORK_LINE_HEADERS_STAGING, DSL.name("network_line_headers_staging_pkey"), new TableField[] { NetworkLineHeadersStaging.NETWORK_LINE_HEADERS_STAGING.NETWORK_LINE_HEADER_EXT_ID }, true);
     public static final UniqueKey<NetworkLinesRecord> NETWORK_LINES_PKEY = Internal.createUniqueKey(NetworkLines.NETWORK_LINES, DSL.name("network_lines_pkey"), new TableField[] { NetworkLines.NETWORK_LINES.NETWORK_LINE_ID }, true);

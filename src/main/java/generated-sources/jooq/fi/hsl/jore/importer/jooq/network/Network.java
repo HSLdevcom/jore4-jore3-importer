@@ -5,6 +5,7 @@ package fi.hsl.jore.importer.jooq.network;
 
 
 import fi.hsl.jore.importer.jooq.DefaultCatalog;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkDirectionTypes;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersStaging;
@@ -38,6 +39,11 @@ public class Network extends SchemaImpl {
      * The reference instance of <code>network</code>
      */
     public static final Network NETWORK = new Network();
+
+    /**
+     * The table <code>network.network_direction_types</code>.
+     */
+    public final NetworkDirectionTypes NETWORK_DIRECTION_TYPES = NetworkDirectionTypes.NETWORK_DIRECTION_TYPES;
 
     /**
      * The table <code>network.network_line_headers</code>.
@@ -115,6 +121,7 @@ public class Network extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
+            NetworkDirectionTypes.NETWORK_DIRECTION_TYPES,
             NetworkLineHeaders.NETWORK_LINE_HEADERS,
             NetworkLineHeadersHistory.NETWORK_LINE_HEADERS_HISTORY,
             NetworkLineHeadersStaging.NETWORK_LINE_HEADERS_STAGING,

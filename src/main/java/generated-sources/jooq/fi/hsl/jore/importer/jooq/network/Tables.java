@@ -4,6 +4,7 @@
 package fi.hsl.jore.importer.jooq.network;
 
 
+import fi.hsl.jore.importer.jooq.network.tables.NetworkDirectionTypes;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersStaging;
@@ -23,6 +24,11 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesWithHistory;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
+
+    /**
+     * The table <code>network.network_direction_types</code>.
+     */
+    public static final NetworkDirectionTypes NETWORK_DIRECTION_TYPES = NetworkDirectionTypes.NETWORK_DIRECTION_TYPES;
 
     /**
      * The table <code>network.network_line_headers</code>.
