@@ -163,9 +163,16 @@ A single Spring Batch job consists of the following components:
 * The `GenericImportWriter<ENTITY, KEY>` class writes the imported data into the staging table which is found
   from the target PostgreSQL database. The actual insert logic is found from the implementation of the 
   `IImportRepository<ENTITY,KEY>` interface. This component is also run during the import step.
-* The `GenericCommitTasklet` class moves the data from the staging table to the real target table. The logic which moves
-  the imported data is found from the implementation of the `IImportRepository<ENTITY,KEY>` interface. This
-  component is run during the import step.
+* The `GenericCommitTasklet` object is run during the import step, and it moves the data from the staging table to the 
+  real target table. The logic which moves the imported data is found from the `commitStagingToTarget()` method of the 
+  `IImportRepository<ENTITY,KEY>` interface. The implementations of this interface must extend the `AbstractImportRepository<ENTITY,KEY>`
+  class which contains three abstract methods:
+    * The `delete()` method contains the logic which deletes rows from the target table. A row is deleted from the target
+      table if it's found from the target table and it's not found from the staging table.
+    * The `insert()` method contains the logic which inserts new rows into the target table. A row is inserted to the target table
+      if it's found from the staging table and it's not found from the target table.
+    * The `update()` method contains the logic which checks if a row is found from the target and staging tables, and
+      replaces the information found from the target table with the information found from the staging table.
 
 The following figure illustrates the responsibilities of these components:
 
