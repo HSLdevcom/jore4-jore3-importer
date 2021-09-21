@@ -17,42 +17,15 @@ def compare_infrastructure_links(row, source, target):
 	#LNKVERKKO
 	source_link_type = source['lnkverkko']
 	target_link_type = target['lnkverkko']
+	link_type_mapping = dict({'1': 'road', '2': 'metro_track', '3': 'tram_track', '4': 'railway', '7': 'waterway', '-1': 'unknown'})
 
-	#Road
-	if source_link_type == '1':
-		if target_link_type != 'road':
+	if source_link_type in link_type_mapping:
+		if link_type_mapping[source_link_type] != target_link_type:
 			error = True
-			error_message += f'Expected lnkverkko: road but found: {target_link_type},'
-	#Metro track
-	elif source_link_type == '2':
-		if target_link_type != 'metro_track':
-			error = True
-			error_message += f'Expected lnkverkko: metro_track but found: {target_link_type},'
-	#Tram track				
-	elif source_link_type == '3':
-		if target_link_type != 'tram_track':
-			error = True
-			error_message += f'Expected lnkverkko: tram_track but found: {target_link_type},'
-	#Railway
-	elif source_link_type == '4':
-		if target_link_type != 'railway':
-			error = True
-			error_message += f'Expected lnkverkko: railway but found: {target_link_type},'
-	#Waterway
-	elif source_link_type == '7':
-		if target_link_type != 'waterway':
-			error = True
-			error_message += f'Expected lnkverkko: waterway but found: {target_link_type},'
-	#Unknown
-	elif source_link_type == '-1':
-		if target_link_type != 'unknown':
-			error = True
-			error_message += f'Expected lnkverkko: unknown but found: {target_link_type},'
-	#Unknown source lnkverkko
+			error_message += f'Expected lnkverkko: {link_type_mapping[source_link_type]} but found: {target_link_type},'
 	else:
 		error = True
 		error_message += f'Unknown source lnkverkko: {source_link_type},'					
-				
 
 	#ALKU_SOLTUNNUS
 	if source['alku_soltunnus'] != target['alku_soltunnus']:
