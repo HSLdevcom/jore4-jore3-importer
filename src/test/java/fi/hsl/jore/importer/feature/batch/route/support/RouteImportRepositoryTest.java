@@ -29,8 +29,8 @@ class RouteImportRepositoryTest {
     private final IRouteTestRepository targetRepository;
 
     @Autowired
-    RouteImportRepositoryTest(IRouteImportRepository importRepository,
-                              IRouteTestRepository targetRepository) {
+    RouteImportRepositoryTest(final IRouteImportRepository importRepository,
+                              final IRouteTestRepository targetRepository) {
         this.importRepository = importRepository;
         this.targetRepository = targetRepository;
     }
@@ -150,8 +150,8 @@ class RouteImportRepositoryTest {
                 void shouldReturnIdOfInsertedRoute() {
                     final Map<RowStatus, Set<RoutePK>> result = importRepository.commitStagingToTarget();
 
-                    RoutePK id = result.get(RowStatus.INSERTED).get().get();
-                    Set<RoutePK> dbIds = targetRepository.findAllIds();
+                    final RoutePK id = result.get(RowStatus.INSERTED).get().get();
+                    final Set<RoutePK> dbIds = targetRepository.findAllIds();
                     assertThat(dbIds)
                             .overridingErrorMessage(
                                     "Expected the database to contain row with id: %s but found: %s",
@@ -207,8 +207,8 @@ class RouteImportRepositoryTest {
                 void shouldUpdateOnlyRouteNameOfExistingRoute(SoftAssertions softAssertions) {
                     final Map<RowStatus, Set<RoutePK>> result = importRepository.commitStagingToTarget();
 
-                    RoutePK id = result.get(RowStatus.UPDATED).get().get();
-                    Route updated = targetRepository.findById(id).get();
+                    final RoutePK id = result.get(RowStatus.UPDATED).get().get();
+                    final Route updated = targetRepository.findById(id).get();
 
                     softAssertions.assertThat(updated.pk().value())
                             .overridingErrorMessage(
@@ -242,9 +242,9 @@ class RouteImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_NUMBER);
 
-                    MultilingualString routeName = updated.name();
+                    final MultilingualString routeName = updated.name();
 
-                    String finnishRouteName = routeName.values().get(LOCALE_FI_FI).get();
+                    final String finnishRouteName = routeName.values().get(LOCALE_FI_FI).get();
                     softAssertions.assertThat(finnishRouteName)
                             .overridingErrorMessage(
                                     "Expected that the updated Finnish route name to be: %s but was: %s",
@@ -253,7 +253,7 @@ class RouteImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_FINNISH_ROUTE_NAME);
 
-                    String swedishRouteName = routeName.values().get(LOCALE_SV_SE).get();
+                    final String swedishRouteName = routeName.values().get(LOCALE_SV_SE).get();
                     softAssertions.assertThat(swedishRouteName)
                             .overridingErrorMessage(
                                     "Expected that the updated Swedish route name to be: %s but was: %s",
