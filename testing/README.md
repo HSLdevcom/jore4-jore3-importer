@@ -28,11 +28,20 @@ The test scripts found from this directory are tools which must be run manually 
 ensure that the import job has finished successfully. In other words, these test scripts assume that:
 
 * You have access to a Microsoft SQL server database which contains the source data (Jore3 data) and you have configured the import
-  job to read the imported data from this database. If you want to use Jore3 dev database as a source database, you must [connect to the Azure environment via bastion host](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#connecting-to-the-azure-environment-via-bastion-host)
-  before you run the `sqlcmd` command.
+  job to read the imported data from this database.
 * You have access to a PostgreSQL database which contains  the Jore4 data model and you have configured the import job
   to write the processed data to this database.
 * [You have invoked the batch job](https://github.com/HSLdevcom/jore4-jore3-importer/blob/main/README.md) which reads data from the Jore3 database and writes data to the Jore4 database.
+
+The actual test process has four steps:
+
+1. You have to go to the _testing_ directory.
+2. You have to export the valid source data from the source database to a CSV file. If you want to use Jore3 dev database as a source database, you must [connect to the Azure environment via bastion host](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#connecting-to-the-azure-environment-via-bastion-host)
+   before you export the source data.
+3. You have to export the imported data from the target database to a CSV file.
+4. You have to run the test script which ensures that the expected data was imported to the target database. This
+   script compares the contents of the CSV file exported from the source database with the
+   contents of the CSV file exported from the target database and reports the errors found from the target CSV file.
 
 The placeholders found from the next examples are described in the following:
 
@@ -51,8 +60,7 @@ This test script (_infrastructure_node_test.py_) ensures that:
 
 You can run this test script by following these steps:
 
-**First**, you have to export the valid node objects from the source database to a CSV file. You can do this by running 
-the following command at command prompt when you are in the _testing_ directory:
+**First**, you have to get the valid source data by running the following command at command prompt:
 
 ```
 sqlcmd -S [host],[port] -d [database] -U [username] -Q "SELECT n.soltunnus AS soltunnus,n.soltyyppi AS soltyyppi,
@@ -61,8 +69,7 @@ WHERE n.solomx IS NOT NULL AND n.solomy IS NOT NULL AND n.solstmx IS NOT NULL AN
 ORDER BY n.soltunnus ASC" -o "infrastructure_nodes_source.csv" -s"," -w 700 -W
 ```
 
-**Second**, you have to export the imported node objects from the target database to a CSV file. You can do this by 
-running the following command at command prompt when you are in the _testing_ directory:
+**Second**, you have to get the imported data by running the following command at command prompt:
 
 ```
 psql -h [host] -p [port] -U [username] [database] -A -F"," -P null='NULL' -c "SELECT infrastructure_node_ext_id AS soltunnus, 
@@ -72,11 +79,7 @@ ST_X(infrastructure_node_projected_location) AS solstmy FROM infrastructure_netw
 ORDER BY infrastructure_node_ext_id ASC" > infrastructure_nodes_target.csv
 ```
 
-**Third**, you have to run the test script which ensures that the expected data was imported to the target database. This
-script compares the contents of the CSV file exported from the source database with the
-contents of the CSV file exported from the target database and reports the errors found from the target CSV file.
-
-You can run this test script by running the command: `python infrastructure_node_test.py` at command prompt when you are in the _testing_ directory.
+**Third**, You have to run the test script by running the command: `python infrastructure_node_test.py` at command prompt.
 
 ### Infrastructure Links
 
@@ -88,8 +91,7 @@ This test script (_infrastructure_link_test.py_) ensures that:
 
 You can run this test script by following these steps:
 
-**First**, you have to export the valid link objects from the source database to a CSV file. You can do this by running
-the following command at command prompt when you are in the _testing_ directory:
+**First**, you have to get the valid source data by running the following command at command prompt:
 
 ```
 sqlcmd -S [host],[port] -d [database] -U [username] -Q "SELECT CONCAT(l.lnkverkko, '-', sa.soltunnus, '-', sb.soltunnus) AS lnk_id, 
@@ -100,8 +102,7 @@ AND sa.solstmy IS NOT NULL AND sb.solomx IS NOT NULL AND sb.solomy IS NOT NULL A
 ORDER BY lnk_id ASC;" -o "infrastructure_links_source.csv" -s"," -w 700 -W
 ```
 
-**Second**, you have to export the imported link objects from the target database to a CSV file. You can do this by
-running the following command at command prompt when you are in the _testing_ directory:
+**Second**, you have to get the imported data by running the following command at command prompt:
 
 ```
 psql -h [host] -p [port] -U [username] [database] -A -F"," -P null='NULL' -c "SELECT l.infrastructure_link_ext_id AS lnk_id, 
@@ -115,10 +116,4 @@ JOIN infrastructure_network.infrastructure_nodes ne ON (ne.infrastructure_node_i
 ORDER BY infrastructure_link_ext_id ASC" > infrastructure_links_target.csv
 ```
 
-**Third**, you have to run the test script which ensures that the expected data was imported to the target database. This
-script compares the contents of the CSV file exported from the source database with the
-contents of the CSV file exported from the target database and reports the errors found from the target CSV file.
-
-You can run this test script by running the command: `python infrastructure_link_test.py` at command prompt when you 
-are in the _testing_ directory.
-
+**Third**, You have to run the test script by running the command: `python infrastructure_link_test.py` at command prompt.
