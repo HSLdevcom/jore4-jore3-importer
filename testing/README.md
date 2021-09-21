@@ -35,7 +35,7 @@ ensure that the import job has finished successfully. In other words, these test
 
 ### Infrastructure Nodes
 
-This test script (_infstructure_node_test.py_) ensures that:
+This test script (_infrastructure_node_test.py_) ensures that:
 
 * The valid node objects which are read from the `jr_solmu` table of the Jore3 database are processed correctly.
 * The processed data is written to the `infrastructure_network.infrastructure_nodes` database table which is found from
@@ -84,4 +84,66 @@ The placeholders found from the example command are described in the following:
 script compares the contents of the CSV file exported from the source database with the
 contents of the CSV file exported from the target database and reports the errors found from the target CSV file.
 
-You can run this test script by running the command: ` python infrastructure_node_test.py` at command prompt when you are in the _testing_ directory.
+You can run this test script by running the command: `python infrastructure_node_test.py` at command prompt when you are in the _testing_ directory.
+
+### Infrastructure Links
+
+This test script (_infrastructure_link_test.py_) ensures that:
+
+* The valid link objects which are read from the `jr_linkki` and `jr_solmu` tables of the Jore3 database are processed correctly.
+* The processed data is written to the `infrastructure_network.infrastructure_links` database table which is found from
+  the Jore4 database.
+
+You can run this test script by following these steps:
+
+**First**, you have to export the valid link objects from the source database to a CSV file. You can do this by running
+the following command at command prompt when you are in the _testing_ directory:
+
+```
+sqlcmd -S [host],[port] -d [database] -U [username] -Q "SELECT CONCAT(l.lnkverkko, '-', sa.soltunnus, '-', sb.soltunnus) AS lnk_id, 
+l.lnkverkko, sa.soltunnus AS alku_soltunnus, sa.solomx AS alku_solomx, sa.solomy AS alku_solomy, sb.soltunnus AS loppu_soltunnus,
+sb.solomx AS loppu_solomx, sb.solomy AS loppu_solomy FROM jr_linkki l LEFT JOIN jr_solmu sa ON sa.soltunnus = l.lnkalkusolmu 
+LEFT JOIN jr_solmu sb ON sb.soltunnus = l.lnkloppusolmu WHERE sa.solomx IS NOT NULL AND sa.solomy IS NOT NULL AND sa.solstmx IS NOT NULL 
+AND sa.solstmy IS NOT NULL AND sb.solomx IS NOT NULL AND sb.solomy IS NOT NULL AND sb.solstmx IS NOT NULL AND sb.solstmy IS NOT NULL 
+ORDER BY lnk_id ASC;" -o "infrastructure_links_source.csv" -s"," -w 700 -W
+```
+
+The placeholders found from the example command are described in the following:
+
+* The `[host]` contains the host of the source database.
+* The `[port]` contains the port o the source database.
+* The `[username]` contains the username of the source database.
+* The `[database]` contains the name of the source database.
+
+**If you want to use Jore3 dev database as a source database, you must [connect to the Azure environment via bastion host](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#connecting-to-the-azure-environment-via-bastion-host)
+before you run the `sqlcmd` command.**
+
+**Second**, you have to export the imported link objects from the target database to a CSV file. You can do this by
+running the following command at command prompt when you are in the _testing_ directory:
+
+```
+psql -h [host] -p [port] -U [username] [database] -A -F"," -P null='NULL' -c "SELECT l.infrastructure_link_ext_id AS lnk_id, 
+l.infrastructure_network_type AS lnkverkko, nb.infrastructure_node_ext_id AS alku_soltunnus, 
+ST_Y(ST_StartPoint(l.infrastructure_link_geog::geometry)) AS alku_solomx, 
+ST_X(ST_StartPoint(l.infrastructure_link_geog::geometry)) AS alku_solomy, 
+ne.infrastructure_node_ext_id AS loppu_soltunnus, ST_Y(ST_EndPoint(l.infrastructure_link_geog::geometry)) AS loppu_solomx, 
+ST_X(ST_EndPoint(l.infrastructure_link_geog::geometry)) AS loppu_solomy FROM infrastructure_network.infrastructure_links l 
+JOIN infrastructure_network.infrastructure_nodes nb ON (nb.infrastructure_node_id=l.infrastructure_link_start_node) 
+JOIN infrastructure_network.infrastructure_nodes ne ON (ne.infrastructure_node_id=l.infrastructure_link_end_node) 
+ORDER BY infrastructure_link_ext_id ASC" > infrastructure_links_target.csv
+```
+
+The placeholders found from the example command are described in the following:
+
+* The `[host]` contains the host of the target database.
+* The `[port]` contains the port o the target database.
+* The `[username]` contains the username of the target database.
+* The `[database]` contains the name of the target database.
+
+**Third**, you have to run the test script which ensures that the expected data was imported to the target database. This
+script compares the contents of the CSV file exported from the source database with the
+contents of the CSV file exported from the target database and reports the errors found from the target CSV file.
+
+You can run this test script by running the command: `python infrastructure_link_test.py` at command prompt when you 
+are in the _testing_ directory.
+
