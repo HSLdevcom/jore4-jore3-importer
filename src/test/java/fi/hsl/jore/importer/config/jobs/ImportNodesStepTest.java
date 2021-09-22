@@ -83,6 +83,10 @@ public class ImportNodesStepTest extends BatchIntegrationTest {
             assertThat(String.format("node %s should have correct location", externalId),
                        node.location(),
                        is(expectedNodeParams._2));
+            //This asserts that:
+            //1. A node of type NodeType.CROSSROADS doesn't have a projected location.
+            //2. A node of type NodeType.STOP must have a projected location
+            //See the NODES constant for more details
             assertThat(String.format("node %s should have correct projected location", externalId),
                        node.projectedLocation(),
                        is(expectedNodeParams._3));
