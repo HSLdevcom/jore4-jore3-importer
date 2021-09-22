@@ -70,7 +70,7 @@ public class ImportLinksStepTest extends BatchIntegrationTest {
     private ILinkTestRepository linkRepository;
 
     @Test
-    public void givenSampleDataInSourceDatabase_andAnEmptyDatabase_whenImportLinksStepsAreRun_thenLinkBetweenNodeCAndNodeDIsImported() {
+    public void givenSampleDataInSourceDatabase_andAnEmptyDatabase_whenImportLinksStepsAreRun_thenLinksBetweenNodesCAndDAndNodesDAndEAndNodesEAndFAreImported() {
         assertThat(linkRepository.empty(),
                    is(true));
 
