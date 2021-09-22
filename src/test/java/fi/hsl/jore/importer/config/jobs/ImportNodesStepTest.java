@@ -69,7 +69,7 @@ public class ImportNodesStepTest extends BatchIntegrationTest {
     }
 
     @Test
-    public void givenSampleDataInSourceDatabase_andAnEmptyTargetDatabase_whenImportNodeStepsAreRun_thenNodesCAndDAreImported() {
+    public void givenSampleDataInSourceDatabase_andAnEmptyTargetDatabase_whenImportNodeStepsAreRun_thenNodesCAndDAndEAndFAreImported() {
         runSteps(STEPS);
 
         assertThat(nodeRepository.count(),
