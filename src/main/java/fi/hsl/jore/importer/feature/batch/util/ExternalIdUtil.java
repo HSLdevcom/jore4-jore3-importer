@@ -6,6 +6,8 @@ import fi.hsl.jore.importer.feature.jore3.entity.JrLineHeader;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLink;
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
+import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
+import fi.hsl.jore.importer.feature.jore3.enumerated.Direction;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.LineId;
 import fi.hsl.jore.importer.feature.jore3.field.RouteId;
@@ -14,6 +16,7 @@ import fi.hsl.jore.importer.feature.jore3.key.JrLineHeaderPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinePk;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrNodePk;
+import fi.hsl.jore.importer.feature.jore3.key.JrRouteDirectionPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrRoutePk;
 
 import java.time.LocalDate;
@@ -95,5 +98,24 @@ public final class ExternalIdUtil {
 
     public static ExternalId forRoute(final JrRoute route) {
         return forRoute(route.pk());
+    }
+
+    public static ExternalId forRouteDirection(final RouteId routeId,
+                                               final Direction direction,
+                                               final LocalDate validFrom) {
+        return ExternalId.of(String.format("%s-%s-%s",
+                                           routeId.originalValue(),
+                                           direction.value(),
+                                           validFrom.format(FORMAT)));
+    }
+
+    public static ExternalId forRouteDirection(final JrRouteDirectionPk routeDirectionPk) {
+        return forRouteDirection(routeDirectionPk.routeId(),
+                                 routeDirectionPk.direction(),
+                                 routeDirectionPk.validFrom());
+    }
+
+    public static ExternalId forRouteDirection(final JrRouteDirection routeDirection) {
+        return forRouteDirection(routeDirection.pk());
     }
 }

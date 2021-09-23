@@ -24,6 +24,9 @@ import fi.hsl.jore.importer.feature.batch.node.support.INodeImportRepository;
 import fi.hsl.jore.importer.feature.batch.route.RouteProcessor;
 import fi.hsl.jore.importer.feature.batch.route.RouteReader;
 import fi.hsl.jore.importer.feature.batch.route.support.IRouteImportRepository;
+import fi.hsl.jore.importer.feature.batch.route_direction.RouteDirectionProcessor;
+import fi.hsl.jore.importer.feature.batch.route_direction.RouteDirectionReader;
+import fi.hsl.jore.importer.feature.batch.route_direction.support.IRouteDirectionImportRepository;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImportableNode;
@@ -31,9 +34,11 @@ import fi.hsl.jore.importer.feature.jore3.entity.JrLine;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLineHeader;
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
+import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line_header.dto.ImportableLineHeader;
 import fi.hsl.jore.importer.feature.network.route.dto.ImportableRoute;
+import fi.hsl.jore.importer.feature.network.route_direction.dto.ImportableRouteDirection;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.FlowBuilder;
@@ -56,7 +61,8 @@ public class JobConfig extends BatchConfig {
                          final Flow importLinkPointsFlow,
                          final Flow importLinesFlow,
                          final Flow importLineHeadersFlow,
-                         final Flow importRoutesFlow) {
+                         final Flow importRoutesFlow,
+                         final Flow importRouteDirectionsFlow) {
         return jobs.get(JOB_NAME)
                    .start(importNodesFlow)
                    .next(importLinksFlow)
@@ -64,6 +70,7 @@ public class JobConfig extends BatchConfig {
                    .next(importLinesFlow)
                    .next(importLineHeadersFlow)
                    .next(importRoutesFlow)
+                   .next(importRouteDirectionsFlow)
                    .end()
                    .build();
     }
@@ -311,6 +318,47 @@ public class JobConfig extends BatchConfig {
         return steps.get("commitRoutesStep")
                     .allowStartIfComplete(true)
                     .tasklet(new GenericCommitTasklet<>(routeImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Flow importRouteDirectionsFlow(final Step prepareRouteDirectionsStep,
+                                          final Step importRouteDirectionsStep,
+                                          final Step commitRouteDirectionsStep) {
+
+        return new FlowBuilder<SimpleFlow>("importRouteDirectionsFlow")
+                .start(prepareRouteDirectionsStep)
+                .next(importRouteDirectionsStep)
+                .next(commitRouteDirectionsStep)
+                .build();
+    }
+
+    @Bean
+    public Step prepareRouteDirectionsStep(final IRouteDirectionImportRepository routeDirectionImportRepository) {
+        return steps.get("prepareRouteDirectionsStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCleanupTasklet<>(routeDirectionImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step importRouteDirectionsStep(final RouteDirectionReader routeDirectionReader,
+                                          final IRouteDirectionImportRepository routeDirectionImportRepository) {
+        final int chunkSize = 1000;
+        return steps.get("importRouteDirectionsStep")
+                    .allowStartIfComplete(true)
+                    .<JrRouteDirection, ImportableRouteDirection>chunk(chunkSize)
+                    .reader(routeDirectionReader.build())
+                    .processor(new RouteDirectionProcessor())
+                    .writer(new GenericImportWriter<>(routeDirectionImportRepository))
+                    .build();
+    }
+
+    @Bean
+    public Step commitRouteDirectionsStep(final IRouteDirectionImportRepository routeDirectionImportRepository) {
+        return steps.get("commitRouteDirectionsStep")
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCommitTasklet<>(routeDirectionImportRepository))
                     .build();
     }
 }

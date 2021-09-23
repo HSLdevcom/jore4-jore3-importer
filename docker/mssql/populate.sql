@@ -153,3 +153,32 @@ CREATE TABLE jr_reitti
 GO
 CREATE UNIQUE CLUSTERED INDEX jr_reitti_cind ON jr_reitti (reitunnus)
 GO
+CREATE TABLE jr_reitinsuunta
+(
+    reitunnus      VARCHAR(6)   NOT NULL,
+    suusuunta      CHAR         NOT NULL,
+    suuvoimast     DATETIME2(3) NOT NULL,
+    suuvoimviimpvm DATETIME2(3) NOT NULL,
+    suulahpaik     VARCHAR(20),
+    suulahpaikr    VARCHAR(20),
+    suupaapaik     VARCHAR(20),
+    suupaapaikr    VARCHAR(20),
+    suuensppy      CHAR(7),
+    suupituus      INT,
+    suukuka        VARCHAR(20),
+    suuviimpvm     DATETIME2(3),
+    suunimilyh     VARCHAR(20),
+    suunimilyhr    VARCHAR(20),
+    suunimi        VARCHAR(60),
+    suunimir       VARCHAR(60),
+    suuhis         VARCHAR,
+    pyssade        INT,
+    kirjaan        VARCHAR,
+    nettiin        VARCHAR,
+    kirjasarake    INT,
+    nettisarake    INT,
+    poikkeusreitti CHAR
+)
+GO
+CREATE UNIQUE CLUSTERED INDEX jr_reitinsuunta_cind ON jr_reitinsuunta (reitunnus, suusuunta, suuvoimast)
+GO

@@ -16,3 +16,6 @@ TRUNCATE TABLE network.network_line_headers_staging CASCADE;
 TRUNCATE TABLE network.network_routes CASCADE;
 TRUNCATE TABLE network.network_routes_history CASCADE;
 TRUNCATE TABLE network.network_routes_staging CASCADE;
+TRUNCATE TABLE network.network_route_directions CASCADE;
+TRUNCATE TABLE network.network_route_directions_history CASCADE;
+TRUNCATE TABLE network.network_route_directions_staging CASCADE;
