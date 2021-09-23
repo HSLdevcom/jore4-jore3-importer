@@ -173,6 +173,10 @@ A single Spring Batch job consists of the following components:
       if it's found from the staging table and it's not found from the target table.
     * The `update()` method contains the logic which checks if a row is found from the target and staging tables, and
       replaces the information found from the target table with the information found from the staging table.
+  Beware that changed rows cannot be properly identified in all tables in the Jore3 database because of the lack of
+  appropriate keys. This means that in some cases a row change is interpreted as a deletion and insertion. One example
+  for this is the line header, and this phenomenon had to be taken into account in
+  [the related tests](src/test/java/fi/hsl/jore/importer/feature/batch/line_header/support/LineHeaderImportRepositoryTest.java).
 
 The following figure illustrates the responsibilities of these components:
 
