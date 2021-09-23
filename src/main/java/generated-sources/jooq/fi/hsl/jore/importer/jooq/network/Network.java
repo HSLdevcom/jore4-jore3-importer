@@ -14,6 +14,10 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesWithHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesStaging;
@@ -86,6 +90,26 @@ public class Network extends SchemaImpl {
     public final NetworkLinesWithHistory NETWORK_LINES_WITH_HISTORY = NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY;
 
     /**
+     * The table <code>network.network_route_directions</code>.
+     */
+    public final NetworkRouteDirections NETWORK_ROUTE_DIRECTIONS = NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS;
+
+    /**
+     * The table <code>network.network_route_directions_history</code>.
+     */
+    public final NetworkRouteDirectionsHistory NETWORK_ROUTE_DIRECTIONS_HISTORY = NetworkRouteDirectionsHistory.NETWORK_ROUTE_DIRECTIONS_HISTORY;
+
+    /**
+     * The table <code>network.network_route_directions_staging</code>.
+     */
+    public final NetworkRouteDirectionsStaging NETWORK_ROUTE_DIRECTIONS_STAGING = NetworkRouteDirectionsStaging.NETWORK_ROUTE_DIRECTIONS_STAGING;
+
+    /**
+     * The table <code>network.network_route_directions_with_history</code>.
+     */
+    public final NetworkRouteDirectionsWithHistory NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY = NetworkRouteDirectionsWithHistory.NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY;
+
+    /**
      * The table <code>network.network_routes</code>.
      */
     public final NetworkRoutes NETWORK_ROUTES = NetworkRoutes.NETWORK_ROUTES;
@@ -130,6 +154,10 @@ public class Network extends SchemaImpl {
             NetworkLinesHistory.NETWORK_LINES_HISTORY,
             NetworkLinesStaging.NETWORK_LINES_STAGING,
             NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY,
+            NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS,
+            NetworkRouteDirectionsHistory.NETWORK_ROUTE_DIRECTIONS_HISTORY,
+            NetworkRouteDirectionsStaging.NETWORK_ROUTE_DIRECTIONS_STAGING,
+            NetworkRouteDirectionsWithHistory.NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY,
             NetworkRoutes.NETWORK_ROUTES,
             NetworkRoutesHistory.NETWORK_ROUTES_HISTORY,
             NetworkRoutesStaging.NETWORK_ROUTES_STAGING,
