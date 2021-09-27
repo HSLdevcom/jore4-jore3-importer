@@ -31,8 +31,8 @@ class RouteDirectionImportRepositoryTest {
     private final IRouteDirectionTestRepository targetRepository;
 
     @Autowired
-    RouteDirectionImportRepositoryTest(IRouteDirectionImportRepository importRepository,
-                                       IRouteDirectionTestRepository targetRepository) {
+    RouteDirectionImportRepositoryTest(final IRouteDirectionImportRepository importRepository,
+                                       final IRouteDirectionTestRepository targetRepository) {
         this.importRepository = importRepository;
         this.targetRepository = targetRepository;
     }
