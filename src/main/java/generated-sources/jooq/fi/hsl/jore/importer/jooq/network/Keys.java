@@ -4,8 +4,12 @@
 package fi.hsl.jore.importer.jooq.network;
 
 
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinks;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNetworkTypes;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureLinksRecord;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNetworkTypesRecord;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNodesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkDirectionTypes;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersStaging;
@@ -13,6 +17,12 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteLinks;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteLinksStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePoints;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePointsStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPoints;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPointsStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesStaging;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkDirectionTypesRecord;
@@ -22,6 +32,12 @@ import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesStagingRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteDirectionsRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteDirectionsStagingRecord;
+import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteLinksRecord;
+import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteLinksStagingRecord;
+import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutePointsRecord;
+import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutePointsStagingRecord;
+import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsRecord;
+import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsStagingRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutesStagingRecord;
 
@@ -50,6 +66,12 @@ public class Keys {
     public static final UniqueKey<NetworkLinesStagingRecord> NETWORK_LINES_STAGING_PKEY = Internal.createUniqueKey(NetworkLinesStaging.NETWORK_LINES_STAGING, DSL.name("network_lines_staging_pkey"), new TableField[] { NetworkLinesStaging.NETWORK_LINES_STAGING.NETWORK_LINE_EXT_ID }, true);
     public static final UniqueKey<NetworkRouteDirectionsRecord> NETWORK_ROUTE_DIRECTIONS_PKEY = Internal.createUniqueKey(NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS, DSL.name("network_route_directions_pkey"), new TableField[] { NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_DIRECTION_ID }, true);
     public static final UniqueKey<NetworkRouteDirectionsStagingRecord> NETWORK_ROUTE_DIRECTIONS_STAGING_PKEY = Internal.createUniqueKey(NetworkRouteDirectionsStaging.NETWORK_ROUTE_DIRECTIONS_STAGING, DSL.name("network_route_directions_staging_pkey"), new TableField[] { NetworkRouteDirectionsStaging.NETWORK_ROUTE_DIRECTIONS_STAGING.NETWORK_ROUTE_DIRECTION_EXT_ID }, true);
+    public static final UniqueKey<NetworkRouteLinksRecord> NETWORK_ROUTE_LINKS_PKEY = Internal.createUniqueKey(NetworkRouteLinks.NETWORK_ROUTE_LINKS, DSL.name("network_route_links_pkey"), new TableField[] { NetworkRouteLinks.NETWORK_ROUTE_LINKS.NETWORK_ROUTE_LINK_ID }, true);
+    public static final UniqueKey<NetworkRouteLinksStagingRecord> NETWORK_ROUTE_LINKS_STAGING_PKEY = Internal.createUniqueKey(NetworkRouteLinksStaging.NETWORK_ROUTE_LINKS_STAGING, DSL.name("network_route_links_staging_pkey"), new TableField[] { NetworkRouteLinksStaging.NETWORK_ROUTE_LINKS_STAGING.NETWORK_ROUTE_LINK_EXT_ID }, true);
+    public static final UniqueKey<NetworkRoutePointsRecord> NETWORK_ROUTE_POINTS_PKEY = Internal.createUniqueKey(NetworkRoutePoints.NETWORK_ROUTE_POINTS, DSL.name("network_route_points_pkey"), new TableField[] { NetworkRoutePoints.NETWORK_ROUTE_POINTS.NETWORK_ROUTE_POINT_ID }, true);
+    public static final UniqueKey<NetworkRoutePointsStagingRecord> NETWORK_ROUTE_POINTS_STAGING_PKEY = Internal.createUniqueKey(NetworkRoutePointsStaging.NETWORK_ROUTE_POINTS_STAGING, DSL.name("network_route_points_staging_pkey"), new TableField[] { NetworkRoutePointsStaging.NETWORK_ROUTE_POINTS_STAGING.NETWORK_ROUTE_POINT_EXT_ID }, true);
+    public static final UniqueKey<NetworkRouteStopPointsRecord> NETWORK_ROUTE_STOP_POINTS_PKEY = Internal.createUniqueKey(NetworkRouteStopPoints.NETWORK_ROUTE_STOP_POINTS, DSL.name("network_route_stop_points_pkey"), new TableField[] { NetworkRouteStopPoints.NETWORK_ROUTE_STOP_POINTS.NETWORK_ROUTE_POINT_ID }, true);
+    public static final UniqueKey<NetworkRouteStopPointsStagingRecord> NETWORK_ROUTE_STOP_POINTS_STAGING_PKEY = Internal.createUniqueKey(NetworkRouteStopPointsStaging.NETWORK_ROUTE_STOP_POINTS_STAGING, DSL.name("network_route_stop_points_staging_pkey"), new TableField[] { NetworkRouteStopPointsStaging.NETWORK_ROUTE_STOP_POINTS_STAGING.NETWORK_ROUTE_STOP_POINT_EXT_ID }, true);
     public static final UniqueKey<NetworkRoutesRecord> NETWORK_ROUTES_PKEY = Internal.createUniqueKey(NetworkRoutes.NETWORK_ROUTES, DSL.name("network_routes_pkey"), new TableField[] { NetworkRoutes.NETWORK_ROUTES.NETWORK_ROUTE_ID }, true);
     public static final UniqueKey<NetworkRoutesStagingRecord> NETWORK_ROUTES_STAGING_PKEY = Internal.createUniqueKey(NetworkRoutesStaging.NETWORK_ROUTES_STAGING, DSL.name("network_routes_staging_pkey"), new TableField[] { NetworkRoutesStaging.NETWORK_ROUTES_STAGING.NETWORK_ROUTE_EXT_ID }, true);
 
@@ -63,5 +85,10 @@ public class Keys {
     public static final ForeignKey<NetworkRouteDirectionsRecord, NetworkDirectionTypesRecord> NETWORK_ROUTE_DIRECTIONS__NETWORK_ROUTE_DIRECTIONS_NETWORK_ROUTE_DIRECTION_TYPE_FKEY = Internal.createForeignKey(NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS, DSL.name("network_route_directions_network_route_direction_type_fkey"), new TableField[] { NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_DIRECTION_TYPE }, Keys.NETWORK_DIRECTION_TYPES_PKEY, new TableField[] { NetworkDirectionTypes.NETWORK_DIRECTION_TYPES.NETWORK_DIRECTION_TYPE }, true);
     public static final ForeignKey<NetworkRouteDirectionsRecord, NetworkRoutesRecord> NETWORK_ROUTE_DIRECTIONS__NETWORK_ROUTE_DIRECTIONS_NETWORK_ROUTE_ID_FKEY = Internal.createForeignKey(NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS, DSL.name("network_route_directions_network_route_id_fkey"), new TableField[] { NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_ID }, Keys.NETWORK_ROUTES_PKEY, new TableField[] { NetworkRoutes.NETWORK_ROUTES.NETWORK_ROUTE_ID }, true);
     public static final ForeignKey<NetworkRouteDirectionsStagingRecord, NetworkDirectionTypesRecord> NETWORK_ROUTE_DIRECTIONS_STAGING__NETWORK_ROUTE_DIRECTIONS_STAG_NETWORK_ROUTE_DIRECTION_TYPE_FKEY = Internal.createForeignKey(NetworkRouteDirectionsStaging.NETWORK_ROUTE_DIRECTIONS_STAGING, DSL.name("network_route_directions_stag_network_route_direction_type_fkey"), new TableField[] { NetworkRouteDirectionsStaging.NETWORK_ROUTE_DIRECTIONS_STAGING.NETWORK_ROUTE_DIRECTION_TYPE }, Keys.NETWORK_DIRECTION_TYPES_PKEY, new TableField[] { NetworkDirectionTypes.NETWORK_DIRECTION_TYPES.NETWORK_DIRECTION_TYPE }, true);
+    public static final ForeignKey<NetworkRouteLinksRecord, InfrastructureLinksRecord> NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_INFRASTRUCTURE_LINK_ID_FKEY = Internal.createForeignKey(NetworkRouteLinks.NETWORK_ROUTE_LINKS, DSL.name("network_route_links_infrastructure_link_id_fkey"), new TableField[] { NetworkRouteLinks.NETWORK_ROUTE_LINKS.INFRASTRUCTURE_LINK_ID }, fi.hsl.jore.importer.jooq.infrastructure_network.Keys.INFRASTRUCTURE_LINKS_PKEY, new TableField[] { InfrastructureLinks.INFRASTRUCTURE_LINKS.INFRASTRUCTURE_LINK_ID }, true);
+    public static final ForeignKey<NetworkRouteLinksRecord, NetworkRouteDirectionsRecord> NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_NETWORK_ROUTE_DIRECTION_ID_FKEY = Internal.createForeignKey(NetworkRouteLinks.NETWORK_ROUTE_LINKS, DSL.name("network_route_links_network_route_direction_id_fkey"), new TableField[] { NetworkRouteLinks.NETWORK_ROUTE_LINKS.NETWORK_ROUTE_DIRECTION_ID }, Keys.NETWORK_ROUTE_DIRECTIONS_PKEY, new TableField[] { NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_DIRECTION_ID }, true);
+    public static final ForeignKey<NetworkRoutePointsRecord, InfrastructureNodesRecord> NETWORK_ROUTE_POINTS__NETWORK_ROUTE_POINTS_INFRASTRUCTURE_NODE_FKEY = Internal.createForeignKey(NetworkRoutePoints.NETWORK_ROUTE_POINTS, DSL.name("network_route_points_infrastructure_node_fkey"), new TableField[] { NetworkRoutePoints.NETWORK_ROUTE_POINTS.INFRASTRUCTURE_NODE }, fi.hsl.jore.importer.jooq.infrastructure_network.Keys.INFRASTRUCTURE_NODES_PKEY, new TableField[] { InfrastructureNodes.INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_ID }, true);
+    public static final ForeignKey<NetworkRoutePointsRecord, NetworkRouteDirectionsRecord> NETWORK_ROUTE_POINTS__NETWORK_ROUTE_POINTS_NETWORK_ROUTE_DIRECTION_ID_FKEY = Internal.createForeignKey(NetworkRoutePoints.NETWORK_ROUTE_POINTS, DSL.name("network_route_points_network_route_direction_id_fkey"), new TableField[] { NetworkRoutePoints.NETWORK_ROUTE_POINTS.NETWORK_ROUTE_DIRECTION_ID }, Keys.NETWORK_ROUTE_DIRECTIONS_PKEY, new TableField[] { NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_DIRECTION_ID }, true);
+    public static final ForeignKey<NetworkRouteStopPointsRecord, NetworkRoutePointsRecord> NETWORK_ROUTE_STOP_POINTS__NETWORK_ROUTE_STOP_POINTS_NETWORK_ROUTE_POINT_ID_FKEY = Internal.createForeignKey(NetworkRouteStopPoints.NETWORK_ROUTE_STOP_POINTS, DSL.name("network_route_stop_points_network_route_point_id_fkey"), new TableField[] { NetworkRouteStopPoints.NETWORK_ROUTE_STOP_POINTS.NETWORK_ROUTE_POINT_ID }, Keys.NETWORK_ROUTE_POINTS_PKEY, new TableField[] { NetworkRoutePoints.NETWORK_ROUTE_POINTS.NETWORK_ROUTE_POINT_ID }, true);
     public static final ForeignKey<NetworkRoutesRecord, NetworkLinesRecord> NETWORK_ROUTES__NETWORK_ROUTES_NETWORK_LINE_ID_FKEY = Internal.createForeignKey(NetworkRoutes.NETWORK_ROUTES, DSL.name("network_routes_network_line_id_fkey"), new TableField[] { NetworkRoutes.NETWORK_ROUTES.NETWORK_LINE_ID }, Keys.NETWORK_LINES_PKEY, new TableField[] { NetworkLines.NETWORK_LINES.NETWORK_LINE_ID }, true);
 }
