@@ -18,6 +18,18 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsWithHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteLinks;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteLinksHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteLinksStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteLinksWithHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePoints;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePointsHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePointsStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePointsWithHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPoints;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPointsHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPointsStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPointsWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesStaging;
@@ -110,6 +122,66 @@ public class Network extends SchemaImpl {
     public final NetworkRouteDirectionsWithHistory NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY = NetworkRouteDirectionsWithHistory.NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY;
 
     /**
+     * The table <code>network.network_route_links</code>.
+     */
+    public final NetworkRouteLinks NETWORK_ROUTE_LINKS = NetworkRouteLinks.NETWORK_ROUTE_LINKS;
+
+    /**
+     * The table <code>network.network_route_links_history</code>.
+     */
+    public final NetworkRouteLinksHistory NETWORK_ROUTE_LINKS_HISTORY = NetworkRouteLinksHistory.NETWORK_ROUTE_LINKS_HISTORY;
+
+    /**
+     * The table <code>network.network_route_links_staging</code>.
+     */
+    public final NetworkRouteLinksStaging NETWORK_ROUTE_LINKS_STAGING = NetworkRouteLinksStaging.NETWORK_ROUTE_LINKS_STAGING;
+
+    /**
+     * The table <code>network.network_route_links_with_history</code>.
+     */
+    public final NetworkRouteLinksWithHistory NETWORK_ROUTE_LINKS_WITH_HISTORY = NetworkRouteLinksWithHistory.NETWORK_ROUTE_LINKS_WITH_HISTORY;
+
+    /**
+     * The table <code>network.network_route_points</code>.
+     */
+    public final NetworkRoutePoints NETWORK_ROUTE_POINTS = NetworkRoutePoints.NETWORK_ROUTE_POINTS;
+
+    /**
+     * The table <code>network.network_route_points_history</code>.
+     */
+    public final NetworkRoutePointsHistory NETWORK_ROUTE_POINTS_HISTORY = NetworkRoutePointsHistory.NETWORK_ROUTE_POINTS_HISTORY;
+
+    /**
+     * The table <code>network.network_route_points_staging</code>.
+     */
+    public final NetworkRoutePointsStaging NETWORK_ROUTE_POINTS_STAGING = NetworkRoutePointsStaging.NETWORK_ROUTE_POINTS_STAGING;
+
+    /**
+     * The table <code>network.network_route_points_with_history</code>.
+     */
+    public final NetworkRoutePointsWithHistory NETWORK_ROUTE_POINTS_WITH_HISTORY = NetworkRoutePointsWithHistory.NETWORK_ROUTE_POINTS_WITH_HISTORY;
+
+    /**
+     * The table <code>network.network_route_stop_points</code>.
+     */
+    public final NetworkRouteStopPoints NETWORK_ROUTE_STOP_POINTS = NetworkRouteStopPoints.NETWORK_ROUTE_STOP_POINTS;
+
+    /**
+     * The table <code>network.network_route_stop_points_history</code>.
+     */
+    public final NetworkRouteStopPointsHistory NETWORK_ROUTE_STOP_POINTS_HISTORY = NetworkRouteStopPointsHistory.NETWORK_ROUTE_STOP_POINTS_HISTORY;
+
+    /**
+     * The table <code>network.network_route_stop_points_staging</code>.
+     */
+    public final NetworkRouteStopPointsStaging NETWORK_ROUTE_STOP_POINTS_STAGING = NetworkRouteStopPointsStaging.NETWORK_ROUTE_STOP_POINTS_STAGING;
+
+    /**
+     * The table <code>network.network_route_stop_points_with_history</code>.
+     */
+    public final NetworkRouteStopPointsWithHistory NETWORK_ROUTE_STOP_POINTS_WITH_HISTORY = NetworkRouteStopPointsWithHistory.NETWORK_ROUTE_STOP_POINTS_WITH_HISTORY;
+
+    /**
      * The table <code>network.network_routes</code>.
      */
     public final NetworkRoutes NETWORK_ROUTES = NetworkRoutes.NETWORK_ROUTES;
@@ -158,6 +230,18 @@ public class Network extends SchemaImpl {
             NetworkRouteDirectionsHistory.NETWORK_ROUTE_DIRECTIONS_HISTORY,
             NetworkRouteDirectionsStaging.NETWORK_ROUTE_DIRECTIONS_STAGING,
             NetworkRouteDirectionsWithHistory.NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY,
+            NetworkRouteLinks.NETWORK_ROUTE_LINKS,
+            NetworkRouteLinksHistory.NETWORK_ROUTE_LINKS_HISTORY,
+            NetworkRouteLinksStaging.NETWORK_ROUTE_LINKS_STAGING,
+            NetworkRouteLinksWithHistory.NETWORK_ROUTE_LINKS_WITH_HISTORY,
+            NetworkRoutePoints.NETWORK_ROUTE_POINTS,
+            NetworkRoutePointsHistory.NETWORK_ROUTE_POINTS_HISTORY,
+            NetworkRoutePointsStaging.NETWORK_ROUTE_POINTS_STAGING,
+            NetworkRoutePointsWithHistory.NETWORK_ROUTE_POINTS_WITH_HISTORY,
+            NetworkRouteStopPoints.NETWORK_ROUTE_STOP_POINTS,
+            NetworkRouteStopPointsHistory.NETWORK_ROUTE_STOP_POINTS_HISTORY,
+            NetworkRouteStopPointsStaging.NETWORK_ROUTE_STOP_POINTS_STAGING,
+            NetworkRouteStopPointsWithHistory.NETWORK_ROUTE_STOP_POINTS_WITH_HISTORY,
             NetworkRoutes.NETWORK_ROUTES,
             NetworkRoutesHistory.NETWORK_ROUTES_HISTORY,
             NetworkRoutesStaging.NETWORK_ROUTES_STAGING,
