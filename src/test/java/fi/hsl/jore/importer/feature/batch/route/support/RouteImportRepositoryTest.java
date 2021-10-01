@@ -179,47 +179,27 @@ class RouteImportRepositoryTest {
                     final Route inserted = targetRepository.findById(id).get();
 
                     softAssertions.assertThat(inserted.line().value())
-                            .overridingErrorMessage(
-                                    "Expected the network line id to be: %s but was: %s",
-                                    EXPECTED_NETWORK_LINE_ID,
-                                    inserted.line().value()
-                            )
+                            .as("network line id")
                             .isEqualTo(EXPECTED_NETWORK_LINE_ID);
 
                     softAssertions.assertThat(inserted.externalId().value())
-                            .overridingErrorMessage(
-                                    "Expected the network route ext id to be: %s but was: %s",
-                                    EXPECTED_NETWORK_ROUTE_EXT_ID,
-                                    inserted.externalId().value()
-                            )
+                            .as("network route ext id")
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_EXT_ID);
 
                     softAssertions.assertThat(inserted.routeNumber())
-                            .overridingErrorMessage(
-                                    "Expected the route number to be: %s but was: %s",
-                                    EXPECTED_NETWORK_ROUTE_NUMBER,
-                                    inserted.routeNumber()
-                            )
+                            .as("route number")
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_NUMBER);
 
                     final MultilingualString routeName = inserted.name();
 
                     final String finnishRouteName = routeName.values().get(LOCALE_FI_FI).get();
                     softAssertions.assertThat(finnishRouteName)
-                            .overridingErrorMessage(
-                                    "Expected that the updated Finnish route name to be: %s but was: %s",
-                                    EXPECTED_FINNISH_ROUTE_NAME,
-                                    finnishRouteName
-                            )
+                            .as("updated Finnish route name")
                             .isEqualTo(EXPECTED_FINNISH_ROUTE_NAME);
 
                     final String swedishRouteName = routeName.values().get(LOCALE_SV_SE).get();
                     softAssertions.assertThat(swedishRouteName)
-                            .overridingErrorMessage(
-                                    "Expected that the updated Swedish route name to be: %s but was: %s",
-                                    EXPECTED_SWEDISH_ROUTE_NAME,
-                                    swedishRouteName
-                            )
+                            .as("updated Swedish route name")
                             .isEqualTo(EXPECTED_SWEDISH_ROUTE_NAME);
                 }
             }
@@ -263,47 +243,27 @@ class RouteImportRepositoryTest {
                     final Route updated = targetRepository.findById(RoutePK.of(EXPECTED_NETWORK_ROUTE_ID)).get();
 
                     softAssertions.assertThat(updated.line().value())
-                            .overridingErrorMessage(
-                                    "Expected the network line id to be: %s but was: %s",
-                                    EXPECTED_NETWORK_LINE_ID,
-                                    updated.line().value()
-                            )
+                            .as("network line id")
                             .isEqualTo(EXPECTED_NETWORK_LINE_ID);
 
                     softAssertions.assertThat(updated.externalId().value())
-                            .overridingErrorMessage(
-                                    "Expected the network route ext id to be: %s but was: %s",
-                                    EXPECTED_NETWORK_ROUTE_EXT_ID,
-                                    updated.externalId().value()
-                            )
+                            .as("network route ext id")
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_EXT_ID);
 
                     softAssertions.assertThat(updated.routeNumber())
-                            .overridingErrorMessage(
-                                    "Expected the route number to be: %s but was: %s",
-                                    EXPECTED_NETWORK_ROUTE_NUMBER,
-                                    updated.routeNumber()
-                            )
+                            .as("route number")
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_NUMBER);
 
                     final MultilingualString routeName = updated.name();
 
                     final String finnishRouteName = routeName.values().get(LOCALE_FI_FI).get();
                     softAssertions.assertThat(finnishRouteName)
-                            .overridingErrorMessage(
-                                    "Expected that the updated Finnish route name to be: %s but was: %s",
-                                    EXPECTED_FINNISH_ROUTE_NAME,
-                                    finnishRouteName
-                            )
+                            .as("updated Finnish route name")
                             .isEqualTo(EXPECTED_FINNISH_ROUTE_NAME);
 
                     final String swedishRouteName = routeName.values().get(LOCALE_SV_SE).get();
                     softAssertions.assertThat(swedishRouteName)
-                            .overridingErrorMessage(
-                                    "Expected that the updated Swedish route name to be: %s but was: %s",
-                                    EXPECTED_SWEDISH_ROUTE_NAME,
-                                    swedishRouteName
-                            )
+                            .as("updated Swedish route name")
                             .isEqualTo(EXPECTED_SWEDISH_ROUTE_NAME);
                 }
             }
