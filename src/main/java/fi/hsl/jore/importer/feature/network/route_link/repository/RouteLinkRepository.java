@@ -47,7 +47,7 @@ public class RouteLinkRepository
 
         r.store();
 
-        return RouteLinkPK.of(r.getNetworkRouteDirectionId());
+        return RouteLinkPK.of(r.getNetworkRouteLinkId());
     }
 
     @Override
@@ -78,7 +78,7 @@ public class RouteLinkRepository
 
         r.store();
 
-        return RouteLinkPK.of(r.getNetworkRouteDirectionId());
+        return RouteLinkPK.of(r.getNetworkRouteLinkId());
     }
 
     @Override
