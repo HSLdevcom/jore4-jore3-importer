@@ -75,8 +75,8 @@ public class RouteLinksProcessorGenerativeTest extends GenerativeTest {
     public Gen<LastLinkAttributes> lastLinkAttributesGen() {
         return nodeTypeGen()
                 .map(nodeType -> LastLinkAttributes.of(nodeType,
-                                                       true,
-                                                       Optional.of(5)));
+                                                       true, // is included in the timetable
+                                                       Optional.of(5))); // The column number of the timetable column
     }
 
     public Gen<RouteLinksAndAttributes> routeLinksAndAttributesGen() {
