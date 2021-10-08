@@ -223,7 +223,7 @@ public class RouteLinksProcessorTest {
                                StopPointPurpose.BOARDING,
                                true, // is a hastus point
                                true, // include in timetable
-                               Optional.of(1)),
+                               Optional.of(1)), //The column number of the timetable column
                 // B->C
                 JrRouteLink.of(RouteLinkId.of(10001),
                                2,
@@ -238,7 +238,7 @@ public class RouteLinksProcessorTest {
                                StopPointPurpose.UNKNOWN,
                                false, // not a hastus point
                                false, // do not include in timetable
-                               Optional.empty()),
+                               Optional.empty()), // The column number isn't given because link isn't included in timetable
                 // C->D
                 JrRouteLink.of(RouteLinkId.of(10002),
                                3,
@@ -253,7 +253,7 @@ public class RouteLinksProcessorTest {
                                StopPointPurpose.UNKNOWN,
                                false, // not a hastus point
                                false, // do not include in timetable
-                               Optional.empty()),
+                               Optional.empty()), // The column number isn't given because link isn't included in timetable
                 // D->E
                 JrRouteLink.of(RouteLinkId.of(10003),
                                4,
@@ -268,7 +268,7 @@ public class RouteLinksProcessorTest {
                                StopPointPurpose.NOT_IN_USE,
                                false, // not a hastus point
                                false, // do not include in timetable
-                               Optional.empty()),
+                               Optional.empty()), // The column number isn't given because link isn't included in timetable
                 // E->F
                 JrRouteLink.of(RouteLinkId.of(10004),
                                5,
@@ -283,7 +283,7 @@ public class RouteLinksProcessorTest {
                                StopPointPurpose.UNKNOWN,
                                false, // not a hastus point
                                false, // do not include in timetable
-                               Optional.empty())
+                               Optional.empty()) // The column number isn't given because link isn't included in timetable
         );
 
         final LastLinkAttributes attributes = LastLinkAttributes.of(NodeType.BUS_STOP,
