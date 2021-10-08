@@ -94,8 +94,8 @@ public class RouteLinksProcessorTest {
     }
 
     @Test
-    public void givenLinkBetweenABusStopAndACrossRoad_thenReturnRoutePoints_andSingleStopPoint() throws Exception {
-        // (A pathological) route consists of a single link between a bus stop and a cross road junction
+    public void givenLinkBetweenABusStopAndACrossroad_thenReturnRoutePoints_andSingleStopPoint() throws Exception {
+        // (A pathological) route consists of a single link between a bus stop and a crossroad junction
         final JrRouteLink link = JrRouteLink.of(RouteLinkId.of(1234),
                                                 1,
                                                 ROUTE,
@@ -147,7 +147,7 @@ public class RouteLinksProcessorTest {
 
     @Test
     public void givenLinkWithNoBusStops_thenReturnRoutePoints_andNoStopPoints() throws Exception {
-        // (A pathological) route consists of a single link between two cross roads
+        // (A pathological) route consists of a single link between two crossroads
         final JrRouteLink link = JrRouteLink.of(RouteLinkId.of(1234),
                                                 1,
                                                 ROUTE,
@@ -197,13 +197,13 @@ public class RouteLinksProcessorTest {
     public void givenComplexRoute_thenReturnRoutePoints_andStopPoints() throws Exception {
         // Node A is a bus stop
         final NodeId nodeA = NodeId.of("a");
-        // Node B is a cross roads junction
+        // Node B is a crossroads junction
         final NodeId nodeB = NodeId.of("b");
-        // Node C is a cross roads junction
+        // Node C is a crossroads junction
         final NodeId nodeC = NodeId.of("c");
         // Node D is a bus stop, but not in use
         final NodeId nodeD = NodeId.of("d");
-        // Node E is a cross roads junction
+        // Node E is a crossroads junction
         final NodeId nodeE = NodeId.of("e");
         // Node F is a bus stop
         final NodeId nodeF = NodeId.of("f");

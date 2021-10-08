@@ -30,7 +30,7 @@ class RouteLinkImportRepositoryTest {
 
     @Autowired
     RouteLinkImportRepositoryTest(final IRouteLinkImportRepository importRepository,
-                                       final IRouteLinkTestRepository targetRepository) {
+                                  final IRouteLinkTestRepository targetRepository) {
         this.importRepository = importRepository;
         this.targetRepository = targetRepository;
     }
