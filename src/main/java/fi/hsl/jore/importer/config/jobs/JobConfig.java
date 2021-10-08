@@ -27,18 +27,18 @@ import fi.hsl.jore.importer.feature.batch.route.support.IRouteImportRepository;
 import fi.hsl.jore.importer.feature.batch.route_direction.RouteDirectionProcessor;
 import fi.hsl.jore.importer.feature.batch.route_direction.RouteDirectionReader;
 import fi.hsl.jore.importer.feature.batch.route_direction.support.IRouteDirectionImportRepository;
+import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointProcessor;
+import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointReader;
+import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support.IScheduledStopPointImportRepository;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImportableNode;
-import fi.hsl.jore.importer.feature.jore3.entity.JrLine;
-import fi.hsl.jore.importer.feature.jore3.entity.JrLineHeader;
-import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
-import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
-import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
+import fi.hsl.jore.importer.feature.jore3.entity.*;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line_header.dto.ImportableLineHeader;
 import fi.hsl.jore.importer.feature.network.route.dto.ImportableRoute;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.ImportableRouteDirection;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImportableScheduledStopPoint;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.FlowBuilder;
@@ -62,7 +62,8 @@ public class JobConfig extends BatchConfig {
                          final Flow importLinesFlow,
                          final Flow importLineHeadersFlow,
                          final Flow importRoutesFlow,
-                         final Flow importRouteDirectionsFlow) {
+                         final Flow importRouteDirectionsFlow,
+                         final Flow importScheduledStopPointsFlow) {
         return jobs.get(JOB_NAME)
                    .start(importNodesFlow)
                    .next(importLinksFlow)
@@ -71,6 +72,7 @@ public class JobConfig extends BatchConfig {
                    .next(importLineHeadersFlow)
                    .next(importRoutesFlow)
                    .next(importRouteDirectionsFlow)
+                   .next(importScheduledStopPointsFlow)
                    .end()
                    .build();
     }
@@ -360,5 +362,44 @@ public class JobConfig extends BatchConfig {
                     .allowStartIfComplete(true)
                     .tasklet(new GenericCommitTasklet<>(routeDirectionImportRepository))
                     .build();
+    }
+
+    @Bean
+    public Flow importScheduledStopPointsFlow(final Step prepareScheduledStopPointsStep,
+                                              final Step importScheduledStopPointsStep,
+                                              final Step commitScheduledStopPointsStep) {
+        return new FlowBuilder<SimpleFlow>("importScheduledStopPointsFlow")
+                .start(prepareScheduledStopPointsStep)
+                .next(importScheduledStopPointsStep)
+                .next(commitScheduledStopPointsStep)
+                .build();
+    }
+
+    @Bean
+    public Step prepareScheduledStopPointsStep(final IScheduledStopPointImportRepository repository) {
+        return steps.get("prepareScheduledStopPointsStep")
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(repository))
+                .build();
+    }
+
+    @Bean
+    public Step importScheduledStopPointsStep(final ScheduledStopPointReader reader,
+                                              final IScheduledStopPointImportRepository repository) {
+        return steps.get("importScheduledStopPointsStep")
+                .allowStartIfComplete(true)
+                .<JrScheduledStopPoint, ImportableScheduledStopPoint>chunk(1000)
+                .reader(reader.build())
+                .processor(new ScheduledStopPointProcessor())
+                .writer(new GenericImportWriter<>(repository))
+                .build();
+    }
+
+    @Bean
+    public Step commitScheduledStopPointsStep(final IScheduledStopPointImportRepository repository) {
+        return steps.get("commitScheduledStopPointsStep")
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(repository))
+                .build();
     }
 }

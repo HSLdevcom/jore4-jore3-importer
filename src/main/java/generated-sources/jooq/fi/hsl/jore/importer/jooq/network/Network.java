@@ -22,6 +22,10 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesWithHistory;
+import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints;
+import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPointsHistory;
+import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPointsStaging;
+import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPointsWithHistory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -130,6 +134,26 @@ public class Network extends SchemaImpl {
     public final NetworkRoutesWithHistory NETWORK_ROUTES_WITH_HISTORY = NetworkRoutesWithHistory.NETWORK_ROUTES_WITH_HISTORY;
 
     /**
+     * The table <code>network.scheduled_stop_points</code>.
+     */
+    public final ScheduledStopPoints SCHEDULED_STOP_POINTS = ScheduledStopPoints.SCHEDULED_STOP_POINTS;
+
+    /**
+     * The table <code>network.scheduled_stop_points_history</code>.
+     */
+    public final ScheduledStopPointsHistory SCHEDULED_STOP_POINTS_HISTORY = ScheduledStopPointsHistory.SCHEDULED_STOP_POINTS_HISTORY;
+
+    /**
+     * The table <code>network.scheduled_stop_points_staging</code>.
+     */
+    public final ScheduledStopPointsStaging SCHEDULED_STOP_POINTS_STAGING = ScheduledStopPointsStaging.SCHEDULED_STOP_POINTS_STAGING;
+
+    /**
+     * The table <code>network.scheduled_stop_points_with_history</code>.
+     */
+    public final ScheduledStopPointsWithHistory SCHEDULED_STOP_POINTS_WITH_HISTORY = ScheduledStopPointsWithHistory.SCHEDULED_STOP_POINTS_WITH_HISTORY;
+
+    /**
      * No further instances allowed
      */
     private Network() {
@@ -161,6 +185,10 @@ public class Network extends SchemaImpl {
             NetworkRoutes.NETWORK_ROUTES,
             NetworkRoutesHistory.NETWORK_ROUTES_HISTORY,
             NetworkRoutesStaging.NETWORK_ROUTES_STAGING,
-            NetworkRoutesWithHistory.NETWORK_ROUTES_WITH_HISTORY);
+            NetworkRoutesWithHistory.NETWORK_ROUTES_WITH_HISTORY,
+            ScheduledStopPoints.SCHEDULED_STOP_POINTS,
+            ScheduledStopPointsHistory.SCHEDULED_STOP_POINTS_HISTORY,
+            ScheduledStopPointsStaging.SCHEDULED_STOP_POINTS_STAGING,
+            ScheduledStopPointsWithHistory.SCHEDULED_STOP_POINTS_WITH_HISTORY);
     }
 }

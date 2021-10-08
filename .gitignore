@@ -31,3 +31,6 @@ build/
 .vscode/
 run.sh
 profiles/dev/config.*.properties
+
+#MacOS
+.DS_store

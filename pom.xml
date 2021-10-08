@@ -413,7 +413,7 @@
                                 <forcedType>
                                     <userType>org.locationtech.jts.geom.Point</userType>
                                     <converter>fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding</converter>
-                                    <includeExpression>.*\.infrastructure_node_location | .*\.infrastructure_node_projected_location</includeExpression>
+                                    <includeExpression>.*\.infrastructure_node_location | .*\.infrastructure_node_projected_location | .*\.scheduled_stop_point_location</includeExpression>
                                 </forcedType>
                                 <forcedType>
                                     <userType>fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange</userType>
