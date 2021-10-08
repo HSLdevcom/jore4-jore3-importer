@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 INSERT INTO infrastructure_network.infrastructure_nodes (
         infrastructure_node_id,
         infrastructure_node_ext_id,
@@ -20,10 +21,19 @@ INSERT INTO infrastructure_network.infrastructure_nodes (
         infrastructure_node_location,
         infrastructure_node_projected_location
 )
-VALUES (
-        '0009b559-0e7c-4549-99eb-5391727d1016',
+VALUES ('0009b559-0e7c-4549-99eb-5391727d1016',
         '"6010203"',
         'S',
         ST_Force3D(point(24.468175, 60.15286)::geometry),
         ST_Force3D(point(24.468122, 60.152911)::geometry)
+);
+
+INSERT INTO infrastructure_network.infrastructure_nodes
+    (infrastructure_node_id, infrastructure_node_ext_id, infrastructure_node_type, infrastructure_node_location, infrastructure_node_projected_location)
+VALUES (
+    'cc11a5db-2ae7-4220-adfe-aca5d6620909',
+    'c',
+    'S',
+    ST_Force3D(point(6, 5)::geometry),
+    ST_Force3D(point(13, 12)::geometry)
 );

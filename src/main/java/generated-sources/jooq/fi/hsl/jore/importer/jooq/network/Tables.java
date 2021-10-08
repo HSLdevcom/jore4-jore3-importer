@@ -33,6 +33,10 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesWithHistory;
+import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints;
+import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPointsHistory;
+import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPointsStaging;
+import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPointsWithHistory;
 
 
 /**
@@ -185,4 +189,24 @@ public class Tables {
      * The table <code>network.network_routes_with_history</code>.
      */
     public static final NetworkRoutesWithHistory NETWORK_ROUTES_WITH_HISTORY = NetworkRoutesWithHistory.NETWORK_ROUTES_WITH_HISTORY;
+
+    /**
+     * The table <code>network.scheduled_stop_points</code>.
+     */
+    public static final ScheduledStopPoints SCHEDULED_STOP_POINTS = ScheduledStopPoints.SCHEDULED_STOP_POINTS;
+
+    /**
+     * The table <code>network.scheduled_stop_points_history</code>.
+     */
+    public static final ScheduledStopPointsHistory SCHEDULED_STOP_POINTS_HISTORY = ScheduledStopPointsHistory.SCHEDULED_STOP_POINTS_HISTORY;
+
+    /**
+     * The table <code>network.scheduled_stop_points_staging</code>.
+     */
+    public static final ScheduledStopPointsStaging SCHEDULED_STOP_POINTS_STAGING = ScheduledStopPointsStaging.SCHEDULED_STOP_POINTS_STAGING;
+
+    /**
+     * The table <code>network.scheduled_stop_points_with_history</code>.
+     */
+    public static final ScheduledStopPointsWithHistory SCHEDULED_STOP_POINTS_WITH_HISTORY = ScheduledStopPointsWithHistory.SCHEDULED_STOP_POINTS_WITH_HISTORY;
 }

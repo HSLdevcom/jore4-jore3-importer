@@ -28,3 +28,6 @@ TRUNCATE TABLE network.network_route_stop_points_staging CASCADE;
 TRUNCATE TABLE network.network_route_links CASCADE;
 TRUNCATE TABLE network.network_route_links_history CASCADE;
 TRUNCATE TABLE network.network_route_links_staging CASCADE;
+TRUNCATE TABLE network.scheduled_stop_points CASCADE;
+TRUNCATE TABLE network.scheduled_stop_points_history CASCADE;
+TRUNCATE TABLE network.scheduled_stop_points_staging CASCADE;
