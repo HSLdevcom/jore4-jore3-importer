@@ -45,8 +45,6 @@ public class ScheduledStopPointImportRepositoryTest {
         private final UUID EXPECTED_ID = UUID.fromString("058a63b3-365b-4676-af51-809bef577cdd");
         private final String EXPECTED_EXTERNAL_ID = "c";
         private final UUID EXPECTED_INFRASTRUCTURE_NODE_ID = UUID.fromString("cc11a5db-2ae7-4220-adfe-aca5d6620909");
-        private final double EXPECTED_X = 6.0;
-        private final double EXPECTED_Y = 5.0;
         private final String EXPECTED_FINNISH_NAME = "Yliopisto";
         private final String EXPECTED_SWEDISH_NAME = "Universitetet";
 
@@ -188,14 +186,6 @@ public class ScheduledStopPointImportRepositoryTest {
                             .as("infrastructure node id")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_NODE_ID);
 
-                    softAssertions.assertThat(inserted.location().getX())
-                            .as("X")
-                            .isEqualTo(EXPECTED_X);
-
-                    softAssertions.assertThat(inserted.location().getY())
-                            .as("Y")
-                            .isEqualTo(EXPECTED_Y);
-
                     String finnishName = inserted.name().values().getOrElse(LOCALE_FI_FI, "No string found with the given locale");
                     softAssertions.assertThat(finnishName)
                             .as("finnish name")
@@ -255,14 +245,6 @@ public class ScheduledStopPointImportRepositoryTest {
                     softAssertions.assertThat(updated.node().value())
                             .as("infrastructure node id")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_NODE_ID);
-
-                    softAssertions.assertThat(updated.location().getX())
-                            .as("X")
-                            .isEqualTo(EXPECTED_X);
-
-                    softAssertions.assertThat(updated.location().getY())
-                            .as("Y")
-                            .isEqualTo(EXPECTED_Y);
 
                     String finnishName = updated.name().values().getOrElse(LOCALE_FI_FI, "No string found with the given locale");
                     softAssertions.assertThat(finnishName)

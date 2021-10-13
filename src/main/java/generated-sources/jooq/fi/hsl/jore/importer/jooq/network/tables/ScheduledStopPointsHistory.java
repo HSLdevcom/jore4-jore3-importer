@@ -4,7 +4,6 @@
 package fi.hsl.jore.importer.jooq.network.tables;
 
 
-import fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding;
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
 import fi.hsl.jore.importer.jooq.network.Network;
@@ -17,7 +16,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -25,7 +24,6 @@ import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
-import org.locationtech.jts.geom.Point;
 
 
 /**
@@ -63,11 +61,6 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
      * The column <code>network.scheduled_stop_points_history.infrastructure_node_id</code>.
      */
     public final TableField<ScheduledStopPointsHistoryRecord, UUID> INFRASTRUCTURE_NODE_ID = createField(DSL.name("infrastructure_node_id"), SQLDataType.UUID.nullable(false), this, "");
-
-    /**
-     * The column <code>network.scheduled_stop_points_history.scheduled_stop_point_location</code>.
-     */
-    public final TableField<ScheduledStopPointsHistoryRecord, Point> SCHEDULED_STOP_POINT_LOCATION = createField(DSL.name("scheduled_stop_point_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geometry\"").nullable(false), this, "", new PointBinding());
 
     /**
      * The column <code>network.scheduled_stop_points_history.scheduled_stop_point_name</code>.
@@ -144,11 +137,11 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<UUID, String, UUID, Point, JSONB, TimeRange> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row5<UUID, String, UUID, JSONB, TimeRange> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }

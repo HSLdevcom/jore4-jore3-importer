@@ -11,11 +11,9 @@ public interface PersistableScheduledStopPoint
 {
 
     static PersistableScheduledStopPoint of(final ExternalId externalId,
-                                            final Point location,
                                             final MultilingualString name) {
         return ImmutablePersistableScheduledStopPoint.builder()
                 .externalId(externalId)
-                .location(location)
                 .name(name)
                 .build();
     }

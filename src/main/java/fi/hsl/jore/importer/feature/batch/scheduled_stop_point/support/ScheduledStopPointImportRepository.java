@@ -61,15 +61,13 @@ public class ScheduledStopPointImportRepository
                 .columns(
                         TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID,
                         TARGET_TABLE.INFRASTRUCTURE_NODE_ID,
-                        TARGET_TABLE.SCHEDULED_STOP_POINT_NAME,
-                        TARGET_TABLE.SCHEDULED_STOP_POINT_LOCATION
+                        TARGET_TABLE.SCHEDULED_STOP_POINT_NAME
                 )
                 .select(
                         db.select(
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID,
                                 INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_ID,
-                                STAGING_TABLE.SCHEDULED_STOP_POINT_NAME,
-                                STAGING_TABLE.SCHEDULED_STOP_POINT_LOCATION
+                                STAGING_TABLE.SCHEDULED_STOP_POINT_NAME
                         )
                                 .from(STAGING_TABLE)
                                 .join(INFRASTRUCTURE_NODES).on(INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_EXT_ID.eq(STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID))
@@ -90,14 +88,10 @@ public class ScheduledStopPointImportRepository
     @Override
     protected Set<ScheduledStopPointPK> update() {
         return db.update(TARGET_TABLE)
-                .set(TARGET_TABLE.SCHEDULED_STOP_POINT_LOCATION, STAGING_TABLE.SCHEDULED_STOP_POINT_LOCATION)
                 .set(TARGET_TABLE.SCHEDULED_STOP_POINT_NAME, STAGING_TABLE.SCHEDULED_STOP_POINT_NAME)
                 .from(STAGING_TABLE)
                 .where(TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID.eq(STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID)
-                        .and(
-                                geometryEquals(TARGET_TABLE.SCHEDULED_STOP_POINT_LOCATION, STAGING_TABLE.SCHEDULED_STOP_POINT_LOCATION).not()
-                                .or(TARGET_TABLE.SCHEDULED_STOP_POINT_NAME.notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_NAME))
-                        )
+                        .and(TARGET_TABLE.SCHEDULED_STOP_POINT_NAME.notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_NAME))
                 )
                 .returningResult(TARGET_TABLE.SCHEDULED_STOP_POINT_ID)
                 .fetch()
@@ -112,16 +106,14 @@ public class ScheduledStopPointImportRepository
         final BatchBindStep batch = db.batch(
                 db.insertInto(STAGING_TABLE,
                         STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID,
-                        STAGING_TABLE.SCHEDULED_STOP_POINT_NAME,
-                        STAGING_TABLE.SCHEDULED_STOP_POINT_LOCATION
+                        STAGING_TABLE.SCHEDULED_STOP_POINT_NAME
                 )
-                        .values((String) null, null, null)
+                        .values((String) null, null)
         );
 
         items.forEach(item -> batch.bind(
                 item.externalId().value(),
-                jsonbConverter.asJson(item.name()),
-                item.location()
+                jsonbConverter.asJson(item.name())
         ));
 
         batch.execute();

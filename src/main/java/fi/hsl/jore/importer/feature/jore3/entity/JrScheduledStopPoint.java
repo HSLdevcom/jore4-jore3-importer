@@ -23,14 +23,6 @@ public interface JrScheduledStopPoint extends IHasPrimaryKey<JrScheduledStopPoin
 
     String TABLE = "jr_pysakki";
 
-    @JoreColumn(name = "solomx",
-            srid = JoreGeometryUtil.JORE_SRID)
-    double latitude();
-
-    @JoreColumn(name = "solomy",
-            srid = JoreGeometryUtil.JORE_SRID)
-    double longitude();
-
     @JoreColumn(name = "pysnimi",
             example = "Ritarihuone")
     Optional<String> nameFinnish();
@@ -40,19 +32,11 @@ public interface JrScheduledStopPoint extends IHasPrimaryKey<JrScheduledStopPoin
             example = "Riddarhuset")
     Optional<String> nameSwedish();
 
-    default Point location() {
-        return JoreGeometryUtil.fromDbCoordinates(latitude(), longitude());
-    }
-
     static JrScheduledStopPoint of(final NodeId nodeId,
-                                   final double latitude,
-                                   final double longitude,
                                    final Optional<String> nameFinnish,
                                    final Optional<String> nameSwedish) {
         return ImmutableJrScheduledStopPoint.builder()
                 .pk(JrScheduledStopPointPK.of(nodeId))
-                .latitude(latitude)
-                .longitude(longitude)
                 .nameFinnish(nameFinnish)
                 .nameSwedish(nameSwedish)
                 .build();

@@ -4,7 +4,6 @@
 package fi.hsl.jore.importer.jooq.network.tables;
 
 
-import fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding;
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
 import fi.hsl.jore.importer.jooq.network.Network;
@@ -17,7 +16,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -25,7 +24,6 @@ import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
-import org.locationtech.jts.geom.Point;
 
 
 /**
@@ -65,11 +63,6 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
     public final TableField<ScheduledStopPointsWithHistoryRecord, UUID> INFRASTRUCTURE_NODE_ID = createField(DSL.name("infrastructure_node_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points_with_history.scheduled_stop_point_location</code>.
-     */
-    public final TableField<ScheduledStopPointsWithHistoryRecord, Point> SCHEDULED_STOP_POINT_LOCATION = createField(DSL.name("scheduled_stop_point_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geometry\""), this, "", new PointBinding());
-
-    /**
      * The column <code>network.scheduled_stop_points_with_history.scheduled_stop_point_name</code>.
      */
     public final TableField<ScheduledStopPointsWithHistoryRecord, JSONB> SCHEDULED_STOP_POINT_NAME = createField(DSL.name("scheduled_stop_point_name"), SQLDataType.JSONB, this, "");
@@ -84,7 +77,7 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
     }
 
     private ScheduledStopPointsWithHistory(Name alias, Table<ScheduledStopPointsWithHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"scheduled_stop_points_with_history\" as  SELECT scheduled_stop_points.scheduled_stop_point_id,\n    scheduled_stop_points.scheduled_stop_point_ext_id,\n    scheduled_stop_points.infrastructure_node_id,\n    scheduled_stop_points.scheduled_stop_point_location,\n    scheduled_stop_points.scheduled_stop_point_name,\n    scheduled_stop_points.scheduled_stop_point_sys_period\n   FROM network.scheduled_stop_points\nUNION ALL\n SELECT scheduled_stop_points_history.scheduled_stop_point_id,\n    scheduled_stop_points_history.scheduled_stop_point_ext_id,\n    scheduled_stop_points_history.infrastructure_node_id,\n    scheduled_stop_points_history.scheduled_stop_point_location,\n    scheduled_stop_points_history.scheduled_stop_point_name,\n    scheduled_stop_points_history.scheduled_stop_point_sys_period\n   FROM network.scheduled_stop_points_history;"));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"scheduled_stop_points_with_history\" as  SELECT scheduled_stop_points.scheduled_stop_point_id,\n    scheduled_stop_points.scheduled_stop_point_ext_id,\n    scheduled_stop_points.infrastructure_node_id,\n    scheduled_stop_points.scheduled_stop_point_name,\n    scheduled_stop_points.scheduled_stop_point_sys_period\n   FROM network.scheduled_stop_points\nUNION ALL\n SELECT scheduled_stop_points_history.scheduled_stop_point_id,\n    scheduled_stop_points_history.scheduled_stop_point_ext_id,\n    scheduled_stop_points_history.infrastructure_node_id,\n    scheduled_stop_points_history.scheduled_stop_point_name,\n    scheduled_stop_points_history.scheduled_stop_point_sys_period\n   FROM network.scheduled_stop_points_history;"));
     }
 
     /**
@@ -144,11 +137,11 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<UUID, String, UUID, Point, JSONB, TimeRange> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row5<UUID, String, UUID, JSONB, TimeRange> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }

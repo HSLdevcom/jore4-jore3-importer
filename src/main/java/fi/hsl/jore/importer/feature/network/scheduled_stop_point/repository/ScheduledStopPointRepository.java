@@ -97,7 +97,6 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
 
         record.setScheduledStopPointExtId(entity.externalId().value());
         record.setScheduledStopPointName(jsonbConverter.asJson(entity.name()));
-        record.setScheduledStopPointLocation(entity.location());
 
         record.store();
 
@@ -125,7 +124,6 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
                         .fetchAny()
         ).orElseThrow();
 
-        record.setScheduledStopPointLocation(scheduledStopPoint.location());
         record.setScheduledStopPointName(jsonbConverter.asJson(scheduledStopPoint.name()));
 
         record.store();

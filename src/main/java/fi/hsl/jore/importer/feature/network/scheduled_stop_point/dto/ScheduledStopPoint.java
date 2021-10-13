@@ -29,14 +29,12 @@ public interface ScheduledStopPoint
     static ScheduledStopPoint of(final ScheduledStopPointPK pk,
                                  final ExternalId externalId,
                                  final NodePK node,
-                                 final Point location,
                                  final MultilingualString name,
                                  final TimeRange systemTime) {
         return ImmutableScheduledStopPoint.builder()
                 .pk(pk)
                 .externalId(externalId)
                 .node(node)
-                .location(location)
                 .name(name)
                 .systemTime(systemTime)
                 .build();
@@ -47,7 +45,6 @@ public interface ScheduledStopPoint
                 ScheduledStopPointPK.of(record.getScheduledStopPointId()),
                 ExternalId.of(record.getScheduledStopPointExtId()),
                 NodePK.of(record.getInfrastructureNodeId()),
-                record.getScheduledStopPointLocation(),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
                 record.getScheduledStopPointSysPeriod()
         );
@@ -58,7 +55,6 @@ public interface ScheduledStopPoint
                 ScheduledStopPointPK.of(record.getScheduledStopPointId()),
                 ExternalId.of(record.getScheduledStopPointExtId()),
                 NodePK.of(record.getInfrastructureNodeId()),
-                record.getScheduledStopPointLocation(),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
                 record.getScheduledStopPointSysPeriod()
         );

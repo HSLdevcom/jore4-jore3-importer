@@ -36,8 +36,6 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
 
     private static final String EXPECTED_EXTERNAL_ID = "c";
     private static final UUID EXPECTED_INFRASTRUCTURE_NODE_ID = UUID.fromString("cc11a5db-2ae7-4220-adfe-aca5d6620909");
-    private static final double EXPECTED_X = 6.0;
-    private static final double EXPECTED_Y = 5.0;
     private static final String EXPECTED_FINNISH_NAME = "Yliopisto";
     private static final String EXPECTED_SWEDISH_NAME = "Universitetet";
 
@@ -77,14 +75,6 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
         softAssertions.assertThat(imported.node().value())
                 .as("infrastructure node id")
                 .isEqualTo(EXPECTED_INFRASTRUCTURE_NODE_ID);
-
-        softAssertions.assertThat(imported.location().getX())
-                .as("X")
-                .isEqualTo(EXPECTED_X);
-
-        softAssertions.assertThat(imported.location().getY())
-                .as("Y")
-                .isEqualTo(EXPECTED_Y);
 
         String finnishName = imported.name().values().getOrElse(LOCALE_FINNISH, "No string found with the given locale");
         softAssertions.assertThat(finnishName)
