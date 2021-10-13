@@ -4,7 +4,6 @@
 package fi.hsl.jore.importer.jooq.network.tables;
 
 
-import fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding;
 import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.ScheduledStopPointsStagingRecord;
@@ -17,7 +16,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Row2;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -26,7 +25,6 @@ import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
-import org.locationtech.jts.geom.Point;
 
 
 /**
@@ -54,11 +52,6 @@ public class ScheduledStopPointsStaging extends TableImpl<ScheduledStopPointsSta
      * The column <code>network.scheduled_stop_points_staging.scheduled_stop_point_ext_id</code>.
      */
     public final TableField<ScheduledStopPointsStagingRecord, String> SCHEDULED_STOP_POINT_EXT_ID = createField(DSL.name("scheduled_stop_point_ext_id"), SQLDataType.VARCHAR(7).nullable(false), this, "");
-
-    /**
-     * The column <code>network.scheduled_stop_points_staging.scheduled_stop_point_location</code>.
-     */
-    public final TableField<ScheduledStopPointsStagingRecord, Point> SCHEDULED_STOP_POINT_LOCATION = createField(DSL.name("scheduled_stop_point_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geometry\"").nullable(false), this, "", new PointBinding());
 
     /**
      * The column <code>network.scheduled_stop_points_staging.scheduled_stop_point_name</code>.
@@ -140,11 +133,11 @@ public class ScheduledStopPointsStaging extends TableImpl<ScheduledStopPointsSta
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row2 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<String, Point, JSONB> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row2<String, JSONB> fieldsRow() {
+        return (Row2) super.fieldsRow();
     }
 }

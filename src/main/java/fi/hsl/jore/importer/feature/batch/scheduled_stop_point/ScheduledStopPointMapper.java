@@ -23,8 +23,6 @@ public class ScheduledStopPointMapper implements RowMapper<JrScheduledStopPoint>
                                        final int rowNumber) throws SQLException {
         return JrScheduledStopPoint.of(
                 NodeId.of(getStringOrThrow(rs, "soltunnus")),
-                getDoubleOrThrow(rs, "solomx"),
-                getDoubleOrThrow(rs, "solomy"),
                 getOptionalString(rs, "pysnimi"),
                 getOptionalString(rs, "pysnimir")
         );

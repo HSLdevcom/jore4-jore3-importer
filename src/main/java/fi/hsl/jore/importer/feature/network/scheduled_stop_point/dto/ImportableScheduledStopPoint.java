@@ -15,11 +15,9 @@ public interface ImportableScheduledStopPoint
 {
 
     static ImportableScheduledStopPoint of(final ExternalId externalId,
-                                           final Point location,
                                            final MultilingualString name) {
         return ImmutableImportableScheduledStopPoint.builder()
                 .externalId(externalId)
-                .location(location)
                 .name(name)
                 .build();
     }

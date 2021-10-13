@@ -17,7 +17,6 @@ public class ScheduledStopPointProcessor implements ItemProcessor<JrScheduledSto
     public ImportableScheduledStopPoint process(JrScheduledStopPoint input) throws Exception {
         return ImportableScheduledStopPoint.of(
                 ExternalId.of(input.pk().nodeId().value()),
-                input.location(),
                 MultilingualString.empty()
                         .with(JoreLocaleUtil.FINNISH, input.nameFinnish())
                         .with(JoreLocaleUtil.SWEDISH, input.nameSwedish())

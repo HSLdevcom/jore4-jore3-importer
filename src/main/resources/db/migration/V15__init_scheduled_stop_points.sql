@@ -4,7 +4,6 @@ CREATE TABLE network.scheduled_stop_points (
     scheduled_stop_point_id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     scheduled_stop_point_ext_id VARCHAR(7) NOT NULL,
     infrastructure_node_id uuid NOT NULL REFERENCES infrastructure_network.infrastructure_nodes(infrastructure_node_id),
-    scheduled_stop_point_location geometry(PointZ, 4326) NOT NULL,
     scheduled_stop_point_name JSONB NOT NULL,
     scheduled_stop_point_sys_period tstzrange DEFAULT tstzrange(current_timestamp, null) NOT NULL
 );
@@ -16,7 +15,6 @@ CREATE UNIQUE INDEX scheduled_stop_points_ext_id_idx
 
 CREATE TABLE network.scheduled_stop_points_staging (
     scheduled_stop_point_ext_id VARCHAR(7) PRIMARY KEY,
-    scheduled_stop_point_location geometry(PointZ, 4326) NOT NULL,
     scheduled_stop_point_name JSONB NOT NULL
 );
 

@@ -6,7 +6,5 @@ import org.locationtech.jts.geom.Point;
 
 public interface CommonFields<T> extends IHasExternalId {
 
-    Point location();
-
     MultilingualString name();
 }
