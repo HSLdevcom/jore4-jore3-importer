@@ -1,5 +1,6 @@
 SELECT
        p.soltunnus AS soltunnus,
+       p.elynumero AS elynumero,
        p.pysnimi AS pysnimi,
        p.pysnimir AS pysnimir
 FROM jr_pysakki p

@@ -128,6 +128,8 @@ public class ScheduledStopPointImportRepositoryTest {
             })
             class WhenTargetTableIsEmpty {
 
+                private final String EXPECTED_ELY_NUMBER = "1234567890";
+
                 @BeforeEach
                 public void beforeEach() {
                     assertThat(targetRepository.empty())
@@ -186,6 +188,10 @@ public class ScheduledStopPointImportRepositoryTest {
                             .as("infrastructure node id")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_NODE_ID);
 
+                    softAssertions.assertThat(inserted.elyNumber())
+                            .as("elyNumber")
+                            .contains(EXPECTED_ELY_NUMBER);
+
                     String finnishName = inserted.name().values().getOrElse(LOCALE_FI_FI, "No string found with the given locale");
                     softAssertions.assertThat(finnishName)
                             .as("finnish name")
@@ -208,6 +214,8 @@ public class ScheduledStopPointImportRepositoryTest {
                     "/sql/destination/populate_scheduled_stop_points_staging.sql"
             })
             class WhenTargetTableContainsImportedScheduledStopPoint {
+
+                private final String EXPECTED_ELY_NUMBER = "1234567891";
 
                 @Test
                 @DisplayName("Should update the information of the existing row")
@@ -245,6 +253,10 @@ public class ScheduledStopPointImportRepositoryTest {
                     softAssertions.assertThat(updated.node().value())
                             .as("infrastructure node id")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_NODE_ID);
+
+                    softAssertions.assertThat(updated.elyNumber())
+                            .as("elyNumber")
+                            .contains(EXPECTED_ELY_NUMBER);
 
                     String finnishName = updated.name().values().getOrElse(LOCALE_FI_FI, "No string found with the given locale");
                     softAssertions.assertThat(finnishName)

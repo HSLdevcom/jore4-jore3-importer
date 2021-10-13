@@ -3,7 +3,8 @@ package fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import org.immutables.value.Value;
-import org.locationtech.jts.geom.Point;
+
+import java.util.Optional;
 
 @Value.Immutable
 public interface PersistableScheduledStopPoint
@@ -11,9 +12,11 @@ public interface PersistableScheduledStopPoint
 {
 
     static PersistableScheduledStopPoint of(final ExternalId externalId,
+                                            final Optional<String> elyNumber,
                                             final MultilingualString name) {
         return ImmutablePersistableScheduledStopPoint.builder()
                 .externalId(externalId)
+                .elyNumber(elyNumber)
                 .name(name)
                 .build();
     }

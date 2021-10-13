@@ -35,6 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
 
     private static final String EXPECTED_EXTERNAL_ID = "c";
+    private static final String EXPECTED_ELY_NUMBER = "1234567890";
     private static final UUID EXPECTED_INFRASTRUCTURE_NODE_ID = UUID.fromString("cc11a5db-2ae7-4220-adfe-aca5d6620909");
     private static final String EXPECTED_FINNISH_NAME = "Yliopisto";
     private static final String EXPECTED_SWEDISH_NAME = "Universitetet";
@@ -75,6 +76,10 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
         softAssertions.assertThat(imported.node().value())
                 .as("infrastructure node id")
                 .isEqualTo(EXPECTED_INFRASTRUCTURE_NODE_ID);
+
+        softAssertions.assertThat(imported.elyNumber())
+                .as("elyNumber")
+                .contains(EXPECTED_ELY_NUMBER);
 
         String finnishName = imported.name().values().getOrElse(LOCALE_FINNISH, "No string found with the given locale");
         softAssertions.assertThat(finnishName)

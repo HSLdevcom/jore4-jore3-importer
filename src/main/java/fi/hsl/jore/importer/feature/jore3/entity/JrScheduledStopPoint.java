@@ -23,6 +23,11 @@ public interface JrScheduledStopPoint extends IHasPrimaryKey<JrScheduledStopPoin
 
     String TABLE = "jr_pysakki";
 
+    @JoreColumn(name = "elynumero",
+            example = "1234567890"
+    )
+    Optional<String> elyNumber();
+
     @JoreColumn(name = "pysnimi",
             example = "Ritarihuone")
     Optional<String> nameFinnish();
@@ -33,10 +38,12 @@ public interface JrScheduledStopPoint extends IHasPrimaryKey<JrScheduledStopPoin
     Optional<String> nameSwedish();
 
     static JrScheduledStopPoint of(final NodeId nodeId,
+                                   final Optional<String> elyNumber,
                                    final Optional<String> nameFinnish,
                                    final Optional<String> nameSwedish) {
         return ImmutableJrScheduledStopPoint.builder()
                 .pk(JrScheduledStopPointPK.of(nodeId))
+                .elyNumber(elyNumber)
                 .nameFinnish(nameFinnish)
                 .nameSwedish(nameSwedish)
                 .build();
