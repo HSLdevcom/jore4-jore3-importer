@@ -13,6 +13,8 @@ import fi.hsl.jore.importer.jooq.network.tables.records.ScheduledStopPointsWithH
 import org.immutables.value.Value;
 import org.locationtech.jts.geom.Point;
 
+import java.util.Optional;
+
 /**
  * Contains the information of a scheduled stop point which
  * is read from the target database.
@@ -28,12 +30,14 @@ public interface ScheduledStopPoint
 
     static ScheduledStopPoint of(final ScheduledStopPointPK pk,
                                  final ExternalId externalId,
+                                 final Optional<String> elyNumber,
                                  final NodePK node,
                                  final MultilingualString name,
                                  final TimeRange systemTime) {
         return ImmutableScheduledStopPoint.builder()
                 .pk(pk)
                 .externalId(externalId)
+                .elyNumber(elyNumber)
                 .node(node)
                 .name(name)
                 .systemTime(systemTime)
@@ -44,6 +48,7 @@ public interface ScheduledStopPoint
         return ScheduledStopPoint.of(
                 ScheduledStopPointPK.of(record.getScheduledStopPointId()),
                 ExternalId.of(record.getScheduledStopPointExtId()),
+                Optional.ofNullable(record.getScheduledStopPointElyNumber()),
                 NodePK.of(record.getInfrastructureNodeId()),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
                 record.getScheduledStopPointSysPeriod()
@@ -54,6 +59,7 @@ public interface ScheduledStopPoint
         return ScheduledStopPoint.of(
                 ScheduledStopPointPK.of(record.getScheduledStopPointId()),
                 ExternalId.of(record.getScheduledStopPointExtId()),
+                Optional.ofNullable(record.getScheduledStopPointElyNumber()),
                 NodePK.of(record.getInfrastructureNodeId()),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
                 record.getScheduledStopPointSysPeriod()

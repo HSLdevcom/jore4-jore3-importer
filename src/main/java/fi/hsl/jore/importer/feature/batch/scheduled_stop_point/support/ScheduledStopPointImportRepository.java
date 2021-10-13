@@ -61,12 +61,14 @@ public class ScheduledStopPointImportRepository
                 .columns(
                         TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID,
                         TARGET_TABLE.INFRASTRUCTURE_NODE_ID,
+                        TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
                         TARGET_TABLE.SCHEDULED_STOP_POINT_NAME
                 )
                 .select(
                         db.select(
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID,
                                 INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_ID,
+                                STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_NAME
                         )
                                 .from(STAGING_TABLE)
@@ -109,13 +111,15 @@ public class ScheduledStopPointImportRepository
         final BatchBindStep batch = db.batch(
                 db.insertInto(STAGING_TABLE,
                         STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID,
+                        STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
                         STAGING_TABLE.SCHEDULED_STOP_POINT_NAME
                 )
-                        .values((String) null, null)
+                        .values((String) null, null, null)
         );
 
         items.forEach(item -> batch.bind(
                 item.externalId().value(),
+                item.elyNumber().orElse(null),
                 jsonbConverter.asJson(item.name())
         ));
 

@@ -96,6 +96,7 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
         final ScheduledStopPointsRecord record = db.newRecord(SCHEDULED_STOP_POINT);
 
         record.setScheduledStopPointExtId(entity.externalId().value());
+        record.setScheduledStopPointElyNumber(entity.elyNumber().orElse(null));
         record.setScheduledStopPointName(jsonbConverter.asJson(entity.name()));
 
         record.store();
