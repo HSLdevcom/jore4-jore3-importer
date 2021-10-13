@@ -42,7 +42,12 @@ import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support.ISchedule
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImportableNode;
-import fi.hsl.jore.importer.feature.jore3.entity.*;
+import fi.hsl.jore.importer.feature.jore3.entity.JrLine;
+import fi.hsl.jore.importer.feature.jore3.entity.JrLineHeader;
+import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
+import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
+import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
+import fi.hsl.jore.importer.feature.jore3.entity.JrScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line_header.dto.ImportableLineHeader;
 import fi.hsl.jore.importer.feature.network.route.dto.ImportableRoute;
