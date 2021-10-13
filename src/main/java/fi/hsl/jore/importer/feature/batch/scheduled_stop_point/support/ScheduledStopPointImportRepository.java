@@ -70,6 +70,9 @@ public class ScheduledStopPointImportRepository
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_NAME
                         )
                                 .from(STAGING_TABLE)
+                                //An infrastructure node and a scheduled stop point use the same external identifier
+                                //which is called soltunnus in Jore3 database. You can verify this by taking a look
+                                //at the jr_solmu and jr_pysakki tables found from the Jore3 database.
                                 .join(INFRASTRUCTURE_NODES).on(INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_EXT_ID.eq(STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID))
                                 .whereNotExists(
                                         db.selectOne()
