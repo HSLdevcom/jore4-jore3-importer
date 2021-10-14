@@ -44,6 +44,7 @@ public class ScheduledStopPointImportRepositoryTest {
 
         private final UUID EXPECTED_ID = UUID.fromString("058a63b3-365b-4676-af51-809bef577cdd");
         private final String EXPECTED_EXTERNAL_ID = "c";
+        private final String EXPECTED_ELY_NUMBER = "1234567890";
         private final UUID EXPECTED_INFRASTRUCTURE_NODE_ID = UUID.fromString("cc11a5db-2ae7-4220-adfe-aca5d6620909");
         private final String EXPECTED_FINNISH_NAME = "Yliopisto";
         private final String EXPECTED_SWEDISH_NAME = "Universitetet";
@@ -127,8 +128,6 @@ public class ScheduledStopPointImportRepositoryTest {
                     "/sql/destination/populate_scheduled_stop_points_staging.sql"
             })
             class WhenTargetTableIsEmpty {
-
-                private final String EXPECTED_ELY_NUMBER = "1234567890";
 
                 @BeforeEach
                 public void beforeEach() {
@@ -214,8 +213,6 @@ public class ScheduledStopPointImportRepositoryTest {
                     "/sql/destination/populate_scheduled_stop_points_staging.sql"
             })
             class WhenTargetTableContainsImportedScheduledStopPoint {
-
-                private final String EXPECTED_ELY_NUMBER = "1234567891";
 
                 @Test
                 @DisplayName("Should update the information of the existing row")
