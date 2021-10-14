@@ -93,10 +93,19 @@ public class ScheduledStopPointImportRepository
     @Override
     protected Set<ScheduledStopPointPK> update() {
         return db.update(TARGET_TABLE)
+                .set(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER, STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER)
                 .set(TARGET_TABLE.SCHEDULED_STOP_POINT_NAME, STAGING_TABLE.SCHEDULED_STOP_POINT_NAME)
                 .from(STAGING_TABLE)
-                .where(TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID.eq(STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID)
-                        .and(TARGET_TABLE.SCHEDULED_STOP_POINT_NAME.notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_NAME))
+                .where(
+                        TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID.eq(STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID)
+                                //A scheduled stop point is updated if:
+                                // 1. Its name was changed OR
+                                // 2. The value of its ely number was set for the first time (null => some value)
+                                .and(TARGET_TABLE.SCHEDULED_STOP_POINT_NAME.notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_NAME)
+                                        .or(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER.isNull()
+                                                .and(STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER.isNotNull())
+                                        )
+                                )
                 )
                 .returningResult(TARGET_TABLE.SCHEDULED_STOP_POINT_ID)
                 .fetch()
