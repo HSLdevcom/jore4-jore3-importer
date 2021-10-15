@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 INSERT INTO infrastructure_network.infrastructure_nodes (
         infrastructure_node_id,
         infrastructure_node_ext_id,
