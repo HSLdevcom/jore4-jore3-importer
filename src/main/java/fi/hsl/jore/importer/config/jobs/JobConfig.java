@@ -476,9 +476,8 @@ public class JobConfig extends BatchConfig {
                 .start(prepareScheduledStopPointsStep)
                 .next(importScheduledStopPointsStep)
                 .next(commitScheduledStopPointsStep)
-
-
-              }
+                .build();
+    }
               
     @Bean
     public Step prepareScheduledStopPointsStep(final IScheduledStopPointImportRepository repository) {
