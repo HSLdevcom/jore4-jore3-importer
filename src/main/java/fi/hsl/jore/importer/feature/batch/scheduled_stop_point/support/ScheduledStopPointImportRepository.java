@@ -99,11 +99,19 @@ public class ScheduledStopPointImportRepository
                 .where(
                         TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID.eq(STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID)
                                 //A scheduled stop point is updated if:
-                                // 1. Its name was changed OR
-                                // 2. The value of its ely number was set for the first time (null => some value)
+                                //Its name was changed
                                 .and(TARGET_TABLE.SCHEDULED_STOP_POINT_NAME.notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_NAME)
+                                        //Ely number is null in the target table but not in the staging table
                                         .or(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER.isNull()
                                                 .and(STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER.isNotNull())
+                                        )
+                                        //Ely number isn't null in the target table but is null in the staging table
+                                        .or(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER.isNotNull()
+                                                .and(STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER.isNull())
+                                        )
+                                        //Ely number was changed
+                                        .or(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER
+                                                .notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER)
                                         )
                                 )
                 )
