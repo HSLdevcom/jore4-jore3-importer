@@ -33,4 +33,5 @@ run.sh
 profiles/dev/config.*.properties
 
 #MacOS
-.DS_store
+.DS_Store
+
