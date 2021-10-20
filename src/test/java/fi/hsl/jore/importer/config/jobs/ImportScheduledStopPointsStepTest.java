@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Sql(scripts = {
         "/sql/source/drop_tables.sql",
         "/sql/source/populate_nodes.sql",
+        "/sql/source/populate_links.sql",
         "/sql/source/populate_scheduled_stop_points.sql"
 },
         config = @SqlConfig(dataSource = "sourceDataSource"))
