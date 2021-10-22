@@ -16,7 +16,7 @@ import javax.sql.DataSource;
  * Reads the imported scheduled stop points from the source database.
  */
 @Component
-public class ScheduledStopPointReader {
+public class ScheduledStopPointImportReader {
 
     private static final String NAME = "stopPointReader";
 
@@ -24,8 +24,8 @@ public class ScheduledStopPointReader {
     private final String sql;
 
     @Autowired
-    public ScheduledStopPointReader(@Qualifier("sourceDataSource") final DataSource sourceDataSource,
-                                    @Value(ScheduledStopPointMapper.SQL_PATH) final Resource sqlResource) {
+    public ScheduledStopPointImportReader(@Qualifier("sourceDataSource") final DataSource sourceDataSource,
+                                          @Value(ScheduledStopPointImportMapper.SQL_PATH) final Resource sqlResource) {
         this.sourceDataSource = sourceDataSource;
         this.sql = ResourceUtil.fromResource(sqlResource);
     }
@@ -36,7 +36,7 @@ public class ScheduledStopPointReader {
                 .dataSource(sourceDataSource)
                 .name(NAME)
                 .sql(sql)
-                .rowMapper(new ScheduledStopPointMapper())
+                .rowMapper(new ScheduledStopPointImportMapper())
                 .build();
     }
 }

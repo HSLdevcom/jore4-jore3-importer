@@ -11,7 +11,7 @@ import org.springframework.batch.item.ItemProcessor;
  * Transforms the input data read from the source database into
  * a format which can be inserted into the target database.
  */
-public class ScheduledStopPointProcessor implements ItemProcessor<JrScheduledStopPoint, ImportableScheduledStopPoint> {
+public class ScheduledStopPointImportProcessor implements ItemProcessor<JrScheduledStopPoint, ImportableScheduledStopPoint> {
 
     @Override
     public ImportableScheduledStopPoint process(JrScheduledStopPoint input) throws Exception {

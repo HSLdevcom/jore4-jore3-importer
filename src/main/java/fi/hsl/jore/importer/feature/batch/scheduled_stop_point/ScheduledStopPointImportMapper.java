@@ -14,7 +14,7 @@ import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
 /**
  * Maps rows read from the source database to {@link JrScheduledStopPoint} objects.
  */
-public class ScheduledStopPointMapper implements RowMapper<JrScheduledStopPoint> {
+public class ScheduledStopPointImportMapper implements RowMapper<JrScheduledStopPoint> {
 
     public static final String SQL_PATH = "classpath:import/import_scheduled_stop_points.sql";
 
