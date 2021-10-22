@@ -36,8 +36,8 @@ import fi.hsl.jore.importer.feature.batch.route_link.dto.RouteLinksAndAttributes
 import fi.hsl.jore.importer.feature.batch.route_link.support.IRouteLinkImportRepository;
 import fi.hsl.jore.importer.feature.batch.route_link.support.IRoutePointImportRepository;
 import fi.hsl.jore.importer.feature.batch.route_link.support.IRouteStopPointImportRepository;
-import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointProcessor;
-import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointReader;
+import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointImportProcessor;
+import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointImportReader;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support.IScheduledStopPointImportRepository;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
@@ -486,13 +486,13 @@ public class JobConfig extends BatchConfig {
     }
 
     @Bean
-    public Step importScheduledStopPointsStep(final ScheduledStopPointReader reader,
+    public Step importScheduledStopPointsStep(final ScheduledStopPointImportReader reader,
                                               final IScheduledStopPointImportRepository repository) {
         return steps.get("importScheduledStopPointsStep")
                 .allowStartIfComplete(true)
                 .<JrScheduledStopPoint, ImportableScheduledStopPoint>chunk(1000)
                 .reader(reader.build())
-                .processor(new ScheduledStopPointProcessor())
+                .processor(new ScheduledStopPointImportProcessor())
                 .writer(new GenericImportWriter<>(repository))
                 .build();
     }
