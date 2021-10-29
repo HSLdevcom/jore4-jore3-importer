@@ -1,36 +1,36 @@
 package fi.hsl.jore.importer.config.properties;
 
-import fi.hsl.jore.importer.config.profile.TestDatabase;
+import fi.hsl.jore.importer.config.profile.StandardDatabase;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@TestDatabase
-@PropertySource("classpath:configuration/testdb.properties")
-public class TestDestinationDataSourceProperties {
-    @Value("#{environment['test.destination.db.driver']}")
+@StandardDatabase
+@PropertySource("classpath:configuration/db.properties")
+public class ImporterDataSourceProperties {
+    @Value("#{environment['importer.db.driver']}")
     private String driverClassName;
 
-    @Value("#{environment['test.destination.db.url']}")
+    @Value("#{environment['importer.db.url']}")
     private String jdbcUrl;
 
-    @Value("#{environment['test.destination.db.min.connections']}")
+    @Value("#{environment['importer.db.min.connections']}")
     private int minimumIdle;
 
-    @Value("#{environment['test.destination.db.max.connections']}")
+    @Value("#{environment['importer.db.max.connections']}")
     private int maximumPoolSize;
 
-    @Value("#{environment['test.destination.db.username']}")
+    @Value("#{environment['importer.db.username']}")
     private String username;
 
-    @Value("#{environment['test.destination.db.password']}")
+    @Value("#{environment['importer.db.password']}")
     private String password;
 
     public DataSourceConfigDto config() {
         return ImmutableDataSourceConfigDto
                 .builder()
-                .poolName("test-dst-pool")
+                .poolName("dst-pool")
                 .driverClassName(driverClassName)
                 .jdbcUrl(jdbcUrl)
                 .minimumIdle(minimumIdle)
