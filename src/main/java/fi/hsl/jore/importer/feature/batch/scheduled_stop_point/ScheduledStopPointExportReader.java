@@ -29,7 +29,7 @@ public class ScheduledStopPointExportReader {
     private final String sql;
 
     @Autowired
-    public ScheduledStopPointExportReader(@Qualifier("destinationDataSource") final DataSource dataSource,
+    public ScheduledStopPointExportReader(@Qualifier("importerDataSource") final DataSource dataSource,
                                           final ObjectMapper objectMapper,
                                           @Value(ScheduledStopPointExportMapper.SQL_PATH) final Resource sqlResource) {
         this.dataSource = dataSource;

@@ -4,9 +4,9 @@ import com.zaxxer.hikari.HikariDataSource;
 import fi.hsl.jore.importer.config.profile.StandardDatabase;
 import fi.hsl.jore.importer.config.profile.TestDatabase;
 import fi.hsl.jore.importer.config.properties.DataSourceConfigDto;
-import fi.hsl.jore.importer.config.properties.DestinationDataSourceProperties;
+import fi.hsl.jore.importer.config.properties.ImporterDataSourceProperties;
 import fi.hsl.jore.importer.config.properties.SourceDataSourceProperties;
-import fi.hsl.jore.importer.config.properties.TestDestinationDataSourceProperties;
+import fi.hsl.jore.importer.config.properties.TestImporterDataSourceProperties;
 import fi.hsl.jore.importer.config.properties.TestSourceDataSourceProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -23,14 +23,14 @@ public class DatasourceConfig {
     @StandardDatabase
     @Import({
                     SourceDataSourceProperties.class,
-                    DestinationDataSourceProperties.class
+                    ImporterDataSourceProperties.class
             })
     public static class StandardDatabaseConfiguration {
         @Resource
         private SourceDataSourceProperties sourceDataSourceProperties;
 
         @Resource
-        private DestinationDataSourceProperties destinationDataSourceProperties;
+        private ImporterDataSourceProperties importerDataSourceProperties;
 
         @Bean
         @Qualifier("sourceDataSourceConfig")
@@ -39,9 +39,9 @@ public class DatasourceConfig {
         }
 
         @Bean
-        @Qualifier("destinationDataSourceConfig")
-        public DataSourceConfigDto destinationDataSourceConfig() {
-            return destinationDataSourceProperties.config();
+        @Qualifier("importerDataSourceConfig")
+        public DataSourceConfigDto importerDataSourceConfig() {
+            return importerDataSourceProperties.config();
         }
     }
 
@@ -49,14 +49,14 @@ public class DatasourceConfig {
     @TestDatabase
     @Import({
                     TestSourceDataSourceProperties.class,
-                    TestDestinationDataSourceProperties.class
+                    TestImporterDataSourceProperties.class
             })
     public static class TestDatabaseConfiguration {
         @Resource
         private TestSourceDataSourceProperties testSourceDataSourceProperties;
 
         @Resource
-        private TestDestinationDataSourceProperties testDestinationDataSourceProperties;
+        private TestImporterDataSourceProperties testImporterDataSourceProperties;
 
         @Bean
         @Qualifier("sourceDataSourceConfig")
@@ -65,9 +65,9 @@ public class DatasourceConfig {
         }
 
         @Bean
-        @Qualifier("destinationDataSourceConfig")
-        public DataSourceConfigDto destinationDataSourceConfig() {
-            return testDestinationDataSourceProperties.config();
+        @Qualifier("importerDataSourceConfig")
+        public DataSourceConfigDto importerDataSourceConfig() {
+            return testImporterDataSourceProperties.config();
         }
     }
 
@@ -80,8 +80,8 @@ public class DatasourceConfig {
 
     @Bean(destroyMethod = "close")
     @Primary
-    @Qualifier("destinationDataSource")
-    public HikariDataSource destinationDataSource(@Qualifier("destinationDataSourceConfig") final DataSourceConfigDto dataSourceConfigDto) {
+    @Qualifier("importerDataSource")
+    public HikariDataSource importerDataSource(@Qualifier("importerDataSourceConfig") final DataSourceConfigDto dataSourceConfigDto) {
         return new HikariDataSource(dataSourceConfigDto.buildHikariConfig());
     }
 }
