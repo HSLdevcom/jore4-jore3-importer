@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStopDirection;
 import fi.hsl.jore.importer.feature.jore3.util.JoreGeometryUtil;
+import fi.hsl.jore.importer.feature.jore3.util.StringParserUtil;
 import org.geojson.GeoJsonObject;
 import org.geojson.LngLatAlt;
 import org.locationtech.jts.geom.Point;
@@ -45,12 +46,12 @@ class DigiroadStopFactory {
      * @param line
      * @return
      */
-    static Optional<DigiroadStop> fromCsvLine(String line) {
+    static Optional<DigiroadStop> fromCsvLine(final String line) {
         if (line == null) {
             throw new NullPointerException("Line cannot be null");
         }
 
-        String[] columns = line.split(CSV_SEPARATOR_CHARACTER);
+        final String[] columns = line.split(CSV_SEPARATOR_CHARACTER);
         if (columns.length != VALID_LINE_COLUMN_COUNT) {
             throw new IllegalArgumentException(String.format(
                     "Expected the line to have %d columns but had %d",
@@ -59,11 +60,11 @@ class DigiroadStopFactory {
             ));
         }
 
-        DigiroadStop stop = DigiroadStop.of(
-                parseRequiredField("externalStopId", columns[0].trim()),
-                parseRequiredField("externalLinkId", columns[1].trim()),
+        final DigiroadStop stop = DigiroadStop.of(
+                StringParserUtil.parseRequiredValue("externalStopId", columns[0].trim()),
+                StringParserUtil.parseRequiredValue("externalLinkId", columns[1].trim()),
                 parseDirection(columns[3]),
-                parseRequiredField("elyNumber", columns[2]),
+                StringParserUtil.parseRequiredInteger("elyNumber", columns[2]),
                 parseLocation(columns[4]),
                 getStringContainer(columns[5]),
                 getStringContainer(columns[6])
@@ -71,16 +72,14 @@ class DigiroadStopFactory {
         return Optional.of(stop);
     }
 
-    private static Optional<String> getStringContainer(String value) {
-        if (value.trim().isEmpty()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(value.trim());
+    private static Optional<String> getStringContainer(final String value) {
+        return Optional.of(value)
+                .map(String::trim)
+                .filter(s -> !s.isEmpty());
     }
 
-    private static DigiroadStopDirection parseDirection(String value) {
-        String trimmedValue = value.trim();
+    private static DigiroadStopDirection parseDirection(final String value) {
+        final String trimmedValue = value.trim();
         switch(trimmedValue) {
             case DIRECTION_IN_DIGITIZING_DIRECTION:
                 return DigiroadStopDirection.FORWARD;
@@ -94,36 +93,26 @@ class DigiroadStopFactory {
         }
     }
 
-    private static Point parseLocation(String value) {
+    private static Point parseLocation(final String value) {
         try {
-            org.geojson.Point point = (org.geojson.Point) OBJECT_MAPPER.readValue(
+            final org.geojson.Point point = (org.geojson.Point) OBJECT_MAPPER.readValue(
                     removeExtraQuotationMarks(value.trim()),
                     GeoJsonObject.class
             );
-            LngLatAlt coordinates = point.getCoordinates();
+            final LngLatAlt coordinates = point.getCoordinates();
             return JoreGeometryUtil.fromDbCoordinates(coordinates.getLatitude(), coordinates.getLongitude());
         }
-        catch (JsonProcessingException ex) {
+        catch (final JsonProcessingException ex) {
             throw new RuntimeException(String.format("Couldn't parse location from value: %s", value), ex);
         }
     }
-
-    private static String parseRequiredField(String fieldName, String source) {
-        String value = source.trim();
-        if (value.isBlank()) {
-            throw new IllegalArgumentException(String.format("%s cannot be empty or contain only white space", fieldName));
-        }
-
-        return value;
-    }
-
 
     /**
      * Transforms the value: "{""type"": ""Point"", ""coordinates"": [24.696376131, 60.207149801]}" to value:
      * {"type": "Point", "coordinates": [24.696376131, 60.207149801]}
      */
-    private static String removeExtraQuotationMarks(String value) {
-        String valueWithoutExtraQuotationMarks = value.substring(1, value.length() - 1);
+    private static String removeExtraQuotationMarks(final String value) {
+        final String valueWithoutExtraQuotationMarks = value.substring(1, value.length() - 1);
         return valueWithoutExtraQuotationMarks.replaceAll("\"\"", "\"");
     }
 }
