@@ -27,44 +27,38 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
     private final DigiroadStopService digiroadStopService;
 
     @Autowired
-    public ScheduledStopPointExportProcessor(DigiroadStopService digiroadStopService) {
+    public ScheduledStopPointExportProcessor(final DigiroadStopService digiroadStopService) {
         this.digiroadStopService = digiroadStopService;
     }
 
     @Override
-    public TransmodelScheduledStopPoint process(ExportableScheduledStopPoint jore3Stop) throws Exception {
+    public TransmodelScheduledStopPoint process(final ExportableScheduledStopPoint jore3Stop) throws Exception {
         LOGGER.debug("Processing Jore 3 stop: {}", jore3Stop);
 
-        //At the moment we export stops which don't have an ely number.
-        //Thus, we must return null if the stop has no ely number
-        //because this ensures that the stop isn't processed any further.
         if (jore3Stop.elyNumber().isEmpty()) {
-            LOGGER.error("Jore 3 stop with id: {} isn't processed any further because it has no ely number",
+            LOGGER.debug("Jore 3 stop with id: {} isn't processed any further because it has no ely number",
                     jore3Stop.externalId().value()
             );
             return null;
         }
 
-        String elyNumber = jore3Stop.elyNumber().get();
-        Optional<DigiroadStop> digiroadStopContainer = digiroadStopService.findByElyNumber(elyNumber);
+        final int nationalId = Integer.parseInt(jore3Stop.elyNumber().get());
+        final Optional<DigiroadStop> digiroadStopContainer = digiroadStopService.findByNationalId(nationalId);
 
-        //If we cannot find the corresponding Digiroad stop, we cannot
-        //determine the coordinates of the stop. Thus, we must return null
-        //because this ensures that the stop isn't processed any further.
         if (digiroadStopContainer.isEmpty()) {
-            LOGGER.error("Jore 3 stop with id: {} isn't processed any further no digiroad stop was found with ely number: {}",
+            LOGGER.error("Jore 3 stop with id: {} isn't processed any further no digiroad stop was found with national id: {}",
                     jore3Stop.externalId().value(),
-                    elyNumber
+                    nationalId
             );
             return null;
         }
 
-        DigiroadStop digiroadStop = digiroadStopContainer.get();
+        final DigiroadStop digiroadStop = digiroadStopContainer.get();
         LOGGER.debug("Found Digiroad stop: {}", digiroadStop);
 
-        TransmodelScheduledStopPoint transmodelStop = TransmodelScheduledStopPoint.of(
+        final TransmodelScheduledStopPoint transmodelStop = TransmodelScheduledStopPoint.of(
                 jore3Stop.externalId().value(),
-                digiroadStop.externalLinkId(),
+                digiroadStop.digiroadLinkId(),
                 isDirectionForwardOnInfraLink(digiroadStop.directionOnInfraLink()),
                 constructLabel(jore3Stop.name()),
                 jore3Stop.location()
@@ -74,11 +68,11 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
         return transmodelStop;
     }
 
-    private boolean isDirectionForwardOnInfraLink(DigiroadStopDirection stopDirection) {
+    private static boolean isDirectionForwardOnInfraLink(final DigiroadStopDirection stopDirection) {
         return stopDirection == DigiroadStopDirection.FORWARD;
     }
 
-    private String constructLabel(MultilingualString name) {
+    private static String constructLabel(final MultilingualString name) {
         return name.values().get(LANGUAGE_CODE_FINNISH).get();
     }
 }
