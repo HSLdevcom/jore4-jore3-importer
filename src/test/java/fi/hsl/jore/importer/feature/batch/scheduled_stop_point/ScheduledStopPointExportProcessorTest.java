@@ -38,7 +38,7 @@ class ScheduledStopPointExportProcessorTest {
 
     @BeforeAll
     void configureSystemUnderTest() throws Exception {
-        DigiroadStopService digiroadStopService = TestCsvDigiroadStopServiceFactory.create();
+        final DigiroadStopService digiroadStopService = TestCsvDigiroadStopServiceFactory.create();
         processor = new ScheduledStopPointExportProcessor(digiroadStopService);
     }
 
@@ -61,7 +61,7 @@ class ScheduledStopPointExportProcessorTest {
         @Test
         @DisplayName("Should return null")
         void shouldReturnNull() throws Exception {
-            TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
             assertThat(output).isNull();
         }
     }
@@ -87,7 +87,7 @@ class ScheduledStopPointExportProcessorTest {
         @Test
         @DisplayName("Should return null")
         void shouldReturnNull() throws Exception {
-            TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
             assertThat(output).isNull();
         }
     }
@@ -111,42 +111,42 @@ class ScheduledStopPointExportProcessorTest {
         @Test
         @DisplayName("Should return a scheduled stop point with the correct external stop id")
         void shouldReturnScheduledStopPointWithCorrectExternalStopId() throws Exception {
-            TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
             assertThat(output.externalScheduledStopPointId()).isEqualTo(JORE_3_STOP_EXTERNAL_ID);
         }
 
         @Test
         @DisplayName("Should return a scheduled stop point with the correct external infrastructure link id")
         void shouldReturnScheduledStopPointWithCorrectExternalInfrastructureLinkId() throws Exception {
-            TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
             assertThat(output.externalInfrastructureLinkId()).isEqualTo(DIGIROAD_STOP_INFRA_LINK_ID);
         }
 
         @Test
         @DisplayName("Should return a scheduled stop point with the correct stop direction")
         void shouldReturnScheduledStopPointWithCorrectStopDirection() throws Exception {
-            TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
             assertThat(output.isDirectionForwardOnInfraLink()).isFalse();
         }
 
         @Test
         @DisplayName("Should return a scheduled stop point with the correct label")
         void shouldReturnScheduledStopPointWithCorrectLabel() throws Exception {
-            TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
             assertThat(output.label()).isEqualTo(JORE_3_STOP_FINNISH_NAME);
         }
 
         @Test
         @DisplayName("Should return a scheduled stop point with the correct X coordinate")
         void shouldReturnScheduledStopPointWithCorrectXCoordinate() throws Exception {
-            TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
             assertThat(output.measuredLocation().getX()).isEqualTo(JORE_3_STOP_X_COORDINATE);
         }
 
         @Test
         @DisplayName("Should return a scheduled stop point with the correct Y coordinate")
         void shouldReturnScheduledStopPointWithCorrectYCoordinate() throws Exception {
-            TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
             assertThat(output.measuredLocation().getY()).isEqualTo(JORE_3_STOP_Y_COORDINATE);
         }
     }
