@@ -45,8 +45,8 @@ public class DigiroadStopFactoryTest {
         }
 
         @Nested
-        @DisplayName("When the external stop id is empty")
-        class WhenExternalStopIdIsEmpty {
+        @DisplayName("When the digiroad stop id is empty")
+        class WhenDigiroadStopIdIsEmpty {
 
             private static final String CSV_LINE = ";133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r";
 
@@ -59,8 +59,8 @@ public class DigiroadStopFactoryTest {
         }
 
         @Nested
-        @DisplayName("When the external link id is empty")
-        class WhenExternalLinkIdIsEmpty {
+        @DisplayName("When the digiroad link id is empty")
+        class WhenDigiroadLinkIdIsEmpty {
 
             private static final String CSV_LINE = "111;;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r";
 
@@ -73,8 +73,8 @@ public class DigiroadStopFactoryTest {
         }
 
         @Nested
-        @DisplayName("When the ely number is empty")
-        class WhenElyNumberIsEmpty {
+        @DisplayName("When the national id is empty")
+        class WhenNationalIdIsEmpty {
 
             private static final String CSV_LINE = "111;133202;;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r";
 
@@ -119,9 +119,9 @@ public class DigiroadStopFactoryTest {
     @DisplayName("When the CSV line is valid")
     class WhenCSVLineIsValid {
 
-        private final String EXPECTED_EXTERNAL_STOP_ID  = "111";
-        private final String EXPECTED_EXTERNAL_LINK_ID = "133202";
-        private final String EXPECTED_ELY_NUMBER = "168626";
+        private final String EXPECTED_DIGIROAD_STOP_ID = "111";
+        private final String EXPECTED_DIGIROAD_LINK_ID = "133202";
+        private final String EXPECTED_NATIONAL_ID = "168626";
         private final DigiroadStopDirection EXPECTED_DIRECTION_ON_INFRALINK = DigiroadStopDirection.BACKWARD;
         private final double EXPECTED_X_COORDINATE = 24.696376131;
         private final double EXPECTED_Y_COORDINATE = 60.207149801;
@@ -142,30 +142,30 @@ public class DigiroadStopFactoryTest {
             }
 
             @Test
-            @DisplayName("Should return a stop which has the correct external stop id")
-            void shouldReturnStopWhichContainsHasExternalStopId() {
+            @DisplayName("Should return a stop which has the correct digiroad stop id")
+            void shouldReturnStopWhichHasCorrectDigiroadStopId() {
                 DigiroadStop stop = DigiroadStopFactory.fromCsvLine(CSV_LINE).get();
-                assertThat(stop.externalStopId())
-                        .as("externalStopId")
-                        .isEqualTo(EXPECTED_EXTERNAL_STOP_ID);
+                assertThat(stop.digiroadStopId())
+                        .as("digiroadStopId")
+                        .isEqualTo(EXPECTED_DIGIROAD_STOP_ID);
             }
 
             @Test
-            @DisplayName("Should return a stop which has the correct externalLinkId")
-            void shouldReturnStopWhichHasCorrectExternalLinkId() {
+            @DisplayName("Should return a stop which has the correct digiroadLinkId")
+            void shouldReturnStopWhichHasCorrectDigiroadLinkId() {
                 DigiroadStop stop = DigiroadStopFactory.fromCsvLine(CSV_LINE).get();
-                assertThat(stop.externalLinkId())
-                        .as("externalLinkId")
-                        .isEqualTo(EXPECTED_EXTERNAL_LINK_ID);
+                assertThat(stop.digiroadLinkId())
+                        .as("digiroadLinkId")
+                        .isEqualTo(EXPECTED_DIGIROAD_LINK_ID);
             }
 
             @Test
-            @DisplayName("Should return a stop which has the correct ely number")
+            @DisplayName("Should return a stop which has the correct national id")
             void shouldReturnStopWhichHasCorrectElyNumber() {
                 DigiroadStop stop = DigiroadStopFactory.fromCsvLine(CSV_LINE).get();
-                assertThat(stop.elyNumber())
-                        .as("elyNumber")
-                        .isEqualTo(EXPECTED_ELY_NUMBER);
+                assertThat(stop.nationalId())
+                        .as("nationalId")
+                        .isEqualTo(EXPECTED_NATIONAL_ID);
             }
 
             @Test
@@ -230,30 +230,30 @@ public class DigiroadStopFactoryTest {
             }
 
             @Test
-            @DisplayName("Should return a stop which has the correct external stop id")
-            void shouldReturnStopWhichContainsHasExternalStopId() {
+            @DisplayName("Should return a stop which has the correct digiroad stop id")
+            void shouldReturnStopWhichContainsHasDigiroadStopId() {
                 DigiroadStop stop = DigiroadStopFactory.fromCsvLine(CSV_LINE).get();
-                assertThat(stop.externalStopId())
-                        .as("externalStopId")
-                        .isEqualTo(EXPECTED_EXTERNAL_STOP_ID);
+                assertThat(stop.digiroadStopId())
+                        .as("digiroadStopId")
+                        .isEqualTo(EXPECTED_DIGIROAD_STOP_ID);
             }
 
             @Test
-            @DisplayName("Should return a stop which has the correct externalLinkId")
-            void shouldReturnStopWhichHasCorrectExternalLinkId() {
+            @DisplayName("Should return a stop which has the correct digiroadLinkId")
+            void shouldReturnStopWhichHasCorrectDigiroadLinkId() {
                 DigiroadStop stop = DigiroadStopFactory.fromCsvLine(CSV_LINE).get();
-                assertThat(stop.externalLinkId())
-                        .as("externalLinkId")
-                        .isEqualTo(EXPECTED_EXTERNAL_LINK_ID);
+                assertThat(stop.digiroadLinkId())
+                        .as("digiroadLinkId")
+                        .isEqualTo(EXPECTED_DIGIROAD_LINK_ID);
             }
 
             @Test
-            @DisplayName("Should return a stop which has the correct ely number")
-            void shouldReturnStopWhichHasCorrectElyNumber() {
+            @DisplayName("Should return a stop which has the correct national id")
+            void shouldReturnStopWhichHasCorrectNationalId() {
                 DigiroadStop stop = DigiroadStopFactory.fromCsvLine(CSV_LINE).get();
-                assertThat(stop.elyNumber())
-                        .as("elyNumber")
-                        .isEqualTo(EXPECTED_ELY_NUMBER);
+                assertThat(stop.nationalId())
+                        .as("nationalId")
+                        .isEqualTo(EXPECTED_NATIONAL_ID);
             }
 
             @Test

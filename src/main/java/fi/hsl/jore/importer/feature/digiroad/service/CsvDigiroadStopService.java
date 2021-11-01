@@ -30,14 +30,9 @@ public class CsvDigiroadStopService implements DigiroadStopService {
     }
 
     @Override
-    public Optional<DigiroadStop> findByElyNumber(String elyNumber) {
-        DigiroadStop stop = digiroadStops.get(elyNumber);
-        if (stop == null) {
-            return Optional.empty();
-        }
-        else {
-            return Optional.of(stop);
-        }
+    public Optional<DigiroadStop> findByNationalId(final String nationalId) {
+        final DigiroadStop stop = digiroadStops.get(nationalId);
+        return Optional.ofNullable(stop);
     }
 
     @PostConstruct
@@ -54,11 +49,11 @@ public class CsvDigiroadStopService implements DigiroadStopService {
         try (BufferedReader reader = new BufferedReader(new FileReader(csvResource.getFile()))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                Optional<DigiroadStop> stopContainer = DigiroadStopFactory.fromCsvLine(line);
+                final Optional<DigiroadStop> stopContainer = DigiroadStopFactory.fromCsvLine(line);
 
                 if (stopContainer.isPresent()) {
-                    DigiroadStop stop = stopContainer.get();
-                    digiroadStops.put(stop.elyNumber(), stop);
+                    final DigiroadStop stop = stopContainer.get();
+                    digiroadStops.put(stop.nationalId(), stop);
                 }
                 else {
                     LOGGER.error("Cannot parse the information of a Digiroad stop from the line: {}", line);
