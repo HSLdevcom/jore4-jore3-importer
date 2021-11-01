@@ -14,11 +14,11 @@ public interface DigiroadStop {
 
     DigiroadStopDirection directionOnInfraLink();
 
-    String externalStopId();
+    String digiroadStopId();
 
-    String externalLinkId();
+    String digiroadLinkId();
 
-    String elyNumber();
+    int nationalId();
 
     Point location();
 
@@ -26,18 +26,18 @@ public interface DigiroadStop {
 
     Optional<String> nameSwedish();
 
-    static ImmutableDigiroadStop of (String externalStopId,
-                                     String externalLinkId,
+    static ImmutableDigiroadStop of (String digiroadStopId,
+                                     String digiroadLinkId,
                                      DigiroadStopDirection directionOnInfralink,
-                                     String elyNumber,
+                                     int nationalId,
                                      Point location,
                                      Optional<String> nameFinnish,
                                      Optional<String> nameSwedish) {
         return ImmutableDigiroadStop.builder()
                 .directionOnInfraLink(directionOnInfralink)
-                .externalStopId(externalStopId)
-                .externalLinkId(externalLinkId)
-                .elyNumber(elyNumber)
+                .digiroadStopId(digiroadStopId)
+                .digiroadLinkId(digiroadLinkId)
+                .nationalId(nationalId)
                 .location(location)
                 .nameFinnish(nameFinnish)
                 .nameSwedish(nameSwedish)
