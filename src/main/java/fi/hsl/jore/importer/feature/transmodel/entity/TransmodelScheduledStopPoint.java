@@ -14,21 +14,21 @@ public interface TransmodelScheduledStopPoint {
 
     String externalScheduledStopPointId();
 
-    boolean isDirectionForwardOnInfraLink();
+    TransmodelScheduledStopPointDirection directionOnInfraLink();
 
     String label();
 
     Point measuredLocation();
 
-    static ImmutableTransmodelScheduledStopPoint of (String externalScheduledStopPointId,
-                                                     String externalInfrastructureLinkId,
-                                                     boolean isDirectionForwardOnInfraLink,
-                                                     String label,
-                                                     Point measuredLocation) {
+    static ImmutableTransmodelScheduledStopPoint of (final String externalScheduledStopPointId,
+                                                     final String externalInfrastructureLinkId,
+                                                     final TransmodelScheduledStopPointDirection directionOnInfraLink,
+                                                     final String label,
+                                                     final Point measuredLocation) {
         return ImmutableTransmodelScheduledStopPoint.builder()
                 .externalScheduledStopPointId(externalScheduledStopPointId)
                 .externalInfrastructureLinkId(externalInfrastructureLinkId)
-                .isDirectionForwardOnInfraLink(isDirectionForwardOnInfraLink)
+                .directionOnInfraLink(directionOnInfraLink)
                 .label(label)
                 .measuredLocation(measuredLocation)
                 .build();

@@ -6,6 +6,7 @@ import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStopDirection;
 import fi.hsl.jore.importer.feature.digiroad.service.DigiroadStopService;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
+import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
@@ -59,17 +60,13 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
         final TransmodelScheduledStopPoint transmodelStop = TransmodelScheduledStopPoint.of(
                 jore3Stop.externalId().value(),
                 digiroadStop.digiroadLinkId(),
-                isDirectionForwardOnInfraLink(digiroadStop.directionOnInfraLink()),
+                TransmodelScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),
                 constructLabel(jore3Stop.name()),
                 jore3Stop.location()
         );
 
         LOGGER.debug("Created scheduled stop point: {}", transmodelStop);
         return transmodelStop;
-    }
-
-    private static boolean isDirectionForwardOnInfraLink(final DigiroadStopDirection stopDirection) {
-        return stopDirection == DigiroadStopDirection.FORWARD;
     }
 
     private static String constructLabel(final MultilingualString name) {

@@ -7,6 +7,7 @@ import fi.hsl.jore.importer.feature.digiroad.service.TestCsvDigiroadStopServiceF
 import fi.hsl.jore.importer.feature.jore3.util.JoreGeometryUtil;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
+import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -33,6 +34,8 @@ class ScheduledStopPointExportProcessorTest {
     private final String JORE_3_STOP_SWEDISH_NAME = "Ullasbacken (Jore3)";
     private final double JORE_3_STOP_X_COORDINATE = 25.696376131;
     private final double JORE_3_STOP_Y_COORDINATE = 61.207149801;
+
+    private final TransmodelScheduledStopPointDirection TRANSMODEL_STOP_POINT_DIRECTION_ON_INFRA_LINK = TransmodelScheduledStopPointDirection.BACKWARD;
 
     private ScheduledStopPointExportProcessor processor;
 
@@ -126,7 +129,7 @@ class ScheduledStopPointExportProcessorTest {
         @DisplayName("Should return a scheduled stop point with the correct stop direction")
         void shouldReturnScheduledStopPointWithCorrectStopDirection() throws Exception {
             final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
-            assertThat(output.isDirectionForwardOnInfraLink()).isFalse();
+            assertThat(output.directionOnInfraLink()).isEqualTo(TRANSMODEL_STOP_POINT_DIRECTION_ON_INFRA_LINK);
         }
 
         @Test
