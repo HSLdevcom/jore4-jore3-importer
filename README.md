@@ -2,6 +2,38 @@
 
 This tool implements a batch job for importing data from a Jore 3 database to a Jore 4 database.
 
+## Coding Conventions
+
+This section identifies the coding conventions which you must follow when you are writing either production or test code
+for this project. These coding conventions are described in the following:
+
+* You must use the `final` keyword when you declare fields, local variables, constructor arguments, or method parameters
+  whose value cannot be changed after it has been assigned for the first time.
+* When you add new fields to entities or data transfer objects, you must follow these
+  rules:
+  * If the field value cannot be `null`, you must use primitive types when possible (e.g. `int`). 
+  * If the field value is optional, you must use `java.util.Optional` (e.g. `Optional<Integer>` or `Optional<String>`)
+* Tag nullable method parameters and return values with the `@Nullable` annotation. You don't have to annotate non-null
+  parameters and return values because every method parameter and return value is non-null by default (see
+  the next coding convention). 
+* Every package must include the `package-info.java` file which declares that every field, method parameter, or
+  return value is non-null by default (see the code example 1 for more details).
+* Use only immutable DTO's by introducing interfaces annotated with `org.immutables` annotations.
+* You must use Vavr collections instead of `java.util` collections when possible.
+* You must use the `java.util.Optional` instead of the `io.vavr.control.Option`.
+
+**Code example 1: package-info.java**
+
+```
+@NonNullApi
+@NonNullFields
+fi.hsl.jore.foo.bar
+
+import org.springframework.lang.NonNullApi;
+import org.springframework.lang.NonNullFields;
+```
+
+
 ## Running the app locally
 
 ### Setup
