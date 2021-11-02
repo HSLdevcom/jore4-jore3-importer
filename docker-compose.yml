@@ -11,9 +11,9 @@ services:
       - SOURCE_DB_DATABASE=testsourcedb
       - SOURCE_DB_USERNAME=sa
       - SOURCE_DB_PASSWORD=testSOURCEdb123
-      - DESTINATION_DB_URL=jdbc:postgresql://importer-jooq-database:5432/devdb?stringtype=unspecified
-      - DESTINATION_DB_USERNAME=devdb
-      - DESTINATION_DB_PASSWORD=devdb
+      - IMPORTER_DB_URL=jdbc:postgresql://importer-jooq-database:5432/devdb?stringtype=unspecified
+      - IMPORTER_DB_USERNAME=devdb
+      - IMPORTER_DB_PASSWORD=devdb
       - JORE_IMPORTER_MIGRATE=true
     networks:
       - jore4
