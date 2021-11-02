@@ -45,7 +45,7 @@ class ScheduledStopPointExportReaderTest {
         @Test
         @DisplayName("The first invocation of the read() method must return null")
         void firstInvocationOfReadMethodMustReturnNull() throws Exception {
-            ExportableScheduledStopPoint found = reader.read();
+            final ExportableScheduledStopPoint found = reader.read();
             assertThat(found).isNull();
         }
     }
@@ -73,8 +73,8 @@ class ScheduledStopPointExportReaderTest {
 
         @Test
         @DisplayName("The first invocation of the read() method must return the found scheduled stop point")
-        void firstInvocationOfReadMethodMustReturnFoundScheduledStopPoint(SoftAssertions softAssertions) throws Exception {
-            ExportableScheduledStopPoint found = reader.read();
+        void firstInvocationOfReadMethodMustReturnFoundScheduledStopPoint(final SoftAssertions softAssertions) throws Exception {
+            final ExportableScheduledStopPoint found = reader.read();
 
             softAssertions.assertThat(found.externalId().value())
                     .as("externalId")
@@ -84,23 +84,23 @@ class ScheduledStopPointExportReaderTest {
                     .as("elyNumber")
                     .isEqualTo(EXPECTED_ELY_NUMBER);
 
-            double XCoordinate = found.location().getX();
-            assertThat(XCoordinate)
+            final double XCoordinate = found.location().getX();
+            softAssertions.assertThat(XCoordinate)
                     .as("X coordinate")
                     .isEqualTo(EXPECTED_X_COORDINATE);
 
-            double YCoordinate = found.location().getY();
-            assertThat(YCoordinate)
+            final double YCoordinate = found.location().getY();
+            softAssertions.assertThat(YCoordinate)
                     .as("Y coordinate")
                     .isEqualTo(EXPECTED_Y_COORDINATE);
 
-            String finnishName = found.name().values().getOrElse(LOCALE_FINNISH, "null");
-            assertThat(finnishName)
+            final String finnishName = found.name().values().getOrElse(LOCALE_FINNISH, "null");
+            softAssertions.assertThat(finnishName)
                     .as("finnishName")
                     .isEqualTo(EXPECTED_FINNISH_NAME);
 
-            String swedishName = found.name().values().getOrElse(LOCALE_SWEDISH, "null");
-            assertThat(swedishName)
+            final String swedishName = found.name().values().getOrElse(LOCALE_SWEDISH, "null");
+            softAssertions.assertThat(swedishName)
                     .as("swedishName")
                     .isEqualTo(EXPECTED_SWEDISH_NAME);
         }
@@ -109,11 +109,11 @@ class ScheduledStopPointExportReaderTest {
         @DisplayName("The second invocation of the read() method must return null")
         void secondInvocationOfReadMethodMustReturnNull() throws Exception {
             //The first invocation returns the scheduled stop found from the database.
-            ExportableScheduledStopPoint first = reader.read();
+            final ExportableScheduledStopPoint first = reader.read();
             assertThat(first).isNotNull();
 
             //Because there are no more scheduled stop points, this invocation must return null.
-            ExportableScheduledStopPoint second = reader.read();
+            final ExportableScheduledStopPoint second = reader.read();
             assertThat(second).isNull();
         }
     }
