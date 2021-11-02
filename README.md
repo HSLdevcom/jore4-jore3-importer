@@ -2,6 +2,20 @@
 
 This tool implements a batch job for importing data from a Jore 3 database to a Jore 4 database.
 
+## Coding Conventions
+
+This section identifies the coding conventions which you must follow when you are writing either production or test code 
+for this project. These coding conventions are described in the following:
+
+* You must use the `final` keyword when you declare fields, local variables, constructor arguments, or method parameters
+  whose value cannot be changed after it has been assigned for the first time.
+* When you add new fields to entities or data transfer objects, you must follow these
+  rules:
+  * If the field value cannot be `null`, you must use primitive types when possible (e.g. `int` or `String`)
+  * If the field value is optional, you must use `java.util.Optional` (e.g. `Optional<Integer>` or `Optional<String>`)
+* You must use Vavr collections instead of `java.util` collections when possible.
+* You must use the `java.util.Optional` instead of the `io.vavr.control.Option`.
+
 ## Running the app locally
 
 ### Setup
