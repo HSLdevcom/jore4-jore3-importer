@@ -35,3 +35,5 @@ profiles/dev/config.*.properties
 #MacOS
 .DS_Store
 
+docker/*
+!docker/docker-compose.custom.yml
