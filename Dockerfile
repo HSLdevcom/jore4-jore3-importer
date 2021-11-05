@@ -20,7 +20,7 @@ FROM openjdk:11-jre
 EXPOSE 8080
 
 # download script for reading docker secrets
-RUN curl -o /tmp/read-secrets.sh "https://raw.githubusercontent.com/HSLdevcom/jore4-tools/main/docker/read-secrets.sh"
+RUN curl -o /tmp/read-secrets.sh "
 
 # copy over jdbc url helper script
 COPY build-jdbc-urls.sh /tmp/build-jdbc-urls.sh
