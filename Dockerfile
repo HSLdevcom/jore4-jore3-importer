@@ -23,7 +23,7 @@ EXPOSE 8080
 RUN curl -o /tmp/read-secrets.sh "https://raw.githubusercontent.com/HSLdevcom/jore4-tools/main/docker/read-secrets.sh"
 
 # copy over jdbc url helper script
-COPY build-jdbc-urls.sh /tmp/build-jdbc-urls.sh
+COPY ./build-jdbc-urls.sh /tmp/build-jdbc-urls.sh
 
 # copy over compiled jar
 COPY --from=builder /build/target/*.jar /usr/src/jore4-jore3-importer/importer.jar
