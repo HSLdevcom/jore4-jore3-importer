@@ -3,14 +3,16 @@ version: "3.8"
 services:
   importer:
     container_name: importer
-    build: .
+    build:
+      context: ../
+      dockerfile: ./Dockerfile
     restart: "unless-stopped"
     environment:
-      - SOURCE_DB_HOSTNAME=importer-test-source-database
+      - SOURCE_DB_HOSTNAME=mssqltestdb
       - SOURCE_DB_PORT=1433
-      - SOURCE_DB_DATABASE=testsourcedb
+      - SOURCE_DB_DATABASE=jore3testdb
       - SOURCE_DB_USERNAME=sa
-      - SOURCE_DB_PASSWORD=testSOURCEdb123
+      - SOURCE_DB_PASSWORD=P@ssw0rd
       - IMPORTER_DB_URL=jdbc:postgresql://importer-jooq-database:5432/devdb?stringtype=unspecified
       - IMPORTER_DB_USERNAME=devdb
       - IMPORTER_DB_PASSWORD=devdb
@@ -45,14 +47,16 @@ services:
     networks:
       - jore4
 
-  importer-test-source-database:
-    container_name: importer-test-source-database
-    build:
-      context: docker/mssql
-    ports:
-      - "127.0.0.1:17001:1433"
+  jore4-mssqltestdb:
+    container_name: "mssqltestdb"
+    image: "hsldevcom/jore4-mssql-testdb:schema-only-main--a650cec4970a6c78335e50a24223e7baa0916dc4"
+    restart: "unless-stopped"
     networks:
       - jore4
-
+    environment:
+      SA_PASSWORD: "P@ssw0rd"
+    ports:
+      - "127.0.0.1:1433:1433"
 networks:
     jore4:
+
