@@ -57,7 +57,7 @@ start_deps() {
   # jore4-mssqltestdb - The Jore 3 MSSQL database which contains the source data which is read by the importer
   # jore4-hasura - Hasura. We have to start Hasura because it ensures that db migrations are run to the Jore 4 database.
   # jore4-testdb - Jore 4 database. This is the destination database of the import process.
-  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-destination-database jore4-mssqltestdb jore4-hasura jore4-testdb
+  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb
 }
 
 generate_jooq() {
@@ -104,7 +104,7 @@ fi
 if [[ ${COMMAND} == "recreate" ]]; then
   docker-compose stop
   docker-compose rm -f
-  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-destination-database jore4-mssqltestdb jore4-hasura jore4-testdb
+  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb
   exit 0
 fi
 
