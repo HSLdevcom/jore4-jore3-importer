@@ -35,13 +35,13 @@ services:
     networks:
       - jore4
 
-  importer-test-destination-database:
+  importer-test-database:
     image: postgis/postgis:12-3.1-alpine
-    container_name: importer-test-destination-database
+    container_name: importer-test-database
     environment:
-      - POSTGRES_DB=testdestinationdb
-      - POSTGRES_USER=testdestinationdb
-      - POSTGRES_PASSWORD=testdestinationdb
+      - POSTGRES_DB=importertestdatabase
+      - POSTGRES_USER=importertestdatabase
+      - POSTGRES_PASSWORD=importertestdatabase
     ports:
       - "127.0.0.1:17000:5432"
     networks:
