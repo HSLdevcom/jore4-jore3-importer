@@ -3,6 +3,7 @@ package fi.hsl.jore.importer.feature.system.repository;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Time;
@@ -16,7 +17,7 @@ public class SystemRepository implements ISystemRepository {
     private final DSLContext db;
 
     @Autowired
-    public SystemRepository(final DSLContext db) {
+    public SystemRepository(@Qualifier("importerDsl") final DSLContext db) {
         this.db = db;
     }
 

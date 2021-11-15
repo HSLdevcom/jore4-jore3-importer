@@ -5,8 +5,10 @@ import fi.hsl.jore.importer.config.profile.StandardDatabase;
 import fi.hsl.jore.importer.config.profile.TestDatabase;
 import fi.hsl.jore.importer.config.properties.DataSourceConfigDto;
 import fi.hsl.jore.importer.config.properties.ImporterDataSourceProperties;
+import fi.hsl.jore.importer.config.properties.Jore4DataSourceProperties;
 import fi.hsl.jore.importer.config.properties.SourceDataSourceProperties;
 import fi.hsl.jore.importer.config.properties.TestImporterDataSourceProperties;
+import fi.hsl.jore.importer.config.properties.TestJore4DataSourceProperties;
 import fi.hsl.jore.importer.config.properties.TestSourceDataSourceProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +25,8 @@ public class DatasourceConfig {
     @StandardDatabase
     @Import({
                     SourceDataSourceProperties.class,
-                    ImporterDataSourceProperties.class
+                    ImporterDataSourceProperties.class,
+                    Jore4DataSourceProperties.class
             })
     public static class StandardDatabaseConfiguration {
         @Resource
@@ -31,6 +34,9 @@ public class DatasourceConfig {
 
         @Resource
         private ImporterDataSourceProperties importerDataSourceProperties;
+
+        @Resource
+        private Jore4DataSourceProperties jore4DataSourceProperties;
 
         @Bean
         @Qualifier("sourceDataSourceConfig")
@@ -43,13 +49,20 @@ public class DatasourceConfig {
         public DataSourceConfigDto importerDataSourceConfig() {
             return importerDataSourceProperties.config();
         }
+
+        @Bean
+        @Qualifier("jore4DataSourceConfig")
+        public DataSourceConfigDto jore4DataSourceConfig() {
+            return jore4DataSourceProperties.config();
+        }
     }
 
     @Configuration
     @TestDatabase
     @Import({
                     TestSourceDataSourceProperties.class,
-                    TestImporterDataSourceProperties.class
+                    TestImporterDataSourceProperties.class,
+                    TestJore4DataSourceProperties.class
             })
     public static class TestDatabaseConfiguration {
         @Resource
@@ -57,6 +70,9 @@ public class DatasourceConfig {
 
         @Resource
         private TestImporterDataSourceProperties testImporterDataSourceProperties;
+
+        @Resource
+        private TestJore4DataSourceProperties testJore4DataSourceProperties;
 
         @Bean
         @Qualifier("sourceDataSourceConfig")
@@ -68,6 +84,12 @@ public class DatasourceConfig {
         @Qualifier("importerDataSourceConfig")
         public DataSourceConfigDto importerDataSourceConfig() {
             return testImporterDataSourceProperties.config();
+        }
+
+        @Bean
+        @Qualifier("jore4DataSourceConfig")
+        public DataSourceConfigDto jore4DataSourceConfig() {
+            return testJore4DataSourceProperties.config();
         }
     }
 
@@ -82,6 +104,12 @@ public class DatasourceConfig {
     @Primary
     @Qualifier("importerDataSource")
     public HikariDataSource importerDataSource(@Qualifier("importerDataSourceConfig") final DataSourceConfigDto dataSourceConfigDto) {
+        return new HikariDataSource(dataSourceConfigDto.buildHikariConfig());
+    }
+
+    @Bean(destroyMethod = "close")
+    @Qualifier("jore4DataSource")
+    public HikariDataSource jore4DataSource(@Qualifier("jore4DataSourceConfig") final DataSourceConfigDto dataSourceConfigDto) {
         return new HikariDataSource(dataSourceConfigDto.buildHikariConfig());
     }
 }

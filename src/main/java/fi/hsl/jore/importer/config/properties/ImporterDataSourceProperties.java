@@ -30,7 +30,7 @@ public class ImporterDataSourceProperties {
     public DataSourceConfigDto config() {
         return ImmutableDataSourceConfigDto
                 .builder()
-                .poolName("dst-pool")
+                .poolName("imp-pool")
                 .driverClassName(driverClassName)
                 .jdbcUrl(jdbcUrl)
                 .minimumIdle(minimumIdle)

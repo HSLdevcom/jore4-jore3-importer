@@ -8,29 +8,29 @@ import org.springframework.stereotype.Component;
 @Component
 @TestDatabase
 @PropertySource("classpath:configuration/testdb.properties")
-public class TestImporterDataSourceProperties {
-    @Value("#{environment['test.importer.db.driver']}")
+public class TestJore4DataSourceProperties {
+    @Value("#{environment['test.jore4.db.driver']}")
     private String driverClassName;
 
-    @Value("#{environment['test.importer.db.url']}")
+    @Value("#{environment['test.jore4.db.url']}")
     private String jdbcUrl;
 
-    @Value("#{environment['test.importer.db.min.connections']}")
+    @Value("#{environment['test.jore4.db.min.connections']}")
     private int minimumIdle;
 
-    @Value("#{environment['test.importer.db.max.connections']}")
+    @Value("#{environment['test.jore4.db.max.connections']}")
     private int maximumPoolSize;
 
-    @Value("#{environment['test.importer.db.username']}")
+    @Value("#{environment['test.jore4.db.username']}")
     private String username;
 
-    @Value("#{environment['test.importer.db.password']}")
+    @Value("#{environment['test.jore4.db.password']}")
     private String password;
 
     public DataSourceConfigDto config() {
         return ImmutableDataSourceConfigDto
                 .builder()
-                .poolName("test-imp-pool")
+                .poolName("test-jore4-pool")
                 .driverClassName(driverClassName)
                 .jdbcUrl(jdbcUrl)
                 .minimumIdle(minimumIdle)
