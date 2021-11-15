@@ -10,6 +10,7 @@ import io.vavr.collection.HashSet;
 import io.vavr.collection.Set;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +28,7 @@ public class ScheduledStopPointImportRepository
     private final DSLContext db;
     private final IJsonbConverter jsonbConverter;
 
-    public ScheduledStopPointImportRepository(DSLContext db, IJsonbConverter jsonbConverter) {
+    public ScheduledStopPointImportRepository(@Qualifier("importerDsl") DSLContext db, IJsonbConverter jsonbConverter) {
         this.db = db;
         this.jsonbConverter= jsonbConverter;
     }
