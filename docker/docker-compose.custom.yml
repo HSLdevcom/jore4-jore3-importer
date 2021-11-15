@@ -1,6 +1,8 @@
 ---
 version: "3.8"
 services:
+  jore4-hasura:
+    image: "hsldevcom/jore4-hasura:main--7d60ba6bf9115c59dff4421f8a8ea132561a0ab3"
   importer:
     container_name: importer
     build:
