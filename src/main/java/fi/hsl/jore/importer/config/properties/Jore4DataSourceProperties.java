@@ -1,36 +1,36 @@
 package fi.hsl.jore.importer.config.properties;
 
-import fi.hsl.jore.importer.config.profile.TestDatabase;
+import fi.hsl.jore.importer.config.profile.StandardDatabase;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@TestDatabase
-@PropertySource("classpath:configuration/testdb.properties")
-public class TestImporterDataSourceProperties {
-    @Value("#{environment['test.importer.db.driver']}")
+@StandardDatabase
+@PropertySource("classpath:configuration/db.properties")
+public class Jore4DataSourceProperties {
+    @Value("#{environment['jore4.db.driver']}")
     private String driverClassName;
 
-    @Value("#{environment['test.importer.db.url']}")
+    @Value("#{environment['jore4.db.url']}")
     private String jdbcUrl;
 
-    @Value("#{environment['test.importer.db.min.connections']}")
+    @Value("#{environment['jore4.db.min.connections']}")
     private int minimumIdle;
 
-    @Value("#{environment['test.importer.db.max.connections']}")
+    @Value("#{environment['jore4.db.max.connections']}")
     private int maximumPoolSize;
 
-    @Value("#{environment['test.importer.db.username']}")
+    @Value("#{environment['jore4.db.username']}")
     private String username;
 
-    @Value("#{environment['test.importer.db.password']}")
+    @Value("#{environment['jore4.db.password']}")
     private String password;
 
     public DataSourceConfigDto config() {
         return ImmutableDataSourceConfigDto
                 .builder()
-                .poolName("test-imp-pool")
+                .poolName("jore4-pool")
                 .driverClassName(driverClassName)
                 .jdbcUrl(jdbcUrl)
                 .minimumIdle(minimumIdle)

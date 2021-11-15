@@ -4,11 +4,7 @@
 package fi.hsl.jore.jore4.jooq.infrastructure_network;
 
 
-import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.Direction;
-import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.ExternalSource;
-import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.InfrastructureLink;
 import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.ResolvePointToClosestLink;
-import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.VehicleSubmodeOnInfrastructureLink;
 import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.records.ResolvePointToClosestLinkRecord;
 
 import org.jooq.Configuration;
@@ -17,36 +13,16 @@ import org.jooq.Result;
 
 
 /**
- * Convenience access to all tables in infrastructure_network.
+ * Convenience access to all stored procedures and functions in infrastructure_network.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class Tables {
-
-    /**
-     * The direction in which an e.g. infrastructure link can be traversed
-     */
-    public static final Direction DIRECTION = Direction.DIRECTION;
-
-    /**
-     * An external source from which infrastructure network parts are imported
-     */
-    public static final ExternalSource EXTERNAL_SOURCE = ExternalSource.EXTERNAL_SOURCE;
-
-    /**
-     * The infrastructure links, e.g. road or rail elements: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:1:1:453
-     */
-    public static final InfrastructureLink INFRASTRUCTURE_LINK = InfrastructureLink.INFRASTRUCTURE_LINK;
-
-    /**
-     * The table <code>infrastructure_network.resolve_point_to_closest_link</code>.
-     */
-    public static final ResolvePointToClosestLink RESOLVE_POINT_TO_CLOSEST_LINK = ResolvePointToClosestLink.RESOLVE_POINT_TO_CLOSEST_LINK;
+public class Routines {
 
     /**
      * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
-    public static Result<ResolvePointToClosestLinkRecord> RESOLVE_POINT_TO_CLOSEST_LINK(
+    public static Result<ResolvePointToClosestLinkRecord> resolvePointToClosestLink(
           Configuration configuration
         , Object geog
     ) {
@@ -59,7 +35,7 @@ public class Tables {
      * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
-    public static ResolvePointToClosestLink RESOLVE_POINT_TO_CLOSEST_LINK(
+    public static ResolvePointToClosestLink resolvePointToClosestLink(
           Object geog
     ) {
         return fi.hsl.jore.jore4.jooq.infrastructure_network.tables.ResolvePointToClosestLink.RESOLVE_POINT_TO_CLOSEST_LINK.call(
@@ -71,16 +47,11 @@ public class Tables {
      * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
-    public static ResolvePointToClosestLink RESOLVE_POINT_TO_CLOSEST_LINK(
+    public static ResolvePointToClosestLink resolvePointToClosestLink(
           Field<Object> geog
     ) {
         return fi.hsl.jore.jore4.jooq.infrastructure_network.tables.ResolvePointToClosestLink.RESOLVE_POINT_TO_CLOSEST_LINK.call(
               geog
         );
     }
-
-    /**
-     * Which infrastructure links are safely traversed by which vehicle submodes?
-     */
-    public static final VehicleSubmodeOnInfrastructureLink VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK = VehicleSubmodeOnInfrastructureLink.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK;
 }

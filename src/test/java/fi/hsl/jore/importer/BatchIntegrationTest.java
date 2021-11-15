@@ -2,6 +2,7 @@ package fi.hsl.jore.importer;
 
 import fi.hsl.jore.importer.config.DatasourceConfig;
 import fi.hsl.jore.importer.config.jackson.VavrModuleConfig;
+import fi.hsl.jore.importer.config.jooq.JOOQConfig;
 import fi.hsl.jore.importer.config.profile.Profiles;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +28,7 @@ import static org.hamcrest.Matchers.is;
 @ComponentScan(basePackages = "fi.hsl.jore.importer.feature")
 @ContextConfiguration(classes = {
         DatasourceConfig.class,
+        JOOQConfig.class,
         VavrModuleConfig.class
 })
 @ActiveProfiles(Profiles.TEST_DATABASE)
