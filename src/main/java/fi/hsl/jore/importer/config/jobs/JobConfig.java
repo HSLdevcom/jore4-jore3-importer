@@ -41,6 +41,7 @@ import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPoin
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointExportWriter;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointImportProcessor;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointImportReader;
+import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.TransmodelScheduledStopPointCleanupTasklet;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support.IScheduledStopPointImportRepository;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
@@ -513,9 +514,19 @@ public class JobConfig extends BatchConfig {
     }
 
     @Bean
-    public Flow exportScheduledStopPointsFlow(final Step exportScheduledStopPointsStep) {
+    public Flow exportScheduledStopPointsFlow(final Step prepareScheduledStopPointExportStep,
+                                              final Step exportScheduledStopPointsStep) {
         return new FlowBuilder<SimpleFlow>("exportScheduledStopPointsFlow")
-                .start(exportScheduledStopPointsStep)
+                .start(prepareScheduledStopPointExportStep)
+                .next(exportScheduledStopPointsStep)
+                .build();
+    }
+
+    @Bean
+    public Step prepareScheduledStopPointExportStep(TransmodelScheduledStopPointCleanupTasklet cleanupTasklet) {
+        return steps.get("prepareScheduledStopPointExportStep")
+                .allowStartIfComplete(true)
+                .tasklet(cleanupTasklet)
                 .build();
     }
 
