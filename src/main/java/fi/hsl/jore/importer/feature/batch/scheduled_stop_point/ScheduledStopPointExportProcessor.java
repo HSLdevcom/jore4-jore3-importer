@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
  * a new {@link TransmodelScheduledStopPoint} object which can be inserted into
  * the Jore 4 database.
  */
+@Component
 public class ScheduledStopPointExportProcessor implements ItemProcessor<ExportableScheduledStopPoint, TransmodelScheduledStopPoint> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScheduledStopPointExportProcessor.class);
@@ -36,14 +38,15 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
     public TransmodelScheduledStopPoint process(final ExportableScheduledStopPoint jore3Stop) throws Exception {
         LOGGER.debug("Processing Jore 3 stop: {}", jore3Stop);
 
-        if (jore3Stop.elyNumber().isEmpty()) {
+        final String elyNumber = jore3Stop.elyNumber().filter(str -> !str.isEmpty()).orElse(null);
+        if (elyNumber == null) {
             LOGGER.debug("Jore 3 stop with id: {} isn't processed any further because it has no ely number",
                     jore3Stop.externalId().value()
             );
             return null;
         }
 
-        final int nationalId = Integer.parseInt(jore3Stop.elyNumber().get());
+        final int nationalId = Integer.parseInt(elyNumber);
         final Optional<DigiroadStop> digiroadStopContainer = digiroadStopService.findByNationalId(nationalId);
 
         if (digiroadStopContainer.isEmpty()) {

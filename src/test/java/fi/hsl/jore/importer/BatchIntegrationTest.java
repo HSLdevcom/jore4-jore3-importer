@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer;
 
 import fi.hsl.jore.importer.config.DatasourceConfig;
+import fi.hsl.jore.importer.config.DigiroadServiceConfig;
 import fi.hsl.jore.importer.config.jackson.VavrModuleConfig;
 import fi.hsl.jore.importer.config.jooq.JOOQConfig;
 import fi.hsl.jore.importer.config.profile.Profiles;
@@ -29,7 +30,8 @@ import static org.hamcrest.Matchers.is;
 @ContextConfiguration(classes = {
         DatasourceConfig.class,
         JOOQConfig.class,
-        VavrModuleConfig.class
+        VavrModuleConfig.class,
+        DigiroadServiceConfig.class
 })
 @ActiveProfiles(Profiles.TEST_DATABASE)
 public class BatchIntegrationTest {

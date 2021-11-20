@@ -28,7 +28,7 @@ class TransmodelScheduledStopPointRepositoryTest {
 
     private final String SCHEDULED_STOP_POINT_EXTERNAL_ID = "1234567";
     private final TransmodelScheduledStopPointDirection DIRECTION_ON_INFRALINK = TransmodelScheduledStopPointDirection.FORWARD;
-    private final String INFRASTRUCTURE_LINK_EXTERNAL_ID = "1234567890";
+    private final String INFRASTRUCTURE_LINK_EXTERNAL_ID = "133202";
     private final String EXPECTED_INFRASTRUCTURE_LINK_ID = "554c63e6-87b2-4dc8-a032-b6b0e2607696";
     private final String LABEL = "Ullanmäki";
     private final double X_COORDINATE = 25.696376131;

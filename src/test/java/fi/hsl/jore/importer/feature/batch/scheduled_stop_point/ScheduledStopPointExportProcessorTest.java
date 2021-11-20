@@ -25,7 +25,7 @@ class ScheduledStopPointExportProcessorTest {
     private final String LANGUAGE_CODE_FINNISH = "fi_FI";
     private final String LANGUAGE_CODE_SWEDISH = "sv_SE";
 
-    private final String ELY_NUMBER = "168626";
+    private final String ELY_NUMBER = "1234567890";
 
     private final String DIGIROAD_STOP_INFRA_LINK_ID = "133202";
 

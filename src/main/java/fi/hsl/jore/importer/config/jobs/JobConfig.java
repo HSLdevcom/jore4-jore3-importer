@@ -36,6 +36,9 @@ import fi.hsl.jore.importer.feature.batch.route_link.dto.RouteLinksAndAttributes
 import fi.hsl.jore.importer.feature.batch.route_link.support.IRouteLinkImportRepository;
 import fi.hsl.jore.importer.feature.batch.route_link.support.IRoutePointImportRepository;
 import fi.hsl.jore.importer.feature.batch.route_link.support.IRouteStopPointImportRepository;
+import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointExportProcessor;
+import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointExportReader;
+import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointExportWriter;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointImportProcessor;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointImportReader;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support.IScheduledStopPointImportRepository;
@@ -52,7 +55,9 @@ import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line_header.dto.ImportableLineHeader;
 import fi.hsl.jore.importer.feature.network.route.dto.ImportableRoute;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.ImportableRouteDirection;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImportableScheduledStopPoint;
+import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.FlowBuilder;
@@ -78,19 +83,21 @@ public class JobConfig extends BatchConfig {
                          final Flow importRoutesFlow,
                          final Flow importRouteDirectionsFlow,
                          final Flow importRouteLinksFlow,
-                         final Flow importScheduledStopPointsFlow) {
+                         final Flow importScheduledStopPointsFlow,
+                         final Flow exportScheduledStopPointsFlow) {
         return jobs.get(JOB_NAME)
-                   .start(importNodesFlow)
-                   .next(importLinksFlow)
-                   .next(importLinkPointsFlow)
-                   .next(importLinesFlow)
-                   .next(importLineHeadersFlow)
-                   .next(importRoutesFlow)
-                   .next(importRouteDirectionsFlow)
-                   .next(importRouteLinksFlow)
-                   .next(importScheduledStopPointsFlow)
-                   .end()
-                   .build();
+                .start(importNodesFlow)
+                .next(importLinksFlow)
+                .next(importLinkPointsFlow)
+                .next(importLinesFlow)
+                .next(importLineHeadersFlow)
+                .next(importRoutesFlow)
+                .next(importRouteDirectionsFlow)
+                .next(importRouteLinksFlow)
+                .next(importScheduledStopPointsFlow)
+                .next(exportScheduledStopPointsFlow)
+                .end()
+                .build();
     }
 
     @Bean
@@ -502,6 +509,26 @@ public class JobConfig extends BatchConfig {
         return steps.get("commitScheduledStopPointsStep")
                 .allowStartIfComplete(true)
                 .tasklet(new GenericCommitTasklet<>(repository))
+                .build();
+    }
+
+    @Bean
+    public Flow exportScheduledStopPointsFlow(final Step exportScheduledStopPointsStep) {
+        return new FlowBuilder<SimpleFlow>("exportScheduledStopPointsFlow")
+                .start(exportScheduledStopPointsStep)
+                .build();
+    }
+
+    @Bean
+    public Step exportScheduledStopPointsStep(final ScheduledStopPointExportReader reader,
+                                             final ScheduledStopPointExportProcessor processor,
+                                             final ScheduledStopPointExportWriter writer) {
+        return steps.get("exportScheduledStopPointsStep")
+                .allowStartIfComplete(true)
+                .<ExportableScheduledStopPoint, TransmodelScheduledStopPoint>chunk(1000)
+                .reader(reader.build())
+                .processor(processor)
+                .writer(writer)
                 .build();
     }
 }
