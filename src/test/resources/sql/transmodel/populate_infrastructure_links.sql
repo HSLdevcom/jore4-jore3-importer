@@ -11,6 +11,6 @@ VALUES (
         'bidirectional',
         ST_MakeLine(ST_SetSRID(ST_MakePoint(24.457948, 60.088725, 0), 4326), ST_SetSRID(ST_MakePoint(24.468175, 60.15286, 0), 4326)),
         1000,
-        '1234567890',
+        '133202',
         'digiroad_r'
 );
