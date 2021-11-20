@@ -20,10 +20,18 @@ import static org.hamcrest.Matchers.is;
         "/sql/source/populate_line_headers.sql",
         "/sql/source/populate_routes.sql",
         "/sql/source/populate_route_directions.sql",
-        "/sql/source/populate_route_links.sql"
+        "/sql/source/populate_route_links.sql",
+        "/sql/source/populate_scheduled_stop_points.sql"
 },
      config = @SqlConfig(dataSource = "sourceDataSource"))
 @Sql(scripts = "/sql/destination/drop_tables.sql")
+@Sql(
+        scripts = {
+                "/sql/transmodel/drop_tables.sql",
+                "/sql/transmodel/populate_infrastructure_links.sql"
+        },
+        config = @SqlConfig(dataSource = "jore4DataSource")
+)
 public class ImportJobBatchTest extends BatchIntegrationTest {
 
     @Test

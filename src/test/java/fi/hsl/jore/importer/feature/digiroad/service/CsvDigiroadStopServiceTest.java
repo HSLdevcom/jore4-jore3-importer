@@ -33,7 +33,7 @@ class CsvDigiroadStopServiceTest {
 
             private final String EXPECTED_DIGIROAD_STOP_ID = "111";
             private final String EXPECTED_DIGIROAD_LINK_ID = "133202";
-            private final int NATIONAL_ID = 168626;
+            private final int NATIONAL_ID = 1234567890;
             private final DigiroadStopDirection EXPECTED_DIRECTION_ON_INFRALINK = DigiroadStopDirection.BACKWARD;
             private final double EXPECTED_X_COORDINATE = 24.696376131;
             private final double EXPECTED_Y_COORDINATE = 60.207149801;

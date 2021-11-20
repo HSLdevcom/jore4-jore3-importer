@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
  * a new {@link TransmodelScheduledStopPoint} object which can be inserted into
  * the Jore 4 database.
  */
+@Component
 public class ScheduledStopPointExportProcessor implements ItemProcessor<ExportableScheduledStopPoint, TransmodelScheduledStopPoint> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScheduledStopPointExportProcessor.class);
