@@ -41,6 +41,7 @@ import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPoin
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointExportWriter;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointImportProcessor;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointImportReader;
+import fi.hsl.jore.importer.feature.batch.common.TransmodelSchemaCleanupTasklet;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support.IScheduledStopPointImportRepository;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
@@ -84,7 +85,7 @@ public class JobConfig extends BatchConfig {
                          final Flow importRouteDirectionsFlow,
                          final Flow importRouteLinksFlow,
                          final Flow importScheduledStopPointsFlow,
-                         final Flow exportScheduledStopPointsFlow) {
+                         final Flow transmodelExportFlow) {
         return jobs.get(JOB_NAME)
                 .start(importNodesFlow)
                 .next(importLinksFlow)
@@ -95,7 +96,7 @@ public class JobConfig extends BatchConfig {
                 .next(importRouteDirectionsFlow)
                 .next(importRouteLinksFlow)
                 .next(importScheduledStopPointsFlow)
-                .next(exportScheduledStopPointsFlow)
+                .next(transmodelExportFlow)
                 .end()
                 .build();
     }
@@ -513,9 +514,19 @@ public class JobConfig extends BatchConfig {
     }
 
     @Bean
-    public Flow exportScheduledStopPointsFlow(final Step exportScheduledStopPointsStep) {
-        return new FlowBuilder<SimpleFlow>("exportScheduledStopPointsFlow")
-                .start(exportScheduledStopPointsStep)
+    public Flow transmodelExportFlow(final Step prepareTransmodelExportStep,
+                                     final Step exportScheduledStopPointsStep) {
+        return new FlowBuilder<SimpleFlow>("transmodelExportFlow")
+                .start(prepareTransmodelExportStep)
+                .next(exportScheduledStopPointsStep)
+                .build();
+    }
+
+    @Bean
+    public Step prepareTransmodelExportStep(final TransmodelSchemaCleanupTasklet cleanupTasklet) {
+        return steps.get("prepareTransmodelExportStep")
+                .allowStartIfComplete(true)
+                .tasklet(cleanupTasklet)
                 .build();
     }
 
