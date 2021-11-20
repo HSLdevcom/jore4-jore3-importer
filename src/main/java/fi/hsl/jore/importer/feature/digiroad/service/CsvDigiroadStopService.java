@@ -15,7 +15,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Optional;
 
-@Service
 public class CsvDigiroadStopService implements DigiroadStopService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CsvDigiroadStopService.class);
@@ -26,8 +25,7 @@ public class CsvDigiroadStopService implements DigiroadStopService {
     //and .put() method returns a new map which contains the added value.
     private Map<Integer, DigiroadStop> digiroadStops;
 
-    @Autowired
-    public CsvDigiroadStopService(@Value("digiroad.stop.csv.file.path") final Resource csvResource) {
+    public CsvDigiroadStopService(final Resource csvResource) {
         this.csvResource = csvResource;
         this.digiroadStops = HashMap.empty();
     }
@@ -39,7 +37,7 @@ public class CsvDigiroadStopService implements DigiroadStopService {
     }
 
     @PostConstruct
-    void readStopsFromCsvFile() throws Exception {
+    public void readStopsFromCsvFile() throws Exception {
         if (!csvResource.exists()) {
             LOGGER.error(
                     "Cannot read Digiroad stops from the CSV File: {} because it doesn't exist",
