@@ -2,11 +2,14 @@ package fi.hsl.jore.importer.config.jobs;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
-import fi.hsl.jore.importer.feature.transmodel.repository.TransmodelScheduledStopPointRepository;
+import fi.hsl.jore.importer.feature.transmodel.repository.ScheduledStopPointTestLocation;
 import io.vavr.collection.List;
+import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.assertj.db.type.Table;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,16 +36,16 @@ import static org.assertj.db.api.Assertions.assertThat;
         },
         config = @SqlConfig(dataSource = "jore4DataSource")
 )
+@ExtendWith(SoftAssertionsExtension.class)
 class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
-
+    
     private static final String SCHEDULED_STOP_POINT_EXTERNAL_ID = "1234567";
     private static final TransmodelScheduledStopPointDirection DIRECTION_ON_INFRALINK = BACKWARD;
     private static final String INFRASTRUCTURE_LINK_EXTERNAL_ID = "133202";
     private static final String EXPECTED_INFRASTRUCTURE_LINK_ID = "554c63e6-87b2-4dc8-a032-b6b0e2607696";
-    private static final String LABEL = "Yliopisto vanha";
-    private static final double X_COORDINATE = 25.696376131;
-    private static final double Y_COORDINATE = 61.207149801;
-
+    private static final String LABEL = "H1234";
+    private static final double X_COORDINATE = 6.0;
+    private static final double Y_COORDINATE = 5.0;
 
     private static final List<String> STEPS = List.of("exportScheduledStopPointsStep");
 
@@ -107,5 +110,28 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
                 .row()
                 .value(SCHEDULED_STOP_POINT.LABEL.getName())
                 .isEqualTo(LABEL);
+    }
+
+    @Test
+    @DisplayName("Should save a new scheduled stop point with the correct measured location")
+    void shouldSaveNewScheduledStopPointWithCorrectMeasuredLocation(SoftAssertions softAssertions) {
+        runSteps(STEPS);
+
+        //I used JDCBTemplate because there was no easy way to write
+        //assertions for custom data types (such as geography) with AssertJ-DB.
+        final ScheduledStopPointTestLocation measuredLocation = jdbcTemplate.query(
+                ScheduledStopPointTestLocation.SQL_QUERY_GET_MEASURED_LOCATION,
+                (resultSet, i) -> new ScheduledStopPointTestLocation(
+                        resultSet.getDouble(ScheduledStopPointTestLocation.SQL_ALIAS_X_COORDINATE),
+                        resultSet.getDouble(ScheduledStopPointTestLocation.SQL_ALIAS_Y_COORDINATE)
+                )
+        ).get(0);
+
+        softAssertions.assertThat(measuredLocation.getX())
+                .as("x")
+                .isEqualTo(X_COORDINATE);
+        softAssertions.assertThat(measuredLocation.getY())
+                .as("y")
+                .isEqualTo(Y_COORDINATE);
     }
 }

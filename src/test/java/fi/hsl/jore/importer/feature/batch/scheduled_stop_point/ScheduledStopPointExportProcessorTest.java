@@ -29,6 +29,8 @@ class ScheduledStopPointExportProcessorTest {
 
     private final String DIGIROAD_STOP_INFRA_LINK_ID = "133202";
 
+    private final String IMPORTER_SHORT_ID = "H1234";
+
     private final String JORE_3_STOP_EXTERNAL_ID = "1234567";
     private final String JORE_3_STOP_FINNISH_NAME = "Ullanmäki (Jore3)";
     private final String JORE_3_STOP_SWEDISH_NAME = "Ullasbacken (Jore3)";
@@ -58,7 +60,8 @@ class ScheduledStopPointExportProcessorTest {
                         JORE_3_STOP_FINNISH_NAME,
                         LANGUAGE_CODE_SWEDISH,
                         JORE_3_STOP_SWEDISH_NAME
-                ))
+                )),
+                Optional.of(IMPORTER_SHORT_ID)
         );
 
         @Test
@@ -84,7 +87,8 @@ class ScheduledStopPointExportProcessorTest {
                         JORE_3_STOP_FINNISH_NAME,
                         LANGUAGE_CODE_SWEDISH,
                         JORE_3_STOP_SWEDISH_NAME
-                ))
+                )),
+                Optional.of(IMPORTER_SHORT_ID)
         );
 
         @Test
@@ -108,7 +112,8 @@ class ScheduledStopPointExportProcessorTest {
                         JORE_3_STOP_FINNISH_NAME,
                         LANGUAGE_CODE_SWEDISH,
                         JORE_3_STOP_SWEDISH_NAME
-                ))
+                )),
+                Optional.of(IMPORTER_SHORT_ID)
         );
 
         @Test
@@ -136,7 +141,7 @@ class ScheduledStopPointExportProcessorTest {
         @DisplayName("Should return a scheduled stop point with the correct label")
         void shouldReturnScheduledStopPointWithCorrectLabel() throws Exception {
             final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
-            assertThat(output.label()).isEqualTo(JORE_3_STOP_FINNISH_NAME);
+            assertThat(output.label()).isEqualTo(IMPORTER_SHORT_ID);
         }
 
         @Test
