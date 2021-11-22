@@ -37,15 +37,29 @@ public interface JrScheduledStopPoint extends IHasPrimaryKey<JrScheduledStopPoin
             example = "Riddarhuset")
     Optional<String> nameSwedish();
 
+    @JoreColumn(name = "sollistunnus",
+            example = "1234"
+    )
+    Optional<String> shortId();
+
+    @JoreColumn(name = "solkirjain",
+            example = "H"
+    )
+    Optional<String> shortLetter();
+
     static JrScheduledStopPoint of(final NodeId nodeId,
                                    final Optional<String> elyNumber,
                                    final Optional<String> nameFinnish,
-                                   final Optional<String> nameSwedish) {
+                                   final Optional<String> nameSwedish,
+                                   final Optional<String> shortId,
+                                   final Optional<String> shortLetter) {
         return ImmutableJrScheduledStopPoint.builder()
                 .pk(JrScheduledStopPointPK.of(nodeId))
                 .elyNumber(elyNumber)
                 .nameFinnish(nameFinnish)
                 .nameSwedish(nameSwedish)
+                .shortId(shortId)
+                .shortLetter(shortLetter)
                 .build();
     }
 }

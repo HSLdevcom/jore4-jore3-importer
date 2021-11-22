@@ -17,11 +17,13 @@ public interface ImportableScheduledStopPoint
 
     static ImportableScheduledStopPoint of(final ExternalId externalId,
                                            final Optional<String> elynumber,
-                                           final MultilingualString name) {
+                                           final MultilingualString name,
+                                           final Optional<String> shortId) {
         return ImmutableImportableScheduledStopPoint.builder()
                 .externalId(externalId)
                 .elyNumber(elynumber)
                 .name(name)
+                .shortId(shortId)
                 .build();
     }
 }

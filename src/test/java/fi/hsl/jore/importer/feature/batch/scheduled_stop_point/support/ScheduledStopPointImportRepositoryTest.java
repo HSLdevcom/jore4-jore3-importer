@@ -48,6 +48,7 @@ public class ScheduledStopPointImportRepositoryTest {
         private final UUID EXPECTED_INFRASTRUCTURE_NODE_ID = UUID.fromString("cc11a5db-2ae7-4220-adfe-aca5d6620909");
         private final String EXPECTED_FINNISH_NAME = "Yliopisto";
         private final String EXPECTED_SWEDISH_NAME = "Universitetet";
+        private final String EXPECTED_SHORT_ID = "H1234";
 
         @Nested
         @DisplayName("When the staging table has no rows")
@@ -92,7 +93,7 @@ public class ScheduledStopPointImportRepositoryTest {
 
                 @Test
                 @DisplayName("Should delete the existing row from the target table")
-                void shouldDeleteExistingRowFromTargetTable(SoftAssertions softAssertions) {
+                void shouldDeleteExistingRowFromTargetTable(final SoftAssertions softAssertions) {
                     final Map<RowStatus, Set<ScheduledStopPointPK>> result = importRepository.commitStagingToTarget();
 
                     softAssertions.assertThat(result.keySet())
@@ -138,7 +139,7 @@ public class ScheduledStopPointImportRepositoryTest {
 
                 @Test
                 @DisplayName("Should insert one new row into the target table")
-                void shouldInsertNewRowIntoTargetTable(SoftAssertions softAssertions) {
+                void shouldInsertNewRowIntoTargetTable(final SoftAssertions softAssertions) {
                     final Map<RowStatus, Set<ScheduledStopPointPK>> result = importRepository.commitStagingToTarget();
 
                     softAssertions.assertThat(result.keySet())
@@ -173,7 +174,7 @@ public class ScheduledStopPointImportRepositoryTest {
 
                 @Test
                 @DisplayName("Should insert a new scheduled stop point into the target table")
-                void shouldInsertNewScheduledStopPointIntoTargetTable(SoftAssertions softAssertions) {
+                void shouldInsertNewScheduledStopPointIntoTargetTable(final SoftAssertions softAssertions) {
                     final Map<RowStatus, Set<ScheduledStopPointPK>> result = importRepository.commitStagingToTarget();
                     final ScheduledStopPointPK id = result.get(RowStatus.INSERTED).get().get();
 
@@ -191,15 +192,19 @@ public class ScheduledStopPointImportRepositoryTest {
                             .as("elyNumber")
                             .contains(EXPECTED_ELY_NUMBER);
 
-                    String finnishName = inserted.name().values().getOrElse(LOCALE_FI_FI, "No string found with the given locale");
+                    final String finnishName = inserted.name().values().getOrElse(LOCALE_FI_FI, "No string found with the given locale");
                     softAssertions.assertThat(finnishName)
                             .as("finnish name")
                             .isEqualTo(EXPECTED_FINNISH_NAME);
 
-                    String swedishName = inserted.name().values().getOrElse(LOCALE_SV_SE, "No string found with the given locale");
+                    final String swedishName = inserted.name().values().getOrElse(LOCALE_SV_SE, "No string found with the given locale");
                     softAssertions.assertThat(swedishName)
                             .as("swedish name")
                             .isEqualTo(EXPECTED_SWEDISH_NAME);
+
+                    softAssertions.assertThat(inserted.shortId())
+                            .as("shortId")
+                            .contains(EXPECTED_SHORT_ID);
                 }
             }
 
@@ -216,7 +221,7 @@ public class ScheduledStopPointImportRepositoryTest {
 
                 @Test
                 @DisplayName("Should update the information of the existing row")
-                void shouldUpdateInformationOfExistingRow(SoftAssertions softAssertions) {
+                void shouldUpdateInformationOfExistingRow(final SoftAssertions softAssertions) {
                     final Map<RowStatus, Set<ScheduledStopPointPK>> result = importRepository.commitStagingToTarget();
 
                     softAssertions.assertThat(result.keySet())
@@ -235,9 +240,9 @@ public class ScheduledStopPointImportRepositoryTest {
 
                 @Test
                 @DisplayName("Should update the information of the found scheduled stop point")
-                void shouldUpdateInformationOFoundScheduledStopPoint(SoftAssertions softAssertions) {
+                void shouldUpdateInformationOFoundScheduledStopPoint(final SoftAssertions softAssertions) {
                     importRepository.commitStagingToTarget();
-                    ScheduledStopPoint updated = targetRepository.findById(ScheduledStopPointPK.of(EXPECTED_ID)).get();
+                    final ScheduledStopPoint updated = targetRepository.findById(ScheduledStopPointPK.of(EXPECTED_ID)).get();
 
                     softAssertions.assertThat(updated.pk().value())
                             .as("id")
@@ -255,15 +260,19 @@ public class ScheduledStopPointImportRepositoryTest {
                             .as("elyNumber")
                             .contains(EXPECTED_ELY_NUMBER);
 
-                    String finnishName = updated.name().values().getOrElse(LOCALE_FI_FI, "No string found with the given locale");
+                    final String finnishName = updated.name().values().getOrElse(LOCALE_FI_FI, "No string found with the given locale");
                     softAssertions.assertThat(finnishName)
                             .as("finnish name")
                             .isEqualTo(EXPECTED_FINNISH_NAME);
 
-                    String swedishName = updated.name().values().getOrElse(LOCALE_SV_SE, "No string found with the given locale");
+                    final String swedishName = updated.name().values().getOrElse(LOCALE_SV_SE, "No string found with the given locale");
                     softAssertions.assertThat(swedishName)
                             .as("swedish name")
                             .isEqualTo(EXPECTED_SWEDISH_NAME);
+
+                    softAssertions.assertThat(updated.shortId())
+                            .as("shortId")
+                            .contains(EXPECTED_SHORT_ID);
                 }
             }
         }

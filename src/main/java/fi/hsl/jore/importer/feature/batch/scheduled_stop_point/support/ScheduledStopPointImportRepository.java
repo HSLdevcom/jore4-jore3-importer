@@ -63,14 +63,16 @@ public class ScheduledStopPointImportRepository
                         TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID,
                         TARGET_TABLE.INFRASTRUCTURE_NODE_ID,
                         TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
-                        TARGET_TABLE.SCHEDULED_STOP_POINT_NAME
+                        TARGET_TABLE.SCHEDULED_STOP_POINT_NAME,
+                        TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID
                 )
                 .select(
                         db.select(
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID,
                                 INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_ID,
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
-                                STAGING_TABLE.SCHEDULED_STOP_POINT_NAME
+                                STAGING_TABLE.SCHEDULED_STOP_POINT_NAME,
+                                STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID
                         )
                                 .from(STAGING_TABLE)
                                 //An infrastructure node and a scheduled stop point use the same external identifier
@@ -96,6 +98,7 @@ public class ScheduledStopPointImportRepository
         return db.update(TARGET_TABLE)
                 .set(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER, STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER)
                 .set(TARGET_TABLE.SCHEDULED_STOP_POINT_NAME, STAGING_TABLE.SCHEDULED_STOP_POINT_NAME)
+                .set(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID, STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID)
                 .from(STAGING_TABLE)
                 .where(
                         TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID.eq(STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID)
@@ -114,6 +117,17 @@ public class ScheduledStopPointImportRepository
                                         .or(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER
                                                 .notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER)
                                         )
+                                        //Short id is null in the target table but not null in the staging table
+                                        .or(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID.isNull()
+                                                .and(STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID.isNotNull())
+                                        )
+                                        //Short id isn't null in the target table but is null in the staging table
+                                        .or(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID.isNotNull()
+                                                .and(STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID.isNull())
+                                        )
+                                        //Short id was changed
+                                        .or(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID
+                                                .notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID))
                                 )
                 )
                 .returningResult(TARGET_TABLE.SCHEDULED_STOP_POINT_ID)
@@ -130,15 +144,17 @@ public class ScheduledStopPointImportRepository
                 db.insertInto(STAGING_TABLE,
                         STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID,
                         STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
-                        STAGING_TABLE.SCHEDULED_STOP_POINT_NAME
+                        STAGING_TABLE.SCHEDULED_STOP_POINT_NAME,
+                        STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID
                 )
-                        .values((String) null, null, null)
+                        .values((String) null, null, null, null)
         );
 
         items.forEach(item -> batch.bind(
                 item.externalId().value(),
                 item.elyNumber().orElse(null),
-                jsonbConverter.asJson(item.name())
+                jsonbConverter.asJson(item.name()),
+                item.shortId().orElse(null)
         ));
 
         batch.execute();

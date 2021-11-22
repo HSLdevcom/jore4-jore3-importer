@@ -33,6 +33,7 @@ public interface ScheduledStopPoint
                                  final Optional<String> elyNumber,
                                  final NodePK node,
                                  final MultilingualString name,
+                                 final Optional<String> shortId,
                                  final TimeRange systemTime) {
         return ImmutableScheduledStopPoint.builder()
                 .pk(pk)
@@ -40,6 +41,7 @@ public interface ScheduledStopPoint
                 .elyNumber(elyNumber)
                 .node(node)
                 .name(name)
+                .shortId(shortId)
                 .systemTime(systemTime)
                 .build();
     }
@@ -51,6 +53,7 @@ public interface ScheduledStopPoint
                 Optional.ofNullable(record.getScheduledStopPointElyNumber()),
                 NodePK.of(record.getInfrastructureNodeId()),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
+                Optional.of(record.getScheduledStopPointShortId()),
                 record.getScheduledStopPointSysPeriod()
         );
     }
@@ -62,6 +65,7 @@ public interface ScheduledStopPoint
                 Optional.ofNullable(record.getScheduledStopPointElyNumber()),
                 NodePK.of(record.getInfrastructureNodeId()),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
+                Optional.of(record.getScheduledStopPointShortId()),
                 record.getScheduledStopPointSysPeriod()
         );
     }
