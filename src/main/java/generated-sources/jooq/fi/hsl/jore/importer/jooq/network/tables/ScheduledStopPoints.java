@@ -20,7 +20,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -81,6 +81,11 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
      * The column <code>network.scheduled_stop_points.scheduled_stop_point_sys_period</code>.
      */
     public final TableField<ScheduledStopPointsRecord, TimeRange> SCHEDULED_STOP_POINT_SYS_PERIOD = createField(DSL.name("scheduled_stop_point_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
+
+    /**
+     * The column <code>network.scheduled_stop_points.scheduled_stop_point_short_id</code>.
+     */
+    public final TableField<ScheduledStopPointsRecord, String> SCHEDULED_STOP_POINT_SHORT_ID = createField(DSL.name("scheduled_stop_point_short_id"), SQLDataType.VARCHAR(6), this, "");
 
     private ScheduledStopPoints(Name alias, Table<ScheduledStopPointsRecord> aliased) {
         this(alias, aliased, null);
@@ -171,11 +176,11 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<UUID, String, UUID, String, JSONB, TimeRange> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<UUID, String, UUID, String, JSONB, TimeRange, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

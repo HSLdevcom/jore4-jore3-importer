@@ -58,7 +58,7 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<ScheduledStopPoint> findById(ScheduledStopPointPK id) {
+    public Optional<ScheduledStopPoint> findById(final ScheduledStopPointPK id) {
         return db.selectFrom(SCHEDULED_STOP_POINT)
                 .where(PRIMARY_KEY.eq(id.value()))
                 .fetchStream()
@@ -68,7 +68,7 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<ScheduledStopPoint> findByExternalId(ExternalId id) {
+    public Optional<ScheduledStopPoint> findByExternalId(final ExternalId id) {
         return db.selectFrom(SCHEDULED_STOP_POINT)
                 .where(SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_EXT_ID.eq(id.value()))
                 .fetchStream()
@@ -93,12 +93,13 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
 
     @Transactional
     @Override
-    public ScheduledStopPointPK insert(PersistableScheduledStopPoint entity) {
+    public ScheduledStopPointPK insert(final PersistableScheduledStopPoint entity) {
         final ScheduledStopPointsRecord record = db.newRecord(SCHEDULED_STOP_POINT);
 
         record.setScheduledStopPointExtId(entity.externalId().value());
         record.setScheduledStopPointElyNumber(entity.elyNumber().orElse(null));
         record.setScheduledStopPointName(jsonbConverter.asJson(entity.name()));
+        record.setScheduledStopPointShortId(entity.shortId().orElse(null));
 
         record.store();
 
@@ -107,26 +108,28 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
 
     @Transactional
     @Override
-    public List<ScheduledStopPointPK> insert(List<PersistableScheduledStopPoint> entities) {
+    public List<ScheduledStopPointPK> insert(final List<PersistableScheduledStopPoint> entities) {
         return entities.map(this::insert);
     }
 
     @Transactional
     @Override
-    public List<ScheduledStopPointPK> insert(PersistableScheduledStopPoint... entities) {
+    public List<ScheduledStopPointPK> insert(final PersistableScheduledStopPoint... entities) {
         return insert(List.of(entities));
     }
 
     @Transactional
     @Override
-    public ScheduledStopPointPK update(ScheduledStopPoint scheduledStopPoint) {
+    public ScheduledStopPointPK update(final ScheduledStopPoint scheduledStopPoint) {
         final ScheduledStopPointsRecord record = Optional.ofNullable(
                 db.selectFrom(SCHEDULED_STOP_POINT)
                         .where(PRIMARY_KEY.eq(scheduledStopPoint.pk().value()))
                         .fetchAny()
         ).orElseThrow();
 
+        record.setScheduledStopPointElyNumber(scheduledStopPoint.elyNumber().orElse(null));
         record.setScheduledStopPointName(jsonbConverter.asJson(scheduledStopPoint.name()));
+        record.setScheduledStopPointShortId(scheduledStopPoint.shortId().orElse(null));
 
         record.store();
 
@@ -135,13 +138,13 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
 
     @Transactional
     @Override
-    public List<ScheduledStopPointPK> update(List<ScheduledStopPoint> scheduledStopPoints) {
+    public List<ScheduledStopPointPK> update(final List<ScheduledStopPoint> scheduledStopPoints) {
         return scheduledStopPoints.map(this::update);
     }
 
     @Transactional
     @Override
-    public List<ScheduledStopPointPK> update(ScheduledStopPoint... scheduledStopPoints) {
+    public List<ScheduledStopPointPK> update(final ScheduledStopPoint... scheduledStopPoints) {
         return update(List.of(scheduledStopPoints));
     }
 

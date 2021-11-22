@@ -60,12 +60,6 @@ class TransmodelScheduledStopPointRepositoryTest {
     @ExtendWith(SoftAssertionsExtension.class)
     class InsertScheduledStopPointIntoDatabase {
 
-        private final String SQL_ALIAS_X_COORDINATE = "x";
-        private final String SQL_ALIAS_Y_COORDINATE = "y";
-        private final String SQL_QUERY_GET_MEASURED_LOCATION = "SELECT ST_X(measured_location::geometry) AS x, " +
-                "ST_Y(measured_location::geometry) AS y " +
-                "FROM internal_service_pattern.scheduled_stop_point";
-
         private final TransmodelScheduledStopPoint INPUT = TransmodelScheduledStopPoint.of(
                 SCHEDULED_STOP_POINT_EXTERNAL_ID,
                 INFRASTRUCTURE_LINK_EXTERNAL_ID,
@@ -133,11 +127,11 @@ class TransmodelScheduledStopPointRepositoryTest {
 
             //I used JDCBTemplate because there was no easy way to write
             //assertions for custom data types (such as geography) with AssertJ-DB.
-            ScheduledStopPointLocation measuredLocation = jdbcTemplate.query(
-                    SQL_QUERY_GET_MEASURED_LOCATION,
-                    (resultSet, i) -> new ScheduledStopPointLocation(
-                            resultSet.getDouble(SQL_ALIAS_X_COORDINATE),
-                            resultSet.getDouble(SQL_ALIAS_Y_COORDINATE)
+            ScheduledStopPointTestLocation measuredLocation = jdbcTemplate.query(
+                    ScheduledStopPointTestLocation.SQL_QUERY_GET_MEASURED_LOCATION,
+                    (resultSet, i) -> new ScheduledStopPointTestLocation(
+                            resultSet.getDouble(ScheduledStopPointTestLocation.SQL_ALIAS_X_COORDINATE),
+                            resultSet.getDouble(ScheduledStopPointTestLocation.SQL_ALIAS_Y_COORDINATE)
                     )
             ).get(0);
 
@@ -147,25 +141,6 @@ class TransmodelScheduledStopPointRepositoryTest {
             softAssertions.assertThat(measuredLocation.getY())
                     .as("y")
                     .isEqualTo(Y_COORDINATE);
-        }
-    }
-
-    private class ScheduledStopPointLocation {
-
-        final double x;
-        final double y;
-
-        private ScheduledStopPointLocation(final double x, final double y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        private double getX() {
-            return x;
-        }
-
-        private double getY() {
-            return y;
         }
     }
 }

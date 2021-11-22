@@ -10,4 +10,6 @@ public interface CommonFields<T> extends IHasExternalId {
     Optional<String> elyNumber();
 
     MultilingualString name();
+
+    Optional<String> shortId();
 }

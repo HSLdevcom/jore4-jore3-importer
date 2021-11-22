@@ -39,6 +39,7 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
     private static final UUID EXPECTED_INFRASTRUCTURE_NODE_ID = UUID.fromString("cc11a5db-2ae7-4220-adfe-aca5d6620909");
     private static final String EXPECTED_FINNISH_NAME = "Yliopisto";
     private static final String EXPECTED_SWEDISH_NAME = "Universitetet";
+    private static final String EXPECTED_SHORT_ID = "H1234";
 
     public static final String LOCALE_FINNISH = "fi_FI";
     public static final String LOCALE_SWEDISH = "sv_SE";
@@ -60,14 +61,14 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
     }
 
     @Test
-    void shouldImportScheduledStopPointFromSourceDatabase(SoftAssertions softAssertions) {
+    void shouldImportScheduledStopPointFromSourceDatabase(final SoftAssertions softAssertions) {
         runSteps(STEPS);
 
         softAssertions.assertThat(repository.count())
                 .as("imported scheduled stop count")
                 .isEqualTo(1);
 
-        ScheduledStopPoint imported = repository.findByExternalId(ExternalId.of(EXPECTED_EXTERNAL_ID)).get();
+        final ScheduledStopPoint imported = repository.findByExternalId(ExternalId.of(EXPECTED_EXTERNAL_ID)).get();
 
         softAssertions.assertThat(imported.externalId().value())
                 .as("external id")
@@ -81,14 +82,18 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
                 .as("elyNumber")
                 .contains(EXPECTED_ELY_NUMBER);
 
-        String finnishName = imported.name().values().getOrElse(LOCALE_FINNISH, "No string found with the given locale");
+        final String finnishName = imported.name().values().getOrElse(LOCALE_FINNISH, "No string found with the given locale");
         softAssertions.assertThat(finnishName)
                 .as("finnish name")
                 .isEqualTo(EXPECTED_FINNISH_NAME);
 
-        String swedishName = imported.name().values().getOrElse(LOCALE_SWEDISH, "No string found with the given locale");
+        final String swedishName = imported.name().values().getOrElse(LOCALE_SWEDISH, "No string found with the given locale");
         softAssertions.assertThat(swedishName)
                 .as("swedish name")
                 .isEqualTo(EXPECTED_SWEDISH_NAME);
+
+        softAssertions.assertThat(imported.shortId())
+                .as("shortId")
+                .contains(EXPECTED_SHORT_ID);
     }
 }

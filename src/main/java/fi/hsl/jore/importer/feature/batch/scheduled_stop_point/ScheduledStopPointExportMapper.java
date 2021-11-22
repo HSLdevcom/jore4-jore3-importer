@@ -39,7 +39,8 @@ public class ScheduledStopPointExportMapper implements RowMapper<ExportableSched
                 ExternalId.of(resultSet.getString("external_id")),
                 getOptionalString(resultSet, "ely_number"),
                 pointFromDatabaseObject(resultSet.getObject("location")),
-                nameFromJsonString(resultSet.getString("name"))
+                nameFromJsonString(resultSet.getString("name")),
+                getOptionalString(resultSet, "short_id")
         );
     }
 

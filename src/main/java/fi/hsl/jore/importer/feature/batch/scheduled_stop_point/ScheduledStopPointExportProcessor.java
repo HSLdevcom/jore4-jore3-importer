@@ -64,15 +64,11 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
                 jore3Stop.externalId().value(),
                 digiroadStop.digiroadLinkId(),
                 TransmodelScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),
-                constructLabel(jore3Stop.name()),
+                jore3Stop.shortId().get(),
                 jore3Stop.location()
         );
 
         LOGGER.debug("Created scheduled stop point: {}", transmodelStop);
         return transmodelStop;
-    }
-
-    private static String constructLabel(final MultilingualString name) {
-        return name.values().get(LANGUAGE_CODE_FINNISH).get();
     }
 }
