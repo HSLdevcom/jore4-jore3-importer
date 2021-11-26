@@ -26,8 +26,13 @@ public class JsonbConverter implements IJsonbConverter {
 
     @Override
     public <T> T fromJson(final JSONB json, final Class<T> clazz) {
+        return fromJson(json.data(), clazz);
+    }
+
+    @Override
+    public <T> T fromJson(final String json, final Class<T> clazz) {
         try {
-            return objectMapper.readValue(json.data(), clazz);
+            return objectMapper.readValue(json, clazz);
         } catch (final JsonProcessingException e) {
             throw new RuntimeException(e);
         }
