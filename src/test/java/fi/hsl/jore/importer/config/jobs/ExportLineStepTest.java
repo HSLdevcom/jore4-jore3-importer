@@ -15,6 +15,10 @@ import org.springframework.test.context.jdbc.SqlConfig;
 
 import javax.sql.DataSource;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -39,6 +43,16 @@ class ExportLineStepTest extends BatchIntegrationTest {
     private static final String EXPECTED_SHORT_NAME = "{\"fi_FI\":\"Eira-Töölö-Käpylä\",\"sv_SE\":\"Eira-Tölö-Kottby\"}";
 
     private static final VehicleMode EXPECTED_PRIMARY_VEHICLE_MODE = VehicleMode.TRAM;
+    private static final int EXPECTED_PRIORITY = 10;
+
+    private static final LocalDateTime EXPECTED_VALIDITY_PERIOD_START = LocalDateTime.of(
+            LocalDate.of(2021, 10, 4),
+            LocalTime.of(4, 30)
+    );
+    private static final LocalDateTime EXPECTED_VALIDITY_PERIOD_END = LocalDateTime.of(
+            LocalDate.of(2051, 1, 1),
+            LocalTime.of(4, 29, 59)
+    );
 
     private final Table targetTable;
 
@@ -89,6 +103,18 @@ class ExportLineStepTest extends BatchIntegrationTest {
                 .row()
                 .value(LINE.DESCRIPTION_I18N.getName())
                 .isNull();
+        softAssertions.assertThat(targetTable)
+                .row()
+                .value(LINE.PRIORITY.getName())
+                .isEqualTo(EXPECTED_PRIORITY);
+        softAssertions.assertThat(targetTable)
+                .row()
+                .value(LINE.VALIDITY_START.getName())
+                .isEqualTo(EXPECTED_VALIDITY_PERIOD_START);
+        softAssertions.assertThat(targetTable)
+                .row()
+                .value(LINE.VALIDITY_END.getName())
+                .isEqualTo(EXPECTED_VALIDITY_PERIOD_END);
 
         softAssertions.assertAll();
     }

@@ -1,10 +1,9 @@
 package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 
-import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
-import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStopDirection;
 import fi.hsl.jore.importer.feature.digiroad.service.DigiroadStopService;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
+import fi.hsl.jore.importer.feature.transmodel.ExportConstants;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
 import org.slf4j.Logger;
@@ -13,6 +12,8 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -25,7 +26,20 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScheduledStopPointExportProcessor.class);
 
-    private static final String LANGUAGE_CODE_FINNISH = "fi_FI";
+    private static final int DEFAULT_PRIORITY = 10;
+
+    //The validity period is hard coded here because it was requested by
+    //the customer. The idea was that these weird dates would make it easier to
+    //find scheduled stop points which are imported from Jore 3 and are valid until
+    //further notice.
+    private static final LocalDateTime DEFAULT_VALIDITY_START = LocalDateTime.of(
+            LocalDate.of(1990, 1, 1),
+            ExportConstants.OPERATING_DAY_START_TIME
+    );
+    private static final LocalDateTime DEFAULT_VALIDITY_END = LocalDateTime.of(
+            LocalDate.of(2051, 1, 1),
+            ExportConstants.OPERATING_DAY_END_TIME
+    );
 
     private final DigiroadStopService digiroadStopService;
 
@@ -65,7 +79,10 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
                 digiroadStop.digiroadLinkId(),
                 TransmodelScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),
                 jore3Stop.shortId().get(),
-                jore3Stop.location()
+                jore3Stop.location(),
+                DEFAULT_PRIORITY,
+                Optional.of(DEFAULT_VALIDITY_START),
+                Optional.of(DEFAULT_VALIDITY_END)
         );
 
         LOGGER.debug("Created scheduled stop point: {}", transmodelStop);

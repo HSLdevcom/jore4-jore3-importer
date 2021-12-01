@@ -30,9 +30,12 @@ public class TransmodelScheduledStopPointRepository implements ITransmodelSchedu
                 SCHEDULED_STOP_POINT.DIRECTION,
                 SCHEDULED_STOP_POINT.LABEL,
                 SCHEDULED_STOP_POINT.LOCATED_ON_INFRASTRUCTURE_LINK_ID,
-                SCHEDULED_STOP_POINT.MEASURED_LOCATION
+                SCHEDULED_STOP_POINT.MEASURED_LOCATION,
+                SCHEDULED_STOP_POINT.PRIORITY,
+                SCHEDULED_STOP_POINT.VALIDITY_START,
+                SCHEDULED_STOP_POINT.VALIDITY_END
         )
-                        .values((String) null, null, null, null)
+                        .values((String) null, null, null, null, null, null, null)
         );
 
         stopPoints.forEach(stopPoint -> batch.bind(
@@ -42,7 +45,10 @@ public class TransmodelScheduledStopPointRepository implements ITransmodelSchedu
                         .from(INFRASTRUCTURE_LINK)
                         .where(INFRASTRUCTURE_LINK.EXTERNAL_LINK_ID.eq(stopPoint.externalInfrastructureLinkId()))
                         .fetchOneInto(UUID.class),
-                stopPoint.measuredLocation()
+                stopPoint.measuredLocation(),
+                stopPoint.priority(),
+                stopPoint.validityStart().orElse(null),
+                stopPoint.validityEnd().orElse(null)
         ));
 
         batch.execute();

@@ -6,12 +6,13 @@ package fi.hsl.jore.jore4.jooq.route.tables.records;
 
 import fi.hsl.jore.jore4.jooq.route.tables.Line;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record5;
-import org.jooq.Row5;
+import org.jooq.Record8;
+import org.jooq.Row8;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -19,7 +20,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * The line from Transmodel: http://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:487
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class LineRecord extends UpdatableRecordImpl<LineRecord> implements Record5<UUID, String, String, String, String> {
+public class LineRecord extends UpdatableRecordImpl<LineRecord> implements Record8<UUID, String, String, String, String, LocalDateTime, LocalDateTime, Integer> {
 
     private static final long serialVersionUID = 1L;
 
@@ -93,6 +94,48 @@ public class LineRecord extends UpdatableRecordImpl<LineRecord> implements Recor
         return (String) get(4);
     }
 
+    /**
+     * Setter for <code>route.line.validity_start</code>. The point in time when the line becomes valid. If NULL, the line has been always valid.
+     */
+    public void setValidityStart(LocalDateTime value) {
+        set(5, value);
+    }
+
+    /**
+     * Getter for <code>route.line.validity_start</code>. The point in time when the line becomes valid. If NULL, the line has been always valid.
+     */
+    public LocalDateTime getValidityStart() {
+        return (LocalDateTime) get(5);
+    }
+
+    /**
+     * Setter for <code>route.line.validity_end</code>. The point in time from which onwards the line is no longer valid. If NULL, the line will be always valid.
+     */
+    public void setValidityEnd(LocalDateTime value) {
+        set(6, value);
+    }
+
+    /**
+     * Getter for <code>route.line.validity_end</code>. The point in time from which onwards the line is no longer valid. If NULL, the line will be always valid.
+     */
+    public LocalDateTime getValidityEnd() {
+        return (LocalDateTime) get(6);
+    }
+
+    /**
+     * Setter for <code>route.line.priority</code>. The priority of the line definition. The definition may be overridden by higher priority definitions.
+     */
+    public void setPriority(Integer value) {
+        set(7, value);
+    }
+
+    /**
+     * Getter for <code>route.line.priority</code>. The priority of the line definition. The definition may be overridden by higher priority definitions.
+     */
+    public Integer getPriority() {
+        return (Integer) get(7);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -103,17 +146,17 @@ public class LineRecord extends UpdatableRecordImpl<LineRecord> implements Recor
     }
 
     // -------------------------------------------------------------------------
-    // Record5 type implementation
+    // Record8 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<UUID, String, String, String, String> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row8<UUID, String, String, String, String, LocalDateTime, LocalDateTime, Integer> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 
     @Override
-    public Row5<UUID, String, String, String, String> valuesRow() {
-        return (Row5) super.valuesRow();
+    public Row8<UUID, String, String, String, String, LocalDateTime, LocalDateTime, Integer> valuesRow() {
+        return (Row8) super.valuesRow();
     }
 
     @Override
@@ -142,6 +185,21 @@ public class LineRecord extends UpdatableRecordImpl<LineRecord> implements Recor
     }
 
     @Override
+    public Field<LocalDateTime> field6() {
+        return Line.LINE.VALIDITY_START;
+    }
+
+    @Override
+    public Field<LocalDateTime> field7() {
+        return Line.LINE.VALIDITY_END;
+    }
+
+    @Override
+    public Field<Integer> field8() {
+        return Line.LINE.PRIORITY;
+    }
+
+    @Override
     public UUID component1() {
         return getLineId();
     }
@@ -167,6 +225,21 @@ public class LineRecord extends UpdatableRecordImpl<LineRecord> implements Recor
     }
 
     @Override
+    public LocalDateTime component6() {
+        return getValidityStart();
+    }
+
+    @Override
+    public LocalDateTime component7() {
+        return getValidityEnd();
+    }
+
+    @Override
+    public Integer component8() {
+        return getPriority();
+    }
+
+    @Override
     public UUID value1() {
         return getLineId();
     }
@@ -189,6 +262,21 @@ public class LineRecord extends UpdatableRecordImpl<LineRecord> implements Recor
     @Override
     public String value5() {
         return getPrimaryVehicleMode();
+    }
+
+    @Override
+    public LocalDateTime value6() {
+        return getValidityStart();
+    }
+
+    @Override
+    public LocalDateTime value7() {
+        return getValidityEnd();
+    }
+
+    @Override
+    public Integer value8() {
+        return getPriority();
     }
 
     @Override
@@ -222,12 +310,33 @@ public class LineRecord extends UpdatableRecordImpl<LineRecord> implements Recor
     }
 
     @Override
-    public LineRecord values(UUID value1, String value2, String value3, String value4, String value5) {
+    public LineRecord value6(LocalDateTime value) {
+        setValidityStart(value);
+        return this;
+    }
+
+    @Override
+    public LineRecord value7(LocalDateTime value) {
+        setValidityEnd(value);
+        return this;
+    }
+
+    @Override
+    public LineRecord value8(Integer value) {
+        setPriority(value);
+        return this;
+    }
+
+    @Override
+    public LineRecord values(UUID value1, String value2, String value3, String value4, String value5, LocalDateTime value6, LocalDateTime value7, Integer value8) {
         value1(value1);
         value2(value2);
         value3(value3);
         value4(value4);
         value5(value5);
+        value6(value6);
+        value7(value7);
+        value8(value8);
         return this;
     }
 
@@ -245,7 +354,7 @@ public class LineRecord extends UpdatableRecordImpl<LineRecord> implements Recor
     /**
      * Create a detached, initialised LineRecord
      */
-    public LineRecord(UUID lineId, String nameI18n, String shortNameI18n, String descriptionI18n, String primaryVehicleMode) {
+    public LineRecord(UUID lineId, String nameI18n, String shortNameI18n, String descriptionI18n, String primaryVehicleMode, LocalDateTime validityStart, LocalDateTime validityEnd, Integer priority) {
         super(Line.LINE);
 
         setLineId(lineId);
@@ -253,5 +362,8 @@ public class LineRecord extends UpdatableRecordImpl<LineRecord> implements Recor
         setShortNameI18n(shortNameI18n);
         setDescriptionI18n(descriptionI18n);
         setPrimaryVehicleMode(primaryVehicleMode);
+        setValidityStart(validityStart);
+        setValidityEnd(validityEnd);
+        setPriority(priority);
     }
 }

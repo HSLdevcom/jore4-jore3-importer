@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.line;
 
+import com.google.common.collect.BoundType;
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
@@ -17,10 +18,14 @@ import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @IntTest
 class LineExportReaderTest {
+
+    private static final String EXPECTED_EXTERNAL_ID = "1001";
 
     private static final String EXPECTED_FINNISH_NAME = "Eira - Töölö - Sörnäinen (M) - Käpylä";
     private static final String EXPECTED_FINNISH_SHORT_NAME = "Eira-Töölö-Käpylä";
@@ -28,6 +33,9 @@ class LineExportReaderTest {
     private static final String EXPECTED_SWEDISH_SHORT_NAME = "Eira-Tölö-Kottby";
 
     private static final NetworkType EXPECTED_NETWORK_TYPE = NetworkType.TRAM_TRACK;
+
+    private static final LocalDate EXPECTED_VALID_DATE_RANGE_START = LocalDate.of(2021, 10, 4);
+    private static final LocalDate EXPECTED_VALID_DATE_RANGE_END  = LocalDate.of(2051, 1, 1);
 
     private final JdbcCursorItemReader<ExportableLine> reader;
 
@@ -71,8 +79,28 @@ class LineExportReaderTest {
 
         @Test
         @DisplayName("The first invocation of the read() method must return the found line")
-        void firstInvocationOfReadMethodMustReturnFoundList(SoftAssertions softAssertions) throws Exception {
+        void firstInvocationOfReadMethodMustReturnFoundList(final SoftAssertions softAssertions) throws Exception {
             final ExportableLine line = reader.read();
+
+            softAssertions.assertThat(line.externalId().value())
+                    .as("externalId")
+                    .isEqualTo(EXPECTED_EXTERNAL_ID);
+
+            softAssertions.assertThat(line.validDateRange().range().lowerEndpoint())
+                    .as("validDateRangeStartDate")
+                    .isEqualTo(EXPECTED_VALID_DATE_RANGE_START);
+
+            softAssertions.assertThat(line.validDateRange().range().lowerBoundType())
+                    .as("validDateRangeStartBoundType")
+                    .isEqualTo(BoundType.CLOSED);
+
+            softAssertions.assertThat(line.validDateRange().range().upperEndpoint())
+                    .as("validDateRangeEndDate")
+                    .isEqualTo(EXPECTED_VALID_DATE_RANGE_END);
+
+            softAssertions.assertThat(line.validDateRange().range().upperBoundType())
+                    .as("validDateRangeEndBoundType")
+                    .isEqualTo(BoundType.OPEN);
 
             final String finnishName = JoreLocaleUtil.getI18nString(line.name(), JoreLocaleUtil.FINNISH);
             softAssertions.assertThat(finnishName)

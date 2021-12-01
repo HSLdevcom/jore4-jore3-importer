@@ -7,13 +7,16 @@ package fi.hsl.jore.jore4.jooq.infrastructure_network;
 import fi.hsl.jore.jore4.jooq.DefaultCatalog;
 import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.Direction;
 import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.ExternalSource;
+import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.FindPointDirectionOnLink;
 import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.InfrastructureLink;
 import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.ResolvePointToClosestLink;
 import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.VehicleSubmodeOnInfrastructureLink;
+import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.records.FindPointDirectionOnLinkRecord;
 import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.records.ResolvePointToClosestLinkRecord;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jooq.Catalog;
 import org.jooq.Configuration;
@@ -45,6 +48,60 @@ public class InfrastructureNetwork extends SchemaImpl {
      * An external source from which infrastructure network parts are imported
      */
     public final ExternalSource EXTERNAL_SOURCE = ExternalSource.EXTERNAL_SOURCE;
+
+    /**
+     * The table <code>infrastructure_network.find_point_direction_on_link</code>.
+     */
+    public final FindPointDirectionOnLink FIND_POINT_DIRECTION_ON_LINK = FindPointDirectionOnLink.FIND_POINT_DIRECTION_ON_LINK;
+
+    /**
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     */
+    @Deprecated
+    public static Result<FindPointDirectionOnLinkRecord> FIND_POINT_DIRECTION_ON_LINK(
+          Configuration configuration
+        , Object pointOfInterest
+        , UUID infrastructureLinkUuid
+        , Double pointMaxDistanceInMeters
+    ) {
+        return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.infrastructure_network.tables.FindPointDirectionOnLink.FIND_POINT_DIRECTION_ON_LINK.call(
+              pointOfInterest
+            , infrastructureLinkUuid
+            , pointMaxDistanceInMeters
+        )).fetch();
+    }
+
+    /**
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     */
+    @Deprecated
+    public static FindPointDirectionOnLink FIND_POINT_DIRECTION_ON_LINK(
+          Object pointOfInterest
+        , UUID infrastructureLinkUuid
+        , Double pointMaxDistanceInMeters
+    ) {
+        return fi.hsl.jore.jore4.jooq.infrastructure_network.tables.FindPointDirectionOnLink.FIND_POINT_DIRECTION_ON_LINK.call(
+              pointOfInterest
+            , infrastructureLinkUuid
+            , pointMaxDistanceInMeters
+        );
+    }
+
+    /**
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     */
+    @Deprecated
+    public static FindPointDirectionOnLink FIND_POINT_DIRECTION_ON_LINK(
+          Field<Object> pointOfInterest
+        , Field<UUID> infrastructureLinkUuid
+        , Field<Double> pointMaxDistanceInMeters
+    ) {
+        return fi.hsl.jore.jore4.jooq.infrastructure_network.tables.FindPointDirectionOnLink.FIND_POINT_DIRECTION_ON_LINK.call(
+              pointOfInterest
+            , infrastructureLinkUuid
+            , pointMaxDistanceInMeters
+        );
+    }
 
     /**
      * The infrastructure links, e.g. road or rail elements: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:1:1:453
@@ -116,6 +173,7 @@ public class InfrastructureNetwork extends SchemaImpl {
         return Arrays.<Table<?>>asList(
             Direction.DIRECTION,
             ExternalSource.EXTERNAL_SOURCE,
+            FindPointDirectionOnLink.FIND_POINT_DIRECTION_ON_LINK,
             InfrastructureLink.INFRASTRUCTURE_LINK,
             ResolvePointToClosestLink.RESOLVE_POINT_TO_CLOSEST_LINK,
             VehicleSubmodeOnInfrastructureLink.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK);
