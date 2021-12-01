@@ -13,6 +13,9 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 
 /**
@@ -25,7 +28,16 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScheduledStopPointExportProcessor.class);
 
-    private static final String LANGUAGE_CODE_FINNISH = "fi_FI";
+    private static final int DEFAULT_PRIORITY = 10;
+
+    private static final LocalDateTime DEFAULT_VALIDITY_START = LocalDateTime.of(
+            LocalDate.of(2020, 1, 1),
+            LocalTime.of(4, 30)
+    );
+    private static final LocalDateTime DEFAULT_VALIDITY_END = LocalDateTime.of(
+            LocalDate.of(2051, 1, 1),
+            LocalTime.of(4, 29, 59)
+    );
 
     private final DigiroadStopService digiroadStopService;
 
@@ -65,7 +77,10 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
                 digiroadStop.digiroadLinkId(),
                 TransmodelScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),
                 jore3Stop.shortId().get(),
-                jore3Stop.location()
+                jore3Stop.location(),
+                DEFAULT_PRIORITY,
+                Optional.of(DEFAULT_VALIDITY_START),
+                Optional.of(DEFAULT_VALIDITY_END)
         );
 
         LOGGER.debug("Created scheduled stop point: {}", transmodelStop);

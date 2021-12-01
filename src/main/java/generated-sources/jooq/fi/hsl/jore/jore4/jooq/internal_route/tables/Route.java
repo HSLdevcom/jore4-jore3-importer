@@ -10,6 +10,7 @@ import fi.hsl.jore.jore4.jooq.internal_route.tables.records.RouteRecord;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.ScheduledStopPoint;
 import fi.hsl.jore.jore4.jooq.route.tables.Line;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +19,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -74,6 +75,21 @@ public class Route extends TableImpl<RouteRecord> {
      * The column <code>internal_route.route.on_line_id</code>.
      */
     public final TableField<RouteRecord, UUID> ON_LINE_ID = createField(DSL.name("on_line_id"), SQLDataType.UUID, this, "");
+
+    /**
+     * The column <code>internal_route.route.validity_start</code>.
+     */
+    public final TableField<RouteRecord, LocalDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATETIME(6), this, "");
+
+    /**
+     * The column <code>internal_route.route.validity_end</code>.
+     */
+    public final TableField<RouteRecord, LocalDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATETIME(6), this, "");
+
+    /**
+     * The column <code>internal_route.route.priority</code>.
+     */
+    public final TableField<RouteRecord, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER.nullable(false), this, "");
 
     private Route(Name alias, Table<RouteRecord> aliased) {
         this(alias, aliased, null);
@@ -180,11 +196,11 @@ public class Route extends TableImpl<RouteRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<UUID, String, UUID, UUID, UUID> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row8<UUID, String, UUID, UUID, UUID, LocalDateTime, LocalDateTime, Integer> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 }
