@@ -9,6 +9,7 @@ import fi.hsl.jore.jore4.jooq.route.Keys;
 import fi.hsl.jore.jore4.jooq.route.Route;
 import fi.hsl.jore.jore4.jooq.route.tables.records.LineRecord;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +18,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -73,6 +74,21 @@ public class Line extends TableImpl<LineRecord> {
      * The column <code>route.line.primary_vehicle_mode</code>. The mode of the vehicles used as primary on the line.
      */
     public final TableField<LineRecord, String> PRIMARY_VEHICLE_MODE = createField(DSL.name("primary_vehicle_mode"), SQLDataType.CLOB.nullable(false), this, "The mode of the vehicles used as primary on the line.");
+
+    /**
+     * The column <code>route.line.validity_start</code>. The point in time when the line becomes valid. If NULL, the line has been always valid.
+     */
+    public final TableField<LineRecord, LocalDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATETIME(6), this, "The point in time when the line becomes valid. If NULL, the line has been always valid.");
+
+    /**
+     * The column <code>route.line.validity_end</code>. The point in time from which onwards the line is no longer valid. If NULL, the line will be always valid.
+     */
+    public final TableField<LineRecord, LocalDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATETIME(6), this, "The point in time from which onwards the line is no longer valid. If NULL, the line will be always valid.");
+
+    /**
+     * The column <code>route.line.priority</code>. The priority of the line definition. The definition may be overridden by higher priority definitions.
+     */
+    public final TableField<LineRecord, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER.nullable(false), this, "The priority of the line definition. The definition may be overridden by higher priority definitions.");
 
     private Line(Name alias, Table<LineRecord> aliased) {
         this(alias, aliased, null);
@@ -163,11 +179,11 @@ public class Line extends TableImpl<LineRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<UUID, String, String, String, String> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row8<UUID, String, String, String, String, LocalDateTime, LocalDateTime, Integer> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 }

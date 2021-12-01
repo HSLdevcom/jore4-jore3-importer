@@ -18,8 +18,13 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
+import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
+import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.jore4.jooq.internal_service_pattern.Tables.SCHEDULED_STOP_POINT;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -33,6 +38,15 @@ class TransmodelScheduledStopPointRepositoryTest {
     private final String LABEL = "Ullanmäki";
     private final double X_COORDINATE = 25.696376131;
     private final double Y_COORDINATE = 61.207149801;
+    private final int PRIORITY = 10;
+    private static final LocalDateTime VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
+            LocalDate.of(1990, 1, 1),
+            OPERATING_DAY_START_TIME
+    );
+    private static final LocalDateTime VALIDITY_PERIOD_END_TIME = LocalDateTime.of(
+            LocalDate.of(2051, 1, 1),
+            OPERATING_DAY_END_TIME
+    );
 
     private final JdbcTemplate jdbcTemplate;
     private final TransmodelScheduledStopPointRepository repository;
@@ -65,7 +79,10 @@ class TransmodelScheduledStopPointRepositoryTest {
                 INFRASTRUCTURE_LINK_EXTERNAL_ID,
                 DIRECTION_ON_INFRALINK,
                 LABEL,
-                JoreGeometryUtil.fromDbCoordinates(Y_COORDINATE, X_COORDINATE)
+                JoreGeometryUtil.fromDbCoordinates(Y_COORDINATE, X_COORDINATE),
+                PRIORITY,
+                Optional.of(VALIDITY_PERIOD_START_TIME),
+                Optional.of(VALIDITY_PERIOD_END_TIME)
         );
 
         @Test
@@ -141,6 +158,39 @@ class TransmodelScheduledStopPointRepositoryTest {
             softAssertions.assertThat(measuredLocation.getY())
                     .as("y")
                     .isEqualTo(Y_COORDINATE);
+        }
+
+        @Test
+        @DisplayName("Should save a new scheduled stop point with the correct priority")
+        void shouldSaveNewScheduledStopPointWithCorrectPriority() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(targetTable)
+                    .row()
+                    .value(SCHEDULED_STOP_POINT.PRIORITY.getName())
+                    .isEqualTo(PRIORITY);
+        }
+
+        @Test
+        @DisplayName("Should save a new scheduled stop point with the correct validity period start time")
+        void shouldSaveNewScheduledStopPointWithCorrectValidityPeriodStartTime() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(targetTable)
+                    .row()
+                    .value(SCHEDULED_STOP_POINT.VALIDITY_START.getName())
+                    .isEqualTo(VALIDITY_PERIOD_START_TIME);
+        }
+
+        @Test
+        @DisplayName("Should save a new scheduled stop point with the correct validity period end time")
+        void shouldSaveNewScheduledStopPointWithCorrectValidityPeriodEndTime() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(targetTable)
+                    .row()
+                    .value(SCHEDULED_STOP_POINT.VALIDITY_END.getName())
+                    .isEqualTo(VALIDITY_PERIOD_END_TIME);
         }
     }
 }

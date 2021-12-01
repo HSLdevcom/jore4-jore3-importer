@@ -31,15 +31,21 @@ public class TransmodelLineRepository implements ITransmodelLineRepository {
                 LINE,
                 LINE.NAME_I18N,
                 LINE.PRIMARY_VEHICLE_MODE,
-                LINE.SHORT_NAME_I18N
+                LINE.PRIORITY,
+                LINE.SHORT_NAME_I18N,
+                LINE.VALIDITY_START,
+                LINE.VALIDITY_END
         )
-                .values((String) null, null, null)
+                .values((String) null, null, null, null, null, null)
         );
 
         lines.forEach(line -> batch.bind(
                 jsonbConverter.asJson(line.name()),
                 line.primaryVehicleMode().getValue(),
-                jsonbConverter.asJson(line.shortName())
+                line.priority(),
+                jsonbConverter.asJson(line.shortName()),
+                line.validityStart().orElse(null),
+                line.validityEnd().orElse(null)
         ));
 
         batch.execute();

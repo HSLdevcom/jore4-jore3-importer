@@ -19,6 +19,11 @@ import org.springframework.test.context.jdbc.SqlConfig;
 
 import javax.sql.DataSource;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
+import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection.BACKWARD;
 import static fi.hsl.jore.jore4.jooq.internal_service_pattern.Tables.SCHEDULED_STOP_POINT;
 import static org.assertj.db.api.Assertions.assertThat;
@@ -38,12 +43,19 @@ import static org.assertj.db.api.Assertions.assertThat;
 )
 @ExtendWith(SoftAssertionsExtension.class)
 class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
-    
-    private static final String SCHEDULED_STOP_POINT_EXTERNAL_ID = "1234567";
+
     private static final TransmodelScheduledStopPointDirection DIRECTION_ON_INFRALINK = BACKWARD;
-    private static final String INFRASTRUCTURE_LINK_EXTERNAL_ID = "133202";
     private static final String EXPECTED_INFRASTRUCTURE_LINK_ID = "554c63e6-87b2-4dc8-a032-b6b0e2607696";
     private static final String LABEL = "H1234";
+    private static final int EXPECTED_PRIORITY = 10;
+    private static final LocalDateTime EXPECTED_VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
+            LocalDate.of(1990, 1, 1),
+            OPERATING_DAY_START_TIME
+    );
+    private static final LocalDateTime EXPECTED_VALIDITY_PERIOD_END_TIME = LocalDateTime.of(
+            LocalDate.of(2051, 1, 1),
+            OPERATING_DAY_END_TIME
+    );
     private static final double X_COORDINATE = 6.0;
     private static final double Y_COORDINATE = 5.0;
 
@@ -133,5 +145,38 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
         softAssertions.assertThat(measuredLocation.getY())
                 .as("y")
                 .isEqualTo(Y_COORDINATE);
+    }
+
+    @Test
+    @DisplayName("Should save the exported scheduled stop point with the correct priority")
+    void shouldSaveExportedScheduledStopPointWithCorrectPriority() {
+        runSteps(STEPS);
+
+        assertThat(targetTable)
+                .row()
+                .value(SCHEDULED_STOP_POINT.PRIORITY.getName())
+                .isEqualTo(EXPECTED_PRIORITY);
+    }
+
+    @Test
+    @DisplayName("Should save the exported scheduled stop point with the correct validity period start time")
+    void shouldSaveExportedScheduledStopPointWithCorrectValidityPeriodStartTime() {
+        runSteps(STEPS);
+
+        assertThat(targetTable)
+                .row()
+                .value(SCHEDULED_STOP_POINT.VALIDITY_START.getName())
+                .isEqualTo(EXPECTED_VALIDITY_PERIOD_START_TIME);
+    }
+
+    @Test
+    @DisplayName("Should save the exported scheduled stop point with the correct validity period end time")
+    void shouldSaveExportedScheduledStopPointWithCorrectValidityPeriodEndTime() {
+        runSteps(STEPS);
+
+        assertThat(targetTable)
+                .row()
+                .value(SCHEDULED_STOP_POINT.VALIDITY_END.getName())
+                .isEqualTo(EXPECTED_VALIDITY_PERIOD_END_TIME);
     }
 }

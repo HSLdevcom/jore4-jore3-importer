@@ -1,7 +1,6 @@
 package fi.hsl.jore.importer.feature.transmodel.repository;
 
 import fi.hsl.jore.importer.IntTest;
-import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelLine;
 import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
@@ -11,14 +10,17 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
+import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
+import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -34,6 +36,16 @@ class TransmodelLineRepositoryTest {
     private static final String SWEDISH_SHORT_NAME = "Vandap-Kervo";
 
     private static final VehicleMode PRIMARY_VEHICLE_MODE = VehicleMode.BUS;
+    private static final int PRIORITY = 10;
+
+    private static final LocalDateTime VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
+            LocalDate.of(2019, 1, 1),
+            OPERATING_DAY_START_TIME
+    );
+    private static final LocalDateTime VALIDITY_PERIOD_END_TIME = LocalDateTime.of(
+            LocalDate.of(2020, 1, 1),
+            OPERATING_DAY_END_TIME
+    );
 
     private final TransmodelLineRepository repository;
     private final Table targetTable;
@@ -59,7 +71,10 @@ class TransmodelLineRepositoryTest {
         private final TransmodelLine INPUT = TransmodelLine.of(
                 JoreLocaleUtil.createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
                 JoreLocaleUtil.createMultilingualString(FINNISH_SHORT_NAME, SWEDISH_SHORT_NAME),
-                PRIMARY_VEHICLE_MODE
+                PRIMARY_VEHICLE_MODE,
+                PRIORITY,
+                Optional.of(VALIDITY_PERIOD_START_TIME),
+                Optional.of(VALIDITY_PERIOD_END_TIME)
         );
 
         @Test
@@ -97,6 +112,36 @@ class TransmodelLineRepositoryTest {
                     .row()
                     .value(LINE.PRIMARY_VEHICLE_MODE.getName())
                     .isEqualTo(PRIMARY_VEHICLE_MODE.getValue());
+        }
+
+        @Test
+        @DisplayName("Should insert the correct priority into the database")
+        void shouldInsertCorrectPriorityIntoDatabase() {
+            repository.insert(List.of(INPUT));
+            assertThat(targetTable)
+                    .row()
+                    .value(LINE.PRIORITY.getName())
+                    .isEqualTo(PRIORITY);
+        }
+
+        @Test
+        @DisplayName("Should insert the correct validity period start time into the database")
+        void shouldInsertCorrectValidityPeriodStartTimeIntoDatabase() {
+            repository.insert(List.of(INPUT));
+            assertThat(targetTable)
+                    .row()
+                    .value(LINE.VALIDITY_START.getName())
+                    .isEqualTo(VALIDITY_PERIOD_START_TIME);
+        }
+
+        @Test
+        @DisplayName("Should insert the correct validity period end time into the database")
+        void shouldInsertCorrectValidityPeriodEndTimeIntoDatabase() {
+            repository.insert(List.of(INPUT));
+            assertThat(targetTable)
+                    .row()
+                    .value(LINE.VALIDITY_END.getName())
+                    .isEqualTo(VALIDITY_PERIOD_END_TIME);
         }
     }
 }

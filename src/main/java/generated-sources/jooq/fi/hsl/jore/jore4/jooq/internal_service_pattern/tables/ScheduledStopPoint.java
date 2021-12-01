@@ -11,6 +11,7 @@ import fi.hsl.jore.jore4.jooq.internal_service_pattern.InternalServicePattern;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.Keys;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.records.ScheduledStopPointRecord;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -76,6 +77,21 @@ public class ScheduledStopPoint extends TableImpl<ScheduledStopPointRecord> {
      * The column <code>internal_service_pattern.scheduled_stop_point.label</code>.
      */
     public final TableField<ScheduledStopPointRecord, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "");
+
+    /**
+     * The column <code>internal_service_pattern.scheduled_stop_point.validity_start</code>.
+     */
+    public final TableField<ScheduledStopPointRecord, LocalDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATETIME(6), this, "");
+
+    /**
+     * The column <code>internal_service_pattern.scheduled_stop_point.validity_end</code>.
+     */
+    public final TableField<ScheduledStopPointRecord, LocalDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATETIME(6), this, "");
+
+    /**
+     * The column <code>internal_service_pattern.scheduled_stop_point.priority</code>.
+     */
+    public final TableField<ScheduledStopPointRecord, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER.nullable(false), this, "");
 
     private ScheduledStopPoint(Name alias, Table<ScheduledStopPointRecord> aliased) {
         this(alias, aliased, null);
@@ -174,11 +190,11 @@ public class ScheduledStopPoint extends TableImpl<ScheduledStopPointRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<UUID, Point, UUID, String, String> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row8<UUID, Point, UUID, String, String, LocalDateTime, LocalDateTime, Integer> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 }

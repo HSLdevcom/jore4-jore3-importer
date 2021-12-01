@@ -8,13 +8,14 @@ import fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding;
 import fi.hsl.jore.jore4.jooq.service_pattern.ServicePattern;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.records.ScheduledStopPointRecord;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -83,12 +84,27 @@ public class ScheduledStopPoint extends TableImpl<ScheduledStopPointRecord> {
     @Deprecated
     public final TableField<ScheduledStopPointRecord, Object> CLOSEST_POINT_ON_INFRASTRUCTURE_LINK = createField(DSL.name("closest_point_on_infrastructure_link"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\""), this, "The point on the infrastructure link closest to measured_location. A PostGIS PointZ geography in EPSG:4326.");
 
+    /**
+     * The column <code>service_pattern.scheduled_stop_point.validity_start</code>. The point in time when the stop becomes valid. If NULL, the stop has been always valid.
+     */
+    public final TableField<ScheduledStopPointRecord, LocalDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATETIME(6), this, "The point in time when the stop becomes valid. If NULL, the stop has been always valid.");
+
+    /**
+     * The column <code>service_pattern.scheduled_stop_point.validity_end</code>. The point in time from which onwards the stop is no longer valid. If NULL, the stop will be always valid.
+     */
+    public final TableField<ScheduledStopPointRecord, LocalDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATETIME(6), this, "The point in time from which onwards the stop is no longer valid. If NULL, the stop will be always valid.");
+
+    /**
+     * The column <code>service_pattern.scheduled_stop_point.priority</code>. The priority of the stop definition. The definition may be overridden by higher priority definitions.
+     */
+    public final TableField<ScheduledStopPointRecord, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER, this, "The priority of the stop definition. The definition may be overridden by higher priority definitions.");
+
     private ScheduledStopPoint(Name alias, Table<ScheduledStopPointRecord> aliased) {
         this(alias, aliased, null);
     }
 
     private ScheduledStopPoint(Name alias, Table<ScheduledStopPointRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("The scheduled stop points: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:845 . Colloquially known as stops from the perspective of timetable planning."), TableOptions.view("create view \"scheduled_stop_point\" as  SELECT ssp.scheduled_stop_point_id,\n    ssp.label,\n    ssp.measured_location,\n    ssp.located_on_infrastructure_link_id,\n    ssp.direction,\n    internal_utils.st_linelocatepoint(il.shape, ssp.measured_location) AS relative_distance_from_infrastructure_link_start,\n    internal_utils.st_closestpoint(il.shape, ssp.measured_location) AS closest_point_on_infrastructure_link\n   FROM (internal_service_pattern.scheduled_stop_point ssp\n     JOIN infrastructure_network.infrastructure_link il ON ((ssp.located_on_infrastructure_link_id = il.infrastructure_link_id)));"));
+        super(alias, null, aliased, parameters, DSL.comment("The scheduled stop points: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:845 . Colloquially known as stops from the perspective of timetable planning."), TableOptions.view("create view \"scheduled_stop_point\" as  SELECT ssp.scheduled_stop_point_id,\n    ssp.label,\n    ssp.measured_location,\n    ssp.located_on_infrastructure_link_id,\n    ssp.direction,\n    internal_utils.st_linelocatepoint(il.shape, ssp.measured_location) AS relative_distance_from_infrastructure_link_start,\n    internal_utils.st_closestpoint(il.shape, ssp.measured_location) AS closest_point_on_infrastructure_link,\n    ssp.validity_start,\n    ssp.validity_end,\n    ssp.priority\n   FROM (internal_service_pattern.scheduled_stop_point ssp\n     JOIN infrastructure_network.infrastructure_link il ON ((ssp.located_on_infrastructure_link_id = il.infrastructure_link_id)));"));
     }
 
     /**
@@ -148,11 +164,11 @@ public class ScheduledStopPoint extends TableImpl<ScheduledStopPointRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<UUID, String, Point, UUID, String, Double, Object> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row10<UUID, String, Point, UUID, String, Double, Object, LocalDateTime, LocalDateTime, Integer> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 }
