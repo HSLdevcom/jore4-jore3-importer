@@ -6,11 +6,12 @@ package fi.hsl.jore.jore4.jooq.route.tables.records;
 
 import fi.hsl.jore.jore4.jooq.route.tables.Route;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.jooq.Field;
-import org.jooq.Record6;
-import org.jooq.Row6;
+import org.jooq.Record9;
+import org.jooq.Row9;
 import org.jooq.impl.TableRecordImpl;
 
 
@@ -18,7 +19,7 @@ import org.jooq.impl.TableRecordImpl;
  * The routes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class RouteRecord extends TableRecordImpl<RouteRecord> implements Record6<UUID, String, UUID, UUID, Object, UUID> {
+public class RouteRecord extends TableRecordImpl<RouteRecord> implements Record9<UUID, String, UUID, UUID, Object, UUID, LocalDateTime, LocalDateTime, Integer> {
 
     private static final long serialVersionUID = 1L;
 
@@ -108,18 +109,60 @@ public class RouteRecord extends TableRecordImpl<RouteRecord> implements Record6
         return (UUID) get(5);
     }
 
+    /**
+     * Setter for <code>route.route.validity_start</code>. The point in time when the route becomes valid. If NULL, the route has been always valid.
+     */
+    public void setValidityStart(LocalDateTime value) {
+        set(6, value);
+    }
+
+    /**
+     * Getter for <code>route.route.validity_start</code>. The point in time when the route becomes valid. If NULL, the route has been always valid.
+     */
+    public LocalDateTime getValidityStart() {
+        return (LocalDateTime) get(6);
+    }
+
+    /**
+     * Setter for <code>route.route.validity_end</code>. The point in time from which onwards the route is no longer valid. If NULL, the route will be always valid.
+     */
+    public void setValidityEnd(LocalDateTime value) {
+        set(7, value);
+    }
+
+    /**
+     * Getter for <code>route.route.validity_end</code>. The point in time from which onwards the route is no longer valid. If NULL, the route will be always valid.
+     */
+    public LocalDateTime getValidityEnd() {
+        return (LocalDateTime) get(7);
+    }
+
+    /**
+     * Setter for <code>route.route.priority</code>. The priority of the route definition. The definition may be overridden by higher priority definitions.
+     */
+    public void setPriority(Integer value) {
+        set(8, value);
+    }
+
+    /**
+     * Getter for <code>route.route.priority</code>. The priority of the route definition. The definition may be overridden by higher priority definitions.
+     */
+    public Integer getPriority() {
+        return (Integer) get(8);
+    }
+
     // -------------------------------------------------------------------------
-    // Record6 type implementation
+    // Record9 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<UUID, String, UUID, UUID, Object, UUID> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row9<UUID, String, UUID, UUID, Object, UUID, LocalDateTime, LocalDateTime, Integer> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 
     @Override
-    public Row6<UUID, String, UUID, UUID, Object, UUID> valuesRow() {
-        return (Row6) super.valuesRow();
+    public Row9<UUID, String, UUID, UUID, Object, UUID, LocalDateTime, LocalDateTime, Integer> valuesRow() {
+        return (Row9) super.valuesRow();
     }
 
     @Override
@@ -157,6 +200,21 @@ public class RouteRecord extends TableRecordImpl<RouteRecord> implements Record6
     }
 
     @Override
+    public Field<LocalDateTime> field7() {
+        return Route.ROUTE_.VALIDITY_START;
+    }
+
+    @Override
+    public Field<LocalDateTime> field8() {
+        return Route.ROUTE_.VALIDITY_END;
+    }
+
+    @Override
+    public Field<Integer> field9() {
+        return Route.ROUTE_.PRIORITY;
+    }
+
+    @Override
     public UUID component1() {
         return getRouteId();
     }
@@ -191,6 +249,21 @@ public class RouteRecord extends TableRecordImpl<RouteRecord> implements Record6
     }
 
     @Override
+    public LocalDateTime component7() {
+        return getValidityStart();
+    }
+
+    @Override
+    public LocalDateTime component8() {
+        return getValidityEnd();
+    }
+
+    @Override
+    public Integer component9() {
+        return getPriority();
+    }
+
+    @Override
     public UUID value1() {
         return getRouteId();
     }
@@ -222,6 +295,21 @@ public class RouteRecord extends TableRecordImpl<RouteRecord> implements Record6
     @Override
     public UUID value6() {
         return getOnLineId();
+    }
+
+    @Override
+    public LocalDateTime value7() {
+        return getValidityStart();
+    }
+
+    @Override
+    public LocalDateTime value8() {
+        return getValidityEnd();
+    }
+
+    @Override
+    public Integer value9() {
+        return getPriority();
     }
 
     @Override
@@ -265,13 +353,34 @@ public class RouteRecord extends TableRecordImpl<RouteRecord> implements Record6
     }
 
     @Override
-    public RouteRecord values(UUID value1, String value2, UUID value3, UUID value4, Object value5, UUID value6) {
+    public RouteRecord value7(LocalDateTime value) {
+        setValidityStart(value);
+        return this;
+    }
+
+    @Override
+    public RouteRecord value8(LocalDateTime value) {
+        setValidityEnd(value);
+        return this;
+    }
+
+    @Override
+    public RouteRecord value9(Integer value) {
+        setPriority(value);
+        return this;
+    }
+
+    @Override
+    public RouteRecord values(UUID value1, String value2, UUID value3, UUID value4, Object value5, UUID value6, LocalDateTime value7, LocalDateTime value8, Integer value9) {
         value1(value1);
         value2(value2);
         value3(value3);
         value4(value4);
         value5(value5);
         value6(value6);
+        value7(value7);
+        value8(value8);
+        value9(value9);
         return this;
     }
 
@@ -289,7 +398,7 @@ public class RouteRecord extends TableRecordImpl<RouteRecord> implements Record6
     /**
      * Create a detached, initialised RouteRecord
      */
-    public RouteRecord(UUID routeId, String descriptionI18n, UUID startsFromScheduledStopPointId, UUID endsAtScheduledStopPointId, Object routeShape, UUID onLineId) {
+    public RouteRecord(UUID routeId, String descriptionI18n, UUID startsFromScheduledStopPointId, UUID endsAtScheduledStopPointId, Object routeShape, UUID onLineId, LocalDateTime validityStart, LocalDateTime validityEnd, Integer priority) {
         super(Route.ROUTE_);
 
         setRouteId(routeId);
@@ -298,5 +407,8 @@ public class RouteRecord extends TableRecordImpl<RouteRecord> implements Record6
         setEndsAtScheduledStopPointId(endsAtScheduledStopPointId);
         setRouteShape(routeShape);
         setOnLineId(onLineId);
+        setValidityStart(validityStart);
+        setValidityEnd(validityEnd);
+        setPriority(priority);
     }
 }
