@@ -3,10 +3,12 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support;
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImportableScheduledStopPoint;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.PersistableScheduledStopPointIdMapping;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.generated.ScheduledStopPointPK;
 import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints;
 import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPointsStaging;
 import io.vavr.collection.HashSet;
+import io.vavr.collection.List;
 import io.vavr.collection.Set;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import static fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes.INFRASTRUCTURE_NODES;
-import static fi.hsl.jore.importer.util.PostgisUtil.geometryEquals;
 
 @Repository
 public class ScheduledStopPointImportRepository
@@ -158,5 +159,18 @@ public class ScheduledStopPointImportRepository
         ));
 
         batch.execute();
+    }
+
+    @Transactional
+    @Override
+    public void setTransmodelIds(final List<PersistableScheduledStopPointIdMapping> idMappings) {
+        db.batched(c -> {
+            idMappings.forEach(idMapping -> {
+                c.dsl().update(TARGET_TABLE)
+                        .set(TARGET_TABLE.SCHEDULED_STOP_POINT_TRANSMODEL_ID, idMapping.transmodelId())
+                        .where(TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID.eq(idMapping.externalId()))
+                        .execute();
+            });
+        });
     }
 }

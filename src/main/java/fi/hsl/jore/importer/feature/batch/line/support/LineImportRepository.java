@@ -2,10 +2,12 @@ package fi.hsl.jore.importer.feature.batch.line.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
+import fi.hsl.jore.importer.feature.network.line.dto.PersistableLineIdMapping;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
 import io.vavr.collection.HashSet;
+import io.vavr.collection.List;
 import io.vavr.collection.Set;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
@@ -90,5 +92,18 @@ public class LineImportRepository
                  .stream()
                  .map(row -> LinePK.of(row.value1()))
                  .collect(HashSet.collector());
+    }
+
+    @Transactional
+    @Override
+    public void setTransmodelIds(final List<PersistableLineIdMapping> idMappings) {
+        db.batched(c -> {
+            idMappings.forEach(idMapping -> {
+                c.dsl().update(TARGET_TABLE)
+                        .set(TARGET_TABLE.NETWORK_LINE_TRANSMODEL_ID, idMapping.transmodelId())
+                        .where(TARGET_TABLE.NETWORK_LINE_EXT_ID.eq(idMapping.externalId()))
+                        .execute();
+            });
+        });
     }
 }

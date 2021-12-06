@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
@@ -129,6 +130,13 @@ class ScheduledStopPointExportProcessorTest {
                 )),
                 Optional.of(IMPORTER_SHORT_ID)
         );
+
+        @Test
+        @DisplayName("Should return a scheduled stop point with a generated id")
+        void shouldReturnScheduledStopPointWithGeneratedId() throws Exception {
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            assertThat(output.scheduledStopPointId()).isNotNull();
+        }
 
         @Test
         @DisplayName("Should return a scheduled stop point with the correct external stop id")

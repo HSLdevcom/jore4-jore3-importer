@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
 
@@ -29,6 +30,7 @@ public class TransmodelLineRepository implements ITransmodelLineRepository {
     public void insert(final List<? extends TransmodelLine> lines) {
         final BatchBindStep batch = db.batch(db.insertInto(
                 LINE,
+                LINE.LINE_ID,
                 LINE.NAME_I18N,
                 LINE.PRIMARY_VEHICLE_MODE,
                 LINE.PRIORITY,
@@ -36,10 +38,11 @@ public class TransmodelLineRepository implements ITransmodelLineRepository {
                 LINE.VALIDITY_START,
                 LINE.VALIDITY_END
         )
-                .values((String) null, null, null, null, null, null)
+                .values((UUID) null, null, null, null, null, null, null)
         );
 
         lines.forEach(line -> batch.bind(
+                line.lineId(),
                 jsonbConverter.asJson(line.name()),
                 line.primaryVehicleMode().getValue(),
                 line.priority(),
