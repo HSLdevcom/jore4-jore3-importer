@@ -7,6 +7,8 @@ import fi.hsl.jore.importer.feature.transmodel.util.ValidityPeriodUtil;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 /**
  * Transforms the information of an exported line into a format
  * that can be inserted into the Jore 4 database.
@@ -19,6 +21,8 @@ public class LineExportProcessor implements ItemProcessor<ExportableLine, Transm
     @Override
     public TransmodelLine process(final ExportableLine input) throws Exception {
         return TransmodelLine.of(
+                UUID.randomUUID().toString(),
+                input.externalId().value(),
                 input.name(),
                 input.shortName(),
                 VehicleMode.of(input.networkType()),

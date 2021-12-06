@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Combines the stop information imported from Jore 3 and Digiroad, and creates
@@ -75,6 +76,7 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
         LOGGER.debug("Found Digiroad stop: {}", digiroadStop);
 
         final TransmodelScheduledStopPoint transmodelStop = TransmodelScheduledStopPoint.of(
+                UUID.randomUUID().toString(),
                 jore3Stop.externalId().value(),
                 digiroadStop.digiroadLinkId(),
                 TransmodelScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),

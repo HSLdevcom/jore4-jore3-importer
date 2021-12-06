@@ -25,7 +25,6 @@ import java.time.LocalDateTime;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection.BACKWARD;
-import static fi.hsl.jore.jore4.jooq.internal_service_pattern.Tables.SCHEDULED_STOP_POINT;
 import static org.assertj.db.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = JobConfig.class)
@@ -61,15 +60,19 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
 
     private static final List<String> STEPS = List.of("exportScheduledStopPointsStep");
 
+    private static final fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints IMPORTER_SCHEDULED_STOP_POINT = fi.hsl.jore.importer.jooq.network.Tables.SCHEDULED_STOP_POINTS;
+    private static final fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.ScheduledStopPoint JORE4_SCHEDULED_STOP_POINT = fi.hsl.jore.jore4.jooq.internal_service_pattern.Tables.SCHEDULED_STOP_POINT;
+
     private final JdbcTemplate jdbcTemplate;
-    private final DataSource targetDataSource;
-    private final Table targetTable;
+    private final Table importerTargetTable;
+    private final Table jore4TargetTable;
 
     @Autowired
-    ExportScheduledStopPointsStepTest(final @Qualifier("jore4DataSource") DataSource targetDataSource) {
-        this.jdbcTemplate = new JdbcTemplate(targetDataSource);
-        this.targetDataSource = targetDataSource;
-        this.targetTable = new Table(targetDataSource, "internal_service_pattern.scheduled_stop_point");
+    ExportScheduledStopPointsStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
+                                      final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
+        this.jdbcTemplate = new JdbcTemplate(jore4DataSource);
+        this.importerTargetTable = new Table(importerDataSource, "network.scheduled_stop_points");
+        this.jore4TargetTable = new Table(jore4DataSource, "internal_service_pattern.scheduled_stop_point");
     }
 
     @Test
@@ -77,7 +80,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldInsertOneScheduledStopPointToJore4Database() {
         runSteps(STEPS);
 
-        assertThat(targetTable).hasNumberOfRows(1);
+        assertThat(jore4TargetTable).hasNumberOfRows(1);
     }
 
     @Test
@@ -85,9 +88,9 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldGenerateNewIdForInsertedScheduledStopPoint() {
         runSteps(STEPS);
 
-        assertThat(targetTable)
+        assertThat(jore4TargetTable)
                 .row()
-                .value(SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID.getName())
+                .value(JORE4_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID.getName())
                 .isNotNull();
     }
 
@@ -96,9 +99,9 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedScheduledStopPointWithCorrectDirection() {
         runSteps(STEPS);
 
-        assertThat(targetTable)
+        assertThat(jore4TargetTable)
                 .row()
-                .value(SCHEDULED_STOP_POINT.DIRECTION.getName())
+                .value(JORE4_SCHEDULED_STOP_POINT.DIRECTION.getName())
                 .isEqualTo(DIRECTION_ON_INFRALINK.getValue());
     }
 
@@ -107,9 +110,9 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedScheduledStopPointWithCorrectInfrastructureLinkId() {
         runSteps(STEPS);
 
-        assertThat(targetTable)
+        assertThat(jore4TargetTable)
                 .row()
-                .value(SCHEDULED_STOP_POINT.LOCATED_ON_INFRASTRUCTURE_LINK_ID.getName())
+                .value(JORE4_SCHEDULED_STOP_POINT.LOCATED_ON_INFRASTRUCTURE_LINK_ID.getName())
                 .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ID);
     }
 
@@ -118,9 +121,9 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedScheduledStopPointWithCorrectLabel() {
         runSteps(STEPS);
 
-        assertThat(targetTable)
+        assertThat(jore4TargetTable)
                 .row()
-                .value(SCHEDULED_STOP_POINT.LABEL.getName())
+                .value(JORE4_SCHEDULED_STOP_POINT.LABEL.getName())
                 .isEqualTo(LABEL);
     }
 
@@ -152,9 +155,9 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedScheduledStopPointWithCorrectPriority() {
         runSteps(STEPS);
 
-        assertThat(targetTable)
+        assertThat(jore4TargetTable)
                 .row()
-                .value(SCHEDULED_STOP_POINT.PRIORITY.getName())
+                .value(JORE4_SCHEDULED_STOP_POINT.PRIORITY.getName())
                 .isEqualTo(EXPECTED_PRIORITY);
     }
 
@@ -163,9 +166,9 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedScheduledStopPointWithCorrectValidityPeriodStartTime() {
         runSteps(STEPS);
 
-        assertThat(targetTable)
+        assertThat(jore4TargetTable)
                 .row()
-                .value(SCHEDULED_STOP_POINT.VALIDITY_START.getName())
+                .value(JORE4_SCHEDULED_STOP_POINT.VALIDITY_START.getName())
                 .isEqualTo(EXPECTED_VALIDITY_PERIOD_START_TIME);
     }
 
@@ -174,9 +177,20 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedScheduledStopPointWithCorrectValidityPeriodEndTime() {
         runSteps(STEPS);
 
-        assertThat(targetTable)
+        assertThat(jore4TargetTable)
                 .row()
-                .value(SCHEDULED_STOP_POINT.VALIDITY_END.getName())
+                .value(JORE4_SCHEDULED_STOP_POINT.VALIDITY_END.getName())
                 .isEqualTo(EXPECTED_VALIDITY_PERIOD_END_TIME);
+    }
+
+    @Test
+    @DisplayName("Should update the transmodel id of the scheduled stop point found from the importer's database")
+    void shouldUpdateTransmodelIdOfScheduledStopPointFoundFromImportersDatabase() {
+        runSteps(STEPS);
+
+        assertThat(importerTargetTable)
+                .row()
+                .value(IMPORTER_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_TRANSMODEL_ID.getName())
+                .isNotNull();
     }
 }

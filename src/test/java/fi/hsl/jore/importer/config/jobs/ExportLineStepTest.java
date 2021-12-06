@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
 import static org.assertj.db.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = JobConfig.class)
@@ -54,11 +53,17 @@ class ExportLineStepTest extends BatchIntegrationTest {
             LocalTime.of(4, 29, 59)
     );
 
-    private final Table targetTable;
+    private static final fi.hsl.jore.importer.jooq.network.tables.NetworkLines IMPORTER_LINE = fi.hsl.jore.importer.jooq.network.Tables.NETWORK_LINES;
+    private static final fi.hsl.jore.jore4.jooq.route.tables.Line JORE4_LINE = fi.hsl.jore.jore4.jooq.route.Tables.LINE;
+
+    private final Table importerTargetTable;
+    private final Table jore4TargetTable;
 
     @Autowired
-    ExportLineStepTest(final @Qualifier("jore4DataSource") DataSource targetDataSource) {
-        this.targetTable = new Table(targetDataSource, "route.line");
+    ExportLineStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
+                       final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
+        this.importerTargetTable = new Table(importerDataSource, "network.network_lines");
+        this.jore4TargetTable = new Table(jore4DataSource, "route.line");
     }
 
     @Test
@@ -66,7 +71,7 @@ class ExportLineStepTest extends BatchIntegrationTest {
     void shouldInsertOneLineIntoJoreDatabase() {
         runSteps(STEPS);
 
-        assertThat(targetTable).hasNumberOfRows(1);
+        assertThat(jore4TargetTable).hasNumberOfRows(1);
     }
 
     @Test
@@ -74,9 +79,9 @@ class ExportLineStepTest extends BatchIntegrationTest {
     void shouldGenerateNewIdForExportedLine() {
         runSteps(STEPS);
 
-        assertThat(targetTable)
+        assertThat(jore4TargetTable)
                 .row()
-                .value(LINE.LINE_ID.getName())
+                .value(JORE4_LINE.LINE_ID.getName())
                 .isNotNull();
     }
 
@@ -87,35 +92,46 @@ class ExportLineStepTest extends BatchIntegrationTest {
 
         final SoftAssertions softAssertions = new SoftAssertions();
 
-        softAssertions.assertThat(targetTable)
+        softAssertions.assertThat(jore4TargetTable)
                 .row()
-                .value(LINE.NAME_I18N.getName())
+                .value(JORE4_LINE.NAME_I18N.getName())
                 .isEqualTo(EXPECTED_NAME);
-        softAssertions.assertThat(targetTable)
+        softAssertions.assertThat(jore4TargetTable)
                 .row()
-                .value(LINE.SHORT_NAME_I18N.getName())
+                .value(JORE4_LINE.SHORT_NAME_I18N.getName())
                 .isEqualTo(EXPECTED_SHORT_NAME);
-        softAssertions.assertThat(targetTable)
+        softAssertions.assertThat(jore4TargetTable)
                 .row()
-                .value(LINE.PRIMARY_VEHICLE_MODE.getName())
+                .value(JORE4_LINE.PRIMARY_VEHICLE_MODE.getName())
                 .isEqualTo(EXPECTED_PRIMARY_VEHICLE_MODE.getValue());
-        softAssertions.assertThat(targetTable)
+        softAssertions.assertThat(jore4TargetTable)
                 .row()
-                .value(LINE.DESCRIPTION_I18N.getName())
+                .value(JORE4_LINE.DESCRIPTION_I18N.getName())
                 .isNull();
-        softAssertions.assertThat(targetTable)
+        softAssertions.assertThat(jore4TargetTable)
                 .row()
-                .value(LINE.PRIORITY.getName())
+                .value(JORE4_LINE.PRIORITY.getName())
                 .isEqualTo(EXPECTED_PRIORITY);
-        softAssertions.assertThat(targetTable)
+        softAssertions.assertThat(jore4TargetTable)
                 .row()
-                .value(LINE.VALIDITY_START.getName())
+                .value(JORE4_LINE.VALIDITY_START.getName())
                 .isEqualTo(EXPECTED_VALIDITY_PERIOD_START);
-        softAssertions.assertThat(targetTable)
+        softAssertions.assertThat(jore4TargetTable)
                 .row()
-                .value(LINE.VALIDITY_END.getName())
+                .value(JORE4_LINE.VALIDITY_END.getName())
                 .isEqualTo(EXPECTED_VALIDITY_PERIOD_END);
 
         softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Should update the transmodel id of the line found from the importer's database")
+    void shouldUpdateTransmodelIdOfLineFoundFromImportersDatabase() {
+        runSteps(STEPS);
+
+        assertThat(importerTargetTable)
+                .row()
+                .value(IMPORTER_LINE.NETWORK_LINE_TRANSMODEL_ID.getName())
+                .isNotNull();
     }
 }

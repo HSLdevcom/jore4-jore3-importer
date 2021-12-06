@@ -51,5 +51,7 @@ public class ImportLinesStepTest extends BatchIntegrationTest {
                    is("1"));
         assertThat(line.networkType(),
                    is(NetworkType.ROAD));
+        assertThat(line.transmodelId().isEmpty(),
+                is(true));
     }
 }

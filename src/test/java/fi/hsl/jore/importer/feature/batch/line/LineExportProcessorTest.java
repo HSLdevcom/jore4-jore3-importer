@@ -57,6 +57,20 @@ class LineExportProcessorTest {
     class TransformExportedLineIntoJore4Format {
 
         @Test
+        @DisplayName("Should return a line with generated id")
+        void shouldReturnLineWithGeneratedId() throws Exception {
+            final TransmodelLine line = processor.process(INPUT);
+            assertThat(line.lineId()).isNotNull();
+        }
+
+        @Test
+        @DisplayName("Should return a line with the correct external id")
+        void shouldReturnLineWithCorrectExternalId() throws Exception {
+            final TransmodelLine line = processor.process(INPUT);
+            assertThat(line.externalLineId()).isEqualTo(EXTERNAL_ID);
+        }
+
+        @Test
         @DisplayName("Should return a line with the correct Finnish name")
         void shouldReturnLineWithCorrectFinnishName() throws Exception {
             final TransmodelLine line = processor.process(INPUT);
