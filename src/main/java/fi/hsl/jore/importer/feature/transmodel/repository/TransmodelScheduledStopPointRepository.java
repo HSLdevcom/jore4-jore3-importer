@@ -27,6 +27,7 @@ public class TransmodelScheduledStopPointRepository implements ITransmodelSchedu
     public void insert(final List<? extends TransmodelScheduledStopPoint> stopPoints) {
         final BatchBindStep batch = db.batch(db.insertInto(
                 SCHEDULED_STOP_POINT,
+                SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID,
                 SCHEDULED_STOP_POINT.DIRECTION,
                 SCHEDULED_STOP_POINT.LABEL,
                 SCHEDULED_STOP_POINT.LOCATED_ON_INFRASTRUCTURE_LINK_ID,
@@ -35,10 +36,11 @@ public class TransmodelScheduledStopPointRepository implements ITransmodelSchedu
                 SCHEDULED_STOP_POINT.VALIDITY_START,
                 SCHEDULED_STOP_POINT.VALIDITY_END
         )
-                        .values((String) null, null, null, null, null, null, null)
+                        .values((UUID) null, null, null, null, null, null, null, null)
         );
 
         stopPoints.forEach(stopPoint -> batch.bind(
+                stopPoint.scheduledStopPointId(),
                 stopPoint.directionOnInfraLink().getValue(),
                 stopPoint.label(),
                 db.select(INFRASTRUCTURE_LINK.INFRASTRUCTURE_LINK_ID)

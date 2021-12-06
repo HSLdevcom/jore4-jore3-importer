@@ -2,10 +2,12 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support;
 
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
-import fi.hsl.jore.importer.feature.network.route_direction.dto.generated.RouteDirectionPK;
+import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.PersistableScheduledStopPointIdMapping;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.generated.ScheduledStopPointPK;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.repository.IScheduledStopPointTestRepository;
+import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 import org.assertj.core.api.SoftAssertions;
@@ -25,6 +27,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @IntTest
 public class ScheduledStopPointImportRepositoryTest {
 
+    private static final String EXTERNAL_ID = "c";
+
     private final IScheduledStopPointImportRepository importRepository;
     private final IScheduledStopPointTestRepository targetRepository;
 
@@ -39,16 +43,15 @@ public class ScheduledStopPointImportRepositoryTest {
     @DisplayName("Move data from the staging table to the target table")
     class CommitStagingToTarget {
 
-        private final String LOCALE_FI_FI = "fi_FI";
-        private final String LOCALE_SV_SE = "sv_SE";
+        private static final String LOCALE_FI_FI = "fi_FI";
+        private static final String LOCALE_SV_SE = "sv_SE";
 
         private final UUID EXPECTED_ID = UUID.fromString("058a63b3-365b-4676-af51-809bef577cdd");
-        private final String EXPECTED_EXTERNAL_ID = "c";
-        private final String EXPECTED_ELY_NUMBER = "1234567890";
         private final UUID EXPECTED_INFRASTRUCTURE_NODE_ID = UUID.fromString("cc11a5db-2ae7-4220-adfe-aca5d6620909");
-        private final String EXPECTED_FINNISH_NAME = "Yliopisto";
-        private final String EXPECTED_SWEDISH_NAME = "Universitetet";
-        private final String EXPECTED_SHORT_ID = "H1234";
+        private static final String EXPECTED_ELY_NUMBER = "1234567890";
+        private static final String EXPECTED_FINNISH_NAME = "Yliopisto";
+        private static final String EXPECTED_SWEDISH_NAME = "Universitetet";
+        private static final String EXPECTED_SHORT_ID = "H1234";
 
         @Nested
         @DisplayName("When the staging table has no rows")
@@ -182,7 +185,7 @@ public class ScheduledStopPointImportRepositoryTest {
 
                     softAssertions.assertThat(inserted.externalId().value())
                             .as("external id")
-                            .isEqualTo(EXPECTED_EXTERNAL_ID);
+                            .isEqualTo(EXTERNAL_ID);
 
                     softAssertions.assertThat(inserted.node().value())
                             .as("infrastructure node id")
@@ -250,7 +253,7 @@ public class ScheduledStopPointImportRepositoryTest {
 
                     softAssertions.assertThat(updated.externalId().value())
                             .as("external id")
-                            .isEqualTo(EXPECTED_EXTERNAL_ID);
+                            .isEqualTo(EXTERNAL_ID);
 
                     softAssertions.assertThat(updated.node().value())
                             .as("infrastructure node id")
@@ -274,6 +277,55 @@ public class ScheduledStopPointImportRepositoryTest {
                             .as("shortId")
                             .contains(EXPECTED_SHORT_ID);
                 }
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Set the transmodel ids of scheduled stop points")
+    @Sql(scripts = {
+            "/sql/destination/drop_tables.sql",
+            "/sql/destination/populate_infrastructure_nodes.sql",
+            "/sql/destination/populate_scheduled_stop_points.sql"
+    })
+    class SetTransmodelIds {
+
+        private final UUID TRANSMODEL_ID = UUID.fromString("51f2686b-166c-4157-bd70-647337e44c8c");
+
+        @Nested
+        @DisplayName("When the updated scheduled stop point isn't found")
+        class WhenUpdatedScheduledStopPointIsNotFound {
+
+            private static final String UNKNOWN_EXT_ID = "999999999";
+            private List<PersistableScheduledStopPointIdMapping> INPUT = List.of(
+                    PersistableScheduledStopPointIdMapping.of(UNKNOWN_EXT_ID, TRANSMODEL_ID)
+            );
+
+            @Test
+            @DisplayName("Shouldn't update the transmodel id of the existing scheduled stop point")
+            void shouldNotUpdateTransmodelIdOfExistingScheduledStopPoint() {
+                importRepository.setTransmodelIds(INPUT);
+
+                final ScheduledStopPoint updated = targetRepository.findByExternalId(ExternalId.of(EXTERNAL_ID)).get();
+                assertThat(updated.transmodelId()).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("When the updated scheduled stop point is found")
+        class WhenUpdatedScheduledStopPointIsFound {
+
+            private List<PersistableScheduledStopPointIdMapping> INPUT = List.of(
+                    PersistableScheduledStopPointIdMapping.of(EXTERNAL_ID, TRANSMODEL_ID)
+            );
+
+            @Test
+            @DisplayName("Should update the transmodel id of the existing scheduled stop point")
+            void shouldUpdateTransmodelIdOfExistingScheduledStopPoint() {
+                importRepository.setTransmodelIds(INPUT);
+
+                final ScheduledStopPoint updated = targetRepository.findByExternalId(ExternalId.of(EXTERNAL_ID)).get();
+                assertThat(updated.transmodelId()).contains(TRANSMODEL_ID);
             }
         }
     }

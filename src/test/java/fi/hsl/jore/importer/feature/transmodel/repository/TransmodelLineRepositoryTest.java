@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
@@ -26,6 +27,9 @@ import static org.assertj.db.api.Assertions.assertThat;
 
 @IntTest
 class TransmodelLineRepositoryTest {
+
+    private static final String LINE_ID = "237fa7b1-bd07-4206-b018-4144750ec689";
+    private static final String EXTERNAL_LINE_ID = "9009";
 
     private static final String EXPECTED_JORE4_NAME = "{\"fi_FI\":\"Vantaanportti-Lentoasema-Kerava\",\"sv_SE\":\"Vandaporten-Flygstationen-Kervo\"}";
     private static final String EXPECTED_JORE4_SHORT_NAME = "{\"fi_FI\":\"Vantaanp-Kerava\",\"sv_SE\":\"Vandap-Kervo\"}";
@@ -69,6 +73,8 @@ class TransmodelLineRepositoryTest {
     class InsertLineIntoDatabase {
 
         private final TransmodelLine INPUT = TransmodelLine.of(
+                LINE_ID,
+                EXTERNAL_LINE_ID,
                 JoreLocaleUtil.createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
                 JoreLocaleUtil.createMultilingualString(FINNISH_SHORT_NAME, SWEDISH_SHORT_NAME),
                 PRIMARY_VEHICLE_MODE,
@@ -82,6 +88,16 @@ class TransmodelLineRepositoryTest {
         void shouldInsertOneLineIntoDatabase() {
             repository.insert(List.of(INPUT));
             assertThat(targetTable).hasNumberOfRows(1);
+        }
+
+        @Test
+        @DisplayName("Should insert the correct id into the database")
+        void shouldInsertCorrectIdIntoDatabase() {
+            repository.insert(List.of(INPUT));
+            assertThat(targetTable)
+                    .row()
+                    .value(LINE.LINE_ID.getName())
+                    .isEqualTo(LINE_ID);
         }
 
         @Test
