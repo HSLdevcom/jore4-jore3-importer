@@ -13,6 +13,10 @@ import java.util.Optional;
 @Value.Immutable
 public interface TransmodelLine {
 
+    String lineId();
+
+    String externalLineId();
+
     MultilingualString name();
 
     MultilingualString shortName();
@@ -25,13 +29,17 @@ public interface TransmodelLine {
 
     Optional<LocalDateTime> validityEnd();
 
-    static ImmutableTransmodelLine of(final MultilingualString name,
+    static ImmutableTransmodelLine of(final String lineId,
+                                      final String externalLineId,
+                                      final MultilingualString name,
                                       final MultilingualString shortName,
                                       final VehicleMode primaryVehicleMode,
                                       final int priority,
                                       final Optional<LocalDateTime> validityStart,
                                       final Optional<LocalDateTime> validityEnd) {
         return ImmutableTransmodelLine.builder()
+                .lineId(lineId)
+                .externalLineId(externalLineId)
                 .name(name)
                 .shortName(shortName)
                 .primaryVehicleMode(primaryVehicleMode)

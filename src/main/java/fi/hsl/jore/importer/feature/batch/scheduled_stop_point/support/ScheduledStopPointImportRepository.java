@@ -3,6 +3,7 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support;
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImportableScheduledStopPoint;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.PersistableScheduledStopPointTransmodelId;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.generated.ScheduledStopPointPK;
 import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints;
 import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPointsStaging;
@@ -13,6 +14,8 @@ import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 import static fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes.INFRASTRUCTURE_NODES;
 import static fi.hsl.jore.importer.util.PostgisUtil.geometryEquals;
@@ -158,5 +161,18 @@ public class ScheduledStopPointImportRepository
         ));
 
         batch.execute();
+    }
+
+    @Transactional
+    @Override
+    public void setTransmodelIds(final Iterable<? extends PersistableScheduledStopPointTransmodelId> transmodelIds) {
+        db.batched(c -> {
+            for (final PersistableScheduledStopPointTransmodelId transmodelId: transmodelIds) {
+                c.dsl().update(TARGET_TABLE)
+                        .set(TARGET_TABLE.SCHEDULED_STOP_POINT_TRANSMODEL_ID, transmodelId.transmodelId())
+                        .where(TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID.eq(transmodelId.externalId()))
+                        .execute();
+            }
+        });
     }
 }

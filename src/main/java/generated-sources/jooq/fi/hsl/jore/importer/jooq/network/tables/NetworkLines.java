@@ -19,7 +19,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row6;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -75,6 +75,11 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
      * The column <code>network.network_lines.network_line_sys_period</code>.
      */
     public final TableField<NetworkLinesRecord, TimeRange> NETWORK_LINE_SYS_PERIOD = createField(DSL.name("network_line_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
+
+    /**
+     * The column <code>network.network_lines.network_line_transmodel_id</code>.
+     */
+    public final TableField<NetworkLinesRecord, UUID> NETWORK_LINE_TRANSMODEL_ID = createField(DSL.name("network_line_transmodel_id"), SQLDataType.UUID, this, "");
 
     private NetworkLines(Name alias, Table<NetworkLinesRecord> aliased) {
         this(alias, aliased, null);
@@ -165,11 +170,11 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<UUID, String, String, String, TimeRange> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row6<UUID, String, String, String, TimeRange, UUID> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 }

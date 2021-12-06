@@ -1,7 +1,9 @@
 package fi.hsl.jore.importer.feature.batch.line.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
+import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
+import fi.hsl.jore.importer.feature.network.line.dto.PersistableLineTransmodelId;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
@@ -13,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 import static org.jooq.impl.DSL.selectOne;
 
@@ -90,5 +94,18 @@ public class LineImportRepository
                  .stream()
                  .map(row -> LinePK.of(row.value1()))
                  .collect(HashSet.collector());
+    }
+
+    @Transactional
+    @Override
+    public void setTransmodelIds(final Iterable<? extends PersistableLineTransmodelId> transmodelIds) {
+        db.batched(c -> {
+            for (final PersistableLineTransmodelId transmodelId: transmodelIds) {
+                c.dsl().update(TARGET_TABLE)
+                        .set(TARGET_TABLE.NETWORK_LINE_TRANSMODEL_ID, transmodelId.transmodelId())
+                        .where(TARGET_TABLE.NETWORK_LINE_EXT_ID.eq(transmodelId.externalId()))
+                        .execute();
+            }
+        });
     }
 }
