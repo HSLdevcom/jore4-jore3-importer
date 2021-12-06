@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
@@ -31,14 +32,15 @@ import static org.assertj.db.api.Assertions.assertThat;
 @IntTest
 class TransmodelScheduledStopPointRepositoryTest {
 
-    private final String SCHEDULED_STOP_POINT_EXTERNAL_ID = "1234567";
-    private final TransmodelScheduledStopPointDirection DIRECTION_ON_INFRALINK = TransmodelScheduledStopPointDirection.FORWARD;
-    private final String INFRASTRUCTURE_LINK_EXTERNAL_ID = "133202";
-    private final String EXPECTED_INFRASTRUCTURE_LINK_ID = "554c63e6-87b2-4dc8-a032-b6b0e2607696";
-    private final String LABEL = "Ullanmäki";
-    private final double X_COORDINATE = 25.696376131;
-    private final double Y_COORDINATE = 61.207149801;
-    private final int PRIORITY = 10;
+    private static final String SCHEDULED_STOP_POINT_ID = "0259d692-7ee0-4792-b769-1141b248d102";
+    private static final String SCHEDULED_STOP_POINT_EXTERNAL_ID = "1234567";
+    private static final TransmodelScheduledStopPointDirection DIRECTION_ON_INFRALINK = TransmodelScheduledStopPointDirection.FORWARD;
+    private static final String INFRASTRUCTURE_LINK_EXTERNAL_ID = "133202";
+    private static final String EXPECTED_INFRASTRUCTURE_LINK_ID = "554c63e6-87b2-4dc8-a032-b6b0e2607696";
+    private static final String LABEL = "Ullanmäki";
+    private static final double X_COORDINATE = 25.696376131;
+    private static final double Y_COORDINATE = 61.207149801;
+    private static final int PRIORITY = 10;
     private static final LocalDateTime VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
             LocalDate.of(1990, 1, 1),
             OPERATING_DAY_START_TIME
@@ -75,6 +77,7 @@ class TransmodelScheduledStopPointRepositoryTest {
     class InsertScheduledStopPointIntoDatabase {
 
         private final TransmodelScheduledStopPoint INPUT = TransmodelScheduledStopPoint.of(
+                SCHEDULED_STOP_POINT_ID,
                 SCHEDULED_STOP_POINT_EXTERNAL_ID,
                 INFRASTRUCTURE_LINK_EXTERNAL_ID,
                 DIRECTION_ON_INFRALINK,
@@ -94,14 +97,14 @@ class TransmodelScheduledStopPointRepositoryTest {
         }
 
         @Test
-        @DisplayName("Should generate a new id for the inserted scheduled stop point")
-        void shouldGenerateNewIdForInsertedScheduledStopPoint() {
+        @DisplayName("Should save a new scheduled stop point with the correct id")
+        void shouldSaveNewScheduledStopPointWithCorrectId() {
             repository.insert(List.of(INPUT));
 
             assertThat(targetTable)
                     .row()
                     .value(SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID.getName())
-                    .isNotNull();
+                    .isEqualTo(SCHEDULED_STOP_POINT_ID);
         }
 
         @Test

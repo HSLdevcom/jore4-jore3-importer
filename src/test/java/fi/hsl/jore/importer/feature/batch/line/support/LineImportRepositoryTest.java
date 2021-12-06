@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.line.support;
 
-import fi.hsl.jore.importer.IntegrationTest;
+import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.batch.util.ExternalIdUtil;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
@@ -15,21 +15,22 @@ import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class LineImportRepositoryTest extends IntegrationTest {
-
-    private static final String LINE_NUMBER = "1005";
-    private static final String DISPLAY_LINE_NUMBER = "5";
-    private static final ExternalId EXT_ID = ExternalIdUtil.forLine(LineId.from(LINE_NUMBER));
-    private static final NetworkType NETWORK = NetworkType.ROAD;
+@IntTest
+public class LineImportRepositoryTest {
 
     private final ILineImportRepository importRepository;
     private final ILineTestRepository targetRepository;
@@ -40,81 +41,135 @@ public class LineImportRepositoryTest extends IntegrationTest {
         this.targetRepository = targetRepository;
     }
 
-    @BeforeEach
-    public void beforeEach() {
-        assertThat("Target repository should be empty at the start of the test",
-                   targetRepository.empty(),
-                   is(true));
+    @Nested
+    @DisplayName("Commit staging to the target table")
+    @Sql(scripts = "/sql/destination/drop_tables.sql")
+    class CommitStagingToTarget {
+
+        private final String LINE_NUMBER = "1005";
+        private final String DISPLAY_LINE_NUMBER = "5";
+        private final ExternalId EXT_ID = ExternalIdUtil.forLine(LineId.from(LINE_NUMBER));
+        private final NetworkType NETWORK = NetworkType.ROAD;
+
+        @BeforeEach
+        public void beforeEach() {
+            assertThat("Target repository should be empty at the start of the test",
+                    targetRepository.empty(),
+                    is(true));
+        }
+
+        @Test
+        public void whenNoStagedRowsAndCommit_thenReturnEmptyResult() {
+            assertThat(importRepository.commitStagingToTarget(),
+                    is(HashMap.empty()));
+        }
+
+        @Test
+        public void whenNewStagedRowsAndCommit_andTargetDbEmpty_thenReturnResultWithInsertedId() {
+            importRepository.submitToStaging(
+                    List.of(PersistableLine.of(EXT_ID,
+                            DISPLAY_LINE_NUMBER,
+                            NETWORK))
+            );
+
+            final Map<RowStatus, Set<LinePK>> result = importRepository.commitStagingToTarget();
+
+            assertThat("Only INSERTs should occur",
+                    result.keySet(),
+                    is(HashSet.of(RowStatus.INSERTED)));
+
+            final Set<LinePK> ids = result.get(RowStatus.INSERTED).get();
+
+            assertThat("Only a single row is inserted",
+                    ids.size(),
+                    is(1));
+
+            final LinePK id = ids.get();
+
+            assertThat("Target repository should contain a single row",
+                    targetRepository.count(),
+                    is(1));
+
+            assertThat("Target repository (including history) should contain a single row",
+                    targetRepository.countHistory(),
+                    is(1));
+
+            final Optional<Line> maybeLine = targetRepository.findById(id);
+            assertThat("The inserted row is found in the target repository",
+                    maybeLine.isPresent(),
+                    is(true));
+        }
+
+        @Test
+        public void whenNoStagedRowsAndCommit_andTargetNotEmpty_thenReturnResultWithDeletedId() {
+            final LinePK existingId = targetRepository.insert(
+                    PersistableLine.of(EXT_ID,
+                            DISPLAY_LINE_NUMBER,
+                            NETWORK)
+            );
+
+            final Map<RowStatus, Set<LinePK>> result = importRepository.commitStagingToTarget();
+
+            assertThat("Only DELETEs should occur",
+                    result.keySet(),
+                    is(HashSet.of(RowStatus.DELETED)));
+
+            final Set<LinePK> ids = result.get(RowStatus.DELETED).get();
+
+            assertThat("Only a single row is deleted",
+                    ids,
+                    is(HashSet.of(existingId)));
+
+            assertThat("Target repository should be empty after import",
+                    targetRepository.empty(),
+                    is(true));
+
+            assertThat("Target repository (including history) should contain a single row",
+                    targetRepository.countHistory(),
+                    is(1));
+        }
     }
 
-    @Test
-    public void whenNoStagedRowsAndCommit_thenReturnEmptyResult() {
-        assertThat(importRepository.commitStagingToTarget(),
-                   is(HashMap.empty()));
-    }
+    @Nested
+    @DisplayName("Set the transmodel id of a line")
 
-    @Test
-    public void whenNewStagedRowsAndCommit_andTargetDbEmpty_thenReturnResultWithInsertedId() {
-        importRepository.submitToStaging(
-                List.of(PersistableLine.of(EXT_ID,
-                                           DISPLAY_LINE_NUMBER,
-                                           NETWORK))
-        );
+    @Sql(scripts = {
+            "/sql/destination/drop_tables.sql",
+            "/sql/destination/populate_lines.sql"
+    })
+    class SetTransmodelId {
 
-        final Map<RowStatus, Set<LinePK>> result = importRepository.commitStagingToTarget();
+        private final ExternalId EXT_ID = ExternalId.of("1001");
+        private final UUID TRANSMODEL_ID = UUID.fromString("51f2686b-166c-4157-bd70-647337e44c8c");
 
-        assertThat("Only INSERTs should occur",
-                   result.keySet(),
-                   is(HashSet.of(RowStatus.INSERTED)));
+        @Nested
+        @DisplayName("When the line isn't found")
+        class WhenLineIsNotFound {
 
-        final Set<LinePK> ids = result.get(RowStatus.INSERTED).get();
+            private final ExternalId UNKNOWN_EXT_ID = ExternalId.of("999999999");
 
-        assertThat("Only a single row is inserted",
-                   ids.size(),
-                   is(1));
+            @Test
+            @DisplayName("Shouldn't update the transmodel id of the existing line")
+            void shouldNotUpdateTransmodelIdOfExistingLine() {
+                importRepository.setTransmodelId(UNKNOWN_EXT_ID, TRANSMODEL_ID);
 
-        final LinePK id = ids.get();
+                final Line existingLine = targetRepository.findByExternalId(EXT_ID).get();
+                Assertions.assertThat(existingLine.transmodelId()).isEmpty();
+            }
+        }
 
-        assertThat("Target repository should contain a single row",
-                   targetRepository.count(),
-                   is(1));
+        @Nested
+        @DisplayName("When the line is found")
+        class WhenLineIsFound {
 
-        assertThat("Target repository (including history) should contain a single row",
-                   targetRepository.countHistory(),
-                   is(1));
+            @Test
+            @DisplayName("Should update the transmodel id of the existing line")
+            void shouldUpdateTransmodelIdOfExistingLine() {
+                importRepository.setTransmodelId(EXT_ID, TRANSMODEL_ID);
 
-        final Optional<Line> maybeLine = targetRepository.findById(id);
-        assertThat("The inserted row is found in the target repository",
-                   maybeLine.isPresent(),
-                   is(true));
-    }
-
-    @Test
-    public void whenNoStagedRowsAndCommit_andTargetNotEmpty_thenReturnResultWithDeletedId() {
-        final LinePK existingId = targetRepository.insert(
-                PersistableLine.of(EXT_ID,
-                                   DISPLAY_LINE_NUMBER,
-                                   NETWORK)
-        );
-
-        final Map<RowStatus, Set<LinePK>> result = importRepository.commitStagingToTarget();
-
-        assertThat("Only DELETEs should occur",
-                   result.keySet(),
-                   is(HashSet.of(RowStatus.DELETED)));
-
-        final Set<LinePK> ids = result.get(RowStatus.DELETED).get();
-
-        assertThat("Only a single row is deleted",
-                   ids,
-                   is(HashSet.of(existingId)));
-
-        assertThat("Target repository should be empty after import",
-                   targetRepository.empty(),
-                   is(true));
-
-        assertThat("Target repository (including history) should contain a single row",
-                   targetRepository.countHistory(),
-                   is(1));
+                final Line existingLine = targetRepository.findByExternalId(EXT_ID).get();
+                Assertions.assertThat(existingLine.transmodelId()).contains(TRANSMODEL_ID);
+            }
+        }
     }
 }

@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 import static fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes.INFRASTRUCTURE_NODES;
 import static fi.hsl.jore.importer.util.PostgisUtil.geometryEquals;
 
@@ -158,5 +160,14 @@ public class ScheduledStopPointImportRepository
         ));
 
         batch.execute();
+    }
+
+    @Transactional
+    @Override
+    public void setTransmodelId(final String elyNumber, final UUID transmodelId) {
+        db.update(TARGET_TABLE)
+                .set(TARGET_TABLE.SCHEDULED_STOP_POINT_TRANSMODEL_ID, transmodelId)
+                .where(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER.eq(elyNumber))
+                .execute();
     }
 }

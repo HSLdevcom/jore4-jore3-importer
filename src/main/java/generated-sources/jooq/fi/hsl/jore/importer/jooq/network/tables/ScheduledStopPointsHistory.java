@@ -16,7 +16,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -81,6 +81,11 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
      * The column <code>network.scheduled_stop_points_history.scheduled_stop_point_short_id</code>.
      */
     public final TableField<ScheduledStopPointsHistoryRecord, String> SCHEDULED_STOP_POINT_SHORT_ID = createField(DSL.name("scheduled_stop_point_short_id"), SQLDataType.VARCHAR(6), this, "");
+
+    /**
+     * The column <code>network.scheduled_stop_points_history.scheduled_stop_point_transmodel_id</code>.
+     */
+    public final TableField<ScheduledStopPointsHistoryRecord, UUID> SCHEDULED_STOP_POINT_TRANSMODEL_ID = createField(DSL.name("scheduled_stop_point_transmodel_id"), SQLDataType.UUID, this, "");
 
     private ScheduledStopPointsHistory(Name alias, Table<ScheduledStopPointsHistoryRecord> aliased) {
         this(alias, aliased, null);
@@ -147,11 +152,11 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<UUID, String, UUID, String, JSONB, TimeRange, String> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row8<UUID, String, UUID, String, JSONB, TimeRange, String, UUID> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 }
