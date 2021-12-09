@@ -8,7 +8,9 @@ import fi.hsl.jore.jore4.jooq.internal_route.tables.Route;
 import fi.hsl.jore.jore4.jooq.internal_route.tables.records.RouteRecord;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.ScheduledStopPoint;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.records.ScheduledStopPointRecord;
+import fi.hsl.jore.jore4.jooq.route.tables.Direction;
 import fi.hsl.jore.jore4.jooq.route.tables.Line;
+import fi.hsl.jore.jore4.jooq.route.tables.records.DirectionRecord;
 import fi.hsl.jore.jore4.jooq.route.tables.records.LineRecord;
 
 import org.jooq.ForeignKey;
@@ -35,6 +37,7 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<RouteRecord, DirectionRecord> ROUTE__ROUTE_DIRECTION_FKEY = Internal.createForeignKey(Route.ROUTE, DSL.name("route_direction_fkey"), new TableField[] { Route.ROUTE.DIRECTION }, fi.hsl.jore.jore4.jooq.route.Keys.DIRECTION_PKEY, new TableField[] { Direction.DIRECTION.DIRECTION_ }, true);
     public static final ForeignKey<RouteRecord, ScheduledStopPointRecord> ROUTE__ROUTE_ENDS_AT_SCHEDULED_STOP_POINT_ID_FKEY = Internal.createForeignKey(Route.ROUTE, DSL.name("route_ends_at_scheduled_stop_point_id_fkey"), new TableField[] { Route.ROUTE.ENDS_AT_SCHEDULED_STOP_POINT_ID }, fi.hsl.jore.jore4.jooq.internal_service_pattern.Keys.SCHEDULED_STOP_POINT_PKEY, new TableField[] { ScheduledStopPoint.SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID }, true);
     public static final ForeignKey<RouteRecord, LineRecord> ROUTE__ROUTE_ON_LINE_ID_FKEY = Internal.createForeignKey(Route.ROUTE, DSL.name("route_on_line_id_fkey"), new TableField[] { Route.ROUTE.ON_LINE_ID }, fi.hsl.jore.jore4.jooq.route.Keys.LINE_PKEY, new TableField[] { Line.LINE.LINE_ID }, true);
     public static final ForeignKey<RouteRecord, ScheduledStopPointRecord> ROUTE__ROUTE_STARTS_FROM_SCHEDULED_STOP_POINT_ID_FKEY = Internal.createForeignKey(Route.ROUTE, DSL.name("route_starts_from_scheduled_stop_point_id_fkey"), new TableField[] { Route.ROUTE.STARTS_FROM_SCHEDULED_STOP_POINT_ID }, fi.hsl.jore.jore4.jooq.internal_service_pattern.Keys.SCHEDULED_STOP_POINT_PKEY, new TableField[] { ScheduledStopPoint.SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID }, true);

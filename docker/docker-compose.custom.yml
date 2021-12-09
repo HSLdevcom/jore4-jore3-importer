@@ -1,29 +1,6 @@
 ---
 version: "3.8"
 services:
-  jore4-hasura:
-    image: "hsldevcom/jore4-hasura:main--10254a33107fb72ee5fd2b78d4b76000d8626203"
-  importer:
-    container_name: importer
-    build:
-      context: ../
-      dockerfile: ./Dockerfile
-    restart: "unless-stopped"
-    environment:
-      - SOURCE_DB_HOSTNAME=mssqltestdb
-      - SOURCE_DB_PORT=1433
-      - SOURCE_DB_DATABASE=jore3testdb
-      - SOURCE_DB_USERNAME=sa
-      - SOURCE_DB_PASSWORD=P@ssw0rd
-      - IMPORTER_DB_URL=jdbc:postgresql://importer-jooq-database:5432/devdb?stringtype=unspecified
-      - IMPORTER_DB_USERNAME=devdb
-      - IMPORTER_DB_PASSWORD=devdb
-      - JORE_IMPORTER_MIGRATE=true
-    networks:
-      - jore4
-    ports:
-      - "127.0.0.1:3200:8080"
-
   importer-jooq-database:
     image: postgis/postgis:12-3.1-alpine
     container_name: importer-database

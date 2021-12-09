@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
+
 /**
  * Combines the stop information imported from Jore 3 and Digiroad, and creates
  * a new {@link TransmodelScheduledStopPoint} object which can be inserted into
@@ -83,8 +85,8 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
                 jore3Stop.shortId().get(),
                 jore3Stop.location(),
                 DEFAULT_PRIORITY,
-                Optional.of(DEFAULT_VALIDITY_START),
-                Optional.of(DEFAULT_VALIDITY_END)
+                Optional.of(offsetDateTimeFromLocalDateTime(DEFAULT_VALIDITY_START)),
+                Optional.of(offsetDateTimeFromLocalDateTime(DEFAULT_VALIDITY_END))
         );
 
         LOGGER.debug("Created scheduled stop point: {}", transmodelStop);

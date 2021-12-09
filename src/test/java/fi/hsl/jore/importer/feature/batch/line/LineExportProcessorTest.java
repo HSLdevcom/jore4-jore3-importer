@@ -13,13 +13,16 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
+import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LineExportProcessorTest {
 
+    private static final String LINE_NUMBER = "35";
     private static final String EXTERNAL_ID = "7863";
     private static final String FINNISH_NAME = "Vantaanportti-Lentoasema-Kerava";
     private static final String FINNISH_SHORT_NAME = "Vantaanp-Kerava";
@@ -30,19 +33,20 @@ class LineExportProcessorTest {
 
     private static final NetworkType NETWORK_TYPE_ROAD = NetworkType.ROAD;
     private static final VehicleMode EXPECTED_PRIMARY_VEHICLE_MODE = VehicleMode.BUS;
-    private static final LocalDateTime EXPECTED_VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
+    private static final OffsetDateTime EXPECTED_VALIDITY_PERIOD_START_TIME = offsetDateTimeFromLocalDateTime(LocalDateTime.of(
             VALID_DATE_RANGE_START,
             OPERATING_DAY_START_TIME
-    );
-    private static final LocalDateTime EXPECTED_VALIDITY_PERIOD_END_TIME = LocalDateTime.of(
+    ));
+    private static final OffsetDateTime EXPECTED_VALIDITY_PERIOD_END_TIME = offsetDateTimeFromLocalDateTime(LocalDateTime.of(
             LocalDate.of(2005, 2, 2),
             OPERATING_DAY_END_TIME
-    );
+    ));
 
     private static final int EXPECTED_PRIORITY = 10;
 
     private static final ExportableLine INPUT = ExportableLine.of(
             ExternalId.of(EXTERNAL_ID),
+            LINE_NUMBER,
             JoreLocaleUtil.createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
             NETWORK_TYPE_ROAD,
             JoreLocaleUtil.createMultilingualString(FINNISH_SHORT_NAME, SWEDISH_SHORT_NAME),
@@ -68,6 +72,13 @@ class LineExportProcessorTest {
         void shouldReturnLineWithCorrectExternalId() throws Exception {
             final TransmodelLine line = processor.process(INPUT);
             assertThat(line.externalLineId()).isEqualTo(EXTERNAL_ID);
+        }
+
+        @Test
+        @DisplayName("Should return a line with the correct label")
+        void shouldReturnLineWithCorrectLabel() throws Exception {
+            final TransmodelLine line = processor.process(INPUT);
+            assertThat(line.label()).isEqualTo(LINE_NUMBER);
         }
 
         @Test

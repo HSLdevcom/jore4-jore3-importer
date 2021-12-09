@@ -8,6 +8,7 @@ import java.time.LocalTime;
  */
 public final class ExportConstants {
 
+    public static final String LOCAL_TIME_ZONE = "Europe/Helsinki";
     public static final LocalTime OPERATING_DAY_START_TIME = LocalTime.of(4, 30);
     public static final LocalTime OPERATING_DAY_END_TIME = LocalTime.of(4, 29, 59);
 

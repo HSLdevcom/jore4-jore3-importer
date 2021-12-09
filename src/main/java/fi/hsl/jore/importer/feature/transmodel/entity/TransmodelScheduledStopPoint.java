@@ -3,7 +3,7 @@ package fi.hsl.jore.importer.feature.transmodel.entity;
 import org.immutables.value.Value;
 import org.locationtech.jts.geom.Point;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 /**
@@ -27,9 +27,9 @@ public interface TransmodelScheduledStopPoint {
 
     int priority();
 
-    Optional<LocalDateTime> validityStart();
+    Optional<OffsetDateTime> validityStart();
 
-    Optional<LocalDateTime> validityEnd();
+    Optional<OffsetDateTime> validityEnd();
 
     static ImmutableTransmodelScheduledStopPoint of(final String scheduledStopPointId,
                                                     final String externalScheduledStopPointId,
@@ -38,8 +38,8 @@ public interface TransmodelScheduledStopPoint {
                                                     final String label,
                                                     final Point measuredLocation,
                                                     final int priority,
-                                                    final Optional<LocalDateTime> validityStart,
-                                                    final Optional<LocalDateTime> validityEnd) {
+                                                    final Optional<OffsetDateTime> validityStart,
+                                                    final Optional<OffsetDateTime> validityEnd) {
         return ImmutableTransmodelScheduledStopPoint.builder()
                 .scheduledStopPointId(scheduledStopPointId)
                 .externalScheduledStopPointId(externalScheduledStopPointId)

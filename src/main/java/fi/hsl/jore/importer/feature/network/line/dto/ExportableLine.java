@@ -15,6 +15,8 @@ public interface ExportableLine {
 
     ExternalId externalId();
 
+    String lineNumber();
+
     MultilingualString name();
 
     NetworkType networkType();
@@ -24,12 +26,14 @@ public interface ExportableLine {
     DateRange validDateRange();
 
     static ImmutableExportableLine of (final ExternalId externalId,
+                                       final String lineNumber,
                                        final MultilingualString name,
                                        final NetworkType networkType,
                                        final MultilingualString shortName,
                                        final DateRange validDateRange) {
         return ImmutableExportableLine.builder()
                 .externalId(externalId)
+                .lineNumber(lineNumber)
                 .name(name)
                 .networkType(networkType)
                 .shortName(shortName)
