@@ -47,6 +47,9 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     private static final String EXPECTED_INFRASTRUCTURE_LINK_ID = "554c63e6-87b2-4dc8-a032-b6b0e2607696";
     private static final String LABEL = "H1234";
     private static final int EXPECTED_PRIORITY = 10;
+
+    //We use LocalDateTime here because the assertion library doesn't work
+    //if we use OffsetDateTime.
     private static final LocalDateTime EXPECTED_VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
             LocalDate.of(1990, 1, 1),
             OPERATING_DAY_START_TIME

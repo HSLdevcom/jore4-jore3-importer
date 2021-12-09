@@ -31,6 +31,7 @@ public class TransmodelLineRepository implements ITransmodelLineRepository {
         final BatchBindStep batch = db.batch(db.insertInto(
                 LINE,
                 LINE.LINE_ID,
+                LINE.LABEL,
                 LINE.NAME_I18N,
                 LINE.PRIMARY_VEHICLE_MODE,
                 LINE.PRIORITY,
@@ -38,11 +39,12 @@ public class TransmodelLineRepository implements ITransmodelLineRepository {
                 LINE.VALIDITY_START,
                 LINE.VALIDITY_END
         )
-                .values((UUID) null, null, null, null, null, null, null)
+                .values((UUID) null, null, null, null, null, null, null, null)
         );
 
         lines.forEach(line -> batch.bind(
                 line.lineId(),
+                line.label(),
                 jsonbConverter.asJson(line.name()),
                 line.primaryVehicleMode().getValue(),
                 line.priority(),

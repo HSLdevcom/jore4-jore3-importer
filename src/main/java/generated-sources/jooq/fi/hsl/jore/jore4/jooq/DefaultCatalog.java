@@ -4,6 +4,7 @@
 package fi.hsl.jore.jore4.jooq;
 
 
+import fi.hsl.jore.jore4.jooq.deleted.Deleted;
 import fi.hsl.jore.jore4.jooq.infrastructure_network.InfrastructureNetwork;
 import fi.hsl.jore.jore4.jooq.internal_route.InternalRoute;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.InternalServicePattern;
@@ -31,6 +32,11 @@ public class DefaultCatalog extends CatalogImpl {
      * The reference instance of <code>DEFAULT_CATALOG</code>
      */
     public static final DefaultCatalog DEFAULT_CATALOG = new DefaultCatalog();
+
+    /**
+     * The schema <code>deleted</code>.
+     */
+    public final Deleted DELETED = Deleted.DELETED;
 
     /**
      * The schema <code>infrastructure_network</code>.
@@ -77,6 +83,7 @@ public class DefaultCatalog extends CatalogImpl {
     @Override
     public final List<Schema> getSchemas() {
         return Arrays.<Schema>asList(
+            Deleted.DELETED,
             InfrastructureNetwork.INFRASTRUCTURE_NETWORK,
             InternalRoute.INTERNAL_ROUTE,
             InternalServicePattern.INTERNAL_SERVICE_PATTERN,

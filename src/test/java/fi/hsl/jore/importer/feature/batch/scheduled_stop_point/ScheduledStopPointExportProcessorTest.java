@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
+import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -191,14 +192,14 @@ class ScheduledStopPointExportProcessorTest {
         @DisplayName("Should return a scheduled stop point with the correct validity period start time")
         void shouldReturnScheduledStopPointWithCorrectValidityPeriodStartTime() throws Exception {
             final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
-            assertThat(output.validityStart()).contains(VALIDITY_PERIOD_START_TIME);
+            assertThat(output.validityStart()).contains(offsetDateTimeFromLocalDateTime(VALIDITY_PERIOD_START_TIME));
         }
 
         @Test
         @DisplayName("Should return a scheduled stop point with the correct validity period end time")
         void shouldReturnScheduledStopPointWithCorrectValidityPeriodEndTime() throws Exception {
             final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
-            assertThat(output.validityEnd()).contains(VALIDITY_PERIOD_END_TIME);
+            assertThat(output.validityEnd()).contains(offsetDateTimeFromLocalDateTime(VALIDITY_PERIOD_END_TIME));
         }
     }
 }

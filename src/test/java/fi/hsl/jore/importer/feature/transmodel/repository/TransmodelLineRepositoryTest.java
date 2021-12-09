@@ -18,10 +18,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
+import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -30,6 +30,7 @@ class TransmodelLineRepositoryTest {
 
     private static final String LINE_ID = "237fa7b1-bd07-4206-b018-4144750ec689";
     private static final String EXTERNAL_LINE_ID = "9009";
+    private static final String LABEL = "1";
 
     private static final String EXPECTED_JORE4_NAME = "{\"fi_FI\":\"Vantaanportti-Lentoasema-Kerava\",\"sv_SE\":\"Vandaporten-Flygstationen-Kervo\"}";
     private static final String EXPECTED_JORE4_SHORT_NAME = "{\"fi_FI\":\"Vantaanp-Kerava\",\"sv_SE\":\"Vandap-Kervo\"}";
@@ -42,6 +43,8 @@ class TransmodelLineRepositoryTest {
     private static final VehicleMode PRIMARY_VEHICLE_MODE = VehicleMode.BUS;
     private static final int PRIORITY = 10;
 
+    //We use LocalDateTime here because the assertion library doesn't work
+    //if we use OffsetDateTime.
     private static final LocalDateTime VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
             LocalDate.of(2019, 1, 1),
             OPERATING_DAY_START_TIME
@@ -75,12 +78,13 @@ class TransmodelLineRepositoryTest {
         private final TransmodelLine INPUT = TransmodelLine.of(
                 LINE_ID,
                 EXTERNAL_LINE_ID,
+                LABEL,
                 JoreLocaleUtil.createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
                 JoreLocaleUtil.createMultilingualString(FINNISH_SHORT_NAME, SWEDISH_SHORT_NAME),
                 PRIMARY_VEHICLE_MODE,
                 PRIORITY,
-                Optional.of(VALIDITY_PERIOD_START_TIME),
-                Optional.of(VALIDITY_PERIOD_END_TIME)
+                Optional.of(offsetDateTimeFromLocalDateTime(VALIDITY_PERIOD_START_TIME)),
+                Optional.of(offsetDateTimeFromLocalDateTime(VALIDITY_PERIOD_END_TIME))
         );
 
         @Test
@@ -98,6 +102,16 @@ class TransmodelLineRepositoryTest {
                     .row()
                     .value(LINE.LINE_ID.getName())
                     .isEqualTo(LINE_ID);
+        }
+
+        @Test
+        @DisplayName("Should insert the correct label into the database")
+        void shouldInsertCorrectLabelIntoDatabase() {
+            repository.insert(List.of(INPUT));
+            assertThat(targetTable)
+                    .row()
+                    .value(LINE.LABEL.getName())
+                    .isEqualTo(LABEL);
         }
 
         @Test
