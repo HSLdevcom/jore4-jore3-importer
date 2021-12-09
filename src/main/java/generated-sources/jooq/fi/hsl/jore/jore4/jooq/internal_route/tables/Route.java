@@ -8,9 +8,10 @@ import fi.hsl.jore.jore4.jooq.internal_route.InternalRoute;
 import fi.hsl.jore.jore4.jooq.internal_route.Keys;
 import fi.hsl.jore.jore4.jooq.internal_route.tables.records.RouteRecord;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.ScheduledStopPoint;
+import fi.hsl.jore.jore4.jooq.route.tables.Direction;
 import fi.hsl.jore.jore4.jooq.route.tables.Line;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -79,17 +80,27 @@ public class Route extends TableImpl<RouteRecord> {
     /**
      * The column <code>internal_route.route.validity_start</code>.
      */
-    public final TableField<RouteRecord, LocalDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATETIME(6), this, "");
+    public final TableField<RouteRecord, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
 
     /**
      * The column <code>internal_route.route.validity_end</code>.
      */
-    public final TableField<RouteRecord, LocalDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATETIME(6), this, "");
+    public final TableField<RouteRecord, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
 
     /**
      * The column <code>internal_route.route.priority</code>.
      */
     public final TableField<RouteRecord, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER.nullable(false), this, "");
+
+    /**
+     * The column <code>internal_route.route.label</code>.
+     */
+    public final TableField<RouteRecord, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "");
+
+    /**
+     * The column <code>internal_route.route.direction</code>.
+     */
+    public final TableField<RouteRecord, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB.nullable(false), this, "");
 
     private Route(Name alias, Table<RouteRecord> aliased) {
         this(alias, aliased, null);
@@ -141,12 +152,13 @@ public class Route extends TableImpl<RouteRecord> {
 
     @Override
     public List<ForeignKey<RouteRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RouteRecord, ?>>asList(Keys.ROUTE__ROUTE_STARTS_FROM_SCHEDULED_STOP_POINT_ID_FKEY, Keys.ROUTE__ROUTE_ENDS_AT_SCHEDULED_STOP_POINT_ID_FKEY, Keys.ROUTE__ROUTE_ON_LINE_ID_FKEY);
+        return Arrays.<ForeignKey<RouteRecord, ?>>asList(Keys.ROUTE__ROUTE_STARTS_FROM_SCHEDULED_STOP_POINT_ID_FKEY, Keys.ROUTE__ROUTE_ENDS_AT_SCHEDULED_STOP_POINT_ID_FKEY, Keys.ROUTE__ROUTE_ON_LINE_ID_FKEY, Keys.ROUTE__ROUTE_DIRECTION_FKEY);
     }
 
     private transient ScheduledStopPoint _routeStartsFromScheduledStopPointIdFkey;
     private transient ScheduledStopPoint _routeEndsAtScheduledStopPointIdFkey;
     private transient Line _line;
+    private transient Direction _direction;
 
     public ScheduledStopPoint routeStartsFromScheduledStopPointIdFkey() {
         if (_routeStartsFromScheduledStopPointIdFkey == null)
@@ -167,6 +179,13 @@ public class Route extends TableImpl<RouteRecord> {
             _line = new Line(this, Keys.ROUTE__ROUTE_ON_LINE_ID_FKEY);
 
         return _line;
+    }
+
+    public Direction direction() {
+        if (_direction == null)
+            _direction = new Direction(this, Keys.ROUTE__ROUTE_DIRECTION_FKEY);
+
+        return _direction;
     }
 
     @Override
@@ -196,11 +215,11 @@ public class Route extends TableImpl<RouteRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<UUID, String, UUID, UUID, UUID, LocalDateTime, LocalDateTime, Integer> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row10<UUID, String, UUID, UUID, UUID, OffsetDateTime, OffsetDateTime, Integer, String, String> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 }

@@ -6,7 +6,7 @@ package fi.hsl.jore.jore4.jooq.service_pattern.tables.records;
 
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPoint;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import org.jooq.Field;
@@ -21,7 +21,7 @@ import org.locationtech.jts.geom.Point;
  * . Colloquially known as stops from the perspective of timetable planning.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class ScheduledStopPointRecord extends TableRecordImpl<ScheduledStopPointRecord> implements Record10<UUID, String, Point, UUID, String, Double, Object, LocalDateTime, LocalDateTime, Integer> {
+public class ScheduledStopPointRecord extends TableRecordImpl<ScheduledStopPointRecord> implements Record10<UUID, String, Point, UUID, String, Double, Object, OffsetDateTime, OffsetDateTime, Integer> {
 
     private static final long serialVersionUID = 1L;
 
@@ -128,29 +128,29 @@ public class ScheduledStopPointRecord extends TableRecordImpl<ScheduledStopPoint
     /**
      * Setter for <code>service_pattern.scheduled_stop_point.validity_start</code>. The point in time when the stop becomes valid. If NULL, the stop has been always valid.
      */
-    public void setValidityStart(LocalDateTime value) {
+    public void setValidityStart(OffsetDateTime value) {
         set(7, value);
     }
 
     /**
      * Getter for <code>service_pattern.scheduled_stop_point.validity_start</code>. The point in time when the stop becomes valid. If NULL, the stop has been always valid.
      */
-    public LocalDateTime getValidityStart() {
-        return (LocalDateTime) get(7);
+    public OffsetDateTime getValidityStart() {
+        return (OffsetDateTime) get(7);
     }
 
     /**
      * Setter for <code>service_pattern.scheduled_stop_point.validity_end</code>. The point in time from which onwards the stop is no longer valid. If NULL, the stop will be always valid.
      */
-    public void setValidityEnd(LocalDateTime value) {
+    public void setValidityEnd(OffsetDateTime value) {
         set(8, value);
     }
 
     /**
      * Getter for <code>service_pattern.scheduled_stop_point.validity_end</code>. The point in time from which onwards the stop is no longer valid. If NULL, the stop will be always valid.
      */
-    public LocalDateTime getValidityEnd() {
-        return (LocalDateTime) get(8);
+    public OffsetDateTime getValidityEnd() {
+        return (OffsetDateTime) get(8);
     }
 
     /**
@@ -172,12 +172,12 @@ public class ScheduledStopPointRecord extends TableRecordImpl<ScheduledStopPoint
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<UUID, String, Point, UUID, String, Double, Object, LocalDateTime, LocalDateTime, Integer> fieldsRow() {
+    public Row10<UUID, String, Point, UUID, String, Double, Object, OffsetDateTime, OffsetDateTime, Integer> fieldsRow() {
         return (Row10) super.fieldsRow();
     }
 
     @Override
-    public Row10<UUID, String, Point, UUID, String, Double, Object, LocalDateTime, LocalDateTime, Integer> valuesRow() {
+    public Row10<UUID, String, Point, UUID, String, Double, Object, OffsetDateTime, OffsetDateTime, Integer> valuesRow() {
         return (Row10) super.valuesRow();
     }
 
@@ -221,12 +221,12 @@ public class ScheduledStopPointRecord extends TableRecordImpl<ScheduledStopPoint
     }
 
     @Override
-    public Field<LocalDateTime> field8() {
+    public Field<OffsetDateTime> field8() {
         return ScheduledStopPoint.SCHEDULED_STOP_POINT.VALIDITY_START;
     }
 
     @Override
-    public Field<LocalDateTime> field9() {
+    public Field<OffsetDateTime> field9() {
         return ScheduledStopPoint.SCHEDULED_STOP_POINT.VALIDITY_END;
     }
 
@@ -275,12 +275,12 @@ public class ScheduledStopPointRecord extends TableRecordImpl<ScheduledStopPoint
     }
 
     @Override
-    public LocalDateTime component8() {
+    public OffsetDateTime component8() {
         return getValidityStart();
     }
 
     @Override
-    public LocalDateTime component9() {
+    public OffsetDateTime component9() {
         return getValidityEnd();
     }
 
@@ -329,12 +329,12 @@ public class ScheduledStopPointRecord extends TableRecordImpl<ScheduledStopPoint
     }
 
     @Override
-    public LocalDateTime value8() {
+    public OffsetDateTime value8() {
         return getValidityStart();
     }
 
     @Override
-    public LocalDateTime value9() {
+    public OffsetDateTime value9() {
         return getValidityEnd();
     }
 
@@ -390,13 +390,13 @@ public class ScheduledStopPointRecord extends TableRecordImpl<ScheduledStopPoint
     }
 
     @Override
-    public ScheduledStopPointRecord value8(LocalDateTime value) {
+    public ScheduledStopPointRecord value8(OffsetDateTime value) {
         setValidityStart(value);
         return this;
     }
 
     @Override
-    public ScheduledStopPointRecord value9(LocalDateTime value) {
+    public ScheduledStopPointRecord value9(OffsetDateTime value) {
         setValidityEnd(value);
         return this;
     }
@@ -408,7 +408,7 @@ public class ScheduledStopPointRecord extends TableRecordImpl<ScheduledStopPoint
     }
 
     @Override
-    public ScheduledStopPointRecord values(UUID value1, String value2, Point value3, UUID value4, String value5, Double value6, Object value7, LocalDateTime value8, LocalDateTime value9, Integer value10) {
+    public ScheduledStopPointRecord values(UUID value1, String value2, Point value3, UUID value4, String value5, Double value6, Object value7, OffsetDateTime value8, OffsetDateTime value9, Integer value10) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -436,7 +436,7 @@ public class ScheduledStopPointRecord extends TableRecordImpl<ScheduledStopPoint
     /**
      * Create a detached, initialised ScheduledStopPointRecord
      */
-    public ScheduledStopPointRecord(UUID scheduledStopPointId, String label, Point measuredLocation, UUID locatedOnInfrastructureLinkId, String direction, Double relativeDistanceFromInfrastructureLinkStart, Object closestPointOnInfrastructureLink, LocalDateTime validityStart, LocalDateTime validityEnd, Integer priority) {
+    public ScheduledStopPointRecord(UUID scheduledStopPointId, String label, Point measuredLocation, UUID locatedOnInfrastructureLinkId, String direction, Double relativeDistanceFromInfrastructureLinkStart, Object closestPointOnInfrastructureLink, OffsetDateTime validityStart, OffsetDateTime validityEnd, Integer priority) {
         super(ScheduledStopPoint.SCHEDULED_STOP_POINT);
 
         setScheduledStopPointId(scheduledStopPointId);

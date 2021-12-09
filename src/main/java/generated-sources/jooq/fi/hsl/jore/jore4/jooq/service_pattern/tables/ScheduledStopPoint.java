@@ -8,7 +8,7 @@ import fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding;
 import fi.hsl.jore.jore4.jooq.service_pattern.ServicePattern;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.records.ScheduledStopPointRecord;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import org.jooq.Field;
@@ -87,12 +87,12 @@ public class ScheduledStopPoint extends TableImpl<ScheduledStopPointRecord> {
     /**
      * The column <code>service_pattern.scheduled_stop_point.validity_start</code>. The point in time when the stop becomes valid. If NULL, the stop has been always valid.
      */
-    public final TableField<ScheduledStopPointRecord, LocalDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATETIME(6), this, "The point in time when the stop becomes valid. If NULL, the stop has been always valid.");
+    public final TableField<ScheduledStopPointRecord, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time when the stop becomes valid. If NULL, the stop has been always valid.");
 
     /**
      * The column <code>service_pattern.scheduled_stop_point.validity_end</code>. The point in time from which onwards the stop is no longer valid. If NULL, the stop will be always valid.
      */
-    public final TableField<ScheduledStopPointRecord, LocalDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATETIME(6), this, "The point in time from which onwards the stop is no longer valid. If NULL, the stop will be always valid.");
+    public final TableField<ScheduledStopPointRecord, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time from which onwards the stop is no longer valid. If NULL, the stop will be always valid.");
 
     /**
      * The column <code>service_pattern.scheduled_stop_point.priority</code>. The priority of the stop definition. The definition may be overridden by higher priority definitions.
@@ -168,7 +168,7 @@ public class ScheduledStopPoint extends TableImpl<ScheduledStopPointRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<UUID, String, Point, UUID, String, Double, Object, LocalDateTime, LocalDateTime, Integer> fieldsRow() {
+    public Row10<UUID, String, Point, UUID, String, Double, Object, OffsetDateTime, OffsetDateTime, Integer> fieldsRow() {
         return (Row10) super.fieldsRow();
     }
 }

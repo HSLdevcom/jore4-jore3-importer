@@ -6,14 +6,14 @@ package fi.hsl.jore.jore4.jooq.route.tables;
 
 import fi.hsl.jore.jore4.jooq.route.tables.records.RouteRecord;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row9;
+import org.jooq.Row11;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -76,26 +76,36 @@ public class Route extends TableImpl<RouteRecord> {
     public final TableField<RouteRecord, UUID> ON_LINE_ID = createField(DSL.name("on_line_id"), SQLDataType.UUID, this, "The line to which this route belongs.");
 
     /**
-     * The column <code>route.route.validity_start</code>. The point in time when the route becomes valid. If NULL, the route has been always valid.
+     * The column <code>route.route.validity_start</code>. The point in time when the route becomes valid. If NULL, the route has been always valid before end time of validity period.
      */
-    public final TableField<RouteRecord, LocalDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATETIME(6), this, "The point in time when the route becomes valid. If NULL, the route has been always valid.");
+    public final TableField<RouteRecord, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time when the route becomes valid. If NULL, the route has been always valid before end time of validity period.");
 
     /**
-     * The column <code>route.route.validity_end</code>. The point in time from which onwards the route is no longer valid. If NULL, the route will be always valid.
+     * The column <code>route.route.validity_end</code>. The point in time from which onwards the route is no longer valid. If NULL, the route is valid indefinitely after the start time of the validity period.
      */
-    public final TableField<RouteRecord, LocalDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATETIME(6), this, "The point in time from which onwards the route is no longer valid. If NULL, the route will be always valid.");
+    public final TableField<RouteRecord, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time from which onwards the route is no longer valid. If NULL, the route is valid indefinitely after the start time of the validity period.");
 
     /**
      * The column <code>route.route.priority</code>. The priority of the route definition. The definition may be overridden by higher priority definitions.
      */
     public final TableField<RouteRecord, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER, this, "The priority of the route definition. The definition may be overridden by higher priority definitions.");
 
+    /**
+     * The column <code>route.route.label</code>. The label of the route definition, label and direction together are unique for a certain priority and validity period.
+     */
+    public final TableField<RouteRecord, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB, this, "The label of the route definition, label and direction together are unique for a certain priority and validity period.");
+
+    /**
+     * The column <code>route.route.direction</code>. The direction of the route definition, label and direction together are unique for a certain priority and validity period.
+     */
+    public final TableField<RouteRecord, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB, this, "The direction of the route definition, label and direction together are unique for a certain priority and validity period.");
+
     private Route(Name alias, Table<RouteRecord> aliased) {
         this(alias, aliased, null);
     }
 
     private Route(Name alias, Table<RouteRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("The routes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483"), TableOptions.view("create view \"route\" as  SELECT r.route_id,\n    r.description_i18n,\n    r.starts_from_scheduled_stop_point_id,\n    r.ends_at_scheduled_stop_point_id,\n    (st_linemerge(st_collect(\n        CASE\n            WHEN ilar.is_traversal_forwards THEN (il.shape)::geometry\n            ELSE st_reverse((il.shape)::geometry)\n        END)))::geography AS route_shape,\n    r.on_line_id,\n    r.validity_start,\n    r.validity_end,\n    r.priority\n   FROM (internal_route.route r\n     LEFT JOIN (route.infrastructure_link_along_route ilar\n     JOIN infrastructure_network.infrastructure_link il ON ((ilar.infrastructure_link_id = il.infrastructure_link_id))) ON ((r.route_id = ilar.route_id)))\n  GROUP BY r.route_id;"));
+        super(alias, null, aliased, parameters, DSL.comment("The routes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483"), TableOptions.view("create view \"route\" as  SELECT r.route_id,\n    r.description_i18n,\n    r.starts_from_scheduled_stop_point_id,\n    r.ends_at_scheduled_stop_point_id,\n    (st_linemerge(st_collect(\n        CASE\n            WHEN ilar.is_traversal_forwards THEN (il.shape)::geometry\n            ELSE st_reverse((il.shape)::geometry)\n        END)))::geography AS route_shape,\n    r.on_line_id,\n    r.validity_start,\n    r.validity_end,\n    r.priority,\n    r.label,\n    r.direction\n   FROM (internal_route.route r\n     LEFT JOIN (route.infrastructure_link_along_route ilar\n     JOIN infrastructure_network.infrastructure_link il ON ((ilar.infrastructure_link_id = il.infrastructure_link_id))) ON ((r.route_id = ilar.route_id)))\n  GROUP BY r.route_id;"));
     }
 
     /**
@@ -155,11 +165,11 @@ public class Route extends TableImpl<RouteRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row11 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<UUID, String, UUID, UUID, Object, UUID, LocalDateTime, LocalDateTime, Integer> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row11<UUID, String, UUID, UUID, Object, UUID, OffsetDateTime, OffsetDateTime, Integer, String, String> fieldsRow() {
+        return (Row11) super.fieldsRow();
     }
 }

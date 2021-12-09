@@ -4,6 +4,7 @@ import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.jore3.util.JoreGeometryUtil;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.assertj.db.type.Table;
@@ -20,12 +21,13 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
+import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static fi.hsl.jore.jore4.jooq.internal_service_pattern.Tables.SCHEDULED_STOP_POINT;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -41,27 +43,34 @@ class TransmodelScheduledStopPointRepositoryTest {
     private static final double X_COORDINATE = 25.696376131;
     private static final double Y_COORDINATE = 61.207149801;
     private static final int PRIORITY = 10;
-    private static final LocalDateTime VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
-            LocalDate.of(1990, 1, 1),
-            OPERATING_DAY_START_TIME
+
+    private static final OffsetDateTime VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
+            LocalDateTime.of(
+                    LocalDate.of(1990, 1, 1),
+                    OPERATING_DAY_START_TIME
+            )
     );
-    private static final LocalDateTime VALIDITY_PERIOD_END_TIME = LocalDateTime.of(
-            LocalDate.of(2051, 1, 1),
-            OPERATING_DAY_END_TIME
+    private static final OffsetDateTime VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
+            LocalDateTime.of(
+                    LocalDate.of(2051, 1, 1),
+                    OPERATING_DAY_END_TIME
+            )
     );
 
     private final JdbcTemplate jdbcTemplate;
     private final TransmodelScheduledStopPointRepository repository;
-    private final DataSource targetDataSource;
     private final Table targetTable;
+    private final TransmodelValidityPeriodTestRepository testRepository;
 
     @Autowired
     TransmodelScheduledStopPointRepositoryTest(final TransmodelScheduledStopPointRepository repository,
                                                @Qualifier("jore4DataSource") final DataSource targetDataSource) {
         this.jdbcTemplate = new JdbcTemplate(targetDataSource);
         this.repository = repository;
-        this.targetDataSource = targetDataSource;
         this.targetTable = new Table(targetDataSource, "internal_service_pattern.scheduled_stop_point");
+        this.testRepository = new TransmodelValidityPeriodTestRepository(targetDataSource,
+                ValidityPeriodTargetTable.SCHEDULED_STOP_POINT
+        );
     }
 
     @Nested
@@ -84,8 +93,8 @@ class TransmodelScheduledStopPointRepositoryTest {
                 LABEL,
                 JoreGeometryUtil.fromDbCoordinates(Y_COORDINATE, X_COORDINATE),
                 PRIORITY,
-                Optional.of(VALIDITY_PERIOD_START_TIME),
-                Optional.of(VALIDITY_PERIOD_END_TIME)
+                Optional.of(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE),
+                Optional.of(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE)
         );
 
         @Test
@@ -179,10 +188,10 @@ class TransmodelScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectValidityPeriodStartTime() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
-                    .row()
-                    .value(SCHEDULED_STOP_POINT.VALIDITY_START.getName())
-                    .isEqualTo(VALIDITY_PERIOD_START_TIME);
+            final OffsetDateTime validityStart = testRepository.findValidityPeriodStartTimestampAtFinnishTimeZone();
+            Assertions.assertThat(validityStart)
+                    .as(SCHEDULED_STOP_POINT.VALIDITY_START.getName())
+                    .isEqualTo(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE);
         }
 
         @Test
@@ -190,10 +199,10 @@ class TransmodelScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectValidityPeriodEndTime() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
-                    .row()
-                    .value(SCHEDULED_STOP_POINT.VALIDITY_END.getName())
-                    .isEqualTo(VALIDITY_PERIOD_END_TIME);
+            final OffsetDateTime validityEnd = testRepository.findValidityPeriodEndTimestampAtFinnishTimeZone();
+            Assertions.assertThat(validityEnd)
+                    .as(SCHEDULED_STOP_POINT.VALIDITY_END.getName())
+                    .isEqualTo(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE);
         }
     }
 }

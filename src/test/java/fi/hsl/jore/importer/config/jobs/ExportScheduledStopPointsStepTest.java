@@ -3,7 +3,10 @@ package fi.hsl.jore.importer.config.jobs;
 import fi.hsl.jore.importer.BatchIntegrationTest;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
 import fi.hsl.jore.importer.feature.transmodel.repository.ScheduledStopPointTestLocation;
+import fi.hsl.jore.importer.feature.transmodel.repository.TransmodelValidityPeriodTestRepository;
+import fi.hsl.jore.importer.feature.transmodel.repository.ValidityPeriodTargetTable;
 import io.vavr.collection.List;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.assertj.db.type.Table;
@@ -21,10 +24,12 @@ import javax.sql.DataSource;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection.BACKWARD;
+import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static org.assertj.db.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = JobConfig.class)
@@ -47,13 +52,18 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     private static final String EXPECTED_INFRASTRUCTURE_LINK_ID = "554c63e6-87b2-4dc8-a032-b6b0e2607696";
     private static final String LABEL = "H1234";
     private static final int EXPECTED_PRIORITY = 10;
-    private static final LocalDateTime EXPECTED_VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
-            LocalDate.of(1990, 1, 1),
-            OPERATING_DAY_START_TIME
+
+    private static final OffsetDateTime EXPECTED_VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
+            LocalDateTime.of(
+                    LocalDate.of(1990, 1, 1),
+                    OPERATING_DAY_START_TIME
+            )
     );
-    private static final LocalDateTime EXPECTED_VALIDITY_PERIOD_END_TIME = LocalDateTime.of(
-            LocalDate.of(2051, 1, 1),
-            OPERATING_DAY_END_TIME
+    private static final OffsetDateTime EXPECTED_VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
+            LocalDateTime.of(
+                    LocalDate.of(2051, 1, 1),
+                    OPERATING_DAY_END_TIME
+            )
     );
     private static final double X_COORDINATE = 6.0;
     private static final double Y_COORDINATE = 5.0;
@@ -66,6 +76,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     private final JdbcTemplate jdbcTemplate;
     private final Table importerTargetTable;
     private final Table jore4TargetTable;
+    private final TransmodelValidityPeriodTestRepository testRepository;
 
     @Autowired
     ExportScheduledStopPointsStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
@@ -73,6 +84,9 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
         this.jdbcTemplate = new JdbcTemplate(jore4DataSource);
         this.importerTargetTable = new Table(importerDataSource, "network.scheduled_stop_points");
         this.jore4TargetTable = new Table(jore4DataSource, "internal_service_pattern.scheduled_stop_point");
+        this.testRepository = new TransmodelValidityPeriodTestRepository(jore4DataSource,
+                ValidityPeriodTargetTable.SCHEDULED_STOP_POINT
+        );
     }
 
     @Test
@@ -166,10 +180,10 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedScheduledStopPointWithCorrectValidityPeriodStartTime() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable)
-                .row()
-                .value(JORE4_SCHEDULED_STOP_POINT.VALIDITY_START.getName())
-                .isEqualTo(EXPECTED_VALIDITY_PERIOD_START_TIME);
+        final OffsetDateTime validityStart = testRepository.findValidityPeriodStartTimestampAtFinnishTimeZone();
+        Assertions.assertThat(validityStart)
+                .as(JORE4_SCHEDULED_STOP_POINT.VALIDITY_START.getName())
+                .isEqualTo(EXPECTED_VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE);
     }
 
     @Test
@@ -177,10 +191,10 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedScheduledStopPointWithCorrectValidityPeriodEndTime() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable)
-                .row()
-                .value(JORE4_SCHEDULED_STOP_POINT.VALIDITY_END.getName())
-                .isEqualTo(EXPECTED_VALIDITY_PERIOD_END_TIME);
+        final OffsetDateTime validityEnd = testRepository.findValidityPeriodEndTimestampAtFinnishTimeZone();
+        Assertions.assertThat(validityEnd)
+                .as(JORE4_SCHEDULED_STOP_POINT.VALIDITY_END.getName())
+                .isEqualTo(EXPECTED_VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE);
     }
 
     @Test

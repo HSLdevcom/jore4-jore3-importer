@@ -27,6 +27,8 @@ class LineExportReaderTest {
 
     private static final String EXPECTED_EXTERNAL_ID = "1001";
 
+    private static final String EXPECTED_LINE_NUMBER = "1";
+
     private static final String EXPECTED_FINNISH_NAME = "Eira - Töölö - Sörnäinen (M) - Käpylä";
     private static final String EXPECTED_FINNISH_SHORT_NAME = "Eira-Töölö-Käpylä";
     private static final String EXPECTED_SWEDISH_NAME = "Eira - Tölö - Sörnäs (M) - Kottby";
@@ -79,12 +81,16 @@ class LineExportReaderTest {
 
         @Test
         @DisplayName("The first invocation of the read() method must return the found line")
-        void firstInvocationOfReadMethodMustReturnFoundList(final SoftAssertions softAssertions) throws Exception {
+        void firstInvocationOfReadMethodMustReturnFoundLine(final SoftAssertions softAssertions) throws Exception {
             final ExportableLine line = reader.read();
 
             softAssertions.assertThat(line.externalId().value())
                     .as("externalId")
                     .isEqualTo(EXPECTED_EXTERNAL_ID);
+
+            softAssertions.assertThat(line.lineNumber())
+                    .as("lineNumber")
+                    .isEqualTo(EXPECTED_LINE_NUMBER);
 
             softAssertions.assertThat(line.validDateRange().range().lowerEndpoint())
                     .as("validDateRangeStartDate")

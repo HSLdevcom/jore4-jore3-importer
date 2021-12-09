@@ -9,7 +9,7 @@ import fi.hsl.jore.jore4.jooq.route.Keys;
 import fi.hsl.jore.jore4.jooq.route.Route;
 import fi.hsl.jore.jore4.jooq.route.tables.records.LineRecord;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +18,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row9;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -78,17 +78,22 @@ public class Line extends TableImpl<LineRecord> {
     /**
      * The column <code>route.line.validity_start</code>. The point in time when the line becomes valid. If NULL, the line has been always valid.
      */
-    public final TableField<LineRecord, LocalDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATETIME(6), this, "The point in time when the line becomes valid. If NULL, the line has been always valid.");
+    public final TableField<LineRecord, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time when the line becomes valid. If NULL, the line has been always valid.");
 
     /**
      * The column <code>route.line.validity_end</code>. The point in time from which onwards the line is no longer valid. If NULL, the line will be always valid.
      */
-    public final TableField<LineRecord, LocalDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATETIME(6), this, "The point in time from which onwards the line is no longer valid. If NULL, the line will be always valid.");
+    public final TableField<LineRecord, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time from which onwards the line is no longer valid. If NULL, the line will be always valid.");
 
     /**
      * The column <code>route.line.priority</code>. The priority of the line definition. The definition may be overridden by higher priority definitions.
      */
     public final TableField<LineRecord, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER.nullable(false), this, "The priority of the line definition. The definition may be overridden by higher priority definitions.");
+
+    /**
+     * The column <code>route.line.label</code>. The label of the line definition. The label is unique for a certain priority and validity period.
+     */
+    public final TableField<LineRecord, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "The label of the line definition. The label is unique for a certain priority and validity period.");
 
     private Line(Name alias, Table<LineRecord> aliased) {
         this(alias, aliased, null);
@@ -179,11 +184,11 @@ public class Line extends TableImpl<LineRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row9 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<UUID, String, String, String, String, LocalDateTime, LocalDateTime, Integer> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row9<UUID, String, String, String, String, OffsetDateTime, OffsetDateTime, Integer, String> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 }
