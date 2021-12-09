@@ -38,12 +38,15 @@ class ExportLineStepTest extends BatchIntegrationTest {
 
     private static final List<String> STEPS = List.of("exportLinesStep");
 
+    private static final String EXPECTED_LABEL = "1";
     private static final String EXPECTED_NAME = "{\"fi_FI\":\"Eira - Töölö - Sörnäinen (M) - Käpylä\",\"sv_SE\":\"Eira - Tölö - Sörnäs (M) - Kottby\"}";
     private static final String EXPECTED_SHORT_NAME = "{\"fi_FI\":\"Eira-Töölö-Käpylä\",\"sv_SE\":\"Eira-Tölö-Kottby\"}";
 
     private static final VehicleMode EXPECTED_PRIMARY_VEHICLE_MODE = VehicleMode.TRAM;
     private static final int EXPECTED_PRIORITY = 10;
 
+    //We use LocalDateTime here because the assertion library doesn't work
+    //if we use OffsetDateTime.
     private static final LocalDateTime EXPECTED_VALIDITY_PERIOD_START = LocalDateTime.of(
             LocalDate.of(2021, 10, 4),
             LocalTime.of(4, 30)
@@ -96,6 +99,11 @@ class ExportLineStepTest extends BatchIntegrationTest {
                 .row()
                 .value(JORE4_LINE.NAME_I18N.getName())
                 .isEqualTo(EXPECTED_NAME);
+
+        softAssertions.assertThat(jore4TargetTable)
+                .row()
+                .value(JORE4_LINE.LABEL.getName())
+                .isEqualTo(EXPECTED_LABEL);
         softAssertions.assertThat(jore4TargetTable)
                 .row()
                 .value(JORE4_LINE.SHORT_NAME_I18N.getName())

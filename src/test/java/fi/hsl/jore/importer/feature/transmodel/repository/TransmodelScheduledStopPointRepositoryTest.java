@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
+import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static fi.hsl.jore.jore4.jooq.internal_service_pattern.Tables.SCHEDULED_STOP_POINT;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -41,6 +42,9 @@ class TransmodelScheduledStopPointRepositoryTest {
     private static final double X_COORDINATE = 25.696376131;
     private static final double Y_COORDINATE = 61.207149801;
     private static final int PRIORITY = 10;
+
+    //We use LocalDateTime here because the assertion library doesn't work
+    //if we use OffsetDateTime.
     private static final LocalDateTime VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
             LocalDate.of(1990, 1, 1),
             OPERATING_DAY_START_TIME
@@ -84,8 +88,8 @@ class TransmodelScheduledStopPointRepositoryTest {
                 LABEL,
                 JoreGeometryUtil.fromDbCoordinates(Y_COORDINATE, X_COORDINATE),
                 PRIORITY,
-                Optional.of(VALIDITY_PERIOD_START_TIME),
-                Optional.of(VALIDITY_PERIOD_END_TIME)
+                Optional.of(offsetDateTimeFromLocalDateTime(VALIDITY_PERIOD_START_TIME)),
+                Optional.of(offsetDateTimeFromLocalDateTime(VALIDITY_PERIOD_END_TIME))
         );
 
         @Test
