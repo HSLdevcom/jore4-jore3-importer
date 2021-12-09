@@ -23,11 +23,12 @@ public class LineExportProcessor implements ItemProcessor<ExportableLine, Transm
         return TransmodelLine.of(
                 UUID.randomUUID().toString(),
                 input.externalId().value(),
+                input.lineNumber(),
                 input.name(),
                 input.shortName(),
                 VehicleMode.of(input.networkType()),
                 DEFAULT_PRIORITY,
-                ValidityPeriodUtil.determineValidityPeriodStartTime(input.validDateRange().range()),
+                ValidityPeriodUtil.constructValidityPeriodStartTime(input.validDateRange().range()),
                 ValidityPeriodUtil.constructValidityPeriodEndTime(input.validDateRange().range())
         );
     }

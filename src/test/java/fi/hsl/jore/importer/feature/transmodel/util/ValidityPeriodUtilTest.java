@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
+import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -30,7 +32,7 @@ class ValidityPeriodUtilTest {
             @Test
             @DisplayName("Should return an empty optional")
             void shouldReturnEmptyOptional() {
-                final Optional<LocalDateTime> startTime = ValidityPeriodUtil.determineValidityPeriodStartTime(Range.atMost(LocalDate.EPOCH));
+                final Optional<OffsetDateTime> startTime = ValidityPeriodUtil.constructValidityPeriodStartTime(Range.atMost(LocalDate.EPOCH));
                 assertThat(startTime).isEmpty();
             }
         }
@@ -44,22 +46,22 @@ class ValidityPeriodUtilTest {
             class WhenStartDayIsIncludedInValidityPeriod {
 
                 private final Range<LocalDate> INPUT = Range.closed(START_DAY, END_DAY);
-                private final LocalDateTime EXPECTED_START_TIME = LocalDateTime.of(
+                private final OffsetDateTime EXPECTED_START_TIME = offsetDateTimeFromLocalDateTime(LocalDateTime.of(
                         START_DAY,
                         OPERATING_DAY_START_TIME
-                );
+                ));
 
                 @Test
                 @DisplayName("Should return an optional which contains the start time")
                 void shouldReturnOptionalWhichContainsStartTime() {
-                    final Optional<LocalDateTime> startTime = ValidityPeriodUtil.determineValidityPeriodStartTime(INPUT);
+                    final Optional<OffsetDateTime> startTime = ValidityPeriodUtil.constructValidityPeriodStartTime(INPUT);
                     assertThat(startTime).isNotEmpty();
                 }
 
                 @Test
                 @DisplayName("Should return the correct start time")
                 void shouldReturnCorrectStartTime() {
-                    final Optional<LocalDateTime> startTime = ValidityPeriodUtil.determineValidityPeriodStartTime(INPUT);
+                    final Optional<OffsetDateTime> startTime = ValidityPeriodUtil.constructValidityPeriodStartTime(INPUT);
                     assertThat(startTime).contains(EXPECTED_START_TIME);
                 }
             }
@@ -69,22 +71,22 @@ class ValidityPeriodUtilTest {
             class WhenStartDayIsExcludedFromValidityPeriod {
 
                 private final Range<LocalDate> INPUT = Range.open(START_DAY, END_DAY);
-                private final LocalDateTime EXPECTED_START_TIME = LocalDateTime.of(
+                private final OffsetDateTime EXPECTED_START_TIME = offsetDateTimeFromLocalDateTime(LocalDateTime.of(
                         LocalDate.of(2021, 2, 2),
                         OPERATING_DAY_START_TIME
-                );
+                ));
 
                 @Test
                 @DisplayName("Should return an optional which contains the start time")
                 void shouldReturnOptionalWhichContainsStartTime() {
-                    final Optional<LocalDateTime> startTime = ValidityPeriodUtil.determineValidityPeriodStartTime(INPUT);
+                    final Optional<OffsetDateTime> startTime = ValidityPeriodUtil.constructValidityPeriodStartTime(INPUT);
                     assertThat(startTime).isNotEmpty();
                 }
 
                 @Test
                 @DisplayName("Should return the correct start time")
                 void shouldReturnCorrectStartTime() {
-                    final Optional<LocalDateTime> startTime = ValidityPeriodUtil.determineValidityPeriodStartTime(INPUT);
+                    final Optional<OffsetDateTime> startTime = ValidityPeriodUtil.constructValidityPeriodStartTime(INPUT);
                     assertThat(startTime).contains(EXPECTED_START_TIME);
                 }
             }
@@ -102,7 +104,7 @@ class ValidityPeriodUtilTest {
             @Test
             @DisplayName("Should return an empty optional")
             void shouldReturnEmptyOptional() {
-                final Optional<LocalDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(Range.atLeast(LocalDate.EPOCH));
+                final Optional<OffsetDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(Range.atLeast(LocalDate.EPOCH));
                 assertThat(endTime).isEmpty();
             }
         }
@@ -116,22 +118,22 @@ class ValidityPeriodUtilTest {
             class WhenEndDayIsIncludedInValidityPeriod {
 
                 private final Range<LocalDate> INPUT = Range.closed(START_DAY, END_DAY);
-                private final LocalDateTime EXPECTED_END_TIME = LocalDateTime.of(
+                private final OffsetDateTime EXPECTED_END_TIME = offsetDateTimeFromLocalDateTime(LocalDateTime.of(
                         LocalDate.of(2021, 3, 2),
                         OPERATING_DAY_END_TIME
-                );
+                ));
 
                 @Test
                 @DisplayName("Should return an optional which contains the end time")
                 void shouldReturnOptionalWhichContainsEndTime() {
-                    final Optional<LocalDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(INPUT);
+                    final Optional<OffsetDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(INPUT);
                     assertThat(endTime).isNotEmpty();
                 }
 
                 @Test
                 @DisplayName("Should return the correct end time")
                 void shouldReturnCorrectEndTime() {
-                    final Optional<LocalDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(INPUT);
+                    final Optional<OffsetDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(INPUT);
                     assertThat(endTime).contains(EXPECTED_END_TIME);
                 }
             }
@@ -141,22 +143,22 @@ class ValidityPeriodUtilTest {
             class WhenEndDayIsExcludedFromValidityPeriod {
 
                 private final Range<LocalDate> INPUT = Range.open(START_DAY, END_DAY);
-                private final LocalDateTime EXPECTED_END_TIME = LocalDateTime.of(
+                private final OffsetDateTime EXPECTED_END_TIME = offsetDateTimeFromLocalDateTime(LocalDateTime.of(
                         LocalDate.of(2021, 3, 1),
                         OPERATING_DAY_END_TIME
-                );
+                ));
 
                 @Test
                 @DisplayName("Should return an optional which contains the end time")
                 void shouldReturnOptionalWhichContainsEndTime() {
-                    final Optional<LocalDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(INPUT);
+                    final Optional<OffsetDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(INPUT);
                     assertThat(endTime).isNotEmpty();
                 }
 
                 @Test
                 @DisplayName("Should return the correct end time")
                 void shouldReturnCorrectEndTime() {
-                    final Optional<LocalDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(INPUT);
+                    final Optional<OffsetDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(INPUT);
                     assertThat(endTime).contains(EXPECTED_END_TIME);
                 }
             }

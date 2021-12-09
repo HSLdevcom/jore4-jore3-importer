@@ -11,7 +11,7 @@ import fi.hsl.jore.jore4.jooq.internal_service_pattern.InternalServicePattern;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.Keys;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.records.ScheduledStopPointRecord;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -81,12 +81,12 @@ public class ScheduledStopPoint extends TableImpl<ScheduledStopPointRecord> {
     /**
      * The column <code>internal_service_pattern.scheduled_stop_point.validity_start</code>.
      */
-    public final TableField<ScheduledStopPointRecord, LocalDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATETIME(6), this, "");
+    public final TableField<ScheduledStopPointRecord, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
 
     /**
      * The column <code>internal_service_pattern.scheduled_stop_point.validity_end</code>.
      */
-    public final TableField<ScheduledStopPointRecord, LocalDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATETIME(6), this, "");
+    public final TableField<ScheduledStopPointRecord, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
 
     /**
      * The column <code>internal_service_pattern.scheduled_stop_point.priority</code>.
@@ -194,7 +194,7 @@ public class ScheduledStopPoint extends TableImpl<ScheduledStopPointRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<UUID, Point, UUID, String, String, LocalDateTime, LocalDateTime, Integer> fieldsRow() {
+    public Row8<UUID, Point, UUID, String, String, OffsetDateTime, OffsetDateTime, Integer> fieldsRow() {
         return (Row8) super.fieldsRow();
     }
 }
