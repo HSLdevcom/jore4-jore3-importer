@@ -3,9 +3,12 @@ package fi.hsl.jore.importer.feature.batch.route.support;
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
+import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
+import fi.hsl.jore.importer.feature.network.route.dto.PersistableRouteIdMapping;
 import fi.hsl.jore.importer.feature.network.route.dto.Route;
 import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
 import fi.hsl.jore.importer.feature.network.route.repository.IRouteTestRepository;
+import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 import org.assertj.core.api.SoftAssertions;
@@ -201,6 +204,10 @@ class RouteImportRepositoryTest {
                     softAssertions.assertThat(swedishRouteName)
                             .as("updated Swedish route name")
                             .isEqualTo(EXPECTED_SWEDISH_ROUTE_NAME);
+
+                    softAssertions.assertThat(inserted.transmodelId())
+                            .as("transmodelId")
+                            .isEmpty();
                 }
             }
 
@@ -265,7 +272,61 @@ class RouteImportRepositoryTest {
                     softAssertions.assertThat(swedishRouteName)
                             .as("updated Swedish route name")
                             .isEqualTo(EXPECTED_SWEDISH_ROUTE_NAME);
+
+                    softAssertions.assertThat(updated.transmodelId())
+                            .as("transmodelId")
+                            .isEmpty();
                 }
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Set the transmodel ids of existing routes")
+    @Sql(scripts = {
+            "/sql/destination/drop_tables.sql",
+            "/sql/destination/populate_lines.sql",
+            "/sql/destination/populate_routes.sql"
+    })
+    class SetTransmodelIds {
+
+        private final ExternalId EXT_ID = ExternalId.of("1001");
+        private final UUID TRANSMODEL_ID = UUID.fromString("51f2686b-166c-4157-bd70-647337e44c8c");
+
+        @Nested
+        @DisplayName("When the route isn't found")
+        class WhenRouteIsNotFound {
+
+            private static final String UNKNOWN_EXT_ID = "999999999";
+            private List<PersistableRouteIdMapping> INPUT = List.of(PersistableRouteIdMapping.of(
+                    UNKNOWN_EXT_ID,
+                    TRANSMODEL_ID
+            ));
+
+            @Test
+            @DisplayName("Shouldn't update the transmodel id of the existing route")
+            void shouldNotUpdateTransmodelIdOfExistingRoute() {
+                importRepository.setTransmodelIds(INPUT);
+                final Route route = targetRepository.findByExternalId(EXT_ID).get();
+                assertThat(route.transmodelId()).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("When the route is found")
+        class WhenRouteIsFound {
+
+            private List<PersistableRouteIdMapping> INPUT = List.of(PersistableRouteIdMapping.of(
+                    EXT_ID.value(),
+                    TRANSMODEL_ID
+            ));
+
+            @Test
+            @DisplayName("Should update the transmodel id of the existing route")
+            void shouldUpdateTransmodelIdOfExistingRoute() {
+                importRepository.setTransmodelIds(INPUT);
+                final Route route = targetRepository.findByExternalId(EXT_ID).get();
+                assertThat(route.transmodelId()).contains(TRANSMODEL_ID);
             }
         }
     }
