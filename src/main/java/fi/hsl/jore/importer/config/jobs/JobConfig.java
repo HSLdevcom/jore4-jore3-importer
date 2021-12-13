@@ -24,6 +24,9 @@ import fi.hsl.jore.importer.feature.batch.link_shape.support.ILinkShapeImportRep
 import fi.hsl.jore.importer.feature.batch.node.NodeProcessor;
 import fi.hsl.jore.importer.feature.batch.node.NodeReader;
 import fi.hsl.jore.importer.feature.batch.node.support.INodeImportRepository;
+import fi.hsl.jore.importer.feature.batch.route.RouteExportProcessor;
+import fi.hsl.jore.importer.feature.batch.route.RouteExportReader;
+import fi.hsl.jore.importer.feature.batch.route.RouteExportWriter;
 import fi.hsl.jore.importer.feature.batch.route.RouteProcessor;
 import fi.hsl.jore.importer.feature.batch.route.RouteReader;
 import fi.hsl.jore.importer.feature.batch.route.support.IRouteImportRepository;
@@ -58,11 +61,13 @@ import fi.hsl.jore.importer.feature.jore3.entity.JrScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.line.dto.ExportableLine;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line_header.dto.ImportableLineHeader;
+import fi.hsl.jore.importer.feature.network.route.dto.ExportableRoute;
 import fi.hsl.jore.importer.feature.network.route.dto.ImportableRoute;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.ImportableRouteDirection;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImportableScheduledStopPoint;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelLine;
+import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRoute;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -521,11 +526,13 @@ public class JobConfig extends BatchConfig {
     @Bean
     public Flow transmodelExportFlow(final Step prepareTransmodelExportStep,
                                      final Step exportScheduledStopPointsStep,
-                                     final Step exportLinesStep) {
+                                     final Step exportLinesStep,
+                                     final Step exportRoutesStep) {
         return new FlowBuilder<SimpleFlow>("transmodelExportFlow")
                 .start(prepareTransmodelExportStep)
                 .next(exportScheduledStopPointsStep)
                 .next(exportLinesStep)
+                .next(exportRoutesStep)
                 .build();
     }
 
@@ -557,6 +564,19 @@ public class JobConfig extends BatchConfig {
         return steps.get("exportLinesStep")
                 .allowStartIfComplete(true)
                 .<ExportableLine, TransmodelLine>chunk(1000)
+                .reader(reader.build())
+                .processor(processor)
+                .writer(writer)
+                .build();
+    }
+
+    @Bean
+    public Step exportRoutesStep(final RouteExportReader reader,
+                                 final RouteExportProcessor processor,
+                                 final RouteExportWriter writer) {
+        return steps.get("exportRoutesStep")
+                .allowStartIfComplete(true)
+                .<ExportableRoute, TransmodelRoute>chunk(1000)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
