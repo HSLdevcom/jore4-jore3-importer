@@ -3,11 +3,13 @@ package fi.hsl.jore.importer.feature.batch.route.support;
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.network.route.dto.ImportableRoute;
+import fi.hsl.jore.importer.feature.network.route.dto.PersistableRouteIdMapping;
 import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesStaging;
 import io.vavr.collection.HashSet;
+import io.vavr.collection.List;
 import io.vavr.collection.Set;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
@@ -119,5 +121,18 @@ public class RouteImportRepository
                  .stream()
                  .map(row -> RoutePK.of(row.value1()))
                  .collect(HashSet.collector());
+    }
+
+    @Transactional
+    @Override
+    public void setTransmodelIds(final List<PersistableRouteIdMapping> idMappings) {
+        db.batched(c -> {
+            idMappings.forEach(idMapping -> {
+                c.dsl().update(TARGET_TABLE)
+                        .set(TARGET_TABLE.NETWORK_ROUTE_TRANSMODEL_ID, idMapping.transmodelId())
+                        .where(TARGET_TABLE.NETWORK_ROUTE_EXT_ID.eq(idMapping.externalId()))
+                        .execute();
+            });
+        });
     }
 }
