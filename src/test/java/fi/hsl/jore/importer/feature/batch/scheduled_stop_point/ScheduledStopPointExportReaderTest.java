@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 
 import fi.hsl.jore.importer.IntTest;
+import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -68,9 +69,6 @@ class ScheduledStopPointExportReaderTest {
         private static final String EXPECTED_FINNISH_NAME = "Yliopisto vanha";
         private static final String EXPECTED_SWEDISH_NAME = "Universitetet gamla";
 
-        private static final String LOCALE_FINNISH = "fi_FI";
-        private static final String LOCALE_SWEDISH = "sv_SE";
-
         @Test
         @DisplayName("The first invocation of the read() method must return the found scheduled stop point")
         void firstInvocationOfReadMethodMustReturnFoundScheduledStopPoint(final SoftAssertions softAssertions) throws Exception {
@@ -94,12 +92,12 @@ class ScheduledStopPointExportReaderTest {
                     .as("Y coordinate")
                     .isEqualTo(EXPECTED_Y_COORDINATE);
 
-            final String finnishName = found.name().values().getOrElse(LOCALE_FINNISH, "null");
+            final String finnishName = JoreLocaleUtil.getI18nString(found.name(), JoreLocaleUtil.FINNISH);
             softAssertions.assertThat(finnishName)
                     .as("finnishName")
                     .isEqualTo(EXPECTED_FINNISH_NAME);
 
-            final String swedishName = found.name().values().getOrElse(LOCALE_SWEDISH, "null");
+            final String swedishName = JoreLocaleUtil.getI18nString(found.name(), JoreLocaleUtil.SWEDISH);
             softAssertions.assertThat(swedishName)
                     .as("swedishName")
                     .isEqualTo(EXPECTED_SWEDISH_NAME);

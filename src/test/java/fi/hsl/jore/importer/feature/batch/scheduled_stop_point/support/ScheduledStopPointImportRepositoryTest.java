@@ -3,6 +3,7 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support;
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
+import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.PersistableScheduledStopPointIdMapping;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.generated.ScheduledStopPointPK;
@@ -42,9 +43,6 @@ public class ScheduledStopPointImportRepositoryTest {
     @Nested
     @DisplayName("Move data from the staging table to the target table")
     class CommitStagingToTarget {
-
-        private static final String LOCALE_FI_FI = "fi_FI";
-        private static final String LOCALE_SV_SE = "sv_SE";
 
         private final UUID EXPECTED_ID = UUID.fromString("058a63b3-365b-4676-af51-809bef577cdd");
         private final UUID EXPECTED_INFRASTRUCTURE_NODE_ID = UUID.fromString("cc11a5db-2ae7-4220-adfe-aca5d6620909");
@@ -195,12 +193,12 @@ public class ScheduledStopPointImportRepositoryTest {
                             .as("elyNumber")
                             .contains(EXPECTED_ELY_NUMBER);
 
-                    final String finnishName = inserted.name().values().getOrElse(LOCALE_FI_FI, "No string found with the given locale");
+                    final String finnishName = JoreLocaleUtil.getI18nString(inserted.name(), JoreLocaleUtil.FINNISH);
                     softAssertions.assertThat(finnishName)
                             .as("finnish name")
                             .isEqualTo(EXPECTED_FINNISH_NAME);
 
-                    final String swedishName = inserted.name().values().getOrElse(LOCALE_SV_SE, "No string found with the given locale");
+                    final String swedishName = JoreLocaleUtil.getI18nString(inserted.name(), JoreLocaleUtil.SWEDISH);
                     softAssertions.assertThat(swedishName)
                             .as("swedish name")
                             .isEqualTo(EXPECTED_SWEDISH_NAME);
@@ -263,12 +261,12 @@ public class ScheduledStopPointImportRepositoryTest {
                             .as("elyNumber")
                             .contains(EXPECTED_ELY_NUMBER);
 
-                    final String finnishName = updated.name().values().getOrElse(LOCALE_FI_FI, "No string found with the given locale");
+                    final String finnishName = JoreLocaleUtil.getI18nString(updated.name(), JoreLocaleUtil.FINNISH);
                     softAssertions.assertThat(finnishName)
                             .as("finnish name")
                             .isEqualTo(EXPECTED_FINNISH_NAME);
 
-                    final String swedishName = updated.name().values().getOrElse(LOCALE_SV_SE, "No string found with the given locale");
+                    final String swedishName = JoreLocaleUtil.getI18nString(updated.name(), JoreLocaleUtil.SWEDISH);
                     softAssertions.assertThat(swedishName)
                             .as("swedish name")
                             .isEqualTo(EXPECTED_SWEDISH_NAME);

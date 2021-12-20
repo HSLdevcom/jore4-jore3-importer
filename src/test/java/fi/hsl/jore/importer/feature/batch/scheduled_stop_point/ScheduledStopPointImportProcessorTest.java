@@ -60,9 +60,7 @@ class ScheduledStopPointImportProcessorTest {
         @DisplayName("Should return a scheduled stop point with the correct finnish name")
         void shouldReturnScheduledStopPointWithCorrectFinnishName() throws Exception {
             final ImportableScheduledStopPoint returned = processor.process(input);
-            final String finnishName = returned.name().values()
-                    .get(JoreLocaleUtil.FINNISH.toString())
-                    .get();
+            final String finnishName = JoreLocaleUtil.getI18nString(returned.name(), JoreLocaleUtil.FINNISH);
             assertThat(finnishName)
                     .as("finnishName")
                     .isEqualTo(FINNISH_NAME);
@@ -72,9 +70,7 @@ class ScheduledStopPointImportProcessorTest {
         @DisplayName("Should return a scheduled stop point with the correct swedish name")
         void shouldReturnScheduledStopPointWithCorrectSwedishName() throws Exception {
             final ImportableScheduledStopPoint returned = processor.process(input);
-            final String swedishName = returned.name().values()
-                    .get(JoreLocaleUtil.SWEDISH.toString())
-                    .get();
+            final String swedishName = JoreLocaleUtil.getI18nString(returned.name(), JoreLocaleUtil.SWEDISH);
             assertThat(swedishName)
                     .as("swedishName")
                     .isEqualTo(SWEDISH_NAME);

@@ -4,6 +4,7 @@ import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
+import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route.dto.PersistableRouteIdMapping;
 import fi.hsl.jore.importer.feature.network.route.dto.Route;
 import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
@@ -119,9 +120,6 @@ class RouteImportRepositoryTest {
             private final String EXPECTED_FINNISH_ROUTE_NAME = "Keskustori - Etelä-Hervanta";
             private final String EXPECTED_SWEDISH_ROUTE_NAME = "Central torget - Södra Hervanta";
 
-            private final String LOCALE_FI_FI = "fi_FI";
-            private final String LOCALE_SV_SE = "sv_SE";
-
             @Nested
             @DisplayName("When the target table is empty")
             @Sql(scripts = {
@@ -193,14 +191,12 @@ class RouteImportRepositoryTest {
                             .as("route number")
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_NUMBER);
 
-                    final MultilingualString routeName = inserted.name();
-
-                    final String finnishRouteName = routeName.values().get(LOCALE_FI_FI).get();
+                    final String finnishRouteName = JoreLocaleUtil.getI18nString(inserted.name(), JoreLocaleUtil.FINNISH);
                     softAssertions.assertThat(finnishRouteName)
                             .as("updated Finnish route name")
                             .isEqualTo(EXPECTED_FINNISH_ROUTE_NAME);
 
-                    final String swedishRouteName = routeName.values().get(LOCALE_SV_SE).get();
+                    final String swedishRouteName = JoreLocaleUtil.getI18nString(inserted.name(), JoreLocaleUtil.SWEDISH);
                     softAssertions.assertThat(swedishRouteName)
                             .as("updated Swedish route name")
                             .isEqualTo(EXPECTED_SWEDISH_ROUTE_NAME);
@@ -261,14 +257,12 @@ class RouteImportRepositoryTest {
                             .as("route number")
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_NUMBER);
 
-                    final MultilingualString routeName = updated.name();
-
-                    final String finnishRouteName = routeName.values().get(LOCALE_FI_FI).get();
+                    final String finnishRouteName = JoreLocaleUtil.getI18nString(updated.name(), JoreLocaleUtil.FINNISH);
                     softAssertions.assertThat(finnishRouteName)
                             .as("updated Finnish route name")
                             .isEqualTo(EXPECTED_FINNISH_ROUTE_NAME);
 
-                    final String swedishRouteName = routeName.values().get(LOCALE_SV_SE).get();
+                    final String swedishRouteName = JoreLocaleUtil.getI18nString(updated.name(), JoreLocaleUtil.SWEDISH);
                     softAssertions.assertThat(swedishRouteName)
                             .as("updated Swedish route name")
                             .isEqualTo(EXPECTED_SWEDISH_ROUTE_NAME);
