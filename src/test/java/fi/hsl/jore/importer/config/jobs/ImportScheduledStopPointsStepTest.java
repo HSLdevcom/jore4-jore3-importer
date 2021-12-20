@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.config.jobs;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
+import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.repository.IScheduledStopPointTestRepository;
 import io.vavr.collection.List;
@@ -41,9 +42,6 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
     private static final String EXPECTED_SWEDISH_NAME = "Universitetet";
     private static final String EXPECTED_SHORT_ID = "H1234";
 
-    public static final String LOCALE_FINNISH = "fi_FI";
-    public static final String LOCALE_SWEDISH = "sv_SE";
-
     private static final List<String> STEPS = List.of("prepareScheduledStopPointsStep",
             "importScheduledStopPointsStep",
             "commitScheduledStopPointsStep");
@@ -82,12 +80,12 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
                 .as("elyNumber")
                 .contains(EXPECTED_ELY_NUMBER);
 
-        final String finnishName = imported.name().values().getOrElse(LOCALE_FINNISH, "No string found with the given locale");
+        final String finnishName = JoreLocaleUtil.getI18nString(imported.name(), JoreLocaleUtil.FINNISH);
         softAssertions.assertThat(finnishName)
                 .as("finnish name")
                 .isEqualTo(EXPECTED_FINNISH_NAME);
 
-        final String swedishName = imported.name().values().getOrElse(LOCALE_SWEDISH, "No string found with the given locale");
+        final String swedishName = JoreLocaleUtil.getI18nString(imported.name(), JoreLocaleUtil.SWEDISH);
         softAssertions.assertThat(swedishName)
                 .as("swedish name")
                 .isEqualTo(EXPECTED_SWEDISH_NAME);

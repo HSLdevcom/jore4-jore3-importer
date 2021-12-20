@@ -3,6 +3,7 @@ package fi.hsl.jore.importer.feature.batch.route_direction.support;
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.config.jooq.converter.date_range.DateRange;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
+import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.direction_type.field.DirectionType;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.RouteDirection;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.generated.RouteDirectionPK;
@@ -40,9 +41,6 @@ class RouteDirectionImportRepositoryTest {
     @Nested
     @DisplayName("Move data from the staging table to the target table")
     class CommitStagingToTarget {
-
-        private final String LOCALE_FI_FI = "fi_FI";
-        private final String LOCALE_SV_SE = "sv_SE";
 
         private final UUID EXPECTED_NETWORK_ROUTE_DIRECTION_ID = UUID.fromString("6f93fa6b-8a19-4b98-bd84-b8409e670c70");
         private final String EXPECTED_NETWORK_ROUTE_DIRECTION_EXT_ID = "1001-2-20211004";
@@ -223,7 +221,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_DIRECTION_EXT_ID);
 
-                    final String actualFinnishName = inserted.name().values().get(LOCALE_FI_FI).get();
+                    final String actualFinnishName = JoreLocaleUtil.getI18nString(inserted.name(), JoreLocaleUtil.FINNISH);
                     softAssertions.assertThat(actualFinnishName)
                             .overridingErrorMessage(
                                     "Expected the Finnish name to be: %s but was: %s",
@@ -232,7 +230,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_FINNISH_NAME);
 
-                    final String actualSwedishName = inserted.name().values().get(LOCALE_SV_SE).get();
+                    final String actualSwedishName = JoreLocaleUtil.getI18nString(inserted.name(), JoreLocaleUtil.SWEDISH);
                     softAssertions.assertThat(actualSwedishName)
                             .overridingErrorMessage(
                                     "Expected the Swedish name to be: %s but was: %s",
@@ -241,7 +239,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_SWEDISH_NAME);
 
-                    final String actualFinnishNameShort = inserted.nameShort().values().get(LOCALE_FI_FI).get();
+                    final String actualFinnishNameShort = JoreLocaleUtil.getI18nString(inserted.nameShort(), JoreLocaleUtil.FINNISH);
                     softAssertions.assertThat(actualFinnishNameShort)
                             .overridingErrorMessage(
                                     "Expected the Finnish short name to be: %s but was: %s",
@@ -250,7 +248,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_FINNISH_NAME_SHORT);
 
-                    final String actualSwedishNameShort = inserted.nameShort().values().get(LOCALE_SV_SE).get();
+                    final String actualSwedishNameShort = JoreLocaleUtil.getI18nString(inserted.nameShort(), JoreLocaleUtil.SWEDISH);
                     softAssertions.assertThat(actualSwedishNameShort)
                             .overridingErrorMessage(
                                     "Expected the Swedish short name to be: %s but was: %s",
@@ -259,7 +257,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_SWEDISH_NAME_SHORT);
 
-                    final String actualFinnishOrigin = inserted.origin().values().get(LOCALE_FI_FI).get();
+                    final String actualFinnishOrigin = JoreLocaleUtil.getI18nString(inserted.origin(), JoreLocaleUtil.FINNISH);
                     softAssertions.assertThat(actualFinnishOrigin)
                             .overridingErrorMessage(
                                     "Expected the Finnish origin to be: %s but was: %s",
@@ -268,7 +266,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_FINNISH_ORIGIN);
 
-                    final String actualSwedishOrigin = inserted.origin().values().get(LOCALE_SV_SE).get();
+                    final String actualSwedishOrigin = JoreLocaleUtil.getI18nString(inserted.origin(), JoreLocaleUtil.SWEDISH);
                     softAssertions.assertThat(actualSwedishOrigin)
                             .overridingErrorMessage(
                                     "Expected the Swedish origin to be: %s but was: %s",
@@ -277,7 +275,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_SWEDISH_ORIGIN);
 
-                    final String actualFinnishDestination = inserted.destination().values().get(LOCALE_FI_FI).get();
+                    final String actualFinnishDestination = JoreLocaleUtil.getI18nString(inserted.destination(), JoreLocaleUtil.FINNISH);
                     softAssertions.assertThat(actualFinnishDestination)
                             .overridingErrorMessage(
                                     "Expected the Finnish destination to be: %s but was: %s",
@@ -286,7 +284,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_FINNISH_DESTINATION);
 
-                    final String actualSwedishDestination = inserted.destination().values().get(LOCALE_SV_SE).get();
+                    final String actualSwedishDestination = JoreLocaleUtil.getI18nString(inserted.destination(), JoreLocaleUtil.SWEDISH);
                     softAssertions.assertThat(actualSwedishDestination)
                             .overridingErrorMessage(
                                     "Expected the Swedish destination to be: %s but was: %s",
@@ -374,7 +372,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_DIRECTION_EXT_ID);
 
-                    final String actualFinnishName = updated.name().values().get(LOCALE_FI_FI).get();
+                    final String actualFinnishName = JoreLocaleUtil.getI18nString(updated.name(), JoreLocaleUtil.FINNISH);
                     softAssertions.assertThat(actualFinnishName)
                             .overridingErrorMessage(
                                     "Expected the Finnish name to be: %s but was: %s",
@@ -383,7 +381,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_FINNISH_NAME);
 
-                    final String actualSwedishName = updated.name().values().get(LOCALE_SV_SE).get();
+                    final String actualSwedishName = JoreLocaleUtil.getI18nString(updated.name(), JoreLocaleUtil.SWEDISH);
                     softAssertions.assertThat(actualSwedishName)
                             .overridingErrorMessage(
                                     "Expected the Swedish name to be: %s but was: %s",
@@ -392,7 +390,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_SWEDISH_NAME);
 
-                    final String actualFinnishNameShort = updated.nameShort().values().get(LOCALE_FI_FI).get();
+                    final String actualFinnishNameShort = JoreLocaleUtil.getI18nString(updated.nameShort(), JoreLocaleUtil.FINNISH);
                     softAssertions.assertThat(actualFinnishNameShort)
                             .overridingErrorMessage(
                                     "Expected the Finnish short name to be: %s but was: %s",
@@ -401,7 +399,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_FINNISH_NAME_SHORT);
 
-                    final String actualSwedishNameShort = updated.nameShort().values().get(LOCALE_SV_SE).get();
+                    final String actualSwedishNameShort = JoreLocaleUtil.getI18nString(updated.nameShort(), JoreLocaleUtil.SWEDISH);
                     softAssertions.assertThat(actualSwedishNameShort)
                             .overridingErrorMessage(
                                     "Expected the Swedish short name to be: %s but was: %s",
@@ -410,7 +408,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_SWEDISH_NAME_SHORT);
 
-                    final String actualFinnishOrigin = updated.origin().values().get(LOCALE_FI_FI).get();
+                    final String actualFinnishOrigin = JoreLocaleUtil.getI18nString(updated.origin(), JoreLocaleUtil.FINNISH);
                     softAssertions.assertThat(actualFinnishOrigin)
                             .overridingErrorMessage(
                                     "Expected the Finnish origin to be: %s but was: %s",
@@ -419,7 +417,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_FINNISH_ORIGIN);
 
-                    final String actualSwedishOrigin = updated.origin().values().get(LOCALE_SV_SE).get();
+                    final String actualSwedishOrigin = JoreLocaleUtil.getI18nString(updated.origin(), JoreLocaleUtil.SWEDISH);
                     softAssertions.assertThat(actualSwedishOrigin)
                             .overridingErrorMessage(
                                     "Expected the Swedish origin to be: %s but was: %s",
@@ -428,7 +426,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_SWEDISH_ORIGIN);
 
-                    final String actualFinnishDestination = updated.destination().values().get(LOCALE_FI_FI).get();
+                    final String actualFinnishDestination = JoreLocaleUtil.getI18nString(updated.destination(), JoreLocaleUtil.FINNISH);
                     softAssertions.assertThat(actualFinnishDestination)
                             .overridingErrorMessage(
                                     "Expected the Finnish destination to be: %s but was: %s",
@@ -437,7 +435,7 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_FINNISH_DESTINATION);
 
-                    final String actualSwedishDestination = updated.destination().values().get(LOCALE_SV_SE).get();
+                    final String actualSwedishDestination = JoreLocaleUtil.getI18nString(updated.destination(), JoreLocaleUtil.SWEDISH);
                     softAssertions.assertThat(actualSwedishDestination)
                             .overridingErrorMessage(
                                     "Expected the Swedish destination to be: %s but was: %s",

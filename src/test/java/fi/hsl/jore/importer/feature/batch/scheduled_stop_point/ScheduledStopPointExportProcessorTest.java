@@ -1,10 +1,10 @@
 package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 
-import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.digiroad.service.DigiroadStopService;
 import fi.hsl.jore.importer.feature.digiroad.service.TestCsvDigiroadStopServiceFactory;
 import fi.hsl.jore.importer.feature.jore3.util.JoreGeometryUtil;
+import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
@@ -16,9 +16,7 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
@@ -27,9 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ScheduledStopPointExportProcessorTest {
-
-    private static final String LANGUAGE_CODE_FINNISH = "fi_FI";
-    private static final String LANGUAGE_CODE_SWEDISH = "sv_SE";
 
     private static final String ELY_NUMBER = "1234567890";
 
@@ -71,12 +66,7 @@ class ScheduledStopPointExportProcessorTest {
                 ExternalId.of(JORE_3_STOP_EXTERNAL_ID),
                 Optional.empty(),
                 JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
-                MultilingualString.of(Map.of(
-                        LANGUAGE_CODE_FINNISH,
-                        JORE_3_STOP_FINNISH_NAME,
-                        LANGUAGE_CODE_SWEDISH,
-                        JORE_3_STOP_SWEDISH_NAME
-                )),
+                JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
                 Optional.of(IMPORTER_SHORT_ID)
         );
 
@@ -98,12 +88,7 @@ class ScheduledStopPointExportProcessorTest {
                 ExternalId.of(JORE_3_STOP_EXTERNAL_ID),
                 Optional.of(UNKNOWN_ELY_NUMBER),
                 JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
-                MultilingualString.of(Map.of(
-                        LANGUAGE_CODE_FINNISH,
-                        JORE_3_STOP_FINNISH_NAME,
-                        LANGUAGE_CODE_SWEDISH,
-                        JORE_3_STOP_SWEDISH_NAME
-                )),
+                JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
                 Optional.of(IMPORTER_SHORT_ID)
         );
 
@@ -123,12 +108,7 @@ class ScheduledStopPointExportProcessorTest {
                 ExternalId.of(JORE_3_STOP_EXTERNAL_ID),
                 Optional.of(ELY_NUMBER),
                 JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
-                MultilingualString.of(Map.of(
-                        LANGUAGE_CODE_FINNISH,
-                        JORE_3_STOP_FINNISH_NAME,
-                        LANGUAGE_CODE_SWEDISH,
-                        JORE_3_STOP_SWEDISH_NAME
-                )),
+                JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
                 Optional.of(IMPORTER_SHORT_ID)
         );
 
