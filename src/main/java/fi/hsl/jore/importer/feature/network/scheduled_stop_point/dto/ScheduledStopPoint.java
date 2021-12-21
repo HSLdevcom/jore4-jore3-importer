@@ -14,6 +14,7 @@ import org.immutables.value.Value;
 import org.locationtech.jts.geom.Point;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Contains the information of a scheduled stop point which
@@ -28,11 +29,15 @@ public interface ScheduledStopPoint
 
     NodePK node();
 
+    Optional<UUID> transmodelId();
+
     static ScheduledStopPoint of(final ScheduledStopPointPK pk,
                                  final ExternalId externalId,
                                  final Optional<String> elyNumber,
                                  final NodePK node,
                                  final MultilingualString name,
+                                 final Optional<String> shortId,
+                                 final Optional<UUID> transmodelId,
                                  final TimeRange systemTime) {
         return ImmutableScheduledStopPoint.builder()
                 .pk(pk)
@@ -40,6 +45,8 @@ public interface ScheduledStopPoint
                 .elyNumber(elyNumber)
                 .node(node)
                 .name(name)
+                .shortId(shortId)
+                .transmodelId(transmodelId)
                 .systemTime(systemTime)
                 .build();
     }
@@ -51,6 +58,8 @@ public interface ScheduledStopPoint
                 Optional.ofNullable(record.getScheduledStopPointElyNumber()),
                 NodePK.of(record.getInfrastructureNodeId()),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
+                Optional.of(record.getScheduledStopPointShortId()),
+                Optional.ofNullable(record.getScheduledStopPointTransmodelId()),
                 record.getScheduledStopPointSysPeriod()
         );
     }
@@ -62,6 +71,8 @@ public interface ScheduledStopPoint
                 Optional.ofNullable(record.getScheduledStopPointElyNumber()),
                 NodePK.of(record.getInfrastructureNodeId()),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
+                Optional.of(record.getScheduledStopPointShortId()),
+                Optional.ofNullable(record.getScheduledStopPointTransmodelId()),
                 record.getScheduledStopPointSysPeriod()
         );
     }

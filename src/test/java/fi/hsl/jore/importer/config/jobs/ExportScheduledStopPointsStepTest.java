@@ -1,0 +1,196 @@
+package fi.hsl.jore.importer.config.jobs;
+
+import fi.hsl.jore.importer.BatchIntegrationTest;
+import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
+import fi.hsl.jore.importer.feature.transmodel.repository.ScheduledStopPointTestLocation;
+import io.vavr.collection.List;
+import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
+import org.assertj.db.type.Table;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
+
+import javax.sql.DataSource;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
+import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
+import static fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection.BACKWARD;
+import static org.assertj.db.api.Assertions.assertThat;
+
+@ContextConfiguration(classes = JobConfig.class)
+@Sql(scripts = {
+        "/sql/destination/drop_tables.sql",
+        "/sql/destination/populate_infrastructure_nodes.sql",
+        "/sql/destination/populate_scheduled_stop_points.sql"
+})
+@Sql(
+        scripts = {
+                "/sql/transmodel/drop_tables.sql",
+                "/sql/transmodel/populate_infrastructure_links.sql"
+        },
+        config = @SqlConfig(dataSource = "jore4DataSource")
+)
+@ExtendWith(SoftAssertionsExtension.class)
+class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
+
+    private static final TransmodelScheduledStopPointDirection DIRECTION_ON_INFRALINK = BACKWARD;
+    private static final String EXPECTED_INFRASTRUCTURE_LINK_ID = "554c63e6-87b2-4dc8-a032-b6b0e2607696";
+    private static final String LABEL = "H1234";
+    private static final int EXPECTED_PRIORITY = 10;
+    private static final LocalDateTime EXPECTED_VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
+            LocalDate.of(1990, 1, 1),
+            OPERATING_DAY_START_TIME
+    );
+    private static final LocalDateTime EXPECTED_VALIDITY_PERIOD_END_TIME = LocalDateTime.of(
+            LocalDate.of(2051, 1, 1),
+            OPERATING_DAY_END_TIME
+    );
+    private static final double X_COORDINATE = 6.0;
+    private static final double Y_COORDINATE = 5.0;
+
+    private static final List<String> STEPS = List.of("exportScheduledStopPointsStep");
+
+    private static final fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints IMPORTER_SCHEDULED_STOP_POINT = fi.hsl.jore.importer.jooq.network.Tables.SCHEDULED_STOP_POINTS;
+    private static final fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.ScheduledStopPoint JORE4_SCHEDULED_STOP_POINT = fi.hsl.jore.jore4.jooq.internal_service_pattern.Tables.SCHEDULED_STOP_POINT;
+
+    private final JdbcTemplate jdbcTemplate;
+    private final Table importerTargetTable;
+    private final Table jore4TargetTable;
+
+    @Autowired
+    ExportScheduledStopPointsStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
+                                      final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
+        this.jdbcTemplate = new JdbcTemplate(jore4DataSource);
+        this.importerTargetTable = new Table(importerDataSource, "network.scheduled_stop_points");
+        this.jore4TargetTable = new Table(jore4DataSource, "internal_service_pattern.scheduled_stop_point");
+    }
+
+    @Test
+    @DisplayName("Should insert one scheduled stop point to the Jore4 database")
+    void shouldInsertOneScheduledStopPointToJore4Database() {
+        runSteps(STEPS);
+
+        assertThat(jore4TargetTable).hasNumberOfRows(1);
+    }
+
+    @Test
+    @DisplayName("Should generate a new id for the exported scheduled stop point")
+    void shouldGenerateNewIdForInsertedScheduledStopPoint() {
+        runSteps(STEPS);
+
+        assertThat(jore4TargetTable)
+                .row()
+                .value(JORE4_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID.getName())
+                .isNotNull();
+    }
+
+    @Test
+    @DisplayName("Should save the exported scheduled stop point with the correct direction")
+    void shouldSaveExportedScheduledStopPointWithCorrectDirection() {
+        runSteps(STEPS);
+
+        assertThat(jore4TargetTable)
+                .row()
+                .value(JORE4_SCHEDULED_STOP_POINT.DIRECTION.getName())
+                .isEqualTo(DIRECTION_ON_INFRALINK.getValue());
+    }
+
+    @Test
+    @DisplayName("Should save the exported scheduled stop point with the correct infrastructure link id")
+    void shouldSaveExportedScheduledStopPointWithCorrectInfrastructureLinkId() {
+        runSteps(STEPS);
+
+        assertThat(jore4TargetTable)
+                .row()
+                .value(JORE4_SCHEDULED_STOP_POINT.LOCATED_ON_INFRASTRUCTURE_LINK_ID.getName())
+                .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ID);
+    }
+
+    @Test
+    @DisplayName("Should save the exported scheduled stop point with the correct label")
+    void shouldSaveExportedScheduledStopPointWithCorrectLabel() {
+        runSteps(STEPS);
+
+        assertThat(jore4TargetTable)
+                .row()
+                .value(JORE4_SCHEDULED_STOP_POINT.LABEL.getName())
+                .isEqualTo(LABEL);
+    }
+
+    @Test
+    @DisplayName("Should save a new scheduled stop point with the correct measured location")
+    void shouldSaveNewScheduledStopPointWithCorrectMeasuredLocation(SoftAssertions softAssertions) {
+        runSteps(STEPS);
+
+        //I used JDCBTemplate because there was no easy way to write
+        //assertions for custom data types (such as geography) with AssertJ-DB.
+        final ScheduledStopPointTestLocation measuredLocation = jdbcTemplate.query(
+                ScheduledStopPointTestLocation.SQL_QUERY_GET_MEASURED_LOCATION,
+                (resultSet, i) -> new ScheduledStopPointTestLocation(
+                        resultSet.getDouble(ScheduledStopPointTestLocation.SQL_ALIAS_X_COORDINATE),
+                        resultSet.getDouble(ScheduledStopPointTestLocation.SQL_ALIAS_Y_COORDINATE)
+                )
+        ).get(0);
+
+        softAssertions.assertThat(measuredLocation.getX())
+                .as("x")
+                .isEqualTo(X_COORDINATE);
+        softAssertions.assertThat(measuredLocation.getY())
+                .as("y")
+                .isEqualTo(Y_COORDINATE);
+    }
+
+    @Test
+    @DisplayName("Should save the exported scheduled stop point with the correct priority")
+    void shouldSaveExportedScheduledStopPointWithCorrectPriority() {
+        runSteps(STEPS);
+
+        assertThat(jore4TargetTable)
+                .row()
+                .value(JORE4_SCHEDULED_STOP_POINT.PRIORITY.getName())
+                .isEqualTo(EXPECTED_PRIORITY);
+    }
+
+    @Test
+    @DisplayName("Should save the exported scheduled stop point with the correct validity period start time")
+    void shouldSaveExportedScheduledStopPointWithCorrectValidityPeriodStartTime() {
+        runSteps(STEPS);
+
+        assertThat(jore4TargetTable)
+                .row()
+                .value(JORE4_SCHEDULED_STOP_POINT.VALIDITY_START.getName())
+                .isEqualTo(EXPECTED_VALIDITY_PERIOD_START_TIME);
+    }
+
+    @Test
+    @DisplayName("Should save the exported scheduled stop point with the correct validity period end time")
+    void shouldSaveExportedScheduledStopPointWithCorrectValidityPeriodEndTime() {
+        runSteps(STEPS);
+
+        assertThat(jore4TargetTable)
+                .row()
+                .value(JORE4_SCHEDULED_STOP_POINT.VALIDITY_END.getName())
+                .isEqualTo(EXPECTED_VALIDITY_PERIOD_END_TIME);
+    }
+
+    @Test
+    @DisplayName("Should update the transmodel id of the scheduled stop point found from the importer's database")
+    void shouldUpdateTransmodelIdOfScheduledStopPointFoundFromImportersDatabase() {
+        runSteps(STEPS);
+
+        assertThat(importerTargetTable)
+                .row()
+                .value(IMPORTER_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_TRANSMODEL_ID.getName())
+                .isNotNull();
+    }
+}

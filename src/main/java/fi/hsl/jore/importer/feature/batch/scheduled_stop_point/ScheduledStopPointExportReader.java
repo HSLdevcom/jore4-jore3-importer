@@ -1,6 +1,5 @@
 package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
@@ -25,15 +24,15 @@ public class ScheduledStopPointExportReader {
     private static final String NAME = "stopPointExportReader";
 
     private final DataSource dataSource;
-    private final ObjectMapper objectMapper;
+    private final IJsonbConverter jsonConverter;
     private final String sql;
 
     @Autowired
     public ScheduledStopPointExportReader(@Qualifier("importerDataSource") final DataSource dataSource,
-                                          final ObjectMapper objectMapper,
+                                          final IJsonbConverter jsonConverter,
                                           @Value(ScheduledStopPointExportMapper.SQL_PATH) final Resource sqlResource) {
         this.dataSource = dataSource;
-        this.objectMapper = objectMapper;
+        this.jsonConverter = jsonConverter;
         this.sql = ResourceUtil.fromResource(sqlResource);
     }
 
@@ -43,7 +42,7 @@ public class ScheduledStopPointExportReader {
                 .dataSource(dataSource)
                 .name(NAME)
                 .sql(sql)
-                .rowMapper(new ScheduledStopPointExportMapper(objectMapper))
+                .rowMapper(new ScheduledStopPointExportMapper(jsonConverter))
                 .build();
     }
 }

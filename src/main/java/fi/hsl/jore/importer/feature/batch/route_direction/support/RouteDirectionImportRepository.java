@@ -12,6 +12,7 @@ import io.vavr.collection.Set;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,7 @@ public class RouteDirectionImportRepository
     private final IJsonbConverter jsonbConverter;
 
     @Autowired
-    public RouteDirectionImportRepository(final DSLContext db,
+    public RouteDirectionImportRepository(@Qualifier("importerDsl") final DSLContext db,
                                           final IJsonbConverter jsonbConverter) {
         this.db = db;
         this.jsonbConverter = jsonbConverter;

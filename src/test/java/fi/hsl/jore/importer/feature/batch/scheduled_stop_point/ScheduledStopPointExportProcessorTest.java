@@ -14,26 +14,43 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
+import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
+import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ScheduledStopPointExportProcessorTest {
 
-    private final String LANGUAGE_CODE_FINNISH = "fi_FI";
-    private final String LANGUAGE_CODE_SWEDISH = "sv_SE";
+    private static final String LANGUAGE_CODE_FINNISH = "fi_FI";
+    private static final String LANGUAGE_CODE_SWEDISH = "sv_SE";
 
-    private final String ELY_NUMBER = "168626";
+    private static final String ELY_NUMBER = "1234567890";
 
-    private final String DIGIROAD_STOP_INFRA_LINK_ID = "133202";
+    private static final String DIGIROAD_STOP_INFRA_LINK_ID = "133202";
 
-    private final String JORE_3_STOP_EXTERNAL_ID = "1234567";
-    private final String JORE_3_STOP_FINNISH_NAME = "Ullanmäki (Jore3)";
-    private final String JORE_3_STOP_SWEDISH_NAME = "Ullasbacken (Jore3)";
-    private final double JORE_3_STOP_X_COORDINATE = 25.696376131;
-    private final double JORE_3_STOP_Y_COORDINATE = 61.207149801;
+    private static final String IMPORTER_SHORT_ID = "H1234";
+
+    private static final String JORE_3_STOP_EXTERNAL_ID = "1234567";
+    private static final String JORE_3_STOP_FINNISH_NAME = "Ullanmäki (Jore3)";
+    private static final String JORE_3_STOP_SWEDISH_NAME = "Ullasbacken (Jore3)";
+    private static final double JORE_3_STOP_X_COORDINATE = 25.696376131;
+    private static final double JORE_3_STOP_Y_COORDINATE = 61.207149801;
+
+    private static final int PRIORITY = 10;
+    private static final LocalDateTime VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
+            LocalDate.of(1990, 1, 1),
+            OPERATING_DAY_START_TIME
+    );
+    private static final LocalDateTime VALIDITY_PERIOD_END_TIME = LocalDateTime.of(
+            LocalDate.of(2051, 1, 1),
+            OPERATING_DAY_END_TIME
+    );
 
     private final TransmodelScheduledStopPointDirection TRANSMODEL_STOP_POINT_DIRECTION_ON_INFRA_LINK = TransmodelScheduledStopPointDirection.BACKWARD;
 
@@ -58,7 +75,8 @@ class ScheduledStopPointExportProcessorTest {
                         JORE_3_STOP_FINNISH_NAME,
                         LANGUAGE_CODE_SWEDISH,
                         JORE_3_STOP_SWEDISH_NAME
-                ))
+                )),
+                Optional.of(IMPORTER_SHORT_ID)
         );
 
         @Test
@@ -84,7 +102,8 @@ class ScheduledStopPointExportProcessorTest {
                         JORE_3_STOP_FINNISH_NAME,
                         LANGUAGE_CODE_SWEDISH,
                         JORE_3_STOP_SWEDISH_NAME
-                ))
+                )),
+                Optional.of(IMPORTER_SHORT_ID)
         );
 
         @Test
@@ -108,8 +127,16 @@ class ScheduledStopPointExportProcessorTest {
                         JORE_3_STOP_FINNISH_NAME,
                         LANGUAGE_CODE_SWEDISH,
                         JORE_3_STOP_SWEDISH_NAME
-                ))
+                )),
+                Optional.of(IMPORTER_SHORT_ID)
         );
+
+        @Test
+        @DisplayName("Should return a scheduled stop point with a generated id")
+        void shouldReturnScheduledStopPointWithGeneratedId() throws Exception {
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            assertThat(output.scheduledStopPointId()).isNotNull();
+        }
 
         @Test
         @DisplayName("Should return a scheduled stop point with the correct external stop id")
@@ -136,7 +163,7 @@ class ScheduledStopPointExportProcessorTest {
         @DisplayName("Should return a scheduled stop point with the correct label")
         void shouldReturnScheduledStopPointWithCorrectLabel() throws Exception {
             final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
-            assertThat(output.label()).isEqualTo(JORE_3_STOP_FINNISH_NAME);
+            assertThat(output.label()).isEqualTo(IMPORTER_SHORT_ID);
         }
 
         @Test
@@ -151,6 +178,27 @@ class ScheduledStopPointExportProcessorTest {
         void shouldReturnScheduledStopPointWithCorrectYCoordinate() throws Exception {
             final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
             assertThat(output.measuredLocation().getY()).isEqualTo(JORE_3_STOP_Y_COORDINATE);
+        }
+
+        @Test
+        @DisplayName("Should return a scheduled stop point with the correct priority")
+        void shouldReturnScheduledStopPointWithCorrectPriority() throws Exception {
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            assertThat(output.priority()).isEqualTo(PRIORITY);
+        }
+
+        @Test
+        @DisplayName("Should return a scheduled stop point with the correct validity period start time")
+        void shouldReturnScheduledStopPointWithCorrectValidityPeriodStartTime() throws Exception {
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            assertThat(output.validityStart()).contains(VALIDITY_PERIOD_START_TIME);
+        }
+
+        @Test
+        @DisplayName("Should return a scheduled stop point with the correct validity period end time")
+        void shouldReturnScheduledStopPointWithCorrectValidityPeriodEndTime() throws Exception {
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            assertThat(output.validityEnd()).contains(VALIDITY_PERIOD_END_TIME);
         }
     }
 }

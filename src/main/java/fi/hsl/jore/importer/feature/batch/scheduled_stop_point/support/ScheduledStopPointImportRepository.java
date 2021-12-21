@@ -3,18 +3,20 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support;
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImportableScheduledStopPoint;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.PersistableScheduledStopPointIdMapping;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.generated.ScheduledStopPointPK;
 import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints;
 import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPointsStaging;
 import io.vavr.collection.HashSet;
+import io.vavr.collection.List;
 import io.vavr.collection.Set;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import static fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes.INFRASTRUCTURE_NODES;
-import static fi.hsl.jore.importer.util.PostgisUtil.geometryEquals;
 
 @Repository
 public class ScheduledStopPointImportRepository
@@ -27,7 +29,7 @@ public class ScheduledStopPointImportRepository
     private final DSLContext db;
     private final IJsonbConverter jsonbConverter;
 
-    public ScheduledStopPointImportRepository(DSLContext db, IJsonbConverter jsonbConverter) {
+    public ScheduledStopPointImportRepository(@Qualifier("importerDsl") DSLContext db, IJsonbConverter jsonbConverter) {
         this.db = db;
         this.jsonbConverter= jsonbConverter;
     }
@@ -62,14 +64,16 @@ public class ScheduledStopPointImportRepository
                         TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID,
                         TARGET_TABLE.INFRASTRUCTURE_NODE_ID,
                         TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
-                        TARGET_TABLE.SCHEDULED_STOP_POINT_NAME
+                        TARGET_TABLE.SCHEDULED_STOP_POINT_NAME,
+                        TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID
                 )
                 .select(
                         db.select(
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID,
                                 INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_ID,
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
-                                STAGING_TABLE.SCHEDULED_STOP_POINT_NAME
+                                STAGING_TABLE.SCHEDULED_STOP_POINT_NAME,
+                                STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID
                         )
                                 .from(STAGING_TABLE)
                                 //An infrastructure node and a scheduled stop point use the same external identifier
@@ -95,6 +99,7 @@ public class ScheduledStopPointImportRepository
         return db.update(TARGET_TABLE)
                 .set(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER, STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER)
                 .set(TARGET_TABLE.SCHEDULED_STOP_POINT_NAME, STAGING_TABLE.SCHEDULED_STOP_POINT_NAME)
+                .set(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID, STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID)
                 .from(STAGING_TABLE)
                 .where(
                         TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID.eq(STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID)
@@ -113,6 +118,17 @@ public class ScheduledStopPointImportRepository
                                         .or(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER
                                                 .notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER)
                                         )
+                                        //Short id is null in the target table but not null in the staging table
+                                        .or(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID.isNull()
+                                                .and(STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID.isNotNull())
+                                        )
+                                        //Short id isn't null in the target table but is null in the staging table
+                                        .or(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID.isNotNull()
+                                                .and(STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID.isNull())
+                                        )
+                                        //Short id was changed
+                                        .or(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID
+                                                .notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID))
                                 )
                 )
                 .returningResult(TARGET_TABLE.SCHEDULED_STOP_POINT_ID)
@@ -129,17 +145,32 @@ public class ScheduledStopPointImportRepository
                 db.insertInto(STAGING_TABLE,
                         STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID,
                         STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
-                        STAGING_TABLE.SCHEDULED_STOP_POINT_NAME
+                        STAGING_TABLE.SCHEDULED_STOP_POINT_NAME,
+                        STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID
                 )
-                        .values((String) null, null, null)
+                        .values((String) null, null, null, null)
         );
 
         items.forEach(item -> batch.bind(
                 item.externalId().value(),
                 item.elyNumber().orElse(null),
-                jsonbConverter.asJson(item.name())
+                jsonbConverter.asJson(item.name()),
+                item.shortId().orElse(null)
         ));
 
         batch.execute();
+    }
+
+    @Transactional
+    @Override
+    public void setTransmodelIds(final List<PersistableScheduledStopPointIdMapping> idMappings) {
+        db.batched(c -> {
+            idMappings.forEach(idMapping -> {
+                c.dsl().update(TARGET_TABLE)
+                        .set(TARGET_TABLE.SCHEDULED_STOP_POINT_TRANSMODEL_ID, idMapping.transmodelId())
+                        .where(TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID.eq(idMapping.externalId()))
+                        .execute();
+            });
+        });
     }
 }

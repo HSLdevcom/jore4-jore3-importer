@@ -6,4 +6,6 @@ public interface IJsonbConverter {
     JSONB asJson(Object obj);
 
     <T> T fromJson(JSONB json, Class<T> clazz);
+
+    <T> T fromJson(String json, Class<T> clazz);
 }

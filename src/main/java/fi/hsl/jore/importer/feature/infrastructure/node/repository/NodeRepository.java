@@ -13,6 +13,7 @@ import io.vavr.collection.Set;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,7 @@ public class NodeRepository
     private final DSLContext db;
 
     @Autowired
-    public NodeRepository(final DSLContext db) {
+    public NodeRepository(@Qualifier("importerDsl") final DSLContext db) {
         this.db = db;
     }
 
