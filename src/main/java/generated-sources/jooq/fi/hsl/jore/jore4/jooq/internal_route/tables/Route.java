@@ -75,7 +75,7 @@ public class Route extends TableImpl<RouteRecord> {
     /**
      * The column <code>internal_route.route.on_line_id</code>.
      */
-    public final TableField<RouteRecord, UUID> ON_LINE_ID = createField(DSL.name("on_line_id"), SQLDataType.UUID, this, "");
+    public final TableField<RouteRecord, UUID> ON_LINE_ID = createField(DSL.name("on_line_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
      * The column <code>internal_route.route.validity_start</code>.
