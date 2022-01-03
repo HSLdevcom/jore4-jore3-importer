@@ -46,7 +46,7 @@ download_docker_bundle() {
 
 start_all() {
   download_docker_bundle
-  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb importer
+  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-jore3importer
 }
 
 start_deps() {
