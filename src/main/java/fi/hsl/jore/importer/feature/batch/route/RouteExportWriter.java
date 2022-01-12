@@ -34,6 +34,6 @@ public class RouteExportWriter implements ItemWriter<TransmodelRoute> {
                         UUID.fromString(item.routeId()))
                 )
                 .collect(io.vavr.collection.List.collector());
-        importerRepository.setTransmodelIds(transmodelIdMappings);
+        importerRepository.setRouteTransmodelIds(transmodelIdMappings);
     }
 }

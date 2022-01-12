@@ -16,7 +16,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -82,12 +82,17 @@ public class NetworkRoutesWithHistory extends TableImpl<NetworkRoutesWithHistory
      */
     public final TableField<NetworkRoutesWithHistoryRecord, UUID> NETWORK_ROUTE_TRANSMODEL_ID = createField(DSL.name("network_route_transmodel_id"), SQLDataType.UUID, this, "");
 
+    /**
+     * The column <code>network.network_routes_with_history.journey_pattern_transmodel_id</code>.
+     */
+    public final TableField<NetworkRoutesWithHistoryRecord, UUID> JOURNEY_PATTERN_TRANSMODEL_ID = createField(DSL.name("journey_pattern_transmodel_id"), SQLDataType.UUID, this, "");
+
     private NetworkRoutesWithHistory(Name alias, Table<NetworkRoutesWithHistoryRecord> aliased) {
         this(alias, aliased, null);
     }
 
     private NetworkRoutesWithHistory(Name alias, Table<NetworkRoutesWithHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_routes_with_history\" as  SELECT network_routes.network_route_id,\n    network_routes.network_line_id,\n    network_routes.network_route_ext_id,\n    network_routes.network_route_number,\n    network_routes.network_route_name,\n    network_routes.network_route_sys_period,\n    network_routes.network_route_transmodel_id\n   FROM network.network_routes\nUNION ALL\n SELECT network_routes_history.network_route_id,\n    network_routes_history.network_line_id,\n    network_routes_history.network_route_ext_id,\n    network_routes_history.network_route_number,\n    network_routes_history.network_route_name,\n    network_routes_history.network_route_sys_period,\n    network_routes_history.network_route_transmodel_id\n   FROM network.network_routes_history;"));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_routes_with_history\" as  SELECT network_routes.network_route_id,\n    network_routes.network_line_id,\n    network_routes.network_route_ext_id,\n    network_routes.network_route_number,\n    network_routes.network_route_name,\n    network_routes.network_route_sys_period,\n    network_routes.network_route_transmodel_id,\n    network_routes.journey_pattern_transmodel_id\n   FROM network.network_routes\nUNION ALL\n SELECT network_routes_history.network_route_id,\n    network_routes_history.network_line_id,\n    network_routes_history.network_route_ext_id,\n    network_routes_history.network_route_number,\n    network_routes_history.network_route_name,\n    network_routes_history.network_route_sys_period,\n    network_routes_history.network_route_transmodel_id,\n    network_routes_history.journey_pattern_transmodel_id\n   FROM network.network_routes_history;"));
     }
 
     /**
@@ -147,11 +152,11 @@ public class NetworkRoutesWithHistory extends TableImpl<NetworkRoutesWithHistory
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<UUID, UUID, String, String, JSONB, TimeRange, UUID> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row8<UUID, UUID, String, String, JSONB, TimeRange, UUID, UUID> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 }
