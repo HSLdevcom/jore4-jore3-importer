@@ -19,7 +19,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -85,6 +85,11 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
      * The column <code>network.network_routes.network_route_transmodel_id</code>.
      */
     public final TableField<NetworkRoutesRecord, UUID> NETWORK_ROUTE_TRANSMODEL_ID = createField(DSL.name("network_route_transmodel_id"), SQLDataType.UUID, this, "");
+
+    /**
+     * The column <code>network.network_routes.journey_pattern_transmodel_id</code>.
+     */
+    public final TableField<NetworkRoutesRecord, UUID> JOURNEY_PATTERN_TRANSMODEL_ID = createField(DSL.name("journey_pattern_transmodel_id"), SQLDataType.UUID, this, "");
 
     private NetworkRoutes(Name alias, Table<NetworkRoutesRecord> aliased) {
         this(alias, aliased, null);
@@ -175,11 +180,11 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<UUID, UUID, String, String, JSONB, TimeRange, UUID> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row8<UUID, UUID, String, String, JSONB, TimeRange, UUID, UUID> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 }
