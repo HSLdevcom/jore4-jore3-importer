@@ -62,19 +62,64 @@ class ScheduledStopPointExportProcessorTest {
     @DisplayName("When the source stop has no ely number")
     class WhenSourceStopHasNoElyNumber {
 
-        private final ExportableScheduledStopPoint jore3Stop = ExportableScheduledStopPoint.of(
-                ExternalId.of(JORE_3_STOP_EXTERNAL_ID),
-                Optional.empty(),
-                JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
-                JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
-                Optional.of(IMPORTER_SHORT_ID)
-        );
+        @Nested
+        @DisplayName("When the ely number is missing")
+        class WhenElyNumberIsMissing {
 
-        @Test
-        @DisplayName("Should return null")
-        void shouldReturnNull() throws Exception {
-            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
-            assertThat(output).isNull();
+            private final ExportableScheduledStopPoint jore3Stop = ExportableScheduledStopPoint.of(
+                    ExternalId.of(JORE_3_STOP_EXTERNAL_ID),
+                    Optional.empty(),
+                    JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
+                    JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
+                    Optional.of(IMPORTER_SHORT_ID)
+            );
+
+            @Test
+            @DisplayName("Should return null")
+            void shouldReturnNull() throws Exception {
+                final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+                assertThat(output).isNull();
+            }
+        }
+
+        @Nested
+        @DisplayName("When the ely number is an empty string")
+        class WhenElyNumberIsEmptyString {
+
+            private final ExportableScheduledStopPoint jore3Stop = ExportableScheduledStopPoint.of(
+                    ExternalId.of(JORE_3_STOP_EXTERNAL_ID),
+                    Optional.of(""),
+                    JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
+                    JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
+                    Optional.of(IMPORTER_SHORT_ID)
+            );
+
+            @Test
+            @DisplayName("Should return null")
+            void shouldReturnNull() throws Exception {
+                final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+                assertThat(output).isNull();
+            }
+        }
+
+        @Nested
+        @DisplayName("When the ely number contains only white space")
+        class WhenElyNumberContainsOnlyWhiteSpace {
+
+            private final ExportableScheduledStopPoint jore3Stop = ExportableScheduledStopPoint.of(
+                    ExternalId.of(JORE_3_STOP_EXTERNAL_ID),
+                    Optional.of("     "),
+                    JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
+                    JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
+                    Optional.of(IMPORTER_SHORT_ID)
+            );
+
+            @Test
+            @DisplayName("Should return null")
+            void shouldReturnNull() throws Exception {
+                final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+                assertThat(output).isNull();
+            }
         }
     }
 
