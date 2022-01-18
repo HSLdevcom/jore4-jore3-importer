@@ -46,17 +46,25 @@ public class CsvDigiroadStopService implements DigiroadStopService {
             return;
         }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(csvResource.getFile()))) {
+        try (final BufferedReader reader = new BufferedReader(new FileReader(csvResource.getFile()))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                final Optional<DigiroadStop> stopContainer = DigiroadStopFactory.fromCsvLine(line);
+                try {
+                    final Optional<DigiroadStop> stopContainer = DigiroadStopFactory.fromCsvLine(line);
 
-                if (stopContainer.isPresent()) {
-                    final DigiroadStop stop = stopContainer.get();
-                    digiroadStops = digiroadStops.put(stop.nationalId(), stop);
+                    if (stopContainer.isPresent()) {
+                        final DigiroadStop stop = stopContainer.get();
+                        digiroadStops = digiroadStops.put(stop.nationalId(), stop);
+                    }
+                    else {
+                        LOGGER.error("Cannot parse the information of a Digiroad stop from the line: {}", line);
+                    }
                 }
-                else {
-                    LOGGER.error("Cannot parse the information of a Digiroad stop from the line: {}", line);
+                catch (final Exception ex) {
+                    LOGGER.error("Cannot parse the information of a Digiroad stop from the line: {} because of an error: {}",
+                            line,
+                            ex.getMessage()
+                    );
                 }
             }
         }
