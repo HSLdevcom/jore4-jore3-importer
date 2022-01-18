@@ -6,6 +6,7 @@ import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableS
 import fi.hsl.jore.importer.feature.transmodel.ExportConstants;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
@@ -56,7 +57,7 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
         LOGGER.debug("Processing Jore 3 stop: {}", jore3Stop);
 
         final String elyNumber = jore3Stop.elyNumber().filter(str -> !str.isEmpty()).orElse(null);
-        if (elyNumber == null) {
+        if (StringUtils.isBlank(elyNumber)) {
             LOGGER.debug("Jore 3 stop with id: {} isn't processed any further because it has no ely number",
                     jore3Stop.externalId().value()
             );

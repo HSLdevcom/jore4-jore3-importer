@@ -230,6 +230,20 @@ The following figure illustrates the responsibilities of these components:
 
 ![Overview](images/import_lines_step.svg "Step overview")
 
+### Importing Data to Jore 4
+
+#### Scheduled Stop Points
+
+The process that imports scheduled stop points to Jore 4 follows these rules:
+
+* The imported stop points are sorted in ascending the order by using the external id (Jore 3 id). If multiple scheduled
+  stop points have the same short id, the first one is transferred to Jore 4. This ensures that multiple stop points
+  with the same short id and validity period cannot be transferred to Jore 4.
+* If the ely number of a scheduled stop point isn't found from the database of the importer, it won't be transferred
+  to Jore 4.
+* If the information of a scheduled stop point isn't found from Digiroad, it won't be transferred to Jore 4.
+* The import process ignores Digiroad stop points which have invalid information (such missing or empty ely number).
+
 ## The Structure of the Project
 
 The directory structure of this project follows the [Maven directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html).
