@@ -28,31 +28,33 @@ public class TransmodelLineRepository implements ITransmodelLineRepository {
 
     @Override
     public void insert(final List<? extends TransmodelLine> lines) {
-        final BatchBindStep batch = db.batch(db.insertInto(
-                LINE,
-                LINE.LINE_ID,
-                LINE.LABEL,
-                LINE.NAME_I18N,
-                LINE.PRIMARY_VEHICLE_MODE,
-                LINE.PRIORITY,
-                LINE.SHORT_NAME_I18N,
-                LINE.VALIDITY_START,
-                LINE.VALIDITY_END
-        )
-                .values((UUID) null, null, null, null, null, null, null, null)
-        );
+        if (!lines.isEmpty()) {
+            final BatchBindStep batch = db.batch(db.insertInto(
+                                    LINE,
+                                    LINE.LINE_ID,
+                                    LINE.LABEL,
+                                    LINE.NAME_I18N,
+                                    LINE.PRIMARY_VEHICLE_MODE,
+                                    LINE.PRIORITY,
+                                    LINE.SHORT_NAME_I18N,
+                                    LINE.VALIDITY_START,
+                                    LINE.VALIDITY_END
+                            )
+                            .values((UUID) null, null, null, null, null, null, null, null)
+            );
 
-        lines.forEach(line -> batch.bind(
-                line.lineId(),
-                line.label(),
-                jsonbConverter.asJson(line.name()),
-                line.primaryVehicleMode().getValue(),
-                line.priority(),
-                jsonbConverter.asJson(line.shortName()),
-                line.validityStart().orElse(null),
-                line.validityEnd().orElse(null)
-        ));
+            lines.forEach(line -> batch.bind(
+                    line.lineId(),
+                    line.label(),
+                    jsonbConverter.asJson(line.name()),
+                    line.primaryVehicleMode().getValue(),
+                    line.priority(),
+                    jsonbConverter.asJson(line.shortName()),
+                    line.validityStart().orElse(null),
+                    line.validityEnd().orElse(null)
+            ));
 
-        batch.execute();
+            batch.execute();
+        }
     }
 }
