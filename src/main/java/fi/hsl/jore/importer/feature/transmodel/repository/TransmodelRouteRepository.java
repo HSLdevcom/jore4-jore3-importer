@@ -30,35 +30,37 @@ public class TransmodelRouteRepository implements ITransmodelRouteRepository {
     @Transactional
     @Override
     public void insert(final List<? extends TransmodelRoute> routes) {
-        final BatchBindStep batch = db.batch(db.insertInto(
-                ROUTE,
-                ROUTE.ROUTE_ID,
-                ROUTE.DESCRIPTION_I18N,
-                ROUTE.DIRECTION,
-                ROUTE.LABEL,
-                ROUTE.ON_LINE_ID,
-                ROUTE.PRIORITY,
-                ROUTE.STARTS_FROM_SCHEDULED_STOP_POINT_ID,
-                ROUTE.ENDS_AT_SCHEDULED_STOP_POINT_ID,
-                ROUTE.VALIDITY_START,
-                ROUTE.VALIDITY_END
-        )
-                .values((UUID) null, null, null, null, null, null, null, null, null, null)
-        );
+        if (!routes.isEmpty()) {
+            final BatchBindStep batch = db.batch(db.insertInto(
+                                    ROUTE,
+                                    ROUTE.ROUTE_ID,
+                                    ROUTE.DESCRIPTION_I18N,
+                                    ROUTE.DIRECTION,
+                                    ROUTE.LABEL,
+                                    ROUTE.ON_LINE_ID,
+                                    ROUTE.PRIORITY,
+                                    ROUTE.STARTS_FROM_SCHEDULED_STOP_POINT_ID,
+                                    ROUTE.ENDS_AT_SCHEDULED_STOP_POINT_ID,
+                                    ROUTE.VALIDITY_START,
+                                    ROUTE.VALIDITY_END
+                            )
+                            .values((UUID) null, null, null, null, null, null, null, null, null, null)
+            );
 
-        routes.forEach(route -> batch.bind(
-                route.routeId(),
-                jsonbConverter.asJson(route.description()),
-                route.direction().getValue(),
-                route.label(),
-                route.lineId(),
-                route.priority(),
-                route.startScheduledStopPointId(),
-                route.endScheduledStopPointId(),
-                route.validityStart().orElse(null),
-                route.validityEnd().orElse(null)
-        ));
+            routes.forEach(route -> batch.bind(
+                    route.routeId(),
+                    jsonbConverter.asJson(route.description()),
+                    route.direction().getValue(),
+                    route.label(),
+                    route.lineId(),
+                    route.priority(),
+                    route.startScheduledStopPointId(),
+                    route.endScheduledStopPointId(),
+                    route.validityStart().orElse(null),
+                    route.validityEnd().orElse(null)
+            ));
 
-        batch.execute();
+            batch.execute();
+        }
     }
 }

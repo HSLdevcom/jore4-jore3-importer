@@ -74,6 +74,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.FlowBuilder;
 import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.core.job.flow.support.SimpleFlow;
+import org.springframework.batch.core.step.skip.AlwaysSkipItemSkipPolicy;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -550,10 +551,12 @@ public class JobConfig extends BatchConfig {
                                               final ScheduledStopPointExportWriter writer) {
         return steps.get("exportScheduledStopPointsStep")
                 .allowStartIfComplete(true)
-                .<ExportableScheduledStopPoint, TransmodelScheduledStopPoint>chunk(1000)
+                .<ExportableScheduledStopPoint, TransmodelScheduledStopPoint>chunk(1)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
                 .build();
     }
 
@@ -563,10 +566,12 @@ public class JobConfig extends BatchConfig {
                                 final LineExportWriter writer) {
         return steps.get("exportLinesStep")
                 .allowStartIfComplete(true)
-                .<ExportableLine, TransmodelLine>chunk(1000)
+                .<ExportableLine, TransmodelLine>chunk(1)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
                 .build();
     }
 
@@ -576,10 +581,12 @@ public class JobConfig extends BatchConfig {
                                  final RouteExportWriter writer) {
         return steps.get("exportRoutesStep")
                 .allowStartIfComplete(true)
-                .<ExportableRoute, TransmodelRoute>chunk(1000)
+                .<ExportableRoute, TransmodelRoute>chunk(1)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
                 .build();
     }
 }
