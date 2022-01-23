@@ -603,10 +603,12 @@ public class JobConfig extends BatchConfig {
                                           final JourneyPatternExportWriter writer) {
         return steps.get("exportJourneyPatternsStep")
                 .allowStartIfComplete(true)
-                .<ExportableJourneyPattern, TransmodelJourneyPattern>chunk(1000)
+                .<ExportableJourneyPattern, TransmodelJourneyPattern>chunk(1)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
                 .build();
     }
 }
