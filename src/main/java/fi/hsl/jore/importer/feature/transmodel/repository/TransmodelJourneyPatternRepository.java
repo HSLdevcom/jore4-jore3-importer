@@ -24,19 +24,18 @@ public class TransmodelJourneyPatternRepository implements ITransmodelJourneyPat
 
     @Override
     public void insert(final List<? extends TransmodelJourneyPattern> journeyPatterns) {
-        final BatchBindStep batch = db.batch(db.insertInto(
-                JOURNEY_PATTERN_,
-                JOURNEY_PATTERN_.JOURNEY_PATTERN_ID,
-                JOURNEY_PATTERN_.ON_ROUTE_ID
-        )
-                        .values((UUID) null, null)
-        );
+        if (!journeyPatterns.isEmpty()) {
+            final BatchBindStep batch = db.batch(db.insertInto(JOURNEY_PATTERN_,
+                            JOURNEY_PATTERN_.JOURNEY_PATTERN_ID,
+                            JOURNEY_PATTERN_.ON_ROUTE_ID
+            ).values((UUID) null, null));
 
-        journeyPatterns.forEach(journeyPattern -> batch.bind(
-                journeyPattern.journeyPatternId(),
-                journeyPattern.routeId()
-        ));
+            journeyPatterns.forEach(journeyPattern -> batch.bind(
+                    journeyPattern.journeyPatternId(),
+                    journeyPattern.routeId()
+            ));
 
-        batch.execute();
+            batch.execute();
+        }
     }
 }
