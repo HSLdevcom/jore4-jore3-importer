@@ -38,20 +38,23 @@ public class RouteLinksProcessorTest {
     @Test
     public void givenLinkBetweenTwoBusStops_thenReturnRoutePoints_andStopPoints() throws Exception {
         // Route consists of a single link between two bus stops
-        final JrRouteLink link = JrRouteLink.of(RouteLinkId.of(1234),
-                                                1,
-                                                ROUTE,
-                                                DIR,
-                                                VALID_FROM,
-                                                TRANSIT,
-                                                NodeId.of("a"),
-                                                NodeId.of("b"),
-                                                NodeType.BUS_STOP,
-                                                TimingStopPoint.NO,
-                                                StopPointPurpose.BOARDING,
-                                                false, // not explicitly a hastus point
-                                                true, // include in timetable
-                                                Optional.of(1));
+        final JrRouteLink link = JrRouteLink.of(
+                RouteLinkId.of(1234),
+                1,
+                ROUTE,
+                DIR,
+                VALID_FROM,
+                TRANSIT,
+                NodeId.of("a"),
+                NodeId.of("b"),
+                NodeType.BUS_STOP,
+                TimingStopPoint.NO,
+                StopPointPurpose.BOARDING,
+                false, // not explicitly a hastus point
+                true, // include in timetable,
+                true, // via point
+                Optional.of(1)
+        );
         final RouteLinksAndAttributes linksAndAttributes =
                 RouteLinksAndAttributes.of(Vector.of(link),
                                            LastLinkAttributes.of(NodeType.BUS_STOP,
@@ -83,12 +86,14 @@ public class RouteLinksProcessorTest {
                                                                  .orderNumber(0)
                                                                  .externalId(ExternalId.of("1234-a"))
                                                                  .hastusStopPoint(true)
+                                                                 .viaPoint(true)
                                                                  .timetableColumn(1)
                                                                  .build(),
                                 ImmutableImportableRouteStopPoint.builder()
                                                                  .orderNumber(1)
                                                                  .externalId(ExternalId.of("1234-b"))
                                                                  .hastusStopPoint(true)
+                                                                 .viaPoint(true)
                                                                  .timetableColumn(7)
                                                                  .build())));
     }
@@ -96,20 +101,23 @@ public class RouteLinksProcessorTest {
     @Test
     public void givenLinkBetweenABusStopAndACrossroad_thenReturnRoutePoints_andSingleStopPoint() throws Exception {
         // (A pathological) route consists of a single link between a bus stop and a crossroad junction
-        final JrRouteLink link = JrRouteLink.of(RouteLinkId.of(1234),
-                                                1,
-                                                ROUTE,
-                                                DIR,
-                                                VALID_FROM,
-                                                TRANSIT,
-                                                NodeId.of("a"),
-                                                NodeId.of("b"),
-                                                NodeType.BUS_STOP,
-                                                TimingStopPoint.NO,
-                                                StopPointPurpose.BOARDING,
-                                                false, // not explicitly a hastus point
-                                                true, // include in timetable
-                                                Optional.of(1));
+        final JrRouteLink link = JrRouteLink.of(
+                RouteLinkId.of(1234),
+                1,
+                ROUTE,
+                DIR,
+                VALID_FROM,
+                TRANSIT,
+                NodeId.of("a"),
+                NodeId.of("b"),
+                NodeType.BUS_STOP,
+                TimingStopPoint.NO,
+                StopPointPurpose.BOARDING,
+                false, // not explicitly a hastus point
+                true, // include in timetable
+                true, // via point
+                Optional.of(1)
+        );
         final RouteLinksAndAttributes linksAndAttributes =
                 RouteLinksAndAttributes.of(Vector.of(link),
                                            LastLinkAttributes.of(NodeType.CROSSROADS,
@@ -141,6 +149,7 @@ public class RouteLinksProcessorTest {
                                                                  .orderNumber(0)
                                                                  .externalId(ExternalId.of("1234-a"))
                                                                  .hastusStopPoint(true)
+                                                                 .viaPoint(true)
                                                                  .timetableColumn(1)
                                                                  .build())));
     }
@@ -148,20 +157,23 @@ public class RouteLinksProcessorTest {
     @Test
     public void givenLinkWithNoBusStops_thenReturnRoutePoints_andNoStopPoints() throws Exception {
         // (A pathological) route consists of a single link between two crossroads
-        final JrRouteLink link = JrRouteLink.of(RouteLinkId.of(1234),
-                                                1,
-                                                ROUTE,
-                                                DIR,
-                                                VALID_FROM,
-                                                TRANSIT,
-                                                NodeId.of("a"),
-                                                NodeId.of("b"),
-                                                NodeType.CROSSROADS,
-                                                TimingStopPoint.NO,
-                                                StopPointPurpose.BOARDING,
-                                                false,
-                                                false,
-                                                Optional.empty());
+        final JrRouteLink link = JrRouteLink.of(
+                RouteLinkId.of(1234),
+                1,
+                ROUTE,
+                DIR,
+                VALID_FROM,
+                TRANSIT,
+                NodeId.of("a"),
+                NodeId.of("b"),
+                NodeType.CROSSROADS,
+                TimingStopPoint.NO,
+                StopPointPurpose.BOARDING,
+                false, // not hastus point
+                false, // don't include in timetable
+                true, // via point
+                Optional.empty()
+        );
         final RouteLinksAndAttributes linksAndAttributes =
                 RouteLinksAndAttributes.of(Vector.of(link),
                                            LastLinkAttributes.of(NodeType.CROSSROADS,
@@ -210,80 +222,95 @@ public class RouteLinksProcessorTest {
 
         final Vector<JrRouteLink> links = Vector.of(
                 // A->B
-                JrRouteLink.of(RouteLinkId.of(10000),
-                               1,
-                               ROUTE,
-                               DIR,
-                               VALID_FROM,
-                               TRANSIT,
-                               nodeA,
-                               nodeB,
-                               NodeType.BUS_STOP,
-                               TimingStopPoint.NO,
-                               StopPointPurpose.BOARDING,
-                               true, // is a hastus point
-                               true, // include in timetable
-                               Optional.of(1)), //The column number of the timetable column
+                JrRouteLink.of(
+                        RouteLinkId.of(10000),
+                        1,
+                        ROUTE,
+                        DIR,
+                        VALID_FROM,
+                        TRANSIT,
+                        nodeA,
+                        nodeB,
+                        NodeType.BUS_STOP,
+                        TimingStopPoint.NO,
+                        StopPointPurpose.BOARDING,
+                        true, // is a hastus point
+                        true, // include in timetable
+                        true, // via point
+                        Optional.of(1)
+                ), //The column number of the timetable column
                 // B->C
-                JrRouteLink.of(RouteLinkId.of(10001),
-                               2,
-                               ROUTE,
-                               DIR,
-                               VALID_FROM,
-                               TRANSIT,
-                               nodeB,
-                               nodeC,
-                               NodeType.CROSSROADS,
-                               TimingStopPoint.NO,
-                               StopPointPurpose.UNKNOWN,
-                               false, // not a hastus point
-                               false, // do not include in timetable
-                               Optional.empty()), // The column number isn't given because link isn't included in timetable
+                JrRouteLink.of(
+                        RouteLinkId.of(10001),
+                        2,
+                        ROUTE,
+                        DIR,
+                        VALID_FROM,
+                        TRANSIT,
+                        nodeB,
+                        nodeC,
+                        NodeType.CROSSROADS,
+                        TimingStopPoint.NO,
+                        StopPointPurpose.UNKNOWN,
+                        false, // not a hastus point
+                        false, // do not include in timetable
+                        true, // via point
+                        Optional.empty()
+                ), // The column number isn't given because link isn't included in timetable
                 // C->D
-                JrRouteLink.of(RouteLinkId.of(10002),
-                               3,
-                               ROUTE,
-                               DIR,
-                               VALID_FROM,
-                               TRANSIT,
-                               nodeC,
-                               nodeD,
-                               NodeType.CROSSROADS,
-                               TimingStopPoint.NO,
-                               StopPointPurpose.UNKNOWN,
-                               false, // not a hastus point
-                               false, // do not include in timetable
-                               Optional.empty()), // The column number isn't given because link isn't included in timetable
+                JrRouteLink.of(
+                        RouteLinkId.of(10002),
+                        3,
+                        ROUTE,
+                        DIR,
+                        VALID_FROM,
+                        TRANSIT,
+                        nodeC,
+                        nodeD,
+                        NodeType.CROSSROADS,
+                        TimingStopPoint.NO,
+                        StopPointPurpose.UNKNOWN,
+                        false, // not a hastus point
+                        false, // do not include in timetable,
+                        true, // via point
+                        Optional.empty()
+                ), // The column number isn't given because link isn't included in timetable
                 // D->E
-                JrRouteLink.of(RouteLinkId.of(10003),
-                               4,
-                               ROUTE,
-                               DIR,
-                               VALID_FROM,
-                               TRANSIT,
-                               nodeD,
-                               nodeE,
-                               NodeType.BUS_STOP_NOT_IN_USE,
-                               TimingStopPoint.NO,
-                               StopPointPurpose.NOT_IN_USE,
-                               false, // not a hastus point
-                               false, // do not include in timetable
-                               Optional.empty()), // The column number isn't given because link isn't included in timetable
+                JrRouteLink.of(
+                        RouteLinkId.of(10003),
+                        4,
+                        ROUTE,
+                        DIR,
+                        VALID_FROM,
+                        TRANSIT,
+                        nodeD,
+                        nodeE,
+                        NodeType.BUS_STOP_NOT_IN_USE,
+                        TimingStopPoint.NO,
+                        StopPointPurpose.NOT_IN_USE,
+                        false, // not a hastus point
+                        false, // do not include in timetable
+                        true, // via point
+                        Optional.empty()
+                ), // The column number isn't given because link isn't included in timetable
                 // E->F
-                JrRouteLink.of(RouteLinkId.of(10004),
-                               5,
-                               ROUTE,
-                               DIR,
-                               VALID_FROM,
-                               TRANSIT,
-                               nodeE,
-                               nodeF,
-                               NodeType.CROSSROADS,
-                               TimingStopPoint.NO,
-                               StopPointPurpose.UNKNOWN,
-                               false, // not a hastus point
-                               false, // do not include in timetable
-                               Optional.empty()) // The column number isn't given because link isn't included in timetable
+                JrRouteLink.of(
+                        RouteLinkId.of(10004),
+                        5,
+                        ROUTE,
+                        DIR,
+                        VALID_FROM,
+                        TRANSIT,
+                        nodeE,
+                        nodeF,
+                        NodeType.CROSSROADS,
+                        TimingStopPoint.NO,
+                        StopPointPurpose.UNKNOWN,
+                        false, // not a hastus point
+                        false, // do not include in timetable
+                        false, // via point
+                        Optional.empty()
+                ) // The column number isn't given because link isn't included in timetable
         );
 
         final LastLinkAttributes attributes = LastLinkAttributes.of(NodeType.BUS_STOP,
@@ -344,6 +371,7 @@ public class RouteLinksProcessorTest {
                                                                  .orderNumber(0)
                                                                  .externalId(ExternalId.of("10000-a"))
                                                                  .hastusStopPoint(true)
+                                                                 .viaPoint(true)
                                                                  .timetableColumn(1)
                                                                  .build(),
                                 // Note how node D is absent, as it's a BUS_STOP_NOT_IN_USE
@@ -351,6 +379,7 @@ public class RouteLinksProcessorTest {
                                                                  .orderNumber(1)
                                                                  .externalId(ExternalId.of("10004-f"))
                                                                  .hastusStopPoint(true)
+                                                                 .viaPoint(false)
                                                                  .timetableColumn(7)
                                                                  .build()
                    )));

@@ -117,6 +117,7 @@ class RouteStopPointImportRepositoryTest {
             private final String EXPECTED_NETWORK_ROUTE_STOP_POINT_EXT_ID = "1234528-1113227";
             private final int EXPECTED_NETWORK_ROUTE_STOP_POINT_ORDER_NUMBER = 6;
             private final boolean EXPECTED_NETWORK_ROUTE_STOP_POINT_HASTUS_POINT = true;
+            private final boolean EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_POINT = true;
             private final int EXPECTED_NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN = 12;
 
             @Nested
@@ -200,11 +201,19 @@ class RouteStopPointImportRepositoryTest {
 
                     softAssertions.assertThat(inserted.hastusStopPoint())
                             .overridingErrorMessage(
-                                    "Expected the network route point hastus point to be: %s but was: %s",
+                                    "Expected the network route stop point hastus point to be: %s but was: %s",
                                     EXPECTED_NETWORK_ROUTE_STOP_POINT_HASTUS_POINT,
                                     inserted.hastusStopPoint()
                             )
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_STOP_POINT_HASTUS_POINT);
+
+                    softAssertions.assertThat(inserted.viaPoint())
+                            .overridingErrorMessage(
+                                    "Expected the network route stop point via point to be: %s but was: %s",
+                                    EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_POINT,
+                                    inserted.viaPoint()
+                            )
+                            .isEqualTo(EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_POINT);
 
                     softAssertions.assertThat(inserted.timetableColumn().get())
                             .overridingErrorMessage(
@@ -284,11 +293,19 @@ class RouteStopPointImportRepositoryTest {
 
                     softAssertions.assertThat(updated.hastusStopPoint())
                             .overridingErrorMessage(
-                                    "Expected the network route point hastus point to be: %s but was: %s",
+                                    "Expected the network route stop point hastus point to be: %s but was: %s",
                                     EXPECTED_NETWORK_ROUTE_STOP_POINT_HASTUS_POINT,
                                     updated.hastusStopPoint()
                             )
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_STOP_POINT_HASTUS_POINT);
+
+                    softAssertions.assertThat(updated.viaPoint())
+                            .overridingErrorMessage(
+                                    "Expected the network route stop point via point to be: %s but was: %s",
+                                    EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_POINT,
+                                    updated.viaPoint()
+                            )
+                            .isEqualTo(EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_POINT);
 
                     softAssertions.assertThat(updated.timetableColumn().get())
                             .overridingErrorMessage(

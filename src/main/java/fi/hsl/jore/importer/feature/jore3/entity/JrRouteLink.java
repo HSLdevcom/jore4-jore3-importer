@@ -58,6 +58,9 @@ public interface JrRouteLink
     @JoreColumn(name = "paikka")
     boolean hastusStopPoint();
 
+    @JoreColumn(name = "via")
+    boolean viaPoint();
+
     @JoreColumn(name = "kirjaan")
     boolean includeInTimetable();
 
@@ -96,25 +99,27 @@ public interface JrRouteLink
                           final StopPointPurpose stopPointPurpose,
                           final boolean hastusStopPoint,
                           final boolean includeInTimetable,
+                          final boolean viaPoint,
                           final Optional<Integer> timetableColumn) {
         return ImmutableJrRouteLink.builder()
-                                   // Fields of this route link
-                                   .routeLinkId(routeLinkId)
-                                   .orderNumber(orderNumber)
-                                   .hastusStopPoint(hastusStopPoint)
-                                   .includeInTimetable(includeInTimetable)
-                                   .timetableColumn(timetableColumn)
-                                   .timingStopPoint(timingStopPoint)
-                                   .stopPointPurpose(stopPointPurpose)
-                                   .startNodeType(startNodeType)
-                                   // Foreign key fields to the route direction
-                                   .routeId(routeId)
-                                   .direction(direction)
-                                   .validFrom(validFrom)
-                                   // Foreign key fields to the link
-                                   .transitType(transitType)
-                                   .startNode(startNode)
-                                   .endNode(endNode)
-                                   .build();
+                // Fields of this route link
+                .routeLinkId(routeLinkId)
+                .orderNumber(orderNumber)
+                .hastusStopPoint(hastusStopPoint)
+                .includeInTimetable(includeInTimetable)
+                .viaPoint(viaPoint)
+                .timetableColumn(timetableColumn)
+                .timingStopPoint(timingStopPoint)
+                .stopPointPurpose(stopPointPurpose)
+                .startNodeType(startNodeType)
+                // Foreign key fields to the route direction
+                .routeId(routeId)
+                .direction(direction)
+                .validFrom(validFrom)
+                // Foreign key fields to the link
+                .transitType(transitType)
+                .startNode(startNode)
+                .endNode(endNode)
+                .build();
     }
 }

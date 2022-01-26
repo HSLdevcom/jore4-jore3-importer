@@ -54,6 +54,7 @@ public class RouteLinkRowMapper implements RowMapper<SingleRouteLinkAndParent> {
                                 .orElse(StopPointPurpose.UNKNOWN),
                         getBooleanOrThrow(rs, "rl_paikka"),
                         getBooleanOrThrow(rs, "rl_kirjaan"),
+                        getBooleanOrThrow(rs, "rl_via"),
                         getOptionalInt(rs, "kirjasarake")
                 ),
 

@@ -15,7 +15,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -76,12 +76,17 @@ public class NetworkRouteStopPointsWithHistory extends TableImpl<NetworkRouteSto
      */
     public final TableField<NetworkRouteStopPointsWithHistoryRecord, TimeRange> NETWORK_ROUTE_STOP_POINT_SYS_PERIOD = createField(DSL.name("network_route_stop_point_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\""), this, "", new TimeRangeBinding());
 
+    /**
+     * The column <code>network.network_route_stop_points_with_history.network_route_stop_point_via_point</code>.
+     */
+    public final TableField<NetworkRouteStopPointsWithHistoryRecord, Boolean> NETWORK_ROUTE_STOP_POINT_VIA_POINT = createField(DSL.name("network_route_stop_point_via_point"), SQLDataType.BOOLEAN, this, "");
+
     private NetworkRouteStopPointsWithHistory(Name alias, Table<NetworkRouteStopPointsWithHistoryRecord> aliased) {
         this(alias, aliased, null);
     }
 
     private NetworkRouteStopPointsWithHistory(Name alias, Table<NetworkRouteStopPointsWithHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_route_stop_points_with_history\" as  SELECT network_route_stop_points.network_route_point_id,\n    network_route_stop_points.network_route_stop_point_ext_id,\n    network_route_stop_points.network_route_stop_point_order,\n    network_route_stop_points.network_route_stop_point_hastus_point,\n    network_route_stop_points.network_route_stop_point_timetable_column,\n    network_route_stop_points.network_route_stop_point_sys_period\n   FROM network.network_route_stop_points\nUNION ALL\n SELECT network_route_stop_points_history.network_route_point_id,\n    network_route_stop_points_history.network_route_stop_point_ext_id,\n    network_route_stop_points_history.network_route_stop_point_order,\n    network_route_stop_points_history.network_route_stop_point_hastus_point,\n    network_route_stop_points_history.network_route_stop_point_timetable_column,\n    network_route_stop_points_history.network_route_stop_point_sys_period\n   FROM network.network_route_stop_points_history;"));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_route_stop_points_with_history\" as  SELECT network_route_stop_points.network_route_point_id,\n    network_route_stop_points.network_route_stop_point_ext_id,\n    network_route_stop_points.network_route_stop_point_order,\n    network_route_stop_points.network_route_stop_point_hastus_point,\n    network_route_stop_points.network_route_stop_point_timetable_column,\n    network_route_stop_points.network_route_stop_point_sys_period,\n    network_route_stop_points.network_route_stop_point_via_point\n   FROM network.network_route_stop_points\nUNION ALL\n SELECT network_route_stop_points_history.network_route_point_id,\n    network_route_stop_points_history.network_route_stop_point_ext_id,\n    network_route_stop_points_history.network_route_stop_point_order,\n    network_route_stop_points_history.network_route_stop_point_hastus_point,\n    network_route_stop_points_history.network_route_stop_point_timetable_column,\n    network_route_stop_points_history.network_route_stop_point_sys_period,\n    network_route_stop_points_history.network_route_stop_point_via_point\n   FROM network.network_route_stop_points_history;"));
     }
 
     /**
@@ -141,11 +146,11 @@ public class NetworkRouteStopPointsWithHistory extends TableImpl<NetworkRouteSto
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<UUID, String, Integer, Boolean, Integer, TimeRange> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<UUID, String, Integer, Boolean, Integer, TimeRange, Boolean> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }
