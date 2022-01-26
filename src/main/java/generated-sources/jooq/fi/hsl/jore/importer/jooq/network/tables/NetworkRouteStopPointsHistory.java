@@ -15,7 +15,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -75,6 +75,11 @@ public class NetworkRouteStopPointsHistory extends TableImpl<NetworkRouteStopPoi
      * The column <code>network.network_route_stop_points_history.network_route_stop_point_sys_period</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, TimeRange> NETWORK_ROUTE_STOP_POINT_SYS_PERIOD = createField(DSL.name("network_route_stop_point_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
+
+    /**
+     * The column <code>network.network_route_stop_points_history.network_route_stop_point_via_point</code>.
+     */
+    public final TableField<NetworkRouteStopPointsHistoryRecord, Boolean> NETWORK_ROUTE_STOP_POINT_VIA_POINT = createField(DSL.name("network_route_stop_point_via_point"), SQLDataType.BOOLEAN.nullable(false), this, "");
 
     private NetworkRouteStopPointsHistory(Name alias, Table<NetworkRouteStopPointsHistoryRecord> aliased) {
         this(alias, aliased, null);
@@ -141,11 +146,11 @@ public class NetworkRouteStopPointsHistory extends TableImpl<NetworkRouteStopPoi
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<UUID, String, Integer, Boolean, Integer, TimeRange> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<UUID, String, Integer, Boolean, Integer, TimeRange, Boolean> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

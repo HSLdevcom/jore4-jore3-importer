@@ -6,4 +6,5 @@ TRUNCATE TABLE jr_linjannimet
 TRUNCATE TABLE jr_reitti
 TRUNCATE TABLE jr_reitinsuunta
 TRUNCATE TABLE jr_reitinlinkki
+TRUNCATE TABLE jr_via_nimet
 TRUNCATE TABLE jr_pysakki

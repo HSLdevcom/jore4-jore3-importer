@@ -12,5 +12,7 @@ public interface CommonFields
 
     boolean hastusStopPoint();
 
+    boolean viaPoint();
+
     Optional<Integer> timetableColumn();
 }

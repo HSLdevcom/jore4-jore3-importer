@@ -15,7 +15,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -66,6 +66,11 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
      * The column <code>network.network_route_stop_points_staging.network_route_stop_point_timetable_column</code>.
      */
     public final TableField<NetworkRouteStopPointsStagingRecord, Integer> NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN = createField(DSL.name("network_route_stop_point_timetable_column"), SQLDataType.INTEGER, this, "");
+
+    /**
+     * The column <code>network.network_route_stop_points_staging.network_route_stop_point_via_point</code>.
+     */
+    public final TableField<NetworkRouteStopPointsStagingRecord, Boolean> NETWORK_ROUTE_STOP_POINT_VIA_POINT = createField(DSL.name("network_route_stop_point_via_point"), SQLDataType.BOOLEAN.nullable(false), this, "");
 
     private NetworkRouteStopPointsStaging(Name alias, Table<NetworkRouteStopPointsStagingRecord> aliased) {
         this(alias, aliased, null);
@@ -142,11 +147,11 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<String, Integer, Boolean, Integer> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row5<String, Integer, Boolean, Integer, Boolean> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }

@@ -24,14 +24,7 @@ import fi.hsl.jore.importer.feature.batch.link_shape.support.ILinkShapeImportRep
 import fi.hsl.jore.importer.feature.batch.node.NodeProcessor;
 import fi.hsl.jore.importer.feature.batch.node.NodeReader;
 import fi.hsl.jore.importer.feature.batch.node.support.INodeImportRepository;
-import fi.hsl.jore.importer.feature.batch.route.JourneyPatternExportProcessor;
-import fi.hsl.jore.importer.feature.batch.route.JourneyPatternExportReader;
-import fi.hsl.jore.importer.feature.batch.route.JourneyPatternExportWriter;
-import fi.hsl.jore.importer.feature.batch.route.RouteExportProcessor;
-import fi.hsl.jore.importer.feature.batch.route.RouteExportReader;
-import fi.hsl.jore.importer.feature.batch.route.RouteExportWriter;
-import fi.hsl.jore.importer.feature.batch.route.RouteProcessor;
-import fi.hsl.jore.importer.feature.batch.route.RouteReader;
+import fi.hsl.jore.importer.feature.batch.route.*;
 import fi.hsl.jore.importer.feature.batch.route.support.IRouteImportRepository;
 import fi.hsl.jore.importer.feature.batch.route_direction.RouteDirectionProcessor;
 import fi.hsl.jore.importer.feature.batch.route_direction.RouteDirectionReader;
@@ -65,12 +58,14 @@ import fi.hsl.jore.importer.feature.network.line.dto.ExportableLine;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line_header.dto.ImportableLineHeader;
 import fi.hsl.jore.importer.feature.network.route.dto.ExportableJourneyPattern;
+import fi.hsl.jore.importer.feature.network.route.dto.ExportableJourneyPatternStop;
 import fi.hsl.jore.importer.feature.network.route.dto.ExportableRoute;
 import fi.hsl.jore.importer.feature.network.route.dto.ImportableRoute;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.ImportableRouteDirection;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImportableScheduledStopPoint;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelJourneyPattern;
+import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelJourneyPatternStop;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelLine;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRoute;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
@@ -534,13 +529,15 @@ public class JobConfig extends BatchConfig {
                                      final Step exportScheduledStopPointsStep,
                                      final Step exportLinesStep,
                                      final Step exportRoutesStep,
-                                     final Step exportJourneyPatternsStep) {
+                                     final Step exportJourneyPatternsStep,
+                                     final Step exportJourneyPatternStopsStep) {
         return new FlowBuilder<SimpleFlow>("transmodelExportFlow")
                 .start(prepareTransmodelExportStep)
                 .next(exportScheduledStopPointsStep)
                 .next(exportLinesStep)
                 .next(exportRoutesStep)
                 .next(exportJourneyPatternsStep)
+                .next(exportJourneyPatternStopsStep)
                 .build();
     }
 
@@ -604,6 +601,21 @@ public class JobConfig extends BatchConfig {
         return steps.get("exportJourneyPatternsStep")
                 .allowStartIfComplete(true)
                 .<ExportableJourneyPattern, TransmodelJourneyPattern>chunk(1)
+                .reader(reader.build())
+                .processor(processor)
+                .writer(writer)
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .build();
+    }
+
+    @Bean
+    public Step exportJourneyPatternStopsStep(final JourneyPatternStopExportReader reader,
+                                              final JourneyPatternStopExportProcessor processor,
+                                              final JourneyPatternStopExportWriter writer) {
+        return steps.get("exportJourneyPatternStopsStep")
+                .allowStartIfComplete(true)
+                .<ExportableJourneyPatternStop, TransmodelJourneyPatternStop>chunk(1)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)

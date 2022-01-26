@@ -29,6 +29,7 @@ public final class RouteStopPointConstructor {
         return ImportableRouteStopPoint.of(ExternalIdUtil.forRouteLinkStartNode(link),
                                            index,
                                            link.hastusStopPoint(),
+                                           link.viaPoint(),
                                            timetableColumn(link.includeInTimetable(),
                                                            link.timetableColumn()));
     }
@@ -41,6 +42,7 @@ public final class RouteStopPointConstructor {
         return ImportableRouteStopPoint.of(ExternalIdUtil.forRouteLinkEndNode(link),
                                            index,
                                            hastusPoint,
+                                           link.viaPoint(),
                                            timetableColumn(attributes.includeInTimetable(),
                                                            attributes.timetableColumn()));
     }

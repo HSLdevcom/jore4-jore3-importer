@@ -22,6 +22,7 @@ public interface RouteStopPoint
                              final ExternalId externalId,
                              final int orderNumber,
                              final boolean hastusStopPoint,
+                             final boolean viaPoint,
                              final Optional<Integer> timetableColumn,
                              final TimeRange systemTime) {
         return ImmutableRouteStopPoint.builder()
@@ -29,6 +30,7 @@ public interface RouteStopPoint
                                       .externalId(externalId)
                                       .orderNumber(orderNumber)
                                       .hastusStopPoint(hastusStopPoint)
+                                      .viaPoint(viaPoint)
                                       .timetableColumn(timetableColumn)
                                       .systemTime(systemTime)
                                       .build();
@@ -40,6 +42,7 @@ public interface RouteStopPoint
                 ExternalId.of(record.getNetworkRouteStopPointExtId()),
                 record.getNetworkRouteStopPointOrder(),
                 record.getNetworkRouteStopPointHastusPoint(),
+                record.getNetworkRouteStopPointViaPoint(),
                 Optional.ofNullable(record.getNetworkRouteStopPointTimetableColumn()),
                 record.getNetworkRouteStopPointSysPeriod()
         );
@@ -51,6 +54,7 @@ public interface RouteStopPoint
                 ExternalId.of(record.getNetworkRouteStopPointExtId()),
                 record.getNetworkRouteStopPointOrder(),
                 record.getNetworkRouteStopPointHastusPoint(),
+                record.getNetworkRouteStopPointViaPoint(),
                 Optional.ofNullable(record.getNetworkRouteStopPointTimetableColumn()),
                 record.getNetworkRouteStopPointSysPeriod()
         );

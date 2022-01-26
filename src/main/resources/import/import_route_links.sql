@@ -11,6 +11,7 @@ SELECT rl.reitunnus,
        rl.ajantaspys,
        IIF(rl.relvpistaikpys = '1', 1, 0) AS rl_relvpistaikpys,
        IIF(rl.paikka = '1', 1, 0)         AS rl_paikka,
+       IIF(vn.viasuomi IS NOT NULL, 1, 0) as rl_via,
        IIF(rl.kirjaan = '1', 1, 0)        AS rl_kirjaan,
        rl.kirjasarake,
        IIF(rs.kirjaan = '1', 1, 0)        AS rs_kirjaan,
@@ -23,6 +24,8 @@ FROM jr_reitinlinkki rl
     -- Fetch the node type of the last node from the node table
          LEFT JOIN jr_solmu loppusolmu
                    ON rl.lnkloppusolmu = loppusolmu.soltunnus
+         LEFT JOIN jr_via_nimet vn
+                   ON rl.relid = vn.relid
 ORDER BY rl.reitunnus,
          rl.suusuunta,
          rl.suuvoimast,

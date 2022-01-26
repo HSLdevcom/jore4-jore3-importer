@@ -60,6 +60,7 @@ public class RouteLinksProcessorGenerativeTest extends GenerativeTest {
                                                                                  .timingStopPoint(TimingStopPoint.NO)
                                                                                  .includeInTimetable(true)
                                                                                  .timetableColumn(3)
+                                                                                 .viaPoint(true)
                                                                                  .build());
     }
 

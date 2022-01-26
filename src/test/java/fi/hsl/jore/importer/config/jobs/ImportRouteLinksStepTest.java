@@ -16,6 +16,7 @@ import fi.hsl.jore.importer.feature.network.route_stop_point.dto.RouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.repository.IRouteStopPointTestRepository;
 import io.vavr.Tuple;
 import io.vavr.Tuple4;
+import io.vavr.Tuple5;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,8 +38,8 @@ import static org.hamcrest.Matchers.is;
         "/sql/source/populate_lines.sql",
         "/sql/source/populate_routes.sql",
         "/sql/source/populate_route_directions.sql",
-        "/sql/source/populate_route_links.sql"
-
+        "/sql/source/populate_route_links.sql",
+        "/sql/source/populate_via_names.sql"
 },
      config = @SqlConfig(dataSource = "sourceDataSource"))
 @Sql(scripts = "/sql/destination/drop_tables.sql")
@@ -94,15 +95,18 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
     // The external id of the route stop point
     // The order number of the route stop point
     // The hastus point flag
+    // The via point flag
     // and the timetable column (if any)
-    private static final List<Tuple4<ExternalId, Integer, Boolean, Optional<Integer>>> ROUTE_STOP_POINTS = List.of(
+    private static final List<Tuple5<ExternalId, Integer, Boolean, Boolean, Optional<Integer>>> ROUTE_STOP_POINTS = List.of(
             Tuple.of(ExternalId.of("1337-c"),
                      0,
                      true,
+                     false,
                      Optional.of(5)),
             Tuple.of(ExternalId.of("1339-f"),
                      1,
                      true,
+                     false,
                      Optional.of(7))
     );
 
@@ -215,9 +219,13 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
                        stopPoint.hastusStopPoint(),
                        is(expectedStopPointParams._3));
 
+            assertThat(String.format("stop point %s should have correct via point flag", externalId),
+                       stopPoint.viaPoint(),
+                       is(expectedStopPointParams._4));
+
             assertThat(String.format("stop point %s should have correct timetable column", externalId),
                        stopPoint.timetableColumn(),
-                       is(expectedStopPointParams._4));
+                       is(expectedStopPointParams._5));
         });
     }
 
