@@ -21,6 +21,7 @@ import static org.hamcrest.Matchers.is;
         "/sql/source/populate_routes.sql",
         "/sql/source/populate_route_directions.sql",
         "/sql/source/populate_route_links.sql",
+        "/sql/source/populate_via_names.sql",
         "/sql/source/populate_scheduled_stop_points.sql"
 },
      config = @SqlConfig(dataSource = "sourceDataSource"))

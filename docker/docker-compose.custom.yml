@@ -28,7 +28,7 @@ services:
 
   jore4-mssqltestdb:
     container_name: "mssqltestdb"
-    image: "hsldevcom/jore4-mssql-testdb:schema-only-main--a650cec4970a6c78335e50a24223e7baa0916dc4"
+    image: "hsldevcom/jore4-mssql-testdb:schema-only-main--21ef30b56e38b0cfa118ccf610ba0fa7e9e00ef7"
     restart: "unless-stopped"
     networks:
       - jore4

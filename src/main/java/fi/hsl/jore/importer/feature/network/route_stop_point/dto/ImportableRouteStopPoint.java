@@ -15,12 +15,14 @@ public interface ImportableRouteStopPoint
     static ImportableRouteStopPoint of(final ExternalId externalId,
                                        final int orderNumber,
                                        final boolean hastusStopPoint,
+                                       final boolean viaPoint,
                                        final Optional<Integer> timetableColumn) {
         return ImmutableImportableRouteStopPoint.builder()
-                                                .externalId(externalId)
-                                                .orderNumber(orderNumber)
-                                                .hastusStopPoint(hastusStopPoint)
-                                                .timetableColumn(timetableColumn)
-                                                .build();
+                .externalId(externalId)
+                .orderNumber(orderNumber)
+                .hastusStopPoint(hastusStopPoint)
+                .viaPoint(viaPoint)
+                .timetableColumn(timetableColumn)
+                .build();
     }
 }
