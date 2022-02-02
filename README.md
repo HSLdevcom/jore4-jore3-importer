@@ -2,6 +2,135 @@
 
 This tool implements a batch job for importing data from a Jore 3 database to a Jore 4 database.
 
+## The Structure of the Project
+
+The directory structure of this project follows the [Maven directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html).
+
+The package structure of this application is described in the following:
+
+* The `fi.hsl.jore.importer.config` package contains the configuration classes which configure the Spring context
+  which is started when this application is run. It has the following sub packages:
+  * The `fi.hsl.jore.importer.config.jackson` package configures the [Jackson datatype module for Vavr](https://github.com/vavr-io/vavr-jackson).
+  * The `fi.hsl.jore.importer.config.jobs` package configures the Spring Batch jobs which import data from the Jore 3 database
+    to the Jore 4 database.
+  * The `fi.hsl.jore.importer.config.jooq` package configures the jOOQ integration of Spring Boot.
+  * The `fi.hsl.jore.importer.config.migration` package configures Flyway which is used to the database migration scripts.
+  * The `fi.hsl.jore.importer.config.profile` package specifies the different Spring profiles used by this application.
+  * The `fi.hsl.jore.importer.config.properties` package contains configuration read from the properties files.
+* The `fi.hsl.jore.importer.feature` package contains the implementation of the import jobs. It has the following
+  sub packages:
+  * The `fi.hsl.jore.importer.feature.api` package contains the implementation of the REST api which allows you to
+    start the import job and query the status of the previous import job.
+  * The `fi.hsl.jore.importer.feature.batch` package contains the custom components which are used by Spring Batch.
+    These components include tasklets, row mappers, item processors, and item readers.
+  * The `fi.hsl.jore.importer.feature.common` package contains general utility code which is used by several other classes.
+  * The `fi.hsl.jore.importer.feature.infrastructure` package contains repositories which insert infrastructure data
+    into the target database.
+  * The `fi.hsl.jore.importer.feature.jore3` package contains classes which contain the information that's read from the source
+    database.
+  * The `fi.hsl.jore.importer.feature.network` package contains repositories which insert network data into the
+    target database.
+  * The `fi.hsl.jore.importer.feature.system.repository` package contains a repository which allows you to current
+    date and time information from the database.
+* The `fi.hsl.jore.importer.util` package provide factory methods which allow you to instantiate classes
+  provided by the [JTS topogy suite](https://github.com/locationtech/jts).
+
+The content of the _src/main/resources_ directory is described in the following:
+
+* The _configuration_ directory contains properties files which configure the used database connections
+  and the jOOQ integration of Spring Boot.
+* The _db/migration_ directory contains the Flyway database migrations.
+* The _import_ directory contains the SQL scripts which read the imported data from the
+  source MSSQL database.
+
+## Import job(s)
+
+The import jobs are implemented by using Spring Batch. If you are not familiar with Spring Batch, you should take a
+look a the [Spring Batch reference documentation](https://docs.spring.io/spring-batch/docs/4.3.x/reference/html/index.html).
+
+### Importing Jore 3 data (`importJoreJob`)
+
+An import job which imports data from the Jore 3 database has the following steps:
+
+* The `prepareStep` cleans the data found from the staging tables.
+* The `importStep` reads the imported data from the source MSSQL database and inserts the imported data into the
+  staging table found from the target PostgreSQL database.
+* The `commitStep` moves the data from the staging table to the actual target table.
+
+The following figure identifies the steps of the import jobs:
+
+![Overview](images/import_jore_job.svg "Job overview")
+
+### Overview of a Generic Job
+
+A single Spring Batch job consists of the following components:
+
+* A `Job` contains the steps which are invoked when a batch job is run.
+* The `GenericCleanupTasklet` cleans the staging tables before the import process is run. This step
+  is called the prepare step.
+* The `JdbcCursorItemReader<ROW>` class reads the imported data from the source MSSQL database by using an SQL
+  script which is found from _src/main/resources/import_ directory. This component is run during the import step.
+* An implementation of the `ItemProcessor<ROW, ENTITY>` interface transforms the source data into a format which can be inserted into the
+  staging table found from the target PostgreSQL database. This component is run during the import step.
+* The `GenericImportWriter<ENTITY, KEY>` class writes the imported data into the staging table which is found
+  from the target PostgreSQL database. The actual insert logic is found from the implementation of the
+  `IImportRepository<ENTITY,KEY>` interface. This component is also run during the import step.
+* The `GenericCommitTasklet` object is run during the import step, and it moves the data from the staging table to the
+  real target table. The logic which moves the imported data is found from the `commitStagingToTarget()` method of the
+  `IImportRepository<ENTITY,KEY>` interface. The implementations of this interface must extend the `AbstractImportRepository<ENTITY,KEY>`
+  class which contains three abstract methods:
+  * The `delete()` method contains the logic which deletes rows from the target table. A row is deleted from the target
+    table if it's found from the target table and it's not found from the staging table.
+  * The `insert()` method contains the logic which inserts new rows into the target table. A row is inserted to the target table
+    if it's found from the staging table and it's not found from the target table.
+  * The `update()` method contains the logic which checks if a row is found from the target and staging tables, and
+    replaces the information found from the target table with the information found from the staging table.
+    Beware that changed rows cannot be properly identified in all tables in the Jore3 database because of the lack of
+    appropriate keys. This means that in some cases a row change is interpreted as a deletion and insertion. One example
+    for this is the line header, and this phenomenon had to be taken into account in
+    [the related tests](src/test/java/fi/hsl/jore/importer/feature/batch/line_header/support/LineHeaderImportRepositoryTest.java).
+
+The following figure illustrates the responsibilities of these components:
+
+![objectDiagram](images/job_diagram.svg "Object diagram of a generic job")
+
+#### Importing nodes (`jr_solmu`)
+
+![Overview](images/import_nodes_step.svg "Step overview")
+
+#### Importing links (`jr_linkki`)
+
+![Overview](images/import_links_step.svg "Step overview")
+
+#### Importing points (`jr_piste`)
+
+![Overview](images/import_points_step.svg "Step overview")
+
+#### Importing lines (`jr_linja`)
+
+![Overview](images/import_lines_step.svg "Step overview")
+
+### Importing Data to Jore 4
+
+This application imports scheduled stop points, lines, routes, journey patterns, and stops of journey patterns
+to the Jore 4 database. The data which is imported to Jore 4 is written to the Jore 4 database one row at a time. 
+If an error occurs, the erroneous row is written to the log and the import process starts to process the next row 
+found from the database of the importer application.
+
+The following sections identify the non-obvious assumptions made by the import process.
+
+#### Scheduled Stop Points
+
+The process that imports scheduled stop points to Jore 4 follows these rules:
+
+* The imported stop points are sorted in ascending the order by using the external id (Jore 3 id). If multiple scheduled
+  stop points have the same short id, the first one is transferred to Jore 4. This ensures that multiple stop points
+  with the same short id and validity period cannot be transferred to Jore 4.
+* If the ely number of a scheduled stop point isn't found from the database of the importer, it won't be transferred
+  to Jore 4.
+* If the information of a scheduled stop point isn't found from Digiroad, it won't be transferred to Jore 4.
+* The import process ignores Digiroad stop points which have invalid information (such missing or empty ely number).
+
 ## Coding Conventions
 
 This section identifies the coding conventions which you must follow when you are writing either production or test code
@@ -32,7 +161,6 @@ fi.hsl.jore.foo.bar
 import org.springframework.lang.NonNullApi;
 import org.springframework.lang.NonNullFields;
 ```
-
 
 ## Running the app locally
 
@@ -162,128 +290,6 @@ If an error occurs:
 $ curl http://localhost:8080/job/import/status/
 {"id":5,"batchStatus":"FAILED","exitCode":"FAILED","exitDescription":"<here's a really long Java stack trace>","startTime":"2021-04-09T08:39:47.698Z","endTime":"2021-04-09T08:41:17.761Z"}
 ```
-
-## Import job(s)
-
-The import jobs are implemented by using Spring Batch. If you are not familiar with Spring Batch, you should take a
-look a the [Spring Batch reference documentation](https://docs.spring.io/spring-batch/docs/4.3.x/reference/html/index.html).
-
-### Importing Jore 3 data (`importJoreJob`)
-
-An import job which imports data from the Jore 3 database has the following steps:
-
-* The `prepareStep` cleans the data found from the staging tables.
-* The `importStep` reads the imported data from the source MSSQL database and inserts the imported data into the 
-  staging table found from the target PostgreSQL database.
-* The `commitStep` moves the data from the staging table to the actual target table.
-
-The following figure identifies the steps of the import jobs:
-
-![Overview](images/import_jore_job.svg "Job overview")
-
-### Overview of a Generic Job
-
-A single Spring Batch job consists of the following components:
-
-* A `Job` contains the steps which are invoked when a batch job is run.
-* The `GenericCleanupTasklet` cleans the staging tables before the import process is run. This step 
-  is called the prepare step.
-* The `JdbcCursorItemReader<ROW>` class reads the imported data from the source MSSQL database by using an SQL
-  script which is found from _src/main/resources/import_ directory. This component is run during the import step.
-* An implementation of the `ItemProcessor<ROW, ENTITY>` interface transforms the source data into a format which can be inserted into the
-  staging table found from the target PostgreSQL database. This component is run during the import step.
-* The `GenericImportWriter<ENTITY, KEY>` class writes the imported data into the staging table which is found
-  from the target PostgreSQL database. The actual insert logic is found from the implementation of the 
-  `IImportRepository<ENTITY,KEY>` interface. This component is also run during the import step.
-* The `GenericCommitTasklet` object is run during the import step, and it moves the data from the staging table to the 
-  real target table. The logic which moves the imported data is found from the `commitStagingToTarget()` method of the 
-  `IImportRepository<ENTITY,KEY>` interface. The implementations of this interface must extend the `AbstractImportRepository<ENTITY,KEY>`
-  class which contains three abstract methods:
-    * The `delete()` method contains the logic which deletes rows from the target table. A row is deleted from the target
-      table if it's found from the target table and it's not found from the staging table.
-    * The `insert()` method contains the logic which inserts new rows into the target table. A row is inserted to the target table
-      if it's found from the staging table and it's not found from the target table.
-    * The `update()` method contains the logic which checks if a row is found from the target and staging tables, and
-      replaces the information found from the target table with the information found from the staging table.
-  Beware that changed rows cannot be properly identified in all tables in the Jore3 database because of the lack of
-  appropriate keys. This means that in some cases a row change is interpreted as a deletion and insertion. One example
-  for this is the line header, and this phenomenon had to be taken into account in
-  [the related tests](src/test/java/fi/hsl/jore/importer/feature/batch/line_header/support/LineHeaderImportRepositoryTest.java).
-
-The following figure illustrates the responsibilities of these components:
-
-![objectDiagram](images/job_diagram.svg "Object diagram of a generic job")
-
-#### Importing nodes (`jr_solmu`)
-
-![Overview](images/import_nodes_step.svg "Step overview")
-
-#### Importing links (`jr_linkki`)
-
-![Overview](images/import_links_step.svg "Step overview")
-
-#### Importing points (`jr_piste`)
-
-![Overview](images/import_points_step.svg "Step overview")
-
-#### Importing lines (`jr_linja`)
-
-![Overview](images/import_lines_step.svg "Step overview")
-
-### Importing Data to Jore 4
-
-#### Scheduled Stop Points
-
-The process that imports scheduled stop points to Jore 4 follows these rules:
-
-* The imported stop points are sorted in ascending the order by using the external id (Jore 3 id). If multiple scheduled
-  stop points have the same short id, the first one is transferred to Jore 4. This ensures that multiple stop points
-  with the same short id and validity period cannot be transferred to Jore 4.
-* If the ely number of a scheduled stop point isn't found from the database of the importer, it won't be transferred
-  to Jore 4.
-* If the information of a scheduled stop point isn't found from Digiroad, it won't be transferred to Jore 4.
-* The import process ignores Digiroad stop points which have invalid information (such missing or empty ely number).
-
-## The Structure of the Project
-
-The directory structure of this project follows the [Maven directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html).
-
-The package structure of this application is described in the following:
-
-* The `fi.hsl.jore.importer.config` package contains the configuration classes which configure the Spring context
-  which is started when this application is run. It has the following sub packages:
-  * The `fi.hsl.jore.importer.config.jackson` package configures the [Jackson datatype module for Vavr](https://github.com/vavr-io/vavr-jackson).
-  * The `fi.hsl.jore.importer.config.jobs` package configures the Spring Batch jobs which import data from the Jore 3 database
-    to the Jore 4 database.
-  * The `fi.hsl.jore.importer.config.jooq` package configures the jOOQ integration of Spring Boot.
-  * The `fi.hsl.jore.importer.config.migration` package configures Flyway which is used to the database migration scripts.
-  * The `fi.hsl.jore.importer.config.profile` package specifies the different Spring profiles used by this application.
-  * The `fi.hsl.jore.importer.config.properties` package contains configuration read from the properties files.
-* The `fi.hsl.jore.importer.feature` package contains the implementation of the import jobs. It has the following
-  sub packages:
-  * The `fi.hsl.jore.importer.feature.api` package contains the implementation of the REST api which allows you to
-    start the import job and query the status of the previous import job.
-  * The `fi.hsl.jore.importer.feature.batch` package contains the custom components which are used by Spring Batch.
-    These components include tasklets, row mappers, item processors, and item readers.
-  * The `fi.hsl.jore.importer.feature.common` package contains general utility code which is used by several other classes.
-  * The `fi.hsl.jore.importer.feature.infrastructure` package contains repositories which insert infrastructure data 
-    into the target database.
-  * The `fi.hsl.jore.importer.feature.jore3` package contains classes which contain the information that's read from the source 
-   database.
-  * The `fi.hsl.jore.importer.feature.network` package contains repositories which insert network data into the
-    target database.
-  * The `fi.hsl.jore.importer.feature.system.repository` package contains a repository which allows you to current
-    date and time information from the database.
-* The `fi.hsl.jore.importer.util` package provide factory methods which allow you to instantiate classes 
-  provided by the [JTS topogy suite](https://github.com/locationtech/jts).
-
-The content of the _src/main/resources_ directory is described in the following:
-
-* The _configuration_ directory contains properties files which configure the used database connections 
-  and the jOOQ integration of Spring Boot.
-* The _db/migration_ directory contains the Flyway database migrations.
-* The _import_ directory contains the SQL scripts which read the imported data from the
-  source MSSQL database.
 
 ## Known Problems
 
