@@ -3,6 +3,7 @@
 
 # Reenable some...
 !/build-jdbc-urls.sh
+!/download-digiroad-data.sh
 !/src
 !/profiles
 !/pom.xml

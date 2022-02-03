@@ -22,14 +22,16 @@ EXPOSE 8080
 # download script for reading docker secrets
 RUN curl -o /tmp/read-secrets.sh "https://raw.githubusercontent.com/HSLdevcom/jore4-tools/main/docker/read-secrets.sh"
 
-# copy over jdbc url helper script
-COPY ./build-jdbc-urls.sh /tmp/build-jdbc-urls.sh
+# copy over helper scripts
+COPY ./build-jdbc-urls.sh \
+  ./download-digiroad-data.sh \
+  /tmp/
 
 # copy over compiled jar
 COPY --from=builder /build/target/*.jar /usr/src/jore4-jore3-importer/importer.jar
 
-# read docker secrets into environment variables and run application
-CMD /bin/bash -c "source /tmp/read-secrets.sh && source /tmp/build-jdbc-urls.sh && java -jar /usr/src/jore4-jore3-importer/importer.jar"
+# read docker secrets into environment variables, fetch digiroad data and run application
+CMD /bin/bash -c "source /tmp/read-secrets.sh && source /tmp/build-jdbc-urls.sh && /tmp/download-digiroad-data.sh && java -jar /usr/src/jore4-jore3-importer/importer.jar"
 
 HEALTHCHECK --interval=1m --timeout=5s \
   CMD curl --fail http://localhost:8080/actuator/health
