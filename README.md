@@ -32,7 +32,7 @@ The package structure of this application is described in the following:
     target database.
   * The `fi.hsl.jore.importer.feature.system.repository` package contains a repository which allows you to current
     date and time information from the database.
-* The `fi.hsl.jore.importer.util` package provide factory methods which allow you to instantiate classes
+* The `fi.hsl.jore.importer.util` package provides factory methods which allow you to instantiate classes
   provided by the [JTS topogy suite](https://github.com/locationtech/jts).
 
 The content of the _src/main/resources_ directory is described in the following:
@@ -161,6 +161,21 @@ fi.hsl.jore.foo.bar
 import org.springframework.lang.NonNullApi;
 import org.springframework.lang.NonNullFields;
 ```
+
+## Configuration
+
+The importer application is configured by using profile specific configuration files. These configuration files are
+found from the profile specific directories which are found from the _profiles_ directory. At the moment this application
+has the following profiles:
+
+* `ci`. This profile is used by the Github Actions workflows which run our CI jobs.
+* `dev`. This profile should be used in the local development environment. This is also the
+  default profile which is used by Maven if the active profile isn't specified.
+* `prod`. This profile is used by the Docker image which runs the importer application.
+
+Each one of these directories contains one _config.properties_ file which contains the profile
+specific configuration of the importer application. The different configuration options are described
+in the _profiles/dev/config.properties_ file.
 
 ## Running the app locally
 
