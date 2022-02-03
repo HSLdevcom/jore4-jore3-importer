@@ -85,7 +85,7 @@ A single Spring Batch job consists of the following components:
     if it's found from the staging table and it's not found from the target table.
   * The `update()` method contains the logic which checks if a row is found from the target and staging tables, and
     replaces the information found from the target table with the information found from the staging table.
-    Beware that changed rows cannot be properly identified in all tables in the Jore3 database because of the lack of
+    Beware that changed rows cannot be properly identified in all tables in the Jore 3 database because of the lack of
     appropriate keys. This means that in some cases a row change is interpreted as a deletion and insertion. One example
     for this is the line header, and this phenomenon had to be taken into account in
     [the related tests](src/test/java/fi/hsl/jore/importer/feature/batch/line_header/support/LineHeaderImportRepositoryTest.java).
@@ -181,14 +181,24 @@ in the _profiles/dev/config.properties_ file.
 
 ### Setup
 
-1. Install preliminaries
-  - OpenJDK 11
-1. Make a copy of the maven `dev`-profile for your user:
+1. Install software that's is required to compile and run the importer application and its dependencies.
+   Before you can run this application, you must install these tools:
+   - Docker Desktop
+   - OpenJDK 11
+   - Maven
+2. Make a copy of the maven `dev`-profile for your user:
     ```
     cp profiles/dev/config.properties profiles/dev/config.<my-username>.properties
     ```
-1. Adjust the `source.db.*` properties in `profiles/dev/config.<my-username>.properties` to your needs. Other configuration for destination database and test database may also be found from here.
-1. If you wish to connect to the original JORE3 database, follow the instructions [here](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#creating-an-ssh-configuration-entry) on how to create a tunnel and connect to the database. After the tunnel is created, the jore3 database will be available on localhost:56239. Ask for the username and password from the project team. 
+3. Adjust the `source.db.*` properties in `profiles/dev/config.<my-username>.properties` to your needs. Other configuration for destination database and test database may also be found from here.
+4. If you wish to connect to the original Jore 3 database, follow the instructions [here](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#creating-an-ssh-configuration-entry) on how to create a tunnel and connect to the database. After the tunnel is created, the Jore 3 database will be available on localhost:56239. Ask for the username and password from the project team. 
+5. Clone the [jore4-digiroad-import](https://github.com/HSLdevcom/jore4-digiroad-import) repository and 
+   follow these steps:
+   1. Run the Digiroad import.
+   2. Export infrastructure links from the data imported from Digiroad and import these links to the Jore 4 database.
+   3. Export scheduled stop points from the data imported from Digiroad and write the exported data to a CSV file.
+6. Configure the absolute path of the CSV file which contains scheduled stop points exported from Digiroad in the 
+   profile specific configuration file.
 
 ### Run 
 
