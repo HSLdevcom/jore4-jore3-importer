@@ -309,14 +309,16 @@ public class JobConfig extends BatchConfig {
     @Bean
     public Step importLineHeadersStep(final LineHeaderReader lineHeaderReader,
                                       final ILineHeaderImportRepository lineHeaderImportRepository) {
-        final int chunkSize = 1000;
+        final int chunkSize = 1;
         return steps.get("importLineHeadersStep")
-                    .allowStartIfComplete(true)
-                    .<JrLineHeader, ImportableLineHeader>chunk(chunkSize)
-                    .reader(lineHeaderReader.build())
-                    .processor(new LineHeaderProcessor())
-                    .writer(new GenericImportWriter<>(lineHeaderImportRepository))
-                    .build();
+                .allowStartIfComplete(true)
+                .<JrLineHeader, ImportableLineHeader>chunk(chunkSize)
+                .reader(lineHeaderReader.build())
+                .processor(new LineHeaderProcessor())
+                .writer(new GenericImportWriter<>(lineHeaderImportRepository))
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .build();
     }
 
     @Bean
@@ -571,6 +573,7 @@ public class JobConfig extends BatchConfig {
                 .writer(writer)
                 .faultTolerant()
                 .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .listener(new StatisticsLoggingStepExecutionListener())
                 .build();
     }
 
@@ -586,6 +589,7 @@ public class JobConfig extends BatchConfig {
                 .writer(writer)
                 .faultTolerant()
                 .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .listener(new StatisticsLoggingStepExecutionListener())
                 .build();
     }
 
@@ -601,6 +605,7 @@ public class JobConfig extends BatchConfig {
                 .writer(writer)
                 .faultTolerant()
                 .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .listener(new StatisticsLoggingStepExecutionListener())
                 .build();
     }
 
@@ -616,6 +621,7 @@ public class JobConfig extends BatchConfig {
                 .writer(writer)
                 .faultTolerant()
                 .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .listener(new StatisticsLoggingStepExecutionListener())
                 .build();
     }
 
@@ -631,6 +637,7 @@ public class JobConfig extends BatchConfig {
                 .writer(writer)
                 .faultTolerant()
                 .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .listener(new StatisticsLoggingStepExecutionListener())
                 .build();
     }
 }
