@@ -4,7 +4,7 @@
 package fi.hsl.jore.jore4.jooq.service_pattern.tables.records;
 
 
-import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPointServicedByVehicleMode;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.VehicleModeOnScheduledStopPoint;
 
 import java.util.UUID;
 
@@ -18,33 +18,33 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Which scheduled stop points are serviced by which vehicle modes?
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class ScheduledStopPointServicedByVehicleModeRecord extends UpdatableRecordImpl<ScheduledStopPointServicedByVehicleModeRecord> implements Record2<UUID, String> {
+public class VehicleModeOnScheduledStopPointRecord extends UpdatableRecordImpl<VehicleModeOnScheduledStopPointRecord> implements Record2<UUID, String> {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>service_pattern.scheduled_stop_point_serviced_by_vehicle_mode.scheduled_stop_point_id</code>. The scheduled stop point that is serviced by the vehicle mode.
+     * Setter for <code>service_pattern.vehicle_mode_on_scheduled_stop_point.scheduled_stop_point_id</code>. The scheduled stop point that is serviced by the vehicle mode.
      */
     public void setScheduledStopPointId(UUID value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>service_pattern.scheduled_stop_point_serviced_by_vehicle_mode.scheduled_stop_point_id</code>. The scheduled stop point that is serviced by the vehicle mode.
+     * Getter for <code>service_pattern.vehicle_mode_on_scheduled_stop_point.scheduled_stop_point_id</code>. The scheduled stop point that is serviced by the vehicle mode.
      */
     public UUID getScheduledStopPointId() {
         return (UUID) get(0);
     }
 
     /**
-     * Setter for <code>service_pattern.scheduled_stop_point_serviced_by_vehicle_mode.vehicle_mode</code>. The vehicle mode servicing the scheduled stop point.
+     * Setter for <code>service_pattern.vehicle_mode_on_scheduled_stop_point.vehicle_mode</code>. The vehicle mode servicing the scheduled stop point.
      */
     public void setVehicleMode(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>service_pattern.scheduled_stop_point_serviced_by_vehicle_mode.vehicle_mode</code>. The vehicle mode servicing the scheduled stop point.
+     * Getter for <code>service_pattern.vehicle_mode_on_scheduled_stop_point.vehicle_mode</code>. The vehicle mode servicing the scheduled stop point.
      */
     public String getVehicleMode() {
         return (String) get(1);
@@ -75,12 +75,12 @@ public class ScheduledStopPointServicedByVehicleModeRecord extends UpdatableReco
 
     @Override
     public Field<UUID> field1() {
-        return ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE.SCHEDULED_STOP_POINT_ID;
+        return VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID;
     }
 
     @Override
     public Field<String> field2() {
-        return ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE.VEHICLE_MODE;
+        return VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.VEHICLE_MODE;
     }
 
     @Override
@@ -104,19 +104,19 @@ public class ScheduledStopPointServicedByVehicleModeRecord extends UpdatableReco
     }
 
     @Override
-    public ScheduledStopPointServicedByVehicleModeRecord value1(UUID value) {
+    public VehicleModeOnScheduledStopPointRecord value1(UUID value) {
         setScheduledStopPointId(value);
         return this;
     }
 
     @Override
-    public ScheduledStopPointServicedByVehicleModeRecord value2(String value) {
+    public VehicleModeOnScheduledStopPointRecord value2(String value) {
         setVehicleMode(value);
         return this;
     }
 
     @Override
-    public ScheduledStopPointServicedByVehicleModeRecord values(UUID value1, String value2) {
+    public VehicleModeOnScheduledStopPointRecord values(UUID value1, String value2) {
         value1(value1);
         value2(value2);
         return this;
@@ -127,17 +127,17 @@ public class ScheduledStopPointServicedByVehicleModeRecord extends UpdatableReco
     // -------------------------------------------------------------------------
 
     /**
-     * Create a detached ScheduledStopPointServicedByVehicleModeRecord
+     * Create a detached VehicleModeOnScheduledStopPointRecord
      */
-    public ScheduledStopPointServicedByVehicleModeRecord() {
-        super(ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE);
+    public VehicleModeOnScheduledStopPointRecord() {
+        super(VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT);
     }
 
     /**
-     * Create a detached, initialised ScheduledStopPointServicedByVehicleModeRecord
+     * Create a detached, initialised VehicleModeOnScheduledStopPointRecord
      */
-    public ScheduledStopPointServicedByVehicleModeRecord(UUID scheduledStopPointId, String vehicleMode) {
-        super(ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE);
+    public VehicleModeOnScheduledStopPointRecord(UUID scheduledStopPointId, String vehicleMode) {
+        super(VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT);
 
         setScheduledStopPointId(scheduledStopPointId);
         setVehicleMode(vehicleMode);

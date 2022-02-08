@@ -19,6 +19,7 @@ public class JourneyPatternExportMapper implements RowMapper<ExportableJourneyPa
     public ExportableJourneyPattern mapRow(final ResultSet resultSet,
                                            final int rowNumber) throws SQLException {
         return ExportableJourneyPattern.of(
+                UUID.fromString(resultSet.getString("route_direction_id")),
                 UUID.fromString(resultSet.getString("route_transmodel_id"))
         );
     }

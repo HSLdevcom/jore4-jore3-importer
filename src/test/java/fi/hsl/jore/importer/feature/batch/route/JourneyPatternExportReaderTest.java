@@ -2,11 +2,14 @@ package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.network.route.dto.ExportableJourneyPattern;
+import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,17 +58,27 @@ class JourneyPatternExportReaderTest {
             "/sql/destination/drop_tables.sql",
             "/sql/destination/populate_infrastructure_nodes.sql",
             "/sql/destination/populate_lines_with_transmodel_ids.sql",
-            "/sql/destination/populate_routes_with_transmodel_ids.sql"
+            "/sql/destination/populate_routes.sql",
+            "/sql/destination/populate_route_directions_with_transmodel_ids.sql"
     })
+    @ExtendWith(SoftAssertionsExtension.class)
     class WhenSourceTableHasOneRoute {
 
+        private final UUID EXPECTED_ROUTE_DIRECTION_ID = UUID.fromString("6f93fa6b-8a19-4b98-bd84-b8409e670c70");
         private final UUID EXPECTED_ROUTE_TRANSMODEL_ID = UUID.fromString("5bfa9a65-c80f-4af8-be95-8370cb12df50");
 
         @Test
         @DisplayName("The first invocation of the read() method must return the found journey pattern")
-        void firstInvocationOfReadMethodMustReturnFoundJourneyPattern() throws Exception {
+        void firstInvocationOfReadMethodMustReturnFoundJourneyPattern(final SoftAssertions softAssertions) throws Exception {
             final ExportableJourneyPattern first = reader.read();
-            assertThat(first.routeTransmodelId()).isEqualTo(EXPECTED_ROUTE_TRANSMODEL_ID);
+
+            softAssertions.assertThat(first.routeDirectionId())
+                    .as("routeDirectionId")
+                    .isEqualTo(EXPECTED_ROUTE_DIRECTION_ID);
+
+            softAssertions.assertThat(first.routeTransmodelId())
+                    .as("routeTransmodelId")
+                    .isEqualTo(EXPECTED_ROUTE_TRANSMODEL_ID);
         }
 
 

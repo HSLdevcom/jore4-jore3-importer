@@ -22,10 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class RouteExportProcessorTest {
 
+    private static final UUID IMPORTER_ROUTE_DIRECTION_ID = UUID.fromString("2d28fda6-b497-436e-8093-c049a9bd7769");
     private static final DirectionType IMPORTER_ROUTE_DIRECTION = DirectionType.INBOUND;
     private static final TransmodelRouteDirection JORE4_ROUTE_DIRECTION = TransmodelRouteDirection.INBOUND;
     private static final int JORE4_ROUTE_PRIORITY = 10;
-    private static final String ROUTE_EXTERNAL_ID = "1001";
     private static final String FINNISH_NAME = "Keskustori - Etelä-Hervanta";
     private static final String SWEDISH_NAME = "Central torget - Södra Hervanta";
     private static final UUID LINE_TRANSMODEL_ID = UUID.fromString("184b4710-9366-4500-aef3-39d03e95dde2");
@@ -46,8 +46,8 @@ class RouteExportProcessorTest {
     );
 
     private static final ExportableRoute INPUT = ExportableRoute.of(
+            IMPORTER_ROUTE_DIRECTION_ID,
             IMPORTER_ROUTE_DIRECTION,
-            ExternalId.of(ROUTE_EXTERNAL_ID),
             createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
             LINE_TRANSMODEL_ID,
             ROUTE_NUMBER,
@@ -89,10 +89,10 @@ class RouteExportProcessorTest {
     }
 
     @Test
-    @DisplayName("Should return a route wtih the correct external id")
-    void shouldReturnRouteWithCorrectExternalId() throws Exception {
+    @DisplayName("Should return a route with the correct direction ext id")
+    void shouldReturnRouteWithCorrectDirectionExtId() throws Exception {
         final TransmodelRoute route = processor.process(INPUT);
-        assertThat(route.externalId()).isEqualTo(ROUTE_EXTERNAL_ID);
+        assertThat(route.directionExtId()).isEqualTo(IMPORTER_ROUTE_DIRECTION_ID);
     }
 
     @Test
@@ -106,7 +106,7 @@ class RouteExportProcessorTest {
     @DisplayName("Should return a route with the correct line transmodel id")
     void shouldReturnRouteWithCorrectLineTransmodelId() throws Exception {
         final TransmodelRoute route = processor.process(INPUT);
-        assertThat(route.lineId()).isEqualTo(LINE_TRANSMODEL_ID.toString());
+        assertThat(route.lineId()).isEqualTo(LINE_TRANSMODEL_ID);
     }
 
     @Test
@@ -120,14 +120,14 @@ class RouteExportProcessorTest {
     @DisplayName("Should return a route with the correct start scheduled stop point id")
     void shouldReturnRouteWithCorrectStartScheduledStopPointId() throws Exception {
         final TransmodelRoute route = processor.process(INPUT);
-        assertThat(route.startScheduledStopPointId()).isEqualTo(START_SCHEDULED_STOP_POINT_TRANSMODEL_ID.toString());
+        assertThat(route.startScheduledStopPointId()).isEqualTo(START_SCHEDULED_STOP_POINT_TRANSMODEL_ID);
     }
 
     @Test
     @DisplayName("Should return a route with the correct end scheduled stop point id")
     void shouldReturnRouteWithCorrectEndScheduledStopPointId() throws Exception {
         final TransmodelRoute route = processor.process(INPUT);
-        assertThat(route.endScheduledStopPointId()).isEqualTo(END_SCHEDULED_STOP_POINT_TRANSMODEL_ID.toString());
+        assertThat(route.endScheduledStopPointId()).isEqualTo(END_SCHEDULED_STOP_POINT_TRANSMODEL_ID);
     }
 
     @Test

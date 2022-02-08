@@ -29,8 +29,8 @@ public class RouteExportMapper implements RowMapper<ExportableRoute> {
     @Override
     public ExportableRoute mapRow(final ResultSet resultSet, final int rowNumber) throws SQLException {
         return ExportableRoute.of(
+                UUID.fromString(resultSet.getString("direction_id")),
                 DirectionType.of(resultSet.getString("direction_type")),
-                ExternalId.of(resultSet.getString("external_id")),
                 jsonConverter.fromJson(resultSet.getString("name"), MultilingualString.class),
                 UUID.fromString(resultSet.getString("line_transmodel_id")),
                 resultSet.getString("route_number"),

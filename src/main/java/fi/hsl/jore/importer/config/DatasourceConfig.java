@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 
 @Configuration
 public class DatasourceConfig {

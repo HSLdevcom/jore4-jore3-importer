@@ -3,11 +3,14 @@ package fi.hsl.jore.importer.feature.batch.route_direction.support;
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.ImportableRouteDirection;
+import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableJourneyPatternIdMapping;
+import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableRouteIdMapping;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.generated.RouteDirectionPK;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes;
 import io.vavr.collection.HashSet;
+import io.vavr.collection.List;
 import io.vavr.collection.Set;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
@@ -153,5 +156,31 @@ public class RouteDirectionImportRepository
                  .stream()
                  .map(row -> RouteDirectionPK.of(row.value1()))
                  .collect(HashSet.collector());
+    }
+
+    @Transactional
+    @Override
+    public void setJourneyPatternTransmodelIds(final List<PersistableJourneyPatternIdMapping> idMappings) {
+        db.batched(c -> {
+            idMappings.forEach(idMapping -> {
+                c.dsl().update(TARGET_TABLE)
+                        .set(TARGET_TABLE.JOURNEY_PATTERN_TRANSMODEL_ID, idMapping.journeyPatternId())
+                        .where(TARGET_TABLE.NETWORK_ROUTE_DIRECTION_ID.eq(idMapping.routeDirectionId()))
+                        .execute();
+            });
+        });
+    }
+
+    @Transactional
+    @Override
+    public void setRouteTransmodelIds(final List<PersistableRouteIdMapping> idMappings) {
+        db.batched(c -> {
+            idMappings.forEach(idMapping -> {
+                c.dsl().update(TARGET_TABLE)
+                        .set(TARGET_TABLE.NETWORK_ROUTE_TRANSMODEL_ID, idMapping.transmodelId())
+                        .where(TARGET_TABLE.NETWORK_ROUTE_DIRECTION_ID.eq(idMapping.routeDirectionId()))
+                        .execute();
+            });
+        });
     }
 }

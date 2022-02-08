@@ -74,7 +74,7 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
             )
     );
 
-    private static final fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes IMPORTER_ROUTE = fi.hsl.jore.importer.jooq.network.Tables.NETWORK_ROUTES;
+    private static final fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections IMPORTER_ROUTE_DIRECTION = fi.hsl.jore.importer.jooq.network.Tables.NETWORK_ROUTE_DIRECTIONS;
     private static final fi.hsl.jore.jore4.jooq.internal_route.tables.Route JORE4_ROUTE = fi.hsl.jore.jore4.jooq.internal_route.Tables.ROUTE;
 
     private final Table importerTargetTable;
@@ -84,7 +84,7 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
     @Autowired
     public ExportRouteStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
                                final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
-        this.importerTargetTable = new Table(importerDataSource, "network.network_routes");
+        this.importerTargetTable = new Table(importerDataSource, "network.network_route_directions");
         this.jore4TargetTable = new Table(jore4DataSource, "internal_route.route");
         this.testRepository = new TransmodelValidityPeriodTestRepository(jore4DataSource,
                 ValidityPeriodTargetTable.ROUTE
@@ -210,13 +210,13 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should update the transmodel id of the route found from the importer's database")
-    void shouldUpdateTransmodelIdOfRouteFoundFromImportersDatabase() {
+    @DisplayName("Should update the transmodel id of the route direction found from the importer's database")
+    void shouldUpdateTransmodelIdOfRouteDirectionFoundFromImportersDatabase() {
         runSteps(STEPS);
 
         assertThat(importerTargetTable)
                 .row()
-                .value(IMPORTER_ROUTE.NETWORK_ROUTE_TRANSMODEL_ID.getName())
+                .value(IMPORTER_ROUTE_DIRECTION.NETWORK_ROUTE_TRANSMODEL_ID.getName())
                 .isNotNull();
     }
 }

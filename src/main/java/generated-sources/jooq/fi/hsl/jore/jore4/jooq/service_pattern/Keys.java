@@ -8,8 +8,8 @@ import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.ScheduledStopPoint
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.records.ScheduledStopPointRecord;
 import fi.hsl.jore.jore4.jooq.reusable_components.tables.VehicleMode;
 import fi.hsl.jore.jore4.jooq.reusable_components.tables.records.VehicleModeRecord;
-import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPointServicedByVehicleMode;
-import fi.hsl.jore.jore4.jooq.service_pattern.tables.records.ScheduledStopPointServicedByVehicleModeRecord;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.VehicleModeOnScheduledStopPoint;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.records.VehicleModeOnScheduledStopPointRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
@@ -29,12 +29,12 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<ScheduledStopPointServicedByVehicleModeRecord> SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE_PKEY = Internal.createUniqueKey(ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE, DSL.name("scheduled_stop_point_serviced_by_vehicle_mode_pkey"), new TableField[] { ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE.SCHEDULED_STOP_POINT_ID, ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE.VEHICLE_MODE }, true);
+    public static final UniqueKey<VehicleModeOnScheduledStopPointRecord> SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE_PKEY = Internal.createUniqueKey(VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT, DSL.name("scheduled_stop_point_serviced_by_vehicle_mode_pkey"), new TableField[] { VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID, VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.VEHICLE_MODE }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<ScheduledStopPointServicedByVehicleModeRecord, ScheduledStopPointRecord> SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE__SCHEDULED_STOP_POINT_SERVICED_BY_V_SCHEDULED_STOP_POINT_ID_FKEY = Internal.createForeignKey(ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE, DSL.name("scheduled_stop_point_serviced_by_v_scheduled_stop_point_id_fkey"), new TableField[] { ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE.SCHEDULED_STOP_POINT_ID }, fi.hsl.jore.jore4.jooq.internal_service_pattern.Keys.SCHEDULED_STOP_POINT_PKEY, new TableField[] { ScheduledStopPoint.SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID }, true);
-    public static final ForeignKey<ScheduledStopPointServicedByVehicleModeRecord, VehicleModeRecord> SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE__SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE_VEHICLE_MODE_FKEY = Internal.createForeignKey(ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE, DSL.name("scheduled_stop_point_serviced_by_vehicle_mode_vehicle_mode_fkey"), new TableField[] { ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE.VEHICLE_MODE }, fi.hsl.jore.jore4.jooq.reusable_components.Keys.VEHICLE_MODE_PKEY, new TableField[] { VehicleMode.VEHICLE_MODE.VEHICLE_MODE_ }, true);
+    public static final ForeignKey<VehicleModeOnScheduledStopPointRecord, VehicleModeRecord> VEHICLE_MODE_ON_SCHEDULED_STOP_POINT__SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE_VEHICLE_MODE_FKEY = Internal.createForeignKey(VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT, DSL.name("scheduled_stop_point_serviced_by_vehicle_mode_vehicle_mode_fkey"), new TableField[] { VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.VEHICLE_MODE }, fi.hsl.jore.jore4.jooq.reusable_components.Keys.VEHICLE_MODE_PKEY, new TableField[] { VehicleMode.VEHICLE_MODE.VEHICLE_MODE_ }, true);
+    public static final ForeignKey<VehicleModeOnScheduledStopPointRecord, ScheduledStopPointRecord> VEHICLE_MODE_ON_SCHEDULED_STOP_POINT__VEHICLE_MODE_ON_SCHEDULED_STOP_POINT_SCHEDULED_STOP_POINT_ID_FK = Internal.createForeignKey(VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT, DSL.name("vehicle_mode_on_scheduled_stop_point_scheduled_stop_point_id_fk"), new TableField[] { VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID }, fi.hsl.jore.jore4.jooq.internal_service_pattern.Keys.SCHEDULED_STOP_POINT_PKEY, new TableField[] { ScheduledStopPoint.SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID }, true);
 }

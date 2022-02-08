@@ -11,8 +11,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JourneyPatternExportProcessorTest {
 
+    private static final UUID ROUTE_DIRECTION_EXT_ID = UUID.fromString("a6fb1824-0cdc-49cf-bd43-7e931ffd249a");
     private static final UUID ROUTE_ID = UUID.fromString("5bfa9a65-c80f-4af8-be95-8370cb12df50");
-    private static final ExportableJourneyPattern INPUT = ExportableJourneyPattern.of(ROUTE_ID);
+    private static final ExportableJourneyPattern INPUT = ExportableJourneyPattern.of(
+            ROUTE_DIRECTION_EXT_ID,
+            ROUTE_ID
+    );
 
 
     private final JourneyPatternExportProcessor processor = new JourneyPatternExportProcessor();
@@ -25,9 +29,16 @@ class JourneyPatternExportProcessorTest {
     }
 
     @Test
+    @DisplayName("Should return a journey pattern with the correct route direction ext id")
+    void shouldReturnJourneyPatternWithCorrectRouteDirectionExtId() throws Exception {
+        final TransmodelJourneyPattern returned = processor.process(INPUT);
+        assertThat(returned.routeDirectionExtId()).isEqualTo(ROUTE_DIRECTION_EXT_ID);
+    }
+
+    @Test
     @DisplayName("Should return a journey pattern with the correct route id")
     void shouldReturnJourneyPatternWithCorrectRouteId() throws Exception {
         final TransmodelJourneyPattern returned = processor.process(INPUT);
-        assertThat(returned.routeId()).isEqualTo(ROUTE_ID.toString());
+        assertThat(returned.routeId()).isEqualTo(ROUTE_ID);
     }
 }

@@ -2,14 +2,10 @@ package fi.hsl.jore.importer.feature.batch.route.support;
 
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
-import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
-import fi.hsl.jore.importer.feature.network.route.dto.PersistableJourneyPatternIdMapping;
-import fi.hsl.jore.importer.feature.network.route.dto.PersistableRouteIdMapping;
 import fi.hsl.jore.importer.feature.network.route.dto.Route;
 import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
 import fi.hsl.jore.importer.feature.network.route.repository.IRouteTestRepository;
-import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 import org.assertj.core.api.SoftAssertions;
@@ -20,7 +16,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.convert.DataSizeUnit;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.UUID;
@@ -272,108 +267,6 @@ class RouteImportRepositoryTest {
                             .as("transmodelId")
                             .isEmpty();
                 }
-            }
-        }
-    }
-
-    @Nested
-    @DisplayName("Set the transmodel ids of existing routes")
-    @Sql(scripts = {
-            "/sql/destination/drop_tables.sql",
-            "/sql/destination/populate_lines.sql",
-            "/sql/destination/populate_routes.sql"
-    })
-    class SetRouteTransmodelIds {
-
-        private final ExternalId EXT_ID = ExternalId.of("1001");
-        private final UUID TRANSMODEL_ID = UUID.fromString("51f2686b-166c-4157-bd70-647337e44c8c");
-
-        @Nested
-        @DisplayName("When the route isn't found")
-        class WhenRouteIsNotFound {
-
-            private static final String UNKNOWN_EXT_ID = "999999999";
-            private List<PersistableRouteIdMapping> INPUT = List.of(PersistableRouteIdMapping.of(
-                    UNKNOWN_EXT_ID,
-                    TRANSMODEL_ID
-            ));
-
-            @Test
-            @DisplayName("Shouldn't update the transmodel id of the existing route")
-            void shouldNotUpdateTransmodelIdOfExistingRoute() {
-                importRepository.setRouteTransmodelIds(INPUT);
-                final Route route = targetRepository.findByExternalId(EXT_ID).get();
-                assertThat(route.transmodelId()).isEmpty();
-            }
-        }
-
-        @Nested
-        @DisplayName("When the route is found")
-        class WhenRouteIsFound {
-
-            private List<PersistableRouteIdMapping> INPUT = List.of(PersistableRouteIdMapping.of(
-                    EXT_ID.value(),
-                    TRANSMODEL_ID
-            ));
-
-            @Test
-            @DisplayName("Should update the transmodel id of the existing route")
-            void shouldUpdateTransmodelIdOfExistingRoute() {
-                importRepository.setRouteTransmodelIds(INPUT);
-                final Route route = targetRepository.findByExternalId(EXT_ID).get();
-                assertThat(route.transmodelId()).contains(TRANSMODEL_ID);
-            }
-        }
-    }
-
-    @Nested
-    @DisplayName("Set the transmodel ids of journey patterns")
-    @Sql(scripts = {
-            "/sql/destination/drop_tables.sql",
-            "/sql/destination/populate_lines.sql",
-            "/sql/destination/populate_routes_with_transmodel_ids.sql"
-    })
-    class SetJourneyPatternTransmodelIds {
-
-        private final UUID JOURNEY_PATTERN_TRANSMODEL_ID = UUID.fromString("8b6a8f9c-64b2-4853-9160-d5eb46836fb7");
-        private final UUID ROUTE_TRANSMODEL_ID = UUID.fromString("5bfa9a65-c80f-4af8-be95-8370cb12df50");
-        private final UUID ROUTE_ID = UUID.fromString("484d89ae-f365-4c9b-bb1a-8f7b783e95f3");
-
-        @Nested
-        @DisplayName("When the route isn't found")
-        class WhenRouteIsNotFound {
-
-            private final UUID UNKNOWN_ROUTE_TRANSMODEL_ID = UUID.fromString("ddd49284-ba94-4eab-8071-ffc9f346b274");
-
-            private final PersistableJourneyPatternIdMapping INPUT = PersistableJourneyPatternIdMapping.of(UNKNOWN_ROUTE_TRANSMODEL_ID,
-                    JOURNEY_PATTERN_TRANSMODEL_ID
-            );
-
-            @Test
-            @DisplayName("Shouldn't update the journey pattern id of an existing route")
-            void shouldNotUpdateJourneyPatternIdOfExistingRoute() {
-                importRepository.setJourneyPatternTransmodelIds(List.of(INPUT));
-
-                final Route route = targetRepository.findById(RoutePK.of(ROUTE_ID)).get();
-                assertThat(route.journeyPatternTransmodelId()).isEmpty();
-            }
-        }
-
-        @Nested
-        @DisplayName("When the route is found")
-        class WhenRouteIsFound {
-
-            private final PersistableJourneyPatternIdMapping INPUT = PersistableJourneyPatternIdMapping.of(ROUTE_TRANSMODEL_ID,
-                    JOURNEY_PATTERN_TRANSMODEL_ID
-            );
-
-            @Test
-            @DisplayName("Should update the journey pattern id of an existing route")
-            void shouldUpdateJourneyPatternIdOfExistingRoute() {
-                importRepository.setJourneyPatternTransmodelIds(List.of(INPUT));
-
-                final Route route = targetRepository.findById(RoutePK.of(ROUTE_ID)).get();
-                assertThat(route.journeyPatternTransmodelId()).contains(JOURNEY_PATTERN_TRANSMODEL_ID);
             }
         }
     }

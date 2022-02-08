@@ -19,7 +19,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row6;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -80,16 +80,6 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
      * The column <code>network.network_routes.network_route_sys_period</code>.
      */
     public final TableField<NetworkRoutesRecord, TimeRange> NETWORK_ROUTE_SYS_PERIOD = createField(DSL.name("network_route_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
-
-    /**
-     * The column <code>network.network_routes.network_route_transmodel_id</code>.
-     */
-    public final TableField<NetworkRoutesRecord, UUID> NETWORK_ROUTE_TRANSMODEL_ID = createField(DSL.name("network_route_transmodel_id"), SQLDataType.UUID, this, "");
-
-    /**
-     * The column <code>network.network_routes.journey_pattern_transmodel_id</code>.
-     */
-    public final TableField<NetworkRoutesRecord, UUID> JOURNEY_PATTERN_TRANSMODEL_ID = createField(DSL.name("journey_pattern_transmodel_id"), SQLDataType.UUID, this, "");
 
     private NetworkRoutes(Name alias, Table<NetworkRoutesRecord> aliased) {
         this(alias, aliased, null);
@@ -180,11 +170,11 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<UUID, UUID, String, String, JSONB, TimeRange, UUID, UUID> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row6<UUID, UUID, String, String, JSONB, TimeRange> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 }

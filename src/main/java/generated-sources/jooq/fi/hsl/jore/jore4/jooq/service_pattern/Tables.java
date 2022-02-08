@@ -5,7 +5,7 @@ package fi.hsl.jore.jore4.jooq.service_pattern;
 
 
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPoint;
-import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPointServicedByVehicleMode;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.VehicleModeOnScheduledStopPoint;
 
 
 /**
@@ -22,5 +22,5 @@ public class Tables {
     /**
      * Which scheduled stop points are serviced by which vehicle modes?
      */
-    public static final ScheduledStopPointServicedByVehicleMode SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE = ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE;
+    public static final VehicleModeOnScheduledStopPoint VEHICLE_MODE_ON_SCHEDULED_STOP_POINT = VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT;
 }

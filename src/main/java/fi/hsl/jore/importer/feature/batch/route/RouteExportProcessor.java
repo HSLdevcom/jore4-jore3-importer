@@ -21,15 +21,15 @@ public class RouteExportProcessor implements ItemProcessor<ExportableRoute, Tran
     @Override
     public TransmodelRoute process(final ExportableRoute input) throws Exception {
         return TransmodelRoute.of(
-                UUID.randomUUID().toString(),
+                UUID.randomUUID(),
                 input.name(),
                 TransmodelRouteDirection.of(input.directionType()),
-                input.externalId().value(),
+                input.directionId(),
                 input.routeNumber(),
-                input.lineTransmodelId().toString(),
+                input.lineTransmodelId(),
                 DEFAULT_PRIORITY,
-                input.startScheduledStopPointTransmodelId().toString(),
-                input.endScheduledStopPointTransmodelId().toString(),
+                input.startScheduledStopPointTransmodelId(),
+                input.endScheduledStopPointTransmodelId(),
                 ValidityPeriodUtil.constructValidityPeriodStartTime(input.validDateRange().range()),
                 ValidityPeriodUtil.constructValidityPeriodEndTime(input.validDateRange().range())
         );

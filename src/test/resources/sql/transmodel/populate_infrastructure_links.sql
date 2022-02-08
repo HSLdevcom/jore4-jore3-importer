@@ -1,3 +1,5 @@
+BEGIN;
+
 INSERT INTO infrastructure_network.infrastructure_link (
         infrastructure_link_id,
         direction,
@@ -14,3 +16,14 @@ VALUES (
         '133202',
         'digiroad_r'
 );
+
+INSERT INTO infrastructure_network.vehicle_submode_on_infrastructure_link (
+        infrastructure_link_id,
+        vehicle_submode
+)
+VALUES (
+        '554c63e6-87b2-4dc8-a032-b6b0e2607696',
+        'generic_bus'
+);
+
+COMMIT;
