@@ -7,8 +7,11 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionManager;
 
 import javax.sql.DataSource;
 
@@ -21,6 +24,15 @@ public class BatchConfig extends DefaultBatchConfigurer {
 
     @Autowired
     protected StepBuilderFactory steps;
+
+    @Autowired
+    @Qualifier("chainedTransactionManager")
+    private PlatformTransactionManager transactionManager;
+
+    @Override
+    public PlatformTransactionManager getTransactionManager() {
+        return transactionManager;
+    }
 
     @Override
     public void setDataSource(final DataSource dataSource) {

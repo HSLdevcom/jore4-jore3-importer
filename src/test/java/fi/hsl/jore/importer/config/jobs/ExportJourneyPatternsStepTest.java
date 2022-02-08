@@ -21,7 +21,8 @@ import static org.assertj.db.api.Assertions.assertThat;
         "/sql/destination/drop_tables.sql",
         "/sql/destination/populate_infrastructure_nodes.sql",
         "/sql/destination/populate_lines_with_transmodel_ids.sql",
-        "/sql/destination/populate_routes_with_transmodel_ids.sql"
+        "/sql/destination/populate_routes.sql",
+        "/sql/destination/populate_route_directions_with_transmodel_ids.sql"
 })
 @Sql(
         scripts = {
@@ -39,7 +40,7 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
     private static final List<String> STEPS = List.of("exportJourneyPatternsStep");
     private static final UUID EXPECTED_ROUTE_ID = UUID.fromString("5bfa9a65-c80f-4af8-be95-8370cb12df50");
 
-    private static final fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes IMPORTER_ROUTE = fi.hsl.jore.importer.jooq.network.Tables.NETWORK_ROUTES;
+    private static final fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections IMPORTER_ROUTE_DIRECTIONS = fi.hsl.jore.importer.jooq.network.Tables.NETWORK_ROUTE_DIRECTIONS;
     private static final fi.hsl.jore.jore4.jooq.journey_pattern.tables.JourneyPattern JORE4_JOURNEY_PATTERN = fi.hsl.jore.jore4.jooq.journey_pattern.Tables.JOURNEY_PATTERN_;
 
     private final Table importerTargetTable;
@@ -48,7 +49,7 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
     @Autowired
     public ExportJourneyPatternsStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
                                          final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
-        this.importerTargetTable = new Table(importerDataSource, "network.network_routes");
+        this.importerTargetTable = new Table(importerDataSource, "network.network_route_directions");
         this.jore4TargetTable = new Table(jore4DataSource, "journey_pattern.journey_pattern");
     }
 
@@ -89,7 +90,7 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
 
         assertThat(importerTargetTable)
                 .row()
-                .value(IMPORTER_ROUTE.JOURNEY_PATTERN_TRANSMODEL_ID.getName())
+                .value(IMPORTER_ROUTE_DIRECTIONS.JOURNEY_PATTERN_TRANSMODEL_ID.getName())
                 .isNotNull();
     }
 }

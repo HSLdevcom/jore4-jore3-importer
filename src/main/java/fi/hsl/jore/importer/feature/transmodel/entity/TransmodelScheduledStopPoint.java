@@ -5,6 +5,7 @@ import org.locationtech.jts.geom.Point;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Contains the information of a scheduled stop point which
@@ -13,7 +14,7 @@ import java.util.Optional;
 @Value.Immutable
 public interface TransmodelScheduledStopPoint {
 
-    String scheduledStopPointId();
+    UUID scheduledStopPointId();
 
     String externalInfrastructureLinkId();
 
@@ -31,7 +32,7 @@ public interface TransmodelScheduledStopPoint {
 
     Optional<OffsetDateTime> validityEnd();
 
-    static ImmutableTransmodelScheduledStopPoint of(final String scheduledStopPointId,
+    static ImmutableTransmodelScheduledStopPoint of(final UUID scheduledStopPointId,
                                                     final String externalScheduledStopPointId,
                                                     final String externalInfrastructureLinkId,
                                                     final TransmodelScheduledStopPointDirection directionOnInfraLink,

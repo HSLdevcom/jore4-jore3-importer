@@ -126,7 +126,7 @@ public class ScheduledStopPointInJourneyPattern extends TableImpl<ScheduledStopP
 
     @Override
     public List<ForeignKey<ScheduledStopPointInJourneyPatternRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ScheduledStopPointInJourneyPatternRecord, ?>>asList(Keys.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN__SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN_JOURNEY_PATTERN_ID_FKEY, Keys.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN__SCHEDULED_STOP_POINT_IN_JOURNEY_PA_SCHEDULED_STOP_POINT_ID_FKEY);
+        return Arrays.<ForeignKey<ScheduledStopPointInJourneyPatternRecord, ?>>asList(Keys.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN__SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN_JOURNEY_PATTERN_ID_FKEY, Keys.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN__SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN_SCHEDULED_STOP_POINT_ID);
     }
 
     private transient fi.hsl.jore.jore4.jooq.journey_pattern.tables.JourneyPattern _journeyPattern;
@@ -141,7 +141,7 @@ public class ScheduledStopPointInJourneyPattern extends TableImpl<ScheduledStopP
 
     public ScheduledStopPoint scheduledStopPoint() {
         if (_scheduledStopPoint == null)
-            _scheduledStopPoint = new ScheduledStopPoint(this, Keys.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN__SCHEDULED_STOP_POINT_IN_JOURNEY_PA_SCHEDULED_STOP_POINT_ID_FKEY);
+            _scheduledStopPoint = new ScheduledStopPoint(this, Keys.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN__SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN_SCHEDULED_STOP_POINT_ID);
 
         return _scheduledStopPoint;
     }

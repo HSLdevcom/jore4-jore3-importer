@@ -35,7 +35,7 @@ public class LineExportWriter implements ItemWriter<TransmodelLine> {
         final io.vavr.collection.List<PersistableLineIdMapping> transmodelIdMappings = items.stream()
                 .map(item -> PersistableLineIdMapping.of(
                         item.externalLineId(),
-                        UUID.fromString(item.lineId())
+                        item.lineId()
                 ))
                 .collect(io.vavr.collection.List.collector());
         importerRepository.setTransmodelIds(transmodelIdMappings);

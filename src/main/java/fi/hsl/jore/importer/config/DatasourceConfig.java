@@ -15,8 +15,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.transaction.ChainedTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 
 @Configuration
 public class DatasourceConfig {
@@ -111,5 +115,30 @@ public class DatasourceConfig {
     @Qualifier("jore4DataSource")
     public HikariDataSource jore4DataSource(@Qualifier("jore4DataSourceConfig") final DataSourceConfigDto dataSourceConfigDto) {
         return new HikariDataSource(dataSourceConfigDto.buildHikariConfig());
+    }
+
+    /**
+     * This transaction manager ensures that database queries are always
+     * executed inside a transaction. This is important because the Jore 4
+     * database has several constraints which require that data is inserted
+     * into two different tables "at the same time" aka inside the same
+     * transaction.
+     *
+     * Note that this transaction manager has also some drawbacks
+     * which are documented quite well:
+     *
+     * https://github.com/spring-projects/spring-data-commons/issues/2232
+     */
+    @Bean
+    @Qualifier("chainedTransactionManager")
+    @Primary
+    public PlatformTransactionManager chainedTransactionManager(@Qualifier("sourceDataSource") final DataSource sourceDataSource,
+                                                                @Qualifier("importerDataSource") final DataSource importerDataSource,
+                                                                @Qualifier("jore4DataSource") final DataSource jore4DataSource) {
+        return new ChainedTransactionManager(
+                new DataSourceTransactionManager(sourceDataSource),
+                new DataSourceTransactionManager(importerDataSource),
+                new DataSourceTransactionManager(jore4DataSource)
+        );
     }
 }

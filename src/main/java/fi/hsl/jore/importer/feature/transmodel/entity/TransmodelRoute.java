@@ -6,6 +6,7 @@ import org.immutables.value.Value;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Contains the information of a route which can be inserted into
@@ -14,44 +15,44 @@ import java.util.Optional;
 @Value.Immutable
 public interface TransmodelRoute {
 
-    String routeId();
+    UUID routeId();
 
     MultilingualString  description();
 
     TransmodelRouteDirection direction();
 
-    String externalId();
+    UUID directionExtId();
 
     String label();
 
-    String lineId();
+    UUID lineId();
 
     int priority();
 
-    String startScheduledStopPointId();
+    UUID startScheduledStopPointId();
 
-    String endScheduledStopPointId();
+    UUID endScheduledStopPointId();
 
     Optional<OffsetDateTime> validityStart();
 
     Optional<OffsetDateTime> validityEnd();
 
-    static TransmodelRoute of(final String routeId,
+    static TransmodelRoute of(final UUID routeId,
                               final MultilingualString description,
                               final TransmodelRouteDirection direction,
-                              final String externalId,
+                              final UUID directionExtId,
                               final String label,
-                              final String lineId,
+                              final UUID lineId,
                               final int priority,
-                              final String startScheduledStopPointId,
-                              final String endScheduledStopPointId,
+                              final UUID startScheduledStopPointId,
+                              final UUID endScheduledStopPointId,
                               final Optional<OffsetDateTime> validityStart,
                               final Optional<OffsetDateTime> validityEnd) {
         return ImmutableTransmodelRoute.builder()
                 .routeId(routeId)
                 .description(description)
                 .direction(direction)
-                .externalId(externalId)
+                .directionExtId(directionExtId)
                 .label(label)
                 .lineId(lineId)
                 .priority(priority)

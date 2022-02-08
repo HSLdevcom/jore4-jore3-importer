@@ -5,9 +5,12 @@ import fi.hsl.jore.importer.config.jooq.converter.date_range.DateRange;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.direction_type.field.DirectionType;
+import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableJourneyPatternIdMapping;
+import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableRouteIdMapping;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.RouteDirection;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.generated.RouteDirectionPK;
 import fi.hsl.jore.importer.feature.network.route_direction.repository.IRouteDirectionTestRepository;
+import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 import org.assertj.core.api.SoftAssertions;
@@ -452,6 +455,113 @@ class RouteDirectionImportRepositoryTest {
                             )
                             .isEqualTo(EXPECTED_VALID_DATE_RANGE);
                 }
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Set journey pattern transmodel ids")
+    @Sql(scripts = {
+            "/sql/destination/drop_tables.sql",
+            "/sql/destination/populate_lines.sql",
+            "/sql/destination/populate_routes.sql",
+            "/sql/destination/populate_route_directions.sql"
+    })
+    class SetJourneyPatternTransmodelIds {
+
+        private final UUID ROUTE_DIRECTION_ID = UUID.fromString("6f93fa6b-8a19-4b98-bd84-b8409e670c70");
+        private final UUID JOURNEY_PATTERN_TRANSMODEL_ID = UUID.fromString("b97185ef-0c27-4548-ac38-3d2cdd0023ac");
+
+
+        @Nested
+        @DisplayName("When the route direction isn't found")
+        class WhenRouteDirectionIsNotFound {
+
+            private final UUID UNKNOWN_ROUTE_DIRECTION_ID = UUID.fromString("038174b2-985f-47f7-9676-83cf0b944d88");
+            private final List<PersistableJourneyPatternIdMapping> INPUT = List.of(PersistableJourneyPatternIdMapping.of(
+                    UNKNOWN_ROUTE_DIRECTION_ID,
+                    JOURNEY_PATTERN_TRANSMODEL_ID
+            ));
+
+            @Test
+            @DisplayName("Should'nt update the journey pattern id of the existing route direction")
+            void shouldNotUpdateJourneyPatternIdOfExistingRouteDirection() {
+                importRepository.setJourneyPatternTransmodelIds(INPUT);
+
+                final RouteDirection routeDirection = targetRepository.findById(RouteDirectionPK.of(ROUTE_DIRECTION_ID)).get();
+                assertThat(routeDirection.journeyPatternTransmodelId()).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("When the route direction is found")
+        class WhenRouteDirectionIsFound {
+
+            private final List<PersistableJourneyPatternIdMapping> INPUT = List.of(PersistableJourneyPatternIdMapping.of(
+                    ROUTE_DIRECTION_ID,
+                    JOURNEY_PATTERN_TRANSMODEL_ID
+            ));
+
+            @Test
+            @DisplayName("Should update the journey pattern id of the existing route direction")
+            void shouldUpdateJourneyPatternIdOfExistingRouteDirection() {
+                importRepository.setJourneyPatternTransmodelIds(INPUT);
+
+                final RouteDirection routeDirection = targetRepository.findById(RouteDirectionPK.of(ROUTE_DIRECTION_ID)).get();
+                assertThat(routeDirection.journeyPatternTransmodelId()).contains(JOURNEY_PATTERN_TRANSMODEL_ID);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Set route transmodel ids")
+    @Sql(scripts = {
+            "/sql/destination/drop_tables.sql",
+            "/sql/destination/populate_lines.sql",
+            "/sql/destination/populate_routes.sql",
+            "/sql/destination/populate_route_directions.sql"
+    })
+    class SetRouteTransmodelIds {
+
+        private final UUID ROUTE_DIRECTION_ID = UUID.fromString("6f93fa6b-8a19-4b98-bd84-b8409e670c70");
+        private final UUID TRANSMODEL_ID = UUID.fromString("51f2686b-166c-4157-bd70-647337e44c8c");
+
+        @Nested
+        @DisplayName("When the route direction isn't found")
+        class WhenRouteDirectionIsNotFound {
+
+            private final UUID UNKNOWN_ROUTE_DIRECTION_ID = UUID.fromString("038174b2-985f-47f7-9676-83cf0b944d88");
+            private List<PersistableRouteIdMapping> INPUT = List.of(PersistableRouteIdMapping.of(
+                    UNKNOWN_ROUTE_DIRECTION_ID,
+                    TRANSMODEL_ID
+            ));
+
+            @Test
+            @DisplayName("Shouldn't update the transmodel id of the existing route direction")
+            void shouldNotUpdateTransmodelIdOfExistingRouteDirection() {
+                importRepository.setRouteTransmodelIds(INPUT);
+
+                final RouteDirection routeDirection = targetRepository.findById(RouteDirectionPK.of(ROUTE_DIRECTION_ID)).get();
+                assertThat(routeDirection.routeTransmodelId()).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("When the route direction is found")
+        class WhenRouteDirectionIsFound {
+
+            private List<PersistableRouteIdMapping> INPUT = List.of(PersistableRouteIdMapping.of(
+                    ROUTE_DIRECTION_ID,
+                    TRANSMODEL_ID
+            ));
+
+            @Test
+            @DisplayName("Should update the transmodel id of the existing route direction")
+            void shouldUpdateTransmodelIdOfExistingRouteDirection() {
+                importRepository.setRouteTransmodelIds(INPUT);
+
+                final RouteDirection routeDirection = targetRepository.findById(RouteDirectionPK.of(ROUTE_DIRECTION_ID)).get();
+                assertThat(routeDirection.routeTransmodelId()).contains(TRANSMODEL_ID);
             }
         }
     }

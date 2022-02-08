@@ -1,17 +1,20 @@
 package fi.hsl.jore.importer.feature.transmodel.repository;
 
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
+import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 import static fi.hsl.jore.jore4.jooq.infrastructure_network.Tables.INFRASTRUCTURE_LINK;
 import static fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.ScheduledStopPoint.SCHEDULED_STOP_POINT;
+import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT;
 
 @Repository
 public class TransmodelScheduledStopPointRepository implements ITransmodelScheduledStopPointRepository {
@@ -23,11 +26,11 @@ public class TransmodelScheduledStopPointRepository implements ITransmodelSchedu
         this.db = db;
     }
 
+    @Transactional
     @Override
     public void insert(final List<? extends TransmodelScheduledStopPoint> stopPoints) {
         if (!stopPoints.isEmpty()) {
-            final BatchBindStep batch = db.batch(db.insertInto(
-                                    SCHEDULED_STOP_POINT,
+            final BatchBindStep stopPointBatch = db.batch(db.insertInto(SCHEDULED_STOP_POINT,
                                     SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID,
                                     SCHEDULED_STOP_POINT.DIRECTION,
                                     SCHEDULED_STOP_POINT.LABEL,
@@ -40,7 +43,7 @@ public class TransmodelScheduledStopPointRepository implements ITransmodelSchedu
                             .values((UUID) null, null, null, null, null, null, null, null)
             );
 
-            stopPoints.forEach(stopPoint -> batch.bind(
+            stopPoints.forEach(stopPoint -> stopPointBatch.bind(
                     stopPoint.scheduledStopPointId(),
                     stopPoint.directionOnInfraLink().getValue(),
                     stopPoint.label(),
@@ -54,7 +57,22 @@ public class TransmodelScheduledStopPointRepository implements ITransmodelSchedu
                     stopPoint.validityEnd().orElse(null)
             ));
 
-            batch.execute();
+            stopPointBatch.execute();
+
+            final BatchBindStep vehicleModeBatch = db.batch(db.insertInto(
+                    VEHICLE_MODE_ON_SCHEDULED_STOP_POINT,
+                    VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID,
+                    VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.VEHICLE_MODE
+            )
+                    .values((UUID) null, null)
+            );
+
+            stopPoints.forEach(stopPoint -> vehicleModeBatch.bind(
+                    stopPoint.scheduledStopPointId(),
+                    VehicleMode.BUS.getValue()
+            ));
+
+            vehicleModeBatch.execute();
         }
     }
 }

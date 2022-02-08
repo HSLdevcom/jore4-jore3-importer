@@ -13,6 +13,7 @@ import org.springframework.test.context.jdbc.SqlConfig;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.UUID;
 
 import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.JOURNEY_PATTERN_;
 import static org.assertj.db.api.Assertions.assertThat;
@@ -45,11 +46,13 @@ class TransmodelJourneyPatternRepositoryTest {
     )
     class InsertJourneyPatternIntoDatabase {
 
-        private static final String JOURNEY_PATTERN_ID = "c5d767fa-400c-45db-bc01-9efd18bad212";
-        private static final String ROUTE_ID = "5bfa9a65-c80f-4af8-be95-8370cb12df50";
+        private final UUID JOURNEY_PATTERN_ID = UUID.fromString("c5d767fa-400c-45db-bc01-9efd18bad212");
+        private final UUID ROUTE_DIRECTION_EXT_ID = UUID.fromString("4aaa41fa-e3ff-4591-a3f5-958f832405af");
+        private final UUID ROUTE_ID = UUID.fromString("5bfa9a65-c80f-4af8-be95-8370cb12df50");
 
         private final TransmodelJourneyPattern INPUT = TransmodelJourneyPattern.of(
                 JOURNEY_PATTERN_ID,
+                ROUTE_DIRECTION_EXT_ID,
                 ROUTE_ID
         );
 
