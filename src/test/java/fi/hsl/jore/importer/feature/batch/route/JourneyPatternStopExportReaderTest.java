@@ -58,8 +58,8 @@ class JourneyPatternStopExportReaderTest {
             "/sql/destination/drop_tables.sql",
             "/sql/destination/populate_infrastructure_nodes.sql",
             "/sql/destination/populate_lines_with_transmodel_ids.sql",
-            "/sql/destination/populate_routes_with_journey_pattern_transmodel_ids.sql",
-            "/sql/destination/populate_route_directions.sql",
+            "/sql/destination/populate_routes.sql",
+            "/sql/destination/populate_route_directions_with_journey_pattern_transmodel_ids.sql",
             "/sql/destination/populate_route_points_for_jore4_export.sql",
             "/sql/destination/populate_route_stop_points_for_jore4_export.sql",
             "/sql/destination/populate_scheduled_stop_points_for_jore4_export.sql"

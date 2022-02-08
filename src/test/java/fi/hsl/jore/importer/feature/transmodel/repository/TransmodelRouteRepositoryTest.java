@@ -31,16 +31,16 @@ import static org.assertj.db.api.Assertions.assertThat;
 @IntTest
 class TransmodelRouteRepositoryTest {
 
-    private static final String ROUTE_ID = "ed878662-dd94-4cad-90a6-597ee10ebd42";
-    private static final String ROUTE_EXTERNAL_ID = "1001";
+    private static final UUID ROUTE_ID = UUID.fromString("ed878662-dd94-4cad-90a6-597ee10ebd42");
     private static final String FINNISH_NAME = "Keskustori - Etelä-Hervanta";
     private static final String SWEDISH_NAME = "Central torget - Södra Hervanta";
     private static final String LABEL = "30";
-    private static final String LINE_ID = "5aa7d9fc-2cf9-466d-8ac0-f442d60c261f";
+    private static final UUID LINE_ID = UUID.fromString("5aa7d9fc-2cf9-466d-8ac0-f442d60c261f");
     private static final int PRIORITY = 10;
     private static final TransmodelRouteDirection ROUTE_DIRECTION = TransmodelRouteDirection.INBOUND;
-    private static final String START_SCHEDULED_STOP_POINT_ID = "45e83727-41fb-4e75-ad71-7e54d58f23ac";
-    private static final String END_SCHEDULED_STOP_POINT_ID = "48a88a16-7b8c-4a97-ac2b-c9bf2ac3a08d";
+    private static final UUID ROUTE_DIRECTION_ID = UUID.fromString("6f93fa6b-8a19-4b98-bd84-b8409e670c70");
+    private static final UUID START_SCHEDULED_STOP_POINT_ID = UUID.fromString("45e83727-41fb-4e75-ad71-7e54d58f23ac");
+    private static final UUID END_SCHEDULED_STOP_POINT_ID = UUID.fromString("48a88a16-7b8c-4a97-ac2b-c9bf2ac3a08d");
 
     private static final OffsetDateTime VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
             LocalDateTime.of(
@@ -89,7 +89,7 @@ class TransmodelRouteRepositoryTest {
                 ROUTE_ID,
                 createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
                 ROUTE_DIRECTION,
-                ROUTE_EXTERNAL_ID,
+                ROUTE_DIRECTION_ID,
                 LABEL,
                 LINE_ID,
                 PRIORITY,
@@ -113,7 +113,7 @@ class TransmodelRouteRepositoryTest {
             assertThat(targetTable)
                     .row()
                     .value(ROUTE.ROUTE_ID.getName())
-                    .isEqualTo(UUID.fromString(ROUTE_ID));
+                    .isEqualTo(ROUTE_ID);
         }
 
         @Test

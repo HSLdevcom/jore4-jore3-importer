@@ -13,9 +13,11 @@ import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.generated.RouteDirectionPK;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteDirectionsRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteDirectionsWithHistoryRecord;
+import org.checkerframework.checker.nullness.Opt;
 import org.immutables.value.Value;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * At the moment this variation of the route direction is intended to be used with
@@ -27,7 +29,11 @@ public interface RouteDirection
                 IHasSystemTime,
                 CommonFields<RouteDirection> {
 
+    Optional<UUID> journeyPatternTransmodelId();
+
     RoutePK routeId();
+
+    Optional<UUID> routeTransmodelId();
 
     static RouteDirection of(final RouteDirectionPK pk,
                              final RoutePK routeId,
@@ -39,7 +45,9 @@ public interface RouteDirection
                              final MultilingualString origin,
                              final MultilingualString destination,
                              final DateRange validTime,
-                             final TimeRange systemTime) {
+                             final TimeRange systemTime,
+                             final Optional<UUID> journeyPatternTransmodelId,
+                             final Optional<UUID> routeTransmodelId) {
         return ImmutableRouteDirection.builder()
                                       .pk(pk)
                                       .routeId(routeId)
@@ -52,6 +60,8 @@ public interface RouteDirection
                                       .destination(destination)
                                       .validTime(validTime)
                                       .systemTime(systemTime)
+                                      .journeyPatternTransmodelId(journeyPatternTransmodelId)
+                                      .routeTransmodelId(routeTransmodelId)
                                       .build();
     }
 
@@ -67,7 +77,9 @@ public interface RouteDirection
                   converter.fromJson(record.getNetworkRouteDirectionOrigin(), MultilingualString.class),
                   converter.fromJson(record.getNetworkRouteDirectionDestination(), MultilingualString.class),
                   record.getNetworkRouteDirectionValidDateRange(),
-                  record.getNetworkRouteDirectionSysPeriod()
+                  record.getNetworkRouteDirectionSysPeriod(),
+                  Optional.ofNullable(record.getJourneyPatternTransmodelId()),
+                  Optional.ofNullable(record.getNetworkRouteTransmodelId())
         );
     }
 
@@ -83,7 +95,9 @@ public interface RouteDirection
                   converter.fromJson(record.getNetworkRouteDirectionOrigin(), MultilingualString.class),
                   converter.fromJson(record.getNetworkRouteDirectionDestination(), MultilingualString.class),
                   record.getNetworkRouteDirectionValidDateRange(),
-                  record.getNetworkRouteDirectionSysPeriod()
+                  record.getNetworkRouteDirectionSysPeriod(),
+                  Optional.ofNullable(record.getJourneyPatternTransmodelId()),
+                  Optional.ofNullable(record.getNetworkRouteTransmodelId())
         );
     }
 }

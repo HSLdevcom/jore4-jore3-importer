@@ -11,10 +11,14 @@ import java.util.UUID;
 @Value.Immutable
 public interface ExportableJourneyPattern {
 
+    UUID routeDirectionId();
+
     UUID routeTransmodelId();
 
-    static ExportableJourneyPattern of(final UUID routeTransmodelId) {
+    static ExportableJourneyPattern of(final UUID routeDirectionId,
+                                       final UUID routeTransmodelId) {
         return ImmutableExportableJourneyPattern.builder()
+                .routeDirectionId(routeDirectionId)
                 .routeTransmodelId(routeTransmodelId)
                 .build();
     }

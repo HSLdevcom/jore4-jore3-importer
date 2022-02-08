@@ -18,7 +18,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row11;
+import org.jooq.Row13;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -104,6 +104,16 @@ public class NetworkRouteDirectionsHistory extends TableImpl<NetworkRouteDirecti
      */
     public final TableField<NetworkRouteDirectionsHistoryRecord, TimeRange> NETWORK_ROUTE_DIRECTION_SYS_PERIOD = createField(DSL.name("network_route_direction_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
+    /**
+     * The column <code>network.network_route_directions_history.network_route_transmodel_id</code>.
+     */
+    public final TableField<NetworkRouteDirectionsHistoryRecord, UUID> NETWORK_ROUTE_TRANSMODEL_ID = createField(DSL.name("network_route_transmodel_id"), SQLDataType.UUID, this, "");
+
+    /**
+     * The column <code>network.network_route_directions_history.journey_pattern_transmodel_id</code>.
+     */
+    public final TableField<NetworkRouteDirectionsHistoryRecord, UUID> JOURNEY_PATTERN_TRANSMODEL_ID = createField(DSL.name("journey_pattern_transmodel_id"), SQLDataType.UUID, this, "");
+
     private NetworkRouteDirectionsHistory(Name alias, Table<NetworkRouteDirectionsHistoryRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -169,11 +179,11 @@ public class NetworkRouteDirectionsHistory extends TableImpl<NetworkRouteDirecti
     }
 
     // -------------------------------------------------------------------------
-    // Row11 type methods
+    // Row13 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row11<UUID, UUID, String, String, Integer, JSONB, JSONB, JSONB, JSONB, DateRange, TimeRange> fieldsRow() {
-        return (Row11) super.fieldsRow();
+    public Row13<UUID, UUID, String, String, Integer, JSONB, JSONB, JSONB, JSONB, DateRange, TimeRange, UUID, UUID> fieldsRow() {
+        return (Row13) super.fieldsRow();
     }
 }

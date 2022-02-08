@@ -631,7 +631,7 @@ public class JobConfig extends BatchConfig {
                                               final JourneyPatternStopExportWriter writer) {
         return steps.get("exportJourneyPatternStopsStep")
                 .allowStartIfComplete(true)
-                .<ExportableJourneyPatternStop, TransmodelJourneyPatternStop>chunk(1)
+                .<ExportableJourneyPatternStop, TransmodelJourneyPatternStop>chunk(1000)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)

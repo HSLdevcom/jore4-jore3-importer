@@ -15,9 +15,9 @@ import java.util.UUID;
 @Value.Immutable
 public interface ExportableRoute {
 
-    DirectionType directionType();
+    UUID directionId();
 
-    ExternalId externalId();
+    DirectionType directionType();
 
     MultilingualString name();
 
@@ -31,8 +31,8 @@ public interface ExportableRoute {
 
     DateRange validDateRange();
 
-    static ExportableRoute of(final DirectionType directionType,
-                              final ExternalId externalId,
+    static ExportableRoute of(final UUID directionId,
+                              final DirectionType directionType,
                               final MultilingualString name,
                               final UUID lineTransmodelId,
                               final String routeNumber,
@@ -40,8 +40,8 @@ public interface ExportableRoute {
                               final UUID endScheduledStopPointTransmodelId,
                               final DateRange  validDateRange) {
         return ImmutableExportableRoute.builder()
+                .directionId(directionId)
                 .directionType(directionType)
-                .externalId(externalId)
                 .name(name)
                 .lineTransmodelId(lineTransmodelId)
                 .routeNumber(routeNumber)

@@ -21,7 +21,7 @@ public class LineExportProcessor implements ItemProcessor<ExportableLine, Transm
     @Override
     public TransmodelLine process(final ExportableLine input) throws Exception {
         return TransmodelLine.of(
-                UUID.randomUUID().toString(),
+                UUID.randomUUID(),
                 input.externalId().value(),
                 input.lineNumber(),
                 input.name(),

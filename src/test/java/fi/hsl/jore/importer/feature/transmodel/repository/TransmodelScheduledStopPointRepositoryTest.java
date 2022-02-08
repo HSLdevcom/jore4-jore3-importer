@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
@@ -34,7 +35,7 @@ import static org.assertj.db.api.Assertions.assertThat;
 @IntTest
 class TransmodelScheduledStopPointRepositoryTest {
 
-    private static final String SCHEDULED_STOP_POINT_ID = "0259d692-7ee0-4792-b769-1141b248d102";
+    private static final UUID SCHEDULED_STOP_POINT_ID = UUID.fromString("0259d692-7ee0-4792-b769-1141b248d102");
     private static final String SCHEDULED_STOP_POINT_EXTERNAL_ID = "1234567";
     private static final TransmodelScheduledStopPointDirection DIRECTION_ON_INFRALINK = TransmodelScheduledStopPointDirection.FORWARD;
     private static final String INFRASTRUCTURE_LINK_EXTERNAL_ID = "133202";

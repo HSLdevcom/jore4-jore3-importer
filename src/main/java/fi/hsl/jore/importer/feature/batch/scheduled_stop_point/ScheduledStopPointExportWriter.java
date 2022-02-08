@@ -36,7 +36,7 @@ public class ScheduledStopPointExportWriter implements ItemWriter<TransmodelSche
         final io.vavr.collection.List<PersistableScheduledStopPointIdMapping> transmodelIdMappings = items.stream()
                 .map(item -> PersistableScheduledStopPointIdMapping.of(
                         item.externalScheduledStopPointId(),
-                        UUID.fromString(item.scheduledStopPointId())
+                        item.scheduledStopPointId()
                 ))
                 .collect(io.vavr.collection.List.collector());
         importerRepository.setTransmodelIds(transmodelIdMappings);
