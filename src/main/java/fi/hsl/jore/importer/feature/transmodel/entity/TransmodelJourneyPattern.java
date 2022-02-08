@@ -2,6 +2,8 @@ package fi.hsl.jore.importer.feature.transmodel.entity;
 
 import org.immutables.value.Value;
 
+import java.util.UUID;
+
 /**
  * Contains the information of a journey pattern which can be
  * inserted into the Jore 4 database.
@@ -9,14 +11,18 @@ import org.immutables.value.Value;
 @Value.Immutable
 public interface TransmodelJourneyPattern {
 
-    String journeyPatternId();
+    UUID journeyPatternId();
 
-    String routeId();
+    UUID routeDirectionExtId();
 
-    static TransmodelJourneyPattern of(final String journeyPatternId,
-                                       final String routeId) {
+    UUID routeId();
+
+    static TransmodelJourneyPattern of(final UUID journeyPatternId,
+                                       final UUID routeDirectionExtId,
+                                       final UUID routeId) {
         return ImmutableTransmodelJourneyPattern.builder()
                 .journeyPatternId(journeyPatternId)
+                .routeDirectionExtId(routeDirectionExtId)
                 .routeId(routeId)
                 .build();
     }

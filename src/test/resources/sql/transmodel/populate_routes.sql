@@ -1,3 +1,5 @@
+BEGIN;
+
 INSERT INTO internal_route.route (
         route_id,
         description_i18n,
@@ -22,3 +24,18 @@ VALUES (
         '2022-01-01 02:29:59+00',
         10
 );
+
+INSERT INTO route.infrastructure_link_along_route (
+        route_id,
+        infrastructure_link_id,
+        infrastructure_link_sequence,
+        is_traversal_forwards
+)
+VALUES (
+        '5bfa9a65-c80f-4af8-be95-8370cb12df50',
+        '554c63e6-87b2-4dc8-a032-b6b0e2607696',
+        1,
+        true
+);
+
+COMMIT;

@@ -15,7 +15,7 @@ import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.JOURNEY_PATTERN_;
 import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN;
 import static fi.hsl.jore.jore4.jooq.route.Tables.INFRASTRUCTURE_LINK_ALONG_ROUTE;
 import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
-import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE;
+import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT;
 
 /**
  * Cleans up the Jore 4 database so that new scheduled stop points,
@@ -33,7 +33,7 @@ public class TransmodelSchemaCleanupTasklet implements Tasklet  {
 
     @Override
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
-        db.truncate(SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE).cascade().execute();
+        db.truncate(VEHICLE_MODE_ON_SCHEDULED_STOP_POINT).cascade().execute();
         db.truncate(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN).cascade().execute();
         db.truncate(INFRASTRUCTURE_LINK_ALONG_ROUTE).cascade().execute();
         db.truncate(LINE).cascade().execute();

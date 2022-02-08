@@ -17,8 +17,9 @@ public class JourneyPatternExportProcessor implements ItemProcessor<ExportableJo
     @Override
     public TransmodelJourneyPattern process(final ExportableJourneyPattern input) throws Exception {
         return TransmodelJourneyPattern.of(
-                UUID.randomUUID().toString(),
-                input.routeTransmodelId().toString()
+                UUID.randomUUID(),
+                input.routeDirectionId(),
+                input.routeTransmodelId()
         );
     }
 }

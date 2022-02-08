@@ -5,26 +5,6 @@ services:
     # build and run the docker image from the local repo
     build:
       context: ..
-    environment:
-      # temporarily set custom environment variables until the e2e bundle is updated
-      # set digiroad stops csv version
-      - DIGIROAD_STOPS_CSV_VERSION=2022-02-03
-      # a new jore4-db connection has been added
-      - JORE4_DB_DATABASE=jore4e2e
-      - JORE4_DB_HOSTNAME=jore4-testdb
-      - JORE4_DB_USERNAME=dbimporter
-      - JORE4_DB_PASSWORD=importerpassword
-    secrets:
-      # temporarily remapping the secrets while the e2e bundle is updated
-      # destination-db has been renamed to importer-db
-      - source: jore3importer-destination-db-database
-        target: /mnt/secrets-store/importer-db-database
-      - source: jore3importer-destination-db-hostname
-        target: /mnt/secrets-store/importer-db-hostname
-      - source: jore3importer-destination-db-password
-        target: /mnt/secrets-store/importer-db-password
-      - source: jore3importer-destination-db-username
-        target: /mnt/secrets-store/importer-db-username
 
   importer-jooq-database:
     image: postgis/postgis:12-3.1-alpine
@@ -55,5 +35,8 @@ services:
     # pin compatible version of mssql schema
     image: "hsldevcom/jore4-mssql-testdb:schema-only-main--21ef30b56e38b0cfa118ccf610ba0fa7e9e00ef7"
 
+  jore4-hasura:
+    # pin compatible version of jore4 data model
+    image: "hsldevcom/jore4-hasura:main--8ff82531bcca8ed0f4581c35e612f07b94ff3819"
 networks:
     jore4:

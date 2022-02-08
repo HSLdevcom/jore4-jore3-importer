@@ -79,7 +79,7 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
         LOGGER.debug("Found Digiroad stop: {}", digiroadStop);
 
         final TransmodelScheduledStopPoint transmodelStop = TransmodelScheduledStopPoint.of(
-                UUID.randomUUID().toString(),
+                UUID.randomUUID(),
                 jore3Stop.externalId().value(),
                 digiroadStop.digiroadLinkId(),
                 TransmodelScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),

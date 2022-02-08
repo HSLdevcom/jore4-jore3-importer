@@ -33,9 +33,7 @@ public interface Route
                     final LinePK line,
                     final String routeNumber,
                     final MultilingualString name,
-                    final TimeRange systemTime,
-                    final Optional<UUID> transmodelId,
-                    final Optional<UUID> journeyPatternTransmodelId) {
+                    final TimeRange systemTime) {
         return ImmutableRoute.builder()
                 .pk(pk)
                 .externalId(externalId)
@@ -43,8 +41,6 @@ public interface Route
                 .routeNumber(routeNumber)
                 .name(name)
                 .systemTime(systemTime)
-                .transmodelId(transmodelId)
-                .journeyPatternTransmodelId(journeyPatternTransmodelId)
                 .build();
     }
 
@@ -55,9 +51,7 @@ public interface Route
                 LinePK.of(record.getNetworkLineId()),
                 record.getNetworkRouteNumber(),
                 converter.fromJson(record.getNetworkRouteName(), MultilingualString.class),
-                record.getNetworkRouteSysPeriod(),
-                Optional.ofNullable(record.getNetworkRouteTransmodelId()),
-                Optional.ofNullable(record.getJourneyPatternTransmodelId())
+                record.getNetworkRouteSysPeriod()
         );
     }
 
@@ -68,9 +62,7 @@ public interface Route
                 LinePK.of(record.getNetworkLineId()),
                 record.getNetworkRouteNumber(),
                 converter.fromJson(record.getNetworkRouteName(), MultilingualString.class),
-                record.getNetworkRouteSysPeriod(),
-                Optional.ofNullable(record.getNetworkRouteTransmodelId()),
-                Optional.ofNullable(record.getJourneyPatternTransmodelId())
+                record.getNetworkRouteSysPeriod()
         );
     }
 }

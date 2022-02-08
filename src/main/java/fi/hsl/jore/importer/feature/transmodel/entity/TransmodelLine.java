@@ -5,6 +5,7 @@ import org.immutables.value.Value;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Contains the information of a line which can
@@ -13,7 +14,7 @@ import java.util.Optional;
 @Value.Immutable
 public interface TransmodelLine {
 
-    String lineId();
+    UUID lineId();
 
     String externalLineId();
 
@@ -31,7 +32,7 @@ public interface TransmodelLine {
 
     Optional<OffsetDateTime> validityEnd();
 
-    static ImmutableTransmodelLine of(final String lineId,
+    static ImmutableTransmodelLine of(final UUID lineId,
                                       final String externalLineId,
                                       final String label,
                                       final MultilingualString name,

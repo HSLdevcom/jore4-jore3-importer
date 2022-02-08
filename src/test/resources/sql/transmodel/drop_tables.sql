@@ -1,4 +1,9 @@
+TRUNCATE TABLE service_pattern.vehicle_mode_on_scheduled_stop_point CASCADE;
 TRUNCATE TABLE infrastructure_network.infrastructure_link CASCADE;
 TRUNCATE TABLE internal_service_pattern.scheduled_stop_point CASCADE;
 TRUNCATE TABLE reusable_components.vehicle_mode CASCADE;
 TRUNCATE TABLE route.line CASCADE;
+TRUNCATE TABLE internal_route.route CASCADE;
+TRUNCATE TABLE route.infrastructure_link_along_route;
+TRUNCATE TABLE journey_pattern.journey_pattern CASCADE;
+TRUNCATE TABLE journey_pattern.scheduled_stop_point_in_journey_pattern CASCADE;

@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
@@ -30,7 +31,7 @@ import static org.assertj.db.api.Assertions.assertThat;
 @IntTest
 class TransmodelLineRepositoryTest {
 
-    private static final String LINE_ID = "237fa7b1-bd07-4206-b018-4144750ec689";
+    private static final UUID LINE_ID = UUID.fromString("237fa7b1-bd07-4206-b018-4144750ec689");
     private static final String EXTERNAL_LINE_ID = "9009";
     private static final String LABEL = "1";
 
