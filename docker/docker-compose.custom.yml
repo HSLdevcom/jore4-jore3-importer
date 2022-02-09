@@ -1,30 +1,14 @@
 ---
 version: "3.8"
 services:
+  jore4-hasura:
+    # pin compatible version of hasura image for jore4 db schema
+    image: "hsldevcom/jore4-hasura:main--b8058278b54c4ae022775657520e98a3749ee319"
+
   jore4-jore3importer:
     # build and run the docker image from the local repo
     build:
       context: ..
-    environment:
-      # temporarily set custom environment variables until the e2e bundle is updated
-      # set digiroad stops csv version
-      - DIGIROAD_STOPS_CSV_VERSION=2022-02-03
-      # a new jore4-db connection has been added
-      - JORE4_DB_DATABASE=jore4e2e
-      - JORE4_DB_HOSTNAME=jore4-testdb
-      - JORE4_DB_USERNAME=dbimporter
-      - JORE4_DB_PASSWORD=importerpassword
-    secrets:
-      # temporarily remapping the secrets while the e2e bundle is updated
-      # destination-db has been renamed to importer-db
-      - source: jore3importer-destination-db-database
-        target: /mnt/secrets-store/importer-db-database
-      - source: jore3importer-destination-db-hostname
-        target: /mnt/secrets-store/importer-db-hostname
-      - source: jore3importer-destination-db-password
-        target: /mnt/secrets-store/importer-db-password
-      - source: jore3importer-destination-db-username
-        target: /mnt/secrets-store/importer-db-username
 
   importer-jooq-database:
     image: postgis/postgis:12-3.1-alpine
