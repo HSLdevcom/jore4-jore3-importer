@@ -109,7 +109,7 @@ public class VehicleSubmodeOnInfrastructureLink extends TableImpl<VehicleSubmode
 
     @Override
     public List<ForeignKey<VehicleSubmodeOnInfrastructureLinkRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<VehicleSubmodeOnInfrastructureLinkRecord, ?>>asList(Keys.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK__VEHICLE_SUBMODE_ON_INFRASTRUCTURE_L_INFRASTRUCTURE_LINK_ID_FKEY, Keys.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK__VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK_VEHICLE_SUBMODE_FKEY);
+        return Arrays.<ForeignKey<VehicleSubmodeOnInfrastructureLinkRecord, ?>>asList(Keys.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK__VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK_INFRASTRUCTURE_LINK_ID_F, Keys.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK__VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK_VEHICLE_SUBMODE_FKEY);
     }
 
     private transient InfrastructureLink _infrastructureLink;
@@ -117,7 +117,7 @@ public class VehicleSubmodeOnInfrastructureLink extends TableImpl<VehicleSubmode
 
     public InfrastructureLink infrastructureLink() {
         if (_infrastructureLink == null)
-            _infrastructureLink = new InfrastructureLink(this, Keys.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK__VEHICLE_SUBMODE_ON_INFRASTRUCTURE_L_INFRASTRUCTURE_LINK_ID_FKEY);
+            _infrastructureLink = new InfrastructureLink(this, Keys.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK__VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK_INFRASTRUCTURE_LINK_ID_F);
 
         return _infrastructureLink;
     }

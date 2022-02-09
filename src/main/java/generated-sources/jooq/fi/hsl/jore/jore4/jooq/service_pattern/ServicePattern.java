@@ -6,7 +6,7 @@ package fi.hsl.jore.jore4.jooq.service_pattern;
 
 import fi.hsl.jore.jore4.jooq.DefaultCatalog;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPoint;
-import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPointServicedByVehicleMode;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.VehicleModeOnScheduledStopPoint;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +37,7 @@ public class ServicePattern extends SchemaImpl {
     /**
      * Which scheduled stop points are serviced by which vehicle modes?
      */
-    public final ScheduledStopPointServicedByVehicleMode SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE = ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE;
+    public final VehicleModeOnScheduledStopPoint VEHICLE_MODE_ON_SCHEDULED_STOP_POINT = VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT;
 
     /**
      * No further instances allowed
@@ -56,6 +56,6 @@ public class ServicePattern extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
             ScheduledStopPoint.SCHEDULED_STOP_POINT,
-            ScheduledStopPointServicedByVehicleMode.SCHEDULED_STOP_POINT_SERVICED_BY_VEHICLE_MODE);
+            VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT);
     }
 }
