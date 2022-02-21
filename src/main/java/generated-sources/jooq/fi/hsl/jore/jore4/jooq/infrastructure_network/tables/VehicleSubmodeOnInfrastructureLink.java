@@ -5,24 +5,17 @@ package fi.hsl.jore.jore4.jooq.infrastructure_network.tables;
 
 
 import fi.hsl.jore.jore4.jooq.infrastructure_network.InfrastructureNetwork;
-import fi.hsl.jore.jore4.jooq.infrastructure_network.Keys;
-import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.records.VehicleSubmodeOnInfrastructureLinkRecord;
-import fi.hsl.jore.jore4.jooq.reusable_components.tables.VehicleSubmode;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row2;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -32,7 +25,7 @@ import org.jooq.impl.TableImpl;
  * Which infrastructure links are safely traversed by which vehicle submodes?
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class VehicleSubmodeOnInfrastructureLink extends TableImpl<VehicleSubmodeOnInfrastructureLinkRecord> {
+public class VehicleSubmodeOnInfrastructureLink extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,25 +38,25 @@ public class VehicleSubmodeOnInfrastructureLink extends TableImpl<VehicleSubmode
      * The class holding records for this type
      */
     @Override
-    public Class<VehicleSubmodeOnInfrastructureLinkRecord> getRecordType() {
-        return VehicleSubmodeOnInfrastructureLinkRecord.class;
+    public Class<Record> getRecordType() {
+        return Record.class;
     }
 
     /**
      * The column <code>infrastructure_network.vehicle_submode_on_infrastructure_link.infrastructure_link_id</code>. The infrastructure link that can be safely traversed by the vehicle submode.
      */
-    public final TableField<VehicleSubmodeOnInfrastructureLinkRecord, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "The infrastructure link that can be safely traversed by the vehicle submode.");
+    public final TableField<Record, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "The infrastructure link that can be safely traversed by the vehicle submode.");
 
     /**
      * The column <code>infrastructure_network.vehicle_submode_on_infrastructure_link.vehicle_submode</code>. The vehicle submode that can safely traverse the infrastructure link.
      */
-    public final TableField<VehicleSubmodeOnInfrastructureLinkRecord, String> VEHICLE_SUBMODE = createField(DSL.name("vehicle_submode"), SQLDataType.CLOB.nullable(false), this, "The vehicle submode that can safely traverse the infrastructure link.");
+    public final TableField<Record, String> VEHICLE_SUBMODE = createField(DSL.name("vehicle_submode"), SQLDataType.CLOB.nullable(false), this, "The vehicle submode that can safely traverse the infrastructure link.");
 
-    private VehicleSubmodeOnInfrastructureLink(Name alias, Table<VehicleSubmodeOnInfrastructureLinkRecord> aliased) {
+    private VehicleSubmodeOnInfrastructureLink(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }
 
-    private VehicleSubmodeOnInfrastructureLink(Name alias, Table<VehicleSubmodeOnInfrastructureLinkRecord> aliased, Field<?>[] parameters) {
+    private VehicleSubmodeOnInfrastructureLink(Name alias, Table<Record> aliased, Field<?>[] parameters) {
         super(alias, null, aliased, parameters, DSL.comment("Which infrastructure links are safely traversed by which vehicle submodes?"), TableOptions.table());
     }
 
@@ -88,45 +81,13 @@ public class VehicleSubmodeOnInfrastructureLink extends TableImpl<VehicleSubmode
         this(DSL.name("vehicle_submode_on_infrastructure_link"), null);
     }
 
-    public <O extends Record> VehicleSubmodeOnInfrastructureLink(Table<O> child, ForeignKey<O, VehicleSubmodeOnInfrastructureLinkRecord> key) {
+    public <O extends Record> VehicleSubmodeOnInfrastructureLink(Table<O> child, ForeignKey<O, Record> key) {
         super(child, key, VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK);
     }
 
     @Override
     public Schema getSchema() {
         return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
-    }
-
-    @Override
-    public UniqueKey<VehicleSubmodeOnInfrastructureLinkRecord> getPrimaryKey() {
-        return Keys.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<VehicleSubmodeOnInfrastructureLinkRecord>> getKeys() {
-        return Arrays.<UniqueKey<VehicleSubmodeOnInfrastructureLinkRecord>>asList(Keys.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK_PKEY);
-    }
-
-    @Override
-    public List<ForeignKey<VehicleSubmodeOnInfrastructureLinkRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<VehicleSubmodeOnInfrastructureLinkRecord, ?>>asList(Keys.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK__VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK_INFRASTRUCTURE_LINK_ID_F, Keys.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK__VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK_VEHICLE_SUBMODE_FKEY);
-    }
-
-    private transient InfrastructureLink _infrastructureLink;
-    private transient VehicleSubmode _vehicleSubmode;
-
-    public InfrastructureLink infrastructureLink() {
-        if (_infrastructureLink == null)
-            _infrastructureLink = new InfrastructureLink(this, Keys.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK__VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK_INFRASTRUCTURE_LINK_ID_F);
-
-        return _infrastructureLink;
-    }
-
-    public VehicleSubmode vehicleSubmode() {
-        if (_vehicleSubmode == null)
-            _vehicleSubmode = new VehicleSubmode(this, Keys.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK__VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK_VEHICLE_SUBMODE_FKEY);
-
-        return _vehicleSubmode;
     }
 
     @Override
@@ -153,14 +114,5 @@ public class VehicleSubmodeOnInfrastructureLink extends TableImpl<VehicleSubmode
     @Override
     public VehicleSubmodeOnInfrastructureLink rename(Name name) {
         return new VehicleSubmodeOnInfrastructureLink(name, null);
-    }
-
-    // -------------------------------------------------------------------------
-    // Row2 type methods
-    // -------------------------------------------------------------------------
-
-    @Override
-    public Row2<UUID, String> fieldsRow() {
-        return (Row2) super.fieldsRow();
     }
 }

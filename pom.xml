@@ -457,7 +457,6 @@
                                         infrastructure_network.*
                                         | internal_route.*
                                         | internal_service_pattern.*
-                                        | internal_utils.*
                                         | journey_pattern.*
                                         | reusable_components.*
                                         | route.*
@@ -466,11 +465,16 @@
                                     <excludes>
                                         AUTH_SESSION.*
                                         | HDB_CATALOG.*
+                                        | infrastructure_network.find_point_direction_on_link
+                                        | infrastructure_network.resolve_point_to_closest_link
                                         | IMPORT_JORE3.*
+                                        | internal_utils.*
+                                        | journey_pattern.verify_route_journey_pattern_refs
                                         | SKEYS
                                         | SVALS
                                         | EACH
                                         | PUBLIC.*
+                                        | route.verify_route_start_end_stop_points
                                         | TIGER.*
                                         | TIGER_DATA.*
                                         | TOPOLOGY.*
@@ -479,17 +483,17 @@
                                     <includeTables>true</includeTables>
                                     <includeInvisibleColumns>false</includeInvisibleColumns>
                                     <includeEmbeddables>false</includeEmbeddables>
-                                    <includeRoutines>false</includeRoutines>
+                                    <includeRoutines>true</includeRoutines>
                                     <includePackages>false</includePackages>
                                     <includePackageRoutines>false</includePackageRoutines>
                                     <includePackageUDTs>false</includePackageUDTs>
                                     <includePackageConstants>false</includePackageConstants>
                                     <includeUDTs>false</includeUDTs>
                                     <includeDomains>false</includeDomains>
-                                    <includeSequences>true</includeSequences>
-                                    <includePrimaryKeys>true</includePrimaryKeys>
-                                    <includeUniqueKeys>true</includeUniqueKeys>
-                                    <includeForeignKeys>true</includeForeignKeys>
+                                    <includeSequences>false</includeSequences>
+                                    <includePrimaryKeys>false</includePrimaryKeys>
+                                    <includeUniqueKeys>false</includeUniqueKeys>
+                                    <includeForeignKeys>false</includeForeignKeys>
                                     <includeCheckConstraints>false</includeCheckConstraints>
                                     <includeSystemCheckConstraints>false</includeSystemCheckConstraints>
                                     <includeIndexes>false</includeIndexes>
@@ -519,6 +523,9 @@
                                         </forcedType>
                                     </forcedTypes>
                                 </database>
+                                <generate>
+                                    <records>false</records>
+                                </generate>
                                 <target>
                                     <packageName>fi.hsl.jore.jore4.jooq</packageName>
                                     <directory>${project.build.sourceDirectory}/generated-sources/jooq</directory>

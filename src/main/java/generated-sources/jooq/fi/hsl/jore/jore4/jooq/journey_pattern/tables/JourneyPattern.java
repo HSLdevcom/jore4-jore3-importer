@@ -4,24 +4,16 @@
 package fi.hsl.jore.jore4.jooq.journey_pattern.tables;
 
 
-import fi.hsl.jore.jore4.jooq.internal_route.tables.Route;
-import fi.hsl.jore.jore4.jooq.journey_pattern.Keys;
-import fi.hsl.jore.jore4.jooq.journey_pattern.tables.records.JourneyPatternRecord;
-
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row2;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -32,7 +24,7 @@ import org.jooq.impl.TableImpl;
  * along routes: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:1:813
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class JourneyPattern extends TableImpl<JourneyPatternRecord> {
+public class JourneyPattern extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,25 +37,25 @@ public class JourneyPattern extends TableImpl<JourneyPatternRecord> {
      * The class holding records for this type
      */
     @Override
-    public Class<JourneyPatternRecord> getRecordType() {
-        return JourneyPatternRecord.class;
+    public Class<Record> getRecordType() {
+        return Record.class;
     }
 
     /**
      * The column <code>journey_pattern.journey_pattern.journey_pattern_id</code>. The ID of the journey pattern.
      */
-    public final TableField<JourneyPatternRecord, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "The ID of the journey pattern.");
+    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "The ID of the journey pattern.");
 
     /**
      * The column <code>journey_pattern.journey_pattern.on_route_id</code>. The ID of the route the journey pattern is on.
      */
-    public final TableField<JourneyPatternRecord, UUID> ON_ROUTE_ID = createField(DSL.name("on_route_id"), SQLDataType.UUID.nullable(false), this, "The ID of the route the journey pattern is on.");
+    public final TableField<Record, UUID> ON_ROUTE_ID = createField(DSL.name("on_route_id"), SQLDataType.UUID.nullable(false), this, "The ID of the route the journey pattern is on.");
 
-    private JourneyPattern(Name alias, Table<JourneyPatternRecord> aliased) {
+    private JourneyPattern(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }
 
-    private JourneyPattern(Name alias, Table<JourneyPatternRecord> aliased, Field<?>[] parameters) {
+    private JourneyPattern(Name alias, Table<Record> aliased, Field<?>[] parameters) {
         super(alias, null, aliased, parameters, DSL.comment("The journey patterns, i.e. the ordered lists of stops and timing points along routes: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:1:813"), TableOptions.table());
     }
 
@@ -88,37 +80,13 @@ public class JourneyPattern extends TableImpl<JourneyPatternRecord> {
         this(DSL.name("journey_pattern"), null);
     }
 
-    public <O extends Record> JourneyPattern(Table<O> child, ForeignKey<O, JourneyPatternRecord> key) {
+    public <O extends Record> JourneyPattern(Table<O> child, ForeignKey<O, Record> key) {
         super(child, key, JOURNEY_PATTERN_);
     }
 
     @Override
     public Schema getSchema() {
         return fi.hsl.jore.jore4.jooq.journey_pattern.JourneyPattern.JOURNEY_PATTERN;
-    }
-
-    @Override
-    public UniqueKey<JourneyPatternRecord> getPrimaryKey() {
-        return Keys.JOURNEY_PATTERN_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<JourneyPatternRecord>> getKeys() {
-        return Arrays.<UniqueKey<JourneyPatternRecord>>asList(Keys.JOURNEY_PATTERN_PKEY);
-    }
-
-    @Override
-    public List<ForeignKey<JourneyPatternRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<JourneyPatternRecord, ?>>asList(Keys.JOURNEY_PATTERN__JOURNEY_PATTERN_ON_ROUTE_ID_FKEY);
-    }
-
-    private transient Route _route;
-
-    public Route route() {
-        if (_route == null)
-            _route = new Route(this, Keys.JOURNEY_PATTERN__JOURNEY_PATTERN_ON_ROUTE_ID_FKEY);
-
-        return _route;
     }
 
     @Override
@@ -145,14 +113,5 @@ public class JourneyPattern extends TableImpl<JourneyPatternRecord> {
     @Override
     public JourneyPattern rename(Name name) {
         return new JourneyPattern(name, null);
-    }
-
-    // -------------------------------------------------------------------------
-    // Row2 type methods
-    // -------------------------------------------------------------------------
-
-    @Override
-    public Row2<UUID, UUID> fieldsRow() {
-        return (Row2) super.fieldsRow();
     }
 }

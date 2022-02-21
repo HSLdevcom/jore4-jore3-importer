@@ -4,26 +4,19 @@
 package fi.hsl.jore.jore4.jooq.route.tables;
 
 
-import fi.hsl.jore.jore4.jooq.reusable_components.tables.VehicleMode;
-import fi.hsl.jore.jore4.jooq.route.Keys;
 import fi.hsl.jore.jore4.jooq.route.Route;
-import fi.hsl.jore.jore4.jooq.route.tables.records.LineRecord;
 
 import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row9;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -33,7 +26,7 @@ import org.jooq.impl.TableImpl;
  * The line from Transmodel: http://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:487
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class Line extends TableImpl<LineRecord> {
+public class Line extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,60 +39,60 @@ public class Line extends TableImpl<LineRecord> {
      * The class holding records for this type
      */
     @Override
-    public Class<LineRecord> getRecordType() {
-        return LineRecord.class;
+    public Class<Record> getRecordType() {
+        return Record.class;
     }
 
     /**
      * The column <code>route.line.line_id</code>. The ID of the line.
      */
-    public final TableField<LineRecord, UUID> LINE_ID = createField(DSL.name("line_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "The ID of the line.");
+    public final TableField<Record, UUID> LINE_ID = createField(DSL.name("line_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "The ID of the line.");
 
     /**
      * The column <code>route.line.name_i18n</code>. The name of the line. Placeholder for multilingual strings.
      */
-    public final TableField<LineRecord, String> NAME_I18N = createField(DSL.name("name_i18n"), SQLDataType.CLOB.nullable(false), this, "The name of the line. Placeholder for multilingual strings.");
+    public final TableField<Record, String> NAME_I18N = createField(DSL.name("name_i18n"), SQLDataType.CLOB.nullable(false), this, "The name of the line. Placeholder for multilingual strings.");
 
     /**
      * The column <code>route.line.short_name_i18n</code>. The shorted name of the line. Placeholder for multilingual strings.
      */
-    public final TableField<LineRecord, String> SHORT_NAME_I18N = createField(DSL.name("short_name_i18n"), SQLDataType.CLOB, this, "The shorted name of the line. Placeholder for multilingual strings.");
+    public final TableField<Record, String> SHORT_NAME_I18N = createField(DSL.name("short_name_i18n"), SQLDataType.CLOB, this, "The shorted name of the line. Placeholder for multilingual strings.");
 
     /**
      * The column <code>route.line.description_i18n</code>. The description of the line. Placeholder for multilingual strings.
      */
-    public final TableField<LineRecord, String> DESCRIPTION_I18N = createField(DSL.name("description_i18n"), SQLDataType.CLOB, this, "The description of the line. Placeholder for multilingual strings.");
+    public final TableField<Record, String> DESCRIPTION_I18N = createField(DSL.name("description_i18n"), SQLDataType.CLOB, this, "The description of the line. Placeholder for multilingual strings.");
 
     /**
      * The column <code>route.line.primary_vehicle_mode</code>. The mode of the vehicles used as primary on the line.
      */
-    public final TableField<LineRecord, String> PRIMARY_VEHICLE_MODE = createField(DSL.name("primary_vehicle_mode"), SQLDataType.CLOB.nullable(false), this, "The mode of the vehicles used as primary on the line.");
+    public final TableField<Record, String> PRIMARY_VEHICLE_MODE = createField(DSL.name("primary_vehicle_mode"), SQLDataType.CLOB.nullable(false), this, "The mode of the vehicles used as primary on the line.");
 
     /**
      * The column <code>route.line.validity_start</code>. The point in time when the line becomes valid. If NULL, the line has been always valid.
      */
-    public final TableField<LineRecord, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time when the line becomes valid. If NULL, the line has been always valid.");
+    public final TableField<Record, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time when the line becomes valid. If NULL, the line has been always valid.");
 
     /**
      * The column <code>route.line.validity_end</code>. The point in time from which onwards the line is no longer valid. If NULL, the line will be always valid.
      */
-    public final TableField<LineRecord, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time from which onwards the line is no longer valid. If NULL, the line will be always valid.");
+    public final TableField<Record, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time from which onwards the line is no longer valid. If NULL, the line will be always valid.");
 
     /**
      * The column <code>route.line.priority</code>. The priority of the line definition. The definition may be overridden by higher priority definitions.
      */
-    public final TableField<LineRecord, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER.nullable(false), this, "The priority of the line definition. The definition may be overridden by higher priority definitions.");
+    public final TableField<Record, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER.nullable(false), this, "The priority of the line definition. The definition may be overridden by higher priority definitions.");
 
     /**
      * The column <code>route.line.label</code>. The label of the line definition. The label is unique for a certain priority and validity period.
      */
-    public final TableField<LineRecord, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "The label of the line definition. The label is unique for a certain priority and validity period.");
+    public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "The label of the line definition. The label is unique for a certain priority and validity period.");
 
-    private Line(Name alias, Table<LineRecord> aliased) {
+    private Line(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }
 
-    private Line(Name alias, Table<LineRecord> aliased, Field<?>[] parameters) {
+    private Line(Name alias, Table<Record> aliased, Field<?>[] parameters) {
         super(alias, null, aliased, parameters, DSL.comment("The line from Transmodel: http://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:487"), TableOptions.table());
     }
 
@@ -124,37 +117,13 @@ public class Line extends TableImpl<LineRecord> {
         this(DSL.name("line"), null);
     }
 
-    public <O extends Record> Line(Table<O> child, ForeignKey<O, LineRecord> key) {
+    public <O extends Record> Line(Table<O> child, ForeignKey<O, Record> key) {
         super(child, key, LINE);
     }
 
     @Override
     public Schema getSchema() {
         return Route.ROUTE;
-    }
-
-    @Override
-    public UniqueKey<LineRecord> getPrimaryKey() {
-        return Keys.LINE_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<LineRecord>> getKeys() {
-        return Arrays.<UniqueKey<LineRecord>>asList(Keys.LINE_PKEY);
-    }
-
-    @Override
-    public List<ForeignKey<LineRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<LineRecord, ?>>asList(Keys.LINE__LINE_PRIMARY_VEHICLE_MODE_FKEY);
-    }
-
-    private transient VehicleMode _vehicleMode;
-
-    public VehicleMode vehicleMode() {
-        if (_vehicleMode == null)
-            _vehicleMode = new VehicleMode(this, Keys.LINE__LINE_PRIMARY_VEHICLE_MODE_FKEY);
-
-        return _vehicleMode;
     }
 
     @Override
@@ -181,14 +150,5 @@ public class Line extends TableImpl<LineRecord> {
     @Override
     public Line rename(Name name) {
         return new Line(name, null);
-    }
-
-    // -------------------------------------------------------------------------
-    // Row9 type methods
-    // -------------------------------------------------------------------------
-
-    @Override
-    public Row9<UUID, String, String, String, String, OffsetDateTime, OffsetDateTime, Integer, String> fieldsRow() {
-        return (Row9) super.fieldsRow();
     }
 }

@@ -4,23 +4,16 @@
 package fi.hsl.jore.jore4.jooq.reusable_components.tables;
 
 
-import fi.hsl.jore.jore4.jooq.reusable_components.Keys;
 import fi.hsl.jore.jore4.jooq.reusable_components.ReusableComponents;
-import fi.hsl.jore.jore4.jooq.reusable_components.tables.records.VehicleModeRecord;
-
-import java.util.Arrays;
-import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row1;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -30,7 +23,7 @@ import org.jooq.impl.TableImpl;
  * The vehicle modes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class VehicleMode extends TableImpl<VehicleModeRecord> {
+public class VehicleMode extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,20 +36,20 @@ public class VehicleMode extends TableImpl<VehicleModeRecord> {
      * The class holding records for this type
      */
     @Override
-    public Class<VehicleModeRecord> getRecordType() {
-        return VehicleModeRecord.class;
+    public Class<Record> getRecordType() {
+        return Record.class;
     }
 
     /**
      * The column <code>reusable_components.vehicle_mode.vehicle_mode</code>. The vehicle mode from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
      */
-    public final TableField<VehicleModeRecord, String> VEHICLE_MODE_ = createField(DSL.name("vehicle_mode"), SQLDataType.CLOB.nullable(false), this, "The vehicle mode from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283");
+    public final TableField<Record, String> VEHICLE_MODE_ = createField(DSL.name("vehicle_mode"), SQLDataType.CLOB.nullable(false), this, "The vehicle mode from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283");
 
-    private VehicleMode(Name alias, Table<VehicleModeRecord> aliased) {
+    private VehicleMode(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }
 
-    private VehicleMode(Name alias, Table<VehicleModeRecord> aliased, Field<?>[] parameters) {
+    private VehicleMode(Name alias, Table<Record> aliased, Field<?>[] parameters) {
         super(alias, null, aliased, parameters, DSL.comment("The vehicle modes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283"), TableOptions.table());
     }
 
@@ -81,23 +74,13 @@ public class VehicleMode extends TableImpl<VehicleModeRecord> {
         this(DSL.name("vehicle_mode"), null);
     }
 
-    public <O extends Record> VehicleMode(Table<O> child, ForeignKey<O, VehicleModeRecord> key) {
+    public <O extends Record> VehicleMode(Table<O> child, ForeignKey<O, Record> key) {
         super(child, key, VEHICLE_MODE);
     }
 
     @Override
     public Schema getSchema() {
         return ReusableComponents.REUSABLE_COMPONENTS;
-    }
-
-    @Override
-    public UniqueKey<VehicleModeRecord> getPrimaryKey() {
-        return Keys.VEHICLE_MODE_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<VehicleModeRecord>> getKeys() {
-        return Arrays.<UniqueKey<VehicleModeRecord>>asList(Keys.VEHICLE_MODE_PKEY);
     }
 
     @Override
@@ -124,14 +107,5 @@ public class VehicleMode extends TableImpl<VehicleModeRecord> {
     @Override
     public VehicleMode rename(Name name) {
         return new VehicleMode(name, null);
-    }
-
-    // -------------------------------------------------------------------------
-    // Row1 type methods
-    // -------------------------------------------------------------------------
-
-    @Override
-    public Row1<String> fieldsRow() {
-        return (Row1) super.fieldsRow();
     }
 }

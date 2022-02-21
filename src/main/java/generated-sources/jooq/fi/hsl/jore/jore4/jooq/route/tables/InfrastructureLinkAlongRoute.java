@@ -4,25 +4,18 @@
 package fi.hsl.jore.jore4.jooq.route.tables;
 
 
-import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.InfrastructureLink;
-import fi.hsl.jore.jore4.jooq.route.Keys;
 import fi.hsl.jore.jore4.jooq.route.Route;
-import fi.hsl.jore.jore4.jooq.route.tables.records.InfrastructureLinkAlongRouteRecord;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -32,7 +25,7 @@ import org.jooq.impl.TableImpl;
  * The infrastructure links along which the routes are defined.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class InfrastructureLinkAlongRoute extends TableImpl<InfrastructureLinkAlongRouteRecord> {
+public class InfrastructureLinkAlongRoute extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,35 +38,35 @@ public class InfrastructureLinkAlongRoute extends TableImpl<InfrastructureLinkAl
      * The class holding records for this type
      */
     @Override
-    public Class<InfrastructureLinkAlongRouteRecord> getRecordType() {
-        return InfrastructureLinkAlongRouteRecord.class;
+    public Class<Record> getRecordType() {
+        return Record.class;
     }
 
     /**
      * The column <code>route.infrastructure_link_along_route.route_id</code>. The ID of the route.
      */
-    public final TableField<InfrastructureLinkAlongRouteRecord, UUID> ROUTE_ID = createField(DSL.name("route_id"), SQLDataType.UUID.nullable(false), this, "The ID of the route.");
+    public final TableField<Record, UUID> ROUTE_ID = createField(DSL.name("route_id"), SQLDataType.UUID.nullable(false), this, "The ID of the route.");
 
     /**
      * The column <code>route.infrastructure_link_along_route.infrastructure_link_id</code>. The ID of the infrastructure link.
      */
-    public final TableField<InfrastructureLinkAlongRouteRecord, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "The ID of the infrastructure link.");
+    public final TableField<Record, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "The ID of the infrastructure link.");
 
     /**
      * The column <code>route.infrastructure_link_along_route.infrastructure_link_sequence</code>. The order of the infrastructure link within the journey pattern.
      */
-    public final TableField<InfrastructureLinkAlongRouteRecord, Integer> INFRASTRUCTURE_LINK_SEQUENCE = createField(DSL.name("infrastructure_link_sequence"), SQLDataType.INTEGER.nullable(false), this, "The order of the infrastructure link within the journey pattern.");
+    public final TableField<Record, Integer> INFRASTRUCTURE_LINK_SEQUENCE = createField(DSL.name("infrastructure_link_sequence"), SQLDataType.INTEGER.nullable(false), this, "The order of the infrastructure link within the journey pattern.");
 
     /**
      * The column <code>route.infrastructure_link_along_route.is_traversal_forwards</code>. Is the infrastructure link traversed in the direction of its linestring?
      */
-    public final TableField<InfrastructureLinkAlongRouteRecord, Boolean> IS_TRAVERSAL_FORWARDS = createField(DSL.name("is_traversal_forwards"), SQLDataType.BOOLEAN.nullable(false), this, "Is the infrastructure link traversed in the direction of its linestring?");
+    public final TableField<Record, Boolean> IS_TRAVERSAL_FORWARDS = createField(DSL.name("is_traversal_forwards"), SQLDataType.BOOLEAN.nullable(false), this, "Is the infrastructure link traversed in the direction of its linestring?");
 
-    private InfrastructureLinkAlongRoute(Name alias, Table<InfrastructureLinkAlongRouteRecord> aliased) {
+    private InfrastructureLinkAlongRoute(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }
 
-    private InfrastructureLinkAlongRoute(Name alias, Table<InfrastructureLinkAlongRouteRecord> aliased, Field<?>[] parameters) {
+    private InfrastructureLinkAlongRoute(Name alias, Table<Record> aliased, Field<?>[] parameters) {
         super(alias, null, aliased, parameters, DSL.comment("The infrastructure links along which the routes are defined."), TableOptions.table());
     }
 
@@ -98,45 +91,13 @@ public class InfrastructureLinkAlongRoute extends TableImpl<InfrastructureLinkAl
         this(DSL.name("infrastructure_link_along_route"), null);
     }
 
-    public <O extends Record> InfrastructureLinkAlongRoute(Table<O> child, ForeignKey<O, InfrastructureLinkAlongRouteRecord> key) {
+    public <O extends Record> InfrastructureLinkAlongRoute(Table<O> child, ForeignKey<O, Record> key) {
         super(child, key, INFRASTRUCTURE_LINK_ALONG_ROUTE);
     }
 
     @Override
     public Schema getSchema() {
         return Route.ROUTE;
-    }
-
-    @Override
-    public UniqueKey<InfrastructureLinkAlongRouteRecord> getPrimaryKey() {
-        return Keys.INFRASTRUCTURE_LINK_ALONG_ROUTE_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<InfrastructureLinkAlongRouteRecord>> getKeys() {
-        return Arrays.<UniqueKey<InfrastructureLinkAlongRouteRecord>>asList(Keys.INFRASTRUCTURE_LINK_ALONG_ROUTE_PKEY);
-    }
-
-    @Override
-    public List<ForeignKey<InfrastructureLinkAlongRouteRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<InfrastructureLinkAlongRouteRecord, ?>>asList(Keys.INFRASTRUCTURE_LINK_ALONG_ROUTE__INFRASTRUCTURE_LINK_ALONG_ROUTE_ROUTE_ID_FKEY, Keys.INFRASTRUCTURE_LINK_ALONG_ROUTE__INFRASTRUCTURE_LINK_ALONG_ROUTE_INFRASTRUCTURE_LINK_ID_FKEY);
-    }
-
-    private transient fi.hsl.jore.jore4.jooq.internal_route.tables.Route _route;
-    private transient InfrastructureLink _infrastructureLink;
-
-    public fi.hsl.jore.jore4.jooq.internal_route.tables.Route route() {
-        if (_route == null)
-            _route = new fi.hsl.jore.jore4.jooq.internal_route.tables.Route(this, Keys.INFRASTRUCTURE_LINK_ALONG_ROUTE__INFRASTRUCTURE_LINK_ALONG_ROUTE_ROUTE_ID_FKEY);
-
-        return _route;
-    }
-
-    public InfrastructureLink infrastructureLink() {
-        if (_infrastructureLink == null)
-            _infrastructureLink = new InfrastructureLink(this, Keys.INFRASTRUCTURE_LINK_ALONG_ROUTE__INFRASTRUCTURE_LINK_ALONG_ROUTE_INFRASTRUCTURE_LINK_ID_FKEY);
-
-        return _infrastructureLink;
     }
 
     @Override
@@ -163,14 +124,5 @@ public class InfrastructureLinkAlongRoute extends TableImpl<InfrastructureLinkAl
     @Override
     public InfrastructureLinkAlongRoute rename(Name name) {
         return new InfrastructureLinkAlongRoute(name, null);
-    }
-
-    // -------------------------------------------------------------------------
-    // Row4 type methods
-    // -------------------------------------------------------------------------
-
-    @Override
-    public Row4<UUID, UUID, Integer, Boolean> fieldsRow() {
-        return (Row4) super.fieldsRow();
     }
 }

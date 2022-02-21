@@ -4,25 +4,18 @@
 package fi.hsl.jore.jore4.jooq.journey_pattern.tables;
 
 
-import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.ScheduledStopPoint;
 import fi.hsl.jore.jore4.jooq.journey_pattern.JourneyPattern;
-import fi.hsl.jore.jore4.jooq.journey_pattern.Keys;
-import fi.hsl.jore.jore4.jooq.journey_pattern.tables.records.ScheduledStopPointInJourneyPatternRecord;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -34,7 +27,7 @@ import org.jooq.impl.TableImpl;
  * service pattern.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class ScheduledStopPointInJourneyPattern extends TableImpl<ScheduledStopPointInJourneyPatternRecord> {
+public class ScheduledStopPointInJourneyPattern extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,40 +40,40 @@ public class ScheduledStopPointInJourneyPattern extends TableImpl<ScheduledStopP
      * The class holding records for this type
      */
     @Override
-    public Class<ScheduledStopPointInJourneyPatternRecord> getRecordType() {
-        return ScheduledStopPointInJourneyPatternRecord.class;
+    public Class<Record> getRecordType() {
+        return Record.class;
     }
 
     /**
      * The column <code>journey_pattern.scheduled_stop_point_in_journey_pattern.journey_pattern_id</code>. The ID of the journey pattern.
      */
-    public final TableField<ScheduledStopPointInJourneyPatternRecord, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false), this, "The ID of the journey pattern.");
+    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false), this, "The ID of the journey pattern.");
 
     /**
      * The column <code>journey_pattern.scheduled_stop_point_in_journey_pattern.scheduled_stop_point_id</code>. The ID of the scheduled stop point.
      */
-    public final TableField<ScheduledStopPointInJourneyPatternRecord, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID.nullable(false), this, "The ID of the scheduled stop point.");
+    public final TableField<Record, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID.nullable(false), this, "The ID of the scheduled stop point.");
 
     /**
      * The column <code>journey_pattern.scheduled_stop_point_in_journey_pattern.scheduled_stop_point_sequence</code>. The order of the scheduled stop point within the journey pattern.
      */
-    public final TableField<ScheduledStopPointInJourneyPatternRecord, Integer> SCHEDULED_STOP_POINT_SEQUENCE = createField(DSL.name("scheduled_stop_point_sequence"), SQLDataType.INTEGER.nullable(false), this, "The order of the scheduled stop point within the journey pattern.");
+    public final TableField<Record, Integer> SCHEDULED_STOP_POINT_SEQUENCE = createField(DSL.name("scheduled_stop_point_sequence"), SQLDataType.INTEGER.nullable(false), this, "The order of the scheduled stop point within the journey pattern.");
 
     /**
      * The column <code>journey_pattern.scheduled_stop_point_in_journey_pattern.is_timing_point</code>. Is this scheduled stop point a timing point?
      */
-    public final TableField<ScheduledStopPointInJourneyPatternRecord, Boolean> IS_TIMING_POINT = createField(DSL.name("is_timing_point"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "Is this scheduled stop point a timing point?");
+    public final TableField<Record, Boolean> IS_TIMING_POINT = createField(DSL.name("is_timing_point"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "Is this scheduled stop point a timing point?");
 
     /**
      * The column <code>journey_pattern.scheduled_stop_point_in_journey_pattern.is_via_point</code>. Is this scheduled stop point a via point?
      */
-    public final TableField<ScheduledStopPointInJourneyPatternRecord, Boolean> IS_VIA_POINT = createField(DSL.name("is_via_point"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "Is this scheduled stop point a via point?");
+    public final TableField<Record, Boolean> IS_VIA_POINT = createField(DSL.name("is_via_point"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "Is this scheduled stop point a via point?");
 
-    private ScheduledStopPointInJourneyPattern(Name alias, Table<ScheduledStopPointInJourneyPatternRecord> aliased) {
+    private ScheduledStopPointInJourneyPattern(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }
 
-    private ScheduledStopPointInJourneyPattern(Name alias, Table<ScheduledStopPointInJourneyPatternRecord> aliased, Field<?>[] parameters) {
+    private ScheduledStopPointInJourneyPattern(Name alias, Table<Record> aliased, Field<?>[] parameters) {
         super(alias, null, aliased, parameters, DSL.comment("The scheduled stop points that form the journey pattern, in order: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:1:813 . For HSL, all timing points are stops, hence journey pattern instead of service pattern."), TableOptions.table());
     }
 
@@ -105,45 +98,13 @@ public class ScheduledStopPointInJourneyPattern extends TableImpl<ScheduledStopP
         this(DSL.name("scheduled_stop_point_in_journey_pattern"), null);
     }
 
-    public <O extends Record> ScheduledStopPointInJourneyPattern(Table<O> child, ForeignKey<O, ScheduledStopPointInJourneyPatternRecord> key) {
+    public <O extends Record> ScheduledStopPointInJourneyPattern(Table<O> child, ForeignKey<O, Record> key) {
         super(child, key, SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN);
     }
 
     @Override
     public Schema getSchema() {
         return JourneyPattern.JOURNEY_PATTERN;
-    }
-
-    @Override
-    public UniqueKey<ScheduledStopPointInJourneyPatternRecord> getPrimaryKey() {
-        return Keys.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<ScheduledStopPointInJourneyPatternRecord>> getKeys() {
-        return Arrays.<UniqueKey<ScheduledStopPointInJourneyPatternRecord>>asList(Keys.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN_PKEY);
-    }
-
-    @Override
-    public List<ForeignKey<ScheduledStopPointInJourneyPatternRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ScheduledStopPointInJourneyPatternRecord, ?>>asList(Keys.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN__SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN_JOURNEY_PATTERN_ID_FKEY, Keys.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN__SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN_SCHEDULED_STOP_POINT_ID);
-    }
-
-    private transient fi.hsl.jore.jore4.jooq.journey_pattern.tables.JourneyPattern _journeyPattern;
-    private transient ScheduledStopPoint _scheduledStopPoint;
-
-    public fi.hsl.jore.jore4.jooq.journey_pattern.tables.JourneyPattern journeyPattern() {
-        if (_journeyPattern == null)
-            _journeyPattern = new fi.hsl.jore.jore4.jooq.journey_pattern.tables.JourneyPattern(this, Keys.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN__SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN_JOURNEY_PATTERN_ID_FKEY);
-
-        return _journeyPattern;
-    }
-
-    public ScheduledStopPoint scheduledStopPoint() {
-        if (_scheduledStopPoint == null)
-            _scheduledStopPoint = new ScheduledStopPoint(this, Keys.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN__SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN_SCHEDULED_STOP_POINT_ID);
-
-        return _scheduledStopPoint;
     }
 
     @Override
@@ -170,14 +131,5 @@ public class ScheduledStopPointInJourneyPattern extends TableImpl<ScheduledStopP
     @Override
     public ScheduledStopPointInJourneyPattern rename(Name name) {
         return new ScheduledStopPointInJourneyPattern(name, null);
-    }
-
-    // -------------------------------------------------------------------------
-    // Row5 type methods
-    // -------------------------------------------------------------------------
-
-    @Override
-    public Row5<UUID, UUID, Integer, Boolean, Boolean> fieldsRow() {
-        return (Row5) super.fieldsRow();
     }
 }
