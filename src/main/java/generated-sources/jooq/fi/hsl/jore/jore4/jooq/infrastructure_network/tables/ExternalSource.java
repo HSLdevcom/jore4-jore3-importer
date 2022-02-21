@@ -5,22 +5,15 @@ package fi.hsl.jore.jore4.jooq.infrastructure_network.tables;
 
 
 import fi.hsl.jore.jore4.jooq.infrastructure_network.InfrastructureNetwork;
-import fi.hsl.jore.jore4.jooq.infrastructure_network.Keys;
-import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.records.ExternalSourceRecord;
-
-import java.util.Arrays;
-import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row1;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -30,7 +23,7 @@ import org.jooq.impl.TableImpl;
  * An external source from which infrastructure network parts are imported
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class ExternalSource extends TableImpl<ExternalSourceRecord> {
+public class ExternalSource extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,20 +36,20 @@ public class ExternalSource extends TableImpl<ExternalSourceRecord> {
      * The class holding records for this type
      */
     @Override
-    public Class<ExternalSourceRecord> getRecordType() {
-        return ExternalSourceRecord.class;
+    public Class<Record> getRecordType() {
+        return Record.class;
     }
 
     /**
      * The column <code>infrastructure_network.external_source.value</code>.
      */
-    public final TableField<ExternalSourceRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<Record, String> VALUE = createField(DSL.name("value"), SQLDataType.CLOB.nullable(false), this, "");
 
-    private ExternalSource(Name alias, Table<ExternalSourceRecord> aliased) {
+    private ExternalSource(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }
 
-    private ExternalSource(Name alias, Table<ExternalSourceRecord> aliased, Field<?>[] parameters) {
+    private ExternalSource(Name alias, Table<Record> aliased, Field<?>[] parameters) {
         super(alias, null, aliased, parameters, DSL.comment("An external source from which infrastructure network parts are imported"), TableOptions.table());
     }
 
@@ -81,23 +74,13 @@ public class ExternalSource extends TableImpl<ExternalSourceRecord> {
         this(DSL.name("external_source"), null);
     }
 
-    public <O extends Record> ExternalSource(Table<O> child, ForeignKey<O, ExternalSourceRecord> key) {
+    public <O extends Record> ExternalSource(Table<O> child, ForeignKey<O, Record> key) {
         super(child, key, EXTERNAL_SOURCE);
     }
 
     @Override
     public Schema getSchema() {
         return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
-    }
-
-    @Override
-    public UniqueKey<ExternalSourceRecord> getPrimaryKey() {
-        return Keys.EXTERNAL_SOURCE_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<ExternalSourceRecord>> getKeys() {
-        return Arrays.<UniqueKey<ExternalSourceRecord>>asList(Keys.EXTERNAL_SOURCE_PKEY);
     }
 
     @Override
@@ -124,14 +107,5 @@ public class ExternalSource extends TableImpl<ExternalSourceRecord> {
     @Override
     public ExternalSource rename(Name name) {
         return new ExternalSource(name, null);
-    }
-
-    // -------------------------------------------------------------------------
-    // Row1 type methods
-    // -------------------------------------------------------------------------
-
-    @Override
-    public Row1<String> fieldsRow() {
-        return (Row1) super.fieldsRow();
     }
 }

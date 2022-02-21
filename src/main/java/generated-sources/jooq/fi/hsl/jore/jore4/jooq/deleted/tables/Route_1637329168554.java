@@ -5,7 +5,6 @@ package fi.hsl.jore.jore4.jooq.deleted.tables;
 
 
 import fi.hsl.jore.jore4.jooq.deleted.Deleted;
-import fi.hsl.jore.jore4.jooq.deleted.tables.records.Route_1637329168554Record;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -14,7 +13,6 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row9;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -28,7 +26,7 @@ import org.jooq.impl.TableImpl;
  * The routes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class Route_1637329168554 extends TableImpl<Route_1637329168554Record> {
+public class Route_1637329168554 extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,61 +39,61 @@ public class Route_1637329168554 extends TableImpl<Route_1637329168554Record> {
      * The class holding records for this type
      */
     @Override
-    public Class<Route_1637329168554Record> getRecordType() {
-        return Route_1637329168554Record.class;
+    public Class<Record> getRecordType() {
+        return Record.class;
     }
 
     /**
      * The column <code>deleted.route_1637329168554.route_id</code>. The ID of the route.
      */
-    public final TableField<Route_1637329168554Record, UUID> ROUTE_ID = createField(DSL.name("route_id"), SQLDataType.UUID, this, "The ID of the route.");
+    public final TableField<Record, UUID> ROUTE_ID = createField(DSL.name("route_id"), SQLDataType.UUID, this, "The ID of the route.");
 
     /**
      * The column <code>deleted.route_1637329168554.description_i18n</code>. The description of the route in the form of starting location - destination. Placeholder for multilingual strings.
      */
-    public final TableField<Route_1637329168554Record, String> DESCRIPTION_I18N = createField(DSL.name("description_i18n"), SQLDataType.CLOB, this, "The description of the route in the form of starting location - destination. Placeholder for multilingual strings.");
+    public final TableField<Record, String> DESCRIPTION_I18N = createField(DSL.name("description_i18n"), SQLDataType.CLOB, this, "The description of the route in the form of starting location - destination. Placeholder for multilingual strings.");
 
     /**
      * The column <code>deleted.route_1637329168554.starts_from_scheduled_stop_point_id</code>. The scheduled stop point where the route starts from.
      */
-    public final TableField<Route_1637329168554Record, UUID> STARTS_FROM_SCHEDULED_STOP_POINT_ID = createField(DSL.name("starts_from_scheduled_stop_point_id"), SQLDataType.UUID, this, "The scheduled stop point where the route starts from.");
+    public final TableField<Record, UUID> STARTS_FROM_SCHEDULED_STOP_POINT_ID = createField(DSL.name("starts_from_scheduled_stop_point_id"), SQLDataType.UUID, this, "The scheduled stop point where the route starts from.");
 
     /**
      * The column <code>deleted.route_1637329168554.ends_at_scheduled_stop_point_id</code>. The scheduled stop point where the route ends at.
      */
-    public final TableField<Route_1637329168554Record, UUID> ENDS_AT_SCHEDULED_STOP_POINT_ID = createField(DSL.name("ends_at_scheduled_stop_point_id"), SQLDataType.UUID, this, "The scheduled stop point where the route ends at.");
+    public final TableField<Record, UUID> ENDS_AT_SCHEDULED_STOP_POINT_ID = createField(DSL.name("ends_at_scheduled_stop_point_id"), SQLDataType.UUID, this, "The scheduled stop point where the route ends at.");
 
     /**
      * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
-    public final TableField<Route_1637329168554Record, Object> ROUTE_SHAPE = createField(DSL.name("route_shape"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\""), this, "A PostGIS LinestringZ geography in EPSG:4326 describing the shape of the route.");
+    public final TableField<Record, Object> ROUTE_SHAPE = createField(DSL.name("route_shape"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\""), this, "A PostGIS LinestringZ geography in EPSG:4326 describing the shape of the route.");
 
     /**
      * The column <code>deleted.route_1637329168554.on_line_id</code>. The line to which this route belongs.
      */
-    public final TableField<Route_1637329168554Record, UUID> ON_LINE_ID = createField(DSL.name("on_line_id"), SQLDataType.UUID, this, "The line to which this route belongs.");
+    public final TableField<Record, UUID> ON_LINE_ID = createField(DSL.name("on_line_id"), SQLDataType.UUID, this, "The line to which this route belongs.");
 
     /**
      * The column <code>deleted.route_1637329168554.validity_start</code>. The point in time when the route becomes valid. If NULL, the route has been always valid.
      */
-    public final TableField<Route_1637329168554Record, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time when the route becomes valid. If NULL, the route has been always valid.");
+    public final TableField<Record, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time when the route becomes valid. If NULL, the route has been always valid.");
 
     /**
      * The column <code>deleted.route_1637329168554.validity_end</code>. The point in time from which onwards the route is no longer valid. If NULL, the route will be always valid.
      */
-    public final TableField<Route_1637329168554Record, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time from which onwards the route is no longer valid. If NULL, the route will be always valid.");
+    public final TableField<Record, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time from which onwards the route is no longer valid. If NULL, the route will be always valid.");
 
     /**
      * The column <code>deleted.route_1637329168554.priority</code>. The priority of the route definition. The definition may be overridden by higher priority definitions.
      */
-    public final TableField<Route_1637329168554Record, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER, this, "The priority of the route definition. The definition may be overridden by higher priority definitions.");
+    public final TableField<Record, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER, this, "The priority of the route definition. The definition may be overridden by higher priority definitions.");
 
-    private Route_1637329168554(Name alias, Table<Route_1637329168554Record> aliased) {
+    private Route_1637329168554(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }
 
-    private Route_1637329168554(Name alias, Table<Route_1637329168554Record> aliased, Field<?>[] parameters) {
+    private Route_1637329168554(Name alias, Table<Record> aliased, Field<?>[] parameters) {
         super(alias, null, aliased, parameters, DSL.comment("The routes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483"), TableOptions.view("create view \"route_1637329168554\" as  SELECT r.route_id,\n    r.description_i18n,\n    r.starts_from_scheduled_stop_point_id,\n    r.ends_at_scheduled_stop_point_id,\n    (st_linemerge(st_collect(\n        CASE\n            WHEN ilar.is_traversal_forwards THEN (il.shape)::geometry\n            ELSE st_reverse((il.shape)::geometry)\n        END)))::geography AS route_shape,\n    r.on_line_id,\n    r.validity_start,\n    r.validity_end,\n    r.priority\n   FROM (internal_route.route r\n     LEFT JOIN (route.infrastructure_link_along_route ilar\n     JOIN infrastructure_network.infrastructure_link il ON ((ilar.infrastructure_link_id = il.infrastructure_link_id))) ON ((r.route_id = ilar.route_id)))\n  GROUP BY r.route_id;"));
     }
 
@@ -120,7 +118,7 @@ public class Route_1637329168554 extends TableImpl<Route_1637329168554Record> {
         this(DSL.name("route_1637329168554"), null);
     }
 
-    public <O extends Record> Route_1637329168554(Table<O> child, ForeignKey<O, Route_1637329168554Record> key) {
+    public <O extends Record> Route_1637329168554(Table<O> child, ForeignKey<O, Record> key) {
         super(child, key, ROUTE_1637329168554);
     }
 
@@ -153,14 +151,5 @@ public class Route_1637329168554 extends TableImpl<Route_1637329168554Record> {
     @Override
     public Route_1637329168554 rename(Name name) {
         return new Route_1637329168554(name, null);
-    }
-
-    // -------------------------------------------------------------------------
-    // Row9 type methods
-    // -------------------------------------------------------------------------
-
-    @Override
-    public Row9<UUID, String, UUID, UUID, Object, UUID, OffsetDateTime, OffsetDateTime, Integer> fieldsRow() {
-        return (Row9) super.fieldsRow();
     }
 }

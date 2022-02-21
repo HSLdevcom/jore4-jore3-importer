@@ -4,23 +4,16 @@
 package fi.hsl.jore.jore4.jooq.route.tables;
 
 
-import fi.hsl.jore.jore4.jooq.route.Keys;
 import fi.hsl.jore.jore4.jooq.route.Route;
-import fi.hsl.jore.jore4.jooq.route.tables.records.DirectionRecord;
-
-import java.util.Arrays;
-import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row2;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -30,7 +23,7 @@ import org.jooq.impl.TableImpl;
  * The route directions from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:480
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class Direction extends TableImpl<DirectionRecord> {
+public class Direction extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,25 +36,25 @@ public class Direction extends TableImpl<DirectionRecord> {
      * The class holding records for this type
      */
     @Override
-    public Class<DirectionRecord> getRecordType() {
-        return DirectionRecord.class;
+    public Class<Record> getRecordType() {
+        return Record.class;
     }
 
     /**
      * The column <code>route.direction.direction</code>. The name of the route direction.
      */
-    public final TableField<DirectionRecord, String> DIRECTION_ = createField(DSL.name("direction"), SQLDataType.CLOB.nullable(false), this, "The name of the route direction.");
+    public final TableField<Record, String> DIRECTION_ = createField(DSL.name("direction"), SQLDataType.CLOB.nullable(false), this, "The name of the route direction.");
 
     /**
      * The column <code>route.direction.the_opposite_of_direction</code>. The opposite direction.
      */
-    public final TableField<DirectionRecord, String> THE_OPPOSITE_OF_DIRECTION = createField(DSL.name("the_opposite_of_direction"), SQLDataType.CLOB, this, "The opposite direction.");
+    public final TableField<Record, String> THE_OPPOSITE_OF_DIRECTION = createField(DSL.name("the_opposite_of_direction"), SQLDataType.CLOB, this, "The opposite direction.");
 
-    private Direction(Name alias, Table<DirectionRecord> aliased) {
+    private Direction(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }
 
-    private Direction(Name alias, Table<DirectionRecord> aliased, Field<?>[] parameters) {
+    private Direction(Name alias, Table<Record> aliased, Field<?>[] parameters) {
         super(alias, null, aliased, parameters, DSL.comment("The route directions from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:480"), TableOptions.table());
     }
 
@@ -86,37 +79,13 @@ public class Direction extends TableImpl<DirectionRecord> {
         this(DSL.name("direction"), null);
     }
 
-    public <O extends Record> Direction(Table<O> child, ForeignKey<O, DirectionRecord> key) {
+    public <O extends Record> Direction(Table<O> child, ForeignKey<O, Record> key) {
         super(child, key, DIRECTION);
     }
 
     @Override
     public Schema getSchema() {
         return Route.ROUTE;
-    }
-
-    @Override
-    public UniqueKey<DirectionRecord> getPrimaryKey() {
-        return Keys.DIRECTION_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<DirectionRecord>> getKeys() {
-        return Arrays.<UniqueKey<DirectionRecord>>asList(Keys.DIRECTION_PKEY);
-    }
-
-    @Override
-    public List<ForeignKey<DirectionRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<DirectionRecord, ?>>asList(Keys.DIRECTION__DIRECTION_THE_OPPOSITE_OF_DIRECTION_FKEY);
-    }
-
-    private transient Direction _direction;
-
-    public Direction direction() {
-        if (_direction == null)
-            _direction = new Direction(this, Keys.DIRECTION__DIRECTION_THE_OPPOSITE_OF_DIRECTION_FKEY);
-
-        return _direction;
     }
 
     @Override
@@ -143,14 +112,5 @@ public class Direction extends TableImpl<DirectionRecord> {
     @Override
     public Direction rename(Name name) {
         return new Direction(name, null);
-    }
-
-    // -------------------------------------------------------------------------
-    // Row2 type methods
-    // -------------------------------------------------------------------------
-
-    @Override
-    public Row2<String, String> fieldsRow() {
-        return (Row2) super.fieldsRow();
     }
 }

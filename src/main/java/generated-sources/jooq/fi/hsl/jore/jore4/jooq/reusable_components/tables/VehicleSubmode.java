@@ -4,23 +4,16 @@
 package fi.hsl.jore.jore4.jooq.reusable_components.tables;
 
 
-import fi.hsl.jore.jore4.jooq.reusable_components.Keys;
 import fi.hsl.jore.jore4.jooq.reusable_components.ReusableComponents;
-import fi.hsl.jore.jore4.jooq.reusable_components.tables.records.VehicleSubmodeRecord;
-
-import java.util.Arrays;
-import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row2;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -31,7 +24,7 @@ import org.jooq.impl.TableImpl;
  * links the vehicle can traverse
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class VehicleSubmode extends TableImpl<VehicleSubmodeRecord> {
+public class VehicleSubmode extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,25 +37,25 @@ public class VehicleSubmode extends TableImpl<VehicleSubmodeRecord> {
      * The class holding records for this type
      */
     @Override
-    public Class<VehicleSubmodeRecord> getRecordType() {
-        return VehicleSubmodeRecord.class;
+    public Class<Record> getRecordType() {
+        return Record.class;
     }
 
     /**
      * The column <code>reusable_components.vehicle_submode.vehicle_submode</code>. The vehicle submode, which may have implications on which infrastructure links the vehicle can traverse
      */
-    public final TableField<VehicleSubmodeRecord, String> VEHICLE_SUBMODE_ = createField(DSL.name("vehicle_submode"), SQLDataType.CLOB.nullable(false), this, "The vehicle submode, which may have implications on which infrastructure links the vehicle can traverse");
+    public final TableField<Record, String> VEHICLE_SUBMODE_ = createField(DSL.name("vehicle_submode"), SQLDataType.CLOB.nullable(false), this, "The vehicle submode, which may have implications on which infrastructure links the vehicle can traverse");
 
     /**
      * The column <code>reusable_components.vehicle_submode.belonging_to_vehicle_mode</code>. The vehicle mode the vehicle submode belongs to: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
      */
-    public final TableField<VehicleSubmodeRecord, String> BELONGING_TO_VEHICLE_MODE = createField(DSL.name("belonging_to_vehicle_mode"), SQLDataType.CLOB.nullable(false), this, "The vehicle mode the vehicle submode belongs to: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283");
+    public final TableField<Record, String> BELONGING_TO_VEHICLE_MODE = createField(DSL.name("belonging_to_vehicle_mode"), SQLDataType.CLOB.nullable(false), this, "The vehicle mode the vehicle submode belongs to: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283");
 
-    private VehicleSubmode(Name alias, Table<VehicleSubmodeRecord> aliased) {
+    private VehicleSubmode(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }
 
-    private VehicleSubmode(Name alias, Table<VehicleSubmodeRecord> aliased, Field<?>[] parameters) {
+    private VehicleSubmode(Name alias, Table<Record> aliased, Field<?>[] parameters) {
         super(alias, null, aliased, parameters, DSL.comment("The vehicle submode, which may have implications on which infrastructure links the vehicle can traverse"), TableOptions.table());
     }
 
@@ -87,37 +80,13 @@ public class VehicleSubmode extends TableImpl<VehicleSubmodeRecord> {
         this(DSL.name("vehicle_submode"), null);
     }
 
-    public <O extends Record> VehicleSubmode(Table<O> child, ForeignKey<O, VehicleSubmodeRecord> key) {
+    public <O extends Record> VehicleSubmode(Table<O> child, ForeignKey<O, Record> key) {
         super(child, key, VEHICLE_SUBMODE);
     }
 
     @Override
     public Schema getSchema() {
         return ReusableComponents.REUSABLE_COMPONENTS;
-    }
-
-    @Override
-    public UniqueKey<VehicleSubmodeRecord> getPrimaryKey() {
-        return Keys.VEHICLE_SUBMODE_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<VehicleSubmodeRecord>> getKeys() {
-        return Arrays.<UniqueKey<VehicleSubmodeRecord>>asList(Keys.VEHICLE_SUBMODE_PKEY);
-    }
-
-    @Override
-    public List<ForeignKey<VehicleSubmodeRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<VehicleSubmodeRecord, ?>>asList(Keys.VEHICLE_SUBMODE__VEHICLE_SUBMODE_BELONGING_TO_VEHICLE_MODE_FKEY);
-    }
-
-    private transient VehicleMode _vehicleMode;
-
-    public VehicleMode vehicleMode() {
-        if (_vehicleMode == null)
-            _vehicleMode = new VehicleMode(this, Keys.VEHICLE_SUBMODE__VEHICLE_SUBMODE_BELONGING_TO_VEHICLE_MODE_FKEY);
-
-        return _vehicleMode;
     }
 
     @Override
@@ -144,14 +113,5 @@ public class VehicleSubmode extends TableImpl<VehicleSubmodeRecord> {
     @Override
     public VehicleSubmode rename(Name name) {
         return new VehicleSubmode(name, null);
-    }
-
-    // -------------------------------------------------------------------------
-    // Row2 type methods
-    // -------------------------------------------------------------------------
-
-    @Override
-    public Row2<String, String> fieldsRow() {
-        return (Row2) super.fieldsRow();
     }
 }
