@@ -35,7 +35,6 @@ import static org.hamcrest.Matchers.is;
         },
         config = @SqlConfig(dataSource = "jore4DataSource")
 )
-@Disabled("Cannot pass at the moment because of the error: route's and journey pattern's traversal paths must match each other")
 public class ImportJobBatchTest extends BatchIntegrationTest {
 
     @Test

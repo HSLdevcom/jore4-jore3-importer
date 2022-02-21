@@ -479,7 +479,7 @@
                                     <includeTables>true</includeTables>
                                     <includeInvisibleColumns>false</includeInvisibleColumns>
                                     <includeEmbeddables>false</includeEmbeddables>
-                                    <includeRoutines>false</includeRoutines>
+                                    <includeRoutines>true</includeRoutines>
                                     <includePackages>false</includePackages>
                                     <includePackageRoutines>false</includePackageRoutines>
                                     <includePackageUDTs>false</includePackageUDTs>

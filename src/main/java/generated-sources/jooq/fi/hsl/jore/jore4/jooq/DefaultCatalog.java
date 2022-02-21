@@ -8,6 +8,7 @@ import fi.hsl.jore.jore4.jooq.deleted.Deleted;
 import fi.hsl.jore.jore4.jooq.infrastructure_network.InfrastructureNetwork;
 import fi.hsl.jore.jore4.jooq.internal_route.InternalRoute;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.InternalServicePattern;
+import fi.hsl.jore.jore4.jooq.internal_utils.InternalUtils;
 import fi.hsl.jore.jore4.jooq.journey_pattern.JourneyPattern;
 import fi.hsl.jore.jore4.jooq.reusable_components.ReusableComponents;
 import fi.hsl.jore.jore4.jooq.route.Route;
@@ -54,6 +55,11 @@ public class DefaultCatalog extends CatalogImpl {
     public final InternalServicePattern INTERNAL_SERVICE_PATTERN = InternalServicePattern.INTERNAL_SERVICE_PATTERN;
 
     /**
+     * The schema <code>internal_utils</code>.
+     */
+    public final InternalUtils INTERNAL_UTILS = InternalUtils.INTERNAL_UTILS;
+
+    /**
      * The schema <code>journey_pattern</code>.
      */
     public final JourneyPattern JOURNEY_PATTERN = JourneyPattern.JOURNEY_PATTERN;
@@ -87,6 +93,7 @@ public class DefaultCatalog extends CatalogImpl {
             InfrastructureNetwork.INFRASTRUCTURE_NETWORK,
             InternalRoute.INTERNAL_ROUTE,
             InternalServicePattern.INTERNAL_SERVICE_PATTERN,
+            InternalUtils.INTERNAL_UTILS,
             JourneyPattern.JOURNEY_PATTERN,
             ReusableComponents.REUSABLE_COMPONENTS,
             Route.ROUTE,

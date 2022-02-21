@@ -4,11 +4,11 @@ import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.jore3.util.JoreGeometryUtil;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
+import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.assertj.db.type.Table;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,10 +31,10 @@ import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static fi.hsl.jore.jore4.jooq.internal_service_pattern.Tables.SCHEDULED_STOP_POINT;
+import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT;
 import static org.assertj.db.api.Assertions.assertThat;
 
 @IntTest
-@Disabled("This test cannot pass because scheduled stop point and its vehicle modes aren't inserted in same transaction")
 class TransmodelScheduledStopPointRepositoryTest {
 
     private static final UUID SCHEDULED_STOP_POINT_ID = UUID.fromString("0259d692-7ee0-4792-b769-1141b248d102");
@@ -60,20 +60,24 @@ class TransmodelScheduledStopPointRepositoryTest {
             )
     );
 
+    private static final String SCHEDULED_STOP_POINT_VEHICLE_MODE = VehicleMode.BUS.getValue();
+
     private final JdbcTemplate jdbcTemplate;
     private final TransmodelScheduledStopPointRepository repository;
-    private final Table targetTable;
+    private final Table scheduledStopPointTargetTable;
     private final TransmodelValidityPeriodTestRepository testRepository;
+    private final Table vehicleModeTargetTable;
 
     @Autowired
     TransmodelScheduledStopPointRepositoryTest(final TransmodelScheduledStopPointRepository repository,
                                                @Qualifier("jore4DataSource") final DataSource targetDataSource) {
         this.jdbcTemplate = new JdbcTemplate(targetDataSource);
         this.repository = repository;
-        this.targetTable = new Table(targetDataSource, "internal_service_pattern.scheduled_stop_point");
+        this.scheduledStopPointTargetTable = new Table(targetDataSource, "internal_service_pattern.scheduled_stop_point");
         this.testRepository = new TransmodelValidityPeriodTestRepository(targetDataSource,
                 ValidityPeriodTargetTable.SCHEDULED_STOP_POINT
         );
+        this.vehicleModeTargetTable = new Table(targetDataSource, "service_pattern.vehicle_mode_on_scheduled_stop_point");
     }
 
     @Nested
@@ -106,7 +110,7 @@ class TransmodelScheduledStopPointRepositoryTest {
         void shouldInsertNewScheduledStopPointIntoDatabase() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable).hasNumberOfRows(1);
+            assertThat(scheduledStopPointTargetTable).hasNumberOfRows(1);
         }
 
         @Test
@@ -114,7 +118,7 @@ class TransmodelScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(scheduledStopPointTargetTable)
                     .row()
                     .value(SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID.getName())
                     .isEqualTo(SCHEDULED_STOP_POINT_ID);
@@ -125,7 +129,7 @@ class TransmodelScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectDirection() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(scheduledStopPointTargetTable)
                     .row()
                     .value(SCHEDULED_STOP_POINT.DIRECTION.getName())
                     .isEqualTo(DIRECTION_ON_INFRALINK.getValue());
@@ -136,7 +140,7 @@ class TransmodelScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectInfrastructureLinkId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(scheduledStopPointTargetTable)
                     .row()
                     .value(SCHEDULED_STOP_POINT.LOCATED_ON_INFRASTRUCTURE_LINK_ID.getName())
                     .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ID);
@@ -147,7 +151,7 @@ class TransmodelScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectLabel() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(scheduledStopPointTargetTable)
                     .row()
                     .value(SCHEDULED_STOP_POINT.LABEL.getName())
                     .isEqualTo(LABEL);
@@ -181,7 +185,7 @@ class TransmodelScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectPriority() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(scheduledStopPointTargetTable)
                     .row()
                     .value(SCHEDULED_STOP_POINT.PRIORITY.getName())
                     .isEqualTo(PRIORITY);
@@ -207,6 +211,36 @@ class TransmodelScheduledStopPointRepositoryTest {
             Assertions.assertThat(validityEnd)
                     .as(SCHEDULED_STOP_POINT.VALIDITY_END.getName())
                     .isEqualTo(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE);
+        }
+
+        @Test
+        @DisplayName("Should insert a new scheduled stop point vehicle mode into the database")
+        void shouldInsertNewScheduledStopPointVehicleModeIntoDatabase() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(vehicleModeTargetTable).hasNumberOfRows(1);
+        }
+
+        @Test
+        @DisplayName("Should save a new scheduled stop point vehicle mode with the correct scheduled stop point id")
+        void shouldSaveNewScheduledStopPointVehicleModeWithCorrectScheduledStopPointId() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(vehicleModeTargetTable)
+                    .row()
+                    .value(VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID.getName())
+                    .isEqualTo(SCHEDULED_STOP_POINT_ID);
+        }
+
+        @Test
+        @DisplayName("Should save a new scheduled stop point vehicle with the correct vehicle mode")
+        void shouldSaveNewScheduledStopPointVehicleModeWithCorrectVehicleMode() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(vehicleModeTargetTable)
+                    .row()
+                    .value(VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.VEHICLE_MODE.getName())
+                    .isEqualTo(SCHEDULED_STOP_POINT_VEHICLE_MODE);
         }
     }
 }
