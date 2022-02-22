@@ -57,6 +57,12 @@ An import job which imports data from the Jore 3 database has the following step
   staging table found from the target PostgreSQL database.
 * The `commitStep` moves the data from the staging table to the actual target table.
 
+It's important to understand that the job which import data from the Jore 3 database to the importer's database don't follow 
+[the chunk oriented processing "pattern" of Spring Batch](https://docs.spring.io/spring-batch/docs/current/reference/html/step.html#chunkOrientedProcessing). 
+Even though these jobs use chunk oriented processing for transferring data from Jore 3 database to importer's staging tables (`importStep`), 
+these jobs also use a tasklet which copy the imported data from the staging table to the target table. Because the final transfer is 
+performed inside one transaction (`commitStep`), no information is transferred to the target table if an error occurs during that transaction.
+
 The following figure identifies the steps of the import jobs:
 
 ![Overview](images/import_jore_job.svg "Job overview")
