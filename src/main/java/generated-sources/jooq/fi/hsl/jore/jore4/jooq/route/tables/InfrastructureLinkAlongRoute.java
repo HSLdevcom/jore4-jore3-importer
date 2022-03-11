@@ -30,7 +30,8 @@ public class InfrastructureLinkAlongRoute extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>route.infrastructure_link_along_route</code>
+     * The reference instance of
+     * <code>route.infrastructure_link_along_route</code>
      */
     public static final InfrastructureLinkAlongRoute INFRASTRUCTURE_LINK_ALONG_ROUTE = new InfrastructureLinkAlongRoute();
 
@@ -43,22 +44,29 @@ public class InfrastructureLinkAlongRoute extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>route.infrastructure_link_along_route.route_id</code>. The ID of the route.
+     * The column <code>route.infrastructure_link_along_route.route_id</code>.
+     * The ID of the route.
      */
     public final TableField<Record, UUID> ROUTE_ID = createField(DSL.name("route_id"), SQLDataType.UUID.nullable(false), this, "The ID of the route.");
 
     /**
-     * The column <code>route.infrastructure_link_along_route.infrastructure_link_id</code>. The ID of the infrastructure link.
+     * The column
+     * <code>route.infrastructure_link_along_route.infrastructure_link_id</code>.
+     * The ID of the infrastructure link.
      */
     public final TableField<Record, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "The ID of the infrastructure link.");
 
     /**
-     * The column <code>route.infrastructure_link_along_route.infrastructure_link_sequence</code>. The order of the infrastructure link within the journey pattern.
+     * The column
+     * <code>route.infrastructure_link_along_route.infrastructure_link_sequence</code>.
+     * The order of the infrastructure link within the journey pattern.
      */
     public final TableField<Record, Integer> INFRASTRUCTURE_LINK_SEQUENCE = createField(DSL.name("infrastructure_link_sequence"), SQLDataType.INTEGER.nullable(false), this, "The order of the infrastructure link within the journey pattern.");
 
     /**
-     * The column <code>route.infrastructure_link_along_route.is_traversal_forwards</code>. Is the infrastructure link traversed in the direction of its linestring?
+     * The column
+     * <code>route.infrastructure_link_along_route.is_traversal_forwards</code>.
+     * Is the infrastructure link traversed in the direction of its linestring?
      */
     public final TableField<Record, Boolean> IS_TRAVERSAL_FORWARDS = createField(DSL.name("is_traversal_forwards"), SQLDataType.BOOLEAN.nullable(false), this, "Is the infrastructure link traversed in the direction of its linestring?");
 
@@ -71,21 +79,24 @@ public class InfrastructureLinkAlongRoute extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased <code>route.infrastructure_link_along_route</code> table reference
+     * Create an aliased <code>route.infrastructure_link_along_route</code>
+     * table reference
      */
     public InfrastructureLinkAlongRoute(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_LINK_ALONG_ROUTE);
     }
 
     /**
-     * Create an aliased <code>route.infrastructure_link_along_route</code> table reference
+     * Create an aliased <code>route.infrastructure_link_along_route</code>
+     * table reference
      */
     public InfrastructureLinkAlongRoute(Name alias) {
         this(alias, INFRASTRUCTURE_LINK_ALONG_ROUTE);
     }
 
     /**
-     * Create a <code>route.infrastructure_link_along_route</code> table reference
+     * Create a <code>route.infrastructure_link_along_route</code> table
+     * reference
      */
     public InfrastructureLinkAlongRoute() {
         this(DSL.name("infrastructure_link_along_route"), null);
@@ -97,7 +108,7 @@ public class InfrastructureLinkAlongRoute extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return Route.ROUTE;
+        return aliased() ? null : Route.ROUTE;
     }
 
     @Override

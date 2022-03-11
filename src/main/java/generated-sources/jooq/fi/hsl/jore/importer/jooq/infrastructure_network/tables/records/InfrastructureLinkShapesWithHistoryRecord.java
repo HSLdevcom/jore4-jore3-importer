@@ -25,70 +25,80 @@ public class InfrastructureLinkShapesWithHistoryRecord extends TableRecordImpl<I
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_shape_id</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_shape_id</code>.
      */
     public void setInfrastructureLinkShapeId(UUID value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_shape_id</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_shape_id</code>.
      */
     public UUID getInfrastructureLinkShapeId() {
         return (UUID) get(0);
     }
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_ext_id</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_ext_id</code>.
      */
     public void setInfrastructureLinkExtId(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_ext_id</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_ext_id</code>.
      */
     public String getInfrastructureLinkExtId() {
         return (String) get(1);
     }
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_id</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_id</code>.
      */
     public void setInfrastructureLinkId(UUID value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_id</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_id</code>.
      */
     public UUID getInfrastructureLinkId() {
         return (UUID) get(2);
     }
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_shape</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_shape</code>.
      */
     public void setInfrastructureLinkShape(LineString value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_shape</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_shape</code>.
      */
     public LineString getInfrastructureLinkShape() {
         return (LineString) get(3);
     }
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_shape_sys_period</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_shape_sys_period</code>.
      */
     public void setInfrastructureLinkShapeSysPeriod(TimeRange value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_shape_sys_period</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_link_shapes_with_history.infrastructure_link_shape_sys_period</code>.
      */
     public TimeRange getInfrastructureLinkShapeSysPeriod() {
         return (TimeRange) get(4);
