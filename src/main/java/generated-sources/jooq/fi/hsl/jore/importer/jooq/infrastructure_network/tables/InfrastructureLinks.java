@@ -40,7 +40,8 @@ public class InfrastructureLinks extends TableImpl<InfrastructureLinksRecord> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.infrastructure_links</code>
+     * The reference instance of
+     * <code>infrastructure_network.infrastructure_links</code>
      */
     public static final InfrastructureLinks INFRASTRUCTURE_LINKS = new InfrastructureLinks();
 
@@ -53,37 +54,44 @@ public class InfrastructureLinks extends TableImpl<InfrastructureLinksRecord> {
     }
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_link_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_link_id</code>.
      */
     public final TableField<InfrastructureLinksRecord, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_link_ext_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_link_ext_id</code>.
      */
     public final TableField<InfrastructureLinksRecord, String> INFRASTRUCTURE_LINK_EXT_ID = createField(DSL.name("infrastructure_link_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_link_geog</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_link_geog</code>.
      */
     public final TableField<InfrastructureLinksRecord, LineString> INFRASTRUCTURE_LINK_GEOG = createField(DSL.name("infrastructure_link_geog"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").nullable(false), this, "", new LineStringBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_network_type</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_network_type</code>.
      */
     public final TableField<InfrastructureLinksRecord, String> INFRASTRUCTURE_NETWORK_TYPE = createField(DSL.name("infrastructure_network_type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_link_sys_period</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_link_sys_period</code>.
      */
     public final TableField<InfrastructureLinksRecord, TimeRange> INFRASTRUCTURE_LINK_SYS_PERIOD = createField(DSL.name("infrastructure_link_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_link_start_node</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_link_start_node</code>.
      */
     public final TableField<InfrastructureLinksRecord, UUID> INFRASTRUCTURE_LINK_START_NODE = createField(DSL.name("infrastructure_link_start_node"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_link_end_node</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_link_end_node</code>.
      */
     public final TableField<InfrastructureLinksRecord, UUID> INFRASTRUCTURE_LINK_END_NODE = createField(DSL.name("infrastructure_link_end_node"), SQLDataType.UUID.nullable(false), this, "");
 
@@ -96,21 +104,24 @@ public class InfrastructureLinks extends TableImpl<InfrastructureLinksRecord> {
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_links</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_links</code> table reference
      */
     public InfrastructureLinks(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_LINKS);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_links</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_links</code> table reference
      */
     public InfrastructureLinks(Name alias) {
         this(alias, INFRASTRUCTURE_LINKS);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_links</code> table reference
+     * Create a <code>infrastructure_network.infrastructure_links</code> table
+     * reference
      */
     public InfrastructureLinks() {
         this(DSL.name("infrastructure_links"), null);
@@ -122,7 +133,7 @@ public class InfrastructureLinks extends TableImpl<InfrastructureLinksRecord> {
 
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
@@ -131,13 +142,8 @@ public class InfrastructureLinks extends TableImpl<InfrastructureLinksRecord> {
     }
 
     @Override
-    public List<UniqueKey<InfrastructureLinksRecord>> getKeys() {
-        return Arrays.<UniqueKey<InfrastructureLinksRecord>>asList(Keys.INFRASTRUCTURE_LINKS_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<InfrastructureLinksRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<InfrastructureLinksRecord, ?>>asList(Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_NETWORK_TYPE_FKEY, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_START_NODE_FKEY, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_END_NODE_FKEY);
+        return Arrays.asList(Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_NETWORK_TYPE_FKEY, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_START_NODE_FKEY, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_END_NODE_FKEY);
     }
 
     private transient InfrastructureNetworkTypes _infrastructureNetworkTypes;

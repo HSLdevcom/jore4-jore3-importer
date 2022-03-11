@@ -54,14 +54,16 @@ public class Direction extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.direction</code> table reference
+     * Create an aliased <code>infrastructure_network.direction</code> table
+     * reference
      */
     public Direction(String alias) {
         this(DSL.name(alias), DIRECTION);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.direction</code> table reference
+     * Create an aliased <code>infrastructure_network.direction</code> table
+     * reference
      */
     public Direction(Name alias) {
         this(alias, DIRECTION);
@@ -80,7 +82,7 @@ public class Direction extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
