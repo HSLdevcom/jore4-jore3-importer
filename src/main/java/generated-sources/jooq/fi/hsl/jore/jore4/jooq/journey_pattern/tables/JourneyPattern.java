@@ -20,8 +20,8 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * The journey patterns, i.e. the ordered lists of stops and timing points 
- * along routes: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:1:813
+ * The journey patterns, i.e. the ordered lists of stops and timing points along
+ * routes: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:1:813
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class JourneyPattern extends TableImpl<Record> {
@@ -42,12 +42,15 @@ public class JourneyPattern extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>journey_pattern.journey_pattern.journey_pattern_id</code>. The ID of the journey pattern.
+     * The column
+     * <code>journey_pattern.journey_pattern.journey_pattern_id</code>. The ID
+     * of the journey pattern.
      */
     public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "The ID of the journey pattern.");
 
     /**
-     * The column <code>journey_pattern.journey_pattern.on_route_id</code>. The ID of the route the journey pattern is on.
+     * The column <code>journey_pattern.journey_pattern.on_route_id</code>. The
+     * ID of the route the journey pattern is on.
      */
     public final TableField<Record, UUID> ON_ROUTE_ID = createField(DSL.name("on_route_id"), SQLDataType.UUID.nullable(false), this, "The ID of the route the journey pattern is on.");
 
@@ -60,14 +63,16 @@ public class JourneyPattern extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased <code>journey_pattern.journey_pattern</code> table reference
+     * Create an aliased <code>journey_pattern.journey_pattern</code> table
+     * reference
      */
     public JourneyPattern(String alias) {
         this(DSL.name(alias), JOURNEY_PATTERN_);
     }
 
     /**
-     * Create an aliased <code>journey_pattern.journey_pattern</code> table reference
+     * Create an aliased <code>journey_pattern.journey_pattern</code> table
+     * reference
      */
     public JourneyPattern(Name alias) {
         this(alias, JOURNEY_PATTERN_);
@@ -86,7 +91,7 @@ public class JourneyPattern extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return fi.hsl.jore.jore4.jooq.journey_pattern.JourneyPattern.JOURNEY_PATTERN;
+        return aliased() ? null : fi.hsl.jore.jore4.jooq.journey_pattern.JourneyPattern.JOURNEY_PATTERN;
     }
 
     @Override

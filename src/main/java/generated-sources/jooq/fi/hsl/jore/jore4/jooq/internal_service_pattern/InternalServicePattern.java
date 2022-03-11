@@ -48,7 +48,8 @@ public class InternalServicePattern extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.<Table<?>>asList(
-            ScheduledStopPoint.SCHEDULED_STOP_POINT);
+        return Arrays.asList(
+            ScheduledStopPoint.SCHEDULED_STOP_POINT
+        );
     }
 }
