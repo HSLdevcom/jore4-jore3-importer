@@ -49,17 +49,20 @@ public class NetworkLinesStaging extends TableImpl<NetworkLinesStagingRecord> {
     }
 
     /**
-     * The column <code>network.network_lines_staging.network_line_ext_id</code>.
+     * The column
+     * <code>network.network_lines_staging.network_line_ext_id</code>.
      */
     public final TableField<NetworkLinesStagingRecord, String> NETWORK_LINE_EXT_ID = createField(DSL.name("network_line_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_lines_staging.network_line_number</code>.
+     * The column
+     * <code>network.network_lines_staging.network_line_number</code>.
      */
     public final TableField<NetworkLinesStagingRecord, String> NETWORK_LINE_NUMBER = createField(DSL.name("network_line_number"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_lines_staging.infrastructure_network_type</code>.
+     * The column
+     * <code>network.network_lines_staging.infrastructure_network_type</code>.
      */
     public final TableField<NetworkLinesStagingRecord, String> INFRASTRUCTURE_NETWORK_TYPE = createField(DSL.name("infrastructure_network_type"), SQLDataType.CLOB.nullable(false), this, "");
 
@@ -72,14 +75,16 @@ public class NetworkLinesStaging extends TableImpl<NetworkLinesStagingRecord> {
     }
 
     /**
-     * Create an aliased <code>network.network_lines_staging</code> table reference
+     * Create an aliased <code>network.network_lines_staging</code> table
+     * reference
      */
     public NetworkLinesStaging(String alias) {
         this(DSL.name(alias), NETWORK_LINES_STAGING);
     }
 
     /**
-     * Create an aliased <code>network.network_lines_staging</code> table reference
+     * Create an aliased <code>network.network_lines_staging</code> table
+     * reference
      */
     public NetworkLinesStaging(Name alias) {
         this(alias, NETWORK_LINES_STAGING);
@@ -98,7 +103,7 @@ public class NetworkLinesStaging extends TableImpl<NetworkLinesStagingRecord> {
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
@@ -107,13 +112,8 @@ public class NetworkLinesStaging extends TableImpl<NetworkLinesStagingRecord> {
     }
 
     @Override
-    public List<UniqueKey<NetworkLinesStagingRecord>> getKeys() {
-        return Arrays.<UniqueKey<NetworkLinesStagingRecord>>asList(Keys.NETWORK_LINES_STAGING_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<NetworkLinesStagingRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<NetworkLinesStagingRecord, ?>>asList(Keys.NETWORK_LINES_STAGING__NETWORK_LINES_STAGING_INFRASTRUCTURE_NETWORK_TYPE_FKEY);
+        return Arrays.asList(Keys.NETWORK_LINES_STAGING__NETWORK_LINES_STAGING_INFRASTRUCTURE_NETWORK_TYPE_FKEY);
     }
 
     private transient InfrastructureNetworkTypes _infrastructureNetworkTypes;
