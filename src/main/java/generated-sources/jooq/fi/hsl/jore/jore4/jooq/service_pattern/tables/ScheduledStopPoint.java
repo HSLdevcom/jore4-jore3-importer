@@ -25,8 +25,9 @@ import org.locationtech.jts.geom.Point;
 
 
 /**
- * The scheduled stop points: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:845 
- * . Colloquially known as stops from the perspective of timetable planning.
+ * The scheduled stop points:
+ * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:845 . Colloquially
+ * known as stops from the perspective of timetable planning.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ScheduledStopPoint extends TableImpl<Record> {
@@ -34,7 +35,8 @@ public class ScheduledStopPoint extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>service_pattern.scheduled_stop_point</code>
+     * The reference instance of
+     * <code>service_pattern.scheduled_stop_point</code>
      */
     public static final ScheduledStopPoint SCHEDULED_STOP_POINT = new ScheduledStopPoint();
 
@@ -47,53 +49,82 @@ public class ScheduledStopPoint extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>service_pattern.scheduled_stop_point.scheduled_stop_point_id</code>. The ID of the scheduled stop point.
+     * The column
+     * <code>service_pattern.scheduled_stop_point.scheduled_stop_point_id</code>.
+     * The ID of the scheduled stop point.
      */
     public final TableField<Record, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID, this, "The ID of the scheduled stop point.");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_point.label</code>. The label is the short code that identifies the stop to the passengers. There can be at most one stop with the same label at a time. The label matches the GTFS stop_code.
+     * The column <code>service_pattern.scheduled_stop_point.label</code>. The
+     * label is the short code that identifies the stop to the passengers. There
+     * can be at most one stop with the same label at a time. The label matches
+     * the GTFS stop_code.
      */
     public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB, this, "The label is the short code that identifies the stop to the passengers. There can be at most one stop with the same label at a time. The label matches the GTFS stop_code.");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_point.measured_location</code>. The measured location describes the physical location of the stop. For some stops this describes the location of the pole-mounted flag. A PostGIS PointZ geography in EPSG:4326.
+     * The column
+     * <code>service_pattern.scheduled_stop_point.measured_location</code>. The
+     * measured location describes the physical location of the stop. For some
+     * stops this describes the location of the pole-mounted flag. A PostGIS
+     * PointZ geography in EPSG:4326.
      */
     public final TableField<Record, Point> MEASURED_LOCATION = createField(DSL.name("measured_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\""), this, "The measured location describes the physical location of the stop. For some stops this describes the location of the pole-mounted flag. A PostGIS PointZ geography in EPSG:4326.", new PointBinding());
 
     /**
-     * The column <code>service_pattern.scheduled_stop_point.located_on_infrastructure_link_id</code>. The infrastructure link on which the stop is located.
+     * The column
+     * <code>service_pattern.scheduled_stop_point.located_on_infrastructure_link_id</code>.
+     * The infrastructure link on which the stop is located.
      */
     public final TableField<Record, UUID> LOCATED_ON_INFRASTRUCTURE_LINK_ID = createField(DSL.name("located_on_infrastructure_link_id"), SQLDataType.UUID, this, "The infrastructure link on which the stop is located.");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_point.direction</code>. The direction(s) of traffic with respect to the digitization, i.e. the direction of the specified line string.
+     * The column <code>service_pattern.scheduled_stop_point.direction</code>.
+     * The direction(s) of traffic with respect to the digitization, i.e. the
+     * direction of the specified line string.
      */
     public final TableField<Record, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB, this, "The direction(s) of traffic with respect to the digitization, i.e. the direction of the specified line string.");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_point.relative_distance_from_infrastructure_link_start</code>. The relative distance of the stop from the start of the linestring along the infrastructure link. Regardless of the specified direction, this value is the distance from the beginning of the linestring. The distance is normalized to the closed interval [0, 1].
+     * The column
+     * <code>service_pattern.scheduled_stop_point.relative_distance_from_infrastructure_link_start</code>.
+     * The relative distance of the stop from the start of the linestring along
+     * the infrastructure link. Regardless of the specified direction, this
+     * value is the distance from the beginning of the linestring. The distance
+     * is normalized to the closed interval [0, 1].
      */
     public final TableField<Record, Double> RELATIVE_DISTANCE_FROM_INFRASTRUCTURE_LINK_START = createField(DSL.name("relative_distance_from_infrastructure_link_start"), SQLDataType.DOUBLE, this, "The relative distance of the stop from the start of the linestring along the infrastructure link. Regardless of the specified direction, this value is the distance from the beginning of the linestring. The distance is normalized to the closed interval [0, 1].");
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
     @Deprecated
     public final TableField<Record, Object> CLOSEST_POINT_ON_INFRASTRUCTURE_LINK = createField(DSL.name("closest_point_on_infrastructure_link"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\""), this, "The point on the infrastructure link closest to measured_location. A PostGIS PointZ geography in EPSG:4326.");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_point.validity_start</code>. The point in time when the stop becomes valid. If NULL, the stop has been always valid.
+     * The column
+     * <code>service_pattern.scheduled_stop_point.validity_start</code>. The
+     * point in time when the stop becomes valid. If NULL, the stop has been
+     * always valid.
      */
     public final TableField<Record, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time when the stop becomes valid. If NULL, the stop has been always valid.");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_point.validity_end</code>. The point in time from which onwards the stop is no longer valid. If NULL, the stop will be always valid.
+     * The column
+     * <code>service_pattern.scheduled_stop_point.validity_end</code>. The point
+     * in time from which onwards the stop is no longer valid. If NULL, the stop
+     * will be always valid.
      */
     public final TableField<Record, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time from which onwards the stop is no longer valid. If NULL, the stop will be always valid.");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_point.priority</code>. The priority of the stop definition. The definition may be overridden by higher priority definitions.
+     * The column <code>service_pattern.scheduled_stop_point.priority</code>.
+     * The priority of the stop definition. The definition may be overridden by
+     * higher priority definitions.
      */
     public final TableField<Record, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER, this, "The priority of the stop definition. The definition may be overridden by higher priority definitions.");
 
@@ -106,21 +137,24 @@ public class ScheduledStopPoint extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased <code>service_pattern.scheduled_stop_point</code> table reference
+     * Create an aliased <code>service_pattern.scheduled_stop_point</code> table
+     * reference
      */
     public ScheduledStopPoint(String alias) {
         this(DSL.name(alias), SCHEDULED_STOP_POINT);
     }
 
     /**
-     * Create an aliased <code>service_pattern.scheduled_stop_point</code> table reference
+     * Create an aliased <code>service_pattern.scheduled_stop_point</code> table
+     * reference
      */
     public ScheduledStopPoint(Name alias) {
         this(alias, SCHEDULED_STOP_POINT);
     }
 
     /**
-     * Create a <code>service_pattern.scheduled_stop_point</code> table reference
+     * Create a <code>service_pattern.scheduled_stop_point</code> table
+     * reference
      */
     public ScheduledStopPoint() {
         this(DSL.name("scheduled_stop_point"), null);
@@ -132,7 +166,7 @@ public class ScheduledStopPoint extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return ServicePattern.SERVICE_PATTERN;
+        return aliased() ? null : ServicePattern.SERVICE_PATTERN;
     }
 
     @Override
