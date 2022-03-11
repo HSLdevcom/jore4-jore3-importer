@@ -25,98 +25,112 @@ public class InfrastructureLinksHistoryRecord extends TableRecordImpl<Infrastruc
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_links_history.infrastructure_link_id</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_id</code>.
      */
     public void setInfrastructureLinkId(UUID value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_links_history.infrastructure_link_id</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_id</code>.
      */
     public UUID getInfrastructureLinkId() {
         return (UUID) get(0);
     }
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_links_history.infrastructure_link_ext_id</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_ext_id</code>.
      */
     public void setInfrastructureLinkExtId(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_links_history.infrastructure_link_ext_id</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_ext_id</code>.
      */
     public String getInfrastructureLinkExtId() {
         return (String) get(1);
     }
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_links_history.infrastructure_link_geog</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_geog</code>.
      */
     public void setInfrastructureLinkGeog(LineString value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_links_history.infrastructure_link_geog</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_geog</code>.
      */
     public LineString getInfrastructureLinkGeog() {
         return (LineString) get(2);
     }
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_links_history.infrastructure_network_type</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_network_type</code>.
      */
     public void setInfrastructureNetworkType(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_links_history.infrastructure_network_type</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_network_type</code>.
      */
     public String getInfrastructureNetworkType() {
         return (String) get(3);
     }
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_links_history.infrastructure_link_sys_period</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_sys_period</code>.
      */
     public void setInfrastructureLinkSysPeriod(TimeRange value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_links_history.infrastructure_link_sys_period</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_sys_period</code>.
      */
     public TimeRange getInfrastructureLinkSysPeriod() {
         return (TimeRange) get(4);
     }
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_links_history.infrastructure_link_start_node</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_start_node</code>.
      */
     public void setInfrastructureLinkStartNode(UUID value) {
         set(5, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_links_history.infrastructure_link_start_node</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_start_node</code>.
      */
     public UUID getInfrastructureLinkStartNode() {
         return (UUID) get(5);
     }
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_links_history.infrastructure_link_end_node</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_end_node</code>.
      */
     public void setInfrastructureLinkEndNode(UUID value) {
         set(6, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_links_history.infrastructure_link_end_node</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_end_node</code>.
      */
     public UUID getInfrastructureLinkEndNode() {
         return (UUID) get(6);

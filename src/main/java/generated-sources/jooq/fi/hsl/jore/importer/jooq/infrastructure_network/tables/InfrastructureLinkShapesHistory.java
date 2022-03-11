@@ -36,7 +36,8 @@ public class InfrastructureLinkShapesHistory extends TableImpl<InfrastructureLin
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.infrastructure_link_shapes_history</code>
+     * The reference instance of
+     * <code>infrastructure_network.infrastructure_link_shapes_history</code>
      */
     public static final InfrastructureLinkShapesHistory INFRASTRUCTURE_LINK_SHAPES_HISTORY = new InfrastructureLinkShapesHistory();
 
@@ -49,27 +50,32 @@ public class InfrastructureLinkShapesHistory extends TableImpl<InfrastructureLin
     }
 
     /**
-     * The column <code>infrastructure_network.infrastructure_link_shapes_history.infrastructure_link_shape_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_link_shapes_history.infrastructure_link_shape_id</code>.
      */
     public final TableField<InfrastructureLinkShapesHistoryRecord, UUID> INFRASTRUCTURE_LINK_SHAPE_ID = createField(DSL.name("infrastructure_link_shape_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_link_shapes_history.infrastructure_link_ext_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_link_shapes_history.infrastructure_link_ext_id</code>.
      */
     public final TableField<InfrastructureLinkShapesHistoryRecord, String> INFRASTRUCTURE_LINK_EXT_ID = createField(DSL.name("infrastructure_link_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_link_shapes_history.infrastructure_link_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_link_shapes_history.infrastructure_link_id</code>.
      */
     public final TableField<InfrastructureLinkShapesHistoryRecord, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_link_shapes_history.infrastructure_link_shape</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_link_shapes_history.infrastructure_link_shape</code>.
      */
     public final TableField<InfrastructureLinkShapesHistoryRecord, LineString> INFRASTRUCTURE_LINK_SHAPE = createField(DSL.name("infrastructure_link_shape"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").nullable(false), this, "", new LineStringBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_link_shapes_history.infrastructure_link_shape_sys_period</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_link_shapes_history.infrastructure_link_shape_sys_period</code>.
      */
     public final TableField<InfrastructureLinkShapesHistoryRecord, TimeRange> INFRASTRUCTURE_LINK_SHAPE_SYS_PERIOD = createField(DSL.name("infrastructure_link_shape_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
@@ -82,21 +88,27 @@ public class InfrastructureLinkShapesHistory extends TableImpl<InfrastructureLin
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_link_shapes_history</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_link_shapes_history</code>
+     * table reference
      */
     public InfrastructureLinkShapesHistory(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_LINK_SHAPES_HISTORY);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_link_shapes_history</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_link_shapes_history</code>
+     * table reference
      */
     public InfrastructureLinkShapesHistory(Name alias) {
         this(alias, INFRASTRUCTURE_LINK_SHAPES_HISTORY);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_link_shapes_history</code> table reference
+     * Create a
+     * <code>infrastructure_network.infrastructure_link_shapes_history</code>
+     * table reference
      */
     public InfrastructureLinkShapesHistory() {
         this(DSL.name("infrastructure_link_shapes_history"), null);
@@ -108,7 +120,7 @@ public class InfrastructureLinkShapesHistory extends TableImpl<InfrastructureLin
 
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
