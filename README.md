@@ -196,8 +196,16 @@ in the _profiles/dev/config.properties_ file.
     ```
     cp profiles/dev/config.properties profiles/dev/config.<my-username>.properties
     ```
+
+   Look up the jore3 database credentials from the Azure vault (e.g. `hsl-jore3-db-username` and `hsl-jore3-db-password`
+   in the `hsl-jore4-dev-vault`) and insert them into your maven profile's `source.db.XXX` definitions.
 3. Adjust the `source.db.*` properties in `profiles/dev/config.<my-username>.properties` to your needs. Other configuration for destination database and test database may also be found from here.
-4. If you wish to connect to the original Jore 3 database, follow the instructions [here](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#creating-an-ssh-configuration-entry) on how to create a tunnel and connect to the database. After the tunnel is created, the Jore 3 database will be available on localhost:56239. Ask for the username and password from the project team. 
+4. If you wish to connect to the original Jore 3 database, follow the instructions [here](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#creating-an-ssh-configuration-entry) on how to create a tunnel and connect to the database. After the tunnel is created, the Jore 3 database will be available on localhost:56239. Ask for the username and password from the project team.
+
+   During the importer run, the shell on the bastion host needs to be "touched" in regular intervals to keep it from timing out. (The `TMOUT` environment variable on the bastion host cannot be modified.) "Touching" can be done manually by issuing key presses into the shell every few minutes. Alternatively, you can start a new subshell with the timeout disabled to keep the session open:
+   ```
+   env TMOUT=0 bash
+   ```
 5. Clone the [jore4-digiroad-import](https://github.com/HSLdevcom/jore4-digiroad-import) repository and 
    follow these steps:
    1. Run the Digiroad import.
@@ -216,16 +224,7 @@ Most of the runtime environment is configured in `profiles/dev/config.<my-userna
 
 - `JORE_IMPORTER_MIGRATE`: At the moment this app requires that the destination database is already up-to-date (e.g. database migrations are handled by another party). If `JORE_IMPORTER_MIGRATE` is set to `true`, this app will perform the migrations. This should only be enabled in local development when using the dockerized local database!
 
-You can create a local `run.sh` script for supplying these arguments:
-
-```shell
-#!/usr/bin/env bash
-
-set -euo pipefail
-
-JORE_IMPORTER_MIGRATE=true \
-  mvn clean spring-boot:run -Dspring-boot.run.jvmArguments="-Xmx128m"
-```
+You can use the provided `run-local.sh` script for running the importer, which supplies this argument.
 
 The importer will be available through http://localhost:8080. See instructions below on how to trigger importing through the HTTP API.
 
