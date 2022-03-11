@@ -8,9 +8,6 @@ import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteLinksStagingRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -35,7 +32,8 @@ public class NetworkRouteLinksStaging extends TableImpl<NetworkRouteLinksStaging
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>network.network_route_links_staging</code>
+     * The reference instance of
+     * <code>network.network_route_links_staging</code>
      */
     public static final NetworkRouteLinksStaging NETWORK_ROUTE_LINKS_STAGING = new NetworkRouteLinksStaging();
 
@@ -48,22 +46,26 @@ public class NetworkRouteLinksStaging extends TableImpl<NetworkRouteLinksStaging
     }
 
     /**
-     * The column <code>network.network_route_links_staging.network_route_link_ext_id</code>.
+     * The column
+     * <code>network.network_route_links_staging.network_route_link_ext_id</code>.
      */
     public final TableField<NetworkRouteLinksStagingRecord, String> NETWORK_ROUTE_LINK_EXT_ID = createField(DSL.name("network_route_link_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_links_staging.network_route_direction_ext_id</code>.
+     * The column
+     * <code>network.network_route_links_staging.network_route_direction_ext_id</code>.
      */
     public final TableField<NetworkRouteLinksStagingRecord, String> NETWORK_ROUTE_DIRECTION_EXT_ID = createField(DSL.name("network_route_direction_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_links_staging.infrastructure_link_ext_id</code>.
+     * The column
+     * <code>network.network_route_links_staging.infrastructure_link_ext_id</code>.
      */
     public final TableField<NetworkRouteLinksStagingRecord, String> INFRASTRUCTURE_LINK_EXT_ID = createField(DSL.name("infrastructure_link_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_links_staging.network_route_link_order</code>.
+     * The column
+     * <code>network.network_route_links_staging.network_route_link_order</code>.
      */
     public final TableField<NetworkRouteLinksStagingRecord, Integer> NETWORK_ROUTE_LINK_ORDER = createField(DSL.name("network_route_link_order"), SQLDataType.INTEGER.nullable(false), this, "");
 
@@ -76,14 +78,16 @@ public class NetworkRouteLinksStaging extends TableImpl<NetworkRouteLinksStaging
     }
 
     /**
-     * Create an aliased <code>network.network_route_links_staging</code> table reference
+     * Create an aliased <code>network.network_route_links_staging</code> table
+     * reference
      */
     public NetworkRouteLinksStaging(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_LINKS_STAGING);
     }
 
     /**
-     * Create an aliased <code>network.network_route_links_staging</code> table reference
+     * Create an aliased <code>network.network_route_links_staging</code> table
+     * reference
      */
     public NetworkRouteLinksStaging(Name alias) {
         this(alias, NETWORK_ROUTE_LINKS_STAGING);
@@ -102,17 +106,12 @@ public class NetworkRouteLinksStaging extends TableImpl<NetworkRouteLinksStaging
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
     public UniqueKey<NetworkRouteLinksStagingRecord> getPrimaryKey() {
         return Keys.NETWORK_ROUTE_LINKS_STAGING_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<NetworkRouteLinksStagingRecord>> getKeys() {
-        return Arrays.<UniqueKey<NetworkRouteLinksStagingRecord>>asList(Keys.NETWORK_ROUTE_LINKS_STAGING_PKEY);
     }
 
     @Override
