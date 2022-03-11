@@ -30,7 +30,9 @@ public class ServicePattern extends SchemaImpl {
     public static final ServicePattern SERVICE_PATTERN = new ServicePattern();
 
     /**
-     * The scheduled stop points: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:845 . Colloquially known as stops from the perspective of timetable planning.
+     * The scheduled stop points:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:845 .
+     * Colloquially known as stops from the perspective of timetable planning.
      */
     public final ScheduledStopPoint SCHEDULED_STOP_POINT = ScheduledStopPoint.SCHEDULED_STOP_POINT;
 
@@ -54,8 +56,9 @@ public class ServicePattern extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.<Table<?>>asList(
+        return Arrays.asList(
             ScheduledStopPoint.SCHEDULED_STOP_POINT,
-            VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT);
+            VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT
+        );
     }
 }

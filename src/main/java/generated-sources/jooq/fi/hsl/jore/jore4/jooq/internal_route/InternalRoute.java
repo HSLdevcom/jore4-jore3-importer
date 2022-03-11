@@ -48,7 +48,8 @@ public class InternalRoute extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.<Table<?>>asList(
-            Route.ROUTE);
+        return Arrays.asList(
+            Route.ROUTE
+        );
     }
 }
