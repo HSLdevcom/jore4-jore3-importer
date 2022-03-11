@@ -29,7 +29,8 @@ public class Deleted extends SchemaImpl {
     public static final Deleted DELETED = new Deleted();
 
     /**
-     * The routes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
+     * The routes from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
      */
     public final Route_1637329168554 ROUTE_1637329168554 = Route_1637329168554.ROUTE_1637329168554;
 
@@ -48,7 +49,8 @@ public class Deleted extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.<Table<?>>asList(
-            Route_1637329168554.ROUTE_1637329168554);
+        return Arrays.asList(
+            Route_1637329168554.ROUTE_1637329168554
+        );
     }
 }

@@ -15,7 +15,9 @@ import fi.hsl.jore.jore4.jooq.service_pattern.tables.VehicleModeOnScheduledStopP
 public class Tables {
 
     /**
-     * The scheduled stop points: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:845 . Colloquially known as stops from the perspective of timetable planning.
+     * The scheduled stop points:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:845 .
+     * Colloquially known as stops from the perspective of timetable planning.
      */
     public static final ScheduledStopPoint SCHEDULED_STOP_POINT = ScheduledStopPoint.SCHEDULED_STOP_POINT;
 

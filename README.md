@@ -205,7 +205,7 @@ in the _profiles/dev/config.properties_ file.
    3. Export scheduled stop points from the data imported from Digiroad and write the exported data to a CSV file.
 6. Configure the absolute path of the CSV file which contains scheduled stop points exported from Digiroad in the 
    profile specific configuration file.
-
+7. Set the value of the `map.matching.api.url` configuration property to: `http://localhost:3005/api/match/public-transport-route/v1/bus.json`.
 ### Run 
 
 The `development.sh` is a simple utility script for starting the development and test dependencies (e.g. databases).

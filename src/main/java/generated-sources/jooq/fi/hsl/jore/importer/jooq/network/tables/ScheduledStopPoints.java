@@ -53,42 +53,50 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
     }
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_id</code>.
      */
     public final TableField<ScheduledStopPointsRecord, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_ext_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_ext_id</code>.
      */
     public final TableField<ScheduledStopPointsRecord, String> SCHEDULED_STOP_POINT_EXT_ID = createField(DSL.name("scheduled_stop_point_ext_id"), SQLDataType.VARCHAR(7).nullable(false), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points.infrastructure_node_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points.infrastructure_node_id</code>.
      */
     public final TableField<ScheduledStopPointsRecord, UUID> INFRASTRUCTURE_NODE_ID = createField(DSL.name("infrastructure_node_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_ely_number</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_ely_number</code>.
      */
     public final TableField<ScheduledStopPointsRecord, String> SCHEDULED_STOP_POINT_ELY_NUMBER = createField(DSL.name("scheduled_stop_point_ely_number"), SQLDataType.VARCHAR(10), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_name</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_name</code>.
      */
     public final TableField<ScheduledStopPointsRecord, JSONB> SCHEDULED_STOP_POINT_NAME = createField(DSL.name("scheduled_stop_point_name"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_sys_period</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_sys_period</code>.
      */
     public final TableField<ScheduledStopPointsRecord, TimeRange> SCHEDULED_STOP_POINT_SYS_PERIOD = createField(DSL.name("scheduled_stop_point_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_short_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_short_id</code>.
      */
     public final TableField<ScheduledStopPointsRecord, String> SCHEDULED_STOP_POINT_SHORT_ID = createField(DSL.name("scheduled_stop_point_short_id"), SQLDataType.VARCHAR(6), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_transmodel_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_transmodel_id</code>.
      */
     public final TableField<ScheduledStopPointsRecord, UUID> SCHEDULED_STOP_POINT_TRANSMODEL_ID = createField(DSL.name("scheduled_stop_point_transmodel_id"), SQLDataType.UUID, this, "");
 
@@ -101,14 +109,16 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
     }
 
     /**
-     * Create an aliased <code>network.scheduled_stop_points</code> table reference
+     * Create an aliased <code>network.scheduled_stop_points</code> table
+     * reference
      */
     public ScheduledStopPoints(String alias) {
         this(DSL.name(alias), SCHEDULED_STOP_POINTS);
     }
 
     /**
-     * Create an aliased <code>network.scheduled_stop_points</code> table reference
+     * Create an aliased <code>network.scheduled_stop_points</code> table
+     * reference
      */
     public ScheduledStopPoints(Name alias) {
         this(alias, SCHEDULED_STOP_POINTS);
@@ -127,7 +137,7 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
@@ -136,13 +146,8 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
     }
 
     @Override
-    public List<UniqueKey<ScheduledStopPointsRecord>> getKeys() {
-        return Arrays.<UniqueKey<ScheduledStopPointsRecord>>asList(Keys.SCHEDULED_STOP_POINTS_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<ScheduledStopPointsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ScheduledStopPointsRecord, ?>>asList(Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_INFRASTRUCTURE_NODE_ID_FKEY);
+        return Arrays.asList(Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_INFRASTRUCTURE_NODE_ID_FKEY);
     }
 
     private transient InfrastructureNodes _infrastructureNodes;
