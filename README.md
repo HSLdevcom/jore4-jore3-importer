@@ -213,7 +213,7 @@ in the _profiles/dev/config.properties_ file.
    3. Export scheduled stop points from the data imported from Digiroad and write the exported data to a CSV file.
 6. Configure the absolute path of the CSV file which contains scheduled stop points exported from Digiroad in the 
    profile specific configuration file.
-
+7. Set the value of the `map.matching.api.url` configuration property to: `http://localhost:3005/api/match/public-transport-route/v1/bus.json`.
 ### Run 
 
 The `development.sh` is a simple utility script for starting the development and test dependencies (e.g. databases).
@@ -256,30 +256,30 @@ them as environment variables.
 
 The following configuration properties are to be defined for each environment:
 
-| Config property       | Environment variable       | Secret name                | Example                                                                          | Description                                                                    |
-| --------------------- | -------------------------- | -------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| -                     | SECRET_STORE_BASE_PATH     | -                          | /mnt/secrets-store                                                               | Directory containing the docker secrets                                        |
-| source.db.url         | SOURCE_DB_URL              | source-db-url              | jdbc:sqlserver://localhost:1433;database=testsourcedb;applicationIntent=ReadOnly | The jdbc url of the source JORE3 MSSQL database                                |
-|                       | SOURCE_DB_HOSTNAME         | source-db-hostname         | localhost                                                                        | The IP/hostname of the source database (if SOURCE_DB_URL is not set)           |
-|                       | SOURCE_DB_PORT             | source-db-port             | 1433                                                                             | The port of the source database (if SOURCE_DB_URL is not set)                  |
-|                       | SOURCE_DB_DATABASE         | source-db-database         | testsourcedb                                                                     | The name of the source database (if SOURCE_DB_URL is not set)                  |
-| source.db.username    | SOURCE_DB_USERNAME         | source-db-username         | sa                                                                               | Username for the source database                                               |
-| source.db.password    | SOURCE_DB_PASSWORD         | source-db-password         | \*\*\*\*                                                                         | Password for the source database                                               |
-| importer.db.url       | IMPORTER_DB_URL            | importer-db-url            | jdbc:postgresql://localhost:5432/devdb?stringtype=unspecified                    | The jdbc url of the importer's PostgreSQL database                             |
-|                       | IMPORTER_DB_HOSTNAME       | importer-db-hostname       | localhost                                                                        | The IP/hostname of the importer's database (if IMPORTER_DB_URL is not set)     |
-|                       | IMPORTER_DB_PORT           | importer-db-port           | 5432                                                                             | The port of the importer's database (if IMPORTER_DB_URL is not set)            |
-|                       | IMPORTER_DB_DATABASE       | importer-db-database       | devdb                                                                            | The name of the importer's database (if IMPORTER_DB_URL is not set)            |
-| importer.db.username  | IMPORTER_DB_USERNAME       | importer-db-username       | postgres                                                                         | Username for the importer's database                                           |
-| importer.db.password  | IMPORTER_DB_PASSWORD       | importer-db-password       | \*\*\*\*                                                                         | Password for the importer's database                                           |
-| jore4.db.url          | JORE4_DB_URL               | jore4-db-url               | jdbc:postgresql://localhost:5432/jore4e2e?stringtype=unspecified                 | The jdbc url of the jore4 target PostgreSQL database                           |
-|                       | JORE4_DB_HOSTNAME          | jore4-db-hostname          | localhost                                                                        | The IP/hostname of the jore4 target database (if JORE4_DB_URL is not set)      |
-|                       | JORE4_DB_PORT              | jore4-db-port              | 5432                                                                             | The port of the jore4 target (if JORE4_DB_URL is not set)                      |
-|                       | JORE4_DB_DATABASE          | jore4-db-database          | jore4e2e                                                                         | The name of the jore4 target (if JORE4_DB_URL is not set)                      |
-| jore4.db.username     | JORE4_DB_USERNAME          | jore4-db-username          | dbimporter                                                                       | Username for the jore4 target                                                  |
-| jore4.db.password     | JORE4_DB_PASSWORD          | jore4-db-password          | \*\*\*\*                                                                         | Password for the jore4 target                                                  |
-|                       | DIGIROAD_STOPS_CSV_VERSION | digiroad-stops-csv-version | 2022-02-03                                                                       | Version of digiroad stops csv file to be downloaded from Azure blob storage    |
-| jore.importer.migrate | JORE_IMPORTER_MIGRATE      | jore-importer-migrate      | false                                                                            | Should the importer should run its own migrations (for local development only) |
-
+| Config property          | Environment variable       | Secret name                | Example                                                                          | Description                                                                    |
+|--------------------------|----------------------------|----------------------------|----------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| -                        | SECRET_STORE_BASE_PATH     | -                          | /mnt/secrets-store                                                               | Directory containing the docker secrets                                        |
+| source.db.url            | SOURCE_DB_URL              | source-db-url              | jdbc:sqlserver://localhost:1433;database=testsourcedb;applicationIntent=ReadOnly | The jdbc url of the source JORE3 MSSQL database                                |
+|                          | SOURCE_DB_HOSTNAME         | source-db-hostname         | localhost                                                                        | The IP/hostname of the source database (if SOURCE_DB_URL is not set)           |
+|                          | SOURCE_DB_PORT             | source-db-port             | 1433                                                                             | The port of the source database (if SOURCE_DB_URL is not set)                  |
+|                          | SOURCE_DB_DATABASE         | source-db-database         | testsourcedb                                                                     | The name of the source database (if SOURCE_DB_URL is not set)                  |
+| source.db.username       | SOURCE_DB_USERNAME         | source-db-username         | sa                                                                               | Username for the source database                                               |
+| source.db.password       | SOURCE_DB_PASSWORD         | source-db-password         | \*\*\*\*                                                                         | Password for the source database                                               |
+| importer.db.url          | IMPORTER_DB_URL            | importer-db-url            | jdbc:postgresql://localhost:5432/devdb?stringtype=unspecified                    | The jdbc url of the importer's PostgreSQL database                             |
+|                          | IMPORTER_DB_HOSTNAME       | importer-db-hostname       | localhost                                                                        | The IP/hostname of the importer's database (if IMPORTER_DB_URL is not set)     |
+|                          | IMPORTER_DB_PORT           | importer-db-port           | 5432                                                                             | The port of the importer's database (if IMPORTER_DB_URL is not set)            |
+|                          | IMPORTER_DB_DATABASE       | importer-db-database       | devdb                                                                            | The name of the importer's database (if IMPORTER_DB_URL is not set)            |
+| importer.db.username     | IMPORTER_DB_USERNAME       | importer-db-username       | postgres                                                                         | Username for the importer's database                                           |
+| importer.db.password     | IMPORTER_DB_PASSWORD       | importer-db-password       | \*\*\*\*                                                                         | Password for the importer's database                                           |
+| jore4.db.url             | JORE4_DB_URL               | jore4-db-url               | jdbc:postgresql://localhost:5432/jore4e2e?stringtype=unspecified                 | The jdbc url of the jore4 target PostgreSQL database                           |
+|                          | JORE4_DB_HOSTNAME          | jore4-db-hostname          | localhost                                                                        | The IP/hostname of the jore4 target database (if JORE4_DB_URL is not set)      |
+|                          | JORE4_DB_PORT              | jore4-db-port              | 5432                                                                             | The port of the jore4 target (if JORE4_DB_URL is not set)                      |
+|                          | JORE4_DB_DATABASE          | jore4-db-database          | jore4e2e                                                                         | The name of the jore4 target (if JORE4_DB_URL is not set)                      |
+| jore4.db.username        | JORE4_DB_USERNAME          | jore4-db-username          | dbimporter                                                                       | Username for the jore4 target                                                  |
+| jore4.db.password        | JORE4_DB_PASSWORD          | jore4-db-password          | \*\*\*\*                                                                         | Password for the jore4 target                                                  |
+|                          | DIGIROAD_STOPS_CSV_VERSION | digiroad-stops-csv-version | 2022-02-03                                                                       | Version of digiroad stops csv file to be downloaded from Azure blob storage    |
+| jore.importer.migrate    | JORE_IMPORTER_MIGRATE      | jore-importer-migrate      | false                                                                            | Should the importer should run its own migrations (for local development only) |
+| map.matching.api.baseUrl | MAP_MATCHING_API_BASEURL   | map-matching-api-baseurl   | https://localhost:3005                                                           | The base url of the map matching API.                                          |
 More properties can be found from `/profiles/prod/config.properties`
 
 ## Running tests

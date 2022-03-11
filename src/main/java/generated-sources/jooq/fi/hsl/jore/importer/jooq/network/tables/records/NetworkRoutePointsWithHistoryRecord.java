@@ -24,84 +24,96 @@ public class NetworkRoutePointsWithHistoryRecord extends TableRecordImpl<Network
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>network.network_route_points_with_history.network_route_point_id</code>.
+     * Setter for
+     * <code>network.network_route_points_with_history.network_route_point_id</code>.
      */
     public void setNetworkRoutePointId(UUID value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>network.network_route_points_with_history.network_route_point_id</code>.
+     * Getter for
+     * <code>network.network_route_points_with_history.network_route_point_id</code>.
      */
     public UUID getNetworkRoutePointId() {
         return (UUID) get(0);
     }
 
     /**
-     * Setter for <code>network.network_route_points_with_history.network_route_direction_id</code>.
+     * Setter for
+     * <code>network.network_route_points_with_history.network_route_direction_id</code>.
      */
     public void setNetworkRouteDirectionId(UUID value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>network.network_route_points_with_history.network_route_direction_id</code>.
+     * Getter for
+     * <code>network.network_route_points_with_history.network_route_direction_id</code>.
      */
     public UUID getNetworkRouteDirectionId() {
         return (UUID) get(1);
     }
 
     /**
-     * Setter for <code>network.network_route_points_with_history.infrastructure_node</code>.
+     * Setter for
+     * <code>network.network_route_points_with_history.infrastructure_node</code>.
      */
     public void setInfrastructureNode(UUID value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>network.network_route_points_with_history.infrastructure_node</code>.
+     * Getter for
+     * <code>network.network_route_points_with_history.infrastructure_node</code>.
      */
     public UUID getInfrastructureNode() {
         return (UUID) get(2);
     }
 
     /**
-     * Setter for <code>network.network_route_points_with_history.network_route_point_ext_id</code>.
+     * Setter for
+     * <code>network.network_route_points_with_history.network_route_point_ext_id</code>.
      */
     public void setNetworkRoutePointExtId(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>network.network_route_points_with_history.network_route_point_ext_id</code>.
+     * Getter for
+     * <code>network.network_route_points_with_history.network_route_point_ext_id</code>.
      */
     public String getNetworkRoutePointExtId() {
         return (String) get(3);
     }
 
     /**
-     * Setter for <code>network.network_route_points_with_history.network_route_point_order</code>.
+     * Setter for
+     * <code>network.network_route_points_with_history.network_route_point_order</code>.
      */
     public void setNetworkRoutePointOrder(Integer value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>network.network_route_points_with_history.network_route_point_order</code>.
+     * Getter for
+     * <code>network.network_route_points_with_history.network_route_point_order</code>.
      */
     public Integer getNetworkRoutePointOrder() {
         return (Integer) get(4);
     }
 
     /**
-     * Setter for <code>network.network_route_points_with_history.network_route_point_sys_period</code>.
+     * Setter for
+     * <code>network.network_route_points_with_history.network_route_point_sys_period</code>.
      */
     public void setNetworkRoutePointSysPeriod(TimeRange value) {
         set(5, value);
     }
 
     /**
-     * Getter for <code>network.network_route_points_with_history.network_route_point_sys_period</code>.
+     * Getter for
+     * <code>network.network_route_points_with_history.network_route_point_sys_period</code>.
      */
     public TimeRange getNetworkRoutePointSysPeriod() {
         return (TimeRange) get(5);

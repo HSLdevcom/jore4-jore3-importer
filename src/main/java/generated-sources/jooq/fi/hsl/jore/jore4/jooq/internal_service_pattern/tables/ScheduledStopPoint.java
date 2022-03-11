@@ -33,7 +33,8 @@ public class ScheduledStopPoint extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>internal_service_pattern.scheduled_stop_point</code>
+     * The reference instance of
+     * <code>internal_service_pattern.scheduled_stop_point</code>
      */
     public static final ScheduledStopPoint SCHEDULED_STOP_POINT = new ScheduledStopPoint();
 
@@ -46,42 +47,50 @@ public class ScheduledStopPoint extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>internal_service_pattern.scheduled_stop_point.scheduled_stop_point_id</code>.
+     * The column
+     * <code>internal_service_pattern.scheduled_stop_point.scheduled_stop_point_id</code>.
      */
     public final TableField<Record, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "");
 
     /**
-     * The column <code>internal_service_pattern.scheduled_stop_point.measured_location</code>.
+     * The column
+     * <code>internal_service_pattern.scheduled_stop_point.measured_location</code>.
      */
     public final TableField<Record, Point> MEASURED_LOCATION = createField(DSL.name("measured_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").nullable(false), this, "", new PointBinding());
 
     /**
-     * The column <code>internal_service_pattern.scheduled_stop_point.located_on_infrastructure_link_id</code>.
+     * The column
+     * <code>internal_service_pattern.scheduled_stop_point.located_on_infrastructure_link_id</code>.
      */
     public final TableField<Record, UUID> LOCATED_ON_INFRASTRUCTURE_LINK_ID = createField(DSL.name("located_on_infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>internal_service_pattern.scheduled_stop_point.direction</code>.
+     * The column
+     * <code>internal_service_pattern.scheduled_stop_point.direction</code>.
      */
     public final TableField<Record, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>internal_service_pattern.scheduled_stop_point.label</code>.
+     * The column
+     * <code>internal_service_pattern.scheduled_stop_point.label</code>.
      */
     public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>internal_service_pattern.scheduled_stop_point.validity_start</code>.
+     * The column
+     * <code>internal_service_pattern.scheduled_stop_point.validity_start</code>.
      */
     public final TableField<Record, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
 
     /**
-     * The column <code>internal_service_pattern.scheduled_stop_point.validity_end</code>.
+     * The column
+     * <code>internal_service_pattern.scheduled_stop_point.validity_end</code>.
      */
     public final TableField<Record, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
 
     /**
-     * The column <code>internal_service_pattern.scheduled_stop_point.priority</code>.
+     * The column
+     * <code>internal_service_pattern.scheduled_stop_point.priority</code>.
      */
     public final TableField<Record, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER.nullable(false), this, "");
 
@@ -94,21 +103,26 @@ public class ScheduledStopPoint extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased <code>internal_service_pattern.scheduled_stop_point</code> table reference
+     * Create an aliased
+     * <code>internal_service_pattern.scheduled_stop_point</code> table
+     * reference
      */
     public ScheduledStopPoint(String alias) {
         this(DSL.name(alias), SCHEDULED_STOP_POINT);
     }
 
     /**
-     * Create an aliased <code>internal_service_pattern.scheduled_stop_point</code> table reference
+     * Create an aliased
+     * <code>internal_service_pattern.scheduled_stop_point</code> table
+     * reference
      */
     public ScheduledStopPoint(Name alias) {
         this(alias, SCHEDULED_STOP_POINT);
     }
 
     /**
-     * Create a <code>internal_service_pattern.scheduled_stop_point</code> table reference
+     * Create a <code>internal_service_pattern.scheduled_stop_point</code> table
+     * reference
      */
     public ScheduledStopPoint() {
         this(DSL.name("scheduled_stop_point"), null);
@@ -120,7 +134,7 @@ public class ScheduledStopPoint extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return InternalServicePattern.INTERNAL_SERVICE_PATTERN;
+        return aliased() ? null : InternalServicePattern.INTERNAL_SERVICE_PATTERN;
     }
 
     @Override

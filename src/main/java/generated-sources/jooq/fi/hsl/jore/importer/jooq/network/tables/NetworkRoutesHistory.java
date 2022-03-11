@@ -58,22 +58,26 @@ public class NetworkRoutesHistory extends TableImpl<NetworkRoutesHistoryRecord> 
     public final TableField<NetworkRoutesHistoryRecord, UUID> NETWORK_LINE_ID = createField(DSL.name("network_line_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_routes_history.network_route_ext_id</code>.
+     * The column
+     * <code>network.network_routes_history.network_route_ext_id</code>.
      */
     public final TableField<NetworkRoutesHistoryRecord, String> NETWORK_ROUTE_EXT_ID = createField(DSL.name("network_route_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_routes_history.network_route_number</code>.
+     * The column
+     * <code>network.network_routes_history.network_route_number</code>.
      */
     public final TableField<NetworkRoutesHistoryRecord, String> NETWORK_ROUTE_NUMBER = createField(DSL.name("network_route_number"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_routes_history.network_route_name</code>.
+     * The column
+     * <code>network.network_routes_history.network_route_name</code>.
      */
     public final TableField<NetworkRoutesHistoryRecord, JSONB> NETWORK_ROUTE_NAME = createField(DSL.name("network_route_name"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_routes_history.network_route_sys_period</code>.
+     * The column
+     * <code>network.network_routes_history.network_route_sys_period</code>.
      */
     public final TableField<NetworkRoutesHistoryRecord, TimeRange> NETWORK_ROUTE_SYS_PERIOD = createField(DSL.name("network_route_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
@@ -86,14 +90,16 @@ public class NetworkRoutesHistory extends TableImpl<NetworkRoutesHistoryRecord> 
     }
 
     /**
-     * Create an aliased <code>network.network_routes_history</code> table reference
+     * Create an aliased <code>network.network_routes_history</code> table
+     * reference
      */
     public NetworkRoutesHistory(String alias) {
         this(DSL.name(alias), NETWORK_ROUTES_HISTORY);
     }
 
     /**
-     * Create an aliased <code>network.network_routes_history</code> table reference
+     * Create an aliased <code>network.network_routes_history</code> table
+     * reference
      */
     public NetworkRoutesHistory(Name alias) {
         this(alias, NETWORK_ROUTES_HISTORY);
@@ -112,7 +118,7 @@ public class NetworkRoutesHistory extends TableImpl<NetworkRoutesHistoryRecord> 
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override

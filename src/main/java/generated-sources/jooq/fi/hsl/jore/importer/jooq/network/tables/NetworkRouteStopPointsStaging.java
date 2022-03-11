@@ -8,9 +8,6 @@ import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsStagingRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -35,7 +32,8 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>network.network_route_stop_points_staging</code>
+     * The reference instance of
+     * <code>network.network_route_stop_points_staging</code>
      */
     public static final NetworkRouteStopPointsStaging NETWORK_ROUTE_STOP_POINTS_STAGING = new NetworkRouteStopPointsStaging();
 
@@ -48,27 +46,32 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
     }
 
     /**
-     * The column <code>network.network_route_stop_points_staging.network_route_stop_point_ext_id</code>.
+     * The column
+     * <code>network.network_route_stop_points_staging.network_route_stop_point_ext_id</code>.
      */
     public final TableField<NetworkRouteStopPointsStagingRecord, String> NETWORK_ROUTE_STOP_POINT_EXT_ID = createField(DSL.name("network_route_stop_point_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_staging.network_route_stop_point_order</code>.
+     * The column
+     * <code>network.network_route_stop_points_staging.network_route_stop_point_order</code>.
      */
     public final TableField<NetworkRouteStopPointsStagingRecord, Integer> NETWORK_ROUTE_STOP_POINT_ORDER = createField(DSL.name("network_route_stop_point_order"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_staging.network_route_stop_point_hastus_point</code>.
+     * The column
+     * <code>network.network_route_stop_points_staging.network_route_stop_point_hastus_point</code>.
      */
     public final TableField<NetworkRouteStopPointsStagingRecord, Boolean> NETWORK_ROUTE_STOP_POINT_HASTUS_POINT = createField(DSL.name("network_route_stop_point_hastus_point"), SQLDataType.BOOLEAN.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_staging.network_route_stop_point_timetable_column</code>.
+     * The column
+     * <code>network.network_route_stop_points_staging.network_route_stop_point_timetable_column</code>.
      */
     public final TableField<NetworkRouteStopPointsStagingRecord, Integer> NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN = createField(DSL.name("network_route_stop_point_timetable_column"), SQLDataType.INTEGER, this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_staging.network_route_stop_point_via_point</code>.
+     * The column
+     * <code>network.network_route_stop_points_staging.network_route_stop_point_via_point</code>.
      */
     public final TableField<NetworkRouteStopPointsStagingRecord, Boolean> NETWORK_ROUTE_STOP_POINT_VIA_POINT = createField(DSL.name("network_route_stop_point_via_point"), SQLDataType.BOOLEAN.nullable(false), this, "");
 
@@ -81,21 +84,24 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
     }
 
     /**
-     * Create an aliased <code>network.network_route_stop_points_staging</code> table reference
+     * Create an aliased <code>network.network_route_stop_points_staging</code>
+     * table reference
      */
     public NetworkRouteStopPointsStaging(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_STOP_POINTS_STAGING);
     }
 
     /**
-     * Create an aliased <code>network.network_route_stop_points_staging</code> table reference
+     * Create an aliased <code>network.network_route_stop_points_staging</code>
+     * table reference
      */
     public NetworkRouteStopPointsStaging(Name alias) {
         this(alias, NETWORK_ROUTE_STOP_POINTS_STAGING);
     }
 
     /**
-     * Create a <code>network.network_route_stop_points_staging</code> table reference
+     * Create a <code>network.network_route_stop_points_staging</code> table
+     * reference
      */
     public NetworkRouteStopPointsStaging() {
         this(DSL.name("network_route_stop_points_staging"), null);
@@ -107,17 +113,12 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
     public UniqueKey<NetworkRouteStopPointsStagingRecord> getPrimaryKey() {
         return Keys.NETWORK_ROUTE_STOP_POINTS_STAGING_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<NetworkRouteStopPointsStagingRecord>> getKeys() {
-        return Arrays.<UniqueKey<NetworkRouteStopPointsStagingRecord>>asList(Keys.NETWORK_ROUTE_STOP_POINTS_STAGING_PKEY);
     }
 
     @Override

@@ -14,7 +14,8 @@ import fi.hsl.jore.jore4.jooq.deleted.tables.Route_1637329168554;
 public class Tables {
 
     /**
-     * The routes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
+     * The routes from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
      */
     public static final Route_1637329168554 ROUTE_1637329168554 = Route_1637329168554.ROUTE_1637329168554;
 }

@@ -23,56 +23,64 @@ public class ScheduledStopPointsStagingRecord extends UpdatableRecordImpl<Schedu
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>network.scheduled_stop_points_staging.scheduled_stop_point_ext_id</code>.
+     * Setter for
+     * <code>network.scheduled_stop_points_staging.scheduled_stop_point_ext_id</code>.
      */
     public void setScheduledStopPointExtId(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>network.scheduled_stop_points_staging.scheduled_stop_point_ext_id</code>.
+     * Getter for
+     * <code>network.scheduled_stop_points_staging.scheduled_stop_point_ext_id</code>.
      */
     public String getScheduledStopPointExtId() {
         return (String) get(0);
     }
 
     /**
-     * Setter for <code>network.scheduled_stop_points_staging.scheduled_stop_point_ely_number</code>.
+     * Setter for
+     * <code>network.scheduled_stop_points_staging.scheduled_stop_point_ely_number</code>.
      */
     public void setScheduledStopPointElyNumber(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>network.scheduled_stop_points_staging.scheduled_stop_point_ely_number</code>.
+     * Getter for
+     * <code>network.scheduled_stop_points_staging.scheduled_stop_point_ely_number</code>.
      */
     public String getScheduledStopPointElyNumber() {
         return (String) get(1);
     }
 
     /**
-     * Setter for <code>network.scheduled_stop_points_staging.scheduled_stop_point_name</code>.
+     * Setter for
+     * <code>network.scheduled_stop_points_staging.scheduled_stop_point_name</code>.
      */
     public void setScheduledStopPointName(JSONB value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>network.scheduled_stop_points_staging.scheduled_stop_point_name</code>.
+     * Getter for
+     * <code>network.scheduled_stop_points_staging.scheduled_stop_point_name</code>.
      */
     public JSONB getScheduledStopPointName() {
         return (JSONB) get(2);
     }
 
     /**
-     * Setter for <code>network.scheduled_stop_points_staging.scheduled_stop_point_short_id</code>.
+     * Setter for
+     * <code>network.scheduled_stop_points_staging.scheduled_stop_point_short_id</code>.
      */
     public void setScheduledStopPointShortId(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>network.scheduled_stop_points_staging.scheduled_stop_point_short_id</code>.
+     * Getter for
+     * <code>network.scheduled_stop_points_staging.scheduled_stop_point_short_id</code>.
      */
     public String getScheduledStopPointShortId() {
         return (String) get(3);

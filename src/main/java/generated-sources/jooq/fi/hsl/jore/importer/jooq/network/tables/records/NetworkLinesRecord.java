@@ -67,14 +67,16 @@ public class NetworkLinesRecord extends UpdatableRecordImpl<NetworkLinesRecord> 
     }
 
     /**
-     * Setter for <code>network.network_lines.infrastructure_network_type</code>.
+     * Setter for
+     * <code>network.network_lines.infrastructure_network_type</code>.
      */
     public void setInfrastructureNetworkType(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>network.network_lines.infrastructure_network_type</code>.
+     * Getter for
+     * <code>network.network_lines.infrastructure_network_type</code>.
      */
     public String getInfrastructureNetworkType() {
         return (String) get(3);

@@ -36,7 +36,8 @@ public class InfrastructureNodesHistory extends TableImpl<InfrastructureNodesHis
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.infrastructure_nodes_history</code>
+     * The reference instance of
+     * <code>infrastructure_network.infrastructure_nodes_history</code>
      */
     public static final InfrastructureNodesHistory INFRASTRUCTURE_NODES_HISTORY = new InfrastructureNodesHistory();
 
@@ -49,32 +50,38 @@ public class InfrastructureNodesHistory extends TableImpl<InfrastructureNodesHis
     }
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_history.infrastructure_node_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_history.infrastructure_node_id</code>.
      */
     public final TableField<InfrastructureNodesHistoryRecord, UUID> INFRASTRUCTURE_NODE_ID = createField(DSL.name("infrastructure_node_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_history.infrastructure_node_ext_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_history.infrastructure_node_ext_id</code>.
      */
     public final TableField<InfrastructureNodesHistoryRecord, String> INFRASTRUCTURE_NODE_EXT_ID = createField(DSL.name("infrastructure_node_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_history.infrastructure_node_type</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_history.infrastructure_node_type</code>.
      */
     public final TableField<InfrastructureNodesHistoryRecord, String> INFRASTRUCTURE_NODE_TYPE = createField(DSL.name("infrastructure_node_type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_history.infrastructure_node_location</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_history.infrastructure_node_location</code>.
      */
     public final TableField<InfrastructureNodesHistoryRecord, Point> INFRASTRUCTURE_NODE_LOCATION = createField(DSL.name("infrastructure_node_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geometry\"").nullable(false), this, "", new PointBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_history.infrastructure_node_projected_location</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_history.infrastructure_node_projected_location</code>.
      */
     public final TableField<InfrastructureNodesHistoryRecord, Point> INFRASTRUCTURE_NODE_PROJECTED_LOCATION = createField(DSL.name("infrastructure_node_projected_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geometry\""), this, "", new PointBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_history.infrastructure_node_sys_period</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_history.infrastructure_node_sys_period</code>.
      */
     public final TableField<InfrastructureNodesHistoryRecord, TimeRange> INFRASTRUCTURE_NODE_SYS_PERIOD = createField(DSL.name("infrastructure_node_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
@@ -87,21 +94,26 @@ public class InfrastructureNodesHistory extends TableImpl<InfrastructureNodesHis
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_nodes_history</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_nodes_history</code> table
+     * reference
      */
     public InfrastructureNodesHistory(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_NODES_HISTORY);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_nodes_history</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_nodes_history</code> table
+     * reference
      */
     public InfrastructureNodesHistory(Name alias) {
         this(alias, INFRASTRUCTURE_NODES_HISTORY);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_nodes_history</code> table reference
+     * Create a <code>infrastructure_network.infrastructure_nodes_history</code>
+     * table reference
      */
     public InfrastructureNodesHistory() {
         this(DSL.name("infrastructure_nodes_history"), null);
@@ -113,7 +125,7 @@ public class InfrastructureNodesHistory extends TableImpl<InfrastructureNodesHis
 
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override

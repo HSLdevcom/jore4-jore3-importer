@@ -21,14 +21,16 @@ public class InfrastructureNetworkTypesRecord extends UpdatableRecordImpl<Infras
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_network_types.infrastructure_network_type</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_network_types.infrastructure_network_type</code>.
      */
     public void setInfrastructureNetworkType(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_network_types.infrastructure_network_type</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_network_types.infrastructure_network_type</code>.
      */
     public String getInfrastructureNetworkType() {
         return (String) get(0);

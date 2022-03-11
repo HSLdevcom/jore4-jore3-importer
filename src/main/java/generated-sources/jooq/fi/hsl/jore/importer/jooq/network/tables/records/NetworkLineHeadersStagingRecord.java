@@ -24,98 +24,112 @@ public class NetworkLineHeadersStagingRecord extends UpdatableRecordImpl<Network
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>network.network_line_headers_staging.network_line_header_ext_id</code>.
+     * Setter for
+     * <code>network.network_line_headers_staging.network_line_header_ext_id</code>.
      */
     public void setNetworkLineHeaderExtId(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>network.network_line_headers_staging.network_line_header_ext_id</code>.
+     * Getter for
+     * <code>network.network_line_headers_staging.network_line_header_ext_id</code>.
      */
     public String getNetworkLineHeaderExtId() {
         return (String) get(0);
     }
 
     /**
-     * Setter for <code>network.network_line_headers_staging.network_line_ext_id</code>.
+     * Setter for
+     * <code>network.network_line_headers_staging.network_line_ext_id</code>.
      */
     public void setNetworkLineExtId(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>network.network_line_headers_staging.network_line_ext_id</code>.
+     * Getter for
+     * <code>network.network_line_headers_staging.network_line_ext_id</code>.
      */
     public String getNetworkLineExtId() {
         return (String) get(1);
     }
 
     /**
-     * Setter for <code>network.network_line_headers_staging.network_line_header_name</code>.
+     * Setter for
+     * <code>network.network_line_headers_staging.network_line_header_name</code>.
      */
     public void setNetworkLineHeaderName(JSONB value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>network.network_line_headers_staging.network_line_header_name</code>.
+     * Getter for
+     * <code>network.network_line_headers_staging.network_line_header_name</code>.
      */
     public JSONB getNetworkLineHeaderName() {
         return (JSONB) get(2);
     }
 
     /**
-     * Setter for <code>network.network_line_headers_staging.network_line_header_name_short</code>.
+     * Setter for
+     * <code>network.network_line_headers_staging.network_line_header_name_short</code>.
      */
     public void setNetworkLineHeaderNameShort(JSONB value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>network.network_line_headers_staging.network_line_header_name_short</code>.
+     * Getter for
+     * <code>network.network_line_headers_staging.network_line_header_name_short</code>.
      */
     public JSONB getNetworkLineHeaderNameShort() {
         return (JSONB) get(3);
     }
 
     /**
-     * Setter for <code>network.network_line_headers_staging.network_line_header_origin_1</code>.
+     * Setter for
+     * <code>network.network_line_headers_staging.network_line_header_origin_1</code>.
      */
     public void setNetworkLineHeaderOrigin_1(JSONB value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>network.network_line_headers_staging.network_line_header_origin_1</code>.
+     * Getter for
+     * <code>network.network_line_headers_staging.network_line_header_origin_1</code>.
      */
     public JSONB getNetworkLineHeaderOrigin_1() {
         return (JSONB) get(4);
     }
 
     /**
-     * Setter for <code>network.network_line_headers_staging.network_line_header_origin_2</code>.
+     * Setter for
+     * <code>network.network_line_headers_staging.network_line_header_origin_2</code>.
      */
     public void setNetworkLineHeaderOrigin_2(JSONB value) {
         set(5, value);
     }
 
     /**
-     * Getter for <code>network.network_line_headers_staging.network_line_header_origin_2</code>.
+     * Getter for
+     * <code>network.network_line_headers_staging.network_line_header_origin_2</code>.
      */
     public JSONB getNetworkLineHeaderOrigin_2() {
         return (JSONB) get(5);
     }
 
     /**
-     * Setter for <code>network.network_line_headers_staging.network_line_header_valid_date_range</code>.
+     * Setter for
+     * <code>network.network_line_headers_staging.network_line_header_valid_date_range</code>.
      */
     public void setNetworkLineHeaderValidDateRange(DateRange value) {
         set(6, value);
     }
 
     /**
-     * Getter for <code>network.network_line_headers_staging.network_line_header_valid_date_range</code>.
+     * Getter for
+     * <code>network.network_line_headers_staging.network_line_header_valid_date_range</code>.
      */
     public DateRange getNetworkLineHeaderValidDateRange() {
         return (DateRange) get(6);

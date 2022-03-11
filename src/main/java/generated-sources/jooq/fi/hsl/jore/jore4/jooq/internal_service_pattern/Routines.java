@@ -14,7 +14,8 @@ import org.locationtech.jts.geom.Point;
 
 
 /**
- * Convenience access to all stored procedures and functions in internal_service_pattern.
+ * Convenience access to all stored procedures and functions in
+ * internal_service_pattern.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Routines {

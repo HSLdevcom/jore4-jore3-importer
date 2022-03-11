@@ -35,7 +35,8 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>network.scheduled_stop_points_history</code>
+     * The reference instance of
+     * <code>network.scheduled_stop_points_history</code>
      */
     public static final ScheduledStopPointsHistory SCHEDULED_STOP_POINTS_HISTORY = new ScheduledStopPointsHistory();
 
@@ -48,42 +49,50 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
     }
 
     /**
-     * The column <code>network.scheduled_stop_points_history.scheduled_stop_point_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points_history.scheduled_stop_point_id</code>.
      */
     public final TableField<ScheduledStopPointsHistoryRecord, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points_history.scheduled_stop_point_ext_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points_history.scheduled_stop_point_ext_id</code>.
      */
     public final TableField<ScheduledStopPointsHistoryRecord, String> SCHEDULED_STOP_POINT_EXT_ID = createField(DSL.name("scheduled_stop_point_ext_id"), SQLDataType.VARCHAR(7).nullable(false), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points_history.infrastructure_node_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points_history.infrastructure_node_id</code>.
      */
     public final TableField<ScheduledStopPointsHistoryRecord, UUID> INFRASTRUCTURE_NODE_ID = createField(DSL.name("infrastructure_node_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points_history.scheduled_stop_point_ely_number</code>.
+     * The column
+     * <code>network.scheduled_stop_points_history.scheduled_stop_point_ely_number</code>.
      */
     public final TableField<ScheduledStopPointsHistoryRecord, String> SCHEDULED_STOP_POINT_ELY_NUMBER = createField(DSL.name("scheduled_stop_point_ely_number"), SQLDataType.VARCHAR(10), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points_history.scheduled_stop_point_name</code>.
+     * The column
+     * <code>network.scheduled_stop_points_history.scheduled_stop_point_name</code>.
      */
     public final TableField<ScheduledStopPointsHistoryRecord, JSONB> SCHEDULED_STOP_POINT_NAME = createField(DSL.name("scheduled_stop_point_name"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points_history.scheduled_stop_point_sys_period</code>.
+     * The column
+     * <code>network.scheduled_stop_points_history.scheduled_stop_point_sys_period</code>.
      */
     public final TableField<ScheduledStopPointsHistoryRecord, TimeRange> SCHEDULED_STOP_POINT_SYS_PERIOD = createField(DSL.name("scheduled_stop_point_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
     /**
-     * The column <code>network.scheduled_stop_points_history.scheduled_stop_point_short_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points_history.scheduled_stop_point_short_id</code>.
      */
     public final TableField<ScheduledStopPointsHistoryRecord, String> SCHEDULED_STOP_POINT_SHORT_ID = createField(DSL.name("scheduled_stop_point_short_id"), SQLDataType.VARCHAR(6), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points_history.scheduled_stop_point_transmodel_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points_history.scheduled_stop_point_transmodel_id</code>.
      */
     public final TableField<ScheduledStopPointsHistoryRecord, UUID> SCHEDULED_STOP_POINT_TRANSMODEL_ID = createField(DSL.name("scheduled_stop_point_transmodel_id"), SQLDataType.UUID, this, "");
 
@@ -96,21 +105,24 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
     }
 
     /**
-     * Create an aliased <code>network.scheduled_stop_points_history</code> table reference
+     * Create an aliased <code>network.scheduled_stop_points_history</code>
+     * table reference
      */
     public ScheduledStopPointsHistory(String alias) {
         this(DSL.name(alias), SCHEDULED_STOP_POINTS_HISTORY);
     }
 
     /**
-     * Create an aliased <code>network.scheduled_stop_points_history</code> table reference
+     * Create an aliased <code>network.scheduled_stop_points_history</code>
+     * table reference
      */
     public ScheduledStopPointsHistory(Name alias) {
         this(alias, SCHEDULED_STOP_POINTS_HISTORY);
     }
 
     /**
-     * Create a <code>network.scheduled_stop_points_history</code> table reference
+     * Create a <code>network.scheduled_stop_points_history</code> table
+     * reference
      */
     public ScheduledStopPointsHistory() {
         this(DSL.name("scheduled_stop_points_history"), null);
@@ -122,7 +134,7 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override

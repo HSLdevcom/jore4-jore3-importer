@@ -20,7 +20,8 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * The route directions from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:480
+ * The route directions from Transmodel:
+ * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:480
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Direction extends TableImpl<Record> {
@@ -41,12 +42,14 @@ public class Direction extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>route.direction.direction</code>. The name of the route direction.
+     * The column <code>route.direction.direction</code>. The name of the route
+     * direction.
      */
     public final TableField<Record, String> DIRECTION_ = createField(DSL.name("direction"), SQLDataType.CLOB.nullable(false), this, "The name of the route direction.");
 
     /**
-     * The column <code>route.direction.the_opposite_of_direction</code>. The opposite direction.
+     * The column <code>route.direction.the_opposite_of_direction</code>. The
+     * opposite direction.
      */
     public final TableField<Record, String> THE_OPPOSITE_OF_DIRECTION = createField(DSL.name("the_opposite_of_direction"), SQLDataType.CLOB, this, "The opposite direction.");
 
@@ -85,7 +88,7 @@ public class Direction extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return Route.ROUTE;
+        return aliased() ? null : Route.ROUTE;
     }
 
     @Override
