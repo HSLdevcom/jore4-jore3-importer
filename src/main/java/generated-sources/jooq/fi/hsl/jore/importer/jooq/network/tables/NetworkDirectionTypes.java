@@ -8,9 +8,6 @@ import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkDirectionTypesRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -48,7 +45,8 @@ public class NetworkDirectionTypes extends TableImpl<NetworkDirectionTypesRecord
     }
 
     /**
-     * The column <code>network.network_direction_types.network_direction_type</code>.
+     * The column
+     * <code>network.network_direction_types.network_direction_type</code>.
      */
     public final TableField<NetworkDirectionTypesRecord, String> NETWORK_DIRECTION_TYPE = createField(DSL.name("network_direction_type"), SQLDataType.CLOB.nullable(false), this, "");
 
@@ -61,14 +59,16 @@ public class NetworkDirectionTypes extends TableImpl<NetworkDirectionTypesRecord
     }
 
     /**
-     * Create an aliased <code>network.network_direction_types</code> table reference
+     * Create an aliased <code>network.network_direction_types</code> table
+     * reference
      */
     public NetworkDirectionTypes(String alias) {
         this(DSL.name(alias), NETWORK_DIRECTION_TYPES);
     }
 
     /**
-     * Create an aliased <code>network.network_direction_types</code> table reference
+     * Create an aliased <code>network.network_direction_types</code> table
+     * reference
      */
     public NetworkDirectionTypes(Name alias) {
         this(alias, NETWORK_DIRECTION_TYPES);
@@ -87,17 +87,12 @@ public class NetworkDirectionTypes extends TableImpl<NetworkDirectionTypesRecord
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
     public UniqueKey<NetworkDirectionTypesRecord> getPrimaryKey() {
         return Keys.NETWORK_DIRECTION_TYPES_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<NetworkDirectionTypesRecord>> getKeys() {
-        return Arrays.<UniqueKey<NetworkDirectionTypesRecord>>asList(Keys.NETWORK_DIRECTION_TYPES_PKEY);
     }
 
     @Override
