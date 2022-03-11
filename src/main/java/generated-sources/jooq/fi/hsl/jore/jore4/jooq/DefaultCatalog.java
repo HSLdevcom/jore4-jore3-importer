@@ -82,7 +82,7 @@ public class DefaultCatalog extends CatalogImpl {
 
     @Override
     public final List<Schema> getSchemas() {
-        return Arrays.<Schema>asList(
+        return Arrays.asList(
             Deleted.DELETED,
             InfrastructureNetwork.INFRASTRUCTURE_NETWORK,
             InternalRoute.INTERNAL_ROUTE,
@@ -90,6 +90,7 @@ public class DefaultCatalog extends CatalogImpl {
             JourneyPattern.JOURNEY_PATTERN,
             ReusableComponents.REUSABLE_COMPONENTS,
             Route.ROUTE,
-            ServicePattern.SERVICE_PATTERN);
+            ServicePattern.SERVICE_PATTERN
+        );
     }
 }

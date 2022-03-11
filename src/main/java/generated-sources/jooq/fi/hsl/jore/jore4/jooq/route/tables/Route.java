@@ -21,7 +21,8 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * The routes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
+ * The routes from Transmodel:
+ * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Route extends TableImpl<Record> {
@@ -47,53 +48,71 @@ public class Route extends TableImpl<Record> {
     public final TableField<Record, UUID> ROUTE_ID = createField(DSL.name("route_id"), SQLDataType.UUID, this, "The ID of the route.");
 
     /**
-     * The column <code>route.route.description_i18n</code>. The description of the route in the form of starting location - destination. Placeholder for multilingual strings.
+     * The column <code>route.route.description_i18n</code>. The description of
+     * the route in the form of starting location - destination. Placeholder for
+     * multilingual strings.
      */
     public final TableField<Record, String> DESCRIPTION_I18N = createField(DSL.name("description_i18n"), SQLDataType.CLOB, this, "The description of the route in the form of starting location - destination. Placeholder for multilingual strings.");
 
     /**
-     * The column <code>route.route.starts_from_scheduled_stop_point_id</code>. The scheduled stop point where the route starts from.
+     * The column <code>route.route.starts_from_scheduled_stop_point_id</code>.
+     * The scheduled stop point where the route starts from.
      */
     public final TableField<Record, UUID> STARTS_FROM_SCHEDULED_STOP_POINT_ID = createField(DSL.name("starts_from_scheduled_stop_point_id"), SQLDataType.UUID, this, "The scheduled stop point where the route starts from.");
 
     /**
-     * The column <code>route.route.ends_at_scheduled_stop_point_id</code>. The scheduled stop point where the route ends at.
+     * The column <code>route.route.ends_at_scheduled_stop_point_id</code>. The
+     * scheduled stop point where the route ends at.
      */
     public final TableField<Record, UUID> ENDS_AT_SCHEDULED_STOP_POINT_ID = createField(DSL.name("ends_at_scheduled_stop_point_id"), SQLDataType.UUID, this, "The scheduled stop point where the route ends at.");
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
     @Deprecated
     public final TableField<Record, Object> ROUTE_SHAPE = createField(DSL.name("route_shape"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\""), this, "A PostGIS LinestringZ geography in EPSG:4326 describing the shape of the route.");
 
     /**
-     * The column <code>route.route.on_line_id</code>. The line to which this route belongs.
+     * The column <code>route.route.on_line_id</code>. The line to which this
+     * route belongs.
      */
     public final TableField<Record, UUID> ON_LINE_ID = createField(DSL.name("on_line_id"), SQLDataType.UUID, this, "The line to which this route belongs.");
 
     /**
-     * The column <code>route.route.validity_start</code>. The point in time when the route becomes valid. If NULL, the route has been always valid before end time of validity period.
+     * The column <code>route.route.validity_start</code>. The point in time
+     * when the route becomes valid. If NULL, the route has been always valid
+     * before end time of validity period.
      */
     public final TableField<Record, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time when the route becomes valid. If NULL, the route has been always valid before end time of validity period.");
 
     /**
-     * The column <code>route.route.validity_end</code>. The point in time from which onwards the route is no longer valid. If NULL, the route is valid indefinitely after the start time of the validity period.
+     * The column <code>route.route.validity_end</code>. The point in time from
+     * which onwards the route is no longer valid. If NULL, the route is valid
+     * indefinitely after the start time of the validity period.
      */
     public final TableField<Record, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time from which onwards the route is no longer valid. If NULL, the route is valid indefinitely after the start time of the validity period.");
 
     /**
-     * The column <code>route.route.priority</code>. The priority of the route definition. The definition may be overridden by higher priority definitions.
+     * The column <code>route.route.priority</code>. The priority of the route
+     * definition. The definition may be overridden by higher priority
+     * definitions.
      */
     public final TableField<Record, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER, this, "The priority of the route definition. The definition may be overridden by higher priority definitions.");
 
     /**
-     * The column <code>route.route.label</code>. The label of the route definition, label and direction together are unique for a certain priority and validity period.
+     * The column <code>route.route.label</code>. The label of the route
+     * definition, label and direction together are unique for a certain
+     * priority and validity period.
      */
     public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB, this, "The label of the route definition, label and direction together are unique for a certain priority and validity period.");
 
     /**
-     * The column <code>route.route.direction</code>. The direction of the route definition, label and direction together are unique for a certain priority and validity period.
+     * The column <code>route.route.direction</code>. The direction of the route
+     * definition, label and direction together are unique for a certain
+     * priority and validity period.
      */
     public final TableField<Record, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB, this, "The direction of the route definition, label and direction together are unique for a certain priority and validity period.");
 
@@ -132,7 +151,7 @@ public class Route extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return fi.hsl.jore.jore4.jooq.route.Route.ROUTE;
+        return aliased() ? null : fi.hsl.jore.jore4.jooq.route.Route.ROUTE;
     }
 
     @Override

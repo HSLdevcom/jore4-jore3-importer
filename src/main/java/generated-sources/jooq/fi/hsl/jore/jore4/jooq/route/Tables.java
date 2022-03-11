@@ -17,7 +17,8 @@ import fi.hsl.jore.jore4.jooq.route.tables.Route;
 public class Tables {
 
     /**
-     * The route directions from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:480
+     * The route directions from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:480
      */
     public static final Direction DIRECTION = Direction.DIRECTION;
 
@@ -27,12 +28,14 @@ public class Tables {
     public static final InfrastructureLinkAlongRoute INFRASTRUCTURE_LINK_ALONG_ROUTE = InfrastructureLinkAlongRoute.INFRASTRUCTURE_LINK_ALONG_ROUTE;
 
     /**
-     * The line from Transmodel: http://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:487
+     * The line from Transmodel:
+     * http://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:487
      */
     public static final Line LINE = Line.LINE;
 
     /**
-     * The routes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
+     * The routes from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
      */
     public static final Route ROUTE_ = Route.ROUTE_;
 }

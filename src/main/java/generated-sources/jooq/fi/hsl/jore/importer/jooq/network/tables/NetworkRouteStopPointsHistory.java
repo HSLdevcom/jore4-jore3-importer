@@ -34,7 +34,8 @@ public class NetworkRouteStopPointsHistory extends TableImpl<NetworkRouteStopPoi
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>network.network_route_stop_points_history</code>
+     * The reference instance of
+     * <code>network.network_route_stop_points_history</code>
      */
     public static final NetworkRouteStopPointsHistory NETWORK_ROUTE_STOP_POINTS_HISTORY = new NetworkRouteStopPointsHistory();
 
@@ -47,37 +48,44 @@ public class NetworkRouteStopPointsHistory extends TableImpl<NetworkRouteStopPoi
     }
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_point_id</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_point_id</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, UUID> NETWORK_ROUTE_POINT_ID = createField(DSL.name("network_route_point_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_ext_id</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_ext_id</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, String> NETWORK_ROUTE_STOP_POINT_EXT_ID = createField(DSL.name("network_route_stop_point_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_order</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_order</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, Integer> NETWORK_ROUTE_STOP_POINT_ORDER = createField(DSL.name("network_route_stop_point_order"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_hastus_point</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_hastus_point</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, Boolean> NETWORK_ROUTE_STOP_POINT_HASTUS_POINT = createField(DSL.name("network_route_stop_point_hastus_point"), SQLDataType.BOOLEAN.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_timetable_column</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_timetable_column</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, Integer> NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN = createField(DSL.name("network_route_stop_point_timetable_column"), SQLDataType.INTEGER, this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_sys_period</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_sys_period</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, TimeRange> NETWORK_ROUTE_STOP_POINT_SYS_PERIOD = createField(DSL.name("network_route_stop_point_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_via_point</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_via_point</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, Boolean> NETWORK_ROUTE_STOP_POINT_VIA_POINT = createField(DSL.name("network_route_stop_point_via_point"), SQLDataType.BOOLEAN.nullable(false), this, "");
 
@@ -90,21 +98,24 @@ public class NetworkRouteStopPointsHistory extends TableImpl<NetworkRouteStopPoi
     }
 
     /**
-     * Create an aliased <code>network.network_route_stop_points_history</code> table reference
+     * Create an aliased <code>network.network_route_stop_points_history</code>
+     * table reference
      */
     public NetworkRouteStopPointsHistory(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_STOP_POINTS_HISTORY);
     }
 
     /**
-     * Create an aliased <code>network.network_route_stop_points_history</code> table reference
+     * Create an aliased <code>network.network_route_stop_points_history</code>
+     * table reference
      */
     public NetworkRouteStopPointsHistory(Name alias) {
         this(alias, NETWORK_ROUTE_STOP_POINTS_HISTORY);
     }
 
     /**
-     * Create a <code>network.network_route_stop_points_history</code> table reference
+     * Create a <code>network.network_route_stop_points_history</code> table
+     * reference
      */
     public NetworkRouteStopPointsHistory() {
         this(DSL.name("network_route_stop_points_history"), null);
@@ -116,7 +127,7 @@ public class NetworkRouteStopPointsHistory extends TableImpl<NetworkRouteStopPoi
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override

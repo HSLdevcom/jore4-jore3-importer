@@ -38,70 +38,80 @@ public class NetworkLinesHistoryRecord extends TableRecordImpl<NetworkLinesHisto
     }
 
     /**
-     * Setter for <code>network.network_lines_history.network_line_ext_id</code>.
+     * Setter for
+     * <code>network.network_lines_history.network_line_ext_id</code>.
      */
     public void setNetworkLineExtId(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>network.network_lines_history.network_line_ext_id</code>.
+     * Getter for
+     * <code>network.network_lines_history.network_line_ext_id</code>.
      */
     public String getNetworkLineExtId() {
         return (String) get(1);
     }
 
     /**
-     * Setter for <code>network.network_lines_history.network_line_number</code>.
+     * Setter for
+     * <code>network.network_lines_history.network_line_number</code>.
      */
     public void setNetworkLineNumber(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>network.network_lines_history.network_line_number</code>.
+     * Getter for
+     * <code>network.network_lines_history.network_line_number</code>.
      */
     public String getNetworkLineNumber() {
         return (String) get(2);
     }
 
     /**
-     * Setter for <code>network.network_lines_history.infrastructure_network_type</code>.
+     * Setter for
+     * <code>network.network_lines_history.infrastructure_network_type</code>.
      */
     public void setInfrastructureNetworkType(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>network.network_lines_history.infrastructure_network_type</code>.
+     * Getter for
+     * <code>network.network_lines_history.infrastructure_network_type</code>.
      */
     public String getInfrastructureNetworkType() {
         return (String) get(3);
     }
 
     /**
-     * Setter for <code>network.network_lines_history.network_line_sys_period</code>.
+     * Setter for
+     * <code>network.network_lines_history.network_line_sys_period</code>.
      */
     public void setNetworkLineSysPeriod(TimeRange value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>network.network_lines_history.network_line_sys_period</code>.
+     * Getter for
+     * <code>network.network_lines_history.network_line_sys_period</code>.
      */
     public TimeRange getNetworkLineSysPeriod() {
         return (TimeRange) get(4);
     }
 
     /**
-     * Setter for <code>network.network_lines_history.network_line_transmodel_id</code>.
+     * Setter for
+     * <code>network.network_lines_history.network_line_transmodel_id</code>.
      */
     public void setNetworkLineTransmodelId(UUID value) {
         set(5, value);
     }
 
     /**
-     * Getter for <code>network.network_lines_history.network_line_transmodel_id</code>.
+     * Getter for
+     * <code>network.network_lines_history.network_line_transmodel_id</code>.
      */
     public UUID getNetworkLineTransmodelId() {
         return (UUID) get(5);

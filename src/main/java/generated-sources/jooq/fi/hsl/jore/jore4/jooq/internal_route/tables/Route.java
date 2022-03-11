@@ -54,12 +54,14 @@ public class Route extends TableImpl<Record> {
     public final TableField<Record, String> DESCRIPTION_I18N = createField(DSL.name("description_i18n"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>internal_route.route.starts_from_scheduled_stop_point_id</code>.
+     * The column
+     * <code>internal_route.route.starts_from_scheduled_stop_point_id</code>.
      */
     public final TableField<Record, UUID> STARTS_FROM_SCHEDULED_STOP_POINT_ID = createField(DSL.name("starts_from_scheduled_stop_point_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>internal_route.route.ends_at_scheduled_stop_point_id</code>.
+     * The column
+     * <code>internal_route.route.ends_at_scheduled_stop_point_id</code>.
      */
     public final TableField<Record, UUID> ENDS_AT_SCHEDULED_STOP_POINT_ID = createField(DSL.name("ends_at_scheduled_stop_point_id"), SQLDataType.UUID.nullable(false), this, "");
 
@@ -128,7 +130,7 @@ public class Route extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return InternalRoute.INTERNAL_ROUTE;
+        return aliased() ? null : InternalRoute.INTERNAL_ROUTE;
     }
 
     @Override

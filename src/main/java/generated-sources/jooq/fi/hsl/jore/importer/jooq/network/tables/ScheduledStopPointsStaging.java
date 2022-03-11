@@ -8,9 +8,6 @@ import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.ScheduledStopPointsStagingRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.JSONB;
@@ -36,7 +33,8 @@ public class ScheduledStopPointsStaging extends TableImpl<ScheduledStopPointsSta
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>network.scheduled_stop_points_staging</code>
+     * The reference instance of
+     * <code>network.scheduled_stop_points_staging</code>
      */
     public static final ScheduledStopPointsStaging SCHEDULED_STOP_POINTS_STAGING = new ScheduledStopPointsStaging();
 
@@ -49,22 +47,26 @@ public class ScheduledStopPointsStaging extends TableImpl<ScheduledStopPointsSta
     }
 
     /**
-     * The column <code>network.scheduled_stop_points_staging.scheduled_stop_point_ext_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points_staging.scheduled_stop_point_ext_id</code>.
      */
     public final TableField<ScheduledStopPointsStagingRecord, String> SCHEDULED_STOP_POINT_EXT_ID = createField(DSL.name("scheduled_stop_point_ext_id"), SQLDataType.VARCHAR(7).nullable(false), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points_staging.scheduled_stop_point_ely_number</code>.
+     * The column
+     * <code>network.scheduled_stop_points_staging.scheduled_stop_point_ely_number</code>.
      */
     public final TableField<ScheduledStopPointsStagingRecord, String> SCHEDULED_STOP_POINT_ELY_NUMBER = createField(DSL.name("scheduled_stop_point_ely_number"), SQLDataType.VARCHAR(10), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points_staging.scheduled_stop_point_name</code>.
+     * The column
+     * <code>network.scheduled_stop_points_staging.scheduled_stop_point_name</code>.
      */
     public final TableField<ScheduledStopPointsStagingRecord, JSONB> SCHEDULED_STOP_POINT_NAME = createField(DSL.name("scheduled_stop_point_name"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points_staging.scheduled_stop_point_short_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points_staging.scheduled_stop_point_short_id</code>.
      */
     public final TableField<ScheduledStopPointsStagingRecord, String> SCHEDULED_STOP_POINT_SHORT_ID = createField(DSL.name("scheduled_stop_point_short_id"), SQLDataType.VARCHAR(6), this, "");
 
@@ -77,21 +79,24 @@ public class ScheduledStopPointsStaging extends TableImpl<ScheduledStopPointsSta
     }
 
     /**
-     * Create an aliased <code>network.scheduled_stop_points_staging</code> table reference
+     * Create an aliased <code>network.scheduled_stop_points_staging</code>
+     * table reference
      */
     public ScheduledStopPointsStaging(String alias) {
         this(DSL.name(alias), SCHEDULED_STOP_POINTS_STAGING);
     }
 
     /**
-     * Create an aliased <code>network.scheduled_stop_points_staging</code> table reference
+     * Create an aliased <code>network.scheduled_stop_points_staging</code>
+     * table reference
      */
     public ScheduledStopPointsStaging(Name alias) {
         this(alias, SCHEDULED_STOP_POINTS_STAGING);
     }
 
     /**
-     * Create a <code>network.scheduled_stop_points_staging</code> table reference
+     * Create a <code>network.scheduled_stop_points_staging</code> table
+     * reference
      */
     public ScheduledStopPointsStaging() {
         this(DSL.name("scheduled_stop_points_staging"), null);
@@ -103,17 +108,12 @@ public class ScheduledStopPointsStaging extends TableImpl<ScheduledStopPointsSta
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
     public UniqueKey<ScheduledStopPointsStagingRecord> getPrimaryKey() {
         return Keys.SCHEDULED_STOP_POINTS_STAGING_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<ScheduledStopPointsStagingRecord>> getKeys() {
-        return Arrays.<UniqueKey<ScheduledStopPointsStagingRecord>>asList(Keys.SCHEDULED_STOP_POINTS_STAGING_PKEY);
     }
 
     @Override

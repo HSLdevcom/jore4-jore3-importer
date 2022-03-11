@@ -14,6 +14,22 @@ VALUES (
 );
 
 INSERT INTO network.network_route_points (
+    network_route_point_id,
+    network_route_direction_id,
+    infrastructure_node,
+    network_route_point_ext_id,
+    network_route_point_order
+)
+VALUES (
+        'd155e4ab-f5d8-44bf-915b-03296da900f3',
+        '6f93fa6b-8a19-4b98-bd84-b8409e670c70',
+        'a799ab85-bfc3-4b6b-8ea2-590f4f3e96cf',
+        '1111111-2222222',
+        2
+);
+
+
+INSERT INTO network.network_route_points (
         network_route_point_id,
         network_route_direction_id,
         infrastructure_node,
@@ -25,5 +41,5 @@ VALUES (
     '6f93fa6b-8a19-4b98-bd84-b8409e670c70',
     '0009b559-0e7c-4549-99eb-5391727d1016',
     '87654321-7223111',
-    2
+    3
 );
