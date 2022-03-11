@@ -28,7 +28,8 @@ public class ExternalSource extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.external_source</code>
+     * The reference instance of
+     * <code>infrastructure_network.external_source</code>
      */
     public static final ExternalSource EXTERNAL_SOURCE = new ExternalSource();
 
@@ -54,21 +55,24 @@ public class ExternalSource extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.external_source</code> table reference
+     * Create an aliased <code>infrastructure_network.external_source</code>
+     * table reference
      */
     public ExternalSource(String alias) {
         this(DSL.name(alias), EXTERNAL_SOURCE);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.external_source</code> table reference
+     * Create an aliased <code>infrastructure_network.external_source</code>
+     * table reference
      */
     public ExternalSource(Name alias) {
         this(alias, EXTERNAL_SOURCE);
     }
 
     /**
-     * Create a <code>infrastructure_network.external_source</code> table reference
+     * Create a <code>infrastructure_network.external_source</code> table
+     * reference
      */
     public ExternalSource() {
         this(DSL.name("external_source"), null);
@@ -80,7 +84,7 @@ public class ExternalSource extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override

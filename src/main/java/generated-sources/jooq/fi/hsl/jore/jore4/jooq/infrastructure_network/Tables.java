@@ -27,12 +27,14 @@ public class Tables {
     public static final ExternalSource EXTERNAL_SOURCE = ExternalSource.EXTERNAL_SOURCE;
 
     /**
-     * The infrastructure links, e.g. road or rail elements: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:1:1:453
+     * The infrastructure links, e.g. road or rail elements:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:1:1:453
      */
     public static final InfrastructureLink INFRASTRUCTURE_LINK = InfrastructureLink.INFRASTRUCTURE_LINK;
 
     /**
-     * Which infrastructure links are safely traversed by which vehicle submodes?
+     * Which infrastructure links are safely traversed by which vehicle
+     * submodes?
      */
     public static final VehicleSubmodeOnInfrastructureLink VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK = VehicleSubmodeOnInfrastructureLink.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK;
 }

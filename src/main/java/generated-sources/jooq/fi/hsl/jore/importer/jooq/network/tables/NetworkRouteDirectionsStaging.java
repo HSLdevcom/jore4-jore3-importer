@@ -38,7 +38,8 @@ public class NetworkRouteDirectionsStaging extends TableImpl<NetworkRouteDirecti
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>network.network_route_directions_staging</code>
+     * The reference instance of
+     * <code>network.network_route_directions_staging</code>
      */
     public static final NetworkRouteDirectionsStaging NETWORK_ROUTE_DIRECTIONS_STAGING = new NetworkRouteDirectionsStaging();
 
@@ -51,47 +52,56 @@ public class NetworkRouteDirectionsStaging extends TableImpl<NetworkRouteDirecti
     }
 
     /**
-     * The column <code>network.network_route_directions_staging.network_route_direction_ext_id</code>.
+     * The column
+     * <code>network.network_route_directions_staging.network_route_direction_ext_id</code>.
      */
     public final TableField<NetworkRouteDirectionsStagingRecord, String> NETWORK_ROUTE_DIRECTION_EXT_ID = createField(DSL.name("network_route_direction_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_directions_staging.network_route_ext_id</code>.
+     * The column
+     * <code>network.network_route_directions_staging.network_route_ext_id</code>.
      */
     public final TableField<NetworkRouteDirectionsStagingRecord, String> NETWORK_ROUTE_EXT_ID = createField(DSL.name("network_route_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_directions_staging.network_route_direction_type</code>.
+     * The column
+     * <code>network.network_route_directions_staging.network_route_direction_type</code>.
      */
     public final TableField<NetworkRouteDirectionsStagingRecord, String> NETWORK_ROUTE_DIRECTION_TYPE = createField(DSL.name("network_route_direction_type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_directions_staging.network_route_direction_length</code>.
+     * The column
+     * <code>network.network_route_directions_staging.network_route_direction_length</code>.
      */
     public final TableField<NetworkRouteDirectionsStagingRecord, Integer> NETWORK_ROUTE_DIRECTION_LENGTH = createField(DSL.name("network_route_direction_length"), SQLDataType.INTEGER, this, "");
 
     /**
-     * The column <code>network.network_route_directions_staging.network_route_direction_name</code>.
+     * The column
+     * <code>network.network_route_directions_staging.network_route_direction_name</code>.
      */
     public final TableField<NetworkRouteDirectionsStagingRecord, JSONB> NETWORK_ROUTE_DIRECTION_NAME = createField(DSL.name("network_route_direction_name"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_directions_staging.network_route_direction_name_short</code>.
+     * The column
+     * <code>network.network_route_directions_staging.network_route_direction_name_short</code>.
      */
     public final TableField<NetworkRouteDirectionsStagingRecord, JSONB> NETWORK_ROUTE_DIRECTION_NAME_SHORT = createField(DSL.name("network_route_direction_name_short"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_directions_staging.network_route_direction_origin</code>.
+     * The column
+     * <code>network.network_route_directions_staging.network_route_direction_origin</code>.
      */
     public final TableField<NetworkRouteDirectionsStagingRecord, JSONB> NETWORK_ROUTE_DIRECTION_ORIGIN = createField(DSL.name("network_route_direction_origin"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_directions_staging.network_route_direction_destination</code>.
+     * The column
+     * <code>network.network_route_directions_staging.network_route_direction_destination</code>.
      */
     public final TableField<NetworkRouteDirectionsStagingRecord, JSONB> NETWORK_ROUTE_DIRECTION_DESTINATION = createField(DSL.name("network_route_direction_destination"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_directions_staging.network_route_direction_valid_date_range</code>.
+     * The column
+     * <code>network.network_route_directions_staging.network_route_direction_valid_date_range</code>.
      */
     public final TableField<NetworkRouteDirectionsStagingRecord, DateRange> NETWORK_ROUTE_DIRECTION_VALID_DATE_RANGE = createField(DSL.name("network_route_direction_valid_date_range"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"daterange\"").nullable(false), this, "", new DateRangeBinding());
 
@@ -104,21 +114,24 @@ public class NetworkRouteDirectionsStaging extends TableImpl<NetworkRouteDirecti
     }
 
     /**
-     * Create an aliased <code>network.network_route_directions_staging</code> table reference
+     * Create an aliased <code>network.network_route_directions_staging</code>
+     * table reference
      */
     public NetworkRouteDirectionsStaging(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_DIRECTIONS_STAGING);
     }
 
     /**
-     * Create an aliased <code>network.network_route_directions_staging</code> table reference
+     * Create an aliased <code>network.network_route_directions_staging</code>
+     * table reference
      */
     public NetworkRouteDirectionsStaging(Name alias) {
         this(alias, NETWORK_ROUTE_DIRECTIONS_STAGING);
     }
 
     /**
-     * Create a <code>network.network_route_directions_staging</code> table reference
+     * Create a <code>network.network_route_directions_staging</code> table
+     * reference
      */
     public NetworkRouteDirectionsStaging() {
         this(DSL.name("network_route_directions_staging"), null);
@@ -130,7 +143,7 @@ public class NetworkRouteDirectionsStaging extends TableImpl<NetworkRouteDirecti
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
@@ -139,13 +152,8 @@ public class NetworkRouteDirectionsStaging extends TableImpl<NetworkRouteDirecti
     }
 
     @Override
-    public List<UniqueKey<NetworkRouteDirectionsStagingRecord>> getKeys() {
-        return Arrays.<UniqueKey<NetworkRouteDirectionsStagingRecord>>asList(Keys.NETWORK_ROUTE_DIRECTIONS_STAGING_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<NetworkRouteDirectionsStagingRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<NetworkRouteDirectionsStagingRecord, ?>>asList(Keys.NETWORK_ROUTE_DIRECTIONS_STAGING__NETWORK_ROUTE_DIRECTIONS_STAG_NETWORK_ROUTE_DIRECTION_TYPE_FKEY);
+        return Arrays.asList(Keys.NETWORK_ROUTE_DIRECTIONS_STAGING__NETWORK_ROUTE_DIRECTIONS_STAG_NETWORK_ROUTE_DIRECTION_TYPE_FKEY);
     }
 
     private transient NetworkDirectionTypes _networkDirectionTypes;
