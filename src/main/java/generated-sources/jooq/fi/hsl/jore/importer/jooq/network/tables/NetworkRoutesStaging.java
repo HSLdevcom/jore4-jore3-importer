@@ -8,9 +8,6 @@ import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutesStagingRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.JSONB;
@@ -49,22 +46,26 @@ public class NetworkRoutesStaging extends TableImpl<NetworkRoutesStagingRecord> 
     }
 
     /**
-     * The column <code>network.network_routes_staging.network_route_ext_id</code>.
+     * The column
+     * <code>network.network_routes_staging.network_route_ext_id</code>.
      */
     public final TableField<NetworkRoutesStagingRecord, String> NETWORK_ROUTE_EXT_ID = createField(DSL.name("network_route_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_routes_staging.network_line_ext_id</code>.
+     * The column
+     * <code>network.network_routes_staging.network_line_ext_id</code>.
      */
     public final TableField<NetworkRoutesStagingRecord, String> NETWORK_LINE_EXT_ID = createField(DSL.name("network_line_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_routes_staging.network_route_number</code>.
+     * The column
+     * <code>network.network_routes_staging.network_route_number</code>.
      */
     public final TableField<NetworkRoutesStagingRecord, String> NETWORK_ROUTE_NUMBER = createField(DSL.name("network_route_number"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_routes_staging.network_route_name</code>.
+     * The column
+     * <code>network.network_routes_staging.network_route_name</code>.
      */
     public final TableField<NetworkRoutesStagingRecord, JSONB> NETWORK_ROUTE_NAME = createField(DSL.name("network_route_name"), SQLDataType.JSONB.nullable(false), this, "");
 
@@ -77,14 +78,16 @@ public class NetworkRoutesStaging extends TableImpl<NetworkRoutesStagingRecord> 
     }
 
     /**
-     * Create an aliased <code>network.network_routes_staging</code> table reference
+     * Create an aliased <code>network.network_routes_staging</code> table
+     * reference
      */
     public NetworkRoutesStaging(String alias) {
         this(DSL.name(alias), NETWORK_ROUTES_STAGING);
     }
 
     /**
-     * Create an aliased <code>network.network_routes_staging</code> table reference
+     * Create an aliased <code>network.network_routes_staging</code> table
+     * reference
      */
     public NetworkRoutesStaging(Name alias) {
         this(alias, NETWORK_ROUTES_STAGING);
@@ -103,17 +106,12 @@ public class NetworkRoutesStaging extends TableImpl<NetworkRoutesStagingRecord> 
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
     public UniqueKey<NetworkRoutesStagingRecord> getPrimaryKey() {
         return Keys.NETWORK_ROUTES_STAGING_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<NetworkRoutesStagingRecord>> getKeys() {
-        return Arrays.<UniqueKey<NetworkRoutesStagingRecord>>asList(Keys.NETWORK_ROUTES_STAGING_PKEY);
     }
 
     @Override
