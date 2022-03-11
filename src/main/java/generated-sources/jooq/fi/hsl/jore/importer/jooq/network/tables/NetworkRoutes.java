@@ -116,7 +116,7 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
@@ -125,13 +125,8 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
     }
 
     @Override
-    public List<UniqueKey<NetworkRoutesRecord>> getKeys() {
-        return Arrays.<UniqueKey<NetworkRoutesRecord>>asList(Keys.NETWORK_ROUTES_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<NetworkRoutesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<NetworkRoutesRecord, ?>>asList(Keys.NETWORK_ROUTES__NETWORK_ROUTES_NETWORK_LINE_ID_FKEY);
+        return Arrays.asList(Keys.NETWORK_ROUTES__NETWORK_ROUTES_NETWORK_LINE_ID_FKEY);
     }
 
     private transient NetworkLines _networkLines;
