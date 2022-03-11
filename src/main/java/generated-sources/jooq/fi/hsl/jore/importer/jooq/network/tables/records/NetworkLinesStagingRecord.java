@@ -22,42 +22,48 @@ public class NetworkLinesStagingRecord extends UpdatableRecordImpl<NetworkLinesS
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>network.network_lines_staging.network_line_ext_id</code>.
+     * Setter for
+     * <code>network.network_lines_staging.network_line_ext_id</code>.
      */
     public void setNetworkLineExtId(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>network.network_lines_staging.network_line_ext_id</code>.
+     * Getter for
+     * <code>network.network_lines_staging.network_line_ext_id</code>.
      */
     public String getNetworkLineExtId() {
         return (String) get(0);
     }
 
     /**
-     * Setter for <code>network.network_lines_staging.network_line_number</code>.
+     * Setter for
+     * <code>network.network_lines_staging.network_line_number</code>.
      */
     public void setNetworkLineNumber(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>network.network_lines_staging.network_line_number</code>.
+     * Getter for
+     * <code>network.network_lines_staging.network_line_number</code>.
      */
     public String getNetworkLineNumber() {
         return (String) get(1);
     }
 
     /**
-     * Setter for <code>network.network_lines_staging.infrastructure_network_type</code>.
+     * Setter for
+     * <code>network.network_lines_staging.infrastructure_network_type</code>.
      */
     public void setInfrastructureNetworkType(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>network.network_lines_staging.infrastructure_network_type</code>.
+     * Getter for
+     * <code>network.network_lines_staging.infrastructure_network_type</code>.
      */
     public String getInfrastructureNetworkType() {
         return (String) get(2);
