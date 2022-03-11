@@ -22,28 +22,32 @@ public class InfrastructureNodeTypesRecord extends UpdatableRecordImpl<Infrastru
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_node_types.infrastructure_node_type_value</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_node_types.infrastructure_node_type_value</code>.
      */
     public void setInfrastructureNodeTypeValue(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_node_types.infrastructure_node_type_value</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_node_types.infrastructure_node_type_value</code>.
      */
     public String getInfrastructureNodeTypeValue() {
         return (String) get(0);
     }
 
     /**
-     * Setter for <code>infrastructure_network.infrastructure_node_types.infrastructure_node_type_comment</code>.
+     * Setter for
+     * <code>infrastructure_network.infrastructure_node_types.infrastructure_node_type_comment</code>.
      */
     public void setInfrastructureNodeTypeComment(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>infrastructure_network.infrastructure_node_types.infrastructure_node_type_comment</code>.
+     * Getter for
+     * <code>infrastructure_network.infrastructure_node_types.infrastructure_node_type_comment</code>.
      */
     public String getInfrastructureNodeTypeComment() {
         return (String) get(1);
