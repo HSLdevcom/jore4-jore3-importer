@@ -30,12 +30,14 @@ public class ReusableComponents extends SchemaImpl {
     public static final ReusableComponents REUSABLE_COMPONENTS = new ReusableComponents();
 
     /**
-     * The vehicle modes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
+     * The vehicle modes from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
      */
     public final VehicleMode VEHICLE_MODE = VehicleMode.VEHICLE_MODE;
 
     /**
-     * The vehicle submode, which may have implications on which infrastructure links the vehicle can traverse
+     * The vehicle submode, which may have implications on which infrastructure
+     * links the vehicle can traverse
      */
     public final VehicleSubmode VEHICLE_SUBMODE = VehicleSubmode.VEHICLE_SUBMODE;
 
@@ -54,8 +56,9 @@ public class ReusableComponents extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.<Table<?>>asList(
+        return Arrays.asList(
             VehicleMode.VEHICLE_MODE,
-            VehicleSubmode.VEHICLE_SUBMODE);
+            VehicleSubmode.VEHICLE_SUBMODE
+        );
     }
 }

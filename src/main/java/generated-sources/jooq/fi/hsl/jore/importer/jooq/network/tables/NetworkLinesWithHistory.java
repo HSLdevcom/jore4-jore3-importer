@@ -47,32 +47,38 @@ public class NetworkLinesWithHistory extends TableImpl<NetworkLinesWithHistoryRe
     }
 
     /**
-     * The column <code>network.network_lines_with_history.network_line_id</code>.
+     * The column
+     * <code>network.network_lines_with_history.network_line_id</code>.
      */
     public final TableField<NetworkLinesWithHistoryRecord, UUID> NETWORK_LINE_ID = createField(DSL.name("network_line_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column <code>network.network_lines_with_history.network_line_ext_id</code>.
+     * The column
+     * <code>network.network_lines_with_history.network_line_ext_id</code>.
      */
     public final TableField<NetworkLinesWithHistoryRecord, String> NETWORK_LINE_EXT_ID = createField(DSL.name("network_line_ext_id"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>network.network_lines_with_history.network_line_number</code>.
+     * The column
+     * <code>network.network_lines_with_history.network_line_number</code>.
      */
     public final TableField<NetworkLinesWithHistoryRecord, String> NETWORK_LINE_NUMBER = createField(DSL.name("network_line_number"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>network.network_lines_with_history.infrastructure_network_type</code>.
+     * The column
+     * <code>network.network_lines_with_history.infrastructure_network_type</code>.
      */
     public final TableField<NetworkLinesWithHistoryRecord, String> INFRASTRUCTURE_NETWORK_TYPE = createField(DSL.name("infrastructure_network_type"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>network.network_lines_with_history.network_line_sys_period</code>.
+     * The column
+     * <code>network.network_lines_with_history.network_line_sys_period</code>.
      */
     public final TableField<NetworkLinesWithHistoryRecord, TimeRange> NETWORK_LINE_SYS_PERIOD = createField(DSL.name("network_line_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\""), this, "", new TimeRangeBinding());
 
     /**
-     * The column <code>network.network_lines_with_history.network_line_transmodel_id</code>.
+     * The column
+     * <code>network.network_lines_with_history.network_line_transmodel_id</code>.
      */
     public final TableField<NetworkLinesWithHistoryRecord, UUID> NETWORK_LINE_TRANSMODEL_ID = createField(DSL.name("network_line_transmodel_id"), SQLDataType.UUID, this, "");
 
@@ -85,14 +91,16 @@ public class NetworkLinesWithHistory extends TableImpl<NetworkLinesWithHistoryRe
     }
 
     /**
-     * Create an aliased <code>network.network_lines_with_history</code> table reference
+     * Create an aliased <code>network.network_lines_with_history</code> table
+     * reference
      */
     public NetworkLinesWithHistory(String alias) {
         this(DSL.name(alias), NETWORK_LINES_WITH_HISTORY);
     }
 
     /**
-     * Create an aliased <code>network.network_lines_with_history</code> table reference
+     * Create an aliased <code>network.network_lines_with_history</code> table
+     * reference
      */
     public NetworkLinesWithHistory(Name alias) {
         this(alias, NETWORK_LINES_WITH_HISTORY);
@@ -111,7 +119,7 @@ public class NetworkLinesWithHistory extends TableImpl<NetworkLinesWithHistoryRe
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override

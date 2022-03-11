@@ -37,7 +37,8 @@ public class InfrastructureLinksStaging extends TableImpl<InfrastructureLinksSta
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.infrastructure_links_staging</code>
+     * The reference instance of
+     * <code>infrastructure_network.infrastructure_links_staging</code>
      */
     public static final InfrastructureLinksStaging INFRASTRUCTURE_LINKS_STAGING = new InfrastructureLinksStaging();
 
@@ -50,27 +51,32 @@ public class InfrastructureLinksStaging extends TableImpl<InfrastructureLinksSta
     }
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_ext_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_ext_id</code>.
      */
     public final TableField<InfrastructureLinksStagingRecord, String> INFRASTRUCTURE_LINK_EXT_ID = createField(DSL.name("infrastructure_link_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_geog</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_geog</code>.
      */
     public final TableField<InfrastructureLinksStagingRecord, LineString> INFRASTRUCTURE_LINK_GEOG = createField(DSL.name("infrastructure_link_geog"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").nullable(false), this, "", new LineStringBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links_staging.infrastructure_network_type</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_network_type</code>.
      */
     public final TableField<InfrastructureLinksStagingRecord, String> INFRASTRUCTURE_NETWORK_TYPE = createField(DSL.name("infrastructure_network_type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_start_node_ext_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_start_node_ext_id</code>.
      */
     public final TableField<InfrastructureLinksStagingRecord, String> INFRASTRUCTURE_LINK_START_NODE_EXT_ID = createField(DSL.name("infrastructure_link_start_node_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_end_node_ext_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_end_node_ext_id</code>.
      */
     public final TableField<InfrastructureLinksStagingRecord, String> INFRASTRUCTURE_LINK_END_NODE_EXT_ID = createField(DSL.name("infrastructure_link_end_node_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
@@ -83,21 +89,26 @@ public class InfrastructureLinksStaging extends TableImpl<InfrastructureLinksSta
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_links_staging</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_links_staging</code> table
+     * reference
      */
     public InfrastructureLinksStaging(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_LINKS_STAGING);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_links_staging</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_links_staging</code> table
+     * reference
      */
     public InfrastructureLinksStaging(Name alias) {
         this(alias, INFRASTRUCTURE_LINKS_STAGING);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_links_staging</code> table reference
+     * Create a <code>infrastructure_network.infrastructure_links_staging</code>
+     * table reference
      */
     public InfrastructureLinksStaging() {
         this(DSL.name("infrastructure_links_staging"), null);
@@ -109,7 +120,7 @@ public class InfrastructureLinksStaging extends TableImpl<InfrastructureLinksSta
 
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
@@ -118,13 +129,8 @@ public class InfrastructureLinksStaging extends TableImpl<InfrastructureLinksSta
     }
 
     @Override
-    public List<UniqueKey<InfrastructureLinksStagingRecord>> getKeys() {
-        return Arrays.<UniqueKey<InfrastructureLinksStagingRecord>>asList(Keys.INFRASTRUCTURE_LINKS_STAGING_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<InfrastructureLinksStagingRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<InfrastructureLinksStagingRecord, ?>>asList(Keys.INFRASTRUCTURE_LINKS_STAGING__INFRASTRUCTURE_LINKS_STAGING_INFRASTRUCTURE_NETWORK_TYPE_FKEY);
+        return Arrays.asList(Keys.INFRASTRUCTURE_LINKS_STAGING__INFRASTRUCTURE_LINKS_STAGING_INFRASTRUCTURE_NETWORK_TYPE_FKEY);
     }
 
     private transient InfrastructureNetworkTypes _infrastructureNetworkTypes;
