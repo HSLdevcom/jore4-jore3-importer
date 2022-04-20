@@ -1,81 +1,163 @@
-# Jore 3 => Jore 4 importer
+# Jore 3 => Jore 4 Importer
 
-This tool implements a batch job for importing data from a Jore 3 database to a Jore 4 database.
+This application imports scheduled stop points, lines, routes, and journey patterns from the Jore 3 database to the
+Jore 4 database. At the moment this application doesn't filter the imported information in any way. In other words, all
+valid rows found from the Jore 3 database are imported to the Jore 4 database. 
 
-## The Structure of the Project
+The import process has two steps:
 
-The directory structure of this project follows the [Maven directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html).
+1. Read the imported data from the Jore 3 database and insert it into the database of this application. Note that this
+   step saves the version history of the imported data.
+2. Read the latest version of the imported data from the database of this application and insert it into the Jore 4 database.
+
+## Using the REST API
+
+The importer application has a REST API which allows you to start the import job and query the status of the last import 
+job. This section describes how you can use this REST API.
+
+### Triggering the Import Job
+
+If you want to start the import job, you have to send a POST request to the path: `/job/import/start`. The API endpoint 
+will start the job and return its status. If an import job is already running, a new job isn't started and the return 
+value will reflect the status of the currently running job.
+
+The following example demonstrates how you can start the import job by using curl:
+
+```shell
+$ curl -X POST http://localhost:8080/job/import/start/
+{"id":0,"batchStatus":"STARTING","exitCode":"UNKNOWN","exitDescription":null,"startTime":null,"endTime":null}
+```
+
+### Querying the Status of the Import Job
+
+If you want to query the status of the latest import job, you have to send a GET request to the path: `/job/import/status`.
+The API endpoint returns the status of an ongoing import job or the status of the latest finished import job in case 
+there is no job currently running. If no import job has been run, the API endpoint returns
+the HTTP status code 204.
+
+The following examples demonstrates how you can query the status of the latest import by using curl:
+
+**Example 1: import is running:**
+
+```shell
+$ curl http://localhost:8080/job/import/status/
+{"id":5,"batchStatus":"STARTED","exitCode":"UNKNOWN","exitDescription":null,"startTime":"2021-04-09T08:35:51.560Z","endTime":null}
+```
+
+**Example 2: import was completed successfully:**
+
+```shell
+$ curl http://localhost:8080/job/import/status/
+{"id":5,"batchStatus":"COMPLETED","exitCode":"COMPLETED","exitDescription":null,"startTime":"2021-04-09T08:35:51.560Z","endTime":"2021-04-09T08:36:11.308Z"}
+```
+
+**Example 3: import failed:**
+
+```shell
+$ curl http://localhost:8080/job/import/status/
+{"id":5,"batchStatus":"FAILED","exitCode":"FAILED","exitDescription":"<here's a really long Java stack trace>","startTime":"2021-04-09T08:39:47.698Z","endTime":"2021-04-09T08:41:17.761Z"}
+```
+
+## The Directory Structure of This Repository
+
+This project uses [the standard directory layout of Maven](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html).
+However, the root directory of this repository contains four additional directories which are described in the following:
+
+* The _docker_ directory contains the custom Docker Compose file which allow you to override the configuration specified 
+  in the [jore4-flux repository](https://github.com/HSLdevcom/jore4-flux).
+* The _images_ directory contains diagrams displayed on this README.
+* The _profiles_ directory contains the profile specific configuration files which are used to configure this application.
+* The _testing_ directory contains testing tools (essentially Python scripts) which ensure that the import job is working  
+  as expected.
+
+The _src/main/resources_ directory contains the resources of our application. To be more specific, it contains
+the subdirectories:
+
+* The _configuration_ directory contains the properties files which configure the used database connections
+  and the jOOQ integration of Spring Boot.
+* The _db/migration_ directory contains the Flyway database migration scripts.
+* The _export_ directory contains the SQL scripts which read the imported data from importer's PostgreSQL database.
+* The _import_ directory contains the SQL scripts which read the imported data from the Jore 3 MSSQL database.
+
+## Technical Documentation
+
+This application is basically a Spring Boot application which reads data from the Jore 3 database, makes some 
+transformations to the data and finally writes it to the Jore 4 database by using Spring Batch library. This 
+application also provides a REST API which allows you to start the import job and query the status of the import job.
+
+> If you are not familiar with Spring Batch, you should take a
+look at the [Spring Batch reference documentation](https://docs.spring.io/spring-batch/docs/4.3.x/reference/html/index.html).
+
+### Package Structure
 
 The package structure of this application is described in the following:
 
 * The `fi.hsl.jore.importer.config` package contains the configuration classes which configure the Spring context
   which is started when this application is run. It has the following sub packages:
-  * The `fi.hsl.jore.importer.config.jackson` package configures the [Jackson datatype module for Vavr](https://github.com/vavr-io/vavr-jackson).
-  * The `fi.hsl.jore.importer.config.jobs` package configures the Spring Batch jobs which import data from the Jore 3 database
-    to the Jore 4 database.
-  * The `fi.hsl.jore.importer.config.jooq` package configures the jOOQ integration of Spring Boot.
-  * The `fi.hsl.jore.importer.config.migration` package configures Flyway which is used to the database migration scripts.
-  * The `fi.hsl.jore.importer.config.profile` package specifies the different Spring profiles used by this application.
-  * The `fi.hsl.jore.importer.config.properties` package contains configuration read from the properties files.
+    * The `fi.hsl.jore.importer.config.jackson` package configures the [Jackson datatype module for Vavr](https://github.com/vavr-io/vavr-jackson).
+    * The `fi.hsl.jore.importer.config.jobs` package configures the Spring Batch jobs which import data from the Jore 3 database
+      to the Jore 4 database.
+    * The `fi.hsl.jore.importer.config.jooq` package configures the jOOQ integration of Spring Boot.
+    * The `fi.hsl.jore.importer.config.migration` package configures Flyway which is used to the database migration scripts.
+    * The `fi.hsl.jore.importer.config.profile` package specifies the different Spring profiles used by this application.
+    * The `fi.hsl.jore.importer.config.properties` package contains configuration read from the properties files.
 * The `fi.hsl.jore.importer.feature` package contains the implementation of the import jobs. It has the following
   sub packages:
-  * The `fi.hsl.jore.importer.feature.api` package contains the implementation of the REST api which allows you to
-    start the import job and query the status of the previous import job.
-  * The `fi.hsl.jore.importer.feature.batch` package contains the custom components which are used by Spring Batch.
-    These components include tasklets, row mappers, item processors, and item readers.
-  * The `fi.hsl.jore.importer.feature.common` package contains general utility code which is used by several other classes.
-  * The `fi.hsl.jore.importer.feature.infrastructure` package contains repositories which insert infrastructure data
-    into the target database.
-  * The `fi.hsl.jore.importer.feature.jore3` package contains classes which contain the information that's read from the source
-    database.
-  * The `fi.hsl.jore.importer.feature.network` package contains repositories which insert network data into the
-    target database.
-  * The `fi.hsl.jore.importer.feature.system.repository` package contains a repository which allows you to current
-    date and time information from the database.
+    * The `fi.hsl.jore.importer.feature.api` package contains the implementation of the REST api which allows you to
+      start the import job and query the status of the previous import job.
+    * The `fi.hsl.jore.importer.feature.batch` package contains the custom components which are used by Spring Batch.
+      These components include tasklets, row mappers, item processors, and item readers.
+    * The `fi.hsl.jore.importer.feature.common` package contains general utility code which is used by several other classes.
+    * The `fi.hsl.jore.importer.feature.infrastructure` package contains DTOs and repositories which insert infrastructure data
+      into the target database.
+    * The `fi.hsl.jore.importer.feature.jore3` package contains classes which contain the information that's read from the source
+      database.
+    * The `fi.hsl.jore.importer.feature.network` package contains DTOs and repositories which insert network data into the
+      target database.
+    * The `fi.hsl.jore.importer.feature.system.repository` package contains a repository which allows you to current
+      date and time information from the database.
+    * The `fi.hsl.jore.importer.feature.transmodel` package contains entities, repositories, and utility classes which
+      are used to insert data into the Jore 4 database.
 * The `fi.hsl.jore.importer.util` package provides factory methods which allow you to instantiate classes
   provided by the [JTS topogy suite](https://github.com/locationtech/jts).
 
-The content of the _src/main/resources_ directory is described in the following:
+### Import Jobs
 
-* The _configuration_ directory contains properties files which configure the used database connections
-  and the jOOQ integration of Spring Boot.
-* The _db/migration_ directory contains the Flyway database migrations.
-* The _import_ directory contains the SQL scripts which read the imported data from the
-  source MSSQL database.
+#### Importing Data From the Jore 3 Database to the Importer's Database
 
-## Import job(s)
+The first part of the import job, which imports data from the Jore 3 database to the importer's database, consists of these flows:
 
-The import jobs are implemented by using Spring Batch. If you are not familiar with Spring Batch, you should take a
-look a the [Spring Batch reference documentation](https://docs.spring.io/spring-batch/docs/4.3.x/reference/html/index.html).
+* The `importNodesFlow` flow imports infrastructure nodes from the Jore 3 database to the importer's database.
+* The `importLinksFlow` flow imports infrastructure links from the Jore 3 database to the importer's database.
+* The `importLinkPointsFlow` flow imports infrastructure link shapes from the Jore 3 database to the importer's database.
+* The `importLinesFlow` flow imports lines from the Jore 3 database to the importer's database.
+* The `importLineHeadersFlow` flow imports line headers from the Jore 3 database to the importer's database.
+* The `importRoutesFlow` flow imports routes from the Jore 3 database to the importer's database.
+* The `importRouteDirectionsFlow` flow imports route directions from the Jore 3 database to the importer's database.
+* The `importRouteLinksFlow` flow imports route points, route's scheduled stop points, and route links from the Jore 3 
+  database to the importer's database.
+* The `importScheduledStopPointsFlow` flow imports scheduled stop points from the Jore 3 database to the importer's database.
 
-### Importing Jore 3 data (`importJoreJob`)
-
-An import job which imports data from the Jore 3 database has the following steps:
+A typical import flow, which imports data from the Jore 3 database to the importer's database, has the following steps:
 
 * The `prepareStep` cleans the data found from the staging tables.
 * The `importStep` reads the imported data from the source MSSQL database and inserts the imported data into the
   staging table found from the target PostgreSQL database.
 * The `commitStep` moves the data from the staging table to the actual target table.
 
-It's important to understand that the job which import data from the Jore 3 database to the importer's database don't follow 
-[the chunk oriented processing "pattern" of Spring Batch](https://docs.spring.io/spring-batch/docs/current/reference/html/step.html#chunkOrientedProcessing). 
-Even though these jobs use chunk oriented processing for transferring data from Jore 3 database to importer's staging tables (`importStep`), 
-these jobs also use a tasklet which copy the imported data from the staging table to the target table. Because the final transfer is 
+It's important to understand that the job which import data from the Jore 3 database to the importer's database doesn't follow
+[the chunk oriented processing "pattern" of Spring Batch](https://docs.spring.io/spring-batch/docs/current/reference/html/step.html#chunkOrientedProcessing).
+Even though these jobs use chunk oriented processing for transferring data from Jore 3 database to importer's staging tables (`importStep`),
+these jobs also use a tasklet which copy the imported data from the staging table to the target table. Because the final transfer is
 performed inside one transaction (`commitStep`), no information is transferred to the target table if an error occurs during that transaction.
 
-The following figure identifies the steps of the import jobs:
+A single Spring Batch flow, which imports data from the Jore 3 database to the importer's database, consists of the following components:
 
-![Overview](images/import_jore_job.svg "Job overview")
-
-### Overview of a Generic Job
-
-A single Spring Batch job consists of the following components:
-
-* A `Job` contains the steps which are invoked when a batch job is run.
+* A `Flow` contains the steps which are invoked when a batch job is run.
 * The `GenericCleanupTasklet` cleans the staging tables before the import process is run. This step
   is called the prepare step.
 * The `JdbcCursorItemReader<ROW>` class reads the imported data from the source MSSQL database by using an SQL
-  script which is found from _src/main/resources/import_ directory. This component is run during the import step.
+  script which is found from the _src/main/resources/import_ directory. This component is run during the import step.
 * An implementation of the `ItemProcessor<ROW, ENTITY>` interface transforms the source data into a format which can be inserted into the
   staging table found from the target PostgreSQL database. This component is run during the import step.
 * The `GenericImportWriter<ENTITY, KEY>` class writes the imported data into the staging table which is found
@@ -85,47 +167,65 @@ A single Spring Batch job consists of the following components:
   real target table. The logic which moves the imported data is found from the `commitStagingToTarget()` method of the
   `IImportRepository<ENTITY,KEY>` interface. The implementations of this interface must extend the `AbstractImportRepository<ENTITY,KEY>`
   class which contains three abstract methods:
-  * The `delete()` method contains the logic which deletes rows from the target table. A row is deleted from the target
-    table if it's found from the target table and it's not found from the staging table.
-  * The `insert()` method contains the logic which inserts new rows into the target table. A row is inserted to the target table
-    if it's found from the staging table and it's not found from the target table.
-  * The `update()` method contains the logic which checks if a row is found from the target and staging tables, and
-    replaces the information found from the target table with the information found from the staging table.
-    Beware that changed rows cannot be properly identified in all tables in the Jore 3 database because of the lack of
-    appropriate keys. This means that in some cases a row change is interpreted as a deletion and insertion. One example
-    for this is the line header, and this phenomenon had to be taken into account in
-    [the related tests](src/test/java/fi/hsl/jore/importer/feature/batch/line_header/support/LineHeaderImportRepositoryTest.java).
+    * The `delete()` method contains the logic which deletes rows from the target table. A row is deleted from the target
+      table if it's found from the target table and it's not found from the staging table.
+    * The `insert()` method contains the logic which inserts new rows into the target table. A row is inserted to the target table
+      if it's found from the staging table and it's not found from the target table.
+    * The `update()` method contains the logic which checks if a row is found from the target and staging tables, and
+      replaces the information found from the target table with the information found from the staging table.
+      Beware that changed rows cannot be properly identified in all tables in the Jore 3 database because of the lack of
+      appropriate keys. This means that in some cases a row change is interpreted as a deletion and insertion. One example
+      for this is the line header, and this phenomenon had to be taken into account in
+      [the related tests](src/test/java/fi/hsl/jore/importer/feature/batch/line_header/support/LineHeaderImportRepositoryTest.java).
 
-The following figure illustrates the responsibilities of these components:
+The following figure illustrates the relationships of these components:
 
 ![objectDiagram](images/job_diagram.svg "Object diagram of a generic job")
 
-#### Importing nodes (`jr_solmu`)
+The following figure illustrates the steps of a single flow which imports data from the Jore 3 database to the 
+importer's database:
 
-![Overview](images/import_nodes_step.svg "Step overview")
+![Jore 3 Import Job](images/jore3-import-job.png)
 
-#### Importing links (`jr_linkki`)
+#### Importing Data From the Importer's Database to the Jore 4 Database
 
-![Overview](images/import_links_step.svg "Step overview")
+The second part of the import job imports scheduled stop points, lines, routes, and journey patterns from the importer's 
+database to the Jore 4 database. The steps of this import flow (`transmodelExportFlow`) follow the 
+[chunk oriented processing "pattern" of Spring Batch](https://docs.spring.io/spring-batch/docs/current/reference/html/step.html#chunkOrientedProcessing). 
+The import flow consists of the following steps:
 
-#### Importing points (`jr_piste`)
+* The `prepareTransmodelExportStep` step deletes the data found from the target tables.
+* The `exportScheduledStopPointsStep` step imports scheduled stop points from the importer's database to the Jore 4 database.
+* The `exportLinesStep` step imports lines from the importer's database to the Jore 4 database.
+* The `exportRoutesStep` step imports route metadata from the importer's database to the Jore 4 database.
+* The `exportRouteGeometriesStep` step imports route geometries from the importer's database to the Jore 4 database.
+* The `exportJourneyPatternsStep` imports journey pattern metadata (not including actual stop point sequences) from the 
+  importer's database to the Jore 4 database.
+* The `exportJourneyPatternStopsStep` imports the sequence of scheduled stop point references for each journey pattern 
+  from the importer's database to the Jore 4 database
 
-![Overview](images/import_points_step.svg "Step overview")
+A single Spring Batch `Step` which imports data from the importer's database to the Jore 4 database consists of
+these three components:
 
-#### Importing lines (`jr_linja`)
+* An `ItemReader<INPUT>` object reads the input data from the importer's database. This application uses the 
+  `JdbcCursorItemReader<ROW>` class which reads the input data by using an SQL script which is found from the
+  _src/main/resources/export_ directory.
+* An `ItemProcessor<INPUT, OUTPUT>` object transforms the input data into a format which can be inserted into the
+  Jore 4 database.
+* An `ItemWriter<OUTPUT>` object inserts the imported data into the Jore 4 database.
 
-![Overview](images/import_lines_step.svg "Step overview")
+The following figure illustrates the responsibilities of these components:
 
-### Importing Data to Jore 4
+![Jore 4 Import Job](images/jore4-import-job.png)
 
-This application imports scheduled stop points, lines, routes, journey patterns, and stops of journey patterns
-to the Jore 4 database. The data which is imported to Jore 4 is written to the Jore 4 database one row at a time. 
-If an error occurs, the erroneous row is written to the log and the import process starts to process the next row 
-found from the database of the importer application.
+Every step which imports data to the Jore 4 database inserts the imported data into the Jore 4 database one row at 
+the time. This approach is slower than using a "larger" chunk size, but it also ensures that we can ignore erroneous
+rows without losing any other data. If an error occurs, the erroneous row is written to the log and the import process starts to process the next row
+found from the importer's database.
 
 The following sections identify the non-obvious assumptions made by the import process.
 
-#### Scheduled Stop Points
+##### Scheduled Stop Points
 
 The process that imports scheduled stop points to Jore 4 follows these rules:
 
@@ -137,7 +237,9 @@ The process that imports scheduled stop points to Jore 4 follows these rules:
 * If the information of a scheduled stop point isn't found from Digiroad, it won't be transferred to Jore 4.
 * The import process ignores Digiroad stop points which have invalid information (such missing or empty ely number).
 
-## Coding Conventions
+## Developer Guide
+
+### Coding Conventions
 
 This section identifies the coding conventions which you must follow when you are writing either production or test code
 for this project. These coding conventions are described in the following:
@@ -146,11 +248,11 @@ for this project. These coding conventions are described in the following:
   whose value cannot be changed after it has been assigned for the first time.
 * When you add new fields to entities or data transfer objects, you must follow these
   rules:
-  * If the field value cannot be `null`, you must use primitive types when possible (e.g. `int`). 
-  * If the field value is optional, you must use `java.util.Optional` (e.g. `Optional<Integer>` or `Optional<String>`)
+    * If the field value cannot be `null`, you must use primitive types when possible (e.g. `int`).
+    * If the field value is optional, you must use `java.util.Optional` (e.g. `Optional<Integer>` or `Optional<String>`)
 * Tag nullable method parameters and return values with the `@Nullable` annotation. You don't have to annotate non-null
   parameters and return values because every method parameter and return value is non-null by default (see
-  the next coding convention). 
+  the next coding convention).
 * Every package must include the `package-info.java` file which declares that every field, method parameter, or
   return value is non-null by default (see the code example 1 for more details).
 * Use only immutable DTO's by introducing interfaces annotated with `org.immutables` annotations.
@@ -168,7 +270,7 @@ import org.springframework.lang.NonNullApi;
 import org.springframework.lang.NonNullFields;
 ```
 
-## Configuration
+### Configuration
 
 The importer application is configured by using profile specific configuration files. These configuration files are
 found from the profile specific directories which are found from the _profiles_ directory. At the moment this application
@@ -183,70 +285,7 @@ Each one of these directories contains one _config.properties_ file which contai
 specific configuration of the importer application. The different configuration options are described
 in the _profiles/dev/config.properties_ file.
 
-## Running the app locally
-
-### Setup
-
-1. Install software that's is required to compile and run the importer application and its dependencies.
-   Before you can run this application, you must install these tools:
-   - Docker Desktop
-   - OpenJDK 11
-   - Maven
-2. Make a copy of the maven `dev`-profile for your user:
-    ```
-    cp profiles/dev/config.properties profiles/dev/config.<my-username>.properties
-    ```
-
-   Look up the jore3 database credentials from the Azure vault (e.g. `hsl-jore3-db-username` and `hsl-jore3-db-password`
-   in the `hsl-jore4-dev-vault`) and insert them into your maven profile's `source.db.XXX` definitions.
-3. Adjust the `source.db.*` properties in `profiles/dev/config.<my-username>.properties` to your needs. Other configuration for destination database and test database may also be found from here.
-4. If you wish to connect to the original Jore 3 database, follow the instructions [here](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#creating-an-ssh-configuration-entry) on how to create a tunnel and connect to the database. After the tunnel is created, the Jore 3 database will be available on localhost:56239. Ask for the username and password from the project team.
-
-   During the importer run, the shell on the bastion host needs to be "touched" in regular intervals to keep it from timing out. (The `TMOUT` environment variable on the bastion host cannot be modified.) "Touching" can be done manually by issuing key presses into the shell every few minutes. Alternatively, you can start a new subshell with the timeout disabled to keep the session open:
-   ```
-   env TMOUT=0 bash
-   ```
-5. Clone the [jore4-digiroad-import](https://github.com/HSLdevcom/jore4-digiroad-import) repository and 
-   follow these steps:
-   1. Run the Digiroad import.
-   2. Export infrastructure links from the data imported from Digiroad and import these links to the Jore 4 database.
-   3. Export scheduled stop points from the data imported from Digiroad and write the exported data to a CSV file.
-6. Configure the absolute path of the CSV file which contains scheduled stop points exported from Digiroad in the 
-   profile specific configuration file.
-7. Set the value of the `map.matching.api.url` configuration property to: `http://localhost:3005/api/match/public-transport-route/v1/bus.json`.
-### Run 
-
-The `development.sh` is a simple utility script for starting the development and test dependencies (e.g. databases).
-
-The dependencies must be up and running for both running this app locally or for running tests. Note that for generating the jooq classes for build, the test database must be running. Run `./development.sh start:deps`
-
-Most of the runtime environment is configured in `profiles/dev/config.<my-username>.properties`. However, some values must be supplied manually:
-
-- `JORE_IMPORTER_MIGRATE`: At the moment this app requires that the destination database is already up-to-date (e.g. database migrations are handled by another party). If `JORE_IMPORTER_MIGRATE` is set to `true`, this app will perform the migrations. This should only be enabled in local development when using the dockerized local database!
-
-You can use the provided `run-local.sh` script for running the importer, which supplies this argument.
-
-The importer will be available through http://localhost:8080. See instructions below on how to trigger importing through the HTTP API.
-
-## Running the app in docker-compose
-
-You may wish to test whether the application works as a container in a docker network. Spin up the dependencies and 
-the app itself with `development.sh start`
-
-The importer will be available through http://localhost:3200. See instructions below on how to trigger importing through the HTTP API.
-
-## Building the app
-
-The application is using jooq for ORM. To (re)generate the mapping classes, you need to have the ORM source database to
-be up and running and jooq connecting to it. `./development.sh generate:jooq` spins up the database and generates the
-ORM classes.
-
-Note that the `dev` profile is only meant for use in your local development environment. To create a build to be used for deployment, compile and create a package using the `prod` profile:
-```
-mvn clean package spring-boot:repackage -Pprod
-```
-
-## Docker reference
+### Docker reference
 
 The application uses spring boot which allows overwriting configuration properties as described
 [here](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config.typesafe-configuration-properties.relaxed-binding.environment-variables).
@@ -280,53 +319,64 @@ The following configuration properties are to be defined for each environment:
 |                          | DIGIROAD_STOPS_CSV_VERSION | digiroad-stops-csv-version | 2022-02-03                                                                       | Version of digiroad stops csv file to be downloaded from Azure blob storage    |
 | jore.importer.migrate    | JORE_IMPORTER_MIGRATE      | jore-importer-migrate      | false                                                                            | Should the importer should run its own migrations (for local development only) |
 | map.matching.api.baseUrl | MAP_MATCHING_API_BASEURL   | map-matching-api-baseurl   | https://localhost:3005                                                           | The base url of the map matching API.                                          |
+
 More properties can be found from `/profiles/prod/config.properties`
 
-## Running tests
+### Setting Up the Local Development Environment
 
-For running the tests, you need to have the test databases up an running:
-```sh
-./development.sh start:deps
-```
+Before you can run the application on your local development environment, you have to set up your development
+environment by following these steps:
 
-Then start the tests with:
-```sh
-mvn --batch-mode clean verify
-```
+1. Install software that's is required to compile and run the importer application and its dependencies.
+   Before you can run this application, you must install these tools:
+    - Docker Desktop
+    - OpenJDK 11
+    - Maven
+2. Make a copy of the maven `dev`-profile for your user:
+    ```
+    cp profiles/dev/config.properties profiles/dev/config.<my-username>.properties
+    ```
+   Look up the jore3 database credentials from the Azure vault (e.g. `hsl-jore3-db-username` and `hsl-jore3-db-password`
+   in the `hsl-jore4-dev-vault`) and insert them into your maven profile's `source.db.XXX` definitions.
+3. Adjust the `source.db.*` properties in `profiles/dev/config.<my-username>.properties` to your needs. Other configuration for destination database and test database may also be found from here.
+4. If you wish to connect to the original Jore 3 database, follow the instructions [here](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#creating-an-ssh-configuration-entry) on how to create a tunnel and connect to the database. After the tunnel is created, the Jore 3 database will be available on localhost:56239. Ask for the username and password from the project team.
+   During the importer run, the shell on the bastion host needs to be "touched" in regular intervals to keep it from timing out. (The `TMOUT` environment variable on the bastion host cannot be modified.) "Touching" can be done manually by issuing key presses into the shell every few minutes. Alternatively, you can start a new subshell with the timeout disabled to keep the session open:
+   ```
+   env TMOUT=0 bash
+   ```
+5. Clone the [jore4-digiroad-import](https://github.com/HSLdevcom/jore4-digiroad-import) repository and
+   follow these steps:
+    1. Run the Digiroad import.
+    2. Export infrastructure links from the data imported from Digiroad and import these links to the Jore 4 database.
+    3. Export scheduled stop points from the data imported from Digiroad and write the exported data to a CSV file.
+6. Configure the absolute path of the CSV file which contains scheduled stop points exported from Digiroad in the
+   profile specific configuration file.
+7. Set the value of the `map.matching.api.url` configuration property to: `http://localhost:3005/api/match/public-transport-route/v1/bus.json`.
 
-## Triggering the batch job
+### Running the Tests
 
-The import can be triggered using a HTTP API. The `POST /job/import/start` endpoint will start the job and return its status. If a previous job instance was already running, a new job is not started and the return value will reflect the status of the running job.
+When you want to run the test, you have follow these steps:
 
-```shell
-$ curl -X POST http://localhost:8080/job/import/start/
-{"id":0,"batchStatus":"STARTING","exitCode":"UNKNOWN","exitDescription":null,"startTime":null,"endTime":null}
-```
+1. Run the dependencies of this application by using the command: `./development.sh start:deps`.
+2. Run the tests by running the command: `mvn --batch-mode clean verify`.
 
-### Querying the status of the latest import
+### Running the Application
 
-The `GET /job/import/status` endpoint returns information about the latest import. If no import has been performed, a HTTP 204 status is returned.
+When you want to run this application, you can use one of these two options:
 
-While the import is running:
+**First**, you can run the dependencies of this application with Docker and run the importer by using the
+Spring Boot Maven plugin. This is useful if you want to get an easy access to the log files written by importer.
+If you want to use this option, you have to follow these steps:
 
-```shell
-$ curl http://localhost:8080/job/import/status/
-{"id":5,"batchStatus":"STARTED","exitCode":"UNKNOWN","exitDescription":null,"startTime":"2021-04-09T08:35:51.560Z","endTime":null}
-```
+1. Run the dependencies of this application by running the command: `./development.sh start:deps`.
+2. Run the application by running the command: `./run-local.sh`.
 
-After the import is complete:
+**Second**, you can run everything with Docker. If you want to use this option, you have to run the command: 
+`./development.sh start`.
 
-```shell
-$ curl http://localhost:8080/job/import/status/
-{"id":5,"batchStatus":"COMPLETED","exitCode":"COMPLETED","exitDescription":null,"startTime":"2021-04-09T08:35:51.560Z","endTime":"2021-04-09T08:36:11.308Z"}
-```
+### Packaging the Application
 
-If an error occurs:
-
-```shell
-$ curl http://localhost:8080/job/import/status/
-{"id":5,"batchStatus":"FAILED","exitCode":"FAILED","exitDescription":"<here's a really long Java stack trace>","startTime":"2021-04-09T08:39:47.698Z","endTime":"2021-04-09T08:41:17.761Z"}
-```
+If you want to create a package that can be used for deployment, you have run the command: `mvn clean package spring-boot:repackage -P prod`
 
 ## Known Problems
 
@@ -334,5 +384,5 @@ $ curl http://localhost:8080/job/import/status/
 
 If a test case fails because the `com.microsoft.sqlserver.jdbc.SQLServerException` is thrown and
 the error message says that it cannot find a database object, the problem is that the script which
-creates the source MSSQL database (_docker/mssql_init/populate.sql_) was changed. You can solve this problem by running the command: 
+creates the source MSSQL database (_docker/mssql_init/populate.sql_) was changed. You can solve this problem by running the command:
 `./development.sh recreate` at command prompt.
