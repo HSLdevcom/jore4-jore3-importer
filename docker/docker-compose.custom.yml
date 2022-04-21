@@ -31,6 +31,11 @@ services:
     networks:
       - jore4
 
+  jore4-testdb:
+    # preserve db's state to local disk to avoid data loss if db container is removed
+    volumes:
+      - './testdb:/var/lib/postgresql/data'
+
   jore4-mssqltestdb:
     # pin compatible version of mssql schema
     image: "hsldevcom/jore4-mssql-testdb:schema-only-main--21ef30b56e38b0cfa118ccf610ba0fa7e9e00ef7"
