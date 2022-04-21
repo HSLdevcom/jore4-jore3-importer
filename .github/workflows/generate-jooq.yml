@@ -29,7 +29,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Run jooq class generation
-        run: ./development.sh generate:jooq
+        run: ./development.sh generate:jooq --no-volume
 
       - name: Verify that generate command made no changes, so generated classes are up to date
         run: '[ -z "$(git status --porcelain)" ]'

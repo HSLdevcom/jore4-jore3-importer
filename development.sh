@@ -5,13 +5,20 @@ set -eu
 cd "$(dirname "$0")" # Setting the working directory as the script directory
 
 COMMAND=${1:-}
-PARAMETER=${2:-none}
 
 # Define a Docker Compose project name to distinguish
 # the docker environment of this project from others
 export COMPOSE_PROJECT_NAME=JOREIMPORTER
 
-DOCKER_COMPOSE_CMD="docker-compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.custom.yml"
+DOCKER_COMPOSE_CMD="docker-compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.testdb-volume.yml -f ./docker/docker-compose.custom.yml"
+
+# if the --no-volume parameter is set, the testdb volume will not be mounted
+for i in "$@" ; do
+    if [[ $i == "--no-volume" ]] ; then
+        DOCKER_COMPOSE_CMD="docker-compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.custom.yml"
+        break
+    fi
+done
 
 instruct_and_exit() {
   echo "Usage: ${0} <command>"
@@ -23,7 +30,6 @@ instruct_and_exit() {
   echo "stop                Stop the dependencies and the dockerized application"
   echo "recreate            Remove and recreate the dependencies, removing all data"
   echo "list                List running dependencies"
-  echo "logs (service-name) Attach to log output of all or specified service"
   exit 1
 }
 
@@ -120,11 +126,6 @@ fi
 
 if [[ ${COMMAND} == "list" ]]; then
   $DOCKER_COMPOSE_CMD config --services
-  exit 0
-fi
-
-if [[ ${COMMAND} == "logs" ]]; then
-  $DOCKER_COMPOSE_CMD logs -f ${PARAMETER}
   exit 0
 fi
 
