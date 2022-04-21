@@ -428,7 +428,7 @@ When you want to run this application, you can use one of these two options:
 Spring Boot Maven plugin. This is useful if you want to get an easy access to the log files written by importer.
 If you want to use this option, you have to follow these steps:
 
-1. Run the dependencies of this application by running the command: `./development.sh start:deps`.
+1. Run the dependencies of this application by running the command: `./development.sh start:deps`. (This will bind a volume for the testdb container so that the imported data won't be lost during sessions. If you wish not to do so, run with with `--no-volume` parameter)
 2. Run the application by running the command: `./run-local.sh`.
 
 **Second**, you can run everything with Docker. If you want to use this option, you have to run the command: 
