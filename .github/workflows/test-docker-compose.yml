@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Start dependencies and importer application
-        run: ./development.sh start
+        run: ./development.sh start --no-volume
 
       - name: Verify that dockerized Importer API is up and running
         uses: HSLdevcom/jore4-tools/github-actions/healthcheck@healthcheck-v1

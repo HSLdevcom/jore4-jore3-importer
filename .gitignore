@@ -38,4 +38,7 @@ profiles/dev/config.*.properties
 #Docker compose bundle
 docker/*
 !docker/docker-compose.custom.yml
+!docker/docker-compose.testdb-volume.yml
 
+#digiroad stops csv file
+digiroad_stops*.csv
