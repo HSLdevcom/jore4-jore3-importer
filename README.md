@@ -378,6 +378,27 @@ If you want to use this option, you have to follow these steps:
 
 If you want to create a package that can be used for deployment, you have run the command: `mvn clean package spring-boot:repackage -P prod`
 
+### Restoring a Jore 4 Database Dump to the Database
+
+#### Local Development environment
+
+If you want to restore a database dump on your local development environment, you should follow [these instructions](https://github.com/HSLdevcom/jore4-ui#loading-dump-into-development-database).
+
+### Azure Dev Database
+
+If you want to restore a database dump to the Azure dev database, you should follow these steps:
+
+1. Ensure that [you can connect to Azure environment via Bastian host](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#connecting-to-the-azure-environment-via-bastion-host).
+2. Open an SSH tunnel to the development database by using the command: `ssh -o -L 6432:hsl-jore4-dev-db.postgres.database.azure.com:5432 -i ~/.ssh/jore4_key_ed25519 hsl-jore4-dev-bastion`.
+3. Restore the database by running the command: `pg_restore -h localhost -p 6432 -c -O -U [database user] -d [database] [dump file]`.
+
+---
+
+You can get the database, database user, and password from the Azure console (Check the secrets of the `hsl-jore4-dev-vault`
+key vault).
+
+---
+
 ## Known Problems
 
 ### Test case fails because a database object isn't found
