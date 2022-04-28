@@ -404,14 +404,14 @@ environment by following these steps:
    ```
    env TMOUT=0 bash
    ```
-5. Clone the [jore4-digiroad-import](https://github.com/HSLdevcom/jore4-digiroad-import) repository and
-   follow these steps:
-    1. Run the Digiroad import.
-    2. Export infrastructure links from the data imported from Digiroad and import these links to the Jore 4 database.
-    3. Export scheduled stop points from the data imported from Digiroad and write the exported data to a CSV file.
+5. Retrieve the digiroad stop list csv:
+   1. Download the latest version of the csv from Azure from `hsl-jore4-common / jore4storage / jore4-digiroad / digiroad_stops_XXX.csv`
+   2. Alternatively you may clone the [jore4-digiroad-import](https://github.com/HSLdevcom/jore4-digiroad-import) repository and follow these steps:
+      1. Run the Digiroad import.
+      2. Export infrastructure links from the data imported from Digiroad and import these links to the Jore 4 database.
+      3. Export scheduled stop points from the data imported from Digiroad and write the exported data to a CSV file.
 6. Configure the absolute path of the CSV file which contains scheduled stop points exported from Digiroad in the
-   profile specific configuration file.
-7. Set the value of the `map.matching.api.url` configuration property to: `http://localhost:3005/api/match/public-transport-route/v1/bus.json`.
+   profile specific configuration file (`digiroad.stop.csv.file.path`)
 
 ### Running the Tests
 
