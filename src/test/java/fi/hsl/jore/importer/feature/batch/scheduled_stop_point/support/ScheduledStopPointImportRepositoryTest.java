@@ -46,7 +46,7 @@ public class ScheduledStopPointImportRepositoryTest {
 
         private final UUID EXPECTED_ID = UUID.fromString("058a63b3-365b-4676-af51-809bef577cdd");
         private final UUID EXPECTED_INFRASTRUCTURE_NODE_ID = UUID.fromString("cc11a5db-2ae7-4220-adfe-aca5d6620909");
-        private static final String EXPECTED_ELY_NUMBER = "1234567890";
+        private final long EXPECTED_ELY_NUMBER = 1234567890L;
         private static final String EXPECTED_FINNISH_NAME = "Yliopisto";
         private static final String EXPECTED_SWEDISH_NAME = "Universitetet";
         private static final String EXPECTED_SHORT_ID = "H1234";

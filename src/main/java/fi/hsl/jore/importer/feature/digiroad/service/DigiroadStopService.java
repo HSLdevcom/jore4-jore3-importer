@@ -17,5 +17,5 @@ public interface DigiroadStopService {
      * @return  An {@link Optional} object which contains the found {@link DigiroadStop}
      *          object. If no stop is found, this method returns an empty {@link Optional}.
      */
-    Optional<DigiroadStop> findByNationalId(final int nationalId);
+    Optional<DigiroadStop> findByNationalId(final long nationalId);
 }

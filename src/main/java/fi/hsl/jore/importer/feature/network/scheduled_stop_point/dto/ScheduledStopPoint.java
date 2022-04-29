@@ -33,7 +33,7 @@ public interface ScheduledStopPoint
 
     static ScheduledStopPoint of(final ScheduledStopPointPK pk,
                                  final ExternalId externalId,
-                                 final Optional<String> elyNumber,
+                                 final Optional<Long> elyNumber,
                                  final NodePK node,
                                  final MultilingualString name,
                                  final Optional<String> shortId,

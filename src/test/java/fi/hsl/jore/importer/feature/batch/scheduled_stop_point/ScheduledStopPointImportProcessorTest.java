@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ScheduledStopPointImportProcessorTest {
 
     private static final String EXTERNAL_ID = "9899";
-    private static final String ELY_NUMBER = "1234567";
+    private static final Long ELY_NUMBER = 1234567L;
     private static final String IMPORTER_SHORT_ID = "H1234";
     private static final String JORE3_SHORT_ID = "1234";
     private static final String JORE3_SHORT_LETTER = "H";

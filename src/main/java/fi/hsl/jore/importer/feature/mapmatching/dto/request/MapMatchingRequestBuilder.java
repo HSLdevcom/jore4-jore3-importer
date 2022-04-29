@@ -75,18 +75,8 @@ public class MapMatchingRequestBuilder {
         return routePoints;
     }
 
-    private static Integer parseToNationalId(final Optional<String> elyNumberContainer) {
-        return elyNumberContainer
-                .filter(elyNumber -> !elyNumber.isBlank())
-                .map(elyNumber -> {
-                    try {
-                        return Integer.parseInt(elyNumber);
-                    }
-                    catch (final Exception ex) {
-                        return null;
-                    }
-                })
-                .orElse(null);
+    private static Long parseToNationalId(final Optional<Long> elyNumberContainer) {
+        return elyNumberContainer.orElse(null);
     }
 
     private static Point toGeoJson(final org.locationtech.jts.geom.Point input) {

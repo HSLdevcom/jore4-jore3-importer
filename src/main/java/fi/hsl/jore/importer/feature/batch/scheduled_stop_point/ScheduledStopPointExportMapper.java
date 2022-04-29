@@ -12,9 +12,9 @@ import org.springframework.jdbc.core.RowMapper;
 import javax.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Objects;
 
+import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalLong;
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalString;
 
 /**
@@ -36,7 +36,7 @@ public class ScheduledStopPointExportMapper implements RowMapper<ExportableSched
                                                final int rowNumber) throws SQLException {
         return ExportableScheduledStopPoint.of(
                 ExternalId.of(resultSet.getString("external_id")),
-                getOptionalString(resultSet, "ely_number"),
+                getOptionalLong(resultSet, "ely_number"),
                 pointFromDatabaseObject(resultSet.getObject("location")),
                 jsonConverter.fromJson(resultSet.getString("name"), MultilingualString.class),
                 getOptionalString(resultSet, "short_id")

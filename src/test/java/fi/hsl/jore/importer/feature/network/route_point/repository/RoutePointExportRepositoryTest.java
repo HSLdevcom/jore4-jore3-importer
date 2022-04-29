@@ -67,7 +67,7 @@ class RoutePointExportRepositoryTest {
             private static final int FIRST_ROUTE_POINT_ORDER_NUMBER = 1;
             private static final double FIRST_ROUTE_POINT_PROJECTED_LOCATION_X = 13;
             private static final double FIRST_ROUTE_POINT_PROJECTED_LOCATION_Y = 12;
-            private static final String FIRST_ROUTE_POINT_STOP_POINT_ELY_NUMBER = "1234567890";
+            private static final long FIRST_ROUTE_POINT_STOP_POINT_ELY_NUMBER = 1234567890L;
             private static final String FIRST_ROUTE_POINT_STOP_POINT_SHORT_ID = "H1234";
             private final NodeType FIRST_ROUTE_POINT_TYPE = NodeType.STOP;
 
@@ -81,7 +81,7 @@ class RoutePointExportRepositoryTest {
             private static final int THIRD_ROUTE_POINT_ORDER_NUMBER = 3;
             private static final double THIRD_ROUTE_POINT_PROJECTED_LOCATION_X = 24.468122;
             private static final double THIRD_ROUTE_POINT_PROJECTED_LOCATION_Y = 60.152911;
-            private static final String THIRD_ROUTE_POINT_STOP_POINT_ELY_NUMBER = "0987654321";
+            private static final long THIRD_ROUTE_POINT_STOP_POINT_ELY_NUMBER = 987654321L;
             private static final String THIRD_ROUTE_POINT_STOP_POINT_SHORT_ID = "H4321";
             private final NodeType THIRD_ROUTE_POINT_TYPE = NodeType.STOP;
 

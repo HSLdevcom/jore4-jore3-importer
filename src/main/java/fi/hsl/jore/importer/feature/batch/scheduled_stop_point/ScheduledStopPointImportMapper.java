@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getDoubleOrThrow;
+import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalLong;
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalString;
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
 
@@ -24,7 +25,7 @@ public class ScheduledStopPointImportMapper implements RowMapper<JrScheduledStop
                                        final int rowNumber) throws SQLException {
         return JrScheduledStopPoint.of(
                 NodeId.of(getStringOrThrow(rs, "soltunnus")),
-                getOptionalString(rs, "elynumero"),
+                getOptionalLong(rs, "elynumero"),
                 getOptionalString(rs, "pysnimi"),
                 getOptionalString(rs, "pysnimir"),
                 getOptionalString(rs, "sollistunnus"),

@@ -70,7 +70,7 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
      * The column
      * <code>network.scheduled_stop_points_with_history.scheduled_stop_point_ely_number</code>.
      */
-    public final TableField<ScheduledStopPointsWithHistoryRecord, String> SCHEDULED_STOP_POINT_ELY_NUMBER = createField(DSL.name("scheduled_stop_point_ely_number"), SQLDataType.VARCHAR(10), this, "");
+    public final TableField<ScheduledStopPointsWithHistoryRecord, Long> SCHEDULED_STOP_POINT_ELY_NUMBER = createField(DSL.name("scheduled_stop_point_ely_number"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column
@@ -168,7 +168,7 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<UUID, String, UUID, String, JSONB, TimeRange, String, UUID> fieldsRow() {
+    public Row8<UUID, String, UUID, Long, JSONB, TimeRange, String, UUID> fieldsRow() {
         return (Row8) super.fieldsRow();
     }
 }

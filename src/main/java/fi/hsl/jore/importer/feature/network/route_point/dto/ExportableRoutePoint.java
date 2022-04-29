@@ -21,7 +21,7 @@ public interface ExportableRoutePoint {
 
     NodeType type();
 
-    Optional<String> stopPointElyNumber();
+    Optional<Long> stopPointElyNumber();
 
     Optional<String> stopPointShortId();
 
@@ -29,7 +29,7 @@ public interface ExportableRoutePoint {
                                      final int orderNumber,
                                      final Optional<Point> projectedLocation,
                                      final NodeType type,
-                                     final Optional<String> stopPointElyNumber,
+                                     final Optional<Long> stopPointElyNumber,
                                      final Optional<String> stopPointShortId) {
         return ImmutableExportableRoutePoint.builder()
                 .location(location)

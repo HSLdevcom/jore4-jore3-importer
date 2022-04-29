@@ -28,7 +28,7 @@ public class RouteGeometryTestFactory {
     public static final double REQUEST_ROUTE_JUNCTION_POINT_X = 3.212;
     public static final double REQUEST_ROUTE_JUNCTION_POINT_Y = 1.2334;
 
-    public static final String REQUEST_STOP_POINT_ELY_NUMBER = "123567";
+    public static final Long REQUEST_STOP_POINT_ELY_NUMBER = 123567L;
     public static final String REQUEST_STOP_POINT_SHORT_ID = "H1234";
 
     public static final double REQUEST_ROUTE_STOP_POINT_POINT_X = 4.5533;

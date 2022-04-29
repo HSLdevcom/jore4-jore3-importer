@@ -18,7 +18,7 @@ public interface DigiroadStop {
 
     String digiroadLinkId();
 
-    int nationalId();
+    long nationalId();
 
     Point location();
 
@@ -29,7 +29,7 @@ public interface DigiroadStop {
     static ImmutableDigiroadStop of (String digiroadStopId,
                                      String digiroadLinkId,
                                      DigiroadStopDirection directionOnInfralink,
-                                     int nationalId,
+                                     long nationalId,
                                      Point location,
                                      Optional<String> nameFinnish,
                                      Optional<String> nameSwedish) {
