@@ -18,7 +18,7 @@ public interface ExportableScheduledStopPoint extends CommonFields<ExportableSch
     Point location();
 
     static ImmutableExportableScheduledStopPoint of(final ExternalId externalId,
-                                                    final Optional<String> elynumber,
+                                                    final Optional<Long> elynumber,
                                                     final Point location,
                                                     final MultilingualString name,
                                                     final Optional<String> shortId) {

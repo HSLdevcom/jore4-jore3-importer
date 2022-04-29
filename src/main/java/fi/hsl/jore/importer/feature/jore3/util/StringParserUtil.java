@@ -29,6 +29,29 @@ public final class StringParserUtil {
     }
 
     /**
+     * Parses an {@code long} value from the source value.
+     * @param alias     The alias of the returned value.
+     * @param source    The source value.
+     * @return          The parsed int value.
+     * @throws NullPointerException if the source value is {@code null}.
+     * @throws IllegalArgumentException if the source value is blank or it cannot be parsed.
+     */
+    public static long parseRequiredLong(final String alias, final String source) {
+        final String value = parseRequiredValue(alias, source);
+        try {
+            return Long.parseLong(value);
+        }
+        catch (final NumberFormatException ex) {
+            throw new IllegalArgumentException(
+                    String.format("Cannot parse long value for field: %s from source value: %s",
+                            alias,
+                            value
+                    )
+            );
+        }
+    }
+
+    /**
      * Parses an {@code int} value from the source value.
      * @param alias     The alias of the returned value.
      * @param source    The source value.

@@ -205,9 +205,7 @@ public class MapMatchingRequestBuilderTest {
             @Nested
             @DisplayName("When ely number is an integer")
             class WhenElyNumberIsInteger {
-
-                private static final int ELY_NUMBER_IN_REQUEST = 123567;
-                private static final String ELY_NUMBER_INPUT = "123567";
+                private static final long ELY_NUMBER = 123567L;
 
                 @BeforeEach
                 void createRoutePoint() {
@@ -216,7 +214,7 @@ public class MapMatchingRequestBuilderTest {
                             1,
                             Optional.of(projectedLocation),
                             NodeType.STOP,
-                            Optional.of(ELY_NUMBER_INPUT),
+                            Optional.of(ELY_NUMBER),
                             Optional.of(SHORT_ID)
                     );
                 }
@@ -245,74 +243,7 @@ public class MapMatchingRequestBuilderTest {
 
                     softAssertions.assertThat(routePoint.getNationalId())
                             .as("nationalId")
-                            .isEqualByComparingTo(ELY_NUMBER_IN_REQUEST);
-                    softAssertions.assertThat(routePoint.getPassengerId())
-                            .as("passengerId")
-                            .contains(SHORT_ID);
-
-                    final org.geojson.Point routePointLocation = routePoint.getLocation();
-                    final LngLatAlt routePointCoordinates = routePointLocation.getCoordinates();
-                    softAssertions.assertThat(routePointCoordinates.getLongitude())
-                            .as("routePointLongitude")
-                            .isEqualTo(ROUTE_POINT_LNG);
-                    softAssertions.assertThat(routePointCoordinates.getLatitude())
-                            .as("routePointLatitude")
-                            .isEqualTo(ROUTE_POINT_LAT);
-
-                    final org.geojson.Point routePointProjectedLocation = routePoint.getProjectedLocation();
-                    final LngLatAlt routePointProjectedCoordinates = routePointProjectedLocation.getCoordinates();
-                    softAssertions.assertThat(routePointProjectedCoordinates.getLongitude())
-                            .as("routePointProjectedLongitude")
-                            .isEqualTo(ROUTE_PROJECTED_POINT_LNG);
-                    softAssertions.assertThat(routePointProjectedCoordinates.getLatitude())
-                            .as("routePointProjectedLatitude")
-                            .isEqualTo(ROUTE_PROJECTED_POINT_LAT);
-                }
-            }
-
-            @Nested
-            @DisplayName("When ely number is a string")
-            class WhenElyNumberIsString {
-
-                private static final String ELY_NUMBER_INPUT = "elyNumber";
-
-                @BeforeEach
-                void createRoutePoint() {
-                    routePoint = ExportableRoutePoint.from(
-                            location,
-                            1,
-                            Optional.of(projectedLocation),
-                            NodeType.STOP,
-                            Optional.of(ELY_NUMBER_INPUT),
-                            Optional.of(SHORT_ID)
-                    );
-                }
-
-                @Test
-                @DisplayName("Should return a map matching request that has one route point")
-                void shouldReturnMapMatchingRequestThatHasOneRoutePoint() {
-                    final MapMatchingRequestDTO request = MapMatchingRequestBuilder.createMapMatchingRequest(routeGeometryInput,
-                            List.of(routePoint)
-                    );
-
-                    assertThat(request.getRoutePoints()).hasSize(1);
-                }
-
-                @Test
-                @DisplayName("Should return a map matching request with the correct route point")
-                void shouldReturnMapMatchingRequestWithCorrectRoutePoint(final SoftAssertions softAssertions) {
-                    final MapMatchingRequestDTO request = MapMatchingRequestBuilder.createMapMatchingRequest(routeGeometryInput,
-                            List.of(routePoint)
-                    );
-                    final RoutePointRequestDTO routePoint = request.getRoutePoints().get(0);
-
-                    softAssertions.assertThat(routePoint.getType())
-                            .as("type")
-                            .isEqualTo(RoutePointType.PUBLIC_TRANSPORT_STOP);
-
-                    softAssertions.assertThat(routePoint.getNationalId())
-                            .as("nationalId")
-                            .isNull();
+                            .isEqualByComparingTo(ELY_NUMBER);
                     softAssertions.assertThat(routePoint.getPassengerId())
                             .as("passengerId")
                             .contains(SHORT_ID);

@@ -12,7 +12,7 @@ public interface PersistableScheduledStopPoint
 {
 
     static PersistableScheduledStopPoint of(final ExternalId externalId,
-                                            final Optional<String> elyNumber,
+                                            final Optional<Long> elyNumber,
                                             final MultilingualString name) {
         return ImmutablePersistableScheduledStopPoint.builder()
                 .externalId(externalId)

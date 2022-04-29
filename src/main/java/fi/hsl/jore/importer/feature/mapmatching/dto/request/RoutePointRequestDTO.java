@@ -13,7 +13,7 @@ public class RoutePointRequestDTO {
     private Point location;
     private Point projectedLocation;
     private String passengerId;
-    private Integer nationalId;
+    private Long nationalId;
 
     public RoutePointRequestDTO() {}
 
@@ -21,7 +21,7 @@ public class RoutePointRequestDTO {
         return location;
     }
 
-    public Integer getNationalId() {
+    public Long getNationalId() {
         return nationalId;
     }
 
@@ -41,7 +41,7 @@ public class RoutePointRequestDTO {
         this.location = location;
     }
 
-    public void setNationalId(final Integer nationalId) {
+    public void setNationalId(final Long nationalId) {
         this.nationalId = nationalId;
     }
 

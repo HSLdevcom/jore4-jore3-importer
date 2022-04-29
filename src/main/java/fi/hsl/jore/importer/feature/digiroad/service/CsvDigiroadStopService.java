@@ -23,7 +23,7 @@ public class CsvDigiroadStopService implements DigiroadStopService {
 
     //This cannot be final because the io.vavr.collection.HashMap is immutable
     //and .put() method returns a new map which contains the added value.
-    private Map<Integer, DigiroadStop> digiroadStops;
+    private Map<Long, DigiroadStop> digiroadStops;
 
     public CsvDigiroadStopService(final Resource csvResource) {
         this.csvResource = csvResource;
@@ -31,7 +31,7 @@ public class CsvDigiroadStopService implements DigiroadStopService {
     }
 
     @Override
-    public Optional<DigiroadStop> findByNationalId(final int nationalId) {
+    public Optional<DigiroadStop> findByNationalId(final long nationalId) {
         final DigiroadStop stop = digiroadStops.get(nationalId).getOrNull();
         return Optional.ofNullable(stop);
     }
