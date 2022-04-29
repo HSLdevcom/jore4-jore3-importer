@@ -26,7 +26,7 @@ public interface JrScheduledStopPoint extends IHasPrimaryKey<JrScheduledStopPoin
     @JoreColumn(name = "elynumero",
             example = "1234567890"
     )
-    Optional<String> elyNumber();
+    Optional<Long> elyNumber();
 
     @JoreColumn(name = "pysnimi",
             example = "Ritarihuone")
@@ -48,7 +48,7 @@ public interface JrScheduledStopPoint extends IHasPrimaryKey<JrScheduledStopPoin
     Optional<String> shortLetter();
 
     static JrScheduledStopPoint of(final NodeId nodeId,
-                                   final Optional<String> elyNumber,
+                                   final Optional<Long> elyNumber,
                                    final Optional<String> nameFinnish,
                                    final Optional<String> nameSwedish,
                                    final Optional<String> shortId,

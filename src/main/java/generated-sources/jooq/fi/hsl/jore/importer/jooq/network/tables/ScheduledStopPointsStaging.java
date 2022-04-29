@@ -56,7 +56,7 @@ public class ScheduledStopPointsStaging extends TableImpl<ScheduledStopPointsSta
      * The column
      * <code>network.scheduled_stop_points_staging.scheduled_stop_point_ely_number</code>.
      */
-    public final TableField<ScheduledStopPointsStagingRecord, String> SCHEDULED_STOP_POINT_ELY_NUMBER = createField(DSL.name("scheduled_stop_point_ely_number"), SQLDataType.VARCHAR(10), this, "");
+    public final TableField<ScheduledStopPointsStagingRecord, Long> SCHEDULED_STOP_POINT_ELY_NUMBER = createField(DSL.name("scheduled_stop_point_ely_number"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column
@@ -147,7 +147,7 @@ public class ScheduledStopPointsStaging extends TableImpl<ScheduledStopPointsSta
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<String, String, JSONB, String> fieldsRow() {
+    public Row4<String, Long, JSONB, String> fieldsRow() {
         return (Row4) super.fieldsRow();
     }
 }

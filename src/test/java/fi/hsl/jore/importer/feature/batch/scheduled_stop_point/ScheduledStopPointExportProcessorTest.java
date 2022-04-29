@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ScheduledStopPointExportProcessorTest {
 
-    private static final String ELY_NUMBER = "1234567890";
+    private static final Long ELY_NUMBER = 1234567890L;
 
     private static final String DIGIROAD_STOP_INFRA_LINK_ID = "133202";
 
@@ -62,64 +62,19 @@ class ScheduledStopPointExportProcessorTest {
     @DisplayName("When the source stop has no ely number")
     class WhenSourceStopHasNoElyNumber {
 
-        @Nested
-        @DisplayName("When the ely number is missing")
-        class WhenElyNumberIsMissing {
+        private final ExportableScheduledStopPoint jore3Stop = ExportableScheduledStopPoint.of(
+                ExternalId.of(JORE_3_STOP_EXTERNAL_ID),
+                Optional.empty(),
+                JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
+                JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
+                Optional.of(IMPORTER_SHORT_ID)
+        );
 
-            private final ExportableScheduledStopPoint jore3Stop = ExportableScheduledStopPoint.of(
-                    ExternalId.of(JORE_3_STOP_EXTERNAL_ID),
-                    Optional.empty(),
-                    JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
-                    JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
-                    Optional.of(IMPORTER_SHORT_ID)
-            );
-
-            @Test
-            @DisplayName("Should return null")
-            void shouldReturnNull() throws Exception {
-                final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
-                assertThat(output).isNull();
-            }
-        }
-
-        @Nested
-        @DisplayName("When the ely number is an empty string")
-        class WhenElyNumberIsEmptyString {
-
-            private final ExportableScheduledStopPoint jore3Stop = ExportableScheduledStopPoint.of(
-                    ExternalId.of(JORE_3_STOP_EXTERNAL_ID),
-                    Optional.of(""),
-                    JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
-                    JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
-                    Optional.of(IMPORTER_SHORT_ID)
-            );
-
-            @Test
-            @DisplayName("Should return null")
-            void shouldReturnNull() throws Exception {
-                final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
-                assertThat(output).isNull();
-            }
-        }
-
-        @Nested
-        @DisplayName("When the ely number contains only white space")
-        class WhenElyNumberContainsOnlyWhiteSpace {
-
-            private final ExportableScheduledStopPoint jore3Stop = ExportableScheduledStopPoint.of(
-                    ExternalId.of(JORE_3_STOP_EXTERNAL_ID),
-                    Optional.of("     "),
-                    JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
-                    JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
-                    Optional.of(IMPORTER_SHORT_ID)
-            );
-
-            @Test
-            @DisplayName("Should return null")
-            void shouldReturnNull() throws Exception {
-                final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
-                assertThat(output).isNull();
-            }
+        @Test
+        @DisplayName("Should return null")
+        void shouldReturnNull() throws Exception {
+            final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
+            assertThat(output).isNull();
         }
     }
 
@@ -127,7 +82,7 @@ class ScheduledStopPointExportProcessorTest {
     @DisplayName("When no Digiroad stop is found with the ely number of the source stop")
     class WhenNoDigiroadStopIsFoundWithElyNumberOfSourceStop {
 
-        private static final String UNKNOWN_ELY_NUMBER = "999999";
+        private static final long UNKNOWN_ELY_NUMBER = 999999L;
 
         private final ExportableScheduledStopPoint jore3Stop = ExportableScheduledStopPoint.of(
                 ExternalId.of(JORE_3_STOP_EXTERNAL_ID),

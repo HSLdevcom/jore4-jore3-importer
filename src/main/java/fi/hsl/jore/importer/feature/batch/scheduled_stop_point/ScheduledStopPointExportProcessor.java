@@ -56,21 +56,20 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
     public TransmodelScheduledStopPoint process(final ExportableScheduledStopPoint jore3Stop) throws Exception {
         LOGGER.debug("Processing Jore 3 stop: {}", jore3Stop);
 
-        final String elyNumber = jore3Stop.elyNumber().filter(str -> !str.isEmpty()).orElse(null);
-        if (StringUtils.isBlank(elyNumber)) {
+        final Long elyNumber = jore3Stop.elyNumber().orElse(null);
+        if (elyNumber == null) {
             LOGGER.debug("Jore 3 stop with id: {} isn't processed any further because it has no ely number",
                     jore3Stop.externalId().value()
             );
             return null;
         }
 
-        final int nationalId = Integer.parseInt(elyNumber);
-        final Optional<DigiroadStop> digiroadStopContainer = digiroadStopService.findByNationalId(nationalId);
+        final Optional<DigiroadStop> digiroadStopContainer = digiroadStopService.findByNationalId(elyNumber);
 
         if (digiroadStopContainer.isEmpty()) {
             LOGGER.error("Jore 3 stop with id: {} isn't processed any further no digiroad stop was found with national id: {}",
                     jore3Stop.externalId().value(),
-                    nationalId
+                    elyNumber
             );
             return null;
         }

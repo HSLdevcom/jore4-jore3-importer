@@ -62,7 +62,7 @@ class ScheduledStopPointExportReaderTest {
     @ExtendWith(SoftAssertionsExtension.class)
     class WhenSourceTableHasOneScheduledStopPoint {
 
-        private static final String EXPECTED_ELY_NUMBER = "1234567890";
+        private static final long EXPECTED_ELY_NUMBER = 1234567890L;
         private static final String EXPECTED_EXTERNAL_ID = "c";
         private static final double EXPECTED_X_COORDINATE = 6;
         private static final double EXPECTED_Y_COORDINATE = 5;

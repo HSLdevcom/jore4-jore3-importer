@@ -64,7 +64,7 @@ class DigiroadStopFactory {
                 StringParserUtil.parseRequiredValue("externalStopId", columns[0].trim()),
                 StringParserUtil.parseRequiredValue("externalLinkId", columns[1].trim()),
                 parseDirection(columns[3]),
-                StringParserUtil.parseRequiredInteger("elyNumber", columns[2]),
+                StringParserUtil.parseRequiredLong("elyNumber", columns[2]),
                 parseLocation(columns[4]),
                 getStringContainer(columns[5]),
                 getStringContainer(columns[6])

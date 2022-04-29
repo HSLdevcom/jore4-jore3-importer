@@ -1,5 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -52,6 +54,17 @@ public final class JdbcUtil {
         final String val = rs.getString(column);
         throwOnNull(rs, column);
         return val.trim();
+    }
+
+    public static Optional<Long> getOptionalLong(final ResultSet rs,
+                                                 final String column) throws SQLException {
+        final String val = rs.getString(column);
+        try {
+            return StringUtils.isBlank(val) ? Optional.empty() : Optional.of(Long.parseLong(val.trim()));
+        }
+        catch (final NumberFormatException ex) {
+            return Optional.empty();
+        }
     }
 
     public static Optional<String> getOptionalString(final ResultSet rs,

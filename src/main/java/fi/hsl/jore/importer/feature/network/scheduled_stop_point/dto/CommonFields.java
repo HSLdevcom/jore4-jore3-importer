@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface CommonFields<T> extends IHasExternalId {
 
-    Optional<String> elyNumber();
+    Optional<Long> elyNumber();
 
     MultilingualString name();
 
