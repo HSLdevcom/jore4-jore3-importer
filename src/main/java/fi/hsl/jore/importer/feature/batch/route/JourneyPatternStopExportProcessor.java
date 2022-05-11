@@ -2,6 +2,8 @@ package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.feature.network.route.dto.ExportableJourneyPatternStop;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelJourneyPatternStop;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +14,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class JourneyPatternStopExportProcessor implements ItemProcessor<ExportableJourneyPatternStop, TransmodelJourneyPatternStop> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JourneyPatternStopExportProcessor.class);
+
     @Override
     public TransmodelJourneyPatternStop process(final ExportableJourneyPatternStop input) throws Exception {
+        LOGGER.debug("Processing journey pattern stop: {}", input);
+
         return TransmodelJourneyPatternStop.of(
                 input.isHastusPoint(),
                 input.isViaPoint(),

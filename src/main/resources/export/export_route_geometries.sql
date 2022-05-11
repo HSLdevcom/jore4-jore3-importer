@@ -15,4 +15,5 @@ CROSS JOIN LATERAL (
             rd.network_route_direction_id = rdo.network_route_direction_id AND l.infrastructure_network_type = 'road'
         ORDER BY rl.network_route_link_order
     ) links ) network_route_direction_shape
-WHERE network_route_direction_shape IS NOT NULL AND rdo.network_route_transmodel_id IS NOT NULL;
+WHERE network_route_direction_shape IS NOT NULL AND rdo.network_route_transmodel_id IS NOT NULL
+ORDER BY rdo.network_route_direction_valid_date_range DESC;

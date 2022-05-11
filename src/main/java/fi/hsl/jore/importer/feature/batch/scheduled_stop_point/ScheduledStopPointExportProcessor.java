@@ -1,12 +1,13 @@
 package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 
+import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
 import fi.hsl.jore.importer.feature.digiroad.service.DigiroadStopService;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
 import fi.hsl.jore.importer.feature.transmodel.ExportConstants;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
-import org.apache.commons.lang3.StringUtils;
+import io.vavr.collection.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
@@ -56,40 +57,50 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
     public TransmodelScheduledStopPoint process(final ExportableScheduledStopPoint jore3Stop) throws Exception {
         LOGGER.debug("Processing Jore 3 stop: {}", jore3Stop);
 
-        final Long elyNumber = jore3Stop.elyNumber().orElse(null);
-        if (elyNumber == null) {
-            LOGGER.debug("Jore 3 stop with id: {} isn't processed any further because it has no ely number",
-                    jore3Stop.externalId().value()
+        final List<ExternalId> externalIds = jore3Stop.externalIds();
+        final List<Long> elyNumbers = jore3Stop.elyNumbers();
+
+        if (externalIds.size() != elyNumbers.size()) {
+            LOGGER.debug(
+                    "Error processing the Jore 3 stop with short id: {}. The amount of external IDs {} differs from the amount of ELY numbers {} which blocks processing any further.",
+                    jore3Stop.shortId(),
+                    externalIds.size(),
+                    elyNumbers.size()
             );
             return null;
         }
 
-        final Optional<DigiroadStop> digiroadStopContainer = digiroadStopService.findByNationalId(elyNumber);
 
-        if (digiroadStopContainer.isEmpty()) {
-            LOGGER.error("Jore 3 stop with id: {} isn't processed any further no digiroad stop was found with national id: {}",
-                    jore3Stop.externalId().value(),
-                    elyNumber
-            );
-            return null;
+        for (int index = 0; index < elyNumbers.size(); index++) {
+            final ExternalId externalId = externalIds.get(index);
+            final Long elyNumber = elyNumbers.get(index);
+
+            final Optional<DigiroadStop> digiroadStopContainer = digiroadStopService.findByNationalId(elyNumber);
+            if (digiroadStopContainer.isPresent()) {
+                final DigiroadStop digiroadStop = digiroadStopContainer.get();
+                LOGGER.debug("Found Digiroad stop: {}", digiroadStop);
+
+                final TransmodelScheduledStopPoint transmodelStop = TransmodelScheduledStopPoint.of(
+                        UUID.randomUUID(),
+                        externalId.value(),
+                        digiroadStop.digiroadLinkId(),
+                        TransmodelScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),
+                        jore3Stop.shortId().get(),
+                        jore3Stop.location(),
+                        DEFAULT_PRIORITY,
+                        Optional.of(offsetDateTimeFromLocalDateTime(DEFAULT_VALIDITY_START)),
+                        Optional.of(offsetDateTimeFromLocalDateTime(DEFAULT_VALIDITY_END))
+                );
+
+                LOGGER.debug("Created scheduled stop point: {}", transmodelStop);
+                return transmodelStop;
+            }
         }
 
-        final DigiroadStop digiroadStop = digiroadStopContainer.get();
-        LOGGER.debug("Found Digiroad stop: {}", digiroadStop);
-
-        final TransmodelScheduledStopPoint transmodelStop = TransmodelScheduledStopPoint.of(
-                UUID.randomUUID(),
-                jore3Stop.externalId().value(),
-                digiroadStop.digiroadLinkId(),
-                TransmodelScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),
+        LOGGER.error("Jore 3 stop with short id: {} isn't processed any further no digiroad stop was found with national ids: {}",
                 jore3Stop.shortId().get(),
-                jore3Stop.location(),
-                DEFAULT_PRIORITY,
-                Optional.of(offsetDateTimeFromLocalDateTime(DEFAULT_VALIDITY_START)),
-                Optional.of(offsetDateTimeFromLocalDateTime(DEFAULT_VALIDITY_END))
+                elyNumbers
         );
-
-        LOGGER.debug("Created scheduled stop point: {}", transmodelStop);
-        return transmodelStop;
+        return null;
     }
 }

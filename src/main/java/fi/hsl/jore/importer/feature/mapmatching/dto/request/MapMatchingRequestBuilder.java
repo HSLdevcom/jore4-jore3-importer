@@ -60,11 +60,17 @@ public class MapMatchingRequestBuilder {
             if (input.type() == NodeType.STOP) {
                 routePoint.setNationalId(input.stopPointElyNumber().orElse(null));
                 routePoint.setPassengerId(input.stopPointShortId().orElseThrow(
-                        () -> new NullPointerException("passengerId cannot be null when route point is stop point")
+                        () -> new NullPointerException(String.format(
+                                "Cannot create map matching request. passengerId is null and the route point is stop point with national id: %d",
+                                routePoint.getNationalId()
+                        ))
                 ));
 
                 final Point projectedLocation = toGeoJson(input.projectedLocation().orElseThrow(
-                        () -> new NullPointerException("projectedLocation cannot be null when route point is stop point")
+                        () -> new NullPointerException(String.format(
+                                "Cannot create map matching request. projectedLocation is null and the route point is stop point with national id: %d",
+                                routePoint.getNationalId()
+                        ))
                 ));
                 routePoint.setProjectedLocation(projectedLocation);
             }
