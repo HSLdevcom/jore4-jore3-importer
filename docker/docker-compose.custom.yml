@@ -31,6 +31,9 @@ services:
     networks:
       - jore4
 
+  jore4-mapmatching:
+    image: "hsldevcom/jore4-map-matching:main--20220511-b2e45b67b95ac7962fad518856450c62ed9e3b01"
+
   jore4-mssqltestdb:
     # pin compatible version of mssql schema
     image: "hsldevcom/jore4-mssql-testdb:schema-only-main--21ef30b56e38b0cfa118ccf610ba0fa7e9e00ef7"

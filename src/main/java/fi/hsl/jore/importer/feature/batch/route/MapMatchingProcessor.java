@@ -39,6 +39,11 @@ public class MapMatchingProcessor implements ItemProcessor<ExportableRouteGeomet
 
     @Override
     public TransmodelRouteGeometry process(final ExportableRouteGeometry routeGeometryInput) throws Exception {
+        LOGGER.debug("Processing route geometry with routeDirectionId: {} and routeDirectionExtId: {}",
+                routeGeometryInput.routeDirectionId(),
+                routeGeometryInput.routeDirectionExtId()
+        );
+
         final List<ExportableRoutePoint> routePointsInput = routePointRepository.findExportableRoutePointsByRouteDirectionId(routeGeometryInput.routeDirectionId());
         if (routePointsInput.isEmpty()) {
             LOGGER.error(

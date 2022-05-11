@@ -1,8 +1,10 @@
 package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 
 import fi.hsl.jore.importer.IntTest;
+import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
+import io.vavr.collection.List;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.AfterEach;
@@ -56,8 +58,7 @@ class ScheduledStopPointExportReaderTest {
     @Sql(scripts = {
             "/sql/destination/drop_tables.sql",
             "/sql/destination/populate_infrastructure_nodes.sql",
-            "/sql/destination/populate_scheduled_stop_points.sql",
-            "/sql/destination/populate_scheduled_stop_points_staging.sql"
+            "/sql/destination/populate_scheduled_stop_points.sql"
     })
     @ExtendWith(SoftAssertionsExtension.class)
     class WhenSourceTableHasOneScheduledStopPoint {
@@ -74,13 +75,98 @@ class ScheduledStopPointExportReaderTest {
         void firstInvocationOfReadMethodMustReturnFoundScheduledStopPoint(final SoftAssertions softAssertions) throws Exception {
             final ExportableScheduledStopPoint found = reader.read();
 
-            softAssertions.assertThat(found.externalId().value())
-                    .as("externalId")
-                    .isEqualTo(EXPECTED_EXTERNAL_ID);
+            final List<ExternalId> externalIds = found.externalIds();
+            softAssertions.assertThat(externalIds)
+                    .as("externalIdSize")
+                    .hasSize(1);
+            softAssertions.assertThat(externalIds)
+                    .as("externalIds")
+                    .containsExactly(ExternalId.of(EXPECTED_EXTERNAL_ID));
 
-            softAssertions.assertThat(found.elyNumber().get())
-                    .as("elyNumber")
-                    .isEqualTo(EXPECTED_ELY_NUMBER);
+            final List<Long> elyNumbers = found.elyNumbers();
+            softAssertions.assertThat(elyNumbers)
+                    .as("elyNumberSize")
+                    .hasSize(1);
+            softAssertions.assertThat(elyNumbers)
+                    .as("elyNumbers")
+                    .containsExactly(EXPECTED_ELY_NUMBER);
+
+            final double XCoordinate = found.location().getX();
+            softAssertions.assertThat(XCoordinate)
+                    .as("X coordinate")
+                    .isEqualTo(EXPECTED_X_COORDINATE);
+
+            final double YCoordinate = found.location().getY();
+            softAssertions.assertThat(YCoordinate)
+                    .as("Y coordinate")
+                    .isEqualTo(EXPECTED_Y_COORDINATE);
+
+            final String finnishName = JoreLocaleUtil.getI18nString(found.name(), JoreLocaleUtil.FINNISH);
+            softAssertions.assertThat(finnishName)
+                    .as("finnishName")
+                    .isEqualTo(EXPECTED_FINNISH_NAME);
+
+            final String swedishName = JoreLocaleUtil.getI18nString(found.name(), JoreLocaleUtil.SWEDISH);
+            softAssertions.assertThat(swedishName)
+                    .as("swedishName")
+                    .isEqualTo(EXPECTED_SWEDISH_NAME);
+        }
+
+        @Test
+        @DisplayName("The second invocation of the read() method must return null")
+        void secondInvocationOfReadMethodMustReturnNull() throws Exception {
+            //The first invocation returns the scheduled stop found from the database.
+            final ExportableScheduledStopPoint first = reader.read();
+            assertThat(first).isNotNull();
+
+            //Because there are no more scheduled stop points, this invocation must return null.
+            final ExportableScheduledStopPoint second = reader.read();
+            assertThat(second).isNull();
+        }
+    }
+
+    @Nested
+    @DisplayName("When the source table has one scheduled stop point")
+    @Sql(scripts = {
+            "/sql/destination/drop_tables.sql",
+            "/sql/destination/populate_infrastructure_nodes.sql",
+            "/sql/destination/populate_scheduled_stop_points_with_same_short_id.sql"
+    })
+    @ExtendWith(SoftAssertionsExtension.class)
+    class WhenSourceTableHasTwoScheduledStopPointsWithSameShortId {
+
+        private static final long EXPECTED_ELY_NUMBER_ONE = 1234567890L;
+        private static final long EXPECTED_ELY_NUMBER_TWO = 9876543211L;
+        private static final String EXPECTED_EXTERNAL_ID_ONE = "c";
+        private static final String EXPECTED_EXTERNAL_ID_TWO = "d";
+        private static final double EXPECTED_X_COORDINATE = 6;
+        private static final double EXPECTED_Y_COORDINATE = 5;
+        private static final String EXPECTED_FINNISH_NAME = "Yliopisto vanha";
+        private static final String EXPECTED_SWEDISH_NAME = "Universitetet gamla";
+
+        @Test
+        @DisplayName("The first invocation of the read() method must return the found scheduled stop point")
+        void firstInvocationOfReadMethodMustReturnFoundScheduledStopPoint(final SoftAssertions softAssertions) throws Exception {
+            final ExportableScheduledStopPoint found = reader.read();
+
+            final List<ExternalId> externalIds = found.externalIds();
+            softAssertions.assertThat(externalIds)
+                    .as("externalIdSize")
+                    .hasSize(2);
+            softAssertions.assertThat(externalIds)
+                    .as("externalIds")
+                    .containsExactly(
+                            ExternalId.of(EXPECTED_EXTERNAL_ID_ONE),
+                            ExternalId.of(EXPECTED_EXTERNAL_ID_TWO)
+                    );
+
+            final List<Long> elyNumbers = found.elyNumbers();
+            softAssertions.assertThat(elyNumbers)
+                    .as("elyNumberSize")
+                    .hasSize(2);
+            softAssertions.assertThat(elyNumbers)
+                    .as("elyNumbers")
+                    .containsExactly(EXPECTED_ELY_NUMBER_ONE, EXPECTED_ELY_NUMBER_TWO);
 
             final double XCoordinate = found.location().getX();
             softAssertions.assertThat(XCoordinate)

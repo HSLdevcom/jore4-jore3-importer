@@ -19,6 +19,7 @@ import static fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections.NE
 import static fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePoints.NETWORK_ROUTE_POINTS;
 import static fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPoints.NETWORK_ROUTE_STOP_POINTS;
 import static fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints.SCHEDULED_STOP_POINTS;
+import static org.jooq.impl.DSL.length;
 
 @Repository
 public class RoutePointExportRepository implements IRoutePointExportRepository {
@@ -46,15 +47,19 @@ public class RoutePointExportRepository implements IRoutePointExportRepository {
                 .on(NETWORK_ROUTE_POINTS.NETWORK_ROUTE_DIRECTION_ID.eq(NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_DIRECTION_ID))
                 .leftJoin(NETWORK_ROUTE_STOP_POINTS)
                 .on(NETWORK_ROUTE_STOP_POINTS.NETWORK_ROUTE_POINT_ID.eq(NETWORK_ROUTE_POINTS.NETWORK_ROUTE_POINT_ID))
-                .leftJoin(SCHEDULED_STOP_POINTS)
-                .on(SCHEDULED_STOP_POINTS.SCHEDULED_STOP_POINT_EXT_ID.eq(
-                        DSL.splitPart(NETWORK_ROUTE_STOP_POINTS.NETWORK_ROUTE_STOP_POINT_EXT_ID, "-", 2)
-                ))
                 .join(INFRASTRUCTURE_NODES)
                 .on(INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_ID.eq(NETWORK_ROUTE_POINTS.INFRASTRUCTURE_NODE))
+                .leftJoin(SCHEDULED_STOP_POINTS)
+                .on(SCHEDULED_STOP_POINTS.INFRASTRUCTURE_NODE_ID.eq(INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_ID))
                 .where(
                         NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_DIRECTION_ID.eq(routeDirectionId),
-                        NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_TRANSMODEL_ID.isNotNull()
+                        NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_TRANSMODEL_ID.isNotNull(),
+                        INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_TYPE.eq(NodeType.STOP.value())
+                                .and(
+                                        SCHEDULED_STOP_POINTS.SCHEDULED_STOP_POINT_ELY_NUMBER.isNotNull()
+                                                .and(length(SCHEDULED_STOP_POINTS.SCHEDULED_STOP_POINT_SHORT_ID).gt(4))
+                                )
+                                .or(INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_TYPE.notEqual(NodeType.STOP.value()))
                 )
                 .orderBy(NETWORK_ROUTE_POINTS.NETWORK_ROUTE_POINT_ORDER)
                 .fetchStream()

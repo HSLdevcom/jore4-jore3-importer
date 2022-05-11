@@ -4,6 +4,8 @@ import fi.hsl.jore.importer.feature.network.line.dto.ExportableLine;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelLine;
 import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
 import fi.hsl.jore.importer.feature.transmodel.util.ValidityPeriodUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +18,14 @@ import java.util.UUID;
 @Component
 public class LineExportProcessor implements ItemProcessor<ExportableLine, TransmodelLine> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(LineExportProcessor.class);
+
     private static final int DEFAULT_PRIORITY = 10;
 
     @Override
     public TransmodelLine process(final ExportableLine input) throws Exception {
+        LOGGER.debug("Processing line: {}", input);
+
         return TransmodelLine.of(
                 UUID.randomUUID(),
                 input.externalId().value(),
