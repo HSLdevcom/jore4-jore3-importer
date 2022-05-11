@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto;
 
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
+import io.vavr.collection.List;
 import org.immutables.value.Value;
 import org.locationtech.jts.geom.Point;
 
@@ -13,12 +14,20 @@ import java.util.Optional;
  * Jore 4 transmodel schema.
  */
 @Value.Immutable
-public interface ExportableScheduledStopPoint extends CommonFields<ExportableScheduledStopPoint> {
+public interface ExportableScheduledStopPoint {
+
+    List<Long> elyNumber();
+
+    List<ExternalId> externalId();
 
     Point location();
 
-    static ImmutableExportableScheduledStopPoint of(final ExternalId externalId,
-                                                    final Optional<Long> elynumber,
+    MultilingualString name();
+
+    Optional<String> shortId();
+
+    static ImmutableExportableScheduledStopPoint of(final List<ExternalId> externalId,
+                                                    final List<Long> elynumber,
                                                     final Point location,
                                                     final MultilingualString name,
                                                     final Optional<String> shortId) {

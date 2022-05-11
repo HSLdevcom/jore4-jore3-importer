@@ -6,4 +6,5 @@ SELECT
         lh.network_line_header_name_short AS short_name,
         lh.network_line_header_valid_date_range AS valid_date_range
 FROM network.network_lines l
-JOIN network.network_line_headers lh ON (lh.network_line_id = l.network_line_id);
+JOIN network.network_line_headers lh ON (lh.network_line_id = l.network_line_id)
+ORDER BY lh.network_line_header_valid_date_range DESC;
