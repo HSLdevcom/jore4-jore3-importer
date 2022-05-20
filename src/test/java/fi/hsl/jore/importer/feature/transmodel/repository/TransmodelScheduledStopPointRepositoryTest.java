@@ -85,7 +85,6 @@ class TransmodelScheduledStopPointRepositoryTest {
     @Sql(
             scripts = {
                     "/sql/transmodel/drop_tables.sql",
-                    "/sql/transmodel/populate_vehicle_modes.sql",
                     "/sql/transmodel/populate_infrastructure_links.sql"
             },
             config = @SqlConfig(dataSource = "jore4DataSource")

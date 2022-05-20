@@ -43,7 +43,6 @@ class TransmodelRouteGeometryRepositoryTest {
     @Sql(
             scripts = {
                     "/sql/transmodel/drop_tables.sql",
-                    "/sql/transmodel/populate_vehicle_modes.sql",
                     "/sql/transmodel/populate_infrastructure_links.sql",
                     "/sql/transmodel/populate_lines.sql",
                     "/sql/transmodel/populate_scheduled_stop_points.sql",
