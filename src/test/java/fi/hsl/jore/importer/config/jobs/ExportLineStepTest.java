@@ -125,10 +125,6 @@ class ExportLineStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_PRIMARY_VEHICLE_MODE.getValue());
         softAssertions.assertThat(jore4TargetTable)
                 .row()
-                .value(JORE4_LINE.DESCRIPTION_I18N.getName())
-                .isNull();
-        softAssertions.assertThat(jore4TargetTable)
-                .row()
                 .value(JORE4_LINE.PRIORITY.getName())
                 .isEqualTo(EXPECTED_PRIORITY);
 
