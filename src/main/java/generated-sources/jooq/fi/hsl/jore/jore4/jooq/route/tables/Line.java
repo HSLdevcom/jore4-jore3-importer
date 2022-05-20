@@ -62,12 +62,6 @@ public class Line extends TableImpl<Record> {
     public final TableField<Record, String> SHORT_NAME_I18N = createField(DSL.name("short_name_i18n"), SQLDataType.CLOB, this, "The shorted name of the line. Placeholder for multilingual strings.");
 
     /**
-     * The column <code>route.line.description_i18n</code>. The description of
-     * the line. Placeholder for multilingual strings.
-     */
-    public final TableField<Record, String> DESCRIPTION_I18N = createField(DSL.name("description_i18n"), SQLDataType.CLOB, this, "The description of the line. Placeholder for multilingual strings.");
-
-    /**
      * The column <code>route.line.primary_vehicle_mode</code>. The mode of the
      * vehicles used as primary on the line.
      */
