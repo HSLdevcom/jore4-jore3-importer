@@ -77,8 +77,7 @@ class TransmodelLineRepositoryTest {
     @DisplayName("Insert line into the database")
     @Sql(
             scripts = {
-                    "/sql/transmodel/drop_tables.sql",
-                    "/sql/transmodel/populate_vehicle_modes.sql"
+                    "/sql/transmodel/drop_tables.sql"
             },
             config = @SqlConfig(dataSource = "jore4DataSource")
     )
