@@ -13,6 +13,7 @@ import fi.hsl.jore.importer.feature.network.line.repository.ILineTestRepository;
 import fi.hsl.jore.importer.feature.network.line_header.dto.LineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.PersistableLineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.generated.LineHeaderPK;
+import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ public class LineHeaderRepositoryTest extends IntegrationTest {
                                                                   LocalDate.of(2021, 6, 25));
     private static final ExternalId HEADER_EXT_ID = ExternalIdUtil.forLineHeader(LineId.from(LINE_NUMBER),
                                                                                  VALID_TIME.range().lowerEndpoint());
+    private final TypeOfLine TYPE_OF_LINE = TypeOfLine.STOPPING_BUS_SERVICE;
 
     private final ILineTestRepository lineRepository;
     private final ILineHeaderTestRepository lineHeaderRepository;
@@ -67,7 +69,8 @@ public class LineHeaderRepositoryTest extends IntegrationTest {
         final LinePK lineId = lineRepository.insert(
                 PersistableLine.of(LINE_EXT_ID,
                                    DISPLAY_LINE_NUMBER,
-                                   NETWORK
+                                   NETWORK,
+                                   TYPE_OF_LINE
                 )
         );
 

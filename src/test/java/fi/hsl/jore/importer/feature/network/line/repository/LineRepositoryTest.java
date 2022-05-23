@@ -8,6 +8,7 @@ import fi.hsl.jore.importer.feature.jore3.field.LineId;
 import fi.hsl.jore.importer.feature.network.line.dto.Line;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
+import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class LineRepositoryTest extends IntegrationTest {
     private static final String DISPLAY_LINE_NUMBER = "5";
     private static final ExternalId EXT_ID = ExternalIdUtil.forLine(LineId.from(LINE_NUMBER));
     private static final NetworkType NETWORK = NetworkType.ROAD;
+    private final TypeOfLine TYPE_OF_LINE = TypeOfLine.STOPPING_BUS_SERVICE;
 
     private final ILineTestRepository lineRepository;
 
@@ -42,7 +44,8 @@ public class LineRepositoryTest extends IntegrationTest {
         final LinePK id = lineRepository.insert(
                 PersistableLine.of(EXT_ID,
                                    DISPLAY_LINE_NUMBER,
-                                   NETWORK)
+                                   NETWORK,
+                                   TYPE_OF_LINE)
         );
 
         assertThat(lineRepository.count(),
