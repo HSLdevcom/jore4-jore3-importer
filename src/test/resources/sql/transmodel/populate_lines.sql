@@ -7,6 +7,7 @@ INSERT INTO route.line (
         validity_start,
         validity_end,
         type_of_line,
+        transport_target,
         priority
 )
 VALUES (
@@ -18,5 +19,6 @@ VALUES (
         '2020-01-01 02:30:00+00',
         '2022-01-01 02:29:59+00',
         'stopping_bus_service',
+        'helsinki_internal_traffic',
         10
 );
