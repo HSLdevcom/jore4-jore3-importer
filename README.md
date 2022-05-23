@@ -197,12 +197,18 @@ The import flow consists of the following steps:
 * The `prepareTransmodelExportStep` step deletes the data found from the target tables.
 * The `exportScheduledStopPointsStep` step imports scheduled stop points from the importer's database to the Jore 4 database.
 * The `exportLinesStep` step imports lines from the importer's database to the Jore 4 database.
-* The `exportRoutesStep` step imports route metadata from the importer's database to the Jore 4 database.
-* The `exportRouteGeometriesStep` step imports route geometries from the importer's database to the Jore 4 database.
-* The `exportJourneyPatternsStep` imports journey pattern metadata (not including actual stop point sequences) from the 
-  importer's database to the Jore 4 database.
-* The `exportJourneyPatternStopsStep` imports the sequence of scheduled stop point references for each journey pattern 
-  from the importer's database to the Jore 4 database
+* The `exportRoutesStep` step imports route metadata from the importer's database to the Jore 4 database. This step
+  imports a route metadata to the Jore 4 database only if the line which owns the processed route metadata was imported 
+  to the Jore 4 database by the `exportLinesStep` step.
+* The `exportRouteGeometriesStep` step imports route geometries from the importer's database to the Jore 4 database. Note
+  that this step imports only the route geometries of route metadatas which were imported to the Jore 4 database by 
+  the `exportRoutesStep` step.
+* The `exportJourneyPatternsStep` step imports journey pattern metadata (not including actual stop point sequences) from the 
+  importer's database to the Jore 4 database. This step creates one journey pattern per route metadata which was imported 
+  to the Jore 4 database by the `exportRoutesStep` step.
+* The `exportJourneyPatternStopsStep`  step imports the sequence of scheduled stop point references for each journey pattern 
+  from the importer's database to the Jore 4 database. Note that this step processes the scheduled stop points of a journey 
+  pattern only if the journey pattern was imported to the Jore 4 database by the `exportJourneyPatternsStep` step.
 
 A single Spring Batch `Step` which imports data from the importer's database to the Jore 4 database consists of
 these three components:
