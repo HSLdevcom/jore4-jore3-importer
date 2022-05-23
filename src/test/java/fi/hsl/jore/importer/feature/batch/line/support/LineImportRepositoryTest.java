@@ -11,6 +11,7 @@ import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLineIdMapping;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
 import fi.hsl.jore.importer.feature.network.line.repository.ILineTestRepository;
+import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
@@ -51,6 +52,7 @@ public class LineImportRepositoryTest {
         private static final String DISPLAY_LINE_NUMBER = "5";
         private final ExternalId EXT_ID = ExternalIdUtil.forLine(LineId.from(LINE_NUMBER));
         private final NetworkType NETWORK = NetworkType.ROAD;
+        private final TypeOfLine TYPE_OF_LINE = TypeOfLine.STOPPING_BUS_SERVICE;
 
         @BeforeEach
         public void beforeEach() {
@@ -70,7 +72,8 @@ public class LineImportRepositoryTest {
             importRepository.submitToStaging(
                     List.of(PersistableLine.of(EXT_ID,
                             DISPLAY_LINE_NUMBER,
-                            NETWORK))
+                            NETWORK,
+                            TYPE_OF_LINE))
             );
 
             final Map<RowStatus, Set<LinePK>> result = importRepository.commitStagingToTarget();
@@ -106,7 +109,8 @@ public class LineImportRepositoryTest {
             final LinePK existingId = targetRepository.insert(
                     PersistableLine.of(EXT_ID,
                             DISPLAY_LINE_NUMBER,
-                            NETWORK)
+                            NETWORK,
+                            TYPE_OF_LINE)
             );
 
             final Map<RowStatus, Set<LinePK>> result = importRepository.commitStagingToTarget();

@@ -6,6 +6,7 @@ import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.line.dto.ExportableLine;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelLine;
+import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -32,6 +33,7 @@ class LineExportProcessorTest {
     private static final LocalDate VALID_DATE_RANGE_END = LocalDate.of(2005, 2, 1);
 
     private static final NetworkType NETWORK_TYPE_ROAD = NetworkType.ROAD;
+    private static final TypeOfLine TYPE_OF_LINE = TypeOfLine.SPECIAL_NEEDS_BUS;
     private static final VehicleMode EXPECTED_PRIMARY_VEHICLE_MODE = VehicleMode.BUS;
     private static final OffsetDateTime EXPECTED_VALIDITY_PERIOD_START_TIME = offsetDateTimeFromLocalDateTime(LocalDateTime.of(
             VALID_DATE_RANGE_START,
@@ -50,7 +52,8 @@ class LineExportProcessorTest {
             JoreLocaleUtil.createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
             NETWORK_TYPE_ROAD,
             JoreLocaleUtil.createMultilingualString(FINNISH_SHORT_NAME, SWEDISH_SHORT_NAME),
-            DateRange.between(VALID_DATE_RANGE_START, VALID_DATE_RANGE_END)
+            DateRange.between(VALID_DATE_RANGE_START, VALID_DATE_RANGE_END),
+            TYPE_OF_LINE
     );
 
     private final LineExportProcessor processor = new LineExportProcessor();
