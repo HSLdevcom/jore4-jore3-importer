@@ -5,6 +5,7 @@ import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.line.dto.ExportableLine;
+import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.AfterEach;
@@ -35,6 +36,7 @@ class LineExportReaderTest {
     private static final String EXPECTED_SWEDISH_SHORT_NAME = "Eira-Tölö-Kottby";
 
     private static final NetworkType EXPECTED_NETWORK_TYPE = NetworkType.TRAM_TRACK;
+    private static final TypeOfLine EXPECTED_TYPE_OF_LINE = TypeOfLine.CITY_TRAM_SERVICE;
 
     private static final LocalDate EXPECTED_VALID_DATE_RANGE_START = LocalDate.of(2021, 10, 4);
     private static final LocalDate EXPECTED_VALID_DATE_RANGE_END  = LocalDate.of(2051, 1, 1);
@@ -131,6 +133,10 @@ class LineExportReaderTest {
             softAssertions.assertThat(line.networkType())
                     .as("Network type")
                     .isEqualTo(EXPECTED_NETWORK_TYPE);
+
+            softAssertions.assertThat(line.typeOfLine())
+                .as("Type of line")
+                .isEqualTo(EXPECTED_TYPE_OF_LINE);
         }
 
         @Test

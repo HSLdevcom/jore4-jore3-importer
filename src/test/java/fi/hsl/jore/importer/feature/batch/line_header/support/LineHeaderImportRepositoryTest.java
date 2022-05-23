@@ -16,6 +16,7 @@ import fi.hsl.jore.importer.feature.network.line_header.dto.LineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.PersistableLineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.generated.LineHeaderPK;
 import fi.hsl.jore.importer.feature.network.line_header.repository.ILineHeaderTestRepository;
+import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
@@ -50,6 +51,7 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
                                                                   LocalDate.of(2021, 6, 25));
     private static final ExternalId HEADER_EXT_ID = ExternalIdUtil.forLineHeader(LineId.from(LINE_NUMBER),
                                                                                  VALID_TIME.range().lowerEndpoint());
+    private final TypeOfLine TYPE_OF_LINE = TypeOfLine.STOPPING_BUS_SERVICE;
 
     private final ILineHeaderImportRepository importRepository;
     private final ILineHeaderTestRepository targetRepository;
@@ -85,7 +87,8 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
         lineRepository.insert(
                 PersistableLine.of(LINE_EXT_ID,
                                    DISPLAY_LINE_NUMBER,
-                                   NETWORK)
+                                   NETWORK,
+                                   TYPE_OF_LINE)
         );
 
         importRepository.submitToStaging(
@@ -132,7 +135,8 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
         final LinePK lineId = lineRepository.insert(
                 PersistableLine.of(LINE_EXT_ID,
                                    DISPLAY_LINE_NUMBER,
-                                   NETWORK)
+                                   NETWORK,
+                                   TYPE_OF_LINE)
         );
 
         final LineHeaderPK existingId = targetRepository.insert(
@@ -197,7 +201,8 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
         final LinePK lineId = lineRepository.insert(
                 PersistableLine.of(LINE_EXT_ID,
                                    DISPLAY_LINE_NUMBER,
-                                   NETWORK)
+                                   NETWORK,
+                                   TYPE_OF_LINE)
         );
 
         final LineHeaderPK existingId = targetRepository.insert(
@@ -272,7 +277,8 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
         final LinePK lineId = lineRepository.insert(
                 PersistableLine.of(LINE_EXT_ID,
                                    DISPLAY_LINE_NUMBER,
-                                   NETWORK)
+                                   NETWORK,
+                                   TYPE_OF_LINE)
         );
 
         final LineHeaderPK existingId = targetRepository.insert(
@@ -330,7 +336,8 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
         final LinePK lineId = lineRepository.insert(
                 PersistableLine.of(LINE_EXT_ID,
                                    DISPLAY_LINE_NUMBER,
-                                   NETWORK)
+                                   NETWORK,
+                                   TYPE_OF_LINE)
         );
 
         final LineHeaderPK existingId = targetRepository.insert(
