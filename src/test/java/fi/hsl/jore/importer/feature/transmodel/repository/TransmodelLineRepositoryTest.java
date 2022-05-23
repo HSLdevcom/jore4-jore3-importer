@@ -3,6 +3,7 @@ package fi.hsl.jore.importer.feature.transmodel.repository;
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelLine;
+import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
 import org.assertj.core.api.Assertions;
 import org.assertj.db.type.Table;
@@ -44,6 +45,7 @@ class TransmodelLineRepositoryTest {
     private static final String SWEDISH_SHORT_NAME = "Vandap-Kervo";
 
     private static final VehicleMode PRIMARY_VEHICLE_MODE = VehicleMode.BUS;
+    private static final TypeOfLine TYPE_OF_LINE = TypeOfLine.STOPPING_BUS_SERVICE;
     private static final int PRIORITY = 10;
 
     private static final OffsetDateTime VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
@@ -90,6 +92,7 @@ class TransmodelLineRepositoryTest {
                 JoreLocaleUtil.createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
                 JoreLocaleUtil.createMultilingualString(FINNISH_SHORT_NAME, SWEDISH_SHORT_NAME),
                 PRIMARY_VEHICLE_MODE,
+                TYPE_OF_LINE,
                 PRIORITY,
                 Optional.of(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE),
                 Optional.of(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE)
