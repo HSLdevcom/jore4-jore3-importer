@@ -12,8 +12,7 @@ import javax.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalString;
-import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
+import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.*;
 
 public class LineRowMapper implements RowMapper<JrLine> {
 
@@ -35,6 +34,8 @@ public class LineRowMapper implements RowMapper<JrLine> {
                                  .orElse(PublicTransportType.UNKNOWN),
                          getOptionalString(rs, "linjlkohde")
                                  .flatMap(PublicTransportDestination::of)
-                                 .orElse(PublicTransportDestination.UNKNOWN));
+                                 .orElse(PublicTransportDestination.UNKNOWN),
+                         getBooleanOrThrow(rs, "linrunkolinja")
+            );
     }
 }
