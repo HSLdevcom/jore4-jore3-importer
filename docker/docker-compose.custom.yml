@@ -36,10 +36,10 @@ services:
 
   jore4-mssqltestdb:
     # pin compatible version of mssql schema
-    image: "hsldevcom/jore4-mssql-testdb:schema-only-main--21ef30b56e38b0cfa118ccf610ba0fa7e9e00ef7"
+    image: "hsldevcom/jore4-mssql-testdb:schema-only-jr_linja_vaatimus-table--20220523-1854abfa889ee6432878c5203a115ad4945506d3"
 
   jore4-hasura:
     # pin compatible version of jore4 data model
-    image: "hsldevcom/jore4-hasura:main--20220218-7261c6dc3d17b1365ed61a77535b7b8551c1c26b"
+    image: "hsldevcom/jore4-hasura:hsl-main--20220428-4afa79e8f2fb299ba3a1bec29fd904a9cadc79d5"
 networks:
     jore4:
