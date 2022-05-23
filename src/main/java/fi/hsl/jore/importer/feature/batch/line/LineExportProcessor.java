@@ -33,6 +33,7 @@ public class LineExportProcessor implements ItemProcessor<ExportableLine, Transm
                 input.name(),
                 input.shortName(),
                 VehicleMode.of(input.networkType()),
+                input.typeOfLine(),
                 DEFAULT_PRIORITY,
                 ValidityPeriodUtil.constructValidityPeriodStartTime(input.validDateRange().range()),
                 ValidityPeriodUtil.constructValidityPeriodEndTime(input.validDateRange().range())

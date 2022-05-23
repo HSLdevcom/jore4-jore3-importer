@@ -8,6 +8,7 @@ import fi.hsl.jore.jore4.jooq.route.tables.Direction;
 import fi.hsl.jore.jore4.jooq.route.tables.InfrastructureLinkAlongRoute;
 import fi.hsl.jore.jore4.jooq.route.tables.Line;
 import fi.hsl.jore.jore4.jooq.route.tables.Route;
+import fi.hsl.jore.jore4.jooq.route.tables.TypeOfLine;
 
 
 /**
@@ -38,4 +39,10 @@ public class Tables {
      * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
      */
     public static final Route ROUTE_ = Route.ROUTE_;
+
+    /**
+     * Type of line.
+     * https://www.transmodel-cen.eu/model/EARoot/EA2/EA1/EA3/EA491.htm
+     */
+    public static final TypeOfLine TYPE_OF_LINE = TypeOfLine.TYPE_OF_LINE;
 }

@@ -45,6 +45,7 @@ public class LineRepository
         r.setNetworkLineExtId(line.externalId().value());
         r.setNetworkLineNumber(line.lineNumber());
         r.setInfrastructureNetworkType(line.networkType().label());
+        r.setNetworkLineTypeOfLine(line.typeOfLine().getValue());
 
         r.store();
 
