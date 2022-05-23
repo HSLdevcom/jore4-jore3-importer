@@ -26,6 +26,8 @@ public interface TransmodelLine {
 
     VehicleMode primaryVehicleMode();
 
+    TypeOfLine typeOfLine();
+
     int priority();
 
     Optional<OffsetDateTime> validityStart();
@@ -38,6 +40,7 @@ public interface TransmodelLine {
                                       final MultilingualString name,
                                       final MultilingualString shortName,
                                       final VehicleMode primaryVehicleMode,
+                                      final TypeOfLine typeOfLine,
                                       final int priority,
                                       final Optional<OffsetDateTime> validityStart,
                                       final Optional<OffsetDateTime> validityEnd) {
@@ -48,6 +51,7 @@ public interface TransmodelLine {
                 .name(name)
                 .shortName(shortName)
                 .primaryVehicleMode(primaryVehicleMode)
+                .typeOfLine(typeOfLine)
                 .priority(priority)
                 .validityStart(validityStart)
                 .validityEnd(validityEnd)

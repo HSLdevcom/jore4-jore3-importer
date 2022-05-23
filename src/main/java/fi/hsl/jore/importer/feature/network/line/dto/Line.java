@@ -6,6 +6,7 @@ import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasSystemTime;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
+import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesWithHistoryRecord;
 import org.immutables.value.Value;
@@ -26,7 +27,8 @@ public interface Line
                    final NetworkType networkType,
                    final String lineNumber,
                    final TimeRange systemTime,
-                   final Optional<UUID> transmodelId) {
+                   final Optional<UUID> transmodelId,
+                   final TypeOfLine typeOfLine) {
         return ImmutableLine.builder()
                             .pk(pk)
                             .externalId(externalId)
@@ -34,6 +36,7 @@ public interface Line
                             .lineNumber(lineNumber)
                             .systemTime(systemTime)
                             .transmodelId(transmodelId)
+                            .typeOfLine(typeOfLine)
                             .build();
     }
 
@@ -44,7 +47,8 @@ public interface Line
                 NetworkType.of(record.getInfrastructureNetworkType()),
                 record.getNetworkLineNumber(),
                 record.getNetworkLineSysPeriod(),
-                Optional.ofNullable(record.getNetworkLineTransmodelId())
+                Optional.ofNullable(record.getNetworkLineTransmodelId()),
+                TypeOfLine.of(record.getNetworkLineTypeOfLine())
         );
     }
 
@@ -55,7 +59,8 @@ public interface Line
                 NetworkType.of(record.getInfrastructureNetworkType()),
                 record.getNetworkLineNumber(),
                 record.getNetworkLineSysPeriod(),
-                Optional.ofNullable(record.getNetworkLineTransmodelId())
+                Optional.ofNullable(record.getNetworkLineTransmodelId()),
+                TypeOfLine.of(record.getNetworkLineTypeOfLine())
         );
     }
 }

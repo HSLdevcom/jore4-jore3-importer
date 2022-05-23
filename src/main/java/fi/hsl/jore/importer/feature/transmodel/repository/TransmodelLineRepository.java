@@ -35,12 +35,13 @@ public class TransmodelLineRepository implements ITransmodelLineRepository {
                                     LINE.LABEL,
                                     LINE.NAME_I18N,
                                     LINE.PRIMARY_VEHICLE_MODE,
+                                    LINE.TYPE_OF_LINE,
                                     LINE.PRIORITY,
                                     LINE.SHORT_NAME_I18N,
                                     LINE.VALIDITY_START,
                                     LINE.VALIDITY_END
                             )
-                            .values((UUID) null, null, null, null, null, null, null, null)
+                            .values((UUID) null, null, null, null, null, null, null, null, null)
             );
 
             lines.forEach(line -> batch.bind(
@@ -48,6 +49,7 @@ public class TransmodelLineRepository implements ITransmodelLineRepository {
                     line.label(),
                     jsonbConverter.asJson(line.name()),
                     line.primaryVehicleMode().getValue(),
+                    line.typeOfLine().getValue(),
                     line.priority(),
                     jsonbConverter.asJson(line.shortName()),
                     line.validityStart().orElse(null),

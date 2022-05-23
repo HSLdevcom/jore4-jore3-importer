@@ -16,7 +16,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -65,6 +65,12 @@ public class NetworkLinesStaging extends TableImpl<NetworkLinesStagingRecord> {
      * <code>network.network_lines_staging.infrastructure_network_type</code>.
      */
     public final TableField<NetworkLinesStagingRecord, String> INFRASTRUCTURE_NETWORK_TYPE = createField(DSL.name("infrastructure_network_type"), SQLDataType.CLOB.nullable(false), this, "");
+
+    /**
+     * The column
+     * <code>network.network_lines_staging.network_line_type_of_line</code>.
+     */
+    public final TableField<NetworkLinesStagingRecord, String> NETWORK_LINE_TYPE_OF_LINE = createField(DSL.name("network_line_type_of_line"), SQLDataType.CLOB.nullable(false), this, "");
 
     private NetworkLinesStaging(Name alias, Table<NetworkLinesStagingRecord> aliased) {
         this(alias, aliased, null);
@@ -152,11 +158,11 @@ public class NetworkLinesStaging extends TableImpl<NetworkLinesStagingRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<String, String, String> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row4<String, String, String, String> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 }

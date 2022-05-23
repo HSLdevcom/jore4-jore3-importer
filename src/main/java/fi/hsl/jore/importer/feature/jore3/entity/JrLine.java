@@ -45,17 +45,23 @@ public interface JrLine
                 example = "9201")
     PublicTransportDestination publicTransportDestination();
 
+    @JoreColumn(name = "linrunkolinja",
+                example = "1")
+    boolean isTrunkLine();
+
     static JrLine of(final LineId lineId,
                      final TransitType transitType,
                      final ClientOrganization clientOrganization,
                      final PublicTransportType publicTransportType,
-                     final PublicTransportDestination publicTransportDestination) {
+                     final PublicTransportDestination publicTransportDestination,
+                     final boolean isTrunkLine) {
         return ImmutableJrLine.builder()
                               .lineId(lineId)
                               .transitType(transitType)
                               .clientOrganization(clientOrganization)
                               .publicTransportType(publicTransportType)
                               .publicTransportDestination(publicTransportDestination)
+                              .isTrunkLine(isTrunkLine)
                               .build();
     }
 }

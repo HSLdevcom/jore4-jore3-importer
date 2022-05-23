@@ -15,7 +15,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -80,6 +80,12 @@ public class NetworkLinesHistory extends TableImpl<NetworkLinesHistoryRecord> {
      * <code>network.network_lines_history.network_line_transmodel_id</code>.
      */
     public final TableField<NetworkLinesHistoryRecord, UUID> NETWORK_LINE_TRANSMODEL_ID = createField(DSL.name("network_line_transmodel_id"), SQLDataType.UUID, this, "");
+
+    /**
+     * The column
+     * <code>network.network_lines_history.network_line_type_of_line</code>.
+     */
+    public final TableField<NetworkLinesHistoryRecord, String> NETWORK_LINE_TYPE_OF_LINE = createField(DSL.name("network_line_type_of_line"), SQLDataType.CLOB.nullable(false), this, "");
 
     private NetworkLinesHistory(Name alias, Table<NetworkLinesHistoryRecord> aliased) {
         this(alias, aliased, null);
@@ -148,11 +154,11 @@ public class NetworkLinesHistory extends TableImpl<NetworkLinesHistoryRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<UUID, String, String, String, TimeRange, UUID> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<UUID, String, String, String, TimeRange, UUID, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }
