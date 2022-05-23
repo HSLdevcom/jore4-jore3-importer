@@ -46,12 +46,14 @@ public class LineImportRepository
         final BatchBindStep batch = db.batch(db.insertInto(STAGING_TABLE,
                                                            STAGING_TABLE.NETWORK_LINE_EXT_ID,
                                                            STAGING_TABLE.NETWORK_LINE_NUMBER,
-                                                           STAGING_TABLE.INFRASTRUCTURE_NETWORK_TYPE)
-                                               .values((String) null, null, null));
+                                                           STAGING_TABLE.INFRASTRUCTURE_NETWORK_TYPE,
+                                                           STAGING_TABLE.NETWORK_LINE_TYPE_OF_LINE)
+                                               .values((String) null, null, null, null));
 
         lines.forEach(line -> batch.bind(line.externalId().value(),
                                          line.lineNumber(),
-                                         line.networkType().label()));
+                                         line.networkType().label(),
+                                         line.typeOfLine().getValue()));
 
         batch.execute();
     }
@@ -79,10 +81,12 @@ public class LineImportRepository
         return db.insertInto(TARGET_TABLE)
                  .columns(TARGET_TABLE.NETWORK_LINE_EXT_ID,
                           TARGET_TABLE.NETWORK_LINE_NUMBER,
-                          TARGET_TABLE.INFRASTRUCTURE_NETWORK_TYPE)
+                          TARGET_TABLE.INFRASTRUCTURE_NETWORK_TYPE,
+                          TARGET_TABLE.NETWORK_LINE_TYPE_OF_LINE)
                  .select(db.select(STAGING_TABLE.NETWORK_LINE_EXT_ID,
                                    STAGING_TABLE.NETWORK_LINE_NUMBER,
-                                   STAGING_TABLE.INFRASTRUCTURE_NETWORK_TYPE)
+                                   STAGING_TABLE.INFRASTRUCTURE_NETWORK_TYPE,
+                                   STAGING_TABLE.NETWORK_LINE_TYPE_OF_LINE)
                            .from(STAGING_TABLE)
                            .whereNotExists(selectOne()
                                                    .from(TARGET_TABLE)

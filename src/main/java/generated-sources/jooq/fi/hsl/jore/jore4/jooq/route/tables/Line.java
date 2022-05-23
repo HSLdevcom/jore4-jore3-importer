@@ -94,6 +94,11 @@ public class Line extends TableImpl<Record> {
      */
     public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "The label of the line definition. The label is unique for a certain priority and validity period.");
 
+    /**
+     * The column <code>route.line.type_of_line</code>. The type of the line.
+     */
+    public final TableField<Record, String> TYPE_OF_LINE = createField(DSL.name("type_of_line"), SQLDataType.CLOB.nullable(false), this, "The type of the line.");
+
     private Line(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }

@@ -8,6 +8,7 @@ import fi.hsl.jore.jore4.jooq.DefaultCatalog;
 import fi.hsl.jore.jore4.jooq.route.tables.Direction;
 import fi.hsl.jore.jore4.jooq.route.tables.InfrastructureLinkAlongRoute;
 import fi.hsl.jore.jore4.jooq.route.tables.Line;
+import fi.hsl.jore.jore4.jooq.route.tables.TypeOfLine;
 
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +55,12 @@ public class Route extends SchemaImpl {
     public final fi.hsl.jore.jore4.jooq.route.tables.Route ROUTE_ = fi.hsl.jore.jore4.jooq.route.tables.Route.ROUTE_;
 
     /**
+     * Type of line.
+     * https://www.transmodel-cen.eu/model/EARoot/EA2/EA1/EA3/EA491.htm
+     */
+    public final TypeOfLine TYPE_OF_LINE = TypeOfLine.TYPE_OF_LINE;
+
+    /**
      * No further instances allowed
      */
     private Route() {
@@ -72,7 +79,8 @@ public class Route extends SchemaImpl {
             Direction.DIRECTION,
             InfrastructureLinkAlongRoute.INFRASTRUCTURE_LINK_ALONG_ROUTE,
             Line.LINE,
-            fi.hsl.jore.jore4.jooq.route.tables.Route.ROUTE_
+            fi.hsl.jore.jore4.jooq.route.tables.Route.ROUTE_,
+            TypeOfLine.TYPE_OF_LINE
         );
     }
 }
