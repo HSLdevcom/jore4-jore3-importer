@@ -197,12 +197,18 @@ The import flow consists of the following steps:
 * The `prepareTransmodelExportStep` step deletes the data found from the target tables.
 * The `exportScheduledStopPointsStep` step imports scheduled stop points from the importer's database to the Jore 4 database.
 * The `exportLinesStep` step imports lines from the importer's database to the Jore 4 database.
-* The `exportRoutesStep` step imports route metadata from the importer's database to the Jore 4 database.
-* The `exportRouteGeometriesStep` step imports route geometries from the importer's database to the Jore 4 database.
-* The `exportJourneyPatternsStep` imports journey pattern metadata (not including actual stop point sequences) from the 
-  importer's database to the Jore 4 database.
-* The `exportJourneyPatternStopsStep` imports the sequence of scheduled stop point references for each journey pattern 
-  from the importer's database to the Jore 4 database
+* The `exportRoutesStep` step imports route metadata from the importer's database to the Jore 4 database. This step
+  imports a route metadata to the Jore 4 database only if the line which owns the processed route metadata was imported 
+  to the Jore 4 database by the `exportLinesStep` step.
+* The `exportRouteGeometriesStep` step imports route geometries from the importer's database to the Jore 4 database. Note
+  that this step imports only the route geometries of route metadatas which were imported to the Jore 4 database by 
+  the `exportRoutesStep` step.
+* The `exportJourneyPatternsStep` step imports journey pattern metadata (not including actual stop point sequences) from the 
+  importer's database to the Jore 4 database. This step creates one journey pattern per route metadata which was imported 
+  to the Jore 4 database by the `exportRoutesStep` step.
+* The `exportJourneyPatternStopsStep`  step imports the sequence of scheduled stop point references for each journey pattern 
+  from the importer's database to the Jore 4 database. Note that this step processes the scheduled stop points of a journey 
+  pattern only if the journey pattern was imported to the Jore 4 database by the `exportJourneyPatternsStep` step.
 
 A single Spring Batch `Step` which imports data from the importer's database to the Jore 4 database consists of
 these three components:
@@ -229,13 +235,45 @@ The following sections identify the non-obvious assumptions made by the import p
 
 The process that imports scheduled stop points to Jore 4 follows these rules:
 
-* The imported stop points are sorted in ascending the order by using the external id (Jore 3 id). If multiple scheduled
-  stop points have the same short id, the first one is transferred to Jore 4. This ensures that multiple stop points
-  with the same short id and validity period cannot be transferred to Jore 4.
 * If the ely number of a scheduled stop point isn't found from the database of the importer, it won't be transferred
   to Jore 4.
-* If the information of a scheduled stop point isn't found from Digiroad, it won't be transferred to Jore 4.
-* The import process ignores Digiroad stop points which have invalid information (such missing or empty ely number).
+* The import process ignores Digiroad stop points which have invalid information (such as empty or missing ely number).
+* The imported stop points are sorted in ascending the order by using the external id (Jore 3 id). If multiple scheduled
+  stop points have the same short id, the exported information is selected by using these rules:
+  * The external ids of these stop points are added to a comma separated string.
+  * The ely numbers of these stop points are added to a comma separated string.
+  * The location, name, and short id of the first stop point are exported to Jore 4.
+* When the import process queries the stop point information from Digiroad, it follows these rules:
+  * It iterates all ely numbers and uses the first stop point whose information is found from Digiroad. The information
+    of the found Digiroad stop point is combined with the data read from the importer's database. The combined stop point
+    data is imported to the Jore 4 database.
+  * If the import process has iterated all ely numbers and none of them was found from the Digiroad data, the importer
+    ignores the processed stop point and won't transfer its information to the Jore 4 database.
+
+See the _/src/resources/export/export_scheduled_stop_points.sql_ file for more details.
+
+##### Lines
+
+* If multiple lines with the same label and priority have overlapping validity periods, only one line is inserted into
+  the Jore 4 database.
+
+##### Routes
+
+* When the importer queries the start and end stop points of an exported route from the importer's database, it 
+  will "group" stop points by using short id and selects the stop point that was exported to Jore 4 database. 
+* If multiple routes with same label and priority have overlapping validity periods, only one route is inserted into the
+  Jore 4 database.
+* The priority of a route must be higher or equal than the priority of the line which owns the route. If this isn't the
+  case, the route in question cannot be inserted into the Jore 4 database.
+
+See the _/src/resources/export/export_routes.sql_ file for more details.
+
+##### Stop Points of Journey Pattern
+
+* When the importer queries the stop points of a journey pattern from the importer's database, it 
+  will "group" stop points by using short id and selects the stop points which were exported to Jore 4 database.
+
+See the _/src/resources/export/export_stops_of_journey_patterns.sql_ file for more details.
 
 ## Developer Guide
 
@@ -384,7 +422,7 @@ If you want to create a package that can be used for deployment, you have run th
 
 If you want to restore a database dump on your local development environment, you should follow [these instructions](https://github.com/HSLdevcom/jore4-ui#loading-dump-into-development-database).
 
-### Azure Dev Database
+#### Azure Dev Database
 
 If you want to restore a database dump to the Azure dev database, you should follow these steps:
 
