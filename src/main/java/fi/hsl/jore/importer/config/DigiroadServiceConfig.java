@@ -11,6 +11,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.web.util.UriBuilder;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @Configuration
 public class DigiroadServiceConfig {
@@ -22,8 +28,8 @@ public class DigiroadServiceConfig {
     public static class StandardDatabaseConfiguration {
 
         @Bean
-        public DigiroadStopService digiroadStopService(final Environment environment) {
-            final Resource csvResource = new FileSystemResource(environment.getRequiredProperty("digiroad.stop.csv.file.path"));
+        public DigiroadStopService digiroadStopService(final Environment environment) throws URISyntaxException, MalformedURLException {
+            final Resource csvResource = new UrlResource(new URI(environment.getRequiredProperty("digiroad.stop.csv.file.url")));
             return new CsvDigiroadStopService(csvResource);
         }
     }
