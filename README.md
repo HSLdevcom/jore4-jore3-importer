@@ -438,6 +438,17 @@ If you want to use this option, you have to follow these steps:
 
 If you want to create a package that can be used for deployment, you have run the command: `mvn clean package spring-boot:repackage -P prod`
 
+### Taking a Database Dump From the Jore 4 Database
+
+When you want to take a database dump from the Jore 4 database, you can use one of these two options:
+
+**First**, If you want the database dump by using the graphical pgAdmin tool, you should use the custom format and ensure 
+that pgAdmin uses the default settings when it takes the database dump.
+
+**Second**, if you want to use the pg_dump command line utility, you should run the following command at command prompt:
+
+    pg_dump --file [file path]  --host [host] --port [port] --username [username] --format=c --blobs [database name]
+
 ### Restoring a Jore 4 Database Dump to the Database
 
 #### Local Development environment
