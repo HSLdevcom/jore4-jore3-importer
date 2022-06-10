@@ -286,6 +286,9 @@ See the _/src/resources/export/export_lines.sql_ file for more details.
   using the value of the `network_line_header_valid_date_range` column as a sort criteria.
 * The priority of a route must be higher or equal than the priority of the line which owns the route. If this isn't the
   case, the route in question cannot be inserted into the Jore 4 database.
+* A route will be transferred to the Jore 4 database only if the processed route is valid at 1.1.2021 or it will be valid 
+  after that date. If you change the valid date range found from the SQL query (_/src/main/resources/export/export_routes.sql_), 
+  you should remember to make the required changes to the route data sets found from the _src/test/resources/sql/destination_ directory.
 
 See the _/src/resources/export/export_routes.sql_ file for more details.
 

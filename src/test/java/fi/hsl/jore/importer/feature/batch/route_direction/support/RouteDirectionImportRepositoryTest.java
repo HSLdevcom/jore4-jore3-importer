@@ -58,7 +58,10 @@ class RouteDirectionImportRepositoryTest {
         private final String EXPECTED_SWEDISH_ORIGIN = "Central torget";
         private final String EXPECTED_FINNISH_DESTINATION = "Etelä-Hervanta";
         private final String EXPECTED_SWEDISH_DESTINATION = "Södra Hervanta";
-        private final DateRange EXPECTED_VALID_DATE_RANGE = DateRange.between(LocalDate.parse("2021-10-04"), LocalDate.parse("2050-12-31"));
+
+        //The expected date range is: [2021-01-01..2022-01-01). We need pass a weird end date to the between() method
+        //because its implementation moves the end day forward by one day.
+        private final DateRange EXPECTED_VALID_DATE_RANGE = DateRange.between(LocalDate.parse("2021-01-01"), LocalDate.parse("2021-12-31"));
 
         @Nested
         @DisplayName("When the staging table has no rows")
