@@ -84,7 +84,7 @@ class RouteExportReaderTest {
        private final UUID EXPECTED_START_SCHEDULED_STOP_POINT_TRANSMODEL_ID = UUID.fromString("45e83727-41fb-4e75-ad71-7e54d58f23ac");
        private final UUID EXPECTED_END_SCHEDULED_STOP_POINT_TRANSMODEL_ID = UUID.fromString("48a88a16-7b8c-4a97-ac2b-c9bf2ac3a08d");
 
-       private final LocalDate EXPECTED_VALID_DATE_RANGE_START = LocalDate.of(2021, 10, 4);
+       private final LocalDate EXPECTED_VALID_DATE_RANGE_START = LocalDate.of(2021, 1, 1);
        private final LocalDate EXPECTED_VALID_DATE_RANGE_END  = LocalDate.of(2022, 1, 1);
 
        @Test

@@ -17,5 +17,5 @@ INSERT INTO network.network_route_directions_staging (
           '{"fi_FI": "Keskustori-Etelä-Hervanta", "sv_SE": "Central torget-Södra Hervanta"}',
           '{"fi_FI": "Keskustori", "sv_SE": "Central torget"}',
           '{"fi_FI": "Etelä-Hervanta", "sv_SE": "Södra Hervanta"}',
-          '[2021-10-04,2051-01-01)'
+          '[2021-01-01,2022-01-01)'
 );
