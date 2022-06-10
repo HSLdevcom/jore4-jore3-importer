@@ -63,7 +63,7 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
 
     private static final OffsetDateTime VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
             LocalDateTime.of(
-                    LocalDate.of(2021, 10, 4),
+                    LocalDate.of(2021, 1, 1),
                     OPERATING_DAY_START_TIME
             )
     );
