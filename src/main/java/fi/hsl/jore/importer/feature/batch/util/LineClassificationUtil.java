@@ -51,7 +51,9 @@ public final class LineClassificationUtil {
                     TypeOfLine.REGIONAL_TRAM_SERVICE : TypeOfLine.CITY_TRAM_SERVICE;
 
             default:
-                throw new IllegalArgumentException("Cannot determine type of line: " + lineNumber);
+                return TypeOfLine.STOPPING_BUS_SERVICE;
+                // TODO: Find a way for determining the line type for this case.
+                //throw new IllegalArgumentException("Cannot determine type of line: " + lineNumber);
         }
     }
 }
