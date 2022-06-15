@@ -34,6 +34,7 @@ public class TransmodelRouteRepository implements ITransmodelRouteRepository {
             final BatchBindStep batch = db.batch(db.insertInto(
                                     ROUTE_,
                                     ROUTE_.ROUTE_ID,
+                                    ROUTE_.NAME_I18N,
                                     ROUTE_.DESCRIPTION_I18N,
                                     ROUTE_.DIRECTION,
                                     ROUTE_.LABEL,
@@ -44,11 +45,12 @@ public class TransmodelRouteRepository implements ITransmodelRouteRepository {
                                     ROUTE_.VALIDITY_START,
                                     ROUTE_.VALIDITY_END
                             )
-                            .values((UUID) null, null, null, null, null, null, null, null, null, null)
+                            .values((UUID) null, null, null, null, null, null, null, null, null, null, null)
             );
 
             routes.forEach(route -> batch.bind(
                     route.routeId(),
+                    jsonbConverter.asJson(route.description()),
                     jsonbConverter.asJson(route.description()),
                     route.direction().getValue(),
                     route.label(),

@@ -24,6 +24,7 @@ import java.time.OffsetDateTime;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
+import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
 import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -109,16 +110,18 @@ class ExportLineStepTest extends BatchIntegrationTest {
         softAssertions.assertThat(jore4TargetTable)
                 .row()
                 .value(JORE4_LINE.NAME_I18N.getName())
-                .isEqualTo(EXPECTED_NAME);
+                .is(equalJson(EXPECTED_NAME));
 
         softAssertions.assertThat(jore4TargetTable)
                 .row()
                 .value(JORE4_LINE.LABEL.getName())
                 .isEqualTo(EXPECTED_LABEL);
+
         softAssertions.assertThat(jore4TargetTable)
                 .row()
                 .value(JORE4_LINE.SHORT_NAME_I18N.getName())
-                .isEqualTo(EXPECTED_SHORT_NAME);
+                .is(equalJson(EXPECTED_SHORT_NAME));
+
         softAssertions.assertThat(jore4TargetTable)
                 .row()
                 .value(JORE4_LINE.PRIMARY_VEHICLE_MODE.getName())

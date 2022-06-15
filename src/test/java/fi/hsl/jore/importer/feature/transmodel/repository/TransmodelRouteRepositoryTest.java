@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
+import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
 import static fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil.createMultilingualString;
 import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
@@ -122,7 +123,7 @@ class TransmodelRouteRepositoryTest {
             assertThat(targetTable)
                     .row()
                     .value(ROUTE_.DESCRIPTION_I18N.getName())
-                    .isEqualTo(EXPECTED_DESCRIPTION);
+                    .is(equalJson(EXPECTED_DESCRIPTION));
         }
 
         @Test

@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
+import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
 import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
 import static org.assertj.db.api.Assertions.assertThat;
@@ -117,7 +118,7 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
         assertThat(jore4TargetTable)
                 .row()
                 .value(JORE4_ROUTE.DESCRIPTION_I18N.getName())
-                .isEqualTo(EXPECTED_DESCRIPTION);
+                .is(equalJson(EXPECTED_DESCRIPTION));
     }
 
     @Test

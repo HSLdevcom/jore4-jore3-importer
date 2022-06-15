@@ -25,6 +25,7 @@ import java.util.UUID;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
+import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
 import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
 import static org.assertj.db.api.Assertions.assertThat;
@@ -132,7 +133,7 @@ class TransmodelLineRepositoryTest {
             assertThat(targetTable)
                     .row()
                     .value(LINE.NAME_I18N.getName())
-                    .isEqualTo(EXPECTED_JORE4_NAME);
+                    .is(equalJson(EXPECTED_JORE4_NAME));
         }
 
         @Test
@@ -142,7 +143,7 @@ class TransmodelLineRepositoryTest {
             assertThat(targetTable)
                     .row()
                     .value(LINE.SHORT_NAME_I18N.getName())
-                    .isEqualTo(EXPECTED_JORE4_SHORT_NAME);
+                    .is(equalJson(EXPECTED_JORE4_SHORT_NAME));
         }
 
         @Test
