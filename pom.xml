@@ -463,7 +463,6 @@
                                     <name>${jooq.generator.db.dialect}</name>
                                     <includes>
                                         infrastructure_network.*
-                                        | internal_route.*
                                         | internal_service_pattern.*
                                         | journey_pattern.*
                                         | reusable_components.*

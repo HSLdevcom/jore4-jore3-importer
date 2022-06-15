@@ -1,6 +1,6 @@
 BEGIN;
 
-INSERT INTO internal_route.route (
+INSERT INTO route.route (
         route_id,
         description_i18n,
         direction,

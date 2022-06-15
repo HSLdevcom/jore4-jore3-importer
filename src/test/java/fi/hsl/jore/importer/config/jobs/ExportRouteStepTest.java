@@ -24,7 +24,7 @@ import java.util.UUID;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
-import static fi.hsl.jore.jore4.jooq.internal_route.Tables.ROUTE;
+import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
 import static org.assertj.db.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = JobConfig.class)
@@ -74,7 +74,7 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
     );
 
     private static final fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections IMPORTER_ROUTE_DIRECTION = fi.hsl.jore.importer.jooq.network.Tables.NETWORK_ROUTE_DIRECTIONS;
-    private static final fi.hsl.jore.jore4.jooq.internal_route.tables.Route JORE4_ROUTE = fi.hsl.jore.jore4.jooq.internal_route.Tables.ROUTE;
+    private static final fi.hsl.jore.jore4.jooq.route.tables.Route JORE4_ROUTE = fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
 
     private final Table importerTargetTable;
     private final Table jore4TargetTable;
@@ -84,7 +84,7 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
     public ExportRouteStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
                                final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
         this.importerTargetTable = new Table(importerDataSource, "network.network_route_directions");
-        this.jore4TargetTable = new Table(jore4DataSource, "internal_route.route");
+        this.jore4TargetTable = new Table(jore4DataSource, "route.route");
         this.testRepository = new TransmodelValidityPeriodTestRepository(jore4DataSource,
                 ValidityPeriodTargetTable.ROUTE
         );
@@ -193,7 +193,7 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
 
         final OffsetDateTime validityPeriodStart = testRepository.findValidityPeriodStartTimestampAtFinnishTimeZone();
         Assertions.assertThat(validityPeriodStart)
-                .as(ROUTE.VALIDITY_START.getName())
+                .as(ROUTE_.VALIDITY_START.getName())
                 .isEqualTo(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE);
     }
 
@@ -204,7 +204,7 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
 
         final OffsetDateTime validityPeriodEnd = testRepository.findValidityPeriodEndTimestampAtFinnishTimeZone();
         Assertions.assertThat(validityPeriodEnd)
-                .as(ROUTE.VALIDITY_END.getName())
+                .as(ROUTE_.VALIDITY_END.getName())
                 .isEqualTo(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE);
     }
 

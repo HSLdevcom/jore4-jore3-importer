@@ -7,7 +7,7 @@ package fi.hsl.jore.importer.feature.transmodel.repository;
 public enum ValidityPeriodTargetTable {
 
     LINE("route.line"),
-    ROUTE("internal_route.route"),
+    ROUTE("route.route"),
     SCHEDULED_STOP_POINT("internal_service_pattern.scheduled_stop_point");
 
     private final String tableName;

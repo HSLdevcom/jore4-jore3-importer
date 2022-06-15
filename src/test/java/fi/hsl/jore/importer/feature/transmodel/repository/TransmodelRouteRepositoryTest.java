@@ -25,7 +25,7 @@ import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil.createMultilingualString;
 import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
-import static fi.hsl.jore.jore4.jooq.internal_route.Tables.ROUTE;
+import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
 import static org.assertj.db.api.Assertions.assertThat;
 
 @IntTest
@@ -63,7 +63,7 @@ class TransmodelRouteRepositoryTest {
     TransmodelRouteRepositoryTest(final TransmodelRouteRepository repository,
                                  @Qualifier("jore4DataSource") final DataSource targetDataSource) {
         this.repository = repository;
-        this.targetTable = new Table(targetDataSource, "internal_route.route");
+        this.targetTable = new Table(targetDataSource, "route.route");
         this.testRepository = new TransmodelValidityPeriodTestRepository(targetDataSource,
                 ValidityPeriodTargetTable.ROUTE
         );
@@ -111,7 +111,7 @@ class TransmodelRouteRepositoryTest {
             repository.insert(List.of(INPUT));
             assertThat(targetTable)
                     .row()
-                    .value(ROUTE.ROUTE_ID.getName())
+                    .value(ROUTE_.ROUTE_ID.getName())
                     .isEqualTo(ROUTE_ID);
         }
 
@@ -121,7 +121,7 @@ class TransmodelRouteRepositoryTest {
             repository.insert(List.of(INPUT));
             assertThat(targetTable)
                     .row()
-                    .value(ROUTE.DESCRIPTION_I18N.getName())
+                    .value(ROUTE_.DESCRIPTION_I18N.getName())
                     .isEqualTo(EXPECTED_DESCRIPTION);
         }
 
@@ -131,7 +131,7 @@ class TransmodelRouteRepositoryTest {
             repository.insert(List.of(INPUT));
             assertThat(targetTable)
                     .row()
-                    .value(ROUTE.DIRECTION.getName())
+                    .value(ROUTE_.DIRECTION.getName())
                     .isEqualTo(ROUTE_DIRECTION.getValue());
         }
 
@@ -141,7 +141,7 @@ class TransmodelRouteRepositoryTest {
             repository.insert(List.of(INPUT));
             assertThat(targetTable)
                     .row()
-                    .value(ROUTE.LABEL.getName())
+                    .value(ROUTE_.LABEL.getName())
                     .isEqualTo(LABEL);
         }
 
@@ -151,7 +151,7 @@ class TransmodelRouteRepositoryTest {
             repository.insert(List.of(INPUT));
             assertThat(targetTable)
                     .row()
-                    .value(ROUTE.ON_LINE_ID.getName())
+                    .value(ROUTE_.ON_LINE_ID.getName())
                     .isEqualTo(LINE_ID);
         }
 
@@ -161,7 +161,7 @@ class TransmodelRouteRepositoryTest {
             repository.insert(List.of(INPUT));
             assertThat(targetTable)
                     .row()
-                    .value(ROUTE.PRIORITY.getName())
+                    .value(ROUTE_.PRIORITY.getName())
                     .isEqualTo(PRIORITY);
         }
 
@@ -192,7 +192,7 @@ class TransmodelRouteRepositoryTest {
 
             final OffsetDateTime validityPeriodStart = testRepository.findValidityPeriodStartTimestampAtFinnishTimeZone();
             Assertions.assertThat(validityPeriodStart)
-                    .as(ROUTE.VALIDITY_START.getName())
+                    .as(ROUTE_.VALIDITY_START.getName())
                     .isEqualTo(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE);
         }
 
@@ -203,7 +203,7 @@ class TransmodelRouteRepositoryTest {
 
             final OffsetDateTime validityPeriodEnd = testRepository.findValidityPeriodEndTimestampAtFinnishTimeZone();
             Assertions.assertThat(validityPeriodEnd)
-                    .as(ROUTE.VALIDITY_END.getName())
+                    .as(ROUTE_.VALIDITY_END.getName())
                     .isEqualTo(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE);
         }
     }

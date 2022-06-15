@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-import static fi.hsl.jore.jore4.jooq.internal_route.Tables.ROUTE;
+import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
 
 @Repository
 public class TransmodelRouteRepository implements ITransmodelRouteRepository {
@@ -32,17 +32,17 @@ public class TransmodelRouteRepository implements ITransmodelRouteRepository {
     public void insert(final List<? extends TransmodelRoute> routes) {
         if (!routes.isEmpty()) {
             final BatchBindStep batch = db.batch(db.insertInto(
-                                    ROUTE,
-                                    ROUTE.ROUTE_ID,
-                                    ROUTE.DESCRIPTION_I18N,
-                                    ROUTE.DIRECTION,
-                                    ROUTE.LABEL,
-                                    ROUTE.ON_LINE_ID,
-                                    ROUTE.PRIORITY,
-                                    ROUTE.STARTS_FROM_SCHEDULED_STOP_POINT_ID,
-                                    ROUTE.ENDS_AT_SCHEDULED_STOP_POINT_ID,
-                                    ROUTE.VALIDITY_START,
-                                    ROUTE.VALIDITY_END
+                                    ROUTE_,
+                                    ROUTE_.ROUTE_ID,
+                                    ROUTE_.DESCRIPTION_I18N,
+                                    ROUTE_.DIRECTION,
+                                    ROUTE_.LABEL,
+                                    ROUTE_.ON_LINE_ID,
+                                    ROUTE_.PRIORITY,
+                                    ROUTE_.STARTS_FROM_SCHEDULED_STOP_POINT_ID,
+                                    ROUTE_.ENDS_AT_SCHEDULED_STOP_POINT_ID,
+                                    ROUTE_.VALIDITY_START,
+                                    ROUTE_.VALIDITY_END
                             )
                             .values((UUID) null, null, null, null, null, null, null, null, null, null)
             );

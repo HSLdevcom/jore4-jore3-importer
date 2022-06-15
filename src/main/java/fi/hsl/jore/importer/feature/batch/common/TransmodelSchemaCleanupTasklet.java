@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import static fi.hsl.jore.jore4.jooq.internal_route.Tables.ROUTE;
+import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
 import static fi.hsl.jore.jore4.jooq.internal_service_pattern.Tables.SCHEDULED_STOP_POINT;
 import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.JOURNEY_PATTERN_;
 import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN;
@@ -37,7 +37,7 @@ public class TransmodelSchemaCleanupTasklet implements Tasklet  {
         db.truncate(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN).cascade().execute();
         db.truncate(INFRASTRUCTURE_LINK_ALONG_ROUTE).cascade().execute();
         db.truncate(LINE).cascade().execute();
-        db.truncate(ROUTE).cascade().execute();
+        db.truncate(ROUTE_).cascade().execute();
         db.truncate(JOURNEY_PATTERN_).cascade().execute();
         db.truncate(SCHEDULED_STOP_POINT).cascade().execute();
         return RepeatStatus.FINISHED;
