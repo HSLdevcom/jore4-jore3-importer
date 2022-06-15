@@ -30,7 +30,7 @@ public class TransmodelScheduledStopPointRepository implements ITransmodelSchedu
     @Override
     public void insert(final List<? extends TransmodelScheduledStopPoint> stopPoints) {
         if (!stopPoints.isEmpty()) {
-            stopPoints.forEach(stopPoint -> Routines.insertScheduledStopPoint(db.configuration(),
+            stopPoints.forEach(stopPoint -> Routines.insertScheduledStopPointWithVehicleMode(db.configuration(),
                     stopPoint.scheduledStopPointId(),
                     stopPoint.measuredLocation(),
                     db.select(INFRASTRUCTURE_LINK.INFRASTRUCTURE_LINK_ID)
