@@ -88,7 +88,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
                                       final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
         this.jdbcTemplate = new JdbcTemplate(jore4DataSource);
         this.importerTargetTable = new Table(importerDataSource, "network.scheduled_stop_points");
-        this.jore4ScheduledStopPointTargetTable = new Table(jore4DataSource, "internal_service_pattern.scheduled_stop_point");
+        this.jore4ScheduledStopPointTargetTable = new Table(jore4DataSource, "service_pattern.scheduled_stop_point");
         this.jore4VehicleModeTargetTable = new Table(jore4DataSource, "service_pattern.vehicle_mode_on_scheduled_stop_point");
         this.testRepository = new TransmodelValidityPeriodTestRepository(jore4DataSource,
                 ValidityPeriodTargetTable.SCHEDULED_STOP_POINT

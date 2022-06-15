@@ -22,7 +22,7 @@ public class JourneyPatternStopExportMapper implements RowMapper<ExportableJourn
                 resultSet.getBoolean("is_via_point"),
                 UUID.fromString(resultSet.getString("journey_pattern_transmodel_id")),
                 resultSet.getInt("order_number"),
-                UUID.fromString(resultSet.getString("scheduled_stop_point_transmodel_id"))
+                resultSet.getString("short_id")
         );
     }
 }

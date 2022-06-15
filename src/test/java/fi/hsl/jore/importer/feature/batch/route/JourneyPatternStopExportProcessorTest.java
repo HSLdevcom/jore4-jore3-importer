@@ -15,14 +15,14 @@ class JourneyPatternStopExportProcessorTest {
     private static final boolean IS_VIA_POINT = true;
     private static final UUID JOURNEY_PATTERN_TRANSMODEL_ID = UUID.fromString("55171cba-d8b7-4d6a-bbd4-cec0501c88f8");
     private static final int ORDER_NUMBER = 1;
-    private static final UUID SCHEDULED_STOP_POINT_TRANSMODEL_ID = UUID.fromString("2ba4162a-d30d-49ec-9ec7-9317be3083ca");
+    private static final String SCHEDULED_STOP_POINT_LABEL = "stop1";
 
     private static final ExportableJourneyPatternStop INPUT = ExportableJourneyPatternStop.of(
             IS_HASTUS_POINT,
             IS_VIA_POINT,
             JOURNEY_PATTERN_TRANSMODEL_ID,
             ORDER_NUMBER,
-            SCHEDULED_STOP_POINT_TRANSMODEL_ID
+            SCHEDULED_STOP_POINT_LABEL
     );
 
     private final JourneyPatternStopExportProcessor processor = new JourneyPatternStopExportProcessor();
@@ -38,7 +38,7 @@ class JourneyPatternStopExportProcessorTest {
     @DisplayName("Should return a journey pattern stop with the correct scheduled stop point id")
     void shouldReturnJourneyPatternStopWithCorrectScheduledStopPointId() throws Exception {
         final TransmodelJourneyPatternStop output = processor.process(INPUT);
-        assertThat(output.scheduledStopPointId()).isEqualTo(SCHEDULED_STOP_POINT_TRANSMODEL_ID);
+        assertThat(output.scheduledStopPointLabel()).isEqualTo(SCHEDULED_STOP_POINT_LABEL);
     }
 
     @Test

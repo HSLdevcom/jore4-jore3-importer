@@ -69,12 +69,12 @@ class JourneyPatternStopExportReaderTest {
 
         private final UUID JOURNEY_PATTERN_TRANSMODEL_ID = UUID.fromString("ec564137-f30c-4689-9322-4ef650768af3");
 
-        private final UUID FIRST_JOURNEY_PATTERN_STOP_TRANSMODEL_ID = UUID.fromString("45e83727-41fb-4e75-ad71-7e54d58f23ac");
+        private final String FIRST_JOURNEY_PATTERN_STOP_TRANSMODEL_LABEL = "H1234";
         private static final int FIRST_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 1;
         private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_HASTUS_POINT = false;
         private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_VIA_POINT = false;
 
-        private final UUID SECOND_JOURNEY_PATTERN_STOP_TRANSMODEL_ID = UUID.fromString("48a88a16-7b8c-4a97-ac2b-c9bf2ac3a08d");
+        private final String SECOND_JOURNEY_PATTERN_STOP_TRANSMODEL_LABEL = "H4321";
         private static final int SECOND_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 2;
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_HASTUS_POINT = true;
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_VIA_POINT = true;
@@ -87,9 +87,9 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(first.journeyPatternTransmodelId())
                     .as("journeyPatternTransmodelId")
                     .isEqualTo(JOURNEY_PATTERN_TRANSMODEL_ID);
-            softAssertions.assertThat(first.scheduledStopPointTransmodelId())
-                    .as("scheduledStopPointTransmodelId")
-                    .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_TRANSMODEL_ID);
+            softAssertions.assertThat(first.scheduledStopPointTransmodelLabel())
+                    .as("scheduledStopPointTransmodelLabel")
+                    .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_TRANSMODEL_LABEL);
             softAssertions.assertThat(first.orderNumber())
                     .as("orderNumber")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_ORDER_NUMBER);
@@ -112,9 +112,9 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(second.journeyPatternTransmodelId())
                     .as("journeyPatternTransmodelId")
                     .isEqualTo(JOURNEY_PATTERN_TRANSMODEL_ID);
-            softAssertions.assertThat(second.scheduledStopPointTransmodelId())
-                    .as("scheduledStopPointTransmodelId")
-                    .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_TRANSMODEL_ID);
+            softAssertions.assertThat(second.scheduledStopPointTransmodelLabel())
+                    .as("scheduledStopPointTransmodelLabel")
+                    .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_TRANSMODEL_LABEL);
             softAssertions.assertThat(second.orderNumber())
                     .as("orderNumber")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_ORDER_NUMBER);

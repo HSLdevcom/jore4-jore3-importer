@@ -17,20 +17,20 @@ public interface TransmodelJourneyPatternStop {
 
     UUID journeyPatternId();
 
-    UUID scheduledStopPointId();
+    String scheduledStopPointLabel();
 
     int scheduledStopPointSequence();
 
     static TransmodelJourneyPatternStop of(final boolean isTimingPoint,
                                            final boolean isViaPoint,
                                            final UUID journeyPatternId,
-                                           final UUID scheduledStopPointId,
+                                           final String scheduledStopPointLabel,
                                            final int scheduledStopPointSequence) {
         return ImmutableTransmodelJourneyPatternStop.builder()
                 .isTimingPoint(isTimingPoint)
                 .isViaPoint(isViaPoint)
                 .journeyPatternId(journeyPatternId)
-                .scheduledStopPointId(scheduledStopPointId)
+                .scheduledStopPointLabel(scheduledStopPointLabel)
                 .scheduledStopPointSequence(scheduledStopPointSequence)
                 .build();
     }

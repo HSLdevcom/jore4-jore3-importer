@@ -45,12 +45,12 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
 
     private static final String EXPECTED_JOURNEY_PATTERN_ID = "ec564137-f30c-4689-9322-4ef650768af3";
 
-    private static final String EXPECTED_FIRST_SCHEDULED_STOP_POINT_ID = "45e83727-41fb-4e75-ad71-7e54d58f23ac";
+    private static final String EXPECTED_FIRST_SCHEDULED_STOP_POINT_LABEL = "H1234";
     private static final int EXPECTED_FIRST_SCHEDULED_STOP_POINT_SEQUENCE = 1;
     private static final boolean EXPECTED_FIRST_IS_TIMING_POINT = false;
     private static final boolean EXPECTED_FIRST_IS_VIA_POINT = false;
 
-    private static final String EXPECTED_SECOND_SCHEDULED_STOP_POINT_ID = "48a88a16-7b8c-4a97-ac2b-c9bf2ac3a08d";
+    private static final String EXPECTED_SECOND_SCHEDULED_STOP_POINT_LABEL = "H4321";
     private static final int EXPECTED_SECOND_SCHEDULED_STOP_POINT_SEQUENCE = 2;
     private static final boolean EXPECTED_SECOND_IS_TIMING_POINT = true;
     private static final boolean EXPECTED_SECOND_IS_VIA_POINT = true;
@@ -83,9 +83,9 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_JOURNEY_PATTERN_ID);
         softAssertions.assertThat(targetTable)
                 .row(0)
-                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_ID.getName())
-                .as("scheduledStopPointId")
-                .isEqualTo(EXPECTED_FIRST_SCHEDULED_STOP_POINT_ID);
+                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_LABEL.getName())
+                .as("scheduledStopPointLabel")
+                .isEqualTo(EXPECTED_FIRST_SCHEDULED_STOP_POINT_LABEL);
         softAssertions.assertThat(targetTable)
                 .row(0)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_SEQUENCE.getName())
@@ -117,9 +117,9 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_JOURNEY_PATTERN_ID);
         softAssertions.assertThat(targetTable)
                 .row(1)
-                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_ID.getName())
-                .as("scheduledStopPointId")
-                .isEqualTo(EXPECTED_SECOND_SCHEDULED_STOP_POINT_ID);
+                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_LABEL.getName())
+                .as("scheduledStopPointLabel")
+                .isEqualTo(EXPECTED_SECOND_SCHEDULED_STOP_POINT_LABEL);
         softAssertions.assertThat(targetTable)
                 .row(1)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_SEQUENCE.getName())
