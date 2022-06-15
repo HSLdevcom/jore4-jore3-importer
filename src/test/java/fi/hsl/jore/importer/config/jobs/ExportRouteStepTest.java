@@ -58,9 +58,6 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
     private static final String EXPECTED_DESCRIPTION = "{\"fi_FI\":\"Keskustori - Etelä-Hervanta vanha\",\"sv_SE\":\"Central torget - Södra Hervanta gamla\"}";
     private static final int EXPECTED_PRIORITY = 10;
 
-    private final UUID EXPECTED_START_SCHEDULED_STOP_POINT_TRANSMODEL_ID = UUID.fromString("45e83727-41fb-4e75-ad71-7e54d58f23ac");
-    private final UUID EXPECTED_END_SCHEDULED_STOP_POINT_TRANSMODEL_ID = UUID.fromString("48a88a16-7b8c-4a97-ac2b-c9bf2ac3a08d");
-
     private static final OffsetDateTime VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
             LocalDateTime.of(
                     LocalDate.of(2021, 1, 1),
@@ -163,28 +160,6 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
                 .row()
                 .value(JORE4_ROUTE.PRIORITY.getName())
                 .isEqualTo(EXPECTED_PRIORITY);
-    }
-
-    @Test
-    @DisplayName("Should save the exported route with the correct start scheduled stop point id")
-    void shouldSaveExportedRouteWithCorrectStartScheduledStopPointId() {
-        runSteps(STEPS);
-
-        assertThat(jore4TargetTable)
-                .row()
-                .value(JORE4_ROUTE.STARTS_FROM_SCHEDULED_STOP_POINT_ID.getName())
-                .isEqualTo(EXPECTED_START_SCHEDULED_STOP_POINT_TRANSMODEL_ID);
-    }
-
-    @Test
-    @DisplayName("Should save the exported route with the correct end scheduled stop point id")
-    void shouldSaveExportedRouteWithCorrectEndScheduledStopPointId() {
-        runSteps(STEPS);
-
-        assertThat(jore4TargetTable)
-                .row()
-                .value(JORE4_ROUTE.ENDS_AT_SCHEDULED_STOP_POINT_ID.getName())
-                .isEqualTo(EXPECTED_END_SCHEDULED_STOP_POINT_TRANSMODEL_ID);
     }
 
     @Test

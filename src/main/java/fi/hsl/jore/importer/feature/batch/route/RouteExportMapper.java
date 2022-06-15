@@ -34,8 +34,6 @@ public class RouteExportMapper implements RowMapper<ExportableRoute> {
                 jsonConverter.fromJson(resultSet.getString("name"), MultilingualString.class),
                 UUID.fromString(resultSet.getString("line_transmodel_id")),
                 resultSet.getString("route_number"),
-                UUID.fromString(resultSet.getString("start_scheduled_stop_point_transmodel_id")),
-                UUID.fromString(resultSet.getString("end_scheduled_stop_point_transmodel_id")),
                 DATE_RANGE_CONVERTER.from(resultSet.getString("valid_date_range"))
         );
     }

@@ -30,8 +30,6 @@ class RouteExportProcessorTest {
     private static final String SWEDISH_NAME = "Central torget - Södra Hervanta";
     private static final UUID LINE_TRANSMODEL_ID = UUID.fromString("184b4710-9366-4500-aef3-39d03e95dde2");
     private static final String ROUTE_NUMBER = "30";
-    private static final UUID START_SCHEDULED_STOP_POINT_TRANSMODEL_ID = UUID.fromString("19a756fa-0a4b-4cf8-99f9-b2e347dd5568");
-    private static final UUID END_SCHEDULED_STOP_POINT_TRANSMODEL_ID = UUID.fromString("33bca2cd-d7ee-494a-844d-8915c4de1893");
 
     private static final LocalDate VALIDITY_PERIOD_START_DAY = LocalDate.of(2021, 1, 1);
     private static final LocalDate VALIDITY_PERIOD_END_DAY = LocalDate.of(2022, 12, 31);
@@ -51,8 +49,6 @@ class RouteExportProcessorTest {
             createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
             LINE_TRANSMODEL_ID,
             ROUTE_NUMBER,
-            START_SCHEDULED_STOP_POINT_TRANSMODEL_ID,
-            END_SCHEDULED_STOP_POINT_TRANSMODEL_ID,
             DateRange.between(VALIDITY_PERIOD_START_DAY, VALIDITY_PERIOD_END_DAY)
     );
 
@@ -114,20 +110,6 @@ class RouteExportProcessorTest {
     void shouldReturnRouteWithCorrectPriority() throws Exception {
         final TransmodelRoute route = processor.process(INPUT);
         assertThat(route.priority()).isEqualTo(JORE4_ROUTE_PRIORITY);
-    }
-
-    @Test
-    @DisplayName("Should return a route with the correct start scheduled stop point id")
-    void shouldReturnRouteWithCorrectStartScheduledStopPointId() throws Exception {
-        final TransmodelRoute route = processor.process(INPUT);
-        assertThat(route.startScheduledStopPointId()).isEqualTo(START_SCHEDULED_STOP_POINT_TRANSMODEL_ID);
-    }
-
-    @Test
-    @DisplayName("Should return a route with the correct end scheduled stop point id")
-    void shouldReturnRouteWithCorrectEndScheduledStopPointId() throws Exception {
-        final TransmodelRoute route = processor.process(INPUT);
-        assertThat(route.endScheduledStopPointId()).isEqualTo(END_SCHEDULED_STOP_POINT_TRANSMODEL_ID);
     }
 
     @Test

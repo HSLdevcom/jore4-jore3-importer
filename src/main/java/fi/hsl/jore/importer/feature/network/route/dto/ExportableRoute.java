@@ -25,10 +25,6 @@ public interface ExportableRoute {
 
     String routeNumber();
 
-    UUID startScheduledStopPointTransmodelId();
-
-    UUID endScheduledStopPointTransmodelId();
-
     DateRange validDateRange();
 
     static ExportableRoute of(final UUID directionId,
@@ -36,8 +32,6 @@ public interface ExportableRoute {
                               final MultilingualString name,
                               final UUID lineTransmodelId,
                               final String routeNumber,
-                              final UUID startScheduledStopPointTransmodelId,
-                              final UUID endScheduledStopPointTransmodelId,
                               final DateRange  validDateRange) {
         return ImmutableExportableRoute.builder()
                 .directionId(directionId)
@@ -45,8 +39,6 @@ public interface ExportableRoute {
                 .name(name)
                 .lineTransmodelId(lineTransmodelId)
                 .routeNumber(routeNumber)
-                .startScheduledStopPointTransmodelId(startScheduledStopPointTransmodelId)
-                .endScheduledStopPointTransmodelId(endScheduledStopPointTransmodelId)
                 .validDateRange(validDateRange)
                 .build();
     }

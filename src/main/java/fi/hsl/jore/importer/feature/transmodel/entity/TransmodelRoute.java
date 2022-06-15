@@ -29,10 +29,6 @@ public interface TransmodelRoute {
 
     int priority();
 
-    UUID startScheduledStopPointId();
-
-    UUID endScheduledStopPointId();
-
     Optional<OffsetDateTime> validityStart();
 
     Optional<OffsetDateTime> validityEnd();
@@ -44,8 +40,6 @@ public interface TransmodelRoute {
                               final String label,
                               final UUID lineId,
                               final int priority,
-                              final UUID startScheduledStopPointId,
-                              final UUID endScheduledStopPointId,
                               final Optional<OffsetDateTime> validityStart,
                               final Optional<OffsetDateTime> validityEnd) {
         return ImmutableTransmodelRoute.builder()
@@ -56,8 +50,6 @@ public interface TransmodelRoute {
                 .label(label)
                 .lineId(lineId)
                 .priority(priority)
-                .startScheduledStopPointId(startScheduledStopPointId)
-                .endScheduledStopPointId(endScheduledStopPointId)
                 .validityStart(validityStart)
                 .validityEnd(validityEnd)
                 .build();

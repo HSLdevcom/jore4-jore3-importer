@@ -40,12 +40,10 @@ public class TransmodelRouteRepository implements ITransmodelRouteRepository {
                                     ROUTE_.LABEL,
                                     ROUTE_.ON_LINE_ID,
                                     ROUTE_.PRIORITY,
-                                    ROUTE_.STARTS_FROM_SCHEDULED_STOP_POINT_ID,
-                                    ROUTE_.ENDS_AT_SCHEDULED_STOP_POINT_ID,
                                     ROUTE_.VALIDITY_START,
                                     ROUTE_.VALIDITY_END
                             )
-                            .values((UUID) null, null, null, null, null, null, null, null, null, null, null)
+                            .values((UUID) null, null, null, null, null, null, null, null, null)
             );
 
             routes.forEach(route -> batch.bind(
@@ -56,8 +54,6 @@ public class TransmodelRouteRepository implements ITransmodelRouteRepository {
                     route.label(),
                     route.lineId(),
                     route.priority(),
-                    route.startScheduledStopPointId(),
-                    route.endScheduledStopPointId(),
                     route.validityStart().orElse(null),
                     route.validityEnd().orElse(null)
             ));
