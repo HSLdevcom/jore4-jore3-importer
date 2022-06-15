@@ -49,14 +49,14 @@ class TransmodelJourneyPatternStopRepositoryTest {
         private static final boolean IS_TIMING_POINT = true;
         private static final boolean IS_VIA_POINT = true;
         private final UUID JOURNEY_PATTERN_ID = UUID.fromString("ec564137-f30c-4689-9322-4ef650768af3");
-        private final UUID SCHEDULED_STOP_POINT_ID  = UUID.fromString("45e83727-41fb-4e75-ad71-7e54d58f23ac");
+        private final String SCHEDULED_STOP_POINT_LABEL  = "H1234";
         private static final int SCHEDULED_STOP_POINT_SEQUENCE = 1;
 
         private final TransmodelJourneyPatternStop INPUT = TransmodelJourneyPatternStop.of(
                 IS_TIMING_POINT,
                 IS_VIA_POINT,
                 JOURNEY_PATTERN_ID,
-                SCHEDULED_STOP_POINT_ID,
+                SCHEDULED_STOP_POINT_LABEL,
                 SCHEDULED_STOP_POINT_SEQUENCE
         );
 
@@ -86,8 +86,8 @@ class TransmodelJourneyPatternStopRepositoryTest {
 
             assertThat(targetTable)
                     .row()
-                    .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_ID.getName())
-                    .isEqualTo(SCHEDULED_STOP_POINT_ID);
+                    .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_LABEL.getName())
+                    .isEqualTo(SCHEDULED_STOP_POINT_LABEL);
         }
 
         @Test

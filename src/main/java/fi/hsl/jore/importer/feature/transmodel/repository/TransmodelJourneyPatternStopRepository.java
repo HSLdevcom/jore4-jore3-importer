@@ -30,7 +30,7 @@ public class TransmodelJourneyPatternStopRepository implements ITransmodelJourne
             final BatchBindStep batch = db.batch(db.insertInto(
                     SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN,
                     SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.JOURNEY_PATTERN_ID,
-                    SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_ID,
+                    SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_LABEL,
                     SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_SEQUENCE,
                     SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_TIMING_POINT,
                     SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_VIA_POINT
@@ -39,7 +39,7 @@ public class TransmodelJourneyPatternStopRepository implements ITransmodelJourne
 
             journeyPatternStops.forEach(journeyPatternStop -> batch.bind(
                     journeyPatternStop.journeyPatternId(),
-                    journeyPatternStop.scheduledStopPointId(),
+                    journeyPatternStop.scheduledStopPointLabel(),
                     journeyPatternStop.scheduledStopPointSequence(),
                     journeyPatternStop.isTimingPoint(),
                     journeyPatternStop.isViaPoint()

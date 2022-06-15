@@ -24,7 +24,7 @@ public class JourneyPatternStopExportProcessor implements ItemProcessor<Exportab
                 input.isHastusPoint(),
                 input.isViaPoint(),
                 input.journeyPatternTransmodelId(),
-                input.scheduledStopPointTransmodelId(),
+                input.scheduledStopPointTransmodelLabel(),
                 input.orderNumber()
         );
     }

@@ -19,19 +19,19 @@ public interface ExportableJourneyPatternStop {
 
     int orderNumber();
 
-    UUID scheduledStopPointTransmodelId();
+    String scheduledStopPointTransmodelLabel();
 
     static ExportableJourneyPatternStop of(final boolean isHastusPoint,
                                            final boolean isViaPoint,
                                            final UUID journeyPatternTransmodelId,
                                            final int orderNumber,
-                                           final UUID scheduledStopPointTransmodelId) {
+                                           final String scheduledStopPointTransmodelLabel) {
         return ImmutableExportableJourneyPatternStop.builder()
                 .isHastusPoint(isHastusPoint)
                 .isViaPoint(isViaPoint)
                 .journeyPatternTransmodelId(journeyPatternTransmodelId)
                 .orderNumber(orderNumber)
-                .scheduledStopPointTransmodelId(scheduledStopPointTransmodelId)
+                .scheduledStopPointTransmodelLabel(scheduledStopPointTransmodelLabel)
                 .build();
     }
 }
