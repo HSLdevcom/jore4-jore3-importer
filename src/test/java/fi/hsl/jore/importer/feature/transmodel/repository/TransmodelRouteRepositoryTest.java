@@ -40,8 +40,6 @@ class TransmodelRouteRepositoryTest {
     private static final int PRIORITY = 10;
     private static final TransmodelRouteDirection ROUTE_DIRECTION = TransmodelRouteDirection.INBOUND;
     private static final UUID ROUTE_DIRECTION_ID = UUID.fromString("6f93fa6b-8a19-4b98-bd84-b8409e670c70");
-    private static final UUID START_SCHEDULED_STOP_POINT_ID = UUID.fromString("45e83727-41fb-4e75-ad71-7e54d58f23ac");
-    private static final UUID END_SCHEDULED_STOP_POINT_ID = UUID.fromString("48a88a16-7b8c-4a97-ac2b-c9bf2ac3a08d");
 
     private static final OffsetDateTime VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
             LocalDateTime.of(
@@ -93,8 +91,6 @@ class TransmodelRouteRepositoryTest {
                 LABEL,
                 LINE_ID,
                 PRIORITY,
-                START_SCHEDULED_STOP_POINT_ID,
-                END_SCHEDULED_STOP_POINT_ID,
                 Optional.of(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE),
                 Optional.of(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE)
         );
@@ -164,26 +160,6 @@ class TransmodelRouteRepositoryTest {
                     .row()
                     .value(ROUTE_.PRIORITY.getName())
                     .isEqualTo(PRIORITY);
-        }
-
-        @Test
-        @DisplayName("Should save a new route with the correct start scheduled stop point id")
-        void shouldSaveNewRouteWithCorrectStartScheduledStopPointId() {
-            repository.insert(List.of(INPUT));
-            assertThat(targetTable)
-                    .row()
-                    .value(ROUTE.STARTS_FROM_SCHEDULED_STOP_POINT_ID.getName())
-                    .isEqualTo(START_SCHEDULED_STOP_POINT_ID);
-        }
-
-        @Test
-        @DisplayName("Should save a new route with the correct end scheduled stop point id")
-        void shouldSaveNewRouteWithCorrectEndScheduledStopPointId() {
-            repository.insert(List.of(INPUT));
-            assertThat(targetTable)
-                    .row()
-                    .value(ROUTE.ENDS_AT_SCHEDULED_STOP_POINT_ID.getName())
-                    .isEqualTo(END_SCHEDULED_STOP_POINT_ID);
         }
 
         @Test
