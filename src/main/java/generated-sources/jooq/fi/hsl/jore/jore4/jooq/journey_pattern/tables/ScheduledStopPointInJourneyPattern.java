@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Schema;
@@ -54,13 +55,6 @@ public class ScheduledStopPointInJourneyPattern extends TableImpl<Record> {
 
     /**
      * The column
-     * <code>journey_pattern.scheduled_stop_point_in_journey_pattern.scheduled_stop_point_id</code>.
-     * The ID of the scheduled stop point.
-     */
-    public final TableField<Record, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID.nullable(false), this, "The ID of the scheduled stop point.");
-
-    /**
-     * The column
      * <code>journey_pattern.scheduled_stop_point_in_journey_pattern.scheduled_stop_point_sequence</code>.
      * The order of the scheduled stop point within the journey pattern.
      */
@@ -79,6 +73,24 @@ public class ScheduledStopPointInJourneyPattern extends TableImpl<Record> {
      * Is this scheduled stop point a via point?
      */
     public final TableField<Record, Boolean> IS_VIA_POINT = createField(DSL.name("is_via_point"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "Is this scheduled stop point a via point?");
+
+    /**
+     * The column
+     * <code>journey_pattern.scheduled_stop_point_in_journey_pattern.via_point_name_i18n</code>.
+     */
+    public final TableField<Record, JSONB> VIA_POINT_NAME_I18N = createField(DSL.name("via_point_name_i18n"), SQLDataType.JSONB, this, "");
+
+    /**
+     * The column
+     * <code>journey_pattern.scheduled_stop_point_in_journey_pattern.via_point_short_name_i18n</code>.
+     */
+    public final TableField<Record, JSONB> VIA_POINT_SHORT_NAME_I18N = createField(DSL.name("via_point_short_name_i18n"), SQLDataType.JSONB, this, "");
+
+    /**
+     * The column
+     * <code>journey_pattern.scheduled_stop_point_in_journey_pattern.scheduled_stop_point_label</code>.
+     */
+    public final TableField<Record, String> SCHEDULED_STOP_POINT_LABEL = createField(DSL.name("scheduled_stop_point_label"), SQLDataType.CLOB.nullable(false), this, "");
 
     private ScheduledStopPointInJourneyPattern(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);

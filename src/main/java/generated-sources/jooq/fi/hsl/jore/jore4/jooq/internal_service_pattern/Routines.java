@@ -4,12 +4,18 @@
 package fi.hsl.jore.jore4.jooq.internal_service_pattern;
 
 
-import fi.hsl.jore.jore4.jooq.internal_service_pattern.routines.InsertScheduledStopPoint;
+import fi.hsl.jore.jore4.jooq.internal_service_pattern.routines.DeleteScheduledStopPointLabel;
+import fi.hsl.jore.jore4.jooq.internal_service_pattern.routines.InsertScheduledStopPointLabel;
+import fi.hsl.jore.jore4.jooq.internal_service_pattern.routines.InsertScheduledStopPointWithVehicleMode;
+import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import org.jooq.Configuration;
+import org.jooq.Field;
+import org.jooq.Record;
+import org.jooq.Result;
 import org.locationtech.jts.geom.Point;
 
 
@@ -21,9 +27,38 @@ import org.locationtech.jts.geom.Point;
 public class Routines {
 
     /**
-     * Call <code>internal_service_pattern.insert_scheduled_stop_point</code>
+     * Call
+     * <code>internal_service_pattern.delete_scheduled_stop_point_label</code>
      */
-    public static void insertScheduledStopPoint(
+    public static void deleteScheduledStopPointLabel(
+          Configuration configuration
+        , String oldLabel
+    ) {
+        DeleteScheduledStopPointLabel p = new DeleteScheduledStopPointLabel();
+        p.setOldLabel(oldLabel);
+
+        p.execute(configuration);
+    }
+
+    /**
+     * Call
+     * <code>internal_service_pattern.insert_scheduled_stop_point_label</code>
+     */
+    public static void insertScheduledStopPointLabel(
+          Configuration configuration
+        , String newLabel
+    ) {
+        InsertScheduledStopPointLabel p = new InsertScheduledStopPointLabel();
+        p.setNewLabel(newLabel);
+
+        p.execute(configuration);
+    }
+
+    /**
+     * Call
+     * <code>internal_service_pattern.insert_scheduled_stop_point_with_vehicle_mode</code>
+     */
+    public static void insertScheduledStopPointWithVehicleMode(
           Configuration configuration
         , UUID scheduledStopPointId
         , Point measuredLocation
@@ -35,7 +70,7 @@ public class Routines {
         , Integer priority
         , String supportedVehicleMode
     ) {
-        InsertScheduledStopPoint p = new InsertScheduledStopPoint();
+        InsertScheduledStopPointWithVehicleMode p = new InsertScheduledStopPointWithVehicleMode();
         p.setScheduledStopPointId(scheduledStopPointId);
         p.setMeasuredLocation(measuredLocation);
         p.setLocatedOnInfrastructureLinkId(locatedOnInfrastructureLinkId);
@@ -47,5 +82,93 @@ public class Routines {
         p.setSupportedVehicleMode(supportedVehicleMode);
 
         p.execute(configuration);
+    }
+
+    /**
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
+     */
+    @Deprecated
+    public static Result<Record> getScheduledStopPointsWithNew(
+          Configuration configuration
+        , UUID replaceScheduledStopPointId
+        , UUID newScheduledStopPointId
+        , UUID newLocatedOnInfrastructureLinkId
+        , Object newMeasuredLocation
+        , String newDirection
+        , String newLabel
+        , OffsetDateTime newValidityStart
+        , OffsetDateTime newValidityEnd
+    ) {
+        return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
+              replaceScheduledStopPointId
+            , newScheduledStopPointId
+            , newLocatedOnInfrastructureLinkId
+            , newMeasuredLocation
+            , newDirection
+            , newLabel
+            , newValidityStart
+            , newValidityEnd
+        )).fetch();
+    }
+
+    /**
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
+     */
+    @Deprecated
+    public static GetScheduledStopPointsWithNew getScheduledStopPointsWithNew(
+          UUID replaceScheduledStopPointId
+        , UUID newScheduledStopPointId
+        , UUID newLocatedOnInfrastructureLinkId
+        , Object newMeasuredLocation
+        , String newDirection
+        , String newLabel
+        , OffsetDateTime newValidityStart
+        , OffsetDateTime newValidityEnd
+    ) {
+        return fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
+            replaceScheduledStopPointId,
+            newScheduledStopPointId,
+            newLocatedOnInfrastructureLinkId,
+            newMeasuredLocation,
+            newDirection,
+            newLabel,
+            newValidityStart,
+            newValidityEnd
+        );
+    }
+
+    /**
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
+     */
+    @Deprecated
+    public static GetScheduledStopPointsWithNew getScheduledStopPointsWithNew(
+          Field<UUID> replaceScheduledStopPointId
+        , Field<UUID> newScheduledStopPointId
+        , Field<UUID> newLocatedOnInfrastructureLinkId
+        , Field<Object> newMeasuredLocation
+        , Field<String> newDirection
+        , Field<String> newLabel
+        , Field<OffsetDateTime> newValidityStart
+        , Field<OffsetDateTime> newValidityEnd
+    ) {
+        return fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
+            replaceScheduledStopPointId,
+            newScheduledStopPointId,
+            newLocatedOnInfrastructureLinkId,
+            newMeasuredLocation,
+            newDirection,
+            newLabel,
+            newValidityStart,
+            newValidityEnd
+        );
     }
 }
