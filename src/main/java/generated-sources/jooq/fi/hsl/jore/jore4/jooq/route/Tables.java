@@ -35,8 +35,7 @@ public class Tables {
     public static final Line LINE = Line.LINE;
 
     /**
-     * The routes from Transmodel:
-     * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
+     * The table <code>route.route</code>.
      */
     public static final Route ROUTE_ = Route.ROUTE_;
 

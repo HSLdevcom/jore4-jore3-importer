@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Schema;
@@ -53,13 +54,13 @@ public class Line extends TableImpl<Record> {
      * The column <code>route.line.name_i18n</code>. The name of the line.
      * Placeholder for multilingual strings.
      */
-    public final TableField<Record, String> NAME_I18N = createField(DSL.name("name_i18n"), SQLDataType.CLOB.nullable(false), this, "The name of the line. Placeholder for multilingual strings.");
+    public final TableField<Record, JSONB> NAME_I18N = createField(DSL.name("name_i18n"), SQLDataType.JSONB.nullable(false), this, "The name of the line. Placeholder for multilingual strings.");
 
     /**
      * The column <code>route.line.short_name_i18n</code>. The shorted name of
      * the line. Placeholder for multilingual strings.
      */
-    public final TableField<Record, String> SHORT_NAME_I18N = createField(DSL.name("short_name_i18n"), SQLDataType.CLOB, this, "The shorted name of the line. Placeholder for multilingual strings.");
+    public final TableField<Record, JSONB> SHORT_NAME_I18N = createField(DSL.name("short_name_i18n"), SQLDataType.JSONB.nullable(false), this, "The shorted name of the line. Placeholder for multilingual strings.");
 
     /**
      * The column <code>route.line.primary_vehicle_mode</code>. The mode of the
