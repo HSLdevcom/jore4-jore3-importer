@@ -16,9 +16,10 @@ import java.util.UUID;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -91,6 +92,12 @@ public class NetworkRouteStopPoints extends TableImpl<NetworkRouteStopPointsReco
      * <code>network.network_route_stop_points.network_route_stop_point_via_point</code>.
      */
     public final TableField<NetworkRouteStopPointsRecord, Boolean> NETWORK_ROUTE_STOP_POINT_VIA_POINT = createField(DSL.name("network_route_stop_point_via_point"), SQLDataType.BOOLEAN.nullable(false), this, "");
+
+    /**
+     * The column
+     * <code>network.network_route_stop_points.network_route_stop_point_via_name</code>.
+     */
+    public final TableField<NetworkRouteStopPointsRecord, JSONB> NETWORK_ROUTE_STOP_POINT_VIA_NAME = createField(DSL.name("network_route_stop_point_via_name"), SQLDataType.JSONB, this, "");
 
     private NetworkRouteStopPoints(Name alias, Table<NetworkRouteStopPointsRecord> aliased) {
         this(alias, aliased, null);
@@ -178,11 +185,11 @@ public class NetworkRouteStopPoints extends TableImpl<NetworkRouteStopPointsReco
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<UUID, String, Integer, Boolean, Integer, TimeRange, Boolean> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row8<UUID, String, Integer, Boolean, Integer, TimeRange, Boolean, JSONB> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 }

@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route_link.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
+import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.ImportableRouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.generated.RouteStopPointPK;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePoints;
@@ -28,9 +29,13 @@ public class RouteStopPointImportRepository
 
     private final DSLContext db;
 
+    private final IJsonbConverter jsonbConverter;
+
     @Autowired
-    public RouteStopPointImportRepository(@Qualifier("importerDsl") final DSLContext db) {
+    public RouteStopPointImportRepository(@Qualifier("importerDsl") final DSLContext db,
+                                          final IJsonbConverter jsonbConverter) {
         this.db = db;
+        this.jsonbConverter = jsonbConverter;
     }
 
     @Override
@@ -48,8 +53,9 @@ public class RouteStopPointImportRepository
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_ORDER,
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT,
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT,
+                                                           STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_NAME,
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN)
-                                               .values((String) null, null, null,null, null));
+                                               .values((String) null, null, null,null, null, null));
 
         points.forEach(point ->
                                batch.bind(
@@ -57,6 +63,7 @@ public class RouteStopPointImportRepository
                                        point.orderNumber(),
                                        point.hastusStopPoint(),
                                        point.viaPoint(),
+                                       jsonbConverter.asJson(point.viaName()),
                                        point.timetableColumn().orElse(null)
                                ));
 
@@ -83,8 +90,10 @@ public class RouteStopPointImportRepository
                       STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_ORDER)
                  .set(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT,
                       STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT)
-                .set(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT,
-                     STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT)
+                 .set(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT,
+                      STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT)
+                 .set(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_NAME,
+                      STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_NAME)
                  .set(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN,
                       STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN)
                  .from(STAGING_TABLE)
@@ -112,12 +121,14 @@ public class RouteStopPointImportRepository
                           TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_ORDER,
                           TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT,
                           TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT,
+                          TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_NAME,
                           TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN)
                  .select(db.select(ROUTE_POINTS_TABLE.NETWORK_ROUTE_POINT_ID,
                                    STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_EXT_ID,
                                    STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_ORDER,
                                    STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT,
                                    STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT,
+                                   STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_NAME,
                                    STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN)
                            .from(STAGING_TABLE)
                            // Note that the stop point ext id is the same as the referenced route point ext id

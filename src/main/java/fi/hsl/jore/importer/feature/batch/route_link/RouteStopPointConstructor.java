@@ -3,8 +3,10 @@ package fi.hsl.jore.importer.feature.batch.route_link;
 import fi.hsl.jore.importer.feature.batch.route_link.dto.LastLinkAttributes;
 import fi.hsl.jore.importer.feature.batch.route_link.dto.RouteLinksAndAttributes;
 import fi.hsl.jore.importer.feature.batch.util.ExternalIdUtil;
+import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteLink;
 import fi.hsl.jore.importer.feature.jore3.enumerated.NodeType;
+import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.ImportableRouteStopPoint;
 import io.vavr.collection.Vector;
 import org.immutables.value.Value;
@@ -30,6 +32,7 @@ public final class RouteStopPointConstructor {
                                            index,
                                            link.hastusStopPoint(),
                                            link.viaPoint(),
+                                           buildViaName(link),
                                            timetableColumn(link.includeInTimetable(),
                                                            link.timetableColumn()));
     }
@@ -43,8 +46,22 @@ public final class RouteStopPointConstructor {
                                            index,
                                            hastusPoint,
                                            link.viaPoint(),
+                                           buildViaName(link),
                                            timetableColumn(attributes.includeInTimetable(),
                                                            attributes.timetableColumn()));
+    }
+
+    private static Optional<MultilingualString> buildViaName(final JrRouteLink link) {
+        if (link.viaName().isPresent() || link.viaNameSwedish().isPresent()) {
+            return Optional.of(
+                    JoreLocaleUtil.createMultilingualString(
+                            link.viaName().orElse(""),
+                            link.viaNameSwedish().orElse("")
+                    )
+            );
+        }
+
+        return Optional.empty();
     }
 
     private static final Function<StopPointContext, StopPointContext> ADD_STOP_POINTS_FROM_STARTING_NODES =

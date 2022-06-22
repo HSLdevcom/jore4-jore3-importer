@@ -55,6 +55,8 @@ public class RouteLinkRowMapper implements RowMapper<SingleRouteLinkAndParent> {
                         getBooleanOrThrow(rs, "rl_paikka"),
                         getBooleanOrThrow(rs, "rl_kirjaan"),
                         getBooleanOrThrow(rs, "rl_via"),
+                        getOptionalString(rs, "rl_maaranpaa2"),
+                        getOptionalString(rs, "rl_maaranpaa2r"),
                         getOptionalInt(rs, "kirjasarake")
                 ),
 

@@ -2,6 +2,8 @@ package fi.hsl.jore.importer.feature.network.route_stop_point.dto;
 
 
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
+import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
+import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasSystemTime;
@@ -9,6 +11,7 @@ import fi.hsl.jore.importer.feature.network.route_stop_point.dto.generated.Route
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsWithHistoryRecord;
 import org.immutables.value.Value;
+import org.jooq.JSONB;
 
 import java.util.Optional;
 
@@ -18,11 +21,14 @@ public interface RouteStopPoint
                 IHasSystemTime,
                 CommonFields {
 
+    Optional<MultilingualString> viaName();
+
     static RouteStopPoint of(final RouteStopPointPK pk,
                              final ExternalId externalId,
                              final int orderNumber,
                              final boolean hastusStopPoint,
                              final boolean viaPoint,
+                             final Optional<MultilingualString> viaName,
                              final Optional<Integer> timetableColumn,
                              final TimeRange systemTime) {
         return ImmutableRouteStopPoint.builder()
@@ -31,30 +37,33 @@ public interface RouteStopPoint
                                       .orderNumber(orderNumber)
                                       .hastusStopPoint(hastusStopPoint)
                                       .viaPoint(viaPoint)
+                                      .viaName(viaName)
                                       .timetableColumn(timetableColumn)
                                       .systemTime(systemTime)
                                       .build();
     }
 
-    static RouteStopPoint from(final NetworkRouteStopPointsRecord record) {
+    static RouteStopPoint from(final NetworkRouteStopPointsRecord record, final IJsonbConverter converter) {
         return of(
                 RouteStopPointPK.of(record.getNetworkRoutePointId()),
                 ExternalId.of(record.getNetworkRouteStopPointExtId()),
                 record.getNetworkRouteStopPointOrder(),
                 record.getNetworkRouteStopPointHastusPoint(),
                 record.getNetworkRouteStopPointViaPoint(),
+                Optional.ofNullable(converter.fromJson(record.getNetworkRouteStopPointViaName(), MultilingualString.class)),
                 Optional.ofNullable(record.getNetworkRouteStopPointTimetableColumn()),
                 record.getNetworkRouteStopPointSysPeriod()
         );
     }
 
-    static RouteStopPoint from(final NetworkRouteStopPointsWithHistoryRecord record) {
+    static RouteStopPoint from(final NetworkRouteStopPointsWithHistoryRecord record, final IJsonbConverter converter) {
         return of(
                 RouteStopPointPK.of(record.getNetworkRoutePointId()),
                 ExternalId.of(record.getNetworkRouteStopPointExtId()),
                 record.getNetworkRouteStopPointOrder(),
                 record.getNetworkRouteStopPointHastusPoint(),
                 record.getNetworkRouteStopPointViaPoint(),
+                Optional.ofNullable(converter.fromJson(record.getNetworkRouteStopPointViaName(), MultilingualString.class)),
                 Optional.ofNullable(record.getNetworkRouteStopPointTimetableColumn()),
                 record.getNetworkRouteStopPointSysPeriod()
         );

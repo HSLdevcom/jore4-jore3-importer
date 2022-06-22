@@ -61,6 +61,12 @@ public interface JrRouteLink
     @JoreColumn(name = "via")
     boolean viaPoint();
 
+    @JoreColumn(name = "maaranpaa2")
+    Optional<String> viaName();
+
+    @JoreColumn(name = "maaranpaa2r")
+    Optional<String> viaNameSwedish();
+
     @JoreColumn(name = "kirjaan")
     boolean includeInTimetable();
 
@@ -100,6 +106,8 @@ public interface JrRouteLink
                           final boolean hastusStopPoint,
                           final boolean includeInTimetable,
                           final boolean viaPoint,
+                          final Optional<String> viaName,
+                          final Optional<String> viaNameSwedish,
                           final Optional<Integer> timetableColumn) {
         return ImmutableJrRouteLink.builder()
                 // Fields of this route link
@@ -108,6 +116,8 @@ public interface JrRouteLink
                 .hastusStopPoint(hastusStopPoint)
                 .includeInTimetable(includeInTimetable)
                 .viaPoint(viaPoint)
+                .viaName(viaName)
+                .viaNameSwedish(viaNameSwedish)
                 .timetableColumn(timetableColumn)
                 .timingStopPoint(timingStopPoint)
                 .stopPointPurpose(stopPointPurpose)
