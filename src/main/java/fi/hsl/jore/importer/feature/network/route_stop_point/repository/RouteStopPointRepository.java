@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.network.route_stop_point.repository;
 
 
+import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.PersistableRouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.RouteStopPoint;
@@ -30,10 +31,13 @@ public class RouteStopPointRepository
     private static final TableField<NetworkRouteStopPointsRecord, UUID> PRIMARY_KEY = POINTS.NETWORK_ROUTE_POINT_ID;
 
     private final DSLContext db;
+    private final IJsonbConverter jsonbConverter;
 
     @Autowired
-    public RouteStopPointRepository(@Qualifier("importerDsl") final DSLContext db) {
+    public RouteStopPointRepository(@Qualifier("importerDsl") final DSLContext db,
+                                    final IJsonbConverter jsonbConverter) {
         this.db = db;
+        this.jsonbConverter = jsonbConverter;
     }
 
     @Override
@@ -100,7 +104,7 @@ public class RouteStopPointRepository
         return db.selectFrom(POINTS)
                  .where(PRIMARY_KEY.eq(id.value()))
                  .fetchStream()
-                 .map(RouteStopPoint::from)
+                 .map(r -> RouteStopPoint.from(r, jsonbConverter))
                  .findFirst();
     }
 
@@ -110,7 +114,7 @@ public class RouteStopPointRepository
         return db.selectFrom(POINTS)
                  .where(POINTS.NETWORK_ROUTE_STOP_POINT_EXT_ID.eq(externalId.value()))
                  .fetchStream()
-                 .map(RouteStopPoint::from)
+                 .map(r -> RouteStopPoint.from(r, jsonbConverter))
                  .findFirst();
     }
 
@@ -119,7 +123,7 @@ public class RouteStopPointRepository
     public List<RouteStopPoint> findAll() {
         return db.selectFrom(POINTS)
                  .fetchStream()
-                 .map(RouteStopPoint::from)
+                 .map(r -> RouteStopPoint.from(r, jsonbConverter))
                  .collect(List.collector());
     }
 
@@ -169,7 +173,7 @@ public class RouteStopPointRepository
         return db.selectFrom(HISTORY_VIEW)
                  .orderBy(HISTORY_VIEW.NETWORK_ROUTE_STOP_POINT_SYS_PERIOD.asc())
                  .fetchStream()
-                 .map(RouteStopPoint::from)
+                 .map(r -> RouteStopPoint.from(r, jsonbConverter))
                  .collect(List.collector());
     }
 }

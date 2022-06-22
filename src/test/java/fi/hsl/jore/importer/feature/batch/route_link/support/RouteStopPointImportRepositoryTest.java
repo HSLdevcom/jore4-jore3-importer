@@ -2,6 +2,8 @@ package fi.hsl.jore.importer.feature.batch.route_link.support;
 
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
+import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
+import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.RouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.generated.RouteStopPointPK;
 import fi.hsl.jore.importer.feature.network.route_stop_point.repository.IRouteStopPointTestRepository;
@@ -17,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -118,6 +121,8 @@ class RouteStopPointImportRepositoryTest {
             private final int EXPECTED_NETWORK_ROUTE_STOP_POINT_ORDER_NUMBER = 6;
             private final boolean EXPECTED_NETWORK_ROUTE_STOP_POINT_HASTUS_POINT = true;
             private final boolean EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_POINT = true;
+            private final String EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_NAME_FINNISH = "ViaSuomi";
+            private final String EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_NAME_SWEDISH = "ViaSverige";
             private final int EXPECTED_NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN = 12;
 
             @Nested
@@ -214,6 +219,27 @@ class RouteStopPointImportRepositoryTest {
                                     inserted.viaPoint()
                             )
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_POINT);
+
+                    Optional<MultilingualString> viaName = inserted.viaName();
+                    softAssertions.assertThat(viaName).isPresent();
+
+                    final String finnishViaName = JoreLocaleUtil.getI18nString(viaName.get(), JoreLocaleUtil.FINNISH);
+                    softAssertions.assertThat(finnishViaName)
+                            .overridingErrorMessage(
+                                    "Expected the finnish via name to be: %s but was: %s",
+                                    EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_NAME_FINNISH,
+                                    finnishViaName
+                            )
+                            .isEqualTo(EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_NAME_FINNISH);
+
+                    final String swedishViaName = JoreLocaleUtil.getI18nString(viaName.get(), JoreLocaleUtil.SWEDISH);
+                    softAssertions.assertThat(swedishViaName)
+                            .overridingErrorMessage(
+                                    "Expected the swedish via name to be: %s but was: %s",
+                                    EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_NAME_SWEDISH,
+                                    swedishViaName
+                            )
+                            .isEqualTo(EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_NAME_SWEDISH);
 
                     softAssertions.assertThat(inserted.timetableColumn().get())
                             .overridingErrorMessage(

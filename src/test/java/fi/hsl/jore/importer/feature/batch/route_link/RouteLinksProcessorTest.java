@@ -13,13 +13,16 @@ import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.RouteId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.RouteLinkId;
+import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImmutableImportableRoutePoint;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImportableRoutePoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.ImmutableImportableRouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.ImportableRouteStopPoint;
 import io.vavr.collection.Vector;
+import org.checkerframework.checker.nullness.Opt;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -34,6 +37,9 @@ public class RouteLinksProcessorTest {
     private static final Direction DIR = Direction.DIRECTION_1;
     private static final LocalDate VALID_FROM = LocalDate.of(2020, 1, 1);
     private static final TransitType TRANSIT = TransitType.BUS;
+
+    private static final String VIA_NAME = "ViaNameFinnish";
+    private static final String VIA_NAME_SWEDISH = "ViaNameSwedish";
 
     @Test
     public void givenLinkBetweenTwoBusStops_thenReturnRoutePoints_andStopPoints() throws Exception {
@@ -52,50 +58,60 @@ public class RouteLinksProcessorTest {
                 StopPointPurpose.BOARDING,
                 false, // not explicitly a hastus point
                 true, // include in timetable,
-                true, // via point
+                true, // via point,
+                Optional.of(VIA_NAME),
+                Optional.of(VIA_NAME_SWEDISH),
                 Optional.of(1)
         );
         final RouteLinksAndAttributes linksAndAttributes =
                 RouteLinksAndAttributes.of(Vector.of(link),
-                                           LastLinkAttributes.of(NodeType.BUS_STOP,
-                                                                 true,
-                                                                 Optional.of(7)));
+                        LastLinkAttributes.of(NodeType.BUS_STOP,
+                                true,
+                                Optional.of(7)));
 
         final ImportableRoutePointsAndLinks result = PROCESSOR.process(linksAndAttributes);
 
         final Vector<ImportableRoutePoint> routePoints = result.routePoints();
 
         assertThat(routePoints,
-                   is(Vector.of(ImmutableImportableRoutePoint.builder()
-                                                             .orderNumber(0)
-                                                             .externalId(ExternalId.of("1234-a"))
-                                                             .node(ExternalId.of("a"))
-                                                             .routeDirection(ExternalId.of("1001-1-20200101"))
-                                                             .build(),
-                                ImmutableImportableRoutePoint.builder()
-                                                             .orderNumber(1)
-                                                             .externalId(ExternalId.of("1234-b"))
-                                                             .node(ExternalId.of("b"))
-                                                             .routeDirection(ExternalId.of("1001-1-20200101"))
-                                                             .build())));
+                is(Vector.of(ImmutableImportableRoutePoint.builder()
+                                .orderNumber(0)
+                                .externalId(ExternalId.of("1234-a"))
+                                .node(ExternalId.of("a"))
+                                .routeDirection(ExternalId.of("1001-1-20200101"))
+                                .build(),
+                        ImmutableImportableRoutePoint.builder()
+                                .orderNumber(1)
+                                .externalId(ExternalId.of("1234-b"))
+                                .node(ExternalId.of("b"))
+                                .routeDirection(ExternalId.of("1001-1-20200101"))
+                                .build())));
 
         final Vector<ImportableRouteStopPoint> stopPoints = result.stopPoints();
 
         assertThat(stopPoints,
-                   is(Vector.of(ImmutableImportableRouteStopPoint.builder()
-                                                                 .orderNumber(0)
-                                                                 .externalId(ExternalId.of("1234-a"))
-                                                                 .hastusStopPoint(true)
-                                                                 .viaPoint(true)
-                                                                 .timetableColumn(1)
-                                                                 .build(),
-                                ImmutableImportableRouteStopPoint.builder()
-                                                                 .orderNumber(1)
-                                                                 .externalId(ExternalId.of("1234-b"))
-                                                                 .hastusStopPoint(true)
-                                                                 .viaPoint(true)
-                                                                 .timetableColumn(7)
-                                                                 .build())));
+                is(Vector.of(ImmutableImportableRouteStopPoint.builder()
+                                .orderNumber(0)
+                                .externalId(ExternalId.of("1234-a"))
+                                .hastusStopPoint(true)
+                                .viaPoint(true)
+                                .viaName(JoreLocaleUtil.createMultilingualString(
+                                        VIA_NAME,
+                                        VIA_NAME_SWEDISH
+                                ))
+                                .timetableColumn(1)
+                                .build(),
+                        ImmutableImportableRouteStopPoint.builder()
+                                .orderNumber(1)
+                                .externalId(ExternalId.of("1234-b"))
+                                .hastusStopPoint(true)
+                                .viaPoint(true)
+                                .viaName(JoreLocaleUtil.createMultilingualString(
+                                        VIA_NAME,
+                                        VIA_NAME_SWEDISH
+                                ))
+                                .timetableColumn(7)
+                                .build())));
     }
 
     @Test
@@ -116,42 +132,48 @@ public class RouteLinksProcessorTest {
                 false, // not explicitly a hastus point
                 true, // include in timetable
                 true, // via point
+                Optional.of(VIA_NAME),
+                Optional.of(VIA_NAME_SWEDISH),
                 Optional.of(1)
         );
         final RouteLinksAndAttributes linksAndAttributes =
                 RouteLinksAndAttributes.of(Vector.of(link),
-                                           LastLinkAttributes.of(NodeType.CROSSROADS,
-                                                                 false,
-                                                                 Optional.empty()));
+                        LastLinkAttributes.of(NodeType.CROSSROADS,
+                                false,
+                                Optional.empty()));
 
         final ImportableRoutePointsAndLinks result = PROCESSOR.process(linksAndAttributes);
 
         final Vector<ImportableRoutePoint> routePoints = result.routePoints();
 
         assertThat(routePoints,
-                   is(Vector.of(ImmutableImportableRoutePoint.builder()
-                                                             .orderNumber(0)
-                                                             .externalId(ExternalId.of("1234-a"))
-                                                             .node(ExternalId.of("a"))
-                                                             .routeDirection(ExternalId.of("1001-1-20200101"))
-                                                             .build(),
-                                ImmutableImportableRoutePoint.builder()
-                                                             .orderNumber(1)
-                                                             .externalId(ExternalId.of("1234-b"))
-                                                             .node(ExternalId.of("b"))
-                                                             .routeDirection(ExternalId.of("1001-1-20200101"))
-                                                             .build())));
+                is(Vector.of(ImmutableImportableRoutePoint.builder()
+                                .orderNumber(0)
+                                .externalId(ExternalId.of("1234-a"))
+                                .node(ExternalId.of("a"))
+                                .routeDirection(ExternalId.of("1001-1-20200101"))
+                                .build(),
+                        ImmutableImportableRoutePoint.builder()
+                                .orderNumber(1)
+                                .externalId(ExternalId.of("1234-b"))
+                                .node(ExternalId.of("b"))
+                                .routeDirection(ExternalId.of("1001-1-20200101"))
+                                .build())));
 
         final Vector<ImportableRouteStopPoint> stopPoints = result.stopPoints();
 
         assertThat(stopPoints,
-                   is(Vector.of(ImmutableImportableRouteStopPoint.builder()
-                                                                 .orderNumber(0)
-                                                                 .externalId(ExternalId.of("1234-a"))
-                                                                 .hastusStopPoint(true)
-                                                                 .viaPoint(true)
-                                                                 .timetableColumn(1)
-                                                                 .build())));
+                is(Vector.of(ImmutableImportableRouteStopPoint.builder()
+                        .orderNumber(0)
+                        .externalId(ExternalId.of("1234-a"))
+                        .hastusStopPoint(true)
+                        .viaPoint(true)
+                        .viaName(JoreLocaleUtil.createMultilingualString(
+                                VIA_NAME,
+                                VIA_NAME_SWEDISH
+                        ))
+                        .timetableColumn(1)
+                        .build())));
     }
 
     @Test
@@ -172,37 +194,39 @@ public class RouteLinksProcessorTest {
                 false, // not hastus point
                 false, // don't include in timetable
                 true, // via point
+                Optional.of(VIA_NAME),
+                Optional.of(VIA_NAME_SWEDISH),
                 Optional.empty()
         );
         final RouteLinksAndAttributes linksAndAttributes =
                 RouteLinksAndAttributes.of(Vector.of(link),
-                                           LastLinkAttributes.of(NodeType.CROSSROADS,
-                                                                 false,
-                                                                 Optional.empty()));
+                        LastLinkAttributes.of(NodeType.CROSSROADS,
+                                false,
+                                Optional.empty()));
 
         final ImportableRoutePointsAndLinks result = PROCESSOR.process(linksAndAttributes);
 
         final Vector<ImportableRoutePoint> routePoints = result.routePoints();
 
         assertThat(routePoints,
-                   is(Vector.of(ImmutableImportableRoutePoint.builder()
-                                                             .orderNumber(0)
-                                                             .externalId(ExternalId.of("1234-a"))
-                                                             .node(ExternalId.of("a"))
-                                                             .routeDirection(ExternalId.of("1001-1-20200101"))
-                                                             .build(),
-                                ImmutableImportableRoutePoint.builder()
-                                                             .orderNumber(1)
-                                                             .externalId(ExternalId.of("1234-b"))
-                                                             .node(ExternalId.of("b"))
-                                                             .routeDirection(ExternalId.of("1001-1-20200101"))
-                                                             .build())));
+                is(Vector.of(ImmutableImportableRoutePoint.builder()
+                                .orderNumber(0)
+                                .externalId(ExternalId.of("1234-a"))
+                                .node(ExternalId.of("a"))
+                                .routeDirection(ExternalId.of("1001-1-20200101"))
+                                .build(),
+                        ImmutableImportableRoutePoint.builder()
+                                .orderNumber(1)
+                                .externalId(ExternalId.of("1234-b"))
+                                .node(ExternalId.of("b"))
+                                .routeDirection(ExternalId.of("1001-1-20200101"))
+                                .build())));
 
         final Vector<ImportableRouteStopPoint> stopPoints = result.stopPoints();
 
         assertThat("There are no bus stops in this route => no stop points",
-                   stopPoints.isEmpty(),
-                   is(true));
+                stopPoints.isEmpty(),
+                is(true));
     }
 
     @Test
@@ -237,6 +261,8 @@ public class RouteLinksProcessorTest {
                         true, // is a hastus point
                         true, // include in timetable
                         true, // via point
+                        Optional.of(VIA_NAME),
+                        Optional.of(VIA_NAME_SWEDISH),
                         Optional.of(1)
                 ), //The column number of the timetable column
                 // B->C
@@ -255,6 +281,8 @@ public class RouteLinksProcessorTest {
                         false, // not a hastus point
                         false, // do not include in timetable
                         true, // via point
+                        Optional.of(VIA_NAME),
+                        Optional.of(VIA_NAME_SWEDISH),
                         Optional.empty()
                 ), // The column number isn't given because link isn't included in timetable
                 // C->D
@@ -273,6 +301,8 @@ public class RouteLinksProcessorTest {
                         false, // not a hastus point
                         false, // do not include in timetable,
                         true, // via point
+                        Optional.of(VIA_NAME),
+                        Optional.of(VIA_NAME_SWEDISH),
                         Optional.empty()
                 ), // The column number isn't given because link isn't included in timetable
                 // D->E
@@ -291,6 +321,8 @@ public class RouteLinksProcessorTest {
                         false, // not a hastus point
                         false, // do not include in timetable
                         true, // via point
+                        Optional.of(VIA_NAME),
+                        Optional.of(VIA_NAME_SWEDISH),
                         Optional.empty()
                 ), // The column number isn't given because link isn't included in timetable
                 // E->F
@@ -308,80 +340,86 @@ public class RouteLinksProcessorTest {
                         StopPointPurpose.UNKNOWN,
                         false, // not a hastus point
                         false, // do not include in timetable
-                        false, // via point
+                        false, // via point,
+                        Optional.empty(),
+                        Optional.empty(),
                         Optional.empty()
                 ) // The column number isn't given because link isn't included in timetable
         );
 
         final LastLinkAttributes attributes = LastLinkAttributes.of(NodeType.BUS_STOP,
-                                                                    true,
-                                                                    Optional.of(7));
+                true,
+                Optional.of(7));
 
         final RouteLinksAndAttributes linksAndAttributes = RouteLinksAndAttributes.of(links,
-                                                                                      attributes);
+                attributes);
 
         final ImportableRoutePointsAndLinks result = PROCESSOR.process(linksAndAttributes);
 
         final Vector<ImportableRoutePoint> routePoints = result.routePoints();
 
         assertThat(routePoints,
-                   is(Vector.of(ImmutableImportableRoutePoint.builder()
-                                                             .orderNumber(0)
-                                                             .externalId(ExternalId.of("10000-a"))
-                                                             .node(ExternalId.of("a"))
-                                                             .routeDirection(ExternalId.of("1001-1-20200101"))
-                                                             .build(),
-                                ImmutableImportableRoutePoint.builder()
-                                                             .orderNumber(1)
-                                                             .externalId(ExternalId.of("10001-b"))
-                                                             .node(ExternalId.of("b"))
-                                                             .routeDirection(ExternalId.of("1001-1-20200101"))
-                                                             .build(),
-                                ImmutableImportableRoutePoint.builder()
-                                                             .orderNumber(2)
-                                                             .externalId(ExternalId.of("10002-c"))
-                                                             .node(ExternalId.of("c"))
-                                                             .routeDirection(ExternalId.of("1001-1-20200101"))
-                                                             .build(),
-                                ImmutableImportableRoutePoint.builder()
-                                                             .orderNumber(3)
-                                                             .externalId(ExternalId.of("10003-d"))
-                                                             .node(ExternalId.of("d"))
-                                                             .routeDirection(ExternalId.of("1001-1-20200101"))
-                                                             .build(),
-                                ImmutableImportableRoutePoint.builder()
-                                                             .orderNumber(4)
-                                                             .externalId(ExternalId.of("10004-e"))
-                                                             .node(ExternalId.of("e"))
-                                                             .routeDirection(ExternalId.of("1001-1-20200101"))
-                                                             .build(),
-                                // Note how the last route point "borrows" the link id from the final link
-                                ImmutableImportableRoutePoint.builder()
-                                                             .orderNumber(5)
-                                                             .externalId(ExternalId.of("10004-f"))
-                                                             .node(ExternalId.of("f"))
-                                                             .routeDirection(ExternalId.of("1001-1-20200101"))
-                                                             .build()
-                   )));
+                is(Vector.of(ImmutableImportableRoutePoint.builder()
+                                .orderNumber(0)
+                                .externalId(ExternalId.of("10000-a"))
+                                .node(ExternalId.of("a"))
+                                .routeDirection(ExternalId.of("1001-1-20200101"))
+                                .build(),
+                        ImmutableImportableRoutePoint.builder()
+                                .orderNumber(1)
+                                .externalId(ExternalId.of("10001-b"))
+                                .node(ExternalId.of("b"))
+                                .routeDirection(ExternalId.of("1001-1-20200101"))
+                                .build(),
+                        ImmutableImportableRoutePoint.builder()
+                                .orderNumber(2)
+                                .externalId(ExternalId.of("10002-c"))
+                                .node(ExternalId.of("c"))
+                                .routeDirection(ExternalId.of("1001-1-20200101"))
+                                .build(),
+                        ImmutableImportableRoutePoint.builder()
+                                .orderNumber(3)
+                                .externalId(ExternalId.of("10003-d"))
+                                .node(ExternalId.of("d"))
+                                .routeDirection(ExternalId.of("1001-1-20200101"))
+                                .build(),
+                        ImmutableImportableRoutePoint.builder()
+                                .orderNumber(4)
+                                .externalId(ExternalId.of("10004-e"))
+                                .node(ExternalId.of("e"))
+                                .routeDirection(ExternalId.of("1001-1-20200101"))
+                                .build(),
+                        // Note how the last route point "borrows" the link id from the final link
+                        ImmutableImportableRoutePoint.builder()
+                                .orderNumber(5)
+                                .externalId(ExternalId.of("10004-f"))
+                                .node(ExternalId.of("f"))
+                                .routeDirection(ExternalId.of("1001-1-20200101"))
+                                .build()
+                )));
 
         final Vector<ImportableRouteStopPoint> stopPoints = result.stopPoints();
 
         assertThat(stopPoints,
-                   is(Vector.of(ImmutableImportableRouteStopPoint.builder()
-                                                                 .orderNumber(0)
-                                                                 .externalId(ExternalId.of("10000-a"))
-                                                                 .hastusStopPoint(true)
-                                                                 .viaPoint(true)
-                                                                 .timetableColumn(1)
-                                                                 .build(),
-                                // Note how node D is absent, as it's a BUS_STOP_NOT_IN_USE
-                                ImmutableImportableRouteStopPoint.builder()
-                                                                 .orderNumber(1)
-                                                                 .externalId(ExternalId.of("10004-f"))
-                                                                 .hastusStopPoint(true)
-                                                                 .viaPoint(false)
-                                                                 .timetableColumn(7)
-                                                                 .build()
-                   )));
+                is(Vector.of(ImmutableImportableRouteStopPoint.builder()
+                                .orderNumber(0)
+                                .externalId(ExternalId.of("10000-a"))
+                                .hastusStopPoint(true)
+                                .viaPoint(true)
+                                .viaName(JoreLocaleUtil.createMultilingualString(
+                                        VIA_NAME,
+                                        VIA_NAME_SWEDISH
+                                ))
+                                .timetableColumn(1)
+                                .build(),
+                        // Note how node D is absent, as it's a BUS_STOP_NOT_IN_USE
+                        ImmutableImportableRouteStopPoint.builder()
+                                .orderNumber(1)
+                                .externalId(ExternalId.of("10004-f"))
+                                .hastusStopPoint(true)
+                                .viaPoint(false)
+                                .timetableColumn(7)
+                                .build()
+                )));
     }
 }
