@@ -6,9 +6,8 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 
-import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getDoubleOrThrow;
+import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getIntOrThrow;
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalLong;
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalString;
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
@@ -29,7 +28,8 @@ public class ScheduledStopPointImportMapper implements RowMapper<JrScheduledStop
                 getOptionalString(rs, "pysnimi"),
                 getOptionalString(rs, "pysnimir"),
                 getOptionalString(rs, "sollistunnus"),
-                getOptionalString(rs, "solkirjain")
+                getOptionalString(rs, "solkirjain"),
+                getIntOrThrow(rs, "usage_in_routes")
         );
     }
 }

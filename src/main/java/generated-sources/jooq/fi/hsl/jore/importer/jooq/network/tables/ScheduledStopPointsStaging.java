@@ -13,7 +13,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -69,6 +69,12 @@ public class ScheduledStopPointsStaging extends TableImpl<ScheduledStopPointsSta
      * <code>network.scheduled_stop_points_staging.scheduled_stop_point_short_id</code>.
      */
     public final TableField<ScheduledStopPointsStagingRecord, String> SCHEDULED_STOP_POINT_SHORT_ID = createField(DSL.name("scheduled_stop_point_short_id"), SQLDataType.VARCHAR(6), this, "");
+
+    /**
+     * The column
+     * <code>network.scheduled_stop_points_staging.usage_in_routes</code>.
+     */
+    public final TableField<ScheduledStopPointsStagingRecord, Integer> USAGE_IN_ROUTES = createField(DSL.name("usage_in_routes"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
 
     private ScheduledStopPointsStaging(Name alias, Table<ScheduledStopPointsStagingRecord> aliased) {
         this(alias, aliased, null);
@@ -143,11 +149,11 @@ public class ScheduledStopPointsStaging extends TableImpl<ScheduledStopPointsSta
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<String, Long, JSONB, String> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row5<String, Long, JSONB, String, Integer> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }

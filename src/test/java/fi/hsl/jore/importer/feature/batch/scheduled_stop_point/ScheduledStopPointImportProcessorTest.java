@@ -22,6 +22,7 @@ class ScheduledStopPointImportProcessorTest {
     private static final String JORE3_SHORT_LETTER = "H";
     private static final String FINNISH_NAME = "";
     private static final String SWEDISH_NAME = "";
+    private static final int USAGE_IN_ROUTES = 1;
 
     private final ScheduledStopPointImportProcessor processor = new ScheduledStopPointImportProcessor();
 
@@ -35,7 +36,8 @@ class ScheduledStopPointImportProcessorTest {
                 Optional.of(FINNISH_NAME),
                 Optional.of(SWEDISH_NAME),
                 Optional.of(JORE3_SHORT_ID),
-                Optional.of(JORE3_SHORT_LETTER)
+                Optional.of(JORE3_SHORT_LETTER),
+                USAGE_IN_ROUTES
         );
 
         @Test
@@ -86,7 +88,8 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.of(FINNISH_NAME),
                     Optional.of(SWEDISH_NAME),
                     Optional.empty(),
-                    Optional.empty()
+                    Optional.empty(),
+                    USAGE_IN_ROUTES
             );
 
             @Test
@@ -109,7 +112,8 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.of(FINNISH_NAME),
                     Optional.of(SWEDISH_NAME),
                     Optional.empty(),
-                    Optional.of(JORE3_SHORT_LETTER)
+                    Optional.of(JORE3_SHORT_LETTER),
+                    USAGE_IN_ROUTES
             );
 
             @Test
@@ -132,7 +136,8 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.of(FINNISH_NAME),
                     Optional.of(SWEDISH_NAME),
                     Optional.of(JORE3_SHORT_ID),
-                    Optional.empty()
+                    Optional.empty(),
+                    USAGE_IN_ROUTES
             );
 
             @Test
@@ -155,7 +160,8 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.of(FINNISH_NAME),
                     Optional.of(SWEDISH_NAME),
                     Optional.of(JORE3_SHORT_ID),
-                    Optional.of(JORE3_SHORT_LETTER)
+                    Optional.of(JORE3_SHORT_LETTER),
+                    USAGE_IN_ROUTES
             );
 
             @Test
