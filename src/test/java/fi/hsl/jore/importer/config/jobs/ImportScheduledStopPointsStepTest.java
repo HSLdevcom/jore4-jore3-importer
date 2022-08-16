@@ -25,6 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Sql(scripts = {
         "/sql/source/drop_tables.sql",
         "/sql/source/populate_nodes.sql",
+        "/sql/source/populate_routes.sql",
+        "/sql/source/populate_route_links.sql",
         "/sql/source/populate_scheduled_stop_points.sql"
 },
         config = @SqlConfig(dataSource = "sourceDataSource"))
@@ -41,6 +43,7 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
     private static final String EXPECTED_FINNISH_NAME = "Yliopisto";
     private static final String EXPECTED_SWEDISH_NAME = "Universitetet";
     private static final String EXPECTED_SHORT_ID = "H1234";
+    private static final int EXPECTED_USAGE_IN_ROUTES = 1;
 
     private static final List<String> STEPS = List.of("prepareScheduledStopPointsStep",
             "importScheduledStopPointsStep",
@@ -97,5 +100,9 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
         softAssertions.assertThat(imported.transmodelId())
                 .as("transmodel id")
                 .isEmpty();
+
+        softAssertions.assertThat(imported.usageInRoutes())
+                .as("usage in routes")
+                .isEqualTo(EXPECTED_USAGE_IN_ROUTES);
     }
 }
