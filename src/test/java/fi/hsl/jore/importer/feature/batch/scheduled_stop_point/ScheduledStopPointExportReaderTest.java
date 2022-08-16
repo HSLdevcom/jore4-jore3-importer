@@ -156,8 +156,8 @@ class ScheduledStopPointExportReaderTest {
             softAssertions.assertThat(externalIds)
                     .as("externalIds")
                     .containsExactly(
-                            ExternalId.of(EXPECTED_EXTERNAL_ID_ONE),
-                            ExternalId.of(EXPECTED_EXTERNAL_ID_TWO)
+                            ExternalId.of(EXPECTED_EXTERNAL_ID_TWO),
+                            ExternalId.of(EXPECTED_EXTERNAL_ID_ONE)
                     );
 
             final List<Long> elyNumbers = found.elyNumbers();
@@ -166,7 +166,7 @@ class ScheduledStopPointExportReaderTest {
                     .hasSize(2);
             softAssertions.assertThat(elyNumbers)
                     .as("elyNumbers")
-                    .containsExactly(EXPECTED_ELY_NUMBER_ONE, EXPECTED_ELY_NUMBER_TWO);
+                    .containsExactly(EXPECTED_ELY_NUMBER_TWO, EXPECTED_ELY_NUMBER_ONE);
 
             final double XCoordinate = found.location().getX();
             softAssertions.assertThat(XCoordinate)

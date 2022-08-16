@@ -8,10 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getDoubleOrThrow;
-import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalLong;
-import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalString;
-import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
+import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.*;
 
 /**
  * Maps rows read from the source database to {@link JrScheduledStopPoint} objects.
@@ -29,7 +26,8 @@ public class ScheduledStopPointImportMapper implements RowMapper<JrScheduledStop
                 getOptionalString(rs, "pysnimi"),
                 getOptionalString(rs, "pysnimir"),
                 getOptionalString(rs, "sollistunnus"),
-                getOptionalString(rs, "solkirjain")
+                getOptionalString(rs, "solkirjain"),
+                getOptionalInt(rs, "usage_in_routes")
         );
     }
 }

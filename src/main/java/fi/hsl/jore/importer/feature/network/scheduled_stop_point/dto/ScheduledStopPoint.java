@@ -31,6 +31,8 @@ public interface ScheduledStopPoint
 
     Optional<UUID> transmodelId();
 
+    Optional<Integer> usageInRoutes();
+
     static ScheduledStopPoint of(final ScheduledStopPointPK pk,
                                  final ExternalId externalId,
                                  final Optional<Long> elyNumber,
@@ -38,6 +40,7 @@ public interface ScheduledStopPoint
                                  final MultilingualString name,
                                  final Optional<String> shortId,
                                  final Optional<UUID> transmodelId,
+                                 final Optional<Integer> usageInRoutes,
                                  final TimeRange systemTime) {
         return ImmutableScheduledStopPoint.builder()
                 .pk(pk)
@@ -48,6 +51,7 @@ public interface ScheduledStopPoint
                 .shortId(shortId)
                 .transmodelId(transmodelId)
                 .systemTime(systemTime)
+                .usageInRoutes(usageInRoutes)
                 .build();
     }
 
@@ -60,6 +64,7 @@ public interface ScheduledStopPoint
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
                 Optional.of(record.getScheduledStopPointShortId()),
                 Optional.ofNullable(record.getScheduledStopPointTransmodelId()),
+                Optional.ofNullable(record.getUsageInRoutes()),
                 record.getScheduledStopPointSysPeriod()
         );
     }
@@ -73,6 +78,7 @@ public interface ScheduledStopPoint
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
                 Optional.of(record.getScheduledStopPointShortId()),
                 Optional.ofNullable(record.getScheduledStopPointTransmodelId()),
+                Optional.ofNullable(record.getUsageInRoutes()),
                 record.getScheduledStopPointSysPeriod()
         );
     }

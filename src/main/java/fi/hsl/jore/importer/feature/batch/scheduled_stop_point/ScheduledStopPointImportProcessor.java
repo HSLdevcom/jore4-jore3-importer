@@ -23,7 +23,8 @@ public class ScheduledStopPointImportProcessor implements ItemProcessor<JrSchedu
                 MultilingualString.empty()
                         .with(JoreLocaleUtil.FINNISH, input.nameFinnish())
                         .with(JoreLocaleUtil.SWEDISH, input.nameSwedish()),
-                constructShortId(input)
+                constructShortId(input),
+                input.usageInRoutes()
         );
     }
 

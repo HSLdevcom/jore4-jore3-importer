@@ -14,16 +14,19 @@ import java.util.Optional;
 public interface ImportableScheduledStopPoint
         extends CommonFields<ImportableScheduledStopPoint>
 {
+    Optional<Integer> usageInRoutes();
 
     static ImportableScheduledStopPoint of(final ExternalId externalId,
                                            final Optional<Long> elynumber,
                                            final MultilingualString name,
-                                           final Optional<String> shortId) {
+                                           final Optional<String> shortId,
+                                           final Optional<Integer> usageInRoutes) {
         return ImmutableImportableScheduledStopPoint.builder()
                 .externalId(externalId)
                 .elyNumber(elynumber)
                 .name(name)
                 .shortId(shortId)
+                .usageInRoutes(usageInRoutes)
                 .build();
     }
 }
