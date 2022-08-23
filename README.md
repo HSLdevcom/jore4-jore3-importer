@@ -2,7 +2,7 @@
 
 This application imports scheduled stop points, lines, routes, and journey patterns from the Jore 3 database to the
 Jore 4 database. At the moment this application doesn't filter the imported information in any way. In other words, all
-valid rows found from the Jore 3 database are imported to the Jore 4 database. 
+valid rows found from the Jore 3 database are imported to the Jore 4 database.
 
 The import process has two steps:
 
@@ -12,13 +12,13 @@ The import process has two steps:
 
 ## Using the REST API
 
-The importer application has a REST API which allows you to start the import job and query the status of the last import 
+The importer application has a REST API which allows you to start the import job and query the status of the last import
 job. This section describes how you can use this REST API.
 
 ### Triggering the Import Job
 
-If you want to start the import job, you have to send a POST request to the path: `/job/import/start`. The API endpoint 
-will start the job and return its status. If an import job is already running, a new job isn't started and the return 
+If you want to start the import job, you have to send a POST request to the path: `/job/import/start`. The API endpoint
+will start the job and return its status. If an import job is already running, a new job isn't started and the return
 value will reflect the status of the currently running job.
 
 The following example demonstrates how you can start the import job by using curl:
@@ -31,7 +31,7 @@ $ curl -X POST http://localhost:8080/job/import/start/
 ### Querying the Status of the Import Job
 
 If you want to query the status of the latest import job, you have to send a GET request to the path: `/job/import/status`.
-The API endpoint returns the status of an ongoing import job or the status of the latest finished import job in case 
+The API endpoint returns the status of an ongoing import job or the status of the latest finished import job in case
 there is no job currently running. If no import job has been run, the API endpoint returns
 the HTTP status code 204.
 
@@ -63,11 +63,11 @@ $ curl http://localhost:8080/job/import/status/
 This project uses [the standard directory layout of Maven](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html).
 However, the root directory of this repository contains four additional directories which are described in the following:
 
-* The _docker_ directory contains the custom Docker Compose file which allow you to override the configuration specified 
+* The _docker_ directory contains the custom Docker Compose file which allow you to override the configuration specified
   in the [jore4-flux repository](https://github.com/HSLdevcom/jore4-flux).
 * The _images_ directory contains diagrams displayed on this README.
 * The _profiles_ directory contains the profile specific configuration files which are used to configure this application.
-* The _testing_ directory contains testing tools (essentially Python scripts) which ensure that the import job is working  
+* The _testing_ directory contains testing tools (essentially Python scripts) which ensure that the import job is working
   as expected.
 
 The _src/main/resources_ directory contains the resources of our application. To be more specific, it contains
@@ -81,8 +81,8 @@ the subdirectories:
 
 ## Technical Documentation
 
-This application is basically a Spring Boot application which reads data from the Jore 3 database, makes some 
-transformations to the data and finally writes it to the Jore 4 database by using Spring Batch library. This 
+This application is basically a Spring Boot application which reads data from the Jore 3 database, makes some
+transformations to the data and finally writes it to the Jore 4 database by using Spring Batch library. This
 application also provides a REST API which allows you to start the import job and query the status of the import job.
 
 > If you are not familiar with Spring Batch, you should take a
@@ -134,7 +134,7 @@ The first part of the import job, which imports data from the Jore 3 database to
 * The `importLineHeadersFlow` flow imports line headers from the Jore 3 database to the importer's database.
 * The `importRoutesFlow` flow imports routes from the Jore 3 database to the importer's database.
 * The `importRouteDirectionsFlow` flow imports route directions from the Jore 3 database to the importer's database.
-* The `importRouteLinksFlow` flow imports route points, route's scheduled stop points, and route links from the Jore 3 
+* The `importRouteLinksFlow` flow imports route points, route's scheduled stop points, and route links from the Jore 3
   database to the importer's database.
 * The `importScheduledStopPointsFlow` flow imports scheduled stop points from the Jore 3 database to the importer's database.
 
@@ -182,41 +182,41 @@ The following figure illustrates the relationships of these components:
 
 ![objectDiagram](images/job_diagram.svg "Object diagram of a generic job")
 
-The following figure illustrates the steps of a single flow which imports data from the Jore 3 database to the 
+The following figure illustrates the steps of a single flow which imports data from the Jore 3 database to the
 importer's database:
 
 ![Jore 3 Import Job](images/jore3-import-job.png)
 
 #### Importing Data From the Importer's Database to the Jore 4 Database
 
-The second part of the import job imports scheduled stop points, lines, routes, and journey patterns from the importer's 
-database to the Jore 4 database. The steps of this import flow (`transmodelExportFlow`) follow the 
-[chunk oriented processing "pattern" of Spring Batch](https://docs.spring.io/spring-batch/docs/current/reference/html/step.html#chunkOrientedProcessing). 
+The second part of the import job imports scheduled stop points, lines, routes, and journey patterns from the importer's
+database to the Jore 4 database. The steps of this import flow (`transmodelExportFlow`) follow the
+[chunk oriented processing "pattern" of Spring Batch](https://docs.spring.io/spring-batch/docs/current/reference/html/step.html#chunkOrientedProcessing).
 The import flow consists of the following steps:
 
 * The `prepareTransmodelExportStep` step deletes the data found from the target tables.
 * The `exportScheduledStopPointsStep` step imports scheduled stop points from the importer's database to the Jore 4 database.
   See also: [the non-obvious assumptions](#scheduled-stop-points).
-* The `exportLinesStep` step imports lines from the importer's database to the Jore 4 database. 
+* The `exportLinesStep` step imports lines from the importer's database to the Jore 4 database.
   See also: [the non-obvious assumptions](#lines).
 * The `exportRoutesStep` step imports route metadata from the importer's database to the Jore 4 database. This step
-  imports a route metadata to the Jore 4 database only if the line which owns the processed route metadata was imported 
+  imports a route metadata to the Jore 4 database only if the line which owns the processed route metadata was imported
   to the Jore 4 database by the `exportLinesStep` step. See also: [the non-obvious assumptions](#routes).
 * The `exportRouteGeometriesStep` step imports route geometries from the importer's database to the Jore 4 database. Note
-  that this step imports only the route geometries of route metadatas which were imported to the Jore 4 database by 
+  that this step imports only the route geometries of route metadatas which were imported to the Jore 4 database by
   the `exportRoutesStep` step.
-* The `exportJourneyPatternsStep` step imports journey pattern metadata (not including actual stop point sequences) from the 
-  importer's database to the Jore 4 database. This step creates one journey pattern per route metadata which was imported 
+* The `exportJourneyPatternsStep` step imports journey pattern metadata (not including actual stop point sequences) from the
+  importer's database to the Jore 4 database. This step creates one journey pattern per route metadata which was imported
   to the Jore 4 database by the `exportRoutesStep` step.
-* The `exportJourneyPatternStopsStep`  step imports the sequence of scheduled stop point references for each journey pattern 
-  from the importer's database to the Jore 4 database. Note that this step processes the scheduled stop points of a journey 
+* The `exportJourneyPatternStopsStep`  step imports the sequence of scheduled stop point references for each journey pattern
+  from the importer's database to the Jore 4 database. Note that this step processes the scheduled stop points of a journey
   pattern only if the journey pattern was imported to the Jore 4 database by the `exportJourneyPatternsStep` step.
   See also: [the non-obvious assumptions](#stop-points-of-journey-pattern).
 
 A single Spring Batch `Step` which imports data from the importer's database to the Jore 4 database consists of
 these three components:
 
-* An `ItemReader<INPUT>` object reads the input data from the importer's database. This application uses the 
+* An `ItemReader<INPUT>` object reads the input data from the importer's database. This application uses the
   `JdbcCursorItemReader<ROW>` class which reads the input data by using an SQL script which is found from the
   _src/main/resources/export_ directory.
 * An `ItemProcessor<INPUT, OUTPUT>` object transforms the input data into a format which can be inserted into the
@@ -224,16 +224,16 @@ these three components:
   in the next process of this step.
 * An `ItemWriter<OUTPUT>` object inserts the imported data into the Jore 4 database. If the data was inserted into the
   Jore 4 database, the `ItemWriter<OUTPUT>` object sets the transmodel ids of exported rows (performs an `UPDATE`
-  statement to the importer's database). Currently, not all database constraints of Jore4 database are implemented or 
-  taken into account in internal data processing logic of Importer. Hence, writing a data item into Jore4 database may 
-  fail because of a database constraint violation. As a consequence of constraint violations, subsequent steps of Spring 
+  statement to the importer's database). Currently, not all database constraints of Jore4 database are implemented or
+  taken into account in internal data processing logic of Importer. Hence, writing a data item into Jore4 database may
+  fail because of a database constraint violation. As a consequence of constraint violations, subsequent steps of Spring
   Batch run may see a reduced number of data items remaining to be processed.
 
 The following figure illustrates the responsibilities of these components:
 
 ![Jore 4 Import Job](images/jore4-import-job.png)
 
-Every step which imports data to the Jore 4 database inserts the imported data into the Jore 4 database one row at 
+Every step which imports data to the Jore 4 database inserts the imported data into the Jore 4 database one row at
 the time. This approach is slower than using a "larger" chunk size, but it also ensures that we can ignore erroneous
 rows without losing any other data. If an error occurs, the erroneous row is written to the log and the import process starts to process the next row
 found from the importer's database.
@@ -258,9 +258,9 @@ The process that imports scheduled stop points to Jore 4 follows these rules:
 * When the import process queries the stop point information from Digiroad, it follows these rules:
   * It iterates all ELY numbers and uses the first stop point whose information is found from Digiroad. The information
     of the found Digiroad stop point is combined with the data read from the importer's database. The combined stop point
-    data is imported to the Jore 4 database. For each stop point the collected data items from Digiroad are: (1) the 
-    Digiroad ID of the infrastructure link along which the stop point is located and (2) the direction of traffic with 
-    regard to direction of the linestring geometry of the associated infrastructure link (reversed or not). All the 
+    data is imported to the Jore 4 database. For each stop point the collected data items from Digiroad are: (1) the
+    Digiroad ID of the infrastructure link along which the stop point is located and (2) the direction of traffic with
+    regard to direction of the linestring geometry of the associated infrastructure link (reversed or not). All the
     other data items originate from Jore3.
   * If the import process has iterated all ELY numbers and none of them was found from the Digiroad data, the importer
     ignores the processed stop point and won't transfer its information to the Jore 4 database.
@@ -269,7 +269,7 @@ See the _/src/resources/export/export_scheduled_stop_points.sql_ file for more d
 
 ##### Lines
 
-* If multiple lines with the same label and priority have overlapping validity periods, only one line is inserted into 
+* If multiple lines with the same label and priority have overlapping validity periods, only one line is inserted into
   the Jore 4 database. The inserted line is the first line found from the query results of the SQL query which selects
   the source data from the importer's database. At the moment, the exported lines are ordered in descending order by
   using the value of the `network_line_header_valid_date_range` column as a sort criteria.
@@ -278,24 +278,24 @@ See the _/src/resources/export/export_lines.sql_ file for more details.
 
 ##### Routes
 
-* When the importer queries the start and end stop points of an exported route from the importer's database, it 
-  will "group" stop points by using short id and selects the stop point that was exported previously to Jore 4 database. 
-* If multiple routes with same label and priority have overlapping validity periods, only one route is inserted into 
+* When the importer queries the start and end stop points of an exported route from the importer's database, it
+  will "group" stop points by using short id and selects the stop point that was exported previously to Jore 4 database.
+* If multiple routes with same label and priority have overlapping validity periods, only one route is inserted into
   the Jore 4 database. The inserted route is the first route found from the query results of the SQL query which selects
   the source data from the importer's database. At the moment, the exported routes are ordered in descending order by
   using the value of the `network_line_header_valid_date_range` column as a sort criteria.
 * The priority of a route must be higher or equal than the priority of the line which owns the route. If this isn't the
   case, the route in question cannot be inserted into the Jore 4 database.
-* A route will be transferred to the Jore 4 database only if the processed route is valid at 1.1.2021 or it will be valid 
-  after that date. If you change the valid date range found from the SQL query (_/src/main/resources/export/export_routes.sql_), 
+* A route will be transferred to the Jore 4 database only if the processed route is valid at 1.1.2021 or it will be valid
+  after that date. If you change the valid date range found from the SQL query (_/src/main/resources/export/export_routes.sql_),
   you should remember to make the required changes to the route data sets found from the _src/test/resources/sql/destination_ directory.
 
 See the _/src/resources/export/export_routes.sql_ file for more details.
 
 ##### Stop Points of Journey Pattern
 
-* When the importer queries the stop points of a journey pattern from the importer's database, it 
-  will "group" stop points by using short id and for each group selects the one that was exported previously 
+* When the importer queries the stop points of a journey pattern from the importer's database, it
+  will "group" stop points by using short id and for each group selects the one that was exported previously
   to Jore 4 database.
 
 See the _/src/resources/export/export_stops_of_journey_patterns.sql_ file for more details.
@@ -358,30 +358,30 @@ them as environment variables.
 
 The following configuration properties are to be defined for each environment:
 
-| Config property          | Environment variable       | Secret name                | Example                                                                          | Description                                                                    |
-|--------------------------|----------------------------|----------------------------|----------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
-| -                        | SECRET_STORE_BASE_PATH     | -                          | /mnt/secrets-store                                                               | Directory containing the docker secrets                                        |
-| source.db.url            | SOURCE_DB_URL              | source-db-url              | jdbc:sqlserver://localhost:1433;database=testsourcedb;applicationIntent=ReadOnly | The jdbc url of the source JORE3 MSSQL database                                |
-|                          | SOURCE_DB_HOSTNAME         | source-db-hostname         | localhost                                                                        | The IP/hostname of the source database (if SOURCE_DB_URL is not set)           |
-|                          | SOURCE_DB_PORT             | source-db-port             | 1433                                                                             | The port of the source database (if SOURCE_DB_URL is not set)                  |
-|                          | SOURCE_DB_DATABASE         | source-db-database         | testsourcedb                                                                     | The name of the source database (if SOURCE_DB_URL is not set)                  |
-| source.db.username       | SOURCE_DB_USERNAME         | source-db-username         | sa                                                                               | Username for the source database                                               |
-| source.db.password       | SOURCE_DB_PASSWORD         | source-db-password         | \*\*\*\*                                                                         | Password for the source database                                               |
-| importer.db.url          | IMPORTER_DB_URL            | importer-db-url            | jdbc:postgresql://localhost:5432/devdb?stringtype=unspecified                    | The jdbc url of the importer's PostgreSQL database                             |
-|                          | IMPORTER_DB_HOSTNAME       | importer-db-hostname       | localhost                                                                        | The IP/hostname of the importer's database (if IMPORTER_DB_URL is not set)     |
-|                          | IMPORTER_DB_PORT           | importer-db-port           | 5432                                                                             | The port of the importer's database (if IMPORTER_DB_URL is not set)            |
-|                          | IMPORTER_DB_DATABASE       | importer-db-database       | devdb                                                                            | The name of the importer's database (if IMPORTER_DB_URL is not set)            |
-| importer.db.username     | IMPORTER_DB_USERNAME       | importer-db-username       | postgres                                                                         | Username for the importer's database                                           |
-| importer.db.password     | IMPORTER_DB_PASSWORD       | importer-db-password       | \*\*\*\*                                                                         | Password for the importer's database                                           |
-| jore4.db.url             | JORE4_DB_URL               | jore4-db-url               | jdbc:postgresql://localhost:5432/jore4e2e?stringtype=unspecified                 | The jdbc url of the jore4 target PostgreSQL database                           |
-|                          | JORE4_DB_HOSTNAME          | jore4-db-hostname          | localhost                                                                        | The IP/hostname of the jore4 target database (if JORE4_DB_URL is not set)      |
-|                          | JORE4_DB_PORT              | jore4-db-port              | 5432                                                                             | The port of the jore4 target (if JORE4_DB_URL is not set)                      |
-|                          | JORE4_DB_DATABASE          | jore4-db-database          | jore4e2e                                                                         | The name of the jore4 target (if JORE4_DB_URL is not set)                      |
-| jore4.db.username        | JORE4_DB_USERNAME          | jore4-db-username          | dbimporter                                                                       | Username for the jore4 target                                                  |
-| jore4.db.password        | JORE4_DB_PASSWORD          | jore4-db-password          | \*\*\*\*                                                                         | Password for the jore4 target                                                  |
-|                          | DIGIROAD_STOPS_CSV_VERSION | digiroad-stops-csv-version | 2022-06-08                                                                       | Version of digiroad stops csv file to be downloaded from Azure blob storage    |
-| jore.importer.migrate    | JORE_IMPORTER_MIGRATE      | jore-importer-migrate      | false                                                                            | Should the importer should run its own migrations (for local development only) |
-| map.matching.api.baseUrl | MAP_MATCHING_API_BASEURL   | map-matching-api-baseurl   | https://localhost:3005                                                           | The base url of the map matching API.                                          |
+| Config property            | Environment variable       | Secret name                | Example                                                                                 | Description                                                                    |
+|-----------------------00---|----------------------------|----------------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| -                          | SECRET_STORE_BASE_PATH     | -                          | /mnt/secrets-store                                                                      | Directory containing the docker secrets                                        |
+| source.db.url              | SOURCE_DB_URL              | source-db-url              | jdbc:sqlserver://localhost:1433;database=testsourcedb;applicationIntent=ReadOnly        | The jdbc url of the source JORE3 MSSQL database                                |
+|                            | SOURCE_DB_HOSTNAME         | source-db-hostname         | localhost                                                                               | The IP/hostname of the source database (if SOURCE_DB_URL is not set)           |
+|                            | SOURCE_DB_PORT             | source-db-port             | 1433                                                                                    | The port of the source database (if SOURCE_DB_URL is not set)                  |
+|                            | SOURCE_DB_DATABASE         | source-db-database         | testsourcedb                                                                            | The name of the source database (if SOURCE_DB_URL is not set)                  |
+| source.db.username         | SOURCE_DB_USERNAME         | source-db-username         | sa                                                                                      | Username for the source database                                               |
+| source.db.password         | SOURCE_DB_PASSWORD         | source-db-password         | \*\*\*\*                                                                                | Password for the source database                                               |
+| importer.db.url            | IMPORTER_DB_URL            | importer-db-url            | jdbc:postgresql://localhost:5432/devdb?stringtype=unspecified                           | The jdbc url of the importer's PostgreSQL database                             |
+|                            | IMPORTER_DB_HOSTNAME       | importer-db-hostname       | localhost                                                                               | The IP/hostname of the importer's database (if IMPORTER_DB_URL is not set)     |
+|                            | IMPORTER_DB_PORT           | importer-db-port           | 5432                                                                                    | The port of the importer's database (if IMPORTER_DB_URL is not set)            |
+|                            | IMPORTER_DB_DATABASE       | importer-db-database       | devdb                                                                                   | The name of the importer's database (if IMPORTER_DB_URL is not set)            |
+| importer.db.username       | IMPORTER_DB_USERNAME       | importer-db-username       | postgres                                                                                | Username for the importer's database                                           |
+| importer.db.password       | IMPORTER_DB_PASSWORD       | importer-db-password       | \*\*\*\*                                                                                | Password for the importer's database                                           |
+| jore4.db.url               | JORE4_DB_URL               | jore4-db-url               | jdbc:postgresql://localhost:5432/jore4e2e?stringtype=unspecified                        | The jdbc url of the jore4 target PostgreSQL database                           |
+|                            | JORE4_DB_HOSTNAME          | jore4-db-hostname          | localhost                                                                               | The IP/hostname of the jore4 target database (if JORE4_DB_URL is not set)      |
+|                            | JORE4_DB_PORT              | jore4-db-port              | 5432                                                                                    | The port of the jore4 target (if JORE4_DB_URL is not set)                      |
+|                            | JORE4_DB_DATABASE          | jore4-db-database          | jore4e2e                                                                                | The name of the jore4 target (if JORE4_DB_URL is not set)                      |
+| jore4.db.username          | JORE4_DB_USERNAME          | jore4-db-username          | dbimporter                                                                              | Username for the jore4 target                                                  |
+| jore4.db.password          | JORE4_DB_PASSWORD          | jore4-db-password          | \*\*\*\*                                                                                | Password for the jore4 target                                                  |
+| digiroad.stop.csv.file.url | DIGIROAD_STOP_CSV_FILE_URL | digiroad-stop-csv-file-url | https://jore4storage.blob.core.windows.net/jore4-digiroad/digiroad_stops_2022_06_08.csv | Url of the digiroad stops csv file to be downloaded                            |
+| jore.importer.migrate      | JORE_IMPORTER_MIGRATE      | jore-importer-migrate      | false                                                                                   | Should the importer should run its own migrations (for local development only) |
+| map.matching.api.baseUrl   | MAP_MATCHING_API_BASEURL   | map-matching-api-baseurl   | https://localhost:3005                                                                  | The base url of the map matching API.                                          |
 
 More properties can be found from `/profiles/prod/config.properties`
 
@@ -434,7 +434,7 @@ If you want to use this option, you have to follow these steps:
 1. Run the dependencies of this application by running the command: `./development.sh start:deps`. (This will bind a volume for the testdb container so that the imported data won't be lost during sessions. If you wish not to do so, run with with `--no-volume` parameter)
 2. Run the application by running the command: `./run-local.sh`.
 
-**Second**, you can run everything with Docker. If you want to use this option, you have to run the command: 
+**Second**, you can run everything with Docker. If you want to use this option, you have to run the command:
 `./development.sh start`.
 
 ### Packaging the Application
@@ -445,7 +445,7 @@ If you want to create a package that can be used for deployment, you have run th
 
 When you want to take a database dump from the Jore 4 database, you can use one of these two options:
 
-**First**, If you want the database dump by using the graphical pgAdmin tool, you should use the custom format and ensure 
+**First**, If you want the database dump by using the graphical pgAdmin tool, you should use the custom format and ensure
 that pgAdmin uses the default settings when it takes the database dump.
 
 **Second**, if you want to use the pg_dump command line utility, you should run the following command at command prompt:
