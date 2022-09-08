@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.IntTest;
+import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route.dto.ExportableJourneyPatternStop;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -78,6 +79,8 @@ class JourneyPatternStopExportReaderTest {
         private static final int SECOND_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 2;
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_HASTUS_POINT = true;
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_VIA_POINT = true;
+        private final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_FINNISH = "ViaSuomi";
+        private final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_SWEDISH = "ViaSverige";
 
         @Test
         @DisplayName("The first invocation of the read() method must return the information of the second stop")
@@ -99,6 +102,9 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(first.isViaPoint())
                     .as("isViaPoint")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_IS_VIA_POINT);
+            softAssertions.assertThat(first.viaPointNames().isEmpty())
+                    .as("viaPointNames")
+                    .isTrue();
         }
 
         @Test
@@ -124,6 +130,12 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(second.isViaPoint())
                     .as("isViaPoint")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_IS_VIA_POINT);
+            softAssertions.assertThat(JoreLocaleUtil.getI18nString(second.viaPointNames().get(), JoreLocaleUtil.FINNISH))
+                    .as("viaPointFinnishName")
+                    .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_FINNISH);
+            softAssertions.assertThat(JoreLocaleUtil.getI18nString(second.viaPointNames().get(), JoreLocaleUtil.SWEDISH))
+                    .as("viaPointSwedishName")
+                    .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_SWEDISH);
         }
 
         @Test
