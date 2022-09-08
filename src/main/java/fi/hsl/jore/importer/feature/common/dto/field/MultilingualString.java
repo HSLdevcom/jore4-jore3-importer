@@ -8,6 +8,7 @@ import org.immutables.value.Value;
 
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Value.Immutable
 public interface MultilingualString {
@@ -24,6 +25,12 @@ public interface MultilingualString {
         return ImmutableMultilingualString.builder()
                                           .values(TreeMap.ofAll(values))
                                           .build();
+    }
+
+    static MultilingualString ofLocaleMap(final java.util.Map<Locale, String> values) {
+        return MultilingualString.of(values.entrySet()
+                .stream()
+                .collect(Collectors.toMap(entry -> entry.getKey().toString(), java.util.Map.Entry::getValue)));
     }
 
     static MultilingualString empty() {
