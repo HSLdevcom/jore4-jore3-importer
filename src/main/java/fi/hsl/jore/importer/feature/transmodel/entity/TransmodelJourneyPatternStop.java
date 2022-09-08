@@ -1,7 +1,9 @@
 package fi.hsl.jore.importer.feature.transmodel.entity;
 
+import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import org.immutables.value.Value;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -21,8 +23,11 @@ public interface TransmodelJourneyPatternStop {
 
     int scheduledStopPointSequence();
 
+    Optional<MultilingualString> viaPointNames();
+
     static TransmodelJourneyPatternStop of(final boolean isTimingPoint,
                                            final boolean isViaPoint,
+                                           final Optional<MultilingualString> viaPointNames,
                                            final UUID journeyPatternId,
                                            final String scheduledStopPointLabel,
                                            final int scheduledStopPointSequence) {
@@ -32,6 +37,7 @@ public interface TransmodelJourneyPatternStop {
                 .journeyPatternId(journeyPatternId)
                 .scheduledStopPointLabel(scheduledStopPointLabel)
                 .scheduledStopPointSequence(scheduledStopPointSequence)
+                .viaPointNames(viaPointNames)
                 .build();
     }
 }

@@ -51,9 +51,8 @@ public class TransmodelJourneyPatternStopRepository implements ITransmodelJourne
                     journeyPatternStop.scheduledStopPointSequence(),
                     journeyPatternStop.isTimingPoint(),
                     journeyPatternStop.isViaPoint(),
-                    // TODO: fetch via point name and short name from Jore3
-                    journeyPatternStop.isViaPoint() ? jsonbConverter.asJson(MultilingualString.of(Map.of("fi-FI", "Via Helsinki", "sv-FI", "Via Helsingfors"))) : null,
-                    journeyPatternStop.isViaPoint() ? jsonbConverter.asJson(MultilingualString.of(Map.of("fi-FI", "Helsinki", "sv-FI", "Helsingfors"))) : null
+                    journeyPatternStop.viaPointNames().map(jsonbConverter::asJson).orElse(null),
+                    journeyPatternStop.viaPointNames().map(jsonbConverter::asJson).orElse(null)
             ));
 
             batch.execute();

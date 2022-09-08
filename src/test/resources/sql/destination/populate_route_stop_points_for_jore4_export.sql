@@ -4,7 +4,8 @@ INSERT INTO network.network_route_stop_points (
         network_route_stop_point_order,
         network_route_stop_point_hastus_point,
         network_route_stop_point_timetable_column,
-        network_route_stop_point_via_point
+        network_route_stop_point_via_point,
+        network_route_stop_point_via_name
 )
 VALUES (
         '00000cc9-d691-492e-b55c-294b903fca33',
@@ -12,7 +13,8 @@ VALUES (
         1,
         false,
         1,
-        false
+        false,
+        NULL
 );
 
 INSERT INTO network.network_route_stop_points (
@@ -21,7 +23,8 @@ INSERT INTO network.network_route_stop_points (
     network_route_stop_point_order,
     network_route_stop_point_hastus_point,
     network_route_stop_point_timetable_column,
-    network_route_stop_point_via_point
+    network_route_stop_point_via_point,
+    network_route_stop_point_via_name
 )
 VALUES (
         '67f69468-882b-49ec-8e3b-925cc1c0de6e',
@@ -29,5 +32,6 @@ VALUES (
         2,
         true,
         1,
-        true
+        true,
+        '{"fi_FI": "ViaSuomi","sv_SE": "ViaSverige"}'
 );

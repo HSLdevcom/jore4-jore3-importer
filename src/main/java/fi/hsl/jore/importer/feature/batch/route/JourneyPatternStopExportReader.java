@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
+import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.network.route.dto.ExportableJourneyPatternStop;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
@@ -18,12 +19,15 @@ public class JourneyPatternStopExportReader {
     private static final String NAME = "journeyPatternStopExportReader";
 
     private final DataSource dataSource;
+    private final IJsonbConverter jsonConverter;
     private final String sql;
 
     @Autowired
     public JourneyPatternStopExportReader(@Qualifier("importerDataSource") final DataSource dataSource,
+                                          final IJsonbConverter jsonConverter,
                                           @Value(JourneyPatternStopExportMapper.SQL_PATH) final Resource sqlResource) {
         this.dataSource = dataSource;
+        this.jsonConverter = jsonConverter;
         this.sql = ResourceUtil.fromResource(sqlResource);
     }
 
@@ -33,7 +37,7 @@ public class JourneyPatternStopExportReader {
                 .dataSource(dataSource)
                 .name(NAME)
                 .sql(sql)
-                .rowMapper(new JourneyPatternStopExportMapper())
+                .rowMapper(new JourneyPatternStopExportMapper(jsonConverter))
                 .build();
     }
 }
