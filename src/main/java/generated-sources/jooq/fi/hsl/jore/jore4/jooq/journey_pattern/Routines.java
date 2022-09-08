@@ -5,6 +5,8 @@ package fi.hsl.jore.jore4.jooq.journey_pattern;
 
 
 import fi.hsl.jore.jore4.jooq.journey_pattern.routines.CheckRouteJourneyPatternRefs;
+import fi.hsl.jore.jore4.jooq.journey_pattern.routines.CreateVerifyInfraLinkStopRefsQueueTempTable;
+import fi.hsl.jore.jore4.jooq.journey_pattern.routines.InfraLinkStopRefsAlreadyVerified;
 import fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint;
 
 import java.time.OffsetDateTime;
@@ -40,6 +42,7 @@ public class Routines {
         , String newLabel
         , OffsetDateTime newValidityStart
         , OffsetDateTime newValidityEnd
+        , Integer newPriority
     ) {
         CheckRouteJourneyPatternRefs f = new CheckRouteJourneyPatternRefs();
         f.setFilterJourneyPatternId(filterJourneyPatternId);
@@ -51,6 +54,7 @@ public class Routines {
         f.setNewLabel(newLabel);
         f.setNewValidityStart(newValidityStart);
         f.setNewValidityEnd(newValidityEnd);
+        f.setNewPriority(newPriority);
 
         f.execute(configuration);
         return f.getReturnValue();
@@ -73,6 +77,7 @@ public class Routines {
         , String newLabel
         , OffsetDateTime newValidityStart
         , OffsetDateTime newValidityEnd
+        , Integer newPriority
     ) {
         CheckRouteJourneyPatternRefs f = new CheckRouteJourneyPatternRefs();
         f.setFilterJourneyPatternId(filterJourneyPatternId);
@@ -84,6 +89,7 @@ public class Routines {
         f.setNewLabel(newLabel);
         f.setNewValidityStart(newValidityStart);
         f.setNewValidityEnd(newValidityEnd);
+        f.setNewPriority(newPriority);
 
         return f.asField();
     }
@@ -105,6 +111,7 @@ public class Routines {
         , Field<String> newLabel
         , Field<OffsetDateTime> newValidityStart
         , Field<OffsetDateTime> newValidityEnd
+        , Field<Integer> newPriority
     ) {
         CheckRouteJourneyPatternRefs f = new CheckRouteJourneyPatternRefs();
         f.setFilterJourneyPatternId(filterJourneyPatternId);
@@ -116,6 +123,41 @@ public class Routines {
         f.setNewLabel(newLabel);
         f.setNewValidityStart(newValidityStart);
         f.setNewValidityEnd(newValidityEnd);
+        f.setNewPriority(newPriority);
+
+        return f.asField();
+    }
+
+    /**
+     * Call
+     * <code>journey_pattern.create_verify_infra_link_stop_refs_queue_temp_table</code>
+     */
+    public static void createVerifyInfraLinkStopRefsQueueTempTable(
+          Configuration configuration
+    ) {
+        CreateVerifyInfraLinkStopRefsQueueTempTable p = new CreateVerifyInfraLinkStopRefsQueueTempTable();
+
+        p.execute(configuration);
+    }
+
+    /**
+     * Call <code>journey_pattern.infra_link_stop_refs_already_verified</code>
+     */
+    public static Boolean infraLinkStopRefsAlreadyVerified(
+          Configuration configuration
+    ) {
+        InfraLinkStopRefsAlreadyVerified f = new InfraLinkStopRefsAlreadyVerified();
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>journey_pattern.infra_link_stop_refs_already_verified</code> as
+     * a field.
+     */
+    public static Field<Boolean> infraLinkStopRefsAlreadyVerified() {
+        InfraLinkStopRefsAlreadyVerified f = new InfraLinkStopRefsAlreadyVerified();
 
         return f.asField();
     }
@@ -136,6 +178,7 @@ public class Routines {
         , String newLabel
         , OffsetDateTime newValidityStart
         , OffsetDateTime newValidityEnd
+        , Integer newPriority
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
               replaceScheduledStopPointId
@@ -145,6 +188,7 @@ public class Routines {
             , newLabel
             , newValidityStart
             , newValidityEnd
+            , newPriority
         )).fetch();
     }
 
@@ -163,6 +207,7 @@ public class Routines {
         , String newLabel
         , OffsetDateTime newValidityStart
         , OffsetDateTime newValidityEnd
+        , Integer newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
             replaceScheduledStopPointId,
@@ -171,7 +216,8 @@ public class Routines {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         );
     }
 
@@ -190,6 +236,7 @@ public class Routines {
         , Field<String> newLabel
         , Field<OffsetDateTime> newValidityStart
         , Field<OffsetDateTime> newValidityEnd
+        , Field<Integer> newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
             replaceScheduledStopPointId,
@@ -198,7 +245,8 @@ public class Routines {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         );
     }
 }

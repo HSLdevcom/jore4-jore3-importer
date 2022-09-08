@@ -117,7 +117,8 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
             DSL.val(null, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
             DSL.val(null, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
             DSL.val(null, SQLDataType.TIMESTAMPWITHTIMEZONE(6).defaultValue(DSL.field("NULL::timestamp with time zone", SQLDataType.TIMESTAMPWITHTIMEZONE))),
-            DSL.val(null, SQLDataType.TIMESTAMPWITHTIMEZONE(6).defaultValue(DSL.field("NULL::timestamp with time zone", SQLDataType.TIMESTAMPWITHTIMEZONE)))
+            DSL.val(null, SQLDataType.TIMESTAMPWITHTIMEZONE(6).defaultValue(DSL.field("NULL::timestamp with time zone", SQLDataType.TIMESTAMPWITHTIMEZONE))),
+            DSL.val(null, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER)))
         });
     }
 
@@ -195,6 +196,7 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
         , String newLabel
         , OffsetDateTime newValidityStart
         , OffsetDateTime newValidityEnd
+        , Integer newPriority
     ) {
         GetScheduledStopPointsWithNew result = new GetScheduledStopPointsWithNew(DSL.name("get_scheduled_stop_points_with_new"), null, new Field[] {
             DSL.val(replaceScheduledStopPointId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
@@ -204,7 +206,8 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
             DSL.val(newDirection, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
             DSL.val(newLabel, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
             DSL.val(newValidityStart, SQLDataType.TIMESTAMPWITHTIMEZONE(6).defaultValue(DSL.field("NULL::timestamp with time zone", SQLDataType.TIMESTAMPWITHTIMEZONE))),
-            DSL.val(newValidityEnd, SQLDataType.TIMESTAMPWITHTIMEZONE(6).defaultValue(DSL.field("NULL::timestamp with time zone", SQLDataType.TIMESTAMPWITHTIMEZONE)))
+            DSL.val(newValidityEnd, SQLDataType.TIMESTAMPWITHTIMEZONE(6).defaultValue(DSL.field("NULL::timestamp with time zone", SQLDataType.TIMESTAMPWITHTIMEZONE))),
+            DSL.val(newPriority, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER)))
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;
@@ -222,6 +225,7 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
         , Field<String> newLabel
         , Field<OffsetDateTime> newValidityStart
         , Field<OffsetDateTime> newValidityEnd
+        , Field<Integer> newPriority
     ) {
         GetScheduledStopPointsWithNew result = new GetScheduledStopPointsWithNew(DSL.name("get_scheduled_stop_points_with_new"), null, new Field[] {
             replaceScheduledStopPointId,
@@ -231,7 +235,8 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;

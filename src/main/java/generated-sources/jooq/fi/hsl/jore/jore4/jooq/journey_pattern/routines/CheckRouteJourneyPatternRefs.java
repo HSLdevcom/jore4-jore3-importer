@@ -89,6 +89,12 @@ public class CheckRouteJourneyPatternRefs extends AbstractRoutine<Boolean> {
     public static final Parameter<OffsetDateTime> NEW_VALIDITY_END = Internal.createParameter("new_validity_end", SQLDataType.TIMESTAMPWITHTIMEZONE(6).defaultValue(DSL.field("NULL::timestamp with time zone", SQLDataType.TIMESTAMPWITHTIMEZONE)), true, false);
 
     /**
+     * The parameter
+     * <code>journey_pattern.check_route_journey_pattern_refs.new_priority</code>.
+     */
+    public static final Parameter<Integer> NEW_PRIORITY = Internal.createParameter("new_priority", SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER)), true, false);
+
+    /**
      * Create a new routine call instance
      */
     public CheckRouteJourneyPatternRefs() {
@@ -104,6 +110,7 @@ public class CheckRouteJourneyPatternRefs extends AbstractRoutine<Boolean> {
         addInParameter(NEW_LABEL);
         addInParameter(NEW_VALIDITY_START);
         addInParameter(NEW_VALIDITY_END);
+        addInParameter(NEW_PRIORITY);
     }
 
     /**
@@ -243,5 +250,20 @@ public class CheckRouteJourneyPatternRefs extends AbstractRoutine<Boolean> {
      */
     public void setNewValidityEnd(Field<OffsetDateTime> field) {
         setField(NEW_VALIDITY_END, field);
+    }
+
+    /**
+     * Set the <code>new_priority</code> parameter IN value to the routine
+     */
+    public void setNewPriority(Integer value) {
+        setValue(NEW_PRIORITY, value);
+    }
+
+    /**
+     * Set the <code>new_priority</code> parameter to the function to be used
+     * with a {@link org.jooq.Select} statement
+     */
+    public void setNewPriority(Field<Integer> field) {
+        setField(NEW_PRIORITY, field);
     }
 }
