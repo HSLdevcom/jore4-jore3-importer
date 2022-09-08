@@ -441,6 +441,10 @@ If you want to use this option, you have to follow these steps:
 
 If you want to create a package that can be used for deployment, you have run the command: `mvn clean package spring-boot:repackage -P prod`
 
+### Restoring a Jore 3 Database Dump to the testing Database
+
+If you want to restore a database dump from Jore 3 to the testing database, there is a script provided for it. Put the jore3 .bak file to the `jore3dump` directory and run `./apply-jore3-database-backup.sh jore3dump.bak`, where `jore3dump.bak` should be replaced with the name of the .bak file you want to apply.
+
 ### Taking a Database Dump From the Jore 4 Database
 
 When you want to take a database dump from the Jore 4 database, you can use one of these two options:
