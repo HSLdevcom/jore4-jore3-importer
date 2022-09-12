@@ -63,7 +63,8 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
             DSL.val(null, SQLDataType.CLOB),
             DSL.val(null, SQLDataType.CLOB),
             DSL.val(null, SQLDataType.TIMESTAMPWITHTIMEZONE(6)),
-            DSL.val(null, SQLDataType.TIMESTAMPWITHTIMEZONE(6))
+            DSL.val(null, SQLDataType.TIMESTAMPWITHTIMEZONE(6)),
+            DSL.val(null, SQLDataType.INTEGER)
         });
     }
 
@@ -140,6 +141,7 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
         , String newLabel
         , OffsetDateTime newValidityStart
         , OffsetDateTime newValidityEnd
+        , Integer newPriority
     ) {
         CheckInfraLinkStopRefsWithNewScheduledStopPoint result = new CheckInfraLinkStopRefsWithNewScheduledStopPoint(DSL.name("check_infra_link_stop_refs_with_new_scheduled_stop_point"), null, new Field[] {
             DSL.val(replaceScheduledStopPointId, SQLDataType.UUID),
@@ -148,7 +150,8 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
             DSL.val(newDirection, SQLDataType.CLOB),
             DSL.val(newLabel, SQLDataType.CLOB),
             DSL.val(newValidityStart, SQLDataType.TIMESTAMPWITHTIMEZONE(6)),
-            DSL.val(newValidityEnd, SQLDataType.TIMESTAMPWITHTIMEZONE(6))
+            DSL.val(newValidityEnd, SQLDataType.TIMESTAMPWITHTIMEZONE(6)),
+            DSL.val(newPriority, SQLDataType.INTEGER)
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;
@@ -165,6 +168,7 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
         , Field<String> newLabel
         , Field<OffsetDateTime> newValidityStart
         , Field<OffsetDateTime> newValidityEnd
+        , Field<Integer> newPriority
     ) {
         CheckInfraLinkStopRefsWithNewScheduledStopPoint result = new CheckInfraLinkStopRefsWithNewScheduledStopPoint(DSL.name("check_infra_link_stop_refs_with_new_scheduled_stop_point"), null, new Field[] {
             replaceScheduledStopPointId,
@@ -173,7 +177,8 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;

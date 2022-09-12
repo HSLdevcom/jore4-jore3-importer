@@ -57,6 +57,7 @@ public class JourneyPattern extends SchemaImpl {
         , String newLabel
         , OffsetDateTime newValidityStart
         , OffsetDateTime newValidityEnd
+        , Integer newPriority
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
               replaceScheduledStopPointId
@@ -66,6 +67,7 @@ public class JourneyPattern extends SchemaImpl {
             , newLabel
             , newValidityStart
             , newValidityEnd
+            , newPriority
         )).fetch();
     }
 
@@ -84,6 +86,7 @@ public class JourneyPattern extends SchemaImpl {
         , String newLabel
         , OffsetDateTime newValidityStart
         , OffsetDateTime newValidityEnd
+        , Integer newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
             replaceScheduledStopPointId,
@@ -92,7 +95,8 @@ public class JourneyPattern extends SchemaImpl {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         );
     }
 
@@ -111,6 +115,7 @@ public class JourneyPattern extends SchemaImpl {
         , Field<String> newLabel
         , Field<OffsetDateTime> newValidityStart
         , Field<OffsetDateTime> newValidityEnd
+        , Field<Integer> newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
             replaceScheduledStopPointId,
@@ -119,7 +124,8 @@ public class JourneyPattern extends SchemaImpl {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         );
     }
 

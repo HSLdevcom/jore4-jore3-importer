@@ -101,6 +101,7 @@ public class Routines {
         , String newLabel
         , OffsetDateTime newValidityStart
         , OffsetDateTime newValidityEnd
+        , Integer newPriority
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
               replaceScheduledStopPointId
@@ -111,6 +112,7 @@ public class Routines {
             , newLabel
             , newValidityStart
             , newValidityEnd
+            , newPriority
         )).fetch();
     }
 
@@ -130,6 +132,7 @@ public class Routines {
         , String newLabel
         , OffsetDateTime newValidityStart
         , OffsetDateTime newValidityEnd
+        , Integer newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
             replaceScheduledStopPointId,
@@ -139,7 +142,8 @@ public class Routines {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         );
     }
 
@@ -159,6 +163,7 @@ public class Routines {
         , Field<String> newLabel
         , Field<OffsetDateTime> newValidityStart
         , Field<OffsetDateTime> newValidityEnd
+        , Field<Integer> newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
             replaceScheduledStopPointId,
@@ -168,7 +173,8 @@ public class Routines {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         );
     }
 }
