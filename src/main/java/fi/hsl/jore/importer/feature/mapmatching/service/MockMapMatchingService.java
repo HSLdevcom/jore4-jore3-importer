@@ -4,13 +4,13 @@ import fi.hsl.jore.importer.feature.mapmatching.dto.response.ExternalLinkRefDTO;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.InfrastructureLinkDTO;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.MapMatchingSuccessResponseDTO;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.RouteDTO;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRouteGeometry;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRoutePoint;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import io.vavr.collection.List;
 
 /**
  * This implementation returns the same map matching response
- * every time when the {@link IMapMatchingService#sendMapMatchingRequest(ExportableRouteGeometry, List)}
+ * every time when the {@link IMapMatchingService#sendMapMatchingRequest(ImporterRouteGeometry, List)}
  * method is invoked. 
  */
 public class MockMapMatchingService implements IMapMatchingService {
@@ -22,8 +22,8 @@ public class MockMapMatchingService implements IMapMatchingService {
     private static final String MAP_MATCHING_OK_RESPONSE_CODE = "Ok";
 
     @Override
-    public MapMatchingSuccessResponseDTO sendMapMatchingRequest(final ExportableRouteGeometry routeGeometry,
-                                                                final List<ExportableRoutePoint> routePoints) {
+    public MapMatchingSuccessResponseDTO sendMapMatchingRequest(final ImporterRouteGeometry routeGeometry,
+                                                                final List<ImporterRoutePoint> routePoints) {
         final MapMatchingSuccessResponseDTO mapMatchingResponse = new MapMatchingSuccessResponseDTO();
         mapMatchingResponse.setCode(MAP_MATCHING_OK_RESPONSE_CODE);
 

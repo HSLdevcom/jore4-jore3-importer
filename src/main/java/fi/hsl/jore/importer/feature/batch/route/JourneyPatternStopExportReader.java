@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
-import fi.hsl.jore.importer.feature.network.route.dto.ExportableJourneyPatternStop;
+import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPatternStop;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +31,9 @@ public class JourneyPatternStopExportReader {
         this.sql = ResourceUtil.fromResource(sqlResource);
     }
 
-    public JdbcCursorItemReader<ExportableJourneyPatternStop> build() {
+    public JdbcCursorItemReader<ImporterJourneyPatternStop> build() {
         // The default fetch size seems to be 128 items
-        return new JdbcCursorItemReaderBuilder<ExportableJourneyPatternStop>()
+        return new JdbcCursorItemReaderBuilder<ImporterJourneyPatternStop>()
                 .dataSource(dataSource)
                 .name(NAME)
                 .sql(sql)

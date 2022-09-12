@@ -1,8 +1,8 @@
 package fi.hsl.jore.importer.feature.mapmatching.service;
 
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.MapMatchingSuccessResponseDTO;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRouteGeometry;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRoutePoint;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import io.vavr.collection.List;
 
 public interface IMapMatchingService {
@@ -16,6 +16,6 @@ public interface IMapMatchingService {
      *          the request was successful, the response contains the information of a
      *          public transport route which can be inserted into the Jore 4 database.
      */
-    MapMatchingSuccessResponseDTO sendMapMatchingRequest(ExportableRouteGeometry routeGeometry,
-                                                         List<ExportableRoutePoint> routePoints);
+    MapMatchingSuccessResponseDTO sendMapMatchingRequest(ImporterRouteGeometry routeGeometry,
+                                                         List<ImporterRoutePoint> routePoints);
 }

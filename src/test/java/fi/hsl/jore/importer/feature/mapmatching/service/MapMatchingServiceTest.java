@@ -5,8 +5,8 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.InfrastructureLinkDTO;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.MapMatchingSuccessResponseDTO;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.RouteDTO;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRouteGeometry;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRoutePoint;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.geojson.LineString;
@@ -47,8 +47,8 @@ class MapMatchingServiceTest {
     private MapMatchingService mapMatchingService;
     private WireMockServer wireMockServer;
 
-    private ExportableRouteGeometry routeGeometryInput;
-    private io.vavr.collection.List<ExportableRoutePoint> routePointsInput;
+    private ImporterRouteGeometry routeGeometryInput;
+    private io.vavr.collection.List<ImporterRoutePoint> routePointsInput;
 
     @BeforeEach
     void configureSystemUnderTest() {

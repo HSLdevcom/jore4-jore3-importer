@@ -6,7 +6,7 @@ import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route.dto.Route;
 import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
 import fi.hsl.jore.importer.feature.network.route.repository.IRouteTestRepository;
-import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
+import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 import org.assertj.core.api.SoftAssertions;

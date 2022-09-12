@@ -1,10 +1,10 @@
 package fi.hsl.jore.importer.config.jobs;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
-import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
-import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
-import fi.hsl.jore.importer.feature.transmodel.repository.TransmodelValidityPeriodTestRepository;
-import fi.hsl.jore.importer.feature.transmodel.repository.ValidityPeriodTargetTable;
+import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
+import fi.hsl.jore.importer.feature.jore4.repository.Jore4ValidityPeriodTestRepository;
+import fi.hsl.jore.importer.feature.jore4.repository.ValidityPeriodTargetTable;
 import io.vavr.collection.List;
 import org.assertj.core.api.Assertions;
 import org.assertj.db.api.SoftAssertions;
@@ -18,7 +18,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
 import javax.sql.DataSource;
-
 import java.time.LocalDate;
 
 import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
@@ -57,14 +56,14 @@ class ExportLineStepTest extends BatchIntegrationTest {
 
     private final Table importerTargetTable;
     private final Table jore4TargetTable;
-    private final TransmodelValidityPeriodTestRepository testRepository;
+    private final Jore4ValidityPeriodTestRepository testRepository;
 
     @Autowired
     ExportLineStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
                        final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
         this.importerTargetTable = new Table(importerDataSource, "network.network_lines");
         this.jore4TargetTable = new Table(jore4DataSource, "route.line");
-        this.testRepository = new TransmodelValidityPeriodTestRepository(jore4DataSource,
+        this.testRepository = new Jore4ValidityPeriodTestRepository(jore4DataSource,
                 ValidityPeriodTargetTable.LINE
         );
     }

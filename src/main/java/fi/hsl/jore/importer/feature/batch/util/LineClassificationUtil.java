@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.batch.util;
 
 import fi.hsl.jore.importer.feature.jore3.enumerated.PublicTransportType;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
-import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
+import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.Set;
 

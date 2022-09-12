@@ -4,7 +4,7 @@ import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.ValidityPeriodAssertions;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.direction_type.field.DirectionType;
-import fi.hsl.jore.importer.feature.network.route.dto.ExportableRoute;
+import fi.hsl.jore.importer.feature.network.route.dto.ImporterRoute;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.AfterEach;
@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -27,7 +26,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @IntTest
 class RouteExportReaderTest {
 
-    private final JdbcCursorItemReader<ExportableRoute> reader;
+    private final JdbcCursorItemReader<ImporterRoute> reader;
 
    @Autowired
    RouteExportReaderTest(RouteExportReader reader) {
@@ -52,7 +51,7 @@ class RouteExportReaderTest {
         @Test
         @DisplayName("The first invocation of the read() method must return null")
         void firstInvocationOfReadMethodMustReturnNull() throws Exception {
-            final ExportableRoute found = reader.read();
+            final ImporterRoute found = reader.read();
             assertThat(found).isNull();
         }
     }
@@ -85,7 +84,7 @@ class RouteExportReaderTest {
        @Test
        @DisplayName("The first invocation of the read()  method must return the found route")
        void firstInvocationOfReadMethodMustReturnFoundRoute(final SoftAssertions softAssertions) throws Exception {
-           final ExportableRoute route = reader.read();
+           final ImporterRoute route = reader.read();
 
            softAssertions.assertThat(route.directionId())
                    .as("directionId")
@@ -122,11 +121,11 @@ class RouteExportReaderTest {
        @DisplayName("The second invocation of the read() method must return null")
        void secondInvocationOfReadMethodMustReturnNull() throws Exception {
            //The first invocation returns the route found from the database.
-           final ExportableRoute first = reader.read();
+           final ImporterRoute first = reader.read();
            assertThat(first).isNotNull();
 
            //Because there are no more routes, this invocation must return null.
-           final ExportableRoute second = reader.read();
+           final ImporterRoute second = reader.read();
            assertThat(second).isNull();
        }
     }

@@ -9,7 +9,7 @@ import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasSystemTime;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
 import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
-import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
+import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutesWithHistoryRecord;
 import org.immutables.value.Value;

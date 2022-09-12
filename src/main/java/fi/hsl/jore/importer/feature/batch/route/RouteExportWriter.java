@@ -2,8 +2,8 @@ package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.feature.batch.route_direction.support.IRouteDirectionImportRepository;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableRouteIdMapping;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRoute;
-import fi.hsl.jore.importer.feature.transmodel.repository.ITransmodelRouteRepository;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4Route;
+import fi.hsl.jore.importer.feature.jore4.repository.IJore4RouteRepository;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,20 +11,20 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class RouteExportWriter implements ItemWriter<TransmodelRoute> {
+public class RouteExportWriter implements ItemWriter<Jore4Route> {
 
     private final IRouteDirectionImportRepository importerRepository;
-    private final ITransmodelRouteRepository jore4Repository;
+    private final IJore4RouteRepository jore4Repository;
 
     @Autowired
     public RouteExportWriter(final IRouteDirectionImportRepository importerRepository,
-                             final ITransmodelRouteRepository jore4Repository)  {
+                             final IJore4RouteRepository jore4Repository)  {
         this.importerRepository = importerRepository;
         this.jore4Repository = jore4Repository;
     }
 
     @Override
-    public void write(final List<? extends TransmodelRoute> items) throws Exception {
+    public void write(final List<? extends Jore4Route> items) throws Exception {
         jore4Repository.insert(items);
 
         final io.vavr.collection.List<PersistableRouteIdMapping> transmodelIdMappings = items.stream()

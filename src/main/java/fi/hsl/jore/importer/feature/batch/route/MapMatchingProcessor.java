@@ -4,11 +4,11 @@ import fi.hsl.jore.importer.feature.mapmatching.dto.response.ExternalLinkRefDTO;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.InfrastructureLinkDTO;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.MapMatchingSuccessResponseDTO;
 import fi.hsl.jore.importer.feature.mapmatching.service.IMapMatchingService;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRouteGeometry;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRoutePoint;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import fi.hsl.jore.importer.feature.network.route_point.repository.IRoutePointExportRepository;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRouteGeometry;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRouteInfrastructureLink;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteGeometry;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteInfrastructureLink;
 import io.vavr.collection.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ import java.util.UUID;
  *  topology network.
  */
 @Component
-public class MapMatchingProcessor implements ItemProcessor<ExportableRouteGeometry, TransmodelRouteGeometry> {
+public class MapMatchingProcessor implements ItemProcessor<ImporterRouteGeometry, Jore4RouteGeometry> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MapMatchingProcessor.class);
 
@@ -38,13 +38,13 @@ public class MapMatchingProcessor implements ItemProcessor<ExportableRouteGeomet
     }
 
     @Override
-    public TransmodelRouteGeometry process(final ExportableRouteGeometry routeGeometryInput) throws Exception {
+    public Jore4RouteGeometry process(final ImporterRouteGeometry routeGeometryInput) throws Exception {
         LOGGER.debug("Processing route geometry with routeDirectionId: {} and routeDirectionExtId: {}",
                 routeGeometryInput.routeDirectionId(),
                 routeGeometryInput.routeDirectionExtId()
         );
 
-        final List<ExportableRoutePoint> routePointsInput = routePointRepository.findExportableRoutePointsByRouteDirectionId(routeGeometryInput.routeDirectionId());
+        final List<ImporterRoutePoint> routePointsInput = routePointRepository.findImporterRoutePointsByRouteDirectionId(routeGeometryInput.routeDirectionId());
         if (routePointsInput.isEmpty()) {
             LOGGER.error(
                     "Cannot process route geometry because no route points were found for route with route direction id: {}",
@@ -60,18 +60,18 @@ public class MapMatchingProcessor implements ItemProcessor<ExportableRouteGeomet
         return createRouteGeometry(routeGeometryInput.routeTransmodelId(), mapMatchingResponse);
     }
 
-    private TransmodelRouteGeometry createRouteGeometry(final UUID routeId,
-                                                        final MapMatchingSuccessResponseDTO mapMatchingResponse) {
+    private Jore4RouteGeometry createRouteGeometry(final UUID routeId,
+                                                   final MapMatchingSuccessResponseDTO mapMatchingResponse) {
         final java.util.List<InfrastructureLinkDTO> matchedInfraLinks = mapMatchingResponse
                 .getRoutes().get(0)
                 .getPaths();
 
-        List<TransmodelRouteInfrastructureLink> transmodelInfraLinks = List.empty();
+        List<Jore4RouteInfrastructureLink> jore4InfraLinks = List.empty();
         int infrastructureLinkSequence = 0;
 
         for (final InfrastructureLinkDTO matchedInfraLink: matchedInfraLinks) {
             final ExternalLinkRefDTO externalLink = matchedInfraLink.getExternalLinkRef();
-            transmodelInfraLinks = transmodelInfraLinks.append(TransmodelRouteInfrastructureLink.of(
+            jore4InfraLinks = jore4InfraLinks.append(Jore4RouteInfrastructureLink.of(
                     externalLink.getInfrastructureSource(),
                     externalLink.getExternalLinkId(),
                     infrastructureLinkSequence,
@@ -81,6 +81,6 @@ public class MapMatchingProcessor implements ItemProcessor<ExportableRouteGeomet
         }
 
 
-        return TransmodelRouteGeometry.of(routeId, transmodelInfraLinks);
+        return Jore4RouteGeometry.of(routeId, jore4InfraLinks);
     }
  }

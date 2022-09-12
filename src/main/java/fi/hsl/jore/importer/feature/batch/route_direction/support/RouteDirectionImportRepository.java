@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.batch.route_direction.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
-import fi.hsl.jore.importer.feature.network.route_direction.dto.ImportableRouteDirection;
+import fi.hsl.jore.importer.feature.network.route_direction.dto.Jore3RouteDirection;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableJourneyPatternIdMapping;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableRouteIdMapping;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.generated.RouteDirectionPK;
@@ -23,7 +23,7 @@ import static org.jooq.impl.DSL.selectOne;
 
 @Repository
 public class RouteDirectionImportRepository
-        extends AbstractImportRepository<ImportableRouteDirection, RouteDirectionPK>
+        extends AbstractImportRepository<Jore3RouteDirection, RouteDirectionPK>
         implements IRouteDirectionImportRepository {
 
     private static final NetworkRouteDirectionsStaging STAGING_TABLE = NetworkRouteDirectionsStaging.NETWORK_ROUTE_DIRECTIONS_STAGING;
@@ -49,7 +49,7 @@ public class RouteDirectionImportRepository
 
     @Override
     @Transactional
-    public void submitToStaging(final Iterable<? extends ImportableRouteDirection> routeDirections) {
+    public void submitToStaging(final Iterable<? extends Jore3RouteDirection> routeDirections) {
         final BatchBindStep batch = db.batch(db.insertInto(STAGING_TABLE,
                                                            STAGING_TABLE.NETWORK_ROUTE_DIRECTION_EXT_ID,
                                                            STAGING_TABLE.NETWORK_ROUTE_EXT_ID,

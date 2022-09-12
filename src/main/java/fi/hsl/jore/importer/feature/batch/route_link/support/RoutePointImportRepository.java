@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route_link.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ImportableRoutePoint;
+import fi.hsl.jore.importer.feature.network.route_point.dto.Jore3RoutePoint;
 import fi.hsl.jore.importer.feature.network.route_point.dto.generated.RoutePointPK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections;
@@ -20,7 +20,7 @@ import static org.jooq.impl.DSL.selectOne;
 
 @Repository
 public class RoutePointImportRepository
-        extends AbstractImportRepository<ImportableRoutePoint, RoutePointPK>
+        extends AbstractImportRepository<Jore3RoutePoint, RoutePointPK>
         implements IRoutePointImportRepository {
 
     private static final NetworkRoutePointsStaging STAGING_TABLE = NetworkRoutePointsStaging.NETWORK_ROUTE_POINTS_STAGING;
@@ -44,7 +44,7 @@ public class RoutePointImportRepository
 
     @Override
     @Transactional
-    public void submitToStaging(final Iterable<? extends ImportableRoutePoint> points) {
+    public void submitToStaging(final Iterable<? extends Jore3RoutePoint> points) {
         final BatchBindStep batch = db.batch(db.insertInto(STAGING_TABLE,
                                                            STAGING_TABLE.NETWORK_ROUTE_POINT_EXT_ID,
                                                            STAGING_TABLE.NETWORK_ROUTE_DIRECTION_EXT_ID,

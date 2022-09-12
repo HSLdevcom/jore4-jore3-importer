@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.batch.util;
 
 import fi.hsl.jore.importer.feature.jore3.enumerated.PublicTransportType;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
-import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
+import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.ExtensionContext;

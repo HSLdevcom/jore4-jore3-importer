@@ -118,7 +118,7 @@ The package structure of this application is described in the following:
       target database.
     * The `fi.hsl.jore.importer.feature.system.repository` package contains a repository which allows you to current
       date and time information from the database.
-    * The `fi.hsl.jore.importer.feature.transmodel` package contains entities, repositories, and utility classes which
+    * The `fi.hsl.jore.importer.feature.jore4` package contains entities, repositories, and utility classes which
       are used to insert data into the Jore 4 database.
 * The `fi.hsl.jore.importer.util` package provides factory methods which allow you to instantiate classes
   provided by the [JTS topogy suite](https://github.com/locationtech/jts).
@@ -192,11 +192,11 @@ importer's database:
 #### Importing Data From the Importer's Database to the Jore 4 Database
 
 The second part of the import job imports scheduled stop points, lines, routes, and journey patterns from the importer's
-database to the Jore 4 database. The steps of this import flow (`transmodelExportFlow`) follow the
+database to the Jore 4 database. The steps of this import flow (`jore4ExportFlow`) follow the
 [chunk oriented processing "pattern" of Spring Batch](https://docs.spring.io/spring-batch/docs/current/reference/html/step.html#chunkOrientedProcessing).
 The import flow consists of the following steps:
 
-* The `prepareTransmodelExportStep` step deletes the data found from the target tables.
+* The `prepareJore4ExportStep` step deletes the data found from the target tables.
 * The `exportScheduledStopPointsStep` step imports scheduled stop points from the importer's database to the Jore 4 database.
   See also: [the non-obvious assumptions](#scheduled-stop-points).
 * The `exportLinesStep` step imports lines from the importer's database to the Jore 4 database.
@@ -334,6 +334,14 @@ fi.hsl.jore.foo.bar
 import org.springframework.lang.NonNullApi;
 import org.springframework.lang.NonNullFields;
 ```
+
+### Naming Conventions
+
+DTO interfaces are named according to which database they are used with.
+
+* `Jore3` prefix is a DTO which represents data from the Jore3 database
+* `Importer` prefix is a DTO which represents data in the importer's own database
+* `Jore4` prefix is a DTO which represents data which can be inserted into the Jore4 database.
 
 ### Configuration
 

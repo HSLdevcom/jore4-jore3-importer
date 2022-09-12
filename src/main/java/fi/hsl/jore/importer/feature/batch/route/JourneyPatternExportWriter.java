@@ -2,8 +2,8 @@ package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.feature.batch.route_direction.support.IRouteDirectionImportRepository;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableJourneyPatternIdMapping;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelJourneyPattern;
-import fi.hsl.jore.importer.feature.transmodel.repository.ITransmodelJourneyPatternRepository;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPattern;
+import fi.hsl.jore.importer.feature.jore4.repository.IJore4JourneyPatternRepository;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,20 +11,20 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class JourneyPatternExportWriter implements ItemWriter<TransmodelJourneyPattern> {
+public class JourneyPatternExportWriter implements ItemWriter<Jore4JourneyPattern> {
 
     private final IRouteDirectionImportRepository importerRepository;
-    private final ITransmodelJourneyPatternRepository jore4Repository;
+    private final IJore4JourneyPatternRepository jore4Repository;
 
     @Autowired
     JourneyPatternExportWriter(final IRouteDirectionImportRepository importerRepository,
-                               final ITransmodelJourneyPatternRepository jore4Repository) {
+                               final IJore4JourneyPatternRepository jore4Repository) {
         this.importerRepository = importerRepository;
         this.jore4Repository = jore4Repository;
     }
 
     @Override
-    public void write(final List<? extends TransmodelJourneyPattern> items) throws Exception {
+    public void write(final List<? extends Jore4JourneyPattern> items) throws Exception {
         jore4Repository.insert(items);
 
         final io.vavr.collection.List<PersistableJourneyPatternIdMapping> journeyPatternIdMappings = items.stream()

@@ -7,7 +7,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteLink;
 import fi.hsl.jore.importer.feature.jore3.enumerated.NodeType;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
-import fi.hsl.jore.importer.feature.network.route_stop_point.dto.ImportableRouteStopPoint;
+import fi.hsl.jore.importer.feature.network.route_stop_point.dto.Jore3RouteStopPoint;
 import io.vavr.collection.Vector;
 import org.immutables.value.Value;
 
@@ -26,9 +26,9 @@ public final class RouteStopPointConstructor {
                 Optional.empty();
     }
 
-    private static ImportableRouteStopPoint fromLink(final JrRouteLink link,
-                                                     final int index) {
-        return ImportableRouteStopPoint.of(ExternalIdUtil.forRouteLinkStartNode(link),
+    private static Jore3RouteStopPoint fromLink(final JrRouteLink link,
+                                                final int index) {
+        return Jore3RouteStopPoint.of(ExternalIdUtil.forRouteLinkStartNode(link),
                                            index,
                                            link.hastusStopPoint(),
                                            link.viaPoint(),
@@ -37,12 +37,12 @@ public final class RouteStopPointConstructor {
                                                            link.timetableColumn()));
     }
 
-    private static ImportableRouteStopPoint fromLastLink(final JrRouteLink link,
-                                                         final int index,
-                                                         final LastLinkAttributes attributes) {
+    private static Jore3RouteStopPoint fromLastLink(final JrRouteLink link,
+                                                    final int index,
+                                                    final LastLinkAttributes attributes) {
         // Final point is always a hastus point
         final boolean hastusPoint = true;
-        return ImportableRouteStopPoint.of(ExternalIdUtil.forRouteLinkEndNode(link),
+        return Jore3RouteStopPoint.of(ExternalIdUtil.forRouteLinkEndNode(link),
                                            index,
                                            hastusPoint,
                                            link.viaPoint(),
@@ -66,7 +66,7 @@ public final class RouteStopPointConstructor {
 
     private static final Function<StopPointContext, StopPointContext> ADD_STOP_POINTS_FROM_STARTING_NODES =
             ctx -> {
-                final Vector<ImportableRouteStopPoint> points = ctx.linksAndAttributes()
+                final Vector<Jore3RouteStopPoint> points = ctx.linksAndAttributes()
                                                                    .routeLinks()
                                                                    .filter(link -> link.startNodeType() == NodeType.BUS_STOP)
                                                                    .zipWithIndex()
@@ -105,7 +105,7 @@ public final class RouteStopPointConstructor {
                     .andThen(MARK_FIRST_STOP_POINT_AS_HASTUS_POINT)
                     .andThen(MARK_LAST_STOP_POINT_AS_HASTUS_POINT);
 
-    public static Vector<ImportableRouteStopPoint> extractStopPoints(final RouteLinksAndAttributes entity) {
+    public static Vector<Jore3RouteStopPoint> extractStopPoints(final RouteLinksAndAttributes entity) {
         final StopPointContext ctx = StopPointContext.of(entity);
         return PIPELINE.apply(ctx)
                        .stopPoints();
@@ -116,7 +116,7 @@ public final class RouteStopPointConstructor {
         RouteLinksAndAttributes linksAndAttributes();
 
         @Value.Default
-        default Vector<ImportableRouteStopPoint> stopPoints() {
+        default Vector<Jore3RouteStopPoint> stopPoints() {
             return Vector.empty();
         }
 
@@ -126,7 +126,7 @@ public final class RouteStopPointConstructor {
          * @param f The function to apply to the head
          * @return A new instance of the context
          */
-        default StopPointContext updateHead(final Function<ImportableRouteStopPoint, ImportableRouteStopPoint> f) {
+        default StopPointContext updateHead(final Function<Jore3RouteStopPoint, Jore3RouteStopPoint> f) {
             if (stopPoints().isEmpty()) {
                 return this;
             }
@@ -139,7 +139,7 @@ public final class RouteStopPointConstructor {
          * @param f The function to apply to the tail
          * @return A new instance of the context
          */
-        default StopPointContext updateTail(final Function<ImportableRouteStopPoint, ImportableRouteStopPoint> f) {
+        default StopPointContext updateTail(final Function<Jore3RouteStopPoint, Jore3RouteStopPoint> f) {
             if (stopPoints().isEmpty()) {
                 return this;
             }
@@ -147,7 +147,7 @@ public final class RouteStopPointConstructor {
             return withStopPoints(stopPoints().update(idx, f));
         }
 
-        StopPointContext withStopPoints(Vector<ImportableRouteStopPoint> stopPoints);
+        StopPointContext withStopPoints(Vector<Jore3RouteStopPoint> stopPoints);
 
         static StopPointContext of(final RouteLinksAndAttributes linksAndAttributes) {
             return ImmutableStopPointContext.builder()

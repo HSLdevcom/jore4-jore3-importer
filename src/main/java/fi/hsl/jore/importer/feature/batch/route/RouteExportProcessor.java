@@ -1,9 +1,9 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
-import fi.hsl.jore.importer.feature.network.route.dto.ExportableRoute;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRoute;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRouteDirection;
-import fi.hsl.jore.importer.feature.transmodel.util.ValidityPeriodUtil;
+import fi.hsl.jore.importer.feature.network.route.dto.ImporterRoute;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4Route;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteDirection;
+import fi.hsl.jore.importer.feature.jore4.util.ValidityPeriodUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
@@ -16,20 +16,20 @@ import java.util.UUID;
  * into the Jore 4 database.
  */
 @Component
-public class RouteExportProcessor implements ItemProcessor<ExportableRoute, TransmodelRoute> {
+public class RouteExportProcessor implements ItemProcessor<ImporterRoute, Jore4Route> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RouteExportProcessor.class);
 
     private static final int DEFAULT_PRIORITY = 10;
 
     @Override
-    public TransmodelRoute process(final ExportableRoute input) throws Exception {
+    public Jore4Route process(final ImporterRoute input) throws Exception {
         LOGGER.debug("Processing route: {}", input);
 
-        return TransmodelRoute.of(
+        return Jore4Route.of(
                 UUID.randomUUID(),
                 input.name(),
-                TransmodelRouteDirection.of(input.directionType()),
+                Jore4RouteDirection.of(input.directionType()),
                 input.directionId(),
                 input.routeNumber(),
                 input.hiddenVariant(),

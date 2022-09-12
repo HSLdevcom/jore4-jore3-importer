@@ -3,7 +3,7 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
-import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImporterScheduledStopPoint;
 import io.vavr.collection.List;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -23,7 +23,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @IntTest
 class ScheduledStopPointExportReaderTest {
 
-    private final JdbcCursorItemReader<ExportableScheduledStopPoint> reader;
+    private final JdbcCursorItemReader<ImporterScheduledStopPoint> reader;
 
     @Autowired
     ScheduledStopPointExportReaderTest(ScheduledStopPointExportReader reader) {
@@ -48,7 +48,7 @@ class ScheduledStopPointExportReaderTest {
         @Test
         @DisplayName("The first invocation of the read() method must return null")
         void firstInvocationOfReadMethodMustReturnNull() throws Exception {
-            final ExportableScheduledStopPoint found = reader.read();
+            final ImporterScheduledStopPoint found = reader.read();
             assertThat(found).isNull();
         }
     }
@@ -73,7 +73,7 @@ class ScheduledStopPointExportReaderTest {
         @Test
         @DisplayName("The first invocation of the read() method must return the found scheduled stop point")
         void firstInvocationOfReadMethodMustReturnFoundScheduledStopPoint(final SoftAssertions softAssertions) throws Exception {
-            final ExportableScheduledStopPoint found = reader.read();
+            final ImporterScheduledStopPoint found = reader.read();
 
             final List<ExternalId> externalIds = found.externalIds();
             softAssertions.assertThat(externalIds)
@@ -116,11 +116,11 @@ class ScheduledStopPointExportReaderTest {
         @DisplayName("The second invocation of the read() method must return null")
         void secondInvocationOfReadMethodMustReturnNull() throws Exception {
             //The first invocation returns the scheduled stop found from the database.
-            final ExportableScheduledStopPoint first = reader.read();
+            final ImporterScheduledStopPoint first = reader.read();
             assertThat(first).isNotNull();
 
             //Because there are no more scheduled stop points, this invocation must return null.
-            final ExportableScheduledStopPoint second = reader.read();
+            final ImporterScheduledStopPoint second = reader.read();
             assertThat(second).isNull();
         }
     }
@@ -147,7 +147,7 @@ class ScheduledStopPointExportReaderTest {
         @Test
         @DisplayName("The first invocation of the read() method must return the found scheduled stop point")
         void firstInvocationOfReadMethodMustReturnFoundScheduledStopPoint(final SoftAssertions softAssertions) throws Exception {
-            final ExportableScheduledStopPoint found = reader.read();
+            final ImporterScheduledStopPoint found = reader.read();
 
             final List<ExternalId> externalIds = found.externalIds();
             softAssertions.assertThat(externalIds)
@@ -193,11 +193,11 @@ class ScheduledStopPointExportReaderTest {
         @DisplayName("The second invocation of the read() method must return null")
         void secondInvocationOfReadMethodMustReturnNull() throws Exception {
             //The first invocation returns the scheduled stop found from the database.
-            final ExportableScheduledStopPoint first = reader.read();
+            final ImporterScheduledStopPoint first = reader.read();
             assertThat(first).isNotNull();
 
             //Because there are no more scheduled stop points, this invocation must return null.
-            final ExportableScheduledStopPoint second = reader.read();
+            final ImporterScheduledStopPoint second = reader.read();
             assertThat(second).isNull();
         }
     }

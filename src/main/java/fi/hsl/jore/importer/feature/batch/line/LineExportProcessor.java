@@ -1,9 +1,9 @@
 package fi.hsl.jore.importer.feature.batch.line;
 
-import fi.hsl.jore.importer.feature.network.line.dto.ExportableLine;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelLine;
-import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
-import fi.hsl.jore.importer.feature.transmodel.util.ValidityPeriodUtil;
+import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4Line;
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
+import fi.hsl.jore.importer.feature.jore4.util.ValidityPeriodUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
@@ -16,17 +16,17 @@ import java.util.UUID;
  * that can be inserted into the Jore 4 database.
  */
 @Component
-public class LineExportProcessor implements ItemProcessor<ExportableLine, TransmodelLine> {
+public class LineExportProcessor implements ItemProcessor<ImporterLine, Jore4Line> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LineExportProcessor.class);
 
     private static final int DEFAULT_PRIORITY = 10;
 
     @Override
-    public TransmodelLine process(final ExportableLine input) throws Exception {
+    public Jore4Line process(final ImporterLine input) throws Exception {
         LOGGER.debug("Processing line: {}", input);
 
-        return TransmodelLine.of(
+        return Jore4Line.of(
                 UUID.randomUUID(),
                 input.externalId().value(),
                 input.lineNumber(),

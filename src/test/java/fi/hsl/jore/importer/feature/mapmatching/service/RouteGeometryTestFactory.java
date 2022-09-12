@@ -1,8 +1,8 @@
 package fi.hsl.jore.importer.feature.mapmatching.service;
 
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRouteGeometry;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRoutePoint;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.List;
 import org.locationtech.jts.geom.Coordinate;
@@ -42,7 +42,7 @@ public class RouteGeometryTestFactory {
      */
     private RouteGeometryTestFactory() {}
 
-    public static ExportableRouteGeometry createRouteGeometry() {
+    public static ImporterRouteGeometry createRouteGeometry() {
         final CoordinateSequence coordinates = new CoordinateArraySequence(new Coordinate[]{
                 new Coordinate(REQUEST_ROUTE_GEOMETRY_START_X, REQUEST_ROUTE_GEOMETRY_START_Y),
                 new Coordinate(REQUEST_ROUTE_GEOMETRY_END_X, REQUEST_ROUTE_GEOMETRY_END_Y)
@@ -51,14 +51,14 @@ public class RouteGeometryTestFactory {
                 GeometryUtil.factoryForSrid(GeometryUtil.SRID_WGS84)
         );
 
-        return ExportableRouteGeometry.from(routeLineString,
+        return ImporterRouteGeometry.from(routeLineString,
                 ROUTE_DIRECTION_ID,
                 ROUTE_DIRECTION_EXT_ID,
                 ROUTE_TRANSMODEL_ID
         );
     }
 
-    public static List<ExportableRoutePoint> createRoutePoints() {
+    public static List<ImporterRoutePoint> createRoutePoints() {
 
 
         return List.of(
@@ -67,7 +67,7 @@ public class RouteGeometryTestFactory {
         );
     }
 
-    private static ExportableRoutePoint createStopPoint() {
+    private static ImporterRoutePoint createStopPoint() {
         final CoordinateSequence locationCoordinates = new CoordinateArraySequence(new Coordinate[]{
                 new Coordinate(REQUEST_ROUTE_STOP_POINT_POINT_X, REQUEST_ROUTE_STOP_POINT_POINT_Y)
         });
@@ -84,7 +84,7 @@ public class RouteGeometryTestFactory {
                 GeometryUtil.factoryForSrid(GeometryUtil.SRID_WGS84)
         );
 
-        return ExportableRoutePoint.from(
+        return ImporterRoutePoint.from(
                 location,
                 1,
                 Optional.of(projectedLocation),
@@ -94,7 +94,7 @@ public class RouteGeometryTestFactory {
         );
     }
 
-    private static ExportableRoutePoint createJunctionPoint() {
+    private static ImporterRoutePoint createJunctionPoint() {
         final CoordinateSequence locationCoordinates = new CoordinateArraySequence(new Coordinate[]{
                 new Coordinate(REQUEST_ROUTE_JUNCTION_POINT_X, REQUEST_ROUTE_JUNCTION_POINT_Y)
         });
@@ -103,7 +103,7 @@ public class RouteGeometryTestFactory {
                 GeometryUtil.factoryForSrid(GeometryUtil.SRID_WGS84)
         );
 
-        return ExportableRoutePoint.from(location,
+        return ImporterRoutePoint.from(location,
                 2,
                 Optional.empty(),
                 NodeType.CROSSROADS,

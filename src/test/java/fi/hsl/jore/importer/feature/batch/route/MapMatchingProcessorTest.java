@@ -5,11 +5,11 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import fi.hsl.jore.importer.feature.mapmatching.service.IMapMatchingService;
 import fi.hsl.jore.importer.feature.mapmatching.service.MapMatchingService;
 import fi.hsl.jore.importer.feature.mapmatching.service.RouteGeometryTestFactory;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRouteGeometry;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRoutePoint;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import fi.hsl.jore.importer.feature.network.route_point.repository.IRoutePointExportRepository;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRouteGeometry;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRouteInfrastructureLink;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteGeometry;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteInfrastructureLink;
 import io.vavr.collection.List;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -42,7 +42,7 @@ class MapMatchingProcessorTest {
     private MapMatchingProcessor processor;
     private IRoutePointExportRepository repository;
 
-    private ExportableRouteGeometry routeGeometryInput;
+    private ImporterRouteGeometry routeGeometryInput;
 
     @BeforeEach
     void configureSystemUnderTest() {
@@ -76,14 +76,14 @@ class MapMatchingProcessorTest {
 
         @BeforeEach
         void returnEmptyList() {
-            given(repository.findExportableRoutePointsByRouteDirectionId(RouteGeometryTestFactory.ROUTE_DIRECTION_ID))
+            given(repository.findImporterRoutePointsByRouteDirectionId(RouteGeometryTestFactory.ROUTE_DIRECTION_ID))
                     .willReturn(List.empty());
         }
 
         @Test
         @DisplayName("Should return null")
         void shouldReturnNull() throws Exception {
-            final TransmodelRouteGeometry routeGeometry = processor.process(routeGeometryInput);
+            final Jore4RouteGeometry routeGeometry = processor.process(routeGeometryInput);
             assertThat(routeGeometry).isNull();
         }
     }
@@ -167,8 +167,8 @@ class MapMatchingProcessorTest {
         }
 
         void returnOneRoutePoint() {
-            final io.vavr.collection.List<ExportableRoutePoint> routePoints = createRoutePoints();
-            given(repository.findExportableRoutePointsByRouteDirectionId(RouteGeometryTestFactory.ROUTE_DIRECTION_ID))
+            final io.vavr.collection.List<ImporterRoutePoint> routePoints = createRoutePoints();
+            given(repository.findImporterRoutePointsByRouteDirectionId(RouteGeometryTestFactory.ROUTE_DIRECTION_ID))
                     .willReturn(routePoints);
         }
 
@@ -181,21 +181,21 @@ class MapMatchingProcessorTest {
         @Test
         @DisplayName("Should return a route geometry with the correct route id")
         void shouldReturnRouteGeometryWithCorrectRouteId() throws Exception {
-            final TransmodelRouteGeometry routeGeometry = processor.process(routeGeometryInput);
-            assertThat(routeGeometry.routeId()).isEqualTo(RouteGeometryTestFactory.ROUTE_TRANSMODEL_ID);
+            final Jore4RouteGeometry routeGeometry = processor.process(routeGeometryInput);
+            assertThat(routeGeometry.routeId()).isEqualTo(RouteGeometryTestFactory.ROUTE_JORE4_ID);
         }
 
         @Test
         @DisplayName("Should return a route geometry with two infrastructure links")
         void shouldReturnRouteGeometryWithTwoInfrastructureLinks() throws Exception {
-            final TransmodelRouteGeometry routeGeometry = processor.process(routeGeometryInput);
+            final Jore4RouteGeometry routeGeometry = processor.process(routeGeometryInput);
             assertThat(routeGeometry.infrastructureLinks()).hasSize(2);
         }
 
         @Test
         @DisplayName("Should return route geometry with the correct first infrastructure link")
         void shouldReturnRouteGeometryWithCorrectFirstInfrastructureLink(final SoftAssertions softAssertions) throws Exception {
-            final TransmodelRouteInfrastructureLink infrastructureLink = processor.process(routeGeometryInput)
+            final Jore4RouteInfrastructureLink infrastructureLink = processor.process(routeGeometryInput)
                     .infrastructureLinks()
                     .get(0);
 
@@ -216,7 +216,7 @@ class MapMatchingProcessorTest {
         @Test
         @DisplayName("Should return route geometry with the correct second infrastructure link")
         void shouldReturnRouteGeometryWithCorrectSecondInfrastructureLink(final SoftAssertions softAssertions) throws Exception {
-            final TransmodelRouteInfrastructureLink infrastructureLink = processor.process(routeGeometryInput)
+            final Jore4RouteInfrastructureLink infrastructureLink = processor.process(routeGeometryInput)
                     .infrastructureLinks()
                     .get(1);
 

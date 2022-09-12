@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.IntTest;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRouteGeometry;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.AfterEach;
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @IntTest
 public class RouteGeometryExportReaderTest {
 
-    private final JdbcCursorItemReader<ExportableRouteGeometry> reader;
+    private final JdbcCursorItemReader<ImporterRouteGeometry> reader;
 
     @Autowired
     RouteGeometryExportReaderTest(final RouteGeometryExportReader reader) {
@@ -48,7 +48,7 @@ public class RouteGeometryExportReaderTest {
         @Test
         @DisplayName("The first invocation of the read() method must return null")
         void firstInvocationOfReadMethodMustReturnNull() throws Exception {
-            final ExportableRouteGeometry first = reader.read();
+            final ImporterRouteGeometry first = reader.read();
             assertThat(first).isNull();
         }
     }
@@ -83,7 +83,7 @@ public class RouteGeometryExportReaderTest {
         @Test
         @DisplayName("The first invocation of the read() method must return the found route geometry")
         void firstInvocationOfReadMethodMustReturnFoundRouteGeometry(final SoftAssertions softAssertions) throws Exception {
-            final ExportableRouteGeometry first = reader.read();
+            final ImporterRouteGeometry first = reader.read();
 
             final Coordinate[] routeGeometryCoordinates = first.geometry().getCoordinates();
             softAssertions.assertThat(routeGeometryCoordinates)
@@ -123,11 +123,11 @@ public class RouteGeometryExportReaderTest {
         @DisplayName("The second invocation of the read() method must return null")
         void secondInvocationOfReadMethodMustReturnNull() throws Exception {
             //The first invocation returns the route geometry found from the database.
-            final ExportableRouteGeometry first = reader.read();
+            final ImporterRouteGeometry first = reader.read();
             assertThat(first).isNotNull();
 
             //Because there are no more route geometries, this invocation must return null.
-            final ExportableRouteGeometry second = reader.read();
+            final ImporterRouteGeometry second = reader.read();
             assertThat(second).isNull();
         }
     }

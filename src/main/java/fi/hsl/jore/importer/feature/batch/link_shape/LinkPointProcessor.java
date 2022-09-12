@@ -4,7 +4,7 @@ import fi.hsl.jore.importer.feature.batch.link_shape.dto.LinkEndpoints;
 import fi.hsl.jore.importer.feature.batch.link_shape.dto.LinkPoints;
 import fi.hsl.jore.importer.feature.batch.util.ExternalIdUtil;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
-import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
+import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.Jore3LinkShape;
 import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
 import fi.hsl.jore.importer.util.GeometryUtil;
@@ -14,7 +14,7 @@ import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.springframework.batch.item.ItemProcessor;
 
-public class LinkPointProcessor implements ItemProcessor<LinkPoints, ImportableLinkShape> {
+public class LinkPointProcessor implements ItemProcessor<LinkPoints, Jore3LinkShape> {
 
     private static LineString geometry(final LinkEndpoints endpoints,
                                        final List<JrPoint> items) {
@@ -29,10 +29,10 @@ public class LinkPointProcessor implements ItemProcessor<LinkPoints, ImportableL
     }
 
     @Override
-    public ImportableLinkShape process(final LinkPoints linkPoints) {
+    public Jore3LinkShape process(final LinkPoints linkPoints) {
         final JrLinkPk parentLink = linkPoints.link();
         final ExternalId externalId = ExternalIdUtil.forLink(parentLink);
-        return ImportableLinkShape.of(externalId,
+        return Jore3LinkShape.of(externalId,
                                       geometry(linkPoints.endpoints(),
                                                linkPoints.points()));
     }

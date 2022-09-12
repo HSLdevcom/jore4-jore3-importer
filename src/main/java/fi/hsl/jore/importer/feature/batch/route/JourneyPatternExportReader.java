@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
-import fi.hsl.jore.importer.feature.network.route.dto.ExportableJourneyPattern;
+import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPattern;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +27,9 @@ public class JourneyPatternExportReader {
         this.sql = ResourceUtil.fromResource(sqlResource);
     }
 
-    public JdbcCursorItemReader<ExportableJourneyPattern> build() {
+    public JdbcCursorItemReader<ImporterJourneyPattern> build() {
         // The default fetch size seems to be 128 items
-        return new JdbcCursorItemReaderBuilder<ExportableJourneyPattern>()
+        return new JdbcCursorItemReaderBuilder<ImporterJourneyPattern>()
                 .dataSource(dataSource)
                 .name(NAME)
                 .sql(sql)
