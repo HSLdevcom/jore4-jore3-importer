@@ -5,7 +5,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.network.route.dto.Route;
 import fi.hsl.jore.importer.feature.network.route.repository.IRouteTestRepository;
-import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
+import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,11 +1,11 @@
 package fi.hsl.jore.importer.config.jobs;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
-import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
-import fi.hsl.jore.importer.feature.transmodel.repository.ScheduledStopPointTestLocation;
-import fi.hsl.jore.importer.feature.transmodel.repository.TransmodelValidityPeriodTestRepository;
-import fi.hsl.jore.importer.feature.transmodel.repository.ValidityPeriodTargetTable;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPointDirection;
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
+import fi.hsl.jore.importer.feature.jore4.repository.Jore4ValidityPeriodTestRepository;
+import fi.hsl.jore.importer.feature.jore4.repository.ScheduledStopPointTestLocation;
+import fi.hsl.jore.importer.feature.jore4.repository.ValidityPeriodTargetTable;
 import io.vavr.collection.List;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
@@ -22,11 +22,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
 import javax.sql.DataSource;
-
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 
-import static fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection.BACKWARD;
+import static fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPointDirection.BACKWARD;
 import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -46,7 +44,7 @@ import static org.assertj.db.api.Assertions.assertThat;
 @ExtendWith(SoftAssertionsExtension.class)
 class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
 
-    private static final TransmodelScheduledStopPointDirection DIRECTION_ON_INFRALINK = BACKWARD;
+    private static final Jore4ScheduledStopPointDirection DIRECTION_ON_INFRALINK = BACKWARD;
     private static final String EXPECTED_INFRASTRUCTURE_LINK_ID = "554c63e6-87b2-4dc8-a032-b6b0e2607696";
     private static final String LABEL = "H1234";
     private static final int EXPECTED_PRIORITY = 10;
@@ -68,7 +66,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     private final Table importerTargetTable;
     private final Table jore4ScheduledStopPointTargetTable;
     private final Table jore4VehicleModeTargetTable;
-    private final TransmodelValidityPeriodTestRepository testRepository;
+    private final Jore4ValidityPeriodTestRepository testRepository;
 
     @Autowired
     ExportScheduledStopPointsStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
@@ -77,7 +75,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
         this.importerTargetTable = new Table(importerDataSource, "network.scheduled_stop_points");
         this.jore4ScheduledStopPointTargetTable = new Table(jore4DataSource, "service_pattern.scheduled_stop_point");
         this.jore4VehicleModeTargetTable = new Table(jore4DataSource, "service_pattern.vehicle_mode_on_scheduled_stop_point");
-        this.testRepository = new TransmodelValidityPeriodTestRepository(jore4DataSource,
+        this.testRepository = new Jore4ValidityPeriodTestRepository(jore4DataSource,
                 ValidityPeriodTargetTable.SCHEDULED_STOP_POINT
         );
     }

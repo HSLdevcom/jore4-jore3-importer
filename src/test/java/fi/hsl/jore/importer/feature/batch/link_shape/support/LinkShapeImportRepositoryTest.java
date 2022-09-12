@@ -8,7 +8,7 @@ import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.PersistableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
 import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkTestRepository;
-import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
+import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.Jore3LinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.LinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.PersistableLinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.generated.LinkShapePK;
@@ -90,7 +90,7 @@ public class LinkShapeImportRepositoryTest extends IntegrationTest {
         final Link parentLink = linkRepository.findById(parentLinkPk).orElseThrow();
 
         importRepository.submitToStaging(
-                List.of(ImportableLinkShape.of(parentLink.externalId(), LINEPOINTS_1))
+                List.of(Jore3LinkShape.of(parentLink.externalId(), LINEPOINTS_1))
         );
 
         final Map<RowStatus, Set<LinkShapePK>> result = importRepository.commitStagingToTarget();
@@ -139,7 +139,7 @@ public class LinkShapeImportRepositoryTest extends IntegrationTest {
 
         // Stage some new points for the same link
         importRepository.submitToStaging(
-                List.of(ImportableLinkShape.of(parentLink.externalId(), LINEPOINTS_2))
+                List.of(Jore3LinkShape.of(parentLink.externalId(), LINEPOINTS_2))
         );
 
         final Map<RowStatus, Set<LinkShapePK>> result = importRepository.commitStagingToTarget();

@@ -46,7 +46,7 @@ import fi.hsl.jore.importer.feature.batch.route_link.RouteLinkReader;
 import fi.hsl.jore.importer.feature.batch.route_link.RouteLinksProcessor;
 import fi.hsl.jore.importer.feature.batch.route_link.RouteLinksReader;
 import fi.hsl.jore.importer.feature.batch.route_link.RouteLinksWriter;
-import fi.hsl.jore.importer.feature.batch.route_link.dto.ImportableRoutePointsAndLinks;
+import fi.hsl.jore.importer.feature.batch.route_link.dto.Jore3RoutePointsAndLinks;
 import fi.hsl.jore.importer.feature.batch.route_link.dto.RouteLinksAndAttributes;
 import fi.hsl.jore.importer.feature.batch.route_link.support.IRouteLinkImportRepository;
 import fi.hsl.jore.importer.feature.batch.route_link.support.IRoutePointImportRepository;
@@ -56,34 +56,34 @@ import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPoin
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointExportWriter;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointImportProcessor;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointImportReader;
-import fi.hsl.jore.importer.feature.batch.common.TransmodelSchemaCleanupTasklet;
+import fi.hsl.jore.importer.feature.batch.common.Jore4SchemaCleanupTasklet;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support.IScheduledStopPointImportRepository;
-import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
-import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
-import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImportableNode;
+import fi.hsl.jore.importer.feature.infrastructure.link.dto.Jore3Link;
+import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.Jore3LinkShape;
+import fi.hsl.jore.importer.feature.infrastructure.node.dto.Jore3Node;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLine;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLineHeader;
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
 import fi.hsl.jore.importer.feature.jore3.entity.JrScheduledStopPoint;
-import fi.hsl.jore.importer.feature.network.line.dto.ExportableLine;
+import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
-import fi.hsl.jore.importer.feature.network.line_header.dto.ImportableLineHeader;
-import fi.hsl.jore.importer.feature.network.route.dto.ExportableJourneyPattern;
-import fi.hsl.jore.importer.feature.network.route.dto.ExportableJourneyPatternStop;
-import fi.hsl.jore.importer.feature.network.route.dto.ExportableRoute;
-import fi.hsl.jore.importer.feature.network.route.dto.ImportableRoute;
-import fi.hsl.jore.importer.feature.network.route_direction.dto.ImportableRouteDirection;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRouteGeometry;
-import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
-import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImportableScheduledStopPoint;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelJourneyPattern;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelJourneyPatternStop;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelLine;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRoute;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRouteGeometry;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
+import fi.hsl.jore.importer.feature.network.line_header.dto.Jore3LineHeader;
+import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPattern;
+import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPatternStop;
+import fi.hsl.jore.importer.feature.network.route.dto.ImporterRoute;
+import fi.hsl.jore.importer.feature.network.route.dto.Jore3Route;
+import fi.hsl.jore.importer.feature.network.route_direction.dto.Jore3RouteDirection;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImporterScheduledStopPoint;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.Jore3ScheduledStopPoint;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPattern;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPatternStop;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4Line;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4Route;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteGeometry;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPoint;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.FlowBuilder;
@@ -111,7 +111,7 @@ public class JobConfig extends BatchConfig {
                          final Flow importRouteDirectionsFlow,
                          final Flow importRouteLinksFlow,
                          final Flow importScheduledStopPointsFlow,
-                         final Flow transmodelExportFlow) {
+                         final Flow jore4ExportFlow) {
         return jobs.get(JOB_NAME)
                 .start(importNodesFlow)
                 .next(importLinksFlow)
@@ -122,7 +122,7 @@ public class JobConfig extends BatchConfig {
                 .next(importRouteDirectionsFlow)
                 .next(importRouteLinksFlow)
                 .next(importScheduledStopPointsFlow)
-                .next(transmodelExportFlow)
+                .next(jore4ExportFlow)
                 .end()
                 .build();
     }
@@ -153,7 +153,7 @@ public class JobConfig extends BatchConfig {
         final int chunkSize = 1000;
         return steps.get("importNodesStep")
                     .allowStartIfComplete(true)
-                    .<JrNode, ImportableNode>chunk(chunkSize)
+                    .<JrNode, Jore3Node>chunk(chunkSize)
                     .reader(nodeReader.build())
                     .processor(new NodeProcessor())
                     .writer(new GenericImportWriter<>(nodeImportRepository))
@@ -194,7 +194,7 @@ public class JobConfig extends BatchConfig {
         final int chunkSize = 1000;
         return steps.get("importLinksStep")
                     .allowStartIfComplete(true)
-                    .<LinkRow, ImportableLink>chunk(chunkSize)
+                    .<LinkRow, Jore3Link>chunk(chunkSize)
                     .reader(linkReader.build())
                     .processor(new LinkRowProcessor())
                     .writer(new GenericImportWriter<>(linkImportRepository))
@@ -235,7 +235,7 @@ public class JobConfig extends BatchConfig {
         final int chunkSize = 100;
         return steps.get("importLinkPointsStep")
                     .allowStartIfComplete(true)
-                    .<LinkPoints, ImportableLinkShape>chunk(chunkSize)
+                    .<LinkPoints, Jore3LinkShape>chunk(chunkSize)
                     .reader(new LinkPointReader(pointReader.build()))
                     .processor(new LinkPointProcessor())
                     .writer(new GenericImportWriter<>(linkPointImportRepository))
@@ -317,7 +317,7 @@ public class JobConfig extends BatchConfig {
         final int chunkSize = 1;
         return steps.get("importLineHeadersStep")
                 .allowStartIfComplete(true)
-                .<JrLineHeader, ImportableLineHeader>chunk(chunkSize)
+                .<JrLineHeader, Jore3LineHeader>chunk(chunkSize)
                 .reader(lineHeaderReader.build())
                 .processor(new LineHeaderProcessor())
                 .writer(new GenericImportWriter<>(lineHeaderImportRepository))
@@ -360,7 +360,7 @@ public class JobConfig extends BatchConfig {
         final int chunkSize = 1000;
         return steps.get("importRoutesStep")
                     .allowStartIfComplete(true)
-                    .<JrRoute, ImportableRoute>chunk(chunkSize)
+                    .<JrRoute, Jore3Route>chunk(chunkSize)
                     .reader(routeReader.build())
                     .processor(new RouteProcessor())
                     .writer(new GenericImportWriter<>(routeImportRepository))
@@ -401,7 +401,7 @@ public class JobConfig extends BatchConfig {
         final int chunkSize = 1000;
         return steps.get("importRouteDirectionsStep")
                     .allowStartIfComplete(true)
-                    .<JrRouteDirection, ImportableRouteDirection>chunk(chunkSize)
+                    .<JrRouteDirection, Jore3RouteDirection>chunk(chunkSize)
                     .reader(routeDirectionReader.build())
                     .processor(new RouteDirectionProcessor())
                     .writer(new GenericImportWriter<>(routeDirectionImportRepository))
@@ -468,7 +468,7 @@ public class JobConfig extends BatchConfig {
         final int chunkSize = 100;
         return steps.get("importRouteLinksStep")
                     .allowStartIfComplete(true)
-                    .<RouteLinksAndAttributes, ImportableRoutePointsAndLinks>chunk(chunkSize)
+                    .<RouteLinksAndAttributes, Jore3RoutePointsAndLinks>chunk(chunkSize)
                     .reader(new RouteLinksReader(routeLinkReader.build()))
                     .processor(new RouteLinksProcessor())
                     // Note how we write the route points, stop points, and route links to three different repositories
@@ -526,7 +526,7 @@ public class JobConfig extends BatchConfig {
                                               final IScheduledStopPointImportRepository repository) {
         return steps.get("importScheduledStopPointsStep")
                 .allowStartIfComplete(true)
-                .<JrScheduledStopPoint, ImportableScheduledStopPoint>chunk(1000)
+                .<JrScheduledStopPoint, Jore3ScheduledStopPoint>chunk(1000)
                 .reader(reader.build())
                 .processor(new ScheduledStopPointImportProcessor())
                 .writer(new GenericImportWriter<>(repository))
@@ -542,15 +542,15 @@ public class JobConfig extends BatchConfig {
     }
 
     @Bean
-    public Flow transmodelExportFlow(final Step prepareTransmodelExportStep,
-                                     final Step exportScheduledStopPointsStep,
-                                     final Step exportLinesStep,
-                                     final Step exportRoutesStep,
-                                     final Step exportRouteGeometriesStep,
-                                     final Step exportJourneyPatternsStep,
-                                     final Step exportJourneyPatternStopsStep) {
-        return new FlowBuilder<SimpleFlow>("transmodelExportFlow")
-                .start(prepareTransmodelExportStep)
+    public Flow jore4ExportFlow(final Step prepareJore4ExportStep,
+                                final Step exportScheduledStopPointsStep,
+                                final Step exportLinesStep,
+                                final Step exportRoutesStep,
+                                final Step exportRouteGeometriesStep,
+                                final Step exportJourneyPatternsStep,
+                                final Step exportJourneyPatternStopsStep) {
+        return new FlowBuilder<SimpleFlow>("jore4ExportFlow")
+                .start(prepareJore4ExportStep)
                 .next(exportScheduledStopPointsStep)
                 .next(exportLinesStep)
                 .next(exportRoutesStep)
@@ -561,8 +561,8 @@ public class JobConfig extends BatchConfig {
     }
 
     @Bean
-    public Step prepareTransmodelExportStep(final TransmodelSchemaCleanupTasklet cleanupTasklet) {
-        return steps.get("prepareTransmodelExportStep")
+    public Step prepareJore4ExportStep(final Jore4SchemaCleanupTasklet cleanupTasklet) {
+        return steps.get("prepareJore4ExportStep")
                 .allowStartIfComplete(true)
                 .tasklet(cleanupTasklet)
                 .build();
@@ -574,7 +574,7 @@ public class JobConfig extends BatchConfig {
                                               final ScheduledStopPointExportWriter writer) {
         return steps.get("exportScheduledStopPointsStep")
                 .allowStartIfComplete(true)
-                .<ExportableScheduledStopPoint, TransmodelScheduledStopPoint>chunk(1)
+                .<ImporterScheduledStopPoint, Jore4ScheduledStopPoint>chunk(1)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
@@ -590,7 +590,7 @@ public class JobConfig extends BatchConfig {
                                 final LineExportWriter writer) {
         return steps.get("exportLinesStep")
                 .allowStartIfComplete(true)
-                .<ExportableLine, TransmodelLine>chunk(1)
+                .<ImporterLine, Jore4Line>chunk(1)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
@@ -606,7 +606,7 @@ public class JobConfig extends BatchConfig {
                                  final RouteExportWriter writer) {
         return steps.get("exportRoutesStep")
                 .allowStartIfComplete(true)
-                .<ExportableRoute, TransmodelRoute>chunk(1)
+                .<ImporterRoute, Jore4Route>chunk(1)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
@@ -622,7 +622,7 @@ public class JobConfig extends BatchConfig {
                                           final RouteGeometryExportWriter writer) {
         return steps.get("exportRouteGeometriesStep")
                 .allowStartIfComplete(true)
-                .<ExportableRouteGeometry, TransmodelRouteGeometry>chunk(1)
+                .<ImporterRouteGeometry, Jore4RouteGeometry>chunk(1)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
@@ -638,7 +638,7 @@ public class JobConfig extends BatchConfig {
                                           final JourneyPatternExportWriter writer) {
         return steps.get("exportJourneyPatternsStep")
                 .allowStartIfComplete(true)
-                .<ExportableJourneyPattern, TransmodelJourneyPattern>chunk(1)
+                .<ImporterJourneyPattern, Jore4JourneyPattern>chunk(1)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
@@ -654,7 +654,7 @@ public class JobConfig extends BatchConfig {
                                               final JourneyPatternStopExportWriter writer) {
         return steps.get("exportJourneyPatternStopsStep")
                 .allowStartIfComplete(true)
-                .<ExportableJourneyPatternStop, TransmodelJourneyPatternStop>chunk(1000)
+                .<ImporterJourneyPatternStop, Jore4JourneyPatternStop>chunk(1000)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)

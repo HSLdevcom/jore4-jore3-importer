@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.link.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
-import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
+import fi.hsl.jore.importer.feature.infrastructure.link.dto.Jore3Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinks;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinksStaging;
@@ -20,7 +20,7 @@ import static org.jooq.impl.DSL.selectOne;
 
 @Repository
 public class LinkImportRepository
-        extends AbstractImportRepository<ImportableLink, LinkPK>
+        extends AbstractImportRepository<Jore3Link, LinkPK>
         implements ILinkImportRepository {
 
     private static final InfrastructureLinksStaging STAGING_TABLE = InfrastructureLinksStaging.INFRASTRUCTURE_LINKS_STAGING;
@@ -43,7 +43,7 @@ public class LinkImportRepository
 
     @Override
     @Transactional
-    public void submitToStaging(final Iterable<? extends ImportableLink> links) {
+    public void submitToStaging(final Iterable<? extends Jore3Link> links) {
         final BatchBindStep batch = db.batch(db.insertInto(STAGING_TABLE,
                                                            STAGING_TABLE.INFRASTRUCTURE_LINK_EXT_ID,
                                                            STAGING_TABLE.INFRASTRUCTURE_NETWORK_TYPE,

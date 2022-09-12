@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.network.route_point.repository;
 
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRoutePoint;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import io.vavr.collection.List;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -31,8 +31,8 @@ class RoutePointExportRepositoryTest {
     }
 
     @Nested
-    @DisplayName("Find exportable route points by route direction id")
-    class FindExportableRoutePointsByRouteDirectionId {
+    @DisplayName("Find importer route points by route direction id")
+    class FindImporterRoutePointsByRouteDirectionId {
 
         @Nested
         @DisplayName("When the source tables are empty")
@@ -42,7 +42,7 @@ class RoutePointExportRepositoryTest {
             @Test
             @DisplayName("Should return an empty list")
             void shouldReturnEmptyList() {
-                final List<ExportableRoutePoint> routePoints = repository.findExportableRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID);
+                final List<ImporterRoutePoint> routePoints = repository.findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID);
                 assertThat(routePoints).isEmpty();
             }
         }
@@ -86,16 +86,16 @@ class RoutePointExportRepositoryTest {
             private final NodeType THIRD_ROUTE_POINT_TYPE = NodeType.STOP;
 
             @Test
-            @DisplayName("Should return a list that has three exportable route points")
-            void shouldReturnListThatHasThreeExportableRoutePoints() {
-                final List<ExportableRoutePoint> routePoints = repository.findExportableRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID);
+            @DisplayName("Should return a list that has three importer route points")
+            void shouldReturnListThatHasThreeImporterRoutePoints() {
+                final List<ImporterRoutePoint> routePoints = repository.findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID);
                 assertThat(routePoints).hasSize(3);
             }
 
             @Test
             @DisplayName("Should return the correct information of the first route point")
             void shouldReturnCorrectInformationOfFirstRoutePoint(final SoftAssertions softAssertions) {
-                final ExportableRoutePoint firstRoutePoint = repository.findExportableRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID)
+                final ImporterRoutePoint firstRoutePoint = repository.findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID)
                         .get(0);
 
                 softAssertions.assertThat(firstRoutePoint.location().getX())
@@ -133,7 +133,7 @@ class RoutePointExportRepositoryTest {
             @Test
             @DisplayName("Should return the correct information of the second route point")
             void shouldReturnCorrectInformationOfSecondRoutePoint(final SoftAssertions softAssertions) {
-                final ExportableRoutePoint secondRoutePoint = repository.findExportableRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID)
+                final ImporterRoutePoint secondRoutePoint = repository.findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID)
                         .get(1);
 
                 softAssertions.assertThat(secondRoutePoint.location().getX())
@@ -167,7 +167,7 @@ class RoutePointExportRepositoryTest {
             @Test
             @DisplayName("Should return the correct information of the third route point")
             void shouldReturnCorrectInformationOfThirdRoutePoint(final SoftAssertions softAssertions) {
-                final ExportableRoutePoint thirdRoutePoint = repository.findExportableRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID)
+                final ImporterRoutePoint thirdRoutePoint = repository.findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID)
                         .get(2);
 
                 softAssertions.assertThat(thirdRoutePoint.location().getX())

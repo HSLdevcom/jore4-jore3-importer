@@ -5,8 +5,8 @@ import fi.hsl.jore.importer.feature.batch.util.LineClassificationUtil;
 import fi.hsl.jore.importer.feature.batch.util.TransitTypeToNetworkTypeMapper;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLine;
 import fi.hsl.jore.importer.feature.jore3.field.LegacyPublicTransportDestination;
+import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
-import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import org.springframework.batch.item.ItemProcessor;
 
 import javax.annotation.Nullable;

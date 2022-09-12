@@ -4,7 +4,7 @@ import fi.hsl.jore.importer.config.jooq.converter.geometry.GeometryConverter;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
-import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImporterScheduledStopPoint;
 import io.vavr.collection.List;
 import org.apache.commons.lang3.StringUtils;
 import org.locationtech.jts.geom.Geometry;
@@ -20,9 +20,9 @@ import java.util.Objects;
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalString;
 
 /**
- * Maps a result set row into an {@link ExportableScheduledStopPoint} object.
+ * Maps a result set row into an {@link ImporterScheduledStopPoint} object.
  */
-public class ScheduledStopPointExportMapper implements RowMapper<ExportableScheduledStopPoint> {
+public class ScheduledStopPointExportMapper implements RowMapper<ImporterScheduledStopPoint> {
 
     public static final String SQL_PATH = "classpath:export/export_scheduled_stop_points.sql";
     private static final GeometryConverter POINT_CONVERTER = new GeometryConverter(Geometry.TYPENAME_POINT);
@@ -34,9 +34,9 @@ public class ScheduledStopPointExportMapper implements RowMapper<ExportableSched
     }
 
     @Override
-    public ExportableScheduledStopPoint mapRow(final ResultSet resultSet,
-                                               final int rowNumber) throws SQLException {
-        return ExportableScheduledStopPoint.of(
+    public ImporterScheduledStopPoint mapRow(final ResultSet resultSet,
+                                             final int rowNumber) throws SQLException {
+        return ImporterScheduledStopPoint.of(
                 csvToExternalIds(resultSet.getString("external_id")),
                 csvToElyNumbers(resultSet.getString("ely_number")),
                 pointFromDatabaseObject(resultSet.getObject("location")),

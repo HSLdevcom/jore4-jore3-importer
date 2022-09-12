@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route_link;
 
 import fi.hsl.jore.importer.GenerativeTest;
-import fi.hsl.jore.importer.feature.batch.route_link.dto.ImportableRoutePointsAndLinks;
+import fi.hsl.jore.importer.feature.batch.route_link.dto.Jore3RoutePointsAndLinks;
 import fi.hsl.jore.importer.feature.batch.route_link.dto.LastLinkAttributes;
 import fi.hsl.jore.importer.feature.batch.route_link.dto.RouteLinksAndAttributes;
 import fi.hsl.jore.importer.feature.jore3.entity.ImmutableJrRouteLink;
@@ -15,9 +15,9 @@ import fi.hsl.jore.importer.feature.jore3.field.RouteId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.RouteLinkId;
 import fi.hsl.jore.importer.feature.jore3.mixin.IHasOrderNumber;
-import fi.hsl.jore.importer.feature.network.route_link.dto.ImportableRouteLink;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ImportableRoutePoint;
-import fi.hsl.jore.importer.feature.network.route_stop_point.dto.ImportableRouteStopPoint;
+import fi.hsl.jore.importer.feature.network.route_link.dto.Jore3RouteLink;
+import fi.hsl.jore.importer.feature.network.route_point.dto.Jore3RoutePoint;
+import fi.hsl.jore.importer.feature.network.route_stop_point.dto.Jore3RouteStopPoint;
 import io.vavr.collection.Vector;
 import org.junit.jupiter.api.Test;
 import org.quicktheories.core.Gen;
@@ -93,11 +93,11 @@ public class RouteLinksProcessorGenerativeTest extends GenerativeTest {
             .checkAssert(linksAndAttributes -> {
                 final Vector<JrRouteLink> inputRouteLinks = linksAndAttributes.routeLinks();
 
-                final ImportableRoutePointsAndLinks results = PROCESSOR.process(linksAndAttributes);
+                final Jore3RoutePointsAndLinks results = PROCESSOR.process(linksAndAttributes);
 
-                final Vector<ImportableRoutePoint> routePoints = results.routePoints();
-                final Vector<ImportableRouteStopPoint> stopPoints = results.stopPoints();
-                final Vector<ImportableRouteLink> routeLinks = results.routeLinks();
+                final Vector<Jore3RoutePoint> routePoints = results.routePoints();
+                final Vector<Jore3RouteStopPoint> stopPoints = results.stopPoints();
+                final Vector<Jore3RouteLink> routeLinks = results.routeLinks();
 
                 assertThat("given N jore3 route links we get N jore4 route links",
                            routeLinks.size(),

@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.batch.line;
 
 import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
-import fi.hsl.jore.importer.feature.network.line.dto.ExportableLine;
+import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +36,9 @@ public class LineExportReader {
         this.sql = ResourceUtil.fromResource(sqlResource);
     }
 
-    public JdbcCursorItemReader<ExportableLine> build() {
+    public JdbcCursorItemReader<ImporterLine> build() {
         // The default fetch size seems to be 128 items
-        return new JdbcCursorItemReaderBuilder<ExportableLine>()
+        return new JdbcCursorItemReaderBuilder<ImporterLine>()
                 .dataSource(dataSource)
                 .name(NAME)
                 .sql(sql)

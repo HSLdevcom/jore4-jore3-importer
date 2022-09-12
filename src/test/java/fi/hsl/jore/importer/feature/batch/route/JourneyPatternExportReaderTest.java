@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.IntTest;
-import fi.hsl.jore.importer.feature.network.route.dto.ExportableJourneyPattern;
+import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPattern;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @IntTest
 class JourneyPatternExportReaderTest {
 
-    private final JdbcCursorItemReader<ExportableJourneyPattern> reader;
+    private final JdbcCursorItemReader<ImporterJourneyPattern> reader;
 
     @Autowired
     JourneyPatternExportReaderTest(final JourneyPatternExportReader reader) {
@@ -47,7 +47,7 @@ class JourneyPatternExportReaderTest {
         @Test
         @DisplayName("The first invocation of the read() method must return null")
         void firstInvocationOfReadMethodMustReturnNull() throws Exception {
-            final ExportableJourneyPattern found = reader.read();
+            final ImporterJourneyPattern found = reader.read();
             assertThat(found).isNull();
         }
     }
@@ -70,7 +70,7 @@ class JourneyPatternExportReaderTest {
         @Test
         @DisplayName("The first invocation of the read() method must return the found journey pattern")
         void firstInvocationOfReadMethodMustReturnFoundJourneyPattern(final SoftAssertions softAssertions) throws Exception {
-            final ExportableJourneyPattern first = reader.read();
+            final ImporterJourneyPattern first = reader.read();
 
             softAssertions.assertThat(first.routeDirectionId())
                     .as("routeDirectionId")
@@ -86,11 +86,11 @@ class JourneyPatternExportReaderTest {
         @DisplayName("The second invocation of the read() method must return null")
         void secondInvocationOfReadMethodMustReturnNull() throws Exception {
             //The first invocation returns the journey pattern found from the database.
-            final ExportableJourneyPattern first = reader.read();
+            final ImporterJourneyPattern first = reader.read();
             assertThat(first).isNotNull();
 
             //Because there are no more journey patterns, this invocation must return null.
-            final ExportableJourneyPattern second = reader.read();
+            final ImporterJourneyPattern second = reader.read();
             assertThat(second).isNull();
         }
     }
