@@ -8,7 +8,7 @@ import fi.hsl.jore.importer.feature.jore3.field.LineId;
 import fi.hsl.jore.importer.feature.network.line.dto.Line;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
-import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
+import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.batch.route.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
-import fi.hsl.jore.importer.feature.network.route.dto.ImportableRoute;
+import fi.hsl.jore.importer.feature.network.route.dto.Jore3Route;
 import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes;
@@ -20,7 +20,7 @@ import static org.jooq.impl.DSL.selectOne;
 
 @Repository
 public class RouteImportRepository
-        extends AbstractImportRepository<ImportableRoute, RoutePK>
+        extends AbstractImportRepository<Jore3Route, RoutePK>
         implements IRouteImportRepository {
 
     private static final NetworkRoutesStaging STAGING_TABLE = NetworkRoutesStaging.NETWORK_ROUTES_STAGING;
@@ -46,7 +46,7 @@ public class RouteImportRepository
 
     @Override
     @Transactional
-    public void submitToStaging(final Iterable<? extends ImportableRoute> routes) {
+    public void submitToStaging(final Iterable<? extends Jore3Route> routes) {
         final BatchBindStep batch = db.batch(db.insertInto(STAGING_TABLE,
                                                            STAGING_TABLE.NETWORK_ROUTE_EXT_ID,
                                                            STAGING_TABLE.NETWORK_LINE_EXT_ID,

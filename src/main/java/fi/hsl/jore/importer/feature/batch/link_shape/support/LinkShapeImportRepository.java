@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.link_shape.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
-import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.ImportableLinkShape;
+import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.Jore3LinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.generated.LinkShapePK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinkShapes;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinkShapesStaging;
@@ -20,7 +20,7 @@ import static org.jooq.impl.DSL.selectOne;
 
 @Repository
 public class LinkShapeImportRepository
-        extends AbstractImportRepository<ImportableLinkShape, LinkShapePK>
+        extends AbstractImportRepository<Jore3LinkShape, LinkShapePK>
         implements ILinkShapeImportRepository {
 
     private static final InfrastructureLinkShapesStaging STAGING_TABLE = InfrastructureLinkShapesStaging.INFRASTRUCTURE_LINK_SHAPES_STAGING;
@@ -43,7 +43,7 @@ public class LinkShapeImportRepository
 
     @Override
     @Transactional
-    public void submitToStaging(final Iterable<? extends ImportableLinkShape> shapes) {
+    public void submitToStaging(final Iterable<? extends Jore3LinkShape> shapes) {
         final BatchBindStep batch = db.batch(db.insertInto(STAGING_TABLE,
                                                            STAGING_TABLE.INFRASTRUCTURE_LINK_EXT_ID,
                                                            STAGING_TABLE.INFRASTRUCTURE_LINK_SHAPE)

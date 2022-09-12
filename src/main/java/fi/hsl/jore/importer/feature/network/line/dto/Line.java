@@ -6,7 +6,7 @@ import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasSystemTime;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
-import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
+import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesWithHistoryRecord;
 import org.immutables.value.Value;

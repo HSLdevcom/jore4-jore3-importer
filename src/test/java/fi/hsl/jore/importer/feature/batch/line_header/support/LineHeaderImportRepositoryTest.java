@@ -11,12 +11,12 @@ import fi.hsl.jore.importer.feature.jore3.field.LineId;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
 import fi.hsl.jore.importer.feature.network.line.repository.ILineTestRepository;
-import fi.hsl.jore.importer.feature.network.line_header.dto.ImportableLineHeader;
+import fi.hsl.jore.importer.feature.network.line_header.dto.Jore3LineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.LineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.PersistableLineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.generated.LineHeaderPK;
 import fi.hsl.jore.importer.feature.network.line_header.repository.ILineHeaderTestRepository;
-import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
+import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
@@ -92,7 +92,7 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
         );
 
         importRepository.submitToStaging(
-                List.of(ImportableLineHeader.of(HEADER_EXT_ID,
+                List.of(Jore3LineHeader.of(HEADER_EXT_ID,
                                                 LINE_EXT_ID,
                                                 NAME,
                                                 NAME_SHORT,
@@ -156,7 +156,7 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
         final MultilingualString newName = NAME.with(Locale.GERMAN, "foo");
 
         importRepository.submitToStaging(
-                List.of(ImportableLineHeader.of(HEADER_EXT_ID,
+                List.of(Jore3LineHeader.of(HEADER_EXT_ID,
                                                 LINE_EXT_ID,
                                                 newName,
                                                 NAME_SHORT,
@@ -229,7 +229,7 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
                                                                       newValidTime.range().lowerEndpoint());
 
         importRepository.submitToStaging(
-                List.of(ImportableLineHeader.of(newExternalId,
+                List.of(Jore3LineHeader.of(newExternalId,
                                                 LINE_EXT_ID,
                                                 NAME,
                                                 NAME_SHORT,
@@ -301,7 +301,7 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
 
         // We submit the same line
         importRepository.submitToStaging(
-                List.of(ImportableLineHeader.of(HEADER_EXT_ID,
+                List.of(Jore3LineHeader.of(HEADER_EXT_ID,
                                                 LINE_EXT_ID,
                                                 NAME,
                                                 NAME_SHORT,

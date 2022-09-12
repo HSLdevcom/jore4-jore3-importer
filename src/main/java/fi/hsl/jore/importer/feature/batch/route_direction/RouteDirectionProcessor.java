@@ -6,17 +6,17 @@ import fi.hsl.jore.importer.feature.batch.util.ExternalIdUtil;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
-import fi.hsl.jore.importer.feature.network.route_direction.dto.ImportableRouteDirection;
+import fi.hsl.jore.importer.feature.network.route_direction.dto.Jore3RouteDirection;
 import org.springframework.batch.item.ItemProcessor;
 
 import javax.annotation.Nullable;
 
-public class RouteDirectionProcessor implements ItemProcessor<JrRouteDirection, ImportableRouteDirection> {
+public class RouteDirectionProcessor implements ItemProcessor<JrRouteDirection, Jore3RouteDirection> {
 
     @Override
     @Nullable
-    public ImportableRouteDirection process(final JrRouteDirection item) {
-        return ImportableRouteDirection.of(ExternalIdUtil.forRouteDirection(item),
+    public Jore3RouteDirection process(final JrRouteDirection item) {
+        return Jore3RouteDirection.of(ExternalIdUtil.forRouteDirection(item),
                                            ExternalIdUtil.forRoute(item.fkRoute()),
                                            DirectionToDirectionTypeMapper.resolveDirectionType(item.direction()),
                                            item.lengthMeters(),

@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRouteGeometry;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +33,9 @@ public class RouteGeometryExportReader {
         this.sql = ResourceUtil.fromResource(sqlResource);
     }
 
-    public JdbcCursorItemReader<ExportableRouteGeometry> build() {
+    public JdbcCursorItemReader<ImporterRouteGeometry> build() {
         // The default fetch size seems to be 128 items
-        return new JdbcCursorItemReaderBuilder<ExportableRouteGeometry>()
+        return new JdbcCursorItemReaderBuilder<ImporterRouteGeometry>()
                 .dataSource(dataSource)
                 .name(NAME)
                 .sql(sql)

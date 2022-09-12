@@ -4,10 +4,10 @@ import fi.hsl.jore.importer.config.jooq.converter.date_range.DateRange;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
-import fi.hsl.jore.importer.feature.network.line.dto.ExportableLine;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelLine;
-import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
-import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
+import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4Line;
+import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import java.time.OffsetDateTime;
 
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
-import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
+import static fi.hsl.jore.importer.feature.jore4.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LineExportProcessorTest {
@@ -46,7 +46,7 @@ class LineExportProcessorTest {
 
     private static final int EXPECTED_PRIORITY = 10;
 
-    private static final ExportableLine INPUT = ExportableLine.of(
+    private static final ImporterLine INPUT = ImporterLine.of(
             ExternalId.of(EXTERNAL_ID),
             LINE_NUMBER,
             JoreLocaleUtil.createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
@@ -66,28 +66,28 @@ class LineExportProcessorTest {
         @Test
         @DisplayName("Should return a line with generated id")
         void shouldReturnLineWithGeneratedId() throws Exception {
-            final TransmodelLine line = processor.process(INPUT);
+            final Jore4Line line = processor.process(INPUT);
             assertThat(line.lineId()).isNotNull();
         }
 
         @Test
         @DisplayName("Should return a line with the correct external id")
         void shouldReturnLineWithCorrectExternalId() throws Exception {
-            final TransmodelLine line = processor.process(INPUT);
+            final Jore4Line line = processor.process(INPUT);
             assertThat(line.externalLineId()).isEqualTo(EXTERNAL_ID);
         }
 
         @Test
         @DisplayName("Should return a line with the correct label")
         void shouldReturnLineWithCorrectLabel() throws Exception {
-            final TransmodelLine line = processor.process(INPUT);
+            final Jore4Line line = processor.process(INPUT);
             assertThat(line.label()).isEqualTo(LINE_NUMBER);
         }
 
         @Test
         @DisplayName("Should return a line with the correct Finnish name")
         void shouldReturnLineWithCorrectFinnishName() throws Exception {
-            final TransmodelLine line = processor.process(INPUT);
+            final Jore4Line line = processor.process(INPUT);
             final String finnishName = JoreLocaleUtil.getI18nString(line.name(), JoreLocaleUtil.FINNISH);
             assertThat(finnishName).isEqualTo(FINNISH_NAME);
         }
@@ -95,7 +95,7 @@ class LineExportProcessorTest {
         @Test
         @DisplayName("Should return a line with the correct Swedish name")
         void shouldReturnLineWithCorrectSwedishName() throws Exception {
-            final TransmodelLine line = processor.process(INPUT);
+            final Jore4Line line = processor.process(INPUT);
             final String swedishName = JoreLocaleUtil.getI18nString(line.name(), JoreLocaleUtil.SWEDISH);
             assertThat(swedishName).isEqualTo(SWEDISH_NAME);
         }
@@ -103,7 +103,7 @@ class LineExportProcessorTest {
         @Test
         @DisplayName("Should return a line with the correct Finnish short name")
         void shouldReturnLineWithCorrectFinnishShortName() throws Exception {
-            final TransmodelLine line = processor.process(INPUT);
+            final Jore4Line line = processor.process(INPUT);
             final String finnishName = JoreLocaleUtil.getI18nString(line.shortName(), JoreLocaleUtil.FINNISH);
             assertThat(finnishName).isEqualTo(FINNISH_SHORT_NAME);
         }
@@ -111,7 +111,7 @@ class LineExportProcessorTest {
         @Test
         @DisplayName("Should return a line with the correct Swedish short name")
         void shouldReturnLineWithCorrectSwedishShortName() throws Exception {
-            final TransmodelLine line = processor.process(INPUT);
+            final Jore4Line line = processor.process(INPUT);
             final String swedishName = JoreLocaleUtil.getI18nString(line.shortName(), JoreLocaleUtil.SWEDISH);
             assertThat(swedishName).isEqualTo(SWEDISH_SHORT_NAME);
         }
@@ -119,42 +119,42 @@ class LineExportProcessorTest {
         @Test
         @DisplayName("Should return a line with the correct primary vehicle mode")
         void shouldReturnLineWithCorrectPrimaryVehicleMode() throws Exception {
-            final TransmodelLine line = processor.process(INPUT);
+            final Jore4Line line = processor.process(INPUT);
             assertThat(line.primaryVehicleMode()).isEqualTo(EXPECTED_PRIMARY_VEHICLE_MODE);
         }
 
         @Test
         @DisplayName("Should return a line that has validity period start time")
         void shouldReturnLineThatHasValidityPeriodStartTime() throws Exception {
-            final TransmodelLine line = processor.process(INPUT);
+            final Jore4Line line = processor.process(INPUT);
             assertThat(line.validityStart()).isNotEmpty();
         }
 
         @Test
         @DisplayName("Should return a line that has the correct validity period start time")
         void shouldReturnLineThatHasCorrectValidityPeriodStartTime() throws Exception {
-            final TransmodelLine line = processor.process(INPUT);
+            final Jore4Line line = processor.process(INPUT);
             assertThat(line.validityStart()).contains(EXPECTED_VALIDITY_PERIOD_START_TIME);
         }
 
         @Test
         @DisplayName("Should return a line that has validity period end time")
         void shouldReturnLineThatHasValidityPeriodEndTime() throws Exception {
-            final TransmodelLine line = processor.process(INPUT);
+            final Jore4Line line = processor.process(INPUT);
             assertThat(line.validityEnd()).isNotEmpty();
         }
 
         @Test
         @DisplayName("Should return a line that has the correct validity period end time")
         void shouldReturnLineThatHasCorrectValidityPeriodEndTime() throws Exception {
-            final TransmodelLine line = processor.process(INPUT);
+            final Jore4Line line = processor.process(INPUT);
             assertThat(line.validityEnd()).contains(EXPECTED_VALIDITY_PERIOD_END_TIME);
         }
 
         @Test
         @DisplayName("Should return a line with the correct priority")
         void shouldReturnLineWithCorrectPriority() throws Exception {
-            final TransmodelLine line = processor.process(INPUT);
+            final Jore4Line line = processor.process(INPUT);
             assertThat(line.priority()).isEqualTo(EXPECTED_PRIORITY);
         }
     }

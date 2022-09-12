@@ -1,8 +1,8 @@
 package fi.hsl.jore.importer.feature.mapmatching.dto.request;
 
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRouteGeometry;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRoutePoint;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.List;
 import org.assertj.core.api.SoftAssertions;
@@ -43,7 +43,7 @@ public class MapMatchingRequestBuilderTest {
         private static final double ROUTE_POINT_LNG = 4.5533;
         private static final double ROUTE_POINT_LAT = 10.3343;
 
-        private ExportableRouteGeometry routeGeometryInput;
+        private ImporterRouteGeometry routeGeometryInput;
 
         @BeforeEach
         void createRouteGeometry() {
@@ -55,7 +55,7 @@ public class MapMatchingRequestBuilderTest {
                     GeometryUtil.factoryForSrid(GeometryUtil.SRID_WGS84)
             );
 
-            routeGeometryInput = ExportableRouteGeometry.from(routeLineString,
+            routeGeometryInput = ImporterRouteGeometry.from(routeLineString,
                     ROUTE_DIRECTION_ID,
                     ROUTE_DIRECTION_EXT_ID,
                     ROUTE_TRANSMODEL_ID
@@ -103,7 +103,7 @@ public class MapMatchingRequestBuilderTest {
         @DisplayName("When the input route point is a crossroad")
         class WhenInputRoutePointIsCrossroad {
 
-            ExportableRoutePoint routePoint;
+            ImporterRoutePoint routePoint;
 
             @BeforeEach
             void createRoutePoint() {
@@ -115,7 +115,7 @@ public class MapMatchingRequestBuilderTest {
                         GeometryUtil.factoryForSrid(GeometryUtil.SRID_WGS84)
                 );
 
-                routePoint = ExportableRoutePoint.from(
+                routePoint = ImporterRoutePoint.from(
                         location,
                         1,
                         Optional.empty(),
@@ -181,7 +181,7 @@ public class MapMatchingRequestBuilderTest {
 
             Point location;
             Point projectedLocation;
-            ExportableRoutePoint routePoint;
+            ImporterRoutePoint routePoint;
 
             @BeforeEach
             void createLocations() {
@@ -209,7 +209,7 @@ public class MapMatchingRequestBuilderTest {
 
                 @BeforeEach
                 void createRoutePoint() {
-                    routePoint = ExportableRoutePoint.from(
+                    routePoint = ImporterRoutePoint.from(
                             location,
                             1,
                             Optional.of(projectedLocation),
@@ -274,7 +274,7 @@ public class MapMatchingRequestBuilderTest {
 
                 @BeforeEach
                 void createRoutePoint() {
-                    routePoint = ExportableRoutePoint.from(
+                    routePoint = ImporterRoutePoint.from(
                             location,
                             1,
                             Optional.of(projectedLocation),

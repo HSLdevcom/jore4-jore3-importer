@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.batch.route_link.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
-import fi.hsl.jore.importer.feature.network.route_stop_point.dto.ImportableRouteStopPoint;
+import fi.hsl.jore.importer.feature.network.route_stop_point.dto.Jore3RouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.generated.RouteStopPointPK;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePoints;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPoints;
@@ -20,7 +20,7 @@ import static org.jooq.impl.DSL.selectOne;
 
 @Repository
 public class RouteStopPointImportRepository
-        extends AbstractImportRepository<ImportableRouteStopPoint, RouteStopPointPK>
+        extends AbstractImportRepository<Jore3RouteStopPoint, RouteStopPointPK>
         implements IRouteStopPointImportRepository {
 
     private static final NetworkRouteStopPointsStaging STAGING_TABLE = NetworkRouteStopPointsStaging.NETWORK_ROUTE_STOP_POINTS_STAGING;
@@ -47,7 +47,7 @@ public class RouteStopPointImportRepository
 
     @Override
     @Transactional
-    public void submitToStaging(final Iterable<? extends ImportableRouteStopPoint> points) {
+    public void submitToStaging(final Iterable<? extends Jore3RouteStopPoint> points) {
         final BatchBindStep batch = db.batch(db.insertInto(STAGING_TABLE,
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_EXT_ID,
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_ORDER,

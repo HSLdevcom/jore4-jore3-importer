@@ -1,9 +1,9 @@
 package fi.hsl.jore.importer.config.jobs;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRouteDirection;
-import fi.hsl.jore.importer.feature.transmodel.repository.TransmodelValidityPeriodTestRepository;
-import fi.hsl.jore.importer.feature.transmodel.repository.ValidityPeriodTargetTable;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteDirection;
+import fi.hsl.jore.importer.feature.jore4.repository.Jore4ValidityPeriodTestRepository;
+import fi.hsl.jore.importer.feature.jore4.repository.ValidityPeriodTargetTable;
 import io.vavr.collection.List;
 import org.assertj.core.api.Assertions;
 import org.assertj.db.type.Table;
@@ -24,7 +24,7 @@ import java.util.UUID;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
-import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
+import static fi.hsl.jore.importer.feature.jore4.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -52,7 +52,7 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
 
     private static final List<String> STEPS = List.of("exportRoutesStep");
 
-    private final String EXPECTED_DIRECTION = TransmodelRouteDirection.INBOUND.getValue();
+    private final String EXPECTED_DIRECTION = Jore4RouteDirection.INBOUND.getValue();
     private final UUID EXPECTED_LINE_TRANSMODEL_ID = UUID.fromString("5aa7d9fc-2cf9-466d-8ac0-f442d60c261f");
     private static final String EXPECTED_LABEL = "1";
     private static final String EXPECTED_DESCRIPTION = "{\"fi_FI\":\"Keskustori - Etelä-Hervanta vanha\",\"sv_SE\":\"Central torget - Södra Hervanta gamla\"}";
@@ -76,14 +76,14 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
 
     private final Table importerTargetTable;
     private final Table jore4TargetTable;
-    private final TransmodelValidityPeriodTestRepository testRepository;
+    private final Jore4ValidityPeriodTestRepository testRepository;
 
     @Autowired
     public ExportRouteStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
                                final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
         this.importerTargetTable = new Table(importerDataSource, "network.network_route_directions");
         this.jore4TargetTable = new Table(jore4DataSource, "route.route");
-        this.testRepository = new TransmodelValidityPeriodTestRepository(jore4DataSource,
+        this.testRepository = new Jore4ValidityPeriodTestRepository(jore4DataSource,
                 ValidityPeriodTargetTable.ROUTE
         );
     }

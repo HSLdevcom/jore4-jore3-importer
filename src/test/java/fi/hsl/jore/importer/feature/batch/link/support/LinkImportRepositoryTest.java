@@ -5,7 +5,7 @@ import fi.hsl.jore.importer.TestGeometryUtil;
 import fi.hsl.jore.importer.feature.batch.util.ExternalIdUtil;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
-import fi.hsl.jore.importer.feature.infrastructure.link.dto.ImportableLink;
+import fi.hsl.jore.importer.feature.infrastructure.link.dto.Jore3Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.PersistableLink;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
@@ -87,7 +87,7 @@ public class LinkImportRepositoryTest extends IntegrationTest {
                                                              startNodeId,
                                                              endNodeId);
         importRepository.submitToStaging(
-                List.of(ImportableLink.of(externalId, networkType, LINE_1, startNodeExtId, endNodeExtId))
+                List.of(Jore3Link.of(externalId, networkType, LINE_1, startNodeExtId, endNodeExtId))
         );
 
         final Map<RowStatus, Set<LinkPK>> result = importRepository.commitStagingToTarget();
@@ -144,7 +144,7 @@ public class LinkImportRepositoryTest extends IntegrationTest {
                    is(HashSet.of(existingId)));
 
         importRepository.submitToStaging(
-                List.of(ImportableLink.of(externalId, networkType, LINE_2, startNodeExtId, endNodeExtId))
+                List.of(Jore3Link.of(externalId, networkType, LINE_2, startNodeExtId, endNodeExtId))
         );
 
         final Map<RowStatus, Set<LinkPK>> result = importRepository.commitStagingToTarget();
@@ -204,7 +204,7 @@ public class LinkImportRepositoryTest extends IntegrationTest {
 
         // We submit the same link
         importRepository.submitToStaging(
-                List.of(ImportableLink.of(sourceLink.externalId(),
+                List.of(Jore3Link.of(sourceLink.externalId(),
                                           sourceLink.networkType(),
                                           sourceLink.geometry(),
                                           startNodeExtId,
@@ -265,7 +265,7 @@ public class LinkImportRepositoryTest extends IntegrationTest {
                                                                 startNodeId,
                                                                 endNodeId);
         importRepository.submitToStaging(
-                List.of(ImportableLink.of(newExternalId,
+                List.of(Jore3Link.of(newExternalId,
                                           newNetworkType,
                                           sourceLink.geometry(),
                                           startNodeExtId,
@@ -340,7 +340,7 @@ public class LinkImportRepositoryTest extends IntegrationTest {
 
         // We submit only the latter link as-is, simulating the case where the first link is removed at the source
         importRepository.submitToStaging(
-                List.of(ImportableLink.of(secondLink.externalId(),
+                List.of(Jore3Link.of(secondLink.externalId(),
                                           secondLink.networkType(),
                                           secondLink.geometry(),
                                           thirdNodeExtId,

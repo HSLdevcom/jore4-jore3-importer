@@ -1,11 +1,10 @@
 package fi.hsl.jore.importer.feature.network.route_point.repository;
 
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRoutePoint;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import io.vavr.collection.List;
 import io.vavr.collection.Stream;
 import org.jooq.DSLContext;
-import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -33,7 +32,7 @@ public class RoutePointExportRepository implements IRoutePointExportRepository {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ExportableRoutePoint> findExportableRoutePointsByRouteDirectionId(final UUID routeDirectionId) {
+    public List<ImporterRoutePoint> findImporterRoutePointsByRouteDirectionId(final UUID routeDirectionId) {
         return Stream.ofAll(db.select(NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_TRANSMODEL_ID,
                         SCHEDULED_STOP_POINTS.SCHEDULED_STOP_POINT_ELY_NUMBER,
                         SCHEDULED_STOP_POINTS.SCHEDULED_STOP_POINT_SHORT_ID,
@@ -63,7 +62,7 @@ public class RoutePointExportRepository implements IRoutePointExportRepository {
                 )
                 .orderBy(NETWORK_ROUTE_POINTS.NETWORK_ROUTE_POINT_ORDER)
                 .fetchStream()
-                .map(record -> ExportableRoutePoint.from(
+                .map(record -> ImporterRoutePoint.from(
                         record.component5(),
                         record.component4(),
                         Optional.ofNullable(record.component6()),

@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.batch.line_header.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
-import fi.hsl.jore.importer.feature.network.line_header.dto.ImportableLineHeader;
+import fi.hsl.jore.importer.feature.network.line_header.dto.Jore3LineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.generated.LineHeaderPK;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersStaging;
@@ -20,7 +20,7 @@ import static org.jooq.impl.DSL.selectOne;
 
 @Repository
 public class LineHeaderImportRepository
-        extends AbstractImportRepository<ImportableLineHeader, LineHeaderPK>
+        extends AbstractImportRepository<Jore3LineHeader, LineHeaderPK>
         implements ILineHeaderImportRepository {
 
     private static final NetworkLineHeadersStaging STAGING_TABLE = NetworkLineHeadersStaging.NETWORK_LINE_HEADERS_STAGING;
@@ -46,7 +46,7 @@ public class LineHeaderImportRepository
 
     @Override
     @Transactional
-    public void submitToStaging(final Iterable<? extends ImportableLineHeader> headers) {
+    public void submitToStaging(final Iterable<? extends Jore3LineHeader> headers) {
         final BatchBindStep batch = db.batch(db.insertInto(STAGING_TABLE,
                                                            STAGING_TABLE.NETWORK_LINE_HEADER_EXT_ID,
                                                            STAGING_TABLE.NETWORK_LINE_EXT_ID,

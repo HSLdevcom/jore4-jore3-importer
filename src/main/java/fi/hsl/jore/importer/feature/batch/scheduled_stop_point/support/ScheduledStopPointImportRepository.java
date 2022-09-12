@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
-import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImportableScheduledStopPoint;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.Jore3ScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.PersistableScheduledStopPointIdMapping;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.generated.ScheduledStopPointPK;
 import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints;
@@ -20,7 +20,7 @@ import static fi.hsl.jore.importer.jooq.infrastructure_network.tables.Infrastruc
 
 @Repository
 public class ScheduledStopPointImportRepository
-        extends AbstractImportRepository<ImportableScheduledStopPoint, ScheduledStopPointPK>
+        extends AbstractImportRepository<Jore3ScheduledStopPoint, ScheduledStopPointPK>
         implements IScheduledStopPointImportRepository {
 
     private static final ScheduledStopPointsStaging STAGING_TABLE = ScheduledStopPointsStaging.SCHEDULED_STOP_POINTS_STAGING;
@@ -146,7 +146,7 @@ public class ScheduledStopPointImportRepository
 
     @Transactional
     @Override
-    public void submitToStaging(Iterable<? extends ImportableScheduledStopPoint> items) {
+    public void submitToStaging(Iterable<? extends Jore3ScheduledStopPoint> items) {
         final BatchBindStep batch = db.batch(
                 db.insertInto(STAGING_TABLE,
                         STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID,

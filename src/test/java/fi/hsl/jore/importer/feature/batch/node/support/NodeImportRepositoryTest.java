@@ -4,7 +4,7 @@ import fi.hsl.jore.importer.IntegrationTest;
 import fi.hsl.jore.importer.TestGeometryUtil;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
-import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImportableNode;
+import fi.hsl.jore.importer.feature.infrastructure.node.dto.Jore3Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
@@ -56,7 +56,7 @@ public class NodeImportRepositoryTest extends IntegrationTest {
     @Test
     public void whenNewStagedRowsAndCommit_andTargetDbEmpty_thenReturnResultWithInsertedId() {
         importRepository.submitToStaging(
-                List.of(ImportableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, POINT_1))
+                List.of(Jore3Node.of(ExternalId.of("a"), NodeType.CROSSROADS, POINT_1))
         );
 
         final Map<RowStatus, Set<NodePK>> result = importRepository.commitStagingToTarget();
@@ -94,7 +94,7 @@ public class NodeImportRepositoryTest extends IntegrationTest {
                    is(HashSet.of(existingId)));
 
         importRepository.submitToStaging(
-                List.of(ImportableNode.of(ExternalId.of("a"), NodeType.CROSSROADS, POINT_2))
+                List.of(Jore3Node.of(ExternalId.of("a"), NodeType.CROSSROADS, POINT_2))
         );
 
         final Map<RowStatus, Set<NodePK>> result = importRepository.commitStagingToTarget();
@@ -134,7 +134,7 @@ public class NodeImportRepositoryTest extends IntegrationTest {
 
         // We submit the same node
         importRepository.submitToStaging(
-                List.of(ImportableNode.of(sourceNode.externalId(),
+                List.of(Jore3Node.of(sourceNode.externalId(),
                                           sourceNode.nodeType(),
                                           sourceNode.location()))
         );
@@ -166,7 +166,7 @@ public class NodeImportRepositoryTest extends IntegrationTest {
 
         // We submit only the latter node as-is, simulating the case where the first node is removed at the source
         importRepository.submitToStaging(
-                List.of(ImportableNode.of(secondNode.externalId(),
+                List.of(Jore3Node.of(secondNode.externalId(),
                                           secondNode.nodeType(),
                                           secondNode.location()))
         );

@@ -6,8 +6,8 @@ import fi.hsl.jore.importer.feature.mapmatching.dto.request.MapMatchingRequestBu
 import fi.hsl.jore.importer.feature.mapmatching.dto.request.MapMatchingRequestDTO;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.MapMatchingErrorResponseDTO;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.MapMatchingSuccessResponseDTO;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRouteGeometry;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRoutePoint;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import io.vavr.collection.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +38,8 @@ public class MapMatchingService implements IMapMatchingService {
     }
 
     @Override
-    public MapMatchingSuccessResponseDTO sendMapMatchingRequest(final ExportableRouteGeometry routeGeometry,
-                                                                final List<ExportableRoutePoint> routePoints) {
+    public MapMatchingSuccessResponseDTO sendMapMatchingRequest(final ImporterRouteGeometry routeGeometry,
+                                                                final List<ImporterRoutePoint> routePoints) {
         LOGGER.debug("Sending map matching request for the route direction: {}", routeGeometry.routeDirectionId());
 
         try {

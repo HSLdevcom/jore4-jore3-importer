@@ -1,8 +1,8 @@
 package fi.hsl.jore.importer.feature.mapmatching.dto.request;
 
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRouteGeometry;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ExportableRoutePoint;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import org.geojson.LineString;
 import org.geojson.LngLatAlt;
 import org.geojson.Point;
@@ -10,7 +10,6 @@ import org.locationtech.jts.geom.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class MapMatchingRequestBuilder {
 
@@ -22,8 +21,8 @@ public class MapMatchingRequestBuilder {
      *                      geometry is exported to Jore 4.
      * @return  The created map matching request.
      */
-    public static MapMatchingRequestDTO createMapMatchingRequest(final ExportableRouteGeometry routeGeometry,
-                                                          final io.vavr.collection.List<ExportableRoutePoint> routePoints) {
+    public static MapMatchingRequestDTO createMapMatchingRequest(final ImporterRouteGeometry routeGeometry,
+                                                          final io.vavr.collection.List<ImporterRoutePoint> routePoints) {
         final LineString requestGeometry = createRequestGeometry(routeGeometry);
         final List<RoutePointRequestDTO> requestRoutePoints = createRequestRoutePoints(routePoints);
 
@@ -35,7 +34,7 @@ public class MapMatchingRequestBuilder {
         return request;
     }
 
-    private static LineString createRequestGeometry(final ExportableRouteGeometry inputGeometry) {
+    private static LineString createRequestGeometry(final ImporterRouteGeometry inputGeometry) {
         final List<LngLatAlt> coordinates = new ArrayList<>();
 
         final Coordinate[] inputCoordinates = inputGeometry.geometry().getCoordinates();
@@ -47,7 +46,7 @@ public class MapMatchingRequestBuilder {
         return new LineString(coordinates.toArray(resultArray));
     }
 
-    private static List<RoutePointRequestDTO> createRequestRoutePoints(final io.vavr.collection.List<ExportableRoutePoint> inputRoutePoints) {
+    private static List<RoutePointRequestDTO> createRequestRoutePoints(final io.vavr.collection.List<ImporterRoutePoint> inputRoutePoints) {
         final List<RoutePointRequestDTO> routePoints = new ArrayList<>();
 
         inputRoutePoints.forEach(input -> {

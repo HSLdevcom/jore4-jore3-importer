@@ -13,7 +13,7 @@ import fi.hsl.jore.importer.feature.network.line.repository.ILineTestRepository;
 import fi.hsl.jore.importer.feature.network.line_header.dto.LineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.PersistableLineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.generated.LineHeaderPK;
-import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
+import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

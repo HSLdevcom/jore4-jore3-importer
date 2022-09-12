@@ -1,9 +1,9 @@
 package fi.hsl.jore.importer.config.jobs;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
-import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
-import fi.hsl.jore.importer.feature.transmodel.repository.TransmodelValidityPeriodTestRepository;
-import fi.hsl.jore.importer.feature.transmodel.repository.ValidityPeriodTargetTable;
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
+import fi.hsl.jore.importer.feature.jore4.repository.Jore4ValidityPeriodTestRepository;
+import fi.hsl.jore.importer.feature.jore4.repository.ValidityPeriodTargetTable;
 import io.vavr.collection.List;
 import org.assertj.core.api.Assertions;
 import org.assertj.db.api.SoftAssertions;
@@ -25,7 +25,7 @@ import java.time.OffsetDateTime;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
 import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
-import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
+import static fi.hsl.jore.importer.feature.jore4.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static org.assertj.db.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = JobConfig.class)
@@ -69,14 +69,14 @@ class ExportLineStepTest extends BatchIntegrationTest {
 
     private final Table importerTargetTable;
     private final Table jore4TargetTable;
-    private final TransmodelValidityPeriodTestRepository testRepository;
+    private final Jore4ValidityPeriodTestRepository testRepository;
 
     @Autowired
     ExportLineStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
                        final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
         this.importerTargetTable = new Table(importerDataSource, "network.network_lines");
         this.jore4TargetTable = new Table(jore4DataSource, "route.line");
-        this.testRepository = new TransmodelValidityPeriodTestRepository(jore4DataSource,
+        this.testRepository = new Jore4ValidityPeriodTestRepository(jore4DataSource,
                 ValidityPeriodTargetTable.LINE
         );
     }

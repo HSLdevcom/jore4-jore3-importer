@@ -3,10 +3,10 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
 import fi.hsl.jore.importer.feature.digiroad.service.DigiroadStopService;
-import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
-import fi.hsl.jore.importer.feature.transmodel.ExportConstants;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
-import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImporterScheduledStopPoint;
+import fi.hsl.jore.importer.feature.jore4.ExportConstants;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPoint;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPointDirection;
 import io.vavr.collection.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,15 +19,15 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
+import static fi.hsl.jore.importer.feature.jore4.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 
 /**
  * Combines the stop information imported from Jore 3 and Digiroad, and creates
- * a new {@link TransmodelScheduledStopPoint} object which can be inserted into
+ * a new {@link Jore4ScheduledStopPoint} object which can be inserted into
  * the Jore 4 database.
  */
 @Component
-public class ScheduledStopPointExportProcessor implements ItemProcessor<ExportableScheduledStopPoint, TransmodelScheduledStopPoint> {
+public class ScheduledStopPointExportProcessor implements ItemProcessor<ImporterScheduledStopPoint, Jore4ScheduledStopPoint> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScheduledStopPointExportProcessor.class);
 
@@ -54,7 +54,7 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
     }
 
     @Override
-    public TransmodelScheduledStopPoint process(final ExportableScheduledStopPoint jore3Stop) throws Exception {
+    public Jore4ScheduledStopPoint process(final ImporterScheduledStopPoint jore3Stop) throws Exception {
         LOGGER.debug("Processing Jore 3 stop: {}", jore3Stop);
 
         final List<ExternalId> externalIds = jore3Stop.externalIds();
@@ -80,11 +80,11 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
                 final DigiroadStop digiroadStop = digiroadStopContainer.get();
                 LOGGER.debug("Found Digiroad stop: {}", digiroadStop);
 
-                final TransmodelScheduledStopPoint transmodelStop = TransmodelScheduledStopPoint.of(
+                final Jore4ScheduledStopPoint transmodelStop = Jore4ScheduledStopPoint.of(
                         UUID.randomUUID(),
                         externalId.value(),
                         digiroadStop.digiroadLinkId(),
-                        TransmodelScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),
+                        Jore4ScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),
                         jore3Stop.shortId().get(),
                         jore3Stop.location(),
                         DEFAULT_PRIORITY,

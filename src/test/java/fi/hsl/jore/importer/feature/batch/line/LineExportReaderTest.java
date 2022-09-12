@@ -4,8 +4,8 @@ import com.google.common.collect.BoundType;
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
-import fi.hsl.jore.importer.feature.network.line.dto.ExportableLine;
-import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
+import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
+import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.AfterEach;
@@ -41,7 +41,7 @@ class LineExportReaderTest {
     private static final LocalDate EXPECTED_VALID_DATE_RANGE_START = LocalDate.of(2021, 10, 4);
     private static final LocalDate EXPECTED_VALID_DATE_RANGE_END  = LocalDate.of(2051, 1, 1);
 
-    private final JdbcCursorItemReader<ExportableLine> reader;
+    private final JdbcCursorItemReader<ImporterLine> reader;
 
     @Autowired
     LineExportReaderTest(final LineExportReader reader) {
@@ -66,7 +66,7 @@ class LineExportReaderTest {
         @Test
         @DisplayName("The first invocation of the read() method must return null")
         void firstInvocationOfReadMethodMustReturnNull() throws Exception {
-            final ExportableLine found = reader.read();
+            final ImporterLine found = reader.read();
             assertThat(found).isNull();
         }
     }
@@ -84,7 +84,7 @@ class LineExportReaderTest {
         @Test
         @DisplayName("The first invocation of the read() method must return the found line")
         void firstInvocationOfReadMethodMustReturnFoundLine(final SoftAssertions softAssertions) throws Exception {
-            final ExportableLine line = reader.read();
+            final ImporterLine line = reader.read();
 
             softAssertions.assertThat(line.externalId().value())
                     .as("externalId")
@@ -143,11 +143,11 @@ class LineExportReaderTest {
         @DisplayName("The second invocation of the read() method must return null")
         void secondInvocationOfReadMethodMustReturnNull() throws Exception {
             //The first invocation returns the scheduled stop found from the database.
-            final ExportableLine first = reader.read();
+            final ImporterLine first = reader.read();
             assertThat(first).isNotNull();
 
             //Because there are no more scheduled stop points, this invocation must return null.
-            final ExportableLine second = reader.read();
+            final ImporterLine second = reader.read();
             assertThat(second).isNull();
         }
     }

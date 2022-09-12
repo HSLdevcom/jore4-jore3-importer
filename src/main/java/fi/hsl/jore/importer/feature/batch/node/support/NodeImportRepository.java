@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.node.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
-import fi.hsl.jore.importer.feature.infrastructure.node.dto.ImportableNode;
+import fi.hsl.jore.importer.feature.infrastructure.node.dto.Jore3Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodesStaging;
@@ -19,7 +19,7 @@ import static org.jooq.impl.DSL.selectOne;
 
 @Repository
 public class NodeImportRepository
-        extends AbstractImportRepository<ImportableNode, NodePK>
+        extends AbstractImportRepository<Jore3Node, NodePK>
         implements INodeImportRepository {
 
     private static final InfrastructureNodesStaging STAGING_TABLE = InfrastructureNodesStaging.INFRASTRUCTURE_NODES_STAGING;
@@ -41,7 +41,7 @@ public class NodeImportRepository
 
     @Override
     @Transactional
-    public void submitToStaging(final Iterable<? extends ImportableNode> nodes) {
+    public void submitToStaging(final Iterable<? extends Jore3Node> nodes) {
         final BatchBindStep batch = db.batch(db.insertInto(STAGING_TABLE,
                                                            STAGING_TABLE.INFRASTRUCTURE_NODE_EXT_ID,
                                                            STAGING_TABLE.INFRASTRUCTURE_NODE_TYPE,

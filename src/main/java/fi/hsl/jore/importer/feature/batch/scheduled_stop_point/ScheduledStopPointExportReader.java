@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 
 import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
-import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImporterScheduledStopPoint;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +36,9 @@ public class ScheduledStopPointExportReader {
         this.sql = ResourceUtil.fromResource(sqlResource);
     }
 
-    public JdbcCursorItemReader<ExportableScheduledStopPoint> build() {
+    public JdbcCursorItemReader<ImporterScheduledStopPoint> build() {
         // The default fetch size seems to be 128 items
-        return new JdbcCursorItemReaderBuilder<ExportableScheduledStopPoint>()
+        return new JdbcCursorItemReaderBuilder<ImporterScheduledStopPoint>()
                 .dataSource(dataSource)
                 .name(NAME)
                 .sql(sql)

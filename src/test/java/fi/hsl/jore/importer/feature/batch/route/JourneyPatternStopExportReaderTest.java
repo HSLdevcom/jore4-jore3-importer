@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
-import fi.hsl.jore.importer.feature.network.route.dto.ExportableJourneyPatternStop;
+import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPatternStop;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.AfterEach;
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @IntTest
 class JourneyPatternStopExportReaderTest {
 
-    private final JdbcCursorItemReader<ExportableJourneyPatternStop> reader;
+    private final JdbcCursorItemReader<ImporterJourneyPatternStop> reader;
 
     @Autowired
     JourneyPatternStopExportReaderTest(final JourneyPatternStopExportReader reader) {
@@ -48,7 +48,7 @@ class JourneyPatternStopExportReaderTest {
         @Test
         @DisplayName("The first invocation of the read() method must return null")
         void firstInvocationOfReadMethodMustReturnNull() throws Exception {
-            final ExportableJourneyPatternStop found = reader.read();
+            final ImporterJourneyPatternStop found = reader.read();
             assertThat(found).isNull();
         }
     }
@@ -85,7 +85,7 @@ class JourneyPatternStopExportReaderTest {
         @Test
         @DisplayName("The first invocation of the read() method must return the information of the second stop")
         void firstInvocationOfReadMethodMustReturnInformationOfFirstStop(final SoftAssertions softAssertions) throws Exception {
-            final ExportableJourneyPatternStop first = reader.read();
+            final ImporterJourneyPatternStop first = reader.read();
 
             softAssertions.assertThat(first.journeyPatternTransmodelId())
                     .as("journeyPatternTransmodelId")
@@ -111,10 +111,10 @@ class JourneyPatternStopExportReaderTest {
         @DisplayName("The second invocation of the read() method must return the information of the second stop")
         void secondInvocationOfReadMethodMustReturnInformationOfSecondStop(SoftAssertions softAssertions) throws Exception {
             //The first invocation returns the journey pattern stop found from the database.
-            final ExportableJourneyPatternStop first = reader.read();
+            final ImporterJourneyPatternStop first = reader.read();
             assertThat(first).isNotNull();
 
-            final ExportableJourneyPatternStop second = reader.read();
+            final ImporterJourneyPatternStop second = reader.read();
             softAssertions.assertThat(second.journeyPatternTransmodelId())
                     .as("journeyPatternTransmodelId")
                     .isEqualTo(JOURNEY_PATTERN_TRANSMODEL_ID);
@@ -142,15 +142,15 @@ class JourneyPatternStopExportReaderTest {
         @DisplayName("The third invocation of the read method must return null")
         void thirdInvocationOfReaderMethodMustReturnNull() throws Exception {
             //The first invocation returns the journey pattern stop found from the database.
-            final ExportableJourneyPatternStop first = reader.read();
+            final ImporterJourneyPatternStop first = reader.read();
             assertThat(first).isNotNull();
 
             //The second invocation returns the journey pattern stop found from the database.
-            final ExportableJourneyPatternStop second = reader.read();
+            final ImporterJourneyPatternStop second = reader.read();
             assertThat(second).isNotNull();
 
             //Because there are no more journey pattern stops, this invocation must return null.
-            final ExportableJourneyPatternStop third = reader.read();
+            final ImporterJourneyPatternStop third = reader.read();
             assertThat(third).isNull();
         }
     }
