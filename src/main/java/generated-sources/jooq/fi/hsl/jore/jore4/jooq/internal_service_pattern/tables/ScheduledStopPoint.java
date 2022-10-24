@@ -7,7 +7,7 @@ package fi.hsl.jore.jore4.jooq.internal_service_pattern.tables;
 import fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.InternalServicePattern;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.jooq.Field;
@@ -79,14 +79,16 @@ public class ScheduledStopPoint extends TableImpl<Record> {
     /**
      * The column
      * <code>internal_service_pattern.scheduled_stop_point.validity_start</code>.
+     * end of the route's operating date span in the route's local time
      */
-    public final TableField<Record, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
+    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "end of the route's operating date span in the route's local time");
 
     /**
      * The column
      * <code>internal_service_pattern.scheduled_stop_point.validity_end</code>.
+     * end of the operating date span in the scheduled stop point's local time
      */
-    public final TableField<Record, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
+    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "end of the operating date span in the scheduled stop point's local time");
 
     /**
      * The column

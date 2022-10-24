@@ -1,10 +1,9 @@
 package fi.hsl.jore.importer.feature.transmodel.entity;
 
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
-import org.checkerframework.checker.nullness.Opt;
 import org.immutables.value.Value;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,9 +28,9 @@ public interface TransmodelRoute {
 
     int priority();
 
-    Optional<OffsetDateTime> validityStart();
+    Optional<LocalDate> validityStart();
 
-    Optional<OffsetDateTime> validityEnd();
+    Optional<LocalDate> validityEnd();
 
     static TransmodelRoute of(final UUID routeId,
                               final MultilingualString description,
@@ -40,8 +39,8 @@ public interface TransmodelRoute {
                               final String label,
                               final UUID lineId,
                               final int priority,
-                              final Optional<OffsetDateTime> validityStart,
-                              final Optional<OffsetDateTime> validityEnd) {
+                              final Optional<LocalDate> validityStart,
+                              final Optional<LocalDate> validityEnd) {
         return ImmutableTransmodelRoute.builder()
                 .routeId(routeId)
                 .description(description)

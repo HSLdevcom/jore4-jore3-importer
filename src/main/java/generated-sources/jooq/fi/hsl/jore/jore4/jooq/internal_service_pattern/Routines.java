@@ -9,7 +9,7 @@ import fi.hsl.jore.jore4.jooq.internal_service_pattern.routines.InsertScheduledS
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.routines.InsertScheduledStopPointWithVehicleMode;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.jooq.Configuration;
@@ -65,8 +65,8 @@ public class Routines {
         , UUID locatedOnInfrastructureLinkId
         , String direction
         , String label
-        , OffsetDateTime validityStart
-        , OffsetDateTime validityEnd
+        , LocalDate validityStart
+        , LocalDate validityEnd
         , Integer priority
         , String supportedVehicleMode
     ) {
@@ -99,8 +99,9 @@ public class Routines {
         , Object newMeasuredLocation
         , String newDirection
         , String newLabel
-        , OffsetDateTime newValidityStart
-        , OffsetDateTime newValidityEnd
+        , LocalDate newValidityStart
+        , LocalDate newValidityEnd
+        , Integer newPriority
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
               replaceScheduledStopPointId
@@ -111,6 +112,7 @@ public class Routines {
             , newLabel
             , newValidityStart
             , newValidityEnd
+            , newPriority
         )).fetch();
     }
 
@@ -128,8 +130,9 @@ public class Routines {
         , Object newMeasuredLocation
         , String newDirection
         , String newLabel
-        , OffsetDateTime newValidityStart
-        , OffsetDateTime newValidityEnd
+        , LocalDate newValidityStart
+        , LocalDate newValidityEnd
+        , Integer newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
             replaceScheduledStopPointId,
@@ -139,7 +142,8 @@ public class Routines {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         );
     }
 
@@ -157,8 +161,9 @@ public class Routines {
         , Field<Object> newMeasuredLocation
         , Field<String> newDirection
         , Field<String> newLabel
-        , Field<OffsetDateTime> newValidityStart
-        , Field<OffsetDateTime> newValidityEnd
+        , Field<LocalDate> newValidityStart
+        , Field<LocalDate> newValidityEnd
+        , Field<Integer> newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
             replaceScheduledStopPointId,
@@ -168,7 +173,8 @@ public class Routines {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         );
     }
 }

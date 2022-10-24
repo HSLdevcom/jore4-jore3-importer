@@ -9,7 +9,7 @@ import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPo
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.ScheduledStopPoint;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.ScheduledStopPointInvariant;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -57,8 +57,9 @@ public class InternalServicePattern extends SchemaImpl {
         , Object newMeasuredLocation
         , String newDirection
         , String newLabel
-        , OffsetDateTime newValidityStart
-        , OffsetDateTime newValidityEnd
+        , LocalDate newValidityStart
+        , LocalDate newValidityEnd
+        , Integer newPriority
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
               replaceScheduledStopPointId
@@ -69,6 +70,7 @@ public class InternalServicePattern extends SchemaImpl {
             , newLabel
             , newValidityStart
             , newValidityEnd
+            , newPriority
         )).fetch();
     }
 
@@ -86,8 +88,9 @@ public class InternalServicePattern extends SchemaImpl {
         , Object newMeasuredLocation
         , String newDirection
         , String newLabel
-        , OffsetDateTime newValidityStart
-        , OffsetDateTime newValidityEnd
+        , LocalDate newValidityStart
+        , LocalDate newValidityEnd
+        , Integer newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
             replaceScheduledStopPointId,
@@ -97,7 +100,8 @@ public class InternalServicePattern extends SchemaImpl {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         );
     }
 
@@ -115,8 +119,9 @@ public class InternalServicePattern extends SchemaImpl {
         , Field<Object> newMeasuredLocation
         , Field<String> newDirection
         , Field<String> newLabel
-        , Field<OffsetDateTime> newValidityStart
-        , Field<OffsetDateTime> newValidityEnd
+        , Field<LocalDate> newValidityStart
+        , Field<LocalDate> newValidityEnd
+        , Field<Integer> newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
             replaceScheduledStopPointId,
@@ -126,7 +131,8 @@ public class InternalServicePattern extends SchemaImpl {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         );
     }
 

@@ -7,7 +7,7 @@ package fi.hsl.jore.jore4.jooq.internal_service_pattern.routines;
 import fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.InternalServicePattern;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.jooq.Parameter;
@@ -59,13 +59,13 @@ public class InsertScheduledStopPointWithVehicleMode extends AbstractRoutine<jav
      * The parameter
      * <code>internal_service_pattern.insert_scheduled_stop_point_with_vehicle_mode.validity_start</code>.
      */
-    public static final Parameter<OffsetDateTime> VALIDITY_START = Internal.createParameter("validity_start", SQLDataType.TIMESTAMPWITHTIMEZONE(6), false, false);
+    public static final Parameter<LocalDate> VALIDITY_START = Internal.createParameter("validity_start", SQLDataType.LOCALDATE, false, false);
 
     /**
      * The parameter
      * <code>internal_service_pattern.insert_scheduled_stop_point_with_vehicle_mode.validity_end</code>.
      */
-    public static final Parameter<OffsetDateTime> VALIDITY_END = Internal.createParameter("validity_end", SQLDataType.TIMESTAMPWITHTIMEZONE(6), false, false);
+    public static final Parameter<LocalDate> VALIDITY_END = Internal.createParameter("validity_end", SQLDataType.LOCALDATE, false, false);
 
     /**
      * The parameter
@@ -136,14 +136,14 @@ public class InsertScheduledStopPointWithVehicleMode extends AbstractRoutine<jav
     /**
      * Set the <code>validity_start</code> parameter IN value to the routine
      */
-    public void setValidityStart(OffsetDateTime value) {
+    public void setValidityStart(LocalDate value) {
         setValue(VALIDITY_START, value);
     }
 
     /**
      * Set the <code>validity_end</code> parameter IN value to the routine
      */
-    public void setValidityEnd(OffsetDateTime value) {
+    public void setValidityEnd(LocalDate value) {
         setValue(VALIDITY_END, value);
     }
 

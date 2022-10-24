@@ -3,7 +3,7 @@ package fi.hsl.jore.importer.feature.transmodel.entity;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import org.immutables.value.Value;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,9 +30,9 @@ public interface TransmodelLine {
 
     int priority();
 
-    Optional<OffsetDateTime> validityStart();
+    Optional<LocalDate> validityStart();
 
-    Optional<OffsetDateTime> validityEnd();
+    Optional<LocalDate> validityEnd();
 
     static ImmutableTransmodelLine of(final UUID lineId,
                                       final String externalLineId,
@@ -42,8 +42,8 @@ public interface TransmodelLine {
                                       final VehicleMode primaryVehicleMode,
                                       final TypeOfLine typeOfLine,
                                       final int priority,
-                                      final Optional<OffsetDateTime> validityStart,
-                                      final Optional<OffsetDateTime> validityEnd) {
+                                      final Optional<LocalDate> validityStart,
+                                      final Optional<LocalDate> validityEnd) {
         return ImmutableTransmodelLine.builder()
                 .lineId(lineId)
                 .externalLineId(externalLineId)

@@ -34,8 +34,8 @@ public class RouteExportProcessor implements ItemProcessor<ExportableRoute, Tran
                 input.routeNumber(),
                 input.lineTransmodelId(),
                 DEFAULT_PRIORITY,
-                ValidityPeriodUtil.constructValidityPeriodStartTime(input.validDateRange().range()),
-                ValidityPeriodUtil.constructValidityPeriodEndTime(input.validDateRange().range())
+                ValidityPeriodUtil.constructValidityPeriodStartDay(input.validDateRange().range()),
+                ValidityPeriodUtil.constructValidityPeriodEndDay(input.validDateRange().range())
         );
     }
 }
