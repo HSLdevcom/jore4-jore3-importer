@@ -22,8 +22,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @IntTest

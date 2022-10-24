@@ -17,16 +17,12 @@ import org.springframework.test.context.jdbc.SqlConfig;
 
 import javax.sql.DataSource;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
-import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -49,18 +45,8 @@ class TransmodelLineRepositoryTest {
     private static final TypeOfLine TYPE_OF_LINE = TypeOfLine.STOPPING_BUS_SERVICE;
     private static final int PRIORITY = 10;
 
-    private static final OffsetDateTime VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
-            LocalDateTime.of(
-                    LocalDate.of(2019, 1, 1),
-                    OPERATING_DAY_START_TIME
-            )
-    );
-    private static final OffsetDateTime VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
-            LocalDateTime.of(
-                    LocalDate.of(2020, 1, 1),
-                    OPERATING_DAY_END_TIME
-            )
-    );
+    private static final LocalDate VALIDITY_PERIOD_START = LocalDate.of(2019, 1, 1);
+    private static final LocalDate VALIDITY_PERIOD_END = LocalDate.of(2020, 1, 1);
 
     private final TransmodelLineRepository repository;
     private final Table targetTable;
@@ -95,8 +81,8 @@ class TransmodelLineRepositoryTest {
                 PRIMARY_VEHICLE_MODE,
                 TYPE_OF_LINE,
                 PRIORITY,
-                Optional.of(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE),
-                Optional.of(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE)
+                Optional.of(VALIDITY_PERIOD_START),
+                Optional.of(VALIDITY_PERIOD_END)
         );
 
         @Test
@@ -171,10 +157,10 @@ class TransmodelLineRepositoryTest {
         void shouldInsertCorrectValidityPeriodStartTimeIntoDatabase() {
             repository.insert(List.of(INPUT));
 
-            final OffsetDateTime validityStart = testRepository.findValidityPeriodStartTimestampAtFinnishTimeZone();
+            final LocalDate validityStart = testRepository.findValidityPeriodStartDate();
             Assertions.assertThat(validityStart)
                     .as(LINE.VALIDITY_START.getName())
-                    .isEqualTo(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE);
+                    .isEqualTo(VALIDITY_PERIOD_START);
         }
 
         @Test
@@ -182,10 +168,10 @@ class TransmodelLineRepositoryTest {
         void shouldInsertCorrectValidityPeriodEndTimeIntoDatabase() {
             repository.insert(List.of(INPUT));
 
-            final OffsetDateTime validityEnd = testRepository.findValidityPeriodEndTimestampAtFinnishTimeZone();
+            final LocalDate validityEnd = testRepository.findValidityPeriodEndDate();
             Assertions.assertThat(validityEnd)
                     .as(LINE.VALIDITY_END.getName())
-                    .isEqualTo(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE);
+                    .isEqualTo(VALIDITY_PERIOD_END);
         }
     }
 }

@@ -3,10 +3,8 @@ package fi.hsl.jore.importer.feature.transmodel.repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.List;
-
-import static fi.hsl.jore.importer.TestConstants.LOCAL_TIME_ZONE;
 
 /**
  * Provides methods which are used to query validity period start
@@ -20,8 +18,8 @@ public class TransmodelValidityPeriodTestRepository {
     private static final String SQL_QUERY_TEMPLATE_GET_VALIDITY_PERIOD_START_TIME = "SELECT validity_start FROM %s";
 
     private final JdbcTemplate jdbcTemplate;
-    private final String sqlQueryGetValidityPeriodEndTime;
-    private final String sqlQueryGetValidityPeriodStartTime;
+    private final String sqlQueryGetValidityPeriodEnd;
+    private final String sqlQueryGetValidityPeriodStart;
 
     /**
      * Creates a new repository
@@ -31,45 +29,41 @@ public class TransmodelValidityPeriodTestRepository {
     public TransmodelValidityPeriodTestRepository(final DataSource dataSource,
                                                   final ValidityPeriodTargetTable targetTable) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.sqlQueryGetValidityPeriodEndTime = String.format(SQL_QUERY_TEMPLATE_GET_VALIDITY_PERIOD_END_TIME,
+        this.sqlQueryGetValidityPeriodEnd = String.format(SQL_QUERY_TEMPLATE_GET_VALIDITY_PERIOD_END_TIME,
                 targetTable.getTableName()
         );
-        this.sqlQueryGetValidityPeriodStartTime = String.format(SQL_QUERY_TEMPLATE_GET_VALIDITY_PERIOD_START_TIME,
+        this.sqlQueryGetValidityPeriodStart = String.format(SQL_QUERY_TEMPLATE_GET_VALIDITY_PERIOD_START_TIME,
                 targetTable.getTableName()
         );
     }
 
     /**
-     * Finds the validity period start timestamp in Finnish time zone (Europe/Helsinki).
+     * Finds the validity period start date.
      * Note that this method assumes the target table has exactly one row.
      *
-     * @return  The found validity period start time.
+     * @return  The found validity period start date.
      */
-    public OffsetDateTime findValidityPeriodStartTimestampAtFinnishTimeZone() {
-        final List<OffsetDateTime> validityPeriodStartDates = jdbcTemplate.queryForList(
-                this.sqlQueryGetValidityPeriodStartTime,
-                OffsetDateTime.class
+    public LocalDate findValidityPeriodStartDate() {
+        final List<LocalDate> validityPeriodStartDates = jdbcTemplate.queryForList(
+                this.sqlQueryGetValidityPeriodStart,
+                LocalDate.class
         );
 
-        return validityPeriodStartDates.get(0)
-                .atZoneSameInstant(LOCAL_TIME_ZONE)
-                .toOffsetDateTime();
+        return validityPeriodStartDates.get(0);
     }
 
     /**
-     * Finds the validity period start timestamp in Finnish time zone (Europe/Helsinki).
+     * Finds the validity period start date.
      * Note that this method assumes the target table has exactly one row.
      *
-     * @return The found validity period end time.
+     * @return The found validity period end date.
      */
-    public OffsetDateTime findValidityPeriodEndTimestampAtFinnishTimeZone() {
-        final List<OffsetDateTime> validityPeriodEndDates = jdbcTemplate.queryForList(
-                this.sqlQueryGetValidityPeriodEndTime,
-                OffsetDateTime.class
+    public LocalDate findValidityPeriodEndDate() {
+        final List<LocalDate> validityPeriodEndDates = jdbcTemplate.queryForList(
+                this.sqlQueryGetValidityPeriodEnd,
+                LocalDate.class
         );
 
-        return validityPeriodEndDates.get(0)
-                .atZoneSameInstant(LOCAL_TIME_ZONE)
-                .toOffsetDateTime();
+        return validityPeriodEndDates.get(0);
     }
 }

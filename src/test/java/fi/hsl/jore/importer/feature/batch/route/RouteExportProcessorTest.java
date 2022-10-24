@@ -11,13 +11,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil.createMultilingualString;
-import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class RouteExportProcessorTest {
@@ -33,15 +29,6 @@ class RouteExportProcessorTest {
 
     private static final LocalDate VALIDITY_PERIOD_START_DAY = LocalDate.of(2021, 1, 1);
     private static final LocalDate VALIDITY_PERIOD_END_DAY = LocalDate.of(2022, 12, 31);
-
-    private static final LocalDateTime VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
-            VALIDITY_PERIOD_START_DAY,
-            OPERATING_DAY_START_TIME
-    );
-    private static final LocalDateTime VALIDITY_PERIOD_END_TIME = LocalDateTime.of(
-            VALIDITY_PERIOD_END_DAY.plusDays(1),
-            OPERATING_DAY_END_TIME
-    );
 
     private static final ExportableRoute INPUT = ExportableRoute.of(
             IMPORTER_ROUTE_DIRECTION_ID,
@@ -116,13 +103,13 @@ class RouteExportProcessorTest {
     @DisplayName("Should return a route with the correct validity period start time")
     void shouldReturnRouteWithCorrectValidityPeriodStartTime() throws Exception {
         final TransmodelRoute route = processor.process(INPUT);
-        assertThat(route.validityStart()).contains(offsetDateTimeFromLocalDateTime(VALIDITY_PERIOD_START_TIME));
+        assertThat(route.validityStart()).contains(VALIDITY_PERIOD_START_DAY);
     }
 
     @Test
     @DisplayName("Should return a route with the correct validity period end time")
     void shouldReturnRouteWithCorrectValidityPeriodEndTime() throws Exception {
         final TransmodelRoute route = processor.process(INPUT);
-        assertThat(route.validityEnd()).contains(offsetDateTimeFromLocalDateTime(VALIDITY_PERIOD_END_TIME));
+        assertThat(route.validityEnd()).contains(VALIDITY_PERIOD_END_DAY);
     }
 }

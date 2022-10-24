@@ -8,7 +8,7 @@ import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPo
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.ScheduledStopPoint;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.ScheduledStopPointInvariant;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.jooq.Configuration;
@@ -44,8 +44,9 @@ public class Tables {
         , Object newMeasuredLocation
         , String newDirection
         , String newLabel
-        , OffsetDateTime newValidityStart
-        , OffsetDateTime newValidityEnd
+        , LocalDate newValidityStart
+        , LocalDate newValidityEnd
+        , Integer newPriority
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
               replaceScheduledStopPointId
@@ -56,6 +57,7 @@ public class Tables {
             , newLabel
             , newValidityStart
             , newValidityEnd
+            , newPriority
         )).fetch();
     }
 
@@ -73,8 +75,9 @@ public class Tables {
         , Object newMeasuredLocation
         , String newDirection
         , String newLabel
-        , OffsetDateTime newValidityStart
-        , OffsetDateTime newValidityEnd
+        , LocalDate newValidityStart
+        , LocalDate newValidityEnd
+        , Integer newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
             replaceScheduledStopPointId,
@@ -84,7 +87,8 @@ public class Tables {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         );
     }
 
@@ -102,8 +106,9 @@ public class Tables {
         , Field<Object> newMeasuredLocation
         , Field<String> newDirection
         , Field<String> newLabel
-        , Field<OffsetDateTime> newValidityStart
-        , Field<OffsetDateTime> newValidityEnd
+        , Field<LocalDate> newValidityStart
+        , Field<LocalDate> newValidityEnd
+        , Field<Integer> newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
             replaceScheduledStopPointId,
@@ -113,7 +118,8 @@ public class Tables {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         );
     }
 

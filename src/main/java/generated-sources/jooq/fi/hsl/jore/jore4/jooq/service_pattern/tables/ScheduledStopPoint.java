@@ -7,7 +7,7 @@ package fi.hsl.jore.jore4.jooq.service_pattern.tables;
 import fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding;
 import fi.hsl.jore.jore4.jooq.service_pattern.ServicePattern;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.jooq.Field;
@@ -82,9 +82,9 @@ public class ScheduledStopPoint extends TableImpl<Record> {
     /**
      * The column <code>service_pattern.scheduled_stop_point.direction</code>.
      * The direction(s) of traffic with respect to the digitization, i.e. the
-     * direction of the specified line string.
+     * direction of the specified LineString.
      */
-    public final TableField<Record, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB, this, "The direction(s) of traffic with respect to the digitization, i.e. the direction of the specified line string.");
+    public final TableField<Record, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB, this, "The direction(s) of traffic with respect to the digitization, i.e. the direction of the specified LineString.");
 
     /**
      * The column
@@ -108,18 +108,18 @@ public class ScheduledStopPoint extends TableImpl<Record> {
     /**
      * The column
      * <code>service_pattern.scheduled_stop_point.validity_start</code>. The
-     * point in time when the stop becomes valid. If NULL, the stop has been
-     * always valid.
+     * date when the stop becomes valid. If NULL, the stop has been always
+     * valid.
      */
-    public final TableField<Record, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time when the stop becomes valid. If NULL, the stop has been always valid.");
+    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "The date when the stop becomes valid. If NULL, the stop has been always valid.");
 
     /**
      * The column
-     * <code>service_pattern.scheduled_stop_point.validity_end</code>. The point
-     * in time from which onwards the stop is no longer valid. If NULL, the stop
-     * will be always valid.
+     * <code>service_pattern.scheduled_stop_point.validity_end</code>. The date
+     * from which onwards the stop is no longer valid. If NULL, the stop will be
+     * always valid.
      */
-    public final TableField<Record, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "The point in time from which onwards the stop is no longer valid. If NULL, the stop will be always valid.");
+    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "The date from which onwards the stop is no longer valid. If NULL, the stop will be always valid.");
 
     /**
      * The column <code>service_pattern.scheduled_stop_point.priority</code>.
