@@ -7,7 +7,7 @@ package fi.hsl.jore.jore4.jooq.internal_service_pattern.tables;
 import fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.InternalServicePattern;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.jooq.Field;
@@ -94,13 +94,13 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
      * The column
      * <code>internal_service_pattern.get_scheduled_stop_points_with_new.validity_start</code>.
      */
-    public final TableField<Record, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
+    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "");
 
     /**
      * The column
      * <code>internal_service_pattern.get_scheduled_stop_points_with_new.validity_end</code>.
      */
-    public final TableField<Record, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
+    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "");
 
     /**
      * The column
@@ -116,8 +116,9 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
             DSL.val(null, org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").defaultValue(DSL.field("NULL::geography", org.jooq.impl.SQLDataType.OTHER))),
             DSL.val(null, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
             DSL.val(null, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
-            DSL.val(null, SQLDataType.TIMESTAMPWITHTIMEZONE(6).defaultValue(DSL.field("NULL::timestamp with time zone", SQLDataType.TIMESTAMPWITHTIMEZONE))),
-            DSL.val(null, SQLDataType.TIMESTAMPWITHTIMEZONE(6).defaultValue(DSL.field("NULL::timestamp with time zone", SQLDataType.TIMESTAMPWITHTIMEZONE)))
+            DSL.val(null, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
+            DSL.val(null, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
+            DSL.val(null, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER)))
         });
     }
 
@@ -193,8 +194,9 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
         , Object newMeasuredLocation
         , String newDirection
         , String newLabel
-        , OffsetDateTime newValidityStart
-        , OffsetDateTime newValidityEnd
+        , LocalDate newValidityStart
+        , LocalDate newValidityEnd
+        , Integer newPriority
     ) {
         GetScheduledStopPointsWithNew result = new GetScheduledStopPointsWithNew(DSL.name("get_scheduled_stop_points_with_new"), null, new Field[] {
             DSL.val(replaceScheduledStopPointId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
@@ -203,8 +205,9 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
             DSL.val(newMeasuredLocation, org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").defaultValue(DSL.field("NULL::geography", org.jooq.impl.SQLDataType.OTHER))),
             DSL.val(newDirection, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
             DSL.val(newLabel, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
-            DSL.val(newValidityStart, SQLDataType.TIMESTAMPWITHTIMEZONE(6).defaultValue(DSL.field("NULL::timestamp with time zone", SQLDataType.TIMESTAMPWITHTIMEZONE))),
-            DSL.val(newValidityEnd, SQLDataType.TIMESTAMPWITHTIMEZONE(6).defaultValue(DSL.field("NULL::timestamp with time zone", SQLDataType.TIMESTAMPWITHTIMEZONE)))
+            DSL.val(newValidityStart, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
+            DSL.val(newValidityEnd, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
+            DSL.val(newPriority, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER)))
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;
@@ -220,8 +223,9 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
         , Field<Object> newMeasuredLocation
         , Field<String> newDirection
         , Field<String> newLabel
-        , Field<OffsetDateTime> newValidityStart
-        , Field<OffsetDateTime> newValidityEnd
+        , Field<LocalDate> newValidityStart
+        , Field<LocalDate> newValidityEnd
+        , Field<Integer> newPriority
     ) {
         GetScheduledStopPointsWithNew result = new GetScheduledStopPointsWithNew(DSL.name("get_scheduled_stop_points_with_new"), null, new Field[] {
             replaceScheduledStopPointId,
@@ -231,7 +235,8 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
             newDirection,
             newLabel,
             newValidityStart,
-            newValidityEnd
+            newValidityEnd,
+            newPriority
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;

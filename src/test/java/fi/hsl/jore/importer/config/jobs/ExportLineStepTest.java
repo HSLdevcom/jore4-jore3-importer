@@ -19,13 +19,8 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import javax.sql.DataSource;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
-import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static org.assertj.db.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = JobConfig.class)
@@ -51,18 +46,9 @@ class ExportLineStepTest extends BatchIntegrationTest {
     private static final VehicleMode EXPECTED_PRIMARY_VEHICLE_MODE = VehicleMode.TRAM;
     private static final int EXPECTED_PRIORITY = 10;
 
-    private static final OffsetDateTime EXPECTED_VALIDITY_PERIOD_START_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
-            LocalDateTime.of(
-                    LocalDate.of(2021, 10, 4),
-                    OPERATING_DAY_START_TIME
-            )
-    );
-    private static final OffsetDateTime EXPECTED_VALIDITY_PERIOD_END_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
-            LocalDateTime.of(
-                    LocalDate.of(2051, 1, 1),
-                    OPERATING_DAY_END_TIME
-            )
-    );
+    private static final LocalDate EXPECTED_VALIDITY_PERIOD_START = LocalDate.of(2021, 10, 4);
+    // validity period end is specified with an open upper boundary
+    private static final LocalDate EXPECTED_VALIDITY_PERIOD_END = LocalDate.of(2051, 1, 1).minusDays(1);
 
     private static final fi.hsl.jore.importer.jooq.network.tables.NetworkLines IMPORTER_LINE = fi.hsl.jore.importer.jooq.network.Tables.NETWORK_LINES;
     private static final fi.hsl.jore.jore4.jooq.route.tables.Line JORE4_LINE = fi.hsl.jore.jore4.jooq.route.Tables.LINE;
@@ -133,15 +119,15 @@ class ExportLineStepTest extends BatchIntegrationTest {
 
         softAssertions.assertAll();
 
-        final OffsetDateTime validityStart = testRepository.findValidityPeriodStartTimestampAtFinnishTimeZone();
+        final LocalDate validityStart = testRepository.findValidityPeriodStartDate();
         Assertions.assertThat(validityStart)
                 .as(JORE4_LINE.VALIDITY_START.getName())
-                .isEqualTo(EXPECTED_VALIDITY_PERIOD_START_AT_FINNISH_TIME_ZONE);
+                .isEqualTo(EXPECTED_VALIDITY_PERIOD_START);
 
-        final OffsetDateTime validityEnd = testRepository.findValidityPeriodEndTimestampAtFinnishTimeZone();
+        final LocalDate validityEnd = testRepository.findValidityPeriodEndDate();
         Assertions.assertThat(validityEnd)
                 .as(JORE4_LINE.VALIDITY_END.getName())
-                .isEqualTo(EXPECTED_VALIDITY_PERIOD_END_AT_FINNISH_TIME_ZONE);
+                .isEqualTo(EXPECTED_VALIDITY_PERIOD_END);
     }
 
     @Test

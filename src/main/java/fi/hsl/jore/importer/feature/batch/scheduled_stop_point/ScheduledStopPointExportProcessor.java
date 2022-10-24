@@ -4,7 +4,6 @@ import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
 import fi.hsl.jore.importer.feature.digiroad.service.DigiroadStopService;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ExportableScheduledStopPoint;
-import fi.hsl.jore.importer.feature.transmodel.ExportConstants;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPoint;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelScheduledStopPointDirection;
 import io.vavr.collection.List;
@@ -15,11 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
-
-import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 
 /**
  * Combines the stop information imported from Jore 3 and Digiroad, and creates
@@ -37,14 +33,10 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
     //the customer. The idea was that these weird dates would make it easier to
     //find scheduled stop points which are imported from Jore 3 and are valid until
     //further notice.
-    private static final LocalDateTime DEFAULT_VALIDITY_START = LocalDateTime.of(
-            LocalDate.of(1990, 1, 1),
-            ExportConstants.OPERATING_DAY_START_TIME
-    );
-    private static final LocalDateTime DEFAULT_VALIDITY_END = LocalDateTime.of(
-            LocalDate.of(2051, 1, 1),
-            ExportConstants.OPERATING_DAY_END_TIME
-    );
+    private static final LocalDate DEFAULT_VALIDITY_START =
+            LocalDate.of(1990, 1, 1);
+    private static final LocalDate DEFAULT_VALIDITY_END =
+            LocalDate.of(2051, 1, 1);
 
     private final DigiroadStopService digiroadStopService;
 
@@ -88,8 +80,8 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Exportab
                         jore3Stop.shortId().get(),
                         jore3Stop.location(),
                         DEFAULT_PRIORITY,
-                        Optional.of(offsetDateTimeFromLocalDateTime(DEFAULT_VALIDITY_START)),
-                        Optional.of(offsetDateTimeFromLocalDateTime(DEFAULT_VALIDITY_END))
+                        Optional.of(DEFAULT_VALIDITY_START),
+                        Optional.of(DEFAULT_VALIDITY_END)
                 );
 
                 LOGGER.debug("Created scheduled stop point: {}", transmodelStop);

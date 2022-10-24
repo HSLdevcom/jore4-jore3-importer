@@ -16,12 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
-import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -40,14 +36,8 @@ class ScheduledStopPointExportProcessorTest {
     private static final double JORE_3_STOP_Y_COORDINATE = 61.207149801;
 
     private static final int PRIORITY = 10;
-    private static final LocalDateTime VALIDITY_PERIOD_START_TIME = LocalDateTime.of(
-            LocalDate.of(1990, 1, 1),
-            OPERATING_DAY_START_TIME
-    );
-    private static final LocalDateTime VALIDITY_PERIOD_END_TIME = LocalDateTime.of(
-            LocalDate.of(2051, 1, 1),
-            OPERATING_DAY_END_TIME
-    );
+    private static final LocalDate VALIDITY_PERIOD_START = LocalDate.of(1990, 1, 1);
+    private static final LocalDate VALIDITY_PERIOD_END = LocalDate.of(2051, 1, 1);
 
     private final TransmodelScheduledStopPointDirection TRANSMODEL_STOP_POINT_DIRECTION_ON_INFRA_LINK = TransmodelScheduledStopPointDirection.BACKWARD;
 
@@ -155,14 +145,14 @@ class ScheduledStopPointExportProcessorTest {
             @DisplayName("Should return a scheduled stop point with the correct validity period start time")
             void shouldReturnScheduledStopPointWithCorrectValidityPeriodStartTime() throws Exception {
                 final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
-                assertThat(output.validityStart()).contains(offsetDateTimeFromLocalDateTime(VALIDITY_PERIOD_START_TIME));
+                assertThat(output.validityStart()).contains(VALIDITY_PERIOD_START);
             }
 
             @Test
             @DisplayName("Should return a scheduled stop point with the correct validity period end time")
             void shouldReturnScheduledStopPointWithCorrectValidityPeriodEndTime() throws Exception {
                 final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
-                assertThat(output.validityEnd()).contains(offsetDateTimeFromLocalDateTime(VALIDITY_PERIOD_END_TIME));
+                assertThat(output.validityEnd()).contains(VALIDITY_PERIOD_END);
             }
         }
     }
@@ -245,14 +235,14 @@ class ScheduledStopPointExportProcessorTest {
             @DisplayName("Should return a scheduled stop point with the correct validity period start time")
             void shouldReturnScheduledStopPointWithCorrectValidityPeriodStartTime() throws Exception {
                 final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
-                assertThat(output.validityStart()).contains(offsetDateTimeFromLocalDateTime(VALIDITY_PERIOD_START_TIME));
+                assertThat(output.validityStart()).contains(VALIDITY_PERIOD_START);
             }
 
             @Test
             @DisplayName("Should return a scheduled stop point with the correct validity period end time")
             void shouldReturnScheduledStopPointWithCorrectValidityPeriodEndTime() throws Exception {
                 final TransmodelScheduledStopPoint output = processor.process(jore3Stop);
-                assertThat(output.validityEnd()).contains(offsetDateTimeFromLocalDateTime(VALIDITY_PERIOD_END_TIME));
+                assertThat(output.validityEnd()).contains(VALIDITY_PERIOD_END);
             }
         }
     }

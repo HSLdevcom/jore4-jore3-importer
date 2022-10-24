@@ -17,14 +17,9 @@ import org.springframework.test.context.jdbc.SqlConfig;
 
 import javax.sql.DataSource;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
-import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -58,18 +53,9 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
     private static final String EXPECTED_DESCRIPTION = "{\"fi_FI\":\"Keskustori - Etelä-Hervanta vanha\",\"sv_SE\":\"Central torget - Södra Hervanta gamla\"}";
     private static final int EXPECTED_PRIORITY = 10;
 
-    private static final OffsetDateTime VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
-            LocalDateTime.of(
-                    LocalDate.of(2021, 1, 1),
-                    OPERATING_DAY_START_TIME
-            )
-    );
-    private static final OffsetDateTime VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
-            LocalDateTime.of(
-                LocalDate.of(2022, 1, 1),
-                OPERATING_DAY_END_TIME
-            )
-    );
+    private static final LocalDate VALIDITY_PERIOD_START = LocalDate.of(2021, 1, 1);
+    // validity period end is specified with an open upper boundary
+    private static final LocalDate VALIDITY_PERIOD_END = LocalDate.of(2022, 1, 1).minusDays(1);
 
     private static final fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections IMPORTER_ROUTE_DIRECTION = fi.hsl.jore.importer.jooq.network.Tables.NETWORK_ROUTE_DIRECTIONS;
     private static final fi.hsl.jore.jore4.jooq.route.tables.Route JORE4_ROUTE = fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
@@ -167,10 +153,10 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectValidityPeriodStartTime() {
         runSteps(STEPS);
 
-        final OffsetDateTime validityPeriodStart = testRepository.findValidityPeriodStartTimestampAtFinnishTimeZone();
+        final LocalDate validityPeriodStart = testRepository.findValidityPeriodStartDate();
         Assertions.assertThat(validityPeriodStart)
                 .as(ROUTE_.VALIDITY_START.getName())
-                .isEqualTo(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE);
+                .isEqualTo(VALIDITY_PERIOD_START);
     }
 
     @Test
@@ -178,10 +164,10 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectValidityPeriodEndTime() {
         runSteps(STEPS);
 
-        final OffsetDateTime validityPeriodEnd = testRepository.findValidityPeriodEndTimestampAtFinnishTimeZone();
+        final LocalDate validityPeriodEnd = testRepository.findValidityPeriodEndDate();
         Assertions.assertThat(validityPeriodEnd)
                 .as(ROUTE_.VALIDITY_END.getName())
-                .isEqualTo(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE);
+                .isEqualTo(VALIDITY_PERIOD_END);
     }
 
     @Test

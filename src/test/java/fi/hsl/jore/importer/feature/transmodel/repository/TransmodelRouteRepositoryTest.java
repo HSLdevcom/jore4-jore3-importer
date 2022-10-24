@@ -15,17 +15,13 @@ import org.springframework.test.context.jdbc.SqlConfig;
 
 import javax.sql.DataSource;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
 import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
 import static fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil.createMultilingualString;
-import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -41,18 +37,10 @@ class TransmodelRouteRepositoryTest {
     private static final TransmodelRouteDirection ROUTE_DIRECTION = TransmodelRouteDirection.INBOUND;
     private static final UUID ROUTE_DIRECTION_ID = UUID.fromString("6f93fa6b-8a19-4b98-bd84-b8409e670c70");
 
-    private static final OffsetDateTime VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
-            LocalDateTime.of(
-                    LocalDate.of(2021, 1, 1),
-                    OPERATING_DAY_START_TIME
-            )
-    );
-    private static final OffsetDateTime VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE = offsetDateTimeFromLocalDateTime(
-            LocalDateTime.of(
-                    LocalDate.of(2022, 1, 1),
-                    OPERATING_DAY_END_TIME
-            )
-    );
+    private static final LocalDate VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE =
+            LocalDate.of(2021, 1, 1);
+    private static final LocalDate VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE =
+            LocalDate.of(2022, 1, 1);
 
     private final TransmodelRouteRepository repository;
     private final Table targetTable;
@@ -167,7 +155,7 @@ class TransmodelRouteRepositoryTest {
         void shouldSaveNewRouteWithCorrectValidityPeriodStartTime() {
             repository.insert(List.of(INPUT));
 
-            final OffsetDateTime validityPeriodStart = testRepository.findValidityPeriodStartTimestampAtFinnishTimeZone();
+            final LocalDate validityPeriodStart = testRepository.findValidityPeriodStartDate();
             Assertions.assertThat(validityPeriodStart)
                     .as(ROUTE_.VALIDITY_START.getName())
                     .isEqualTo(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE);
@@ -178,7 +166,7 @@ class TransmodelRouteRepositoryTest {
         void shouldSaveNewRouteWithCorrectValidityPeriodEndTime() {
             repository.insert(List.of(INPUT));
 
-            final OffsetDateTime validityPeriodEnd = testRepository.findValidityPeriodEndTimestampAtFinnishTimeZone();
+            final LocalDate validityPeriodEnd = testRepository.findValidityPeriodEndDate();
             Assertions.assertThat(validityPeriodEnd)
                     .as(ROUTE_.VALIDITY_END.getName())
                     .isEqualTo(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE);

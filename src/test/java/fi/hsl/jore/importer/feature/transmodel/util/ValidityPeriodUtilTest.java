@@ -6,13 +6,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.Optional;
 
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
-import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -22,8 +17,8 @@ class ValidityPeriodUtilTest {
     private static final LocalDate START_DAY = LocalDate.of(2021, 2, 1);
 
     @Nested
-    @DisplayName("Determine validity period start time")
-    class DetermineValidityPeriodStartTime {
+    @DisplayName("Determine validity period start day")
+    class DetermineValidityPeriodStartDay {
 
         @Nested
         @DisplayName("When the validity period doesn't have start day")
@@ -32,8 +27,8 @@ class ValidityPeriodUtilTest {
             @Test
             @DisplayName("Should return an empty optional")
             void shouldReturnEmptyOptional() {
-                final Optional<OffsetDateTime> startTime = ValidityPeriodUtil.constructValidityPeriodStartTime(Range.atMost(LocalDate.EPOCH));
-                assertThat(startTime).isEmpty();
+                final Optional<LocalDate> startDay = ValidityPeriodUtil.constructValidityPeriodStartDay(Range.atMost(LocalDate.EPOCH));
+                assertThat(startDay).isEmpty();
             }
         }
 
@@ -46,23 +41,19 @@ class ValidityPeriodUtilTest {
             class WhenStartDayIsIncludedInValidityPeriod {
 
                 private final Range<LocalDate> INPUT = Range.closed(START_DAY, END_DAY);
-                private final OffsetDateTime EXPECTED_START_TIME = offsetDateTimeFromLocalDateTime(LocalDateTime.of(
-                        START_DAY,
-                        OPERATING_DAY_START_TIME
-                ));
 
                 @Test
-                @DisplayName("Should return an optional which contains the start time")
-                void shouldReturnOptionalWhichContainsStartTime() {
-                    final Optional<OffsetDateTime> startTime = ValidityPeriodUtil.constructValidityPeriodStartTime(INPUT);
-                    assertThat(startTime).isNotEmpty();
+                @DisplayName("Should return an optional which contains the start day")
+                void shouldReturnOptionalWhichContainsStartDay() {
+                    final Optional<LocalDate> startDay = ValidityPeriodUtil.constructValidityPeriodStartDay(INPUT);
+                    assertThat(startDay).isNotEmpty();
                 }
 
                 @Test
-                @DisplayName("Should return the correct start time")
-                void shouldReturnCorrectStartTime() {
-                    final Optional<OffsetDateTime> startTime = ValidityPeriodUtil.constructValidityPeriodStartTime(INPUT);
-                    assertThat(startTime).contains(EXPECTED_START_TIME);
+                @DisplayName("Should return the correct start day")
+                void shouldReturnCorrectStartDay() {
+                    final Optional<LocalDate> startDay = ValidityPeriodUtil.constructValidityPeriodStartDay(INPUT);
+                    assertThat(startDay).contains(START_DAY);
                 }
             }
 
@@ -71,41 +62,37 @@ class ValidityPeriodUtilTest {
             class WhenStartDayIsExcludedFromValidityPeriod {
 
                 private final Range<LocalDate> INPUT = Range.open(START_DAY, END_DAY);
-                private final OffsetDateTime EXPECTED_START_TIME = offsetDateTimeFromLocalDateTime(LocalDateTime.of(
-                        LocalDate.of(2021, 2, 2),
-                        OPERATING_DAY_START_TIME
-                ));
 
                 @Test
-                @DisplayName("Should return an optional which contains the start time")
-                void shouldReturnOptionalWhichContainsStartTime() {
-                    final Optional<OffsetDateTime> startTime = ValidityPeriodUtil.constructValidityPeriodStartTime(INPUT);
-                    assertThat(startTime).isNotEmpty();
+                @DisplayName("Should return an optional which contains the start day")
+                void shouldReturnOptionalWhichContainsStartDay() {
+                    final Optional<LocalDate> startDay = ValidityPeriodUtil.constructValidityPeriodStartDay(INPUT);
+                    assertThat(startDay).isNotEmpty();
                 }
 
                 @Test
-                @DisplayName("Should return the correct start time")
-                void shouldReturnCorrectStartTime() {
-                    final Optional<OffsetDateTime> startTime = ValidityPeriodUtil.constructValidityPeriodStartTime(INPUT);
-                    assertThat(startTime).contains(EXPECTED_START_TIME);
+                @DisplayName("Should return the correct start day")
+                void shouldReturnCorrectStartDay() {
+                    final Optional<LocalDate> startDay = ValidityPeriodUtil.constructValidityPeriodStartDay(INPUT);
+                    assertThat(startDay).contains(START_DAY.plusDays(1));
                 }
             }
         }
     }
 
     @Nested
-    @DisplayName("Determine validity period end time")
-    class DetermineValidityPeriodEndTime {
+    @DisplayName("Determine validity period end day")
+    class DetermineValidityPeriodEndDay {
 
         @Nested
         @DisplayName("When the validity period doesn't have end day")
-        class WhenValidityPeriodDoesNotHavenEndDay {
+        class WhenValidityPeriodDoesNotHaveEndDay {
 
             @Test
             @DisplayName("Should return an empty optional")
             void shouldReturnEmptyOptional() {
-                final Optional<OffsetDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(Range.atLeast(LocalDate.EPOCH));
-                assertThat(endTime).isEmpty();
+                final Optional<LocalDate> endDay = ValidityPeriodUtil.constructValidityPeriodEndDay(Range.atLeast(LocalDate.EPOCH));
+                assertThat(endDay).isEmpty();
             }
         }
 
@@ -118,23 +105,19 @@ class ValidityPeriodUtilTest {
             class WhenEndDayIsIncludedInValidityPeriod {
 
                 private final Range<LocalDate> INPUT = Range.closed(START_DAY, END_DAY);
-                private final OffsetDateTime EXPECTED_END_TIME = offsetDateTimeFromLocalDateTime(LocalDateTime.of(
-                        LocalDate.of(2021, 3, 2),
-                        OPERATING_DAY_END_TIME
-                ));
 
                 @Test
-                @DisplayName("Should return an optional which contains the end time")
-                void shouldReturnOptionalWhichContainsEndTime() {
-                    final Optional<OffsetDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(INPUT);
-                    assertThat(endTime).isNotEmpty();
+                @DisplayName("Should return an optional which contains the end day")
+                void shouldReturnOptionalWhichContainsEndDay() {
+                    final Optional<LocalDate> endDay = ValidityPeriodUtil.constructValidityPeriodEndDay(INPUT);
+                    assertThat(endDay).isNotEmpty();
                 }
 
                 @Test
-                @DisplayName("Should return the correct end time")
-                void shouldReturnCorrectEndTime() {
-                    final Optional<OffsetDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(INPUT);
-                    assertThat(endTime).contains(EXPECTED_END_TIME);
+                @DisplayName("Should return the correct end day")
+                void shouldReturnCorrectEndDay() {
+                    final Optional<LocalDate> endDay = ValidityPeriodUtil.constructValidityPeriodEndDay(INPUT);
+                    assertThat(endDay).contains(END_DAY);
                 }
             }
 
@@ -143,23 +126,19 @@ class ValidityPeriodUtilTest {
             class WhenEndDayIsExcludedFromValidityPeriod {
 
                 private final Range<LocalDate> INPUT = Range.open(START_DAY, END_DAY);
-                private final OffsetDateTime EXPECTED_END_TIME = offsetDateTimeFromLocalDateTime(LocalDateTime.of(
-                        LocalDate.of(2021, 3, 1),
-                        OPERATING_DAY_END_TIME
-                ));
 
                 @Test
-                @DisplayName("Should return an optional which contains the end time")
-                void shouldReturnOptionalWhichContainsEndTime() {
-                    final Optional<OffsetDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(INPUT);
-                    assertThat(endTime).isNotEmpty();
+                @DisplayName("Should return an optional which contains the end day")
+                void shouldReturnOptionalWhichContainsEndDay() {
+                    final Optional<LocalDate> endDay = ValidityPeriodUtil.constructValidityPeriodEndDay(INPUT);
+                    assertThat(endDay).isNotEmpty();
                 }
 
                 @Test
-                @DisplayName("Should return the correct end time")
-                void shouldReturnCorrectEndTime() {
-                    final Optional<OffsetDateTime> endTime = ValidityPeriodUtil.constructValidityPeriodEndTime(INPUT);
-                    assertThat(endTime).contains(EXPECTED_END_TIME);
+                @DisplayName("Should return the correct end day")
+                void shouldReturnCorrectEndDay() {
+                    final Optional<LocalDate> endDay = ValidityPeriodUtil.constructValidityPeriodEndDay(INPUT);
+                    assertThat(endDay).contains(END_DAY.minusDays(1));
                 }
             }
         }

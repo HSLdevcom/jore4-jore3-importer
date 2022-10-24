@@ -4,7 +4,7 @@
 package fi.hsl.jore.jore4.jooq.route.tables;
 
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.jooq.Field;
@@ -60,12 +60,12 @@ public class Route extends TableImpl<Record> {
     /**
      * The column <code>route.route.validity_start</code>.
      */
-    public final TableField<Record, OffsetDateTime> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
+    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "");
 
     /**
      * The column <code>route.route.validity_end</code>.
      */
-    public final TableField<Record, OffsetDateTime> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
+    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "");
 
     /**
      * The column <code>route.route.priority</code>.

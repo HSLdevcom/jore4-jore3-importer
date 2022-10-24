@@ -13,12 +13,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_END_TIME;
-import static fi.hsl.jore.importer.TestConstants.OPERATING_DAY_START_TIME;
-import static fi.hsl.jore.importer.feature.transmodel.util.TimestampFactory.offsetDateTimeFromLocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LineExportProcessorTest {
@@ -35,14 +30,6 @@ class LineExportProcessorTest {
     private static final NetworkType NETWORK_TYPE_ROAD = NetworkType.ROAD;
     private static final TypeOfLine TYPE_OF_LINE = TypeOfLine.SPECIAL_NEEDS_BUS;
     private static final VehicleMode EXPECTED_PRIMARY_VEHICLE_MODE = VehicleMode.BUS;
-    private static final OffsetDateTime EXPECTED_VALIDITY_PERIOD_START_TIME = offsetDateTimeFromLocalDateTime(LocalDateTime.of(
-            VALID_DATE_RANGE_START,
-            OPERATING_DAY_START_TIME
-    ));
-    private static final OffsetDateTime EXPECTED_VALIDITY_PERIOD_END_TIME = offsetDateTimeFromLocalDateTime(LocalDateTime.of(
-            LocalDate.of(2005, 2, 2),
-            OPERATING_DAY_END_TIME
-    ));
 
     private static final int EXPECTED_PRIORITY = 10;
 
@@ -134,7 +121,7 @@ class LineExportProcessorTest {
         @DisplayName("Should return a line that has the correct validity period start time")
         void shouldReturnLineThatHasCorrectValidityPeriodStartTime() throws Exception {
             final TransmodelLine line = processor.process(INPUT);
-            assertThat(line.validityStart()).contains(EXPECTED_VALIDITY_PERIOD_START_TIME);
+            assertThat(line.validityStart()).contains(VALID_DATE_RANGE_START);
         }
 
         @Test
@@ -148,7 +135,7 @@ class LineExportProcessorTest {
         @DisplayName("Should return a line that has the correct validity period end time")
         void shouldReturnLineThatHasCorrectValidityPeriodEndTime() throws Exception {
             final TransmodelLine line = processor.process(INPUT);
-            assertThat(line.validityEnd()).contains(EXPECTED_VALIDITY_PERIOD_END_TIME);
+            assertThat(line.validityEnd()).contains(VALID_DATE_RANGE_END);
         }
 
         @Test
