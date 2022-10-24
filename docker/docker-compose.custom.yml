@@ -43,6 +43,6 @@ services:
 
   jore4-hasura:
     # pin compatible version of jore4 data model
-    image: "hsldevcom/jore4-hasura:hsl-fix-importer-issues--20220610-224ac9da7b96820af0eb4ba778c74be701e917b2"
+    image: "hsldevcom/jore4-hasura:hsl-fix-insert_scheduled_stop_point_with_vehicle_mode--20221102-b9340eb12b9d73480e7b7bf8d7d19f7c4c0f4e1d"
 networks:
     jore4:
