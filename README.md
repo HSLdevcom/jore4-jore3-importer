@@ -68,7 +68,7 @@ This project uses [the standard directory layout of Maven](https://maven.apache.
 However, the root directory of this repository contains four additional directories which are described in the following:
 
 * The _docker_ directory contains the custom Docker Compose file which allow you to override the configuration specified
-  in the [jore4-flux repository](https://github.com/HSLdevcom/jore4-flux).
+  in the [jore4-tools repository](https://github.com/HSLdevcom/jore4-tools).
 * The _images_ directory contains diagrams displayed on this README.
 * The _profiles_ directory contains the profile specific configuration files which are used to configure this application.
 * The _testing_ directory contains testing tools (essentially Python scripts) which ensure that the import job is working
