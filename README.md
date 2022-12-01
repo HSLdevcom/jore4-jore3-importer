@@ -359,7 +359,7 @@ them as environment variables.
 The following configuration properties are to be defined for each environment:
 
 | Config property            | Environment variable       | Secret name                | Example                                                                                 | Description                                                                    |
-|-----------------------00---|----------------------------|----------------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+|----------------------------|----------------------------|----------------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
 | -                          | SECRET_STORE_BASE_PATH     | -                          | /mnt/secrets-store                                                                      | Directory containing the docker secrets                                        |
 | source.db.url              | SOURCE_DB_URL              | source-db-url              | jdbc:sqlserver://localhost:1433;database=testsourcedb;applicationIntent=ReadOnly        | The jdbc url of the source JORE3 MSSQL database                                |
 |                            | SOURCE_DB_HOSTNAME         | source-db-hostname         | localhost                                                                               | The IP/hostname of the source database (if SOURCE_DB_URL is not set)           |
