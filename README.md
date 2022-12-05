@@ -28,6 +28,8 @@ $ curl -X POST http://localhost:8080/job/import/start/
 {"id":0,"batchStatus":"STARTING","exitCode":"UNKNOWN","exitDescription":null,"startTime":null,"endTime":null}
 ```
 
+Note: if using Docker environment, the port is `3004` (by default).
+
 ### Querying the Status of the Import Job
 
 If you want to query the status of the latest import job, you have to send a GET request to the path: `/job/import/status`.
@@ -444,6 +446,8 @@ If you want to create a package that can be used for deployment, you have run th
 ### Restoring a Jore 3 Database Dump to the testing Database
 
 If you want to restore a database dump from Jore 3 to the testing database, there is a script provided for it. Put the jore3 .bak file to the `jore3dump` directory and run `./apply-jore3-database-backup.sh jore3dump.bak`, where `jore3dump.bak` should be replaced with the name of the .bak file you want to apply.
+
+Some dump files can be found in [Google Drive](https://drive.google.com/drive/folders/1oTfv8vgM7nqg9Hkg5DkSoLTsc8MUAf-s).
 
 ### Taking a Database Dump From the Jore 4 Database
 
