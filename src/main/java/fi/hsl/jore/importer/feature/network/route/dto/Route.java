@@ -28,10 +28,13 @@ public interface Route
 
     Optional<UUID> journeyPatternTransmodelId();
 
+    Optional<Short> hiddenVariant();
+
     static Route of(final RoutePK pk,
                     final ExternalId externalId,
                     final LinePK line,
                     final String routeNumber,
+                    final Optional<Short> hiddenVariant,
                     final MultilingualString name,
                     final TimeRange systemTime) {
         return ImmutableRoute.builder()
@@ -39,6 +42,7 @@ public interface Route
                 .externalId(externalId)
                 .line(line)
                 .routeNumber(routeNumber)
+                .hiddenVariant(hiddenVariant)
                 .name(name)
                 .systemTime(systemTime)
                 .build();
@@ -50,6 +54,7 @@ public interface Route
                 ExternalId.of(record.getNetworkRouteExtId()),
                 LinePK.of(record.getNetworkLineId()),
                 record.getNetworkRouteNumber(),
+                Optional.ofNullable(record.getNetworkRouteHiddenVariant()),
                 converter.fromJson(record.getNetworkRouteName(), MultilingualString.class),
                 record.getNetworkRouteSysPeriod()
         );
@@ -61,6 +66,7 @@ public interface Route
                 ExternalId.of(record.getNetworkRouteExtId()),
                 LinePK.of(record.getNetworkLineId()),
                 record.getNetworkRouteNumber(),
+                Optional.ofNullable(record.getNetworkRouteHiddenVariant()),
                 converter.fromJson(record.getNetworkRouteName(), MultilingualString.class),
                 record.getNetworkRouteSysPeriod()
         );

@@ -16,7 +16,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -80,6 +80,12 @@ public class NetworkRoutesHistory extends TableImpl<NetworkRoutesHistoryRecord> 
      * <code>network.network_routes_history.network_route_sys_period</code>.
      */
     public final TableField<NetworkRoutesHistoryRecord, TimeRange> NETWORK_ROUTE_SYS_PERIOD = createField(DSL.name("network_route_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
+
+    /**
+     * The column
+     * <code>network.network_routes_history.network_route_hidden_variant</code>.
+     */
+    public final TableField<NetworkRoutesHistoryRecord, Short> NETWORK_ROUTE_HIDDEN_VARIANT = createField(DSL.name("network_route_hidden_variant"), SQLDataType.SMALLINT, this, "");
 
     private NetworkRoutesHistory(Name alias, Table<NetworkRoutesHistoryRecord> aliased) {
         this(alias, aliased, null);
@@ -148,11 +154,11 @@ public class NetworkRoutesHistory extends TableImpl<NetworkRoutesHistoryRecord> 
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<UUID, UUID, String, String, JSONB, TimeRange> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<UUID, UUID, String, String, JSONB, TimeRange, Short> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

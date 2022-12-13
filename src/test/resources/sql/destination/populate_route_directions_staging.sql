@@ -10,7 +10,7 @@ INSERT INTO network.network_route_directions_staging (
         network_route_direction_valid_date_range
 ) VALUES (
           '1001-2-20211004',
-          '1001',
+          '1001 3',
           'inbound',
           10700,
           '{"fi_FI": "Keskustori - Kaleva - Etelä-Hervanta", "sv_SE": "Central torget - Kaleva - Södra Hervanta"}',

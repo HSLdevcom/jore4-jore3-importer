@@ -18,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -111,8 +112,9 @@ class RouteImportRepositoryTest {
         class WhenStagingTableHasRows {
 
             private final UUID EXPECTED_NETWORK_LINE_ID = UUID.fromString("579db108-1f52-4364-9815-5f17c84ce3fb");
-            private final String EXPECTED_NETWORK_ROUTE_EXT_ID = "1001";
+            private final String EXPECTED_NETWORK_ROUTE_EXT_ID = "1001 3";
             private final String EXPECTED_NETWORK_ROUTE_NUMBER = "1";
+            private final Optional<Short> EXPECTED_NETWORK_ROUTE_HIDDEN_VARIANT = Optional.of((short) 3);
             private final String EXPECTED_FINNISH_ROUTE_NAME = "Keskustori - Etelä-Hervanta";
             private final String EXPECTED_SWEDISH_ROUTE_NAME = "Central torget - Södra Hervanta";
 
@@ -186,6 +188,10 @@ class RouteImportRepositoryTest {
                     softAssertions.assertThat(inserted.routeNumber())
                             .as("route number")
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_NUMBER);
+
+                    softAssertions.assertThat(inserted.hiddenVariant())
+                            .as("route hidden variant")
+                            .isEqualTo(EXPECTED_NETWORK_ROUTE_HIDDEN_VARIANT);
 
                     final String finnishRouteName = JoreLocaleUtil.getI18nString(inserted.name(), JoreLocaleUtil.FINNISH);
                     softAssertions.assertThat(finnishRouteName)

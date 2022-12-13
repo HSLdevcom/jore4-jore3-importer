@@ -16,7 +16,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -84,12 +84,18 @@ public class NetworkRoutesWithHistory extends TableImpl<NetworkRoutesWithHistory
      */
     public final TableField<NetworkRoutesWithHistoryRecord, TimeRange> NETWORK_ROUTE_SYS_PERIOD = createField(DSL.name("network_route_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\""), this, "", new TimeRangeBinding());
 
+    /**
+     * The column
+     * <code>network.network_routes_with_history.network_route_hidden_variant</code>.
+     */
+    public final TableField<NetworkRoutesWithHistoryRecord, Short> NETWORK_ROUTE_HIDDEN_VARIANT = createField(DSL.name("network_route_hidden_variant"), SQLDataType.SMALLINT, this, "");
+
     private NetworkRoutesWithHistory(Name alias, Table<NetworkRoutesWithHistoryRecord> aliased) {
         this(alias, aliased, null);
     }
 
     private NetworkRoutesWithHistory(Name alias, Table<NetworkRoutesWithHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_routes_with_history\" as  SELECT network_routes.network_route_id,\n    network_routes.network_line_id,\n    network_routes.network_route_ext_id,\n    network_routes.network_route_number,\n    network_routes.network_route_name,\n    network_routes.network_route_sys_period\n   FROM network.network_routes\nUNION ALL\n SELECT network_routes_history.network_route_id,\n    network_routes_history.network_line_id,\n    network_routes_history.network_route_ext_id,\n    network_routes_history.network_route_number,\n    network_routes_history.network_route_name,\n    network_routes_history.network_route_sys_period\n   FROM network.network_routes_history;"));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_routes_with_history\" as  SELECT network_routes.network_route_id,\n    network_routes.network_line_id,\n    network_routes.network_route_ext_id,\n    network_routes.network_route_number,\n    network_routes.network_route_name,\n    network_routes.network_route_sys_period,\n    network_routes.network_route_hidden_variant\n   FROM network.network_routes\nUNION ALL\n SELECT network_routes_history.network_route_id,\n    network_routes_history.network_line_id,\n    network_routes_history.network_route_ext_id,\n    network_routes_history.network_route_number,\n    network_routes_history.network_route_name,\n    network_routes_history.network_route_sys_period,\n    network_routes_history.network_route_hidden_variant\n   FROM network.network_routes_history;"));
     }
 
     /**
@@ -151,11 +157,11 @@ public class NetworkRoutesWithHistory extends TableImpl<NetworkRoutesWithHistory
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<UUID, UUID, String, String, JSONB, TimeRange> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<UUID, UUID, String, String, JSONB, TimeRange, Short> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }
