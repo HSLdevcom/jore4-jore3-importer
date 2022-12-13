@@ -20,7 +20,8 @@ public class RouteProcessor implements ItemProcessor<JrRoute, ImportableRoute> {
                 item.routeId().displayId(),
                 MultilingualString.empty()
                                   .with(JoreLocaleUtil.FINNISH, item.name())
-                                  .with(JoreLocaleUtil.SWEDISH, item.nameSwedish())
+                                  .with(JoreLocaleUtil.SWEDISH, item.nameSwedish()),
+                item.routeId().hiddenVariantValue()
         );
     }
 }
