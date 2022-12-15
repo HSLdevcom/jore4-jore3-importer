@@ -32,11 +32,14 @@ public interface TransmodelRoute {
 
     Optional<LocalDate> validityEnd();
 
+    Optional<Short> hiddenVariant();
+
     static TransmodelRoute of(final UUID routeId,
                               final MultilingualString description,
                               final TransmodelRouteDirection direction,
                               final UUID directionExtId,
                               final String label,
+                              final Optional<Short> hiddenVariant,
                               final UUID lineId,
                               final int priority,
                               final Optional<LocalDate> validityStart,
@@ -47,6 +50,7 @@ public interface TransmodelRoute {
                 .direction(direction)
                 .directionExtId(directionExtId)
                 .label(label)
+                .hiddenVariant(hiddenVariant)
                 .lineId(lineId)
                 .priority(priority)
                 .validityStart(validityStart)
