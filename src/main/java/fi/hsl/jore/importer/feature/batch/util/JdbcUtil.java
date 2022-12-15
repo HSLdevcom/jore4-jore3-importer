@@ -56,6 +56,17 @@ public final class JdbcUtil {
         return val.trim();
     }
 
+    public static Optional<Short> getOptionalShort(final ResultSet rs,
+                                                   final String column) throws SQLException {
+        final String val = rs.getString(column);
+        try {
+            return StringUtils.isBlank(val) ? Optional.empty() : Optional.of(Short.parseShort(val.trim()));
+        }
+        catch (final NumberFormatException ex) {
+            return Optional.empty();
+        }
+    }
+
     public static Optional<Long> getOptionalLong(final ResultSet rs,
                                                  final String column) throws SQLException {
         final String val = rs.getString(column);
