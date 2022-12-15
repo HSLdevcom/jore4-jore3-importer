@@ -32,6 +32,7 @@ public class RouteExportProcessor implements ItemProcessor<ExportableRoute, Tran
                 TransmodelRouteDirection.of(input.directionType()),
                 input.directionId(),
                 input.routeNumber(),
+                input.hiddenVariant(),
                 input.lineTransmodelId(),
                 DEFAULT_PRIORITY,
                 ValidityPeriodUtil.constructValidityPeriodStartDay(input.validDateRange().range()),

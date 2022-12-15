@@ -32,6 +32,7 @@ class TransmodelRouteRepositoryTest {
     private static final String FINNISH_NAME = "Keskustori - Etelä-Hervanta";
     private static final String SWEDISH_NAME = "Central torget - Södra Hervanta";
     private static final String LABEL = "30";
+    private static final Short HIDDEN_VARIANT = 2;
     private static final UUID LINE_ID = UUID.fromString("5aa7d9fc-2cf9-466d-8ac0-f442d60c261f");
     private static final int PRIORITY = 10;
     private static final TransmodelRouteDirection ROUTE_DIRECTION = TransmodelRouteDirection.INBOUND;
@@ -77,6 +78,7 @@ class TransmodelRouteRepositoryTest {
                 ROUTE_DIRECTION,
                 ROUTE_DIRECTION_ID,
                 LABEL,
+                Optional.of(HIDDEN_VARIANT),
                 LINE_ID,
                 PRIORITY,
                 Optional.of(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE),
@@ -128,6 +130,16 @@ class TransmodelRouteRepositoryTest {
                     .row()
                     .value(ROUTE_.LABEL.getName())
                     .isEqualTo(LABEL);
+        }
+
+        @Test
+        @DisplayName("Should save a new route with the correct hidden variant")
+        void shouldSaveNewRouteWithCorrectHiddenVariant() {
+            repository.insert(List.of(INPUT));
+            assertThat(targetTable)
+                    .row()
+                    .value(ROUTE_.VARIANT.getName())
+                    .isEqualTo(HIDDEN_VARIANT);
         }
 
         @Test

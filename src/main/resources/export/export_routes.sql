@@ -1,5 +1,6 @@
 SELECT r.network_route_name AS name,
        r.network_route_number AS route_number,
+       r.network_route_hidden_variant AS hidden_variant,
        rd.network_route_direction_id AS direction_id,
        rd.network_route_direction_type AS direction_type,
        l.network_line_transmodel_id AS line_transmodel_id,

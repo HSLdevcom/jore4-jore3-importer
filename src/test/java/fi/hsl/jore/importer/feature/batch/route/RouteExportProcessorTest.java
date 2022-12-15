@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 import static fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil.createMultilingualString;
@@ -26,6 +27,7 @@ class RouteExportProcessorTest {
     private static final String SWEDISH_NAME = "Central torget - Södra Hervanta";
     private static final UUID LINE_TRANSMODEL_ID = UUID.fromString("184b4710-9366-4500-aef3-39d03e95dde2");
     private static final String ROUTE_NUMBER = "30";
+    private static final Optional<Short> ROUTE_HIDDEN_VARIANT = Optional.of((short)1);
 
     private static final LocalDate VALIDITY_PERIOD_START_DAY = LocalDate.of(2021, 1, 1);
     private static final LocalDate VALIDITY_PERIOD_END_DAY = LocalDate.of(2022, 12, 31);
@@ -36,6 +38,7 @@ class RouteExportProcessorTest {
             createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
             LINE_TRANSMODEL_ID,
             ROUTE_NUMBER,
+            ROUTE_HIDDEN_VARIANT,
             DateRange.between(VALIDITY_PERIOD_START_DAY, VALIDITY_PERIOD_END_DAY)
     );
 
@@ -83,6 +86,13 @@ class RouteExportProcessorTest {
     void shouldReturnRouteWithCorrectLabel() throws Exception {
         final TransmodelRoute route = processor.process(INPUT);
         assertThat(route.label()).isEqualTo(ROUTE_NUMBER);
+    }
+
+    @Test
+    @DisplayName("Should return a route with the correct hidden variant when there is none")
+    void shouldReturnRouteWithCorrectHiddenVariantNull() throws Exception {
+        final TransmodelRoute route = processor.process(INPUT);
+        assertThat(route.hiddenVariant()).isEqualTo(ROUTE_HIDDEN_VARIANT);
     }
 
     @Test

@@ -38,12 +38,13 @@ public class TransmodelRouteRepository implements ITransmodelRouteRepository {
                                     ROUTE_.DESCRIPTION_I18N,
                                     ROUTE_.DIRECTION,
                                     ROUTE_.LABEL,
+                                    ROUTE_.VARIANT,
                                     ROUTE_.ON_LINE_ID,
                                     ROUTE_.PRIORITY,
                                     ROUTE_.VALIDITY_START,
                                     ROUTE_.VALIDITY_END
                             )
-                            .values((UUID) null, null, null, null, null, null, null, null, null)
+                            .values((UUID) null, null, null, null, null, null, null, null, null, null)
             );
 
             routes.forEach(route -> batch.bind(
@@ -52,6 +53,7 @@ public class TransmodelRouteRepository implements ITransmodelRouteRepository {
                     jsonbConverter.asJson(route.description()),
                     route.direction().getValue(),
                     route.label(),
+                    route.hiddenVariant().orElse(null),
                     route.lineId(),
                     route.priority(),
                     route.validityStart().orElse(null),
