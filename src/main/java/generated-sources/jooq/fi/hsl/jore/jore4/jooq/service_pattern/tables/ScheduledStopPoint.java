@@ -53,15 +53,7 @@ public class ScheduledStopPoint extends TableImpl<Record> {
      * <code>service_pattern.scheduled_stop_point.scheduled_stop_point_id</code>.
      * The ID of the scheduled stop point.
      */
-    public final TableField<Record, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID, this, "The ID of the scheduled stop point.");
-
-    /**
-     * The column <code>service_pattern.scheduled_stop_point.label</code>. The
-     * label is the short code that identifies the stop to the passengers. There
-     * can be at most one stop with the same label at a time. The label matches
-     * the GTFS stop_code.
-     */
-    public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB, this, "The label is the short code that identifies the stop to the passengers. There can be at most one stop with the same label at a time. The label matches the GTFS stop_code.");
+    public final TableField<Record, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "The ID of the scheduled stop point.");
 
     /**
      * The column
@@ -70,70 +62,63 @@ public class ScheduledStopPoint extends TableImpl<Record> {
      * stops this describes the location of the pole-mounted flag. A PostGIS
      * PointZ geography in EPSG:4326.
      */
-    public final TableField<Record, Point> MEASURED_LOCATION = createField(DSL.name("measured_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\""), this, "The measured location describes the physical location of the stop. For some stops this describes the location of the pole-mounted flag. A PostGIS PointZ geography in EPSG:4326.", new PointBinding());
+    public final TableField<Record, Point> MEASURED_LOCATION = createField(DSL.name("measured_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").nullable(false), this, "The measured location describes the physical location of the stop. For some stops this describes the location of the pole-mounted flag. A PostGIS PointZ geography in EPSG:4326.", new PointBinding());
 
     /**
      * The column
      * <code>service_pattern.scheduled_stop_point.located_on_infrastructure_link_id</code>.
      * The infrastructure link on which the stop is located.
      */
-    public final TableField<Record, UUID> LOCATED_ON_INFRASTRUCTURE_LINK_ID = createField(DSL.name("located_on_infrastructure_link_id"), SQLDataType.UUID, this, "The infrastructure link on which the stop is located.");
+    public final TableField<Record, UUID> LOCATED_ON_INFRASTRUCTURE_LINK_ID = createField(DSL.name("located_on_infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "The infrastructure link on which the stop is located.");
 
     /**
      * The column <code>service_pattern.scheduled_stop_point.direction</code>.
      * The direction(s) of traffic with respect to the digitization, i.e. the
-     * direction of the specified LineString.
+     * direction of the specified line string.
      */
-    public final TableField<Record, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB, this, "The direction(s) of traffic with respect to the digitization, i.e. the direction of the specified LineString.");
+    public final TableField<Record, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB.nullable(false), this, "The direction(s) of traffic with respect to the digitization, i.e. the direction of the specified line string.");
+
+    /**
+     * The column <code>service_pattern.scheduled_stop_point.label</code>. The
+     * label is the short code that identifies the stop to the passengers. There
+     * can be at most one stop with the same label at a time. The label matches
+     * the GTFS stop_code.
+     */
+    public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "The label is the short code that identifies the stop to the passengers. There can be at most one stop with the same label at a time. The label matches the GTFS stop_code.");
 
     /**
      * The column
-     * <code>service_pattern.scheduled_stop_point.relative_distance_from_infrastructure_link_start</code>.
-     * The relative distance of the stop from the start of the linestring along
-     * the infrastructure link. Regardless of the specified direction, this
-     * value is the distance from the beginning of the linestring. The distance
-     * is normalized to the closed interval [0, 1].
+     * <code>service_pattern.scheduled_stop_point.validity_start</code>. end of
+     * the route's operating date span in the route's local time
      */
-    public final TableField<Record, Double> RELATIVE_DISTANCE_FROM_INFRASTRUCTURE_LINK_START = createField(DSL.name("relative_distance_from_infrastructure_link_start"), SQLDataType.DOUBLE, this, "The relative distance of the stop from the start of the linestring along the infrastructure link. Regardless of the specified direction, this value is the distance from the beginning of the linestring. The distance is normalized to the closed interval [0, 1].");
-
-    /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
-     */
-    @Deprecated
-    public final TableField<Record, Object> CLOSEST_POINT_ON_INFRASTRUCTURE_LINK = createField(DSL.name("closest_point_on_infrastructure_link"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\""), this, "The point on the infrastructure link closest to measured_location. A PostGIS PointZ geography in EPSG:4326.");
+    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "end of the route's operating date span in the route's local time");
 
     /**
      * The column
-     * <code>service_pattern.scheduled_stop_point.validity_start</code>. The
-     * date when the stop becomes valid. If NULL, the stop has been always
-     * valid.
+     * <code>service_pattern.scheduled_stop_point.validity_end</code>. end of
+     * the operating date span in the scheduled stop point's local time
      */
-    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "The date when the stop becomes valid. If NULL, the stop has been always valid.");
-
-    /**
-     * The column
-     * <code>service_pattern.scheduled_stop_point.validity_end</code>. The date
-     * from which onwards the stop is no longer valid. If NULL, the stop will be
-     * always valid.
-     */
-    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "The date from which onwards the stop is no longer valid. If NULL, the stop will be always valid.");
+    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "end of the operating date span in the scheduled stop point's local time");
 
     /**
      * The column <code>service_pattern.scheduled_stop_point.priority</code>.
-     * The priority of the stop definition. The definition may be overridden by
-     * higher priority definitions.
      */
-    public final TableField<Record, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER, this, "The priority of the stop definition. The definition may be overridden by higher priority definitions.");
+    public final TableField<Record, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER.nullable(false), this, "");
+
+    /**
+     * The column
+     * <code>service_pattern.scheduled_stop_point.timing_place_id</code>.
+     * Optional reference to a TIMING PLACE. If NULL, the SCHEDULED STOP POINT
+     * is not used for timing.
+     */
+    public final TableField<Record, UUID> TIMING_PLACE_ID = createField(DSL.name("timing_place_id"), SQLDataType.UUID, this, "Optional reference to a TIMING PLACE. If NULL, the SCHEDULED STOP POINT is not used for timing.");
 
     private ScheduledStopPoint(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }
 
     private ScheduledStopPoint(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("The scheduled stop points: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:845 . Colloquially known as stops from the perspective of timetable planning."), TableOptions.view("create view \"scheduled_stop_point\" as  SELECT ssp.scheduled_stop_point_id,\n    ssp.label,\n    ssp.measured_location,\n    ssp.located_on_infrastructure_link_id,\n    ssp.direction,\n    internal_utils.st_linelocatepoint(il.shape, ssp.measured_location) AS relative_distance_from_infrastructure_link_start,\n    internal_utils.st_closestpoint(il.shape, ssp.measured_location) AS closest_point_on_infrastructure_link,\n    ssp.validity_start,\n    ssp.validity_end,\n    ssp.priority\n   FROM (internal_service_pattern.scheduled_stop_point ssp\n     JOIN infrastructure_network.infrastructure_link il ON ((ssp.located_on_infrastructure_link_id = il.infrastructure_link_id)));"));
+        super(alias, null, aliased, parameters, DSL.comment("The scheduled stop points: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:845 . Colloquially known as stops from the perspective of timetable planning."), TableOptions.table());
     }
 
     /**
