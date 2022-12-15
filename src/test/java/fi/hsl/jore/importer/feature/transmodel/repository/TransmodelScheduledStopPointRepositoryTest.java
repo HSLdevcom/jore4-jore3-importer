@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static fi.hsl.jore.jore4.jooq.internal_service_pattern.Tables.SCHEDULED_STOP_POINT;
+import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.SCHEDULED_STOP_POINT;
 import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -58,7 +58,7 @@ class TransmodelScheduledStopPointRepositoryTest {
                                                @Qualifier("jore4DataSource") final DataSource targetDataSource) {
         this.jdbcTemplate = new JdbcTemplate(targetDataSource);
         this.repository = repository;
-        this.scheduledStopPointTargetTable = new Table(targetDataSource, "internal_service_pattern.scheduled_stop_point");
+        this.scheduledStopPointTargetTable = new Table(targetDataSource, "service_pattern.scheduled_stop_point");
         this.testRepository = new TransmodelValidityPeriodTestRepository(targetDataSource,
                 ValidityPeriodTargetTable.SCHEDULED_STOP_POINT
         );

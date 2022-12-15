@@ -1,14 +1,14 @@
 BEGIN;
 
-INSERT INTO internal_service_pattern.scheduled_stop_point_invariant (label)
+INSERT INTO service_pattern.scheduled_stop_point_invariant (label)
 VALUES ('H1234')
 ON CONFLICT DO NOTHING;
 
-INSERT INTO internal_service_pattern.scheduled_stop_point_invariant (label)
+INSERT INTO service_pattern.scheduled_stop_point_invariant (label)
 VALUES ('H4321')
 ON CONFLICT DO NOTHING;
 
-INSERT INTO internal_service_pattern.scheduled_stop_point (
+INSERT INTO service_pattern.scheduled_stop_point (
         scheduled_stop_point_id,
         measured_location,
         located_on_infrastructure_link_id,
@@ -29,7 +29,7 @@ VALUES (
         10
 );
 
-INSERT INTO internal_service_pattern.scheduled_stop_point (
+INSERT INTO service_pattern.scheduled_stop_point (
         scheduled_stop_point_id,
         measured_location,
         located_on_infrastructure_link_id,

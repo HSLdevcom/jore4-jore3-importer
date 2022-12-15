@@ -49,7 +49,8 @@ public class Route extends SchemaImpl {
     public final Line LINE = Line.LINE;
 
     /**
-     * The table <code>route.route</code>.
+     * The routes from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
      */
     public final fi.hsl.jore.jore4.jooq.route.tables.Route ROUTE_ = fi.hsl.jore.jore4.jooq.route.tables.Route.ROUTE_;
 

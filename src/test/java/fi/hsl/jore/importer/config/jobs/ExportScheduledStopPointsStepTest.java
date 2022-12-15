@@ -61,7 +61,8 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     private static final List<String> STEPS = List.of("exportScheduledStopPointsStep");
 
     private static final fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints IMPORTER_SCHEDULED_STOP_POINT = fi.hsl.jore.importer.jooq.network.Tables.SCHEDULED_STOP_POINTS;
-    private static final fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.ScheduledStopPoint JORE4_SCHEDULED_STOP_POINT = fi.hsl.jore.jore4.jooq.internal_service_pattern.Tables.SCHEDULED_STOP_POINT;
+    private static final fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPoint JORE4_SCHEDULED_STOP_POINT = fi.hsl.jore.jore4.jooq.service_pattern.Tables.SCHEDULED_STOP_POINT;
+
 
     private final JdbcTemplate jdbcTemplate;
     private final Table importerTargetTable;

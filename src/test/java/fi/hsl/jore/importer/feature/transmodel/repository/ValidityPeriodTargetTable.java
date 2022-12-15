@@ -8,7 +8,7 @@ public enum ValidityPeriodTargetTable {
 
     LINE("route.line"),
     ROUTE("route.route"),
-    SCHEDULED_STOP_POINT("internal_service_pattern.scheduled_stop_point");
+    SCHEDULED_STOP_POINT("service_pattern.scheduled_stop_point");
 
     private final String tableName;
 

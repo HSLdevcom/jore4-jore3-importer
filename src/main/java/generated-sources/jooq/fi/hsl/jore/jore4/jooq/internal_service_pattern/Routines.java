@@ -4,18 +4,12 @@
 package fi.hsl.jore.jore4.jooq.internal_service_pattern;
 
 
-import fi.hsl.jore.jore4.jooq.internal_service_pattern.routines.DeleteScheduledStopPointLabel;
-import fi.hsl.jore.jore4.jooq.internal_service_pattern.routines.InsertScheduledStopPointLabel;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.routines.InsertScheduledStopPointWithVehicleMode;
-import fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 import org.jooq.Configuration;
-import org.jooq.Field;
-import org.jooq.Record;
-import org.jooq.Result;
 import org.locationtech.jts.geom.Point;
 
 
@@ -25,34 +19,6 @@ import org.locationtech.jts.geom.Point;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Routines {
-
-    /**
-     * Call
-     * <code>internal_service_pattern.delete_scheduled_stop_point_label</code>
-     */
-    public static void deleteScheduledStopPointLabel(
-          Configuration configuration
-        , String oldLabel
-    ) {
-        DeleteScheduledStopPointLabel p = new DeleteScheduledStopPointLabel();
-        p.setOldLabel(oldLabel);
-
-        p.execute(configuration);
-    }
-
-    /**
-     * Call
-     * <code>internal_service_pattern.insert_scheduled_stop_point_label</code>
-     */
-    public static void insertScheduledStopPointLabel(
-          Configuration configuration
-        , String newLabel
-    ) {
-        InsertScheduledStopPointLabel p = new InsertScheduledStopPointLabel();
-        p.setNewLabel(newLabel);
-
-        p.execute(configuration);
-    }
 
     /**
      * Call
@@ -82,99 +48,5 @@ public class Routines {
         p.setSupportedVehicleMode(supportedVehicleMode);
 
         p.execute(configuration);
-    }
-
-    /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
-     */
-    @Deprecated
-    public static Result<Record> getScheduledStopPointsWithNew(
-          Configuration configuration
-        , UUID replaceScheduledStopPointId
-        , UUID newScheduledStopPointId
-        , UUID newLocatedOnInfrastructureLinkId
-        , Object newMeasuredLocation
-        , String newDirection
-        , String newLabel
-        , LocalDate newValidityStart
-        , LocalDate newValidityEnd
-        , Integer newPriority
-    ) {
-        return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
-              replaceScheduledStopPointId
-            , newScheduledStopPointId
-            , newLocatedOnInfrastructureLinkId
-            , newMeasuredLocation
-            , newDirection
-            , newLabel
-            , newValidityStart
-            , newValidityEnd
-            , newPriority
-        )).fetch();
-    }
-
-    /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
-     */
-    @Deprecated
-    public static GetScheduledStopPointsWithNew getScheduledStopPointsWithNew(
-          UUID replaceScheduledStopPointId
-        , UUID newScheduledStopPointId
-        , UUID newLocatedOnInfrastructureLinkId
-        , Object newMeasuredLocation
-        , String newDirection
-        , String newLabel
-        , LocalDate newValidityStart
-        , LocalDate newValidityEnd
-        , Integer newPriority
-    ) {
-        return fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
-            replaceScheduledStopPointId,
-            newScheduledStopPointId,
-            newLocatedOnInfrastructureLinkId,
-            newMeasuredLocation,
-            newDirection,
-            newLabel,
-            newValidityStart,
-            newValidityEnd,
-            newPriority
-        );
-    }
-
-    /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
-     */
-    @Deprecated
-    public static GetScheduledStopPointsWithNew getScheduledStopPointsWithNew(
-          Field<UUID> replaceScheduledStopPointId
-        , Field<UUID> newScheduledStopPointId
-        , Field<UUID> newLocatedOnInfrastructureLinkId
-        , Field<Object> newMeasuredLocation
-        , Field<String> newDirection
-        , Field<String> newLabel
-        , Field<LocalDate> newValidityStart
-        , Field<LocalDate> newValidityEnd
-        , Field<Integer> newPriority
-    ) {
-        return fi.hsl.jore.jore4.jooq.internal_service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
-            replaceScheduledStopPointId,
-            newScheduledStopPointId,
-            newLocatedOnInfrastructureLinkId,
-            newMeasuredLocation,
-            newDirection,
-            newLabel,
-            newValidityStart,
-            newValidityEnd,
-            newPriority
-        );
     }
 }
