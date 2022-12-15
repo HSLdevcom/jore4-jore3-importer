@@ -56,6 +56,39 @@ public final class JdbcUtil {
         return val.trim();
     }
 
+    /**
+     * A utility for parsing a nullable Short value from ResultSet.
+     *
+     * NOTE: if the target field has an unexpected number format that would cause an exception when parsing, en empty value is returned instead.
+     * Thus, it is the caller's responsibility to ensure the field is in correct format.
+     *
+     * @param rs the ResultSet to read the data from
+     * @param column name of the column to read
+     * @return An Optional with the value of the field as Short, or empty if field was null or had an incorrect number format.
+     * @throws SQLException
+     */
+    public static Optional<Short> getOptionalShort(final ResultSet rs,
+                                                   final String column) throws SQLException {
+        final String val = rs.getString(column);
+        try {
+            return StringUtils.isBlank(val) ? Optional.empty() : Optional.of(Short.parseShort(val.trim()));
+        }
+        catch (final NumberFormatException ex) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * A utility for parsing a nullable Long value from ResultSet.
+     *
+     * NOTE: if the target field has an unexpected number format that would cause an exception when parsing, en empty value is returned instead.
+     * Thus, it is the caller's responsibility to ensure the field is in correct format.
+     *
+     * @param rs the ResultSet to read the data from
+     * @param column name of the column to read
+     * @return An Optional with the value of the field as Long, or empty if field was null or had an incorrect number format.
+     * @throws SQLException
+     */
     public static Optional<Long> getOptionalLong(final ResultSet rs,
                                                  final String column) throws SQLException {
         final String val = rs.getString(column);

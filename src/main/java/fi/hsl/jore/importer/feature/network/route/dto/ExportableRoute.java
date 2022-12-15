@@ -6,6 +6,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.network.direction_type.field.DirectionType;
 import org.immutables.value.Value;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -25,6 +26,8 @@ public interface ExportableRoute {
 
     String routeNumber();
 
+    Optional<Short> hiddenVariant();
+
     DateRange validDateRange();
 
     static ExportableRoute of(final UUID directionId,
@@ -32,6 +35,7 @@ public interface ExportableRoute {
                               final MultilingualString name,
                               final UUID lineTransmodelId,
                               final String routeNumber,
+                              final Optional<Short> hiddenVariant,
                               final DateRange  validDateRange) {
         return ImmutableExportableRoute.builder()
                 .directionId(directionId)
@@ -39,6 +43,7 @@ public interface ExportableRoute {
                 .name(name)
                 .lineTransmodelId(lineTransmodelId)
                 .routeNumber(routeNumber)
+                .hiddenVariant(hiddenVariant)
                 .validDateRange(validDateRange)
                 .build();
     }
