@@ -202,4 +202,18 @@ public abstract class EncodedIdentifier {
 
         return result.toString();
     }
+
+    /**
+     * The value of the hidden variant, if any.
+     *
+     * @return The hidden variant of the route, or null if one does not exist..
+     */
+    public Optional<Short> hiddenVariantValue() {
+        // The hidden variant type in Jore 4 DB is nullable smallint, so return it in matching format already.
+        if (hiddenVariantB()) {
+            return Optional.of(Short.parseShort(variantB().get().toString()));
+        } else {
+            return Optional.empty();
+        }
+    }
 }
