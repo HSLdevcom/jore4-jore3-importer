@@ -51,15 +51,15 @@ public class RouteImportRepository
                                                            STAGING_TABLE.NETWORK_ROUTE_EXT_ID,
                                                            STAGING_TABLE.NETWORK_LINE_EXT_ID,
                                                            STAGING_TABLE.NETWORK_ROUTE_NUMBER,
-                                                           STAGING_TABLE.NETWORK_ROUTE_NAME,
-                                                           STAGING_TABLE.NETWORK_ROUTE_HIDDEN_VARIANT)
+                                                           STAGING_TABLE.NETWORK_ROUTE_HIDDEN_VARIANT,
+                                                           STAGING_TABLE.NETWORK_ROUTE_NAME)
                                                .values((String) null, null, null, null, null));
 
         routes.forEach(route -> batch.bind(route.externalId().value(),
                                            route.lineId().value(),
                                            route.routeNumber(),
-                                           jsonbConverter.asJson(route.name()),
-                                           route.routeHiddenVariant().orElse(null)
+                                           route.routeHiddenVariant().orElse(null),
+                                           jsonbConverter.asJson(route.name())
         ));
 
         batch.execute();
@@ -107,13 +107,13 @@ public class RouteImportRepository
                  .columns(TARGET_TABLE.NETWORK_ROUTE_EXT_ID,
                           TARGET_TABLE.NETWORK_LINE_ID,
                           TARGET_TABLE.NETWORK_ROUTE_NUMBER,
-                          TARGET_TABLE.NETWORK_ROUTE_NAME,
-                          TARGET_TABLE.NETWORK_ROUTE_HIDDEN_VARIANT)
+                          TARGET_TABLE.NETWORK_ROUTE_HIDDEN_VARIANT,
+                          TARGET_TABLE.NETWORK_ROUTE_NAME)
                  .select(db.select(STAGING_TABLE.NETWORK_ROUTE_EXT_ID,
                                    LINES_TABLE.NETWORK_LINE_ID,
                                    STAGING_TABLE.NETWORK_ROUTE_NUMBER,
-                                   STAGING_TABLE.NETWORK_ROUTE_NAME,
-                                   STAGING_TABLE.NETWORK_ROUTE_HIDDEN_VARIANT)
+                                   STAGING_TABLE.NETWORK_ROUTE_HIDDEN_VARIANT,
+                                   STAGING_TABLE.NETWORK_ROUTE_NAME)
                            .from(STAGING_TABLE)
                            .leftJoin(LINES_TABLE).on(LINES_TABLE.NETWORK_LINE_EXT_ID.eq(STAGING_TABLE.NETWORK_LINE_EXT_ID))
                            .whereNotExists(selectOne()
