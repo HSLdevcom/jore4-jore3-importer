@@ -18,8 +18,7 @@ public interface ImportableRoute
     static ImportableRoute of(final ExternalId externalId,
                               final ExternalId lineId,
                               final String routeNumber,
-                              final MultilingualString name,
-                              final Optional<Short> routeHiddenVariant) {
+                              final Optional<Short> routeHiddenVariant, final MultilingualString name) {
         return ImmutableImportableRoute.builder()
                                        .externalId(externalId)
                                        .lineId(lineId)
