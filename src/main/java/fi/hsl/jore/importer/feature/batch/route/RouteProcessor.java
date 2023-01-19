@@ -18,10 +18,10 @@ public class RouteProcessor implements ItemProcessor<JrRoute, ImportableRoute> {
                 ExternalIdUtil.forRoute(item),
                 ExternalIdUtil.forLine(item.fkLine()),
                 item.routeId().displayId(),
+                item.routeId().hiddenVariantValue(),
                 MultilingualString.empty()
                                   .with(JoreLocaleUtil.FINNISH, item.name())
-                                  .with(JoreLocaleUtil.SWEDISH, item.nameSwedish()),
-                item.routeId().hiddenVariantValue()
+                                  .with(JoreLocaleUtil.SWEDISH, item.nameSwedish())
         );
     }
 }
