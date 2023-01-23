@@ -84,17 +84,15 @@ public class Route extends TableImpl<Record> {
 
     /**
      * The column <code>route.route.label</code>. The label of the route
-     * definition, label, variant and direction together are unique for a
-     * certain priority and validity period.
+     * definition.
      */
-    public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "The label of the route definition, label, variant and direction together are unique for a certain priority and validity period.");
+    public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "The label of the route definition.");
 
     /**
      * The column <code>route.route.direction</code>. The direction of the route
-     * definition, label, variant and direction together are unique for a
-     * certain priority and validity period.
+     * definition.
      */
-    public final TableField<Record, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB.nullable(false), this, "The direction of the route definition, label, variant and direction together are unique for a certain priority and validity period.");
+    public final TableField<Record, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB.nullable(false), this, "The direction of the route definition.");
 
     /**
      * The column <code>route.route.name_i18n</code>.
@@ -123,10 +121,16 @@ public class Route extends TableImpl<Record> {
 
     /**
      * The column <code>route.route.variant</code>. The variant for route
-     * definition, label, variant and direction together are unique for a
-     * certain priority and validity period.
+     * definition.
      */
-    public final TableField<Record, Short> VARIANT = createField(DSL.name("variant"), SQLDataType.SMALLINT, this, "The variant for route definition, label, variant and direction together are unique for a certain priority and validity period.");
+    public final TableField<Record, Short> VARIANT = createField(DSL.name("variant"), SQLDataType.SMALLINT, this, "The variant for route definition.");
+
+    /**
+     * The column <code>route.route.unique_label</code>. Derived from label and
+     * variant. Routes are unique for each unique label for a certain direction,
+     * priority and validity period
+     */
+    public final TableField<Record, String> UNIQUE_LABEL = createField(DSL.name("unique_label"), SQLDataType.CLOB, this, "Derived from label and variant. Routes are unique for each unique label for a certain direction, priority and validity period");
 
     private Route(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
