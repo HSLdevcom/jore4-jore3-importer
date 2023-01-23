@@ -5,6 +5,12 @@ package fi.hsl.jore.jore4.jooq.service_pattern;
 
 
 import fi.hsl.jore.jore4.jooq.DefaultCatalog;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.DistanceBetweenStopsCalculation;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.FindEffectiveScheduledStopPointsInJourneyPattern;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.FindScheduledStopPointLocationsInJourneyPattern;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsByRoutes;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPattern;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPatterns;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetScheduledStopPointsWithNew;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPoint;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPointInvariant;
@@ -36,6 +42,292 @@ public class ServicePattern extends SchemaImpl {
      * The reference instance of <code>service_pattern</code>
      */
     public static final ServicePattern SERVICE_PATTERN = new ServicePattern();
+
+    /**
+     * A dummy table that models the results of calculating the lengths of stop
+     * intervals from the given journey patterns. The table exists due to the
+     * limitations of Hasura and there is no intention to insert anything to it.
+     */
+    public final DistanceBetweenStopsCalculation DISTANCE_BETWEEN_STOPS_CALCULATION = DistanceBetweenStopsCalculation.DISTANCE_BETWEEN_STOPS_CALCULATION;
+
+    /**
+     * The table
+     * <code>service_pattern.find_effective_scheduled_stop_points_in_journey_pattern</code>.
+     */
+    public final FindEffectiveScheduledStopPointsInJourneyPattern FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN = FindEffectiveScheduledStopPointsInJourneyPattern.FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN;
+
+    /**
+     * Call
+     * <code>service_pattern.find_effective_scheduled_stop_points_in_journey_pattern</code>.
+     */
+    public static Result<Record> FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN(
+          Configuration configuration
+        , UUID filterJourneyPatternId
+        , LocalDate observationDate
+        , Boolean includeDraftStops
+    ) {
+        return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.service_pattern.tables.FindEffectiveScheduledStopPointsInJourneyPattern.FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN.call(
+              filterJourneyPatternId
+            , observationDate
+            , includeDraftStops
+        )).fetch();
+    }
+
+    /**
+     * Get
+     * <code>service_pattern.find_effective_scheduled_stop_points_in_journey_pattern</code>
+     * as a table.
+     */
+    public static FindEffectiveScheduledStopPointsInJourneyPattern FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN(
+          UUID filterJourneyPatternId
+        , LocalDate observationDate
+        , Boolean includeDraftStops
+    ) {
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.FindEffectiveScheduledStopPointsInJourneyPattern.FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN.call(
+            filterJourneyPatternId,
+            observationDate,
+            includeDraftStops
+        );
+    }
+
+    /**
+     * Get
+     * <code>service_pattern.find_effective_scheduled_stop_points_in_journey_pattern</code>
+     * as a table.
+     */
+    public static FindEffectiveScheduledStopPointsInJourneyPattern FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN(
+          Field<UUID> filterJourneyPatternId
+        , Field<LocalDate> observationDate
+        , Field<Boolean> includeDraftStops
+    ) {
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.FindEffectiveScheduledStopPointsInJourneyPattern.FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN.call(
+            filterJourneyPatternId,
+            observationDate,
+            includeDraftStops
+        );
+    }
+
+    /**
+     * The table
+     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>.
+     */
+    public final FindScheduledStopPointLocationsInJourneyPattern FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN = FindScheduledStopPointLocationsInJourneyPattern.FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN;
+
+    /**
+     * Call
+     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>.
+     */
+    public static Result<Record> FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN(
+          Configuration configuration
+        , UUID filterJourneyPatternId
+        , LocalDate observationDate
+        , Boolean includeDraftStops
+    ) {
+        return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.service_pattern.tables.FindScheduledStopPointLocationsInJourneyPattern.FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN.call(
+              filterJourneyPatternId
+            , observationDate
+            , includeDraftStops
+        )).fetch();
+    }
+
+    /**
+     * Get
+     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>
+     * as a table.
+     */
+    public static FindScheduledStopPointLocationsInJourneyPattern FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN(
+          UUID filterJourneyPatternId
+        , LocalDate observationDate
+        , Boolean includeDraftStops
+    ) {
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.FindScheduledStopPointLocationsInJourneyPattern.FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN.call(
+            filterJourneyPatternId,
+            observationDate,
+            includeDraftStops
+        );
+    }
+
+    /**
+     * Get
+     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>
+     * as a table.
+     */
+    public static FindScheduledStopPointLocationsInJourneyPattern FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN(
+          Field<UUID> filterJourneyPatternId
+        , Field<LocalDate> observationDate
+        , Field<Boolean> includeDraftStops
+    ) {
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.FindScheduledStopPointLocationsInJourneyPattern.FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN.call(
+            filterJourneyPatternId,
+            observationDate,
+            includeDraftStops
+        );
+    }
+
+    /**
+     * The table
+     * <code>service_pattern.get_distances_between_stop_points_by_routes</code>.
+     */
+    public final GetDistancesBetweenStopPointsByRoutes GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES = GetDistancesBetweenStopPointsByRoutes.GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES;
+
+    /**
+     * Call
+     * <code>service_pattern.get_distances_between_stop_points_by_routes</code>.
+     */
+    public static Result<Record> GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES(
+          Configuration configuration
+        , UUID[] routeIds
+        , LocalDate observationDate
+    ) {
+        return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsByRoutes.GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES.call(
+              routeIds
+            , observationDate
+        )).fetch();
+    }
+
+    /**
+     * Get
+     * <code>service_pattern.get_distances_between_stop_points_by_routes</code>
+     * as a table.
+     */
+    public static GetDistancesBetweenStopPointsByRoutes GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES(
+          UUID[] routeIds
+        , LocalDate observationDate
+    ) {
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsByRoutes.GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES.call(
+            routeIds,
+            observationDate
+        );
+    }
+
+    /**
+     * Get
+     * <code>service_pattern.get_distances_between_stop_points_by_routes</code>
+     * as a table.
+     */
+    public static GetDistancesBetweenStopPointsByRoutes GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES(
+          Field<UUID[]> routeIds
+        , Field<LocalDate> observationDate
+    ) {
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsByRoutes.GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES.call(
+            routeIds,
+            observationDate
+        );
+    }
+
+    /**
+     * The table
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>.
+     */
+    public final GetDistancesBetweenStopPointsInJourneyPattern GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN = GetDistancesBetweenStopPointsInJourneyPattern.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN;
+
+    /**
+     * Call
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>.
+     */
+    public static Result<Record> GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN(
+          Configuration configuration
+        , UUID journeyPatternId
+        , LocalDate observationDate
+        , Boolean includeDraftStops
+    ) {
+        return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPattern.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN.call(
+              journeyPatternId
+            , observationDate
+            , includeDraftStops
+        )).fetch();
+    }
+
+    /**
+     * Get
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>
+     * as a table.
+     */
+    public static GetDistancesBetweenStopPointsInJourneyPattern GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN(
+          UUID journeyPatternId
+        , LocalDate observationDate
+        , Boolean includeDraftStops
+    ) {
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPattern.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN.call(
+            journeyPatternId,
+            observationDate,
+            includeDraftStops
+        );
+    }
+
+    /**
+     * Get
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>
+     * as a table.
+     */
+    public static GetDistancesBetweenStopPointsInJourneyPattern GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN(
+          Field<UUID> journeyPatternId
+        , Field<LocalDate> observationDate
+        , Field<Boolean> includeDraftStops
+    ) {
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPattern.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN.call(
+            journeyPatternId,
+            observationDate,
+            includeDraftStops
+        );
+    }
+
+    /**
+     * The table
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_patterns</code>.
+     */
+    public final GetDistancesBetweenStopPointsInJourneyPatterns GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS = GetDistancesBetweenStopPointsInJourneyPatterns.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS;
+
+    /**
+     * Call
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_patterns</code>.
+     */
+    public static Result<Record> GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS(
+          Configuration configuration
+        , UUID[] journeyPatternIds
+        , LocalDate observationDate
+        , Boolean includeDraftStops
+    ) {
+        return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPatterns.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS.call(
+              journeyPatternIds
+            , observationDate
+            , includeDraftStops
+        )).fetch();
+    }
+
+    /**
+     * Get
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_patterns</code>
+     * as a table.
+     */
+    public static GetDistancesBetweenStopPointsInJourneyPatterns GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS(
+          UUID[] journeyPatternIds
+        , LocalDate observationDate
+        , Boolean includeDraftStops
+    ) {
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPatterns.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS.call(
+            journeyPatternIds,
+            observationDate,
+            includeDraftStops
+        );
+    }
+
+    /**
+     * Get
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_patterns</code>
+     * as a table.
+     */
+    public static GetDistancesBetweenStopPointsInJourneyPatterns GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS(
+          Field<UUID[]> journeyPatternIds
+        , Field<LocalDate> observationDate
+        , Field<Boolean> includeDraftStops
+    ) {
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPatterns.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS.call(
+            journeyPatternIds,
+            observationDate,
+            includeDraftStops
+        );
+    }
 
     /**
      * The table
@@ -170,6 +462,12 @@ public class ServicePattern extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
+            DistanceBetweenStopsCalculation.DISTANCE_BETWEEN_STOPS_CALCULATION,
+            FindEffectiveScheduledStopPointsInJourneyPattern.FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN,
+            FindScheduledStopPointLocationsInJourneyPattern.FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN,
+            GetDistancesBetweenStopPointsByRoutes.GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES,
+            GetDistancesBetweenStopPointsInJourneyPattern.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN,
+            GetDistancesBetweenStopPointsInJourneyPatterns.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS,
             GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW,
             ScheduledStopPoint.SCHEDULED_STOP_POINT,
             ScheduledStopPointInvariant.SCHEDULED_STOP_POINT_INVARIANT,

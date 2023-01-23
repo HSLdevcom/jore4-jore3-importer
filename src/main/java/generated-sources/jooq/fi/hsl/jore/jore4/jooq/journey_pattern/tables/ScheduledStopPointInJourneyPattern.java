@@ -62,10 +62,11 @@ public class ScheduledStopPointInJourneyPattern extends TableImpl<Record> {
 
     /**
      * The column
-     * <code>journey_pattern.scheduled_stop_point_in_journey_pattern.is_timing_point</code>.
-     * Is this scheduled stop point a timing point?
+     * <code>journey_pattern.scheduled_stop_point_in_journey_pattern.is_used_as_timing_point</code>.
+     * Is this scheduled stop point used as a timing point in the journey
+     * pattern?
      */
-    public final TableField<Record, Boolean> IS_TIMING_POINT = createField(DSL.name("is_timing_point"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "Is this scheduled stop point a timing point?");
+    public final TableField<Record, Boolean> IS_USED_AS_TIMING_POINT = createField(DSL.name("is_used_as_timing_point"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "Is this scheduled stop point used as a timing point in the journey pattern?");
 
     /**
      * The column
@@ -91,6 +92,22 @@ public class ScheduledStopPointInJourneyPattern extends TableImpl<Record> {
      * <code>journey_pattern.scheduled_stop_point_in_journey_pattern.scheduled_stop_point_label</code>.
      */
     public final TableField<Record, String> SCHEDULED_STOP_POINT_LABEL = createField(DSL.name("scheduled_stop_point_label"), SQLDataType.CLOB.nullable(false), this, "");
+
+    /**
+     * The column
+     * <code>journey_pattern.scheduled_stop_point_in_journey_pattern.is_loading_time_allowed</code>.
+     * Is adding loading time to this scheduled stop point in the journey
+     * pattern allowed?
+     */
+    public final TableField<Record, Boolean> IS_LOADING_TIME_ALLOWED = createField(DSL.name("is_loading_time_allowed"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "Is adding loading time to this scheduled stop point in the journey pattern allowed?");
+
+    /**
+     * The column
+     * <code>journey_pattern.scheduled_stop_point_in_journey_pattern.is_regulated_timing_point</code>.
+     * Is this stop point passing time regulated so that it cannot be passed
+     * before scheduled time?
+     */
+    public final TableField<Record, Boolean> IS_REGULATED_TIMING_POINT = createField(DSL.name("is_regulated_timing_point"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "Is this stop point passing time regulated so that it cannot be passed before scheduled time?");
 
     private ScheduledStopPointInJourneyPattern(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);

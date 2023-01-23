@@ -47,12 +47,12 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
 
     private static final String EXPECTED_FIRST_SCHEDULED_STOP_POINT_LABEL = "H1234";
     private static final int EXPECTED_FIRST_SCHEDULED_STOP_POINT_SEQUENCE = 1;
-    private static final boolean EXPECTED_FIRST_IS_TIMING_POINT = false;
+    private static final boolean EXPECTED_FIRST_IS_USED_AS_TIMING_POINT = false;
     private static final boolean EXPECTED_FIRST_IS_VIA_POINT = false;
 
     private static final String EXPECTED_SECOND_SCHEDULED_STOP_POINT_LABEL = "H4321";
     private static final int EXPECTED_SECOND_SCHEDULED_STOP_POINT_SEQUENCE = 2;
-    private static final boolean EXPECTED_SECOND_IS_TIMING_POINT = true;
+    private static final boolean EXPECTED_SECOND_IS_USED_AS_TIMING_POINT = true;
     private static final boolean EXPECTED_SECOND_IS_VIA_POINT = true;
 
     private final Table targetTable;
@@ -93,9 +93,9 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_FIRST_SCHEDULED_STOP_POINT_SEQUENCE);
         softAssertions.assertThat(targetTable)
                 .row(0)
-                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_TIMING_POINT.getName())
+                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_USED_AS_TIMING_POINT.getName())
                 .as("isTimingPoint")
-                .isEqualTo(EXPECTED_FIRST_IS_TIMING_POINT);
+                .isEqualTo(EXPECTED_FIRST_IS_USED_AS_TIMING_POINT);
         softAssertions.assertThat(targetTable)
                 .row(0)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_VIA_POINT.getName())
@@ -127,9 +127,9 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_SECOND_SCHEDULED_STOP_POINT_SEQUENCE);
         softAssertions.assertThat(targetTable)
                 .row(1)
-                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_TIMING_POINT.getName())
+                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_USED_AS_TIMING_POINT.getName())
                 .as("isTimingPoint")
-                .isEqualTo(EXPECTED_SECOND_IS_TIMING_POINT);
+                .isEqualTo(EXPECTED_SECOND_IS_USED_AS_TIMING_POINT);
         softAssertions.assertThat(targetTable)
                 .row(1)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_VIA_POINT.getName())
