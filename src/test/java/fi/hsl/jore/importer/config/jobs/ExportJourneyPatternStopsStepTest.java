@@ -35,7 +35,8 @@ import static org.assertj.db.api.Assertions.assertThat;
                 "/sql/transmodel/populate_lines.sql",
                 "/sql/transmodel/populate_scheduled_stop_points.sql",
                 "/sql/transmodel/populate_routes.sql",
-                "/sql/transmodel/populate_journey_patterns.sql"
+                "/sql/transmodel/populate_journey_patterns.sql",
+                "/sql/transmodel/populate_timing_places.sql"
         },
         config = @SqlConfig(dataSource = "jore4DataSource")
 )
