@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.transmodel.repository;
 
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelLine;
 import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
@@ -48,6 +49,8 @@ class TransmodelLineRepositoryTest {
     private static final LocalDate VALIDITY_PERIOD_START = LocalDate.of(2019, 1, 1);
     private static final LocalDate VALIDITY_PERIOD_END = LocalDate.of(2020, 1, 1);
 
+    private static final LegacyHslMunicipalityCode LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.HELSINKI;
+
     private final TransmodelLineRepository repository;
     private final Table targetTable;
     private final TransmodelValidityPeriodTestRepository testRepository;
@@ -82,7 +85,8 @@ class TransmodelLineRepositoryTest {
                 TYPE_OF_LINE,
                 PRIORITY,
                 Optional.of(VALIDITY_PERIOD_START),
-                Optional.of(VALIDITY_PERIOD_END)
+                Optional.of(VALIDITY_PERIOD_END),
+                LEGACY_HSL_MUNICIPALITY_CODE
         );
 
         @Test
@@ -172,6 +176,16 @@ class TransmodelLineRepositoryTest {
             Assertions.assertThat(validityEnd)
                     .as(LINE.VALIDITY_END.getName())
                     .isEqualTo(VALIDITY_PERIOD_END);
+        }
+
+        @Test
+        @DisplayName("Should insert the correct legacy HSL municipality code")
+        void shouldInsertCorrectLegacyHslMunicipalityCodeIntoDatabase() {
+            repository.insert(List.of(INPUT));
+            assertThat(targetTable)
+                    .row()
+                    .value(LINE.LEGACY_HSL_MUNICIPALITY_CODE.getName())
+                    .isEqualTo(LEGACY_HSL_MUNICIPALITY_CODE.getJore4Value());
         }
     }
 }

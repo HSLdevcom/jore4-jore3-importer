@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.config.jobs;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
 import fi.hsl.jore.importer.feature.transmodel.repository.TransmodelValidityPeriodTestRepository;
 import fi.hsl.jore.importer.feature.transmodel.repository.ValidityPeriodTargetTable;
@@ -45,6 +46,7 @@ class ExportLineStepTest extends BatchIntegrationTest {
 
     private static final VehicleMode EXPECTED_PRIMARY_VEHICLE_MODE = VehicleMode.TRAM;
     private static final int EXPECTED_PRIORITY = 10;
+    private static final LegacyHslMunicipalityCode EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.HELSINKI;
 
     private static final LocalDate EXPECTED_VALIDITY_PERIOD_START = LocalDate.of(2021, 10, 4);
     // validity period end is specified with an open upper boundary
@@ -112,10 +114,16 @@ class ExportLineStepTest extends BatchIntegrationTest {
                 .row()
                 .value(JORE4_LINE.PRIMARY_VEHICLE_MODE.getName())
                 .isEqualTo(EXPECTED_PRIMARY_VEHICLE_MODE.getValue());
+
         softAssertions.assertThat(jore4TargetTable)
                 .row()
                 .value(JORE4_LINE.PRIORITY.getName())
                 .isEqualTo(EXPECTED_PRIORITY);
+
+        softAssertions.assertThat(jore4TargetTable)
+                .row()
+                .value(JORE4_LINE.LEGACY_HSL_MUNICIPALITY_CODE.getName())
+                .isEqualTo(EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE.getJore4Value());
 
         softAssertions.assertAll();
 

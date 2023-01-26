@@ -34,6 +34,8 @@ public interface TransmodelRoute {
 
     Optional<Short> hiddenVariant();
 
+    LegacyHslMunicipalityCode legacyHslMunicipalityCode();
+
     static TransmodelRoute of(final UUID routeId,
                               final MultilingualString description,
                               final TransmodelRouteDirection direction,
@@ -43,7 +45,8 @@ public interface TransmodelRoute {
                               final UUID lineId,
                               final int priority,
                               final Optional<LocalDate> validityStart,
-                              final Optional<LocalDate> validityEnd) {
+                              final Optional<LocalDate> validityEnd,
+                              final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableTransmodelRoute.builder()
                 .routeId(routeId)
                 .description(description)
@@ -55,6 +58,7 @@ public interface TransmodelRoute {
                 .priority(priority)
                 .validityStart(validityStart)
                 .validityEnd(validityEnd)
+                .legacyHslMunicipalityCode(legacyHslMunicipalityCode)
                 .build();
     }
 }

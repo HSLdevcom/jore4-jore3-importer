@@ -5,6 +5,7 @@ import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.network.direction_type.field.DirectionType;
 import fi.hsl.jore.importer.feature.network.route.dto.ExportableRoute;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -37,7 +38,8 @@ public class RouteExportMapper implements RowMapper<ExportableRoute> {
                 UUID.fromString(resultSet.getString("line_transmodel_id")),
                 resultSet.getString("route_number"),
                 getOptionalShort(resultSet, "hidden_variant"),
-                DATE_RANGE_CONVERTER.from(resultSet.getString("valid_date_range"))
+                DATE_RANGE_CONVERTER.from(resultSet.getString("valid_date_range")),
+                LegacyHslMunicipalityCode.valueOf(resultSet.getString("legacy_hsl_municipality_code"))
         );
     }
 

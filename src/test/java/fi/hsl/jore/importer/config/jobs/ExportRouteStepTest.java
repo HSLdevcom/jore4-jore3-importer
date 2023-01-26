@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.config.jobs;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRouteDirection;
 import fi.hsl.jore.importer.feature.transmodel.repository.TransmodelValidityPeriodTestRepository;
 import fi.hsl.jore.importer.feature.transmodel.repository.ValidityPeriodTargetTable;
@@ -52,6 +53,7 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
     private static final String EXPECTED_LABEL = "1";
     private static final String EXPECTED_DESCRIPTION = "{\"fi_FI\":\"Keskustori - Etelä-Hervanta vanha\",\"sv_SE\":\"Central torget - Södra Hervanta gamla\"}";
     private static final int EXPECTED_PRIORITY = 10;
+    private static final LegacyHslMunicipalityCode EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.HELSINKI;
 
     private static final LocalDate VALIDITY_PERIOD_START = LocalDate.of(2021, 1, 1);
     // validity period end is specified with an open upper boundary
@@ -168,6 +170,17 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
         Assertions.assertThat(validityPeriodEnd)
                 .as(ROUTE_.VALIDITY_END.getName())
                 .isEqualTo(VALIDITY_PERIOD_END);
+    }
+
+    @Test
+    @DisplayName("Should save the exported route with the correct legacy HSL municipality code")
+    void shouldSaveExportedRouteWithCorrectLegacyHslMunicipalityCode() {
+        runSteps(STEPS);
+
+         assertThat(jore4TargetTable)
+                .row()
+                .value(JORE4_ROUTE.LEGACY_HSL_MUNICIPALITY_CODE.getName())
+                .isEqualTo(EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE.getJore4Value());
     }
 
     @Test

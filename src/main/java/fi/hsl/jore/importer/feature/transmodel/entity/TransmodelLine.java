@@ -34,6 +34,8 @@ public interface TransmodelLine {
 
     Optional<LocalDate> validityEnd();
 
+    LegacyHslMunicipalityCode legacyHslMunicipalityCode();
+
     static ImmutableTransmodelLine of(final UUID lineId,
                                       final String externalLineId,
                                       final String label,
@@ -43,7 +45,8 @@ public interface TransmodelLine {
                                       final TypeOfLine typeOfLine,
                                       final int priority,
                                       final Optional<LocalDate> validityStart,
-                                      final Optional<LocalDate> validityEnd) {
+                                      final Optional<LocalDate> validityEnd,
+                                      final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableTransmodelLine.builder()
                 .lineId(lineId)
                 .externalLineId(externalLineId)
@@ -55,6 +58,7 @@ public interface TransmodelLine {
                 .priority(priority)
                 .validityStart(validityStart)
                 .validityEnd(validityEnd)
+                .legacyHslMunicipalityCode(legacyHslMunicipalityCode)
                 .build();
     }
 }
