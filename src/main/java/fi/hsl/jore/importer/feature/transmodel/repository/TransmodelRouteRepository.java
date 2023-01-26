@@ -42,9 +42,10 @@ public class TransmodelRouteRepository implements ITransmodelRouteRepository {
                                     ROUTE_.ON_LINE_ID,
                                     ROUTE_.PRIORITY,
                                     ROUTE_.VALIDITY_START,
-                                    ROUTE_.VALIDITY_END
+                                    ROUTE_.VALIDITY_END,
+                                    ROUTE_.LEGACY_HSL_MUNICIPALITY_CODE
                             )
-                            .values((UUID) null, null, null, null, null, null, null, null, null, null)
+                            .values((UUID) null, null, null, null, null, null, null, null, null, null, null)
             );
 
             routes.forEach(route -> batch.bind(
@@ -57,7 +58,8 @@ public class TransmodelRouteRepository implements ITransmodelRouteRepository {
                     route.lineId(),
                     route.priority(),
                     route.validityStart().orElse(null),
-                    route.validityEnd().orElse(null)
+                    route.validityEnd().orElse(null),
+                    route.legacyHslMunicipalityCode().getJore4Value()
             ));
 
             batch.execute();

@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.transmodel.repository;
 
 import fi.hsl.jore.importer.IntTest;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRoute;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelRouteDirection;
 import org.assertj.core.api.Assertions;
@@ -37,6 +38,7 @@ class TransmodelRouteRepositoryTest {
     private static final int PRIORITY = 10;
     private static final TransmodelRouteDirection ROUTE_DIRECTION = TransmodelRouteDirection.INBOUND;
     private static final UUID ROUTE_DIRECTION_ID = UUID.fromString("6f93fa6b-8a19-4b98-bd84-b8409e670c70");
+    private static final LegacyHslMunicipalityCode ROUTE_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.HELSINKI;
 
     private static final LocalDate VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE =
             LocalDate.of(2021, 1, 1);
@@ -82,7 +84,8 @@ class TransmodelRouteRepositoryTest {
                 LINE_ID,
                 PRIORITY,
                 Optional.of(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE),
-                Optional.of(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE)
+                Optional.of(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE),
+                ROUTE_LEGACY_HSL_MUNICIPALITY_CODE
         );
 
         @Test
@@ -160,6 +163,17 @@ class TransmodelRouteRepositoryTest {
                     .row()
                     .value(ROUTE_.PRIORITY.getName())
                     .isEqualTo(PRIORITY);
+        }
+
+        @Test
+        @DisplayName("Should save a new route with the correct legacy HSL municipality code")
+        void shouldSaveNewRouteWithCorrectLegacyHslMunicipalityCode() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(targetTable)
+                    .row()
+                    .value(ROUTE_.LEGACY_HSL_MUNICIPALITY_CODE.getName())
+                    .isEqualTo(LegacyHslMunicipalityCode.HELSINKI.getJore4Value());
         }
 
         @Test

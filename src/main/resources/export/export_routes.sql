@@ -4,7 +4,8 @@ SELECT r.network_route_name AS name,
        rd.network_route_direction_id AS direction_id,
        rd.network_route_direction_type AS direction_type,
        l.network_line_transmodel_id AS line_transmodel_id,
-       rd.network_route_direction_valid_date_range AS valid_date_range
+       rd.network_route_direction_valid_date_range AS valid_date_range,
+       r.network_route_legacy_hsl_municipality_code AS legacy_hsl_municipality_code
     FROM network.network_routes r
     JOIN network.network_route_directions rd ON (rd.network_route_id = r.network_route_id)
     JOIN network.network_lines l ON (l.network_line_id = r.network_line_id)
