@@ -19,7 +19,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -86,6 +86,12 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
      * <code>network.network_routes.network_route_hidden_variant</code>.
      */
     public final TableField<NetworkRoutesRecord, Short> NETWORK_ROUTE_HIDDEN_VARIANT = createField(DSL.name("network_route_hidden_variant"), SQLDataType.SMALLINT, this, "");
+
+    /**
+     * The column
+     * <code>network.network_routes.network_route_legacy_hsl_municipality_code</code>.
+     */
+    public final TableField<NetworkRoutesRecord, String> NETWORK_ROUTE_LEGACY_HSL_MUNICIPALITY_CODE = createField(DSL.name("network_route_legacy_hsl_municipality_code"), SQLDataType.CLOB, this, "");
 
     private NetworkRoutes(Name alias, Table<NetworkRoutesRecord> aliased) {
         this(alias, aliased, null);
@@ -171,11 +177,11 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<UUID, UUID, String, String, JSONB, TimeRange, Short> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row8<UUID, UUID, String, String, JSONB, TimeRange, Short, String> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 }

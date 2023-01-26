@@ -16,6 +16,7 @@ import fi.hsl.jore.importer.feature.network.line_header.dto.LineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.PersistableLineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.generated.LineHeaderPK;
 import fi.hsl.jore.importer.feature.network.line_header.repository.ILineHeaderTestRepository;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.HashSet;
@@ -37,6 +38,7 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
 
     private static final String LINE_NUMBER = "1005";
     private static final String DISPLAY_LINE_NUMBER = "5";
+    private static final LegacyHslMunicipalityCode LINE_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.of('1');
     private static final ExternalId LINE_EXT_ID = ExternalIdUtil.forLine(LineId.from(LINE_NUMBER));
     private static final NetworkType NETWORK = NetworkType.ROAD;
     private static final MultilingualString NAME = MultilingualString.empty()
@@ -88,7 +90,9 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
                 PersistableLine.of(LINE_EXT_ID,
                                    DISPLAY_LINE_NUMBER,
                                    NETWORK,
-                                   TYPE_OF_LINE)
+                                   TYPE_OF_LINE,
+                                   LINE_LEGACY_HSL_MUNICIPALITY_CODE
+                )
         );
 
         importRepository.submitToStaging(
@@ -136,7 +140,9 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
                 PersistableLine.of(LINE_EXT_ID,
                                    DISPLAY_LINE_NUMBER,
                                    NETWORK,
-                                   TYPE_OF_LINE)
+                                   TYPE_OF_LINE,
+                                   LINE_LEGACY_HSL_MUNICIPALITY_CODE
+                )
         );
 
         final LineHeaderPK existingId = targetRepository.insert(
@@ -202,7 +208,9 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
                 PersistableLine.of(LINE_EXT_ID,
                                    DISPLAY_LINE_NUMBER,
                                    NETWORK,
-                                   TYPE_OF_LINE)
+                                   TYPE_OF_LINE,
+                                   LINE_LEGACY_HSL_MUNICIPALITY_CODE
+                )
         );
 
         final LineHeaderPK existingId = targetRepository.insert(
@@ -278,7 +286,9 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
                 PersistableLine.of(LINE_EXT_ID,
                                    DISPLAY_LINE_NUMBER,
                                    NETWORK,
-                                   TYPE_OF_LINE)
+                                   TYPE_OF_LINE,
+                                   LINE_LEGACY_HSL_MUNICIPALITY_CODE
+                )
         );
 
         final LineHeaderPK existingId = targetRepository.insert(
@@ -337,7 +347,9 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
                 PersistableLine.of(LINE_EXT_ID,
                                    DISPLAY_LINE_NUMBER,
                                    NETWORK,
-                                   TYPE_OF_LINE)
+                                   TYPE_OF_LINE,
+                                   LINE_LEGACY_HSL_MUNICIPALITY_CODE
+                )
         );
 
         final LineHeaderPK existingId = targetRepository.insert(
