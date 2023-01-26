@@ -3,7 +3,6 @@ package fi.hsl.jore.importer.feature.jore3.field;
 import java.util.Arrays;
 import java.util.Optional;
 
-@Deprecated
 public enum LegacyPublicTransportDestination {
     LEGACY('0', "Not used / legacy"),
     HELSINKI('1', "Helsinki"),

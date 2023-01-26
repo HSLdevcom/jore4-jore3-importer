@@ -9,6 +9,7 @@ INSERT INTO route.route (
         on_line_id,
         validity_start,
         validity_end,
+        legacy_hsl_municipality_code,
         priority
 )
 VALUES (
@@ -20,6 +21,7 @@ VALUES (
         '5aa7d9fc-2cf9-466d-8ac0-f442d60c261f',
         '2020-01-01 02:30:00+00',
         '2022-01-01 02:29:59+00',
+        'helsinki',
         10
 );
 

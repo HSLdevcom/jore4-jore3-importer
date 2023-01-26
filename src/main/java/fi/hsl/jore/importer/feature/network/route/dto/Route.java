@@ -9,6 +9,7 @@ import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasSystemTime;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
 import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutesWithHistoryRecord;
 import org.immutables.value.Value;
@@ -30,13 +31,16 @@ public interface Route
 
     Optional<Short> hiddenVariant();
 
+    LegacyHslMunicipalityCode legacyHslMunicipalityCode();
+
     static Route of(final RoutePK pk,
                     final ExternalId externalId,
                     final LinePK line,
                     final String routeNumber,
                     final Optional<Short> hiddenVariant,
                     final MultilingualString name,
-                    final TimeRange systemTime) {
+                    final TimeRange systemTime,
+                    final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableRoute.builder()
                 .pk(pk)
                 .externalId(externalId)
@@ -45,6 +49,7 @@ public interface Route
                 .hiddenVariant(hiddenVariant)
                 .name(name)
                 .systemTime(systemTime)
+                .legacyHslMunicipalityCode(legacyHslMunicipalityCode)
                 .build();
     }
 
@@ -56,7 +61,8 @@ public interface Route
                 record.getNetworkRouteNumber(),
                 Optional.ofNullable(record.getNetworkRouteHiddenVariant()),
                 converter.fromJson(record.getNetworkRouteName(), MultilingualString.class),
-                record.getNetworkRouteSysPeriod()
+                record.getNetworkRouteSysPeriod(),
+                LegacyHslMunicipalityCode.valueOf(record.getNetworkRouteLegacyHslMunicipalityCode())
         );
     }
 
@@ -68,7 +74,8 @@ public interface Route
                 record.getNetworkRouteNumber(),
                 Optional.ofNullable(record.getNetworkRouteHiddenVariant()),
                 converter.fromJson(record.getNetworkRouteName(), MultilingualString.class),
-                record.getNetworkRouteSysPeriod()
+                record.getNetworkRouteSysPeriod(),
+                LegacyHslMunicipalityCode.valueOf(record.getNetworkRouteLegacyHslMunicipalityCode())
         );
     }
 }

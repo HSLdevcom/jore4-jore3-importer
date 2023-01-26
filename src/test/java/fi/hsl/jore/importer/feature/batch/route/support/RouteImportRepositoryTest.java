@@ -6,6 +6,7 @@ import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route.dto.Route;
 import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
 import fi.hsl.jore.importer.feature.network.route.repository.IRouteTestRepository;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 import org.assertj.core.api.SoftAssertions;
@@ -114,6 +115,7 @@ class RouteImportRepositoryTest {
             private final UUID EXPECTED_NETWORK_LINE_ID = UUID.fromString("579db108-1f52-4364-9815-5f17c84ce3fb");
             private final String EXPECTED_NETWORK_ROUTE_EXT_ID = "1001 3";
             private final String EXPECTED_NETWORK_ROUTE_NUMBER = "1";
+            private final LegacyHslMunicipalityCode EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.of('1');
             private final Optional<Short> EXPECTED_NETWORK_ROUTE_HIDDEN_VARIANT = Optional.of((short) 3);
             private final String EXPECTED_FINNISH_ROUTE_NAME = "Keskustori - Etelä-Hervanta";
             private final String EXPECTED_SWEDISH_ROUTE_NAME = "Central torget - Södra Hervanta";
@@ -206,6 +208,10 @@ class RouteImportRepositoryTest {
                     softAssertions.assertThat(inserted.transmodelId())
                             .as("transmodelId")
                             .isEmpty();
+
+                    softAssertions.assertThat(inserted.legacyHslMunicipalityCode())
+                            .as("legacy HSL municipality code")
+                            .isEqualTo(EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE);
                 }
             }
 
@@ -272,6 +278,10 @@ class RouteImportRepositoryTest {
                     softAssertions.assertThat(updated.transmodelId())
                             .as("transmodelId")
                             .isEmpty();
+
+                    softAssertions.assertThat(updated.legacyHslMunicipalityCode())
+                            .as("legacy HSL municipality code")
+                            .isEqualTo(EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE);
                 }
             }
         }

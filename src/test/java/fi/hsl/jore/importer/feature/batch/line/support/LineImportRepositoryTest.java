@@ -11,6 +11,7 @@ import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLineIdMapping;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
 import fi.hsl.jore.importer.feature.network.line.repository.ILineTestRepository;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.HashSet;
@@ -50,6 +51,7 @@ public class LineImportRepositoryTest {
 
         private static final String LINE_NUMBER = "1005";
         private static final String DISPLAY_LINE_NUMBER = "5";
+        private final LegacyHslMunicipalityCode LINE_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.of('1');
         private final ExternalId EXT_ID = ExternalIdUtil.forLine(LineId.from(LINE_NUMBER));
         private final NetworkType NETWORK = NetworkType.ROAD;
         private final TypeOfLine TYPE_OF_LINE = TypeOfLine.STOPPING_BUS_SERVICE;
@@ -73,7 +75,9 @@ public class LineImportRepositoryTest {
                     List.of(PersistableLine.of(EXT_ID,
                             DISPLAY_LINE_NUMBER,
                             NETWORK,
-                            TYPE_OF_LINE))
+                            TYPE_OF_LINE,
+                            LINE_LEGACY_HSL_MUNICIPALITY_CODE
+                    ))
             );
 
             final Map<RowStatus, Set<LinePK>> result = importRepository.commitStagingToTarget();
@@ -110,7 +114,9 @@ public class LineImportRepositoryTest {
                     PersistableLine.of(EXT_ID,
                             DISPLAY_LINE_NUMBER,
                             NETWORK,
-                            TYPE_OF_LINE)
+                            TYPE_OF_LINE,
+                            LINE_LEGACY_HSL_MUNICIPALITY_CODE
+                    )
             );
 
             final Map<RowStatus, Set<LinePK>> result = importRepository.commitStagingToTarget();
