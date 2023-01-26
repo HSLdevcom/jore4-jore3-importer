@@ -40,9 +40,10 @@ public class TransmodelLineRepository implements ITransmodelLineRepository {
                                     LINE.PRIORITY,
                                     LINE.SHORT_NAME_I18N,
                                     LINE.VALIDITY_START,
-                                    LINE.VALIDITY_END
+                                    LINE.VALIDITY_END,
+                                    LINE.LEGACY_HSL_MUNICIPALITY_CODE
                             )
-                            .values((UUID) null, null, null, null, null, null, null, null, null, null)
+                            .values((UUID) null, null, null, null, null, null, null, null, null, null, null)
             );
 
             lines.forEach(line -> batch.bind(
@@ -55,7 +56,8 @@ public class TransmodelLineRepository implements ITransmodelLineRepository {
                     line.priority(),
                     jsonbConverter.asJson(line.shortName()),
                     line.validityStart().orElse(null),
-                    line.validityEnd().orElse(null)
+                    line.validityEnd().orElse(null),
+                    line.legacyHslMunicipalityCode().getJore4Value()
             ));
 
             batch.execute();

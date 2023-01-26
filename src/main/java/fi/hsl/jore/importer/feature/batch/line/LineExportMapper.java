@@ -6,6 +6,7 @@ import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.network.line.dto.ExportableLine;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -35,7 +36,8 @@ public class LineExportMapper implements RowMapper<ExportableLine> {
                 NetworkType.of(resultSet.getString("network_type")),
                 jsonConverter.fromJson(resultSet.getString("short_name"), MultilingualString.class),
                 DATE_RANGE_CONVERTER.from(resultSet.getString("valid_date_range")),
-                TypeOfLine.of(resultSet.getString("type_of_line"))
+                TypeOfLine.of(resultSet.getString("type_of_line")),
+                LegacyHslMunicipalityCode.valueOf(resultSet.getString("legacy_hsl_municipality_code"))
         );
     }
 }

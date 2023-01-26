@@ -5,6 +5,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.line.dto.ExportableLine;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.transmodel.entity.TransmodelLine;
 import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import fi.hsl.jore.importer.feature.transmodel.entity.VehicleMode;
@@ -29,6 +30,7 @@ class LineExportProcessorTest {
 
     private static final NetworkType NETWORK_TYPE_ROAD = NetworkType.ROAD;
     private static final TypeOfLine TYPE_OF_LINE = TypeOfLine.SPECIAL_NEEDS_BUS;
+    private static final LegacyHslMunicipalityCode LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.HELSINKI;
     private static final VehicleMode EXPECTED_PRIMARY_VEHICLE_MODE = VehicleMode.BUS;
 
     private static final int EXPECTED_PRIORITY = 10;
@@ -40,7 +42,8 @@ class LineExportProcessorTest {
             NETWORK_TYPE_ROAD,
             JoreLocaleUtil.createMultilingualString(FINNISH_SHORT_NAME, SWEDISH_SHORT_NAME),
             DateRange.between(VALID_DATE_RANGE_START, VALID_DATE_RANGE_END),
-            TYPE_OF_LINE
+            TYPE_OF_LINE,
+            LEGACY_HSL_MUNICIPALITY_CODE
     );
 
     private final LineExportProcessor processor = new LineExportProcessor();
@@ -143,6 +146,13 @@ class LineExportProcessorTest {
         void shouldReturnLineWithCorrectPriority() throws Exception {
             final TransmodelLine line = processor.process(INPUT);
             assertThat(line.priority()).isEqualTo(EXPECTED_PRIORITY);
+        }
+
+        @Test
+        @DisplayName("Should return a line with the correct legacy HSL municipality code")
+        void shouldReturnLineWithCorrectLegacyHslMunicipalityCode() throws Exception {
+            final TransmodelLine line = processor.process(INPUT);
+            assertThat(line.legacyHslMunicipalityCode()).isEqualTo(LEGACY_HSL_MUNICIPALITY_CODE);
         }
     }
 }

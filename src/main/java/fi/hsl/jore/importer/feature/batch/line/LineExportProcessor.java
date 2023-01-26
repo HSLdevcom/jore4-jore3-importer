@@ -36,7 +36,8 @@ public class LineExportProcessor implements ItemProcessor<ExportableLine, Transm
                 input.typeOfLine(),
                 DEFAULT_PRIORITY,
                 ValidityPeriodUtil.constructValidityPeriodStartDay(input.validDateRange().range()),
-                ValidityPeriodUtil.constructValidityPeriodEndDay(input.validDateRange().range())
+                ValidityPeriodUtil.constructValidityPeriodEndDay(input.validDateRange().range()),
+                input.legacyHslMunicipalityCode()
         );
     }
 }
