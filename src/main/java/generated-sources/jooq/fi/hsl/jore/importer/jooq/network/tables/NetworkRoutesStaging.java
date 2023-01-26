@@ -13,7 +13,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row6;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -74,6 +74,12 @@ public class NetworkRoutesStaging extends TableImpl<NetworkRoutesStagingRecord> 
      * <code>network.network_routes_staging.network_route_hidden_variant</code>.
      */
     public final TableField<NetworkRoutesStagingRecord, Short> NETWORK_ROUTE_HIDDEN_VARIANT = createField(DSL.name("network_route_hidden_variant"), SQLDataType.SMALLINT, this, "");
+
+    /**
+     * The column
+     * <code>network.network_routes_staging.network_route_legacy_hsl_municipality_code</code>.
+     */
+    public final TableField<NetworkRoutesStagingRecord, String> NETWORK_ROUTE_LEGACY_HSL_MUNICIPALITY_CODE = createField(DSL.name("network_route_legacy_hsl_municipality_code"), SQLDataType.CLOB, this, "");
 
     private NetworkRoutesStaging(Name alias, Table<NetworkRoutesStagingRecord> aliased) {
         this(alias, aliased, null);
@@ -147,11 +153,11 @@ public class NetworkRoutesStaging extends TableImpl<NetworkRoutesStagingRecord> 
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<String, String, String, JSONB, Short> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row6<String, String, String, JSONB, Short, String> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 }

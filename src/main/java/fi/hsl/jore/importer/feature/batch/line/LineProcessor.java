@@ -4,7 +4,9 @@ import fi.hsl.jore.importer.feature.batch.util.ExternalIdUtil;
 import fi.hsl.jore.importer.feature.batch.util.LineClassificationUtil;
 import fi.hsl.jore.importer.feature.batch.util.TransitTypeToNetworkTypeMapper;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLine;
+import fi.hsl.jore.importer.feature.jore3.field.LegacyPublicTransportDestination;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import org.springframework.batch.item.ItemProcessor;
 
 import javax.annotation.Nullable;
@@ -15,6 +17,7 @@ public class LineProcessor implements ItemProcessor<JrLine, PersistableLine> {
     @Nullable
     public PersistableLine process(final JrLine item) {
         final String lineNumber =  item.lineId().displayId();
+        final LegacyPublicTransportDestination lineLegacyPublicTransportDestination = item.lineId().destination();
 
         return PersistableLine.of(ExternalIdUtil.forLine(item),
                                   lineNumber,
@@ -22,6 +25,8 @@ public class LineProcessor implements ItemProcessor<JrLine, PersistableLine> {
                                   LineClassificationUtil.resolveTypeOfLine(item.transitType(),
                                                                            item.isTrunkLine(),
                                                                            item.publicTransportType(),
-                                                                           lineNumber));
+                                                                           lineNumber),
+                                  LegacyHslMunicipalityCode.of(lineLegacyPublicTransportDestination)
+        );
     }
 }

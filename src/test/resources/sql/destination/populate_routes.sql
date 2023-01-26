@@ -4,7 +4,8 @@ INSERT INTO network.network_routes (
         network_route_ext_id,
         network_route_number,
         network_route_hidden_variant,
-        network_route_name
+        network_route_name,
+        network_route_legacy_hsl_municipality_code
 )
 VALUES (
         '484d89ae-f365-4c9b-bb1a-8f7b783e95f3',
@@ -12,5 +13,6 @@ VALUES (
         '1001 3',
         '1',
         3,
-        '{"fi_FI": "Keskustori - Etelä-Hervanta vanha","sv_SE": "Central torget - Södra Hervanta gamla"}'
+        '{"fi_FI": "Keskustori - Etelä-Hervanta vanha","sv_SE": "Central torget - Södra Hervanta gamla"}',
+        'HELSINKI'
 );

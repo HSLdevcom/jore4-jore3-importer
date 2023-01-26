@@ -46,6 +46,7 @@ public class LineRepository
         r.setNetworkLineNumber(line.lineNumber());
         r.setInfrastructureNetworkType(line.networkType().label());
         r.setNetworkLineTypeOfLine(line.typeOfLine().getValue());
+        r.setNetworkLineLegacyHslMunicipalityCode((line.lineLegacyHslMunicipalityCode().name()));
 
         r.store();
 

@@ -5,6 +5,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route.dto.ImportableRoute;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import org.springframework.batch.item.ItemProcessor;
 
 import javax.annotation.Nullable;
@@ -21,7 +22,8 @@ public class RouteProcessor implements ItemProcessor<JrRoute, ImportableRoute> {
                 item.routeId().hiddenVariantValue(),
                 MultilingualString.empty()
                                   .with(JoreLocaleUtil.FINNISH, item.name())
-                                  .with(JoreLocaleUtil.SWEDISH, item.nameSwedish())
+                                  .with(JoreLocaleUtil.SWEDISH, item.nameSwedish()),
+                LegacyHslMunicipalityCode.of(item.routeId().destination())
         );
     }
 }

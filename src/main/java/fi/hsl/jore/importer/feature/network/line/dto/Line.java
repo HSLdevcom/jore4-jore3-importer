@@ -6,6 +6,7 @@ import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasSystemTime;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesWithHistoryRecord;
@@ -22,13 +23,16 @@ public interface Line
 
     Optional<UUID> transmodelId();
 
+    LegacyHslMunicipalityCode legacyHslMunicipalityCode();
+
     static Line of(final LinePK pk,
                    final ExternalId externalId,
                    final NetworkType networkType,
                    final String lineNumber,
                    final TimeRange systemTime,
                    final Optional<UUID> transmodelId,
-                   final TypeOfLine typeOfLine) {
+                   final TypeOfLine typeOfLine,
+                   final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableLine.builder()
                             .pk(pk)
                             .externalId(externalId)
@@ -37,6 +41,7 @@ public interface Line
                             .systemTime(systemTime)
                             .transmodelId(transmodelId)
                             .typeOfLine(typeOfLine)
+                            .legacyHslMunicipalityCode(legacyHslMunicipalityCode)
                             .build();
     }
 
@@ -48,7 +53,8 @@ public interface Line
                 record.getNetworkLineNumber(),
                 record.getNetworkLineSysPeriod(),
                 Optional.ofNullable(record.getNetworkLineTransmodelId()),
-                TypeOfLine.of(record.getNetworkLineTypeOfLine())
+                TypeOfLine.of(record.getNetworkLineTypeOfLine()),
+                LegacyHslMunicipalityCode.valueOf(record.getNetworkLineLegacyHslMunicipalityCode())
         );
     }
 
@@ -60,7 +66,8 @@ public interface Line
                 record.getNetworkLineNumber(),
                 record.getNetworkLineSysPeriod(),
                 Optional.ofNullable(record.getNetworkLineTransmodelId()),
-                TypeOfLine.of(record.getNetworkLineTypeOfLine())
+                TypeOfLine.of(record.getNetworkLineTypeOfLine()),
+                LegacyHslMunicipalityCode.valueOf(record.getNetworkLineLegacyHslMunicipalityCode())
         );
     }
 }

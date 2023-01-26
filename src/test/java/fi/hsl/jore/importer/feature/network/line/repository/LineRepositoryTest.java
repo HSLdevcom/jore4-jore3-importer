@@ -8,6 +8,7 @@ import fi.hsl.jore.importer.feature.jore3.field.LineId;
 import fi.hsl.jore.importer.feature.network.line.dto.Line;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.transmodel.entity.TypeOfLine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ public class LineRepositoryTest extends IntegrationTest {
 
     private static final String LINE_NUMBER = "1005";
     private static final String DISPLAY_LINE_NUMBER = "5";
+    private static final LegacyHslMunicipalityCode LINE_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.of('1');
     private static final ExternalId EXT_ID = ExternalIdUtil.forLine(LineId.from(LINE_NUMBER));
     private static final NetworkType NETWORK = NetworkType.ROAD;
     private final TypeOfLine TYPE_OF_LINE = TypeOfLine.STOPPING_BUS_SERVICE;
@@ -45,7 +47,9 @@ public class LineRepositoryTest extends IntegrationTest {
                 PersistableLine.of(EXT_ID,
                                    DISPLAY_LINE_NUMBER,
                                    NETWORK,
-                                   TYPE_OF_LINE)
+                                   TYPE_OF_LINE,
+                                   LINE_LEGACY_HSL_MUNICIPALITY_CODE
+                )
         );
 
         assertThat(lineRepository.count(),
@@ -66,5 +70,7 @@ public class LineRepositoryTest extends IntegrationTest {
                    is(DISPLAY_LINE_NUMBER));
         assertThat(line.networkType(),
                    is(NETWORK));
+        assertThat(line.legacyHslMunicipalityCode(),
+                   is(LINE_LEGACY_HSL_MUNICIPALITY_CODE));
     }
 }
