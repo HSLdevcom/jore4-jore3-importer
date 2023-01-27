@@ -59,9 +59,9 @@ public class RouteImportRepository
         routes.forEach(route -> batch.bind(route.externalId().value(),
                                            route.lineId().value(),
                                            route.routeNumber(),
-                                           route.routeHiddenVariant().orElse(null),
+                                           route.hiddenVariant().orElse(null),
                                            jsonbConverter.asJson(route.name()),
-                                           route.routeLegacyHslMunicipalityCode().name()
+                                           route.legacyHslMunicipalityCode().name()
         ));
 
         batch.execute();
