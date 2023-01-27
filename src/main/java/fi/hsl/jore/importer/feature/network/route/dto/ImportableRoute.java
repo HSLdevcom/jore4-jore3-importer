@@ -14,10 +14,6 @@ public interface ImportableRoute
 
     ExternalId lineId();
 
-    LegacyHslMunicipalityCode routeLegacyHslMunicipalityCode();
-
-    Optional<Short> routeHiddenVariant();
-
     static ImportableRoute of(final ExternalId externalId,
                               final ExternalId lineId,
                               final String routeNumber,
@@ -28,9 +24,9 @@ public interface ImportableRoute
                                        .externalId(externalId)
                                        .lineId(lineId)
                                        .routeNumber(routeNumber)
-                                       .routeHiddenVariant(routeHiddenVariant)
+                                       .hiddenVariant(routeHiddenVariant)
                                        .name(name)
-                                       .routeLegacyHslMunicipalityCode(routeLegacyHslMunicipalityCode)
+                                       .legacyHslMunicipalityCode(routeLegacyHslMunicipalityCode)
                                        .build();
     }
 }

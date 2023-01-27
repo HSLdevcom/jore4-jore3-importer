@@ -48,6 +48,8 @@ public class RouteRepository
         r.setNetworkRouteExtId(route.externalId().value());
         r.setNetworkLineId(route.line().value());
         r.setNetworkRouteNumber(route.routeNumber());
+        r.setNetworkRouteHiddenVariant(route.hiddenVariant().orElse(null));
+        r.setNetworkRouteLegacyHslMunicipalityCode(route.legacyHslMunicipalityCode().name());
         r.setNetworkRouteName(jsonbConverter.asJson(route.name()));
 
         r.store();

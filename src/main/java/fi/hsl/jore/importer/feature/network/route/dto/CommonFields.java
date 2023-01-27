@@ -2,6 +2,9 @@ package fi.hsl.jore.importer.feature.network.route.dto;
 
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasExternalId;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
+
+import java.util.Optional;
 
 public interface CommonFields<T> extends IHasExternalId {
 
@@ -9,4 +12,7 @@ public interface CommonFields<T> extends IHasExternalId {
 
     MultilingualString name();
 
+    LegacyHslMunicipalityCode legacyHslMunicipalityCode();
+
+    Optional<Short> hiddenVariant();
 }

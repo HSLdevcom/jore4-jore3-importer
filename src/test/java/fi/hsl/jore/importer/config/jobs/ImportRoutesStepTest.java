@@ -5,6 +5,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.network.route.dto.Route;
 import fi.hsl.jore.importer.feature.network.route.repository.IRouteTestRepository;
+import fi.hsl.jore.importer.feature.transmodel.entity.LegacyHslMunicipalityCode;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -59,6 +61,10 @@ public class ImportRoutesStepTest extends BatchIntegrationTest {
                    is(ExternalId.of("1001")));
         assertThat(route.routeNumber(),
                    is("1"));
+        assertThat(route.hiddenVariant(),
+                   is(Optional.empty()));
+        assertThat(route.legacyHslMunicipalityCode(),
+                is(LegacyHslMunicipalityCode.HELSINKI));
         assertThat(route.name(),
                    is(MultilingualString.empty()
                                         .with(FINNISH, "Keskustori - Etelä-Hervanta")
