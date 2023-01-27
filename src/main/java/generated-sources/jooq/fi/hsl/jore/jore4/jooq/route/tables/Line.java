@@ -105,6 +105,12 @@ public class Line extends TableImpl<Record> {
      */
     public final TableField<Record, String> TRANSPORT_TARGET = createField(DSL.name("transport_target"), SQLDataType.CLOB.nullable(false), this, "");
 
+    /**
+     * The column <code>route.line.legacy_hsl_municipality_code</code>. Defines
+     * the legacy municipality that is mainly used for data exports.
+     */
+    public final TableField<Record, String> LEGACY_HSL_MUNICIPALITY_CODE = createField(DSL.name("legacy_hsl_municipality_code"), SQLDataType.CLOB.nullable(false), this, "Defines the legacy municipality that is mainly used for data exports.");
+
     private Line(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }
