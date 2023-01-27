@@ -29,10 +29,6 @@ public interface Route
 
     Optional<UUID> journeyPatternTransmodelId();
 
-    Optional<Short> hiddenVariant();
-
-    LegacyHslMunicipalityCode legacyHslMunicipalityCode();
-
     static Route of(final RoutePK pk,
                     final ExternalId externalId,
                     final LinePK line,

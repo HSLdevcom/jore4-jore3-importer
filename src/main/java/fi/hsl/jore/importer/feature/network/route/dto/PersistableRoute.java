@@ -9,6 +9,9 @@ import org.immutables.value.Value;
 /**
  * The reinimilyh and reinimilyhr fields are missing
  * because they are deprecated.
+ *
+ * At the moment this variation of the route is intended to be used with
+ * the {@link fi.hsl.jore.importer.feature.network.route.repository.IRouteTestRepository test repository}.
  */
 @Value.Immutable
 public interface PersistableRoute
