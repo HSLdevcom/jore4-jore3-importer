@@ -132,6 +132,12 @@ public class Route extends TableImpl<Record> {
      */
     public final TableField<Record, String> UNIQUE_LABEL = createField(DSL.name("unique_label"), SQLDataType.CLOB, this, "Derived from label and variant. Routes are unique for each unique label for a certain direction, priority and validity period");
 
+    /**
+     * The column <code>route.route.legacy_hsl_municipality_code</code>. Defines
+     * the legacy municipality that is mainly used for data exports.
+     */
+    public final TableField<Record, String> LEGACY_HSL_MUNICIPALITY_CODE = createField(DSL.name("legacy_hsl_municipality_code"), SQLDataType.CLOB.nullable(false), this, "Defines the legacy municipality that is mainly used for data exports.");
+
     private Route(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
     }
