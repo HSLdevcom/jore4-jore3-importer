@@ -18,7 +18,6 @@ import fi.hsl.jore.importer.feature.network.route_stop_point.dto.RouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.repository.IRouteStopPointTestRepository;
 import io.vavr.Tuple;
 import io.vavr.Tuple4;
-import io.vavr.Tuple5;
 import io.vavr.Tuple7;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.BeforeEach;

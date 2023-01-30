@@ -12,7 +12,9 @@ import javax.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.*;
+import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getBooleanOrThrow;
+import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalString;
+import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
 
 public class LineRowMapper implements RowMapper<JrLine> {
 

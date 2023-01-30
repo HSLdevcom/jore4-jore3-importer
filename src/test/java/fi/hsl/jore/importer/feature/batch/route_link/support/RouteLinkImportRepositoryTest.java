@@ -5,7 +5,6 @@ import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.network.route_link.dto.RouteLink;
 import fi.hsl.jore.importer.feature.network.route_link.dto.generated.RouteLinkPK;
 import fi.hsl.jore.importer.feature.network.route_link.repository.IRouteLinkTestRepository;
-import fi.hsl.jore.importer.feature.network.route_point.dto.generated.RoutePointPK;
 import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 import org.assertj.core.api.SoftAssertions;

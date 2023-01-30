@@ -2,8 +2,8 @@ package fi.hsl.jore.importer.feature.network.route.dto;
 
 import fi.hsl.jore.importer.config.jooq.converter.date_range.DateRange;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
-import fi.hsl.jore.importer.feature.network.direction_type.field.DirectionType;
 import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
+import fi.hsl.jore.importer.feature.network.direction_type.field.DirectionType;
 import org.immutables.value.Value;
 
 import java.util.Optional;

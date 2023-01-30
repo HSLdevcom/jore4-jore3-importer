@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
-import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPatternStop;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPatternStop;
+import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPatternStop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;

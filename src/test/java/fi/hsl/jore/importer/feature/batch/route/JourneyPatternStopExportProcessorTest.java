@@ -2,8 +2,8 @@ package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
-import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPatternStop;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPatternStop;
+import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPatternStop;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

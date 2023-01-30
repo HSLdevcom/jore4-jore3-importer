@@ -1,9 +1,9 @@
 package fi.hsl.jore.importer.feature.batch.line;
 
 import fi.hsl.jore.importer.feature.batch.line.support.ILineImportRepository;
-import fi.hsl.jore.importer.feature.network.line.dto.PersistableLineIdMapping;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4Line;
 import fi.hsl.jore.importer.feature.jore4.repository.IJore4LineRepository;
+import fi.hsl.jore.importer.feature.network.line.dto.PersistableLineIdMapping;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

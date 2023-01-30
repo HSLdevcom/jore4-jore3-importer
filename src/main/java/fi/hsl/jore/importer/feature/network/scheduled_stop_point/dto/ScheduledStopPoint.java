@@ -11,7 +11,6 @@ import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.generated.S
 import fi.hsl.jore.importer.jooq.network.tables.records.ScheduledStopPointsRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.ScheduledStopPointsWithHistoryRecord;
 import org.immutables.value.Value;
-import org.locationtech.jts.geom.Point;
 
 import java.util.Optional;
 import java.util.UUID;

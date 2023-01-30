@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.jore4.repository;
 
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPoint;
 import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
+import fi.hsl.jore.jore4.jooq.internal_service_pattern.Routines;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
-
-import fi.hsl.jore.jore4.jooq.internal_service_pattern.Routines;
 
 import static fi.hsl.jore.jore4.jooq.infrastructure_network.Tables.INFRASTRUCTURE_LINK;
 
