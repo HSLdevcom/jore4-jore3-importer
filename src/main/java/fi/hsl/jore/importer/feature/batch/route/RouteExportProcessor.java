@@ -1,9 +1,9 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
-import fi.hsl.jore.importer.feature.network.route.dto.ImporterRoute;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4Route;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteDirection;
 import fi.hsl.jore.importer.feature.jore4.util.ValidityPeriodUtil;
+import fi.hsl.jore.importer.feature.network.route.dto.ImporterRoute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;

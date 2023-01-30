@@ -13,7 +13,6 @@ import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.generated.RouteDirectionPK;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteDirectionsRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteDirectionsWithHistoryRecord;
-import org.checkerframework.checker.nullness.Opt;
 import org.immutables.value.Value;
 
 import java.util.Optional;

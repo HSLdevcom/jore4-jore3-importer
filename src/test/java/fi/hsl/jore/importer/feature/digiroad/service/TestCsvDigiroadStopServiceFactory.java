@@ -1,8 +1,6 @@
 package fi.hsl.jore.importer.feature.digiroad.service;
 
 import fi.hsl.jore.importer.config.DigiroadServiceConfig;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 public final class TestCsvDigiroadStopServiceFactory {
 

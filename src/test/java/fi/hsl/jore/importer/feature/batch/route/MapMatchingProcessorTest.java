@@ -2,14 +2,14 @@ package fi.hsl.jore.importer.feature.batch.route;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteGeometry;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteInfrastructureLink;
 import fi.hsl.jore.importer.feature.mapmatching.service.IMapMatchingService;
 import fi.hsl.jore.importer.feature.mapmatching.service.MapMatchingService;
 import fi.hsl.jore.importer.feature.mapmatching.service.RouteGeometryTestFactory;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import fi.hsl.jore.importer.feature.network.route_point.repository.IRoutePointExportRepository;
-import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteGeometry;
-import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteInfrastructureLink;
 import io.vavr.collection.List;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;

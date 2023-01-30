@@ -11,7 +11,6 @@ import fi.hsl.jore.importer.feature.network.route_stop_point.dto.generated.Route
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsWithHistoryRecord;
 import org.immutables.value.Value;
-import org.jooq.JSONB;
 
 import java.util.Optional;
 

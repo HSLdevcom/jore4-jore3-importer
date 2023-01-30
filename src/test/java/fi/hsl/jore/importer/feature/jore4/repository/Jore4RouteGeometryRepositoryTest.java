@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static fi.hsl.jore.jore4.jooq.route.Tables.INFRASTRUCTURE_LINK_ALONG_ROUTE;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.db.api.Assertions.assertThat;
 
 @IntTest

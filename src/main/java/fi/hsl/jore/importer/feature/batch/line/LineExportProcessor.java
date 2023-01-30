@@ -1,9 +1,9 @@
 package fi.hsl.jore.importer.feature.batch.line;
 
-import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4Line;
 import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import fi.hsl.jore.importer.feature.jore4.util.ValidityPeriodUtil;
+import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;

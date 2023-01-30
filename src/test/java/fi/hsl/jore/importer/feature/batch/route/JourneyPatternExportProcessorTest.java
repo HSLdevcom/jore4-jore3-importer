@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
-import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPattern;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPattern;
+import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPattern;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

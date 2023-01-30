@@ -6,9 +6,7 @@ import fi.hsl.jore.importer.feature.jore3.mapping.JoreColumn;
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreTable;
 import fi.hsl.jore.importer.feature.jore3.mixin.IHasPrimaryKey;
 import fi.hsl.jore.importer.feature.jore3.style.JoreDtoStyle;
-import fi.hsl.jore.importer.feature.jore3.util.JoreGeometryUtil;
 import org.immutables.value.Value;
-import org.locationtech.jts.geom.Point;
 
 import java.util.Optional;
 

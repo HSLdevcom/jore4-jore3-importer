@@ -1,5 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteGeometry;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteInfrastructureLink;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.ExternalLinkRefDTO;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.InfrastructureLinkDTO;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.MapMatchingSuccessResponseDTO;
@@ -7,8 +9,6 @@ import fi.hsl.jore.importer.feature.mapmatching.service.IMapMatchingService;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import fi.hsl.jore.importer.feature.network.route_point.repository.IRoutePointExportRepository;
-import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteGeometry;
-import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteInfrastructureLink;
 import io.vavr.collection.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
