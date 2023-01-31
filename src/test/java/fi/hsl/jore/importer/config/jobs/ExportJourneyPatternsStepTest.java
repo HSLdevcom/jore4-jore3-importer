@@ -83,8 +83,8 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should update the journey pattern transmodel id of a route found from the importer's database")
-    void shouldUpdateJourneyPatternTransmodelIdOfRouteFoundFromImporterDatabase() {
+    @DisplayName("Should update the journey pattern Jore 4 id of a route found from the importer's database")
+    void shouldUpdateJourneyPatternJore4IdOfRouteFoundFromImporterDatabase() {
         runSteps(STEPS);
 
         assertThat(importerTargetTable)

@@ -30,12 +30,12 @@ public class LineExportWriter implements ItemWriter<Jore4Line> {
     public void write(final List<? extends Jore4Line> items) throws Exception {
         jore4Repository.insert(items);
 
-        final io.vavr.collection.List<PersistableLineIdMapping> transmodelIdMappings = items.stream()
+        final io.vavr.collection.List<PersistableLineIdMapping> jore4IdMappings = items.stream()
                 .map(item -> PersistableLineIdMapping.of(
                         item.externalLineId(),
                         item.lineId()
                 ))
                 .collect(io.vavr.collection.List.collector());
-        importerRepository.setTransmodelIds(transmodelIdMappings);
+        importerRepository.setJore4Ids(jore4IdMappings);
     }
 }

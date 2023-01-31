@@ -33,7 +33,7 @@ public class MapMatchingRequestBuilderTest {
 
         private final UUID ROUTE_DIRECTION_ID = UUID.randomUUID();
         private final String ROUTE_DIRECTION_EXT_ID = "1001-2-20211004";
-        private final UUID ROUTE_TRANSMODEL_ID = UUID.randomUUID();
+        private final UUID ROUTE_JORE4_ID = UUID.randomUUID();
 
         private static final double ROUTE_GEOMETRY_START_LNG = 5;
         private static final double ROUTE_GEOMETRY_START_LATITUDE = 6;
@@ -58,7 +58,7 @@ public class MapMatchingRequestBuilderTest {
             routeGeometryInput = ImporterRouteGeometry.from(routeLineString,
                     ROUTE_DIRECTION_ID,
                     ROUTE_DIRECTION_EXT_ID,
-                    ROUTE_TRANSMODEL_ID
+                    ROUTE_JORE4_ID
             );
         }
 

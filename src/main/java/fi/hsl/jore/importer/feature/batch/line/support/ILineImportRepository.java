@@ -9,10 +9,10 @@ import io.vavr.collection.List;
 public interface ILineImportRepository extends IImportRepository<PersistableLine, LinePK> {
 
     /**
-     * Sets the transmodel ids which identifies the lines in the Jore 4 database.
+     * Sets the Jore 4 ids which identifies the lines in the Jore 4 database.
      *
-     * @param idMappings  The information that's required to set the transmodel ids
+     * @param idMappings  The information that's required to set the Jore 4 ids
      *                    of lines.
      */
-    void setTransmodelIds(List<PersistableLineIdMapping> idMappings);
+    void setJore4Ids(List<PersistableLineIdMapping> idMappings);
 }

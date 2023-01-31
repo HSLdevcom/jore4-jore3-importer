@@ -78,7 +78,7 @@ public class RouteGeometryExportReaderTest {
 
         private final UUID EXPECTED_ROUTE_DIRECTION_ID = UUID.fromString("6f93fa6b-8a19-4b98-bd84-b8409e670c70");
         private final String EXPECTED_ROUTE_DIRECTION_EXT_ID = "1001-2-20211004";
-        private final UUID EXPECTED_ROUTE_TRANSMODEL_ID = UUID.fromString("5bfa9a65-c80f-4af8-be95-8370cb12df50");
+        private final UUID EXPECTED_ROUTE_JORE4_ID = UUID.fromString("5bfa9a65-c80f-4af8-be95-8370cb12df50");
 
         @Test
         @DisplayName("The first invocation of the read() method must return the found route geometry")
@@ -115,8 +115,8 @@ public class RouteGeometryExportReaderTest {
                     .isEqualTo(EXPECTED_ROUTE_DIRECTION_EXT_ID);
 
             softAssertions.assertThat(first.routeTransmodelId())
-                    .as("routeTransmodelId")
-                    .isEqualTo(EXPECTED_ROUTE_TRANSMODEL_ID);
+                    .as("routeJore4Id")
+                    .isEqualTo(EXPECTED_ROUTE_JORE4_ID);
         }
 
         @Test

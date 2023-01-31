@@ -138,8 +138,8 @@ class ExportLineStepTest extends BatchIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should update the transmodel id of the line found from the importer's database")
-    void shouldUpdateTransmodelIdOfLineFoundFromImportersDatabase() {
+    @DisplayName("Should update the Jore 4 id of the line found from the importer's database")
+    void shouldUpdateJore4IdOfLineFoundFromImportersDatabase() {
         runSteps(STEPS);
 
         assertThat(importerTargetTable)

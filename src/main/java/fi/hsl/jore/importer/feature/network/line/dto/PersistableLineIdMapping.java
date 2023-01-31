@@ -6,7 +6,7 @@ import java.util.UUID;
 
 /**
  * Contains the information that's required to update
- * the transmodel id (primary key of a line found from
+ * the Jore 4 id (primary key of a line found from
  * Jore 4 database) of a line stored in the database
  * of the importer application.
  */

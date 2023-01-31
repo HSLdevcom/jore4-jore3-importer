@@ -13,8 +13,8 @@ public interface IScheduledStopPointImportRepository
      * Sets the ids which identifies the scheduled stop points
      * in the Jore 4 database.
      *
-     * @param   idMappings   The information that's required to set the transmodel ids
+     * @param   idMappings   The information that's required to set the Jore 4 ids
      *                       of scheduled stop points.
      */
-    void setTransmodelIds(List<PersistableScheduledStopPointIdMapping> idMappings);
+    void setJore4Ids(List<PersistableScheduledStopPointIdMapping> idMappings);
 }

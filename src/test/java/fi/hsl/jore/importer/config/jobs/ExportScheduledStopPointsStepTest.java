@@ -189,8 +189,8 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should update the transmodel id of the scheduled stop point found from the importer's database")
-    void shouldUpdateTransmodelIdOfScheduledStopPointFoundFromImportersDatabase() {
+    @DisplayName("Should update the Jore 4 id of the scheduled stop point found from the importer's database")
+    void shouldUpdateJore4IdOfScheduledStopPointFoundFromImportersDatabase() {
         runSteps(STEPS);
 
         assertThat(importerTargetTable)

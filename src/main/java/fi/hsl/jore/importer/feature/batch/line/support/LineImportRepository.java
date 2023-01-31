@@ -105,7 +105,7 @@ public class LineImportRepository
 
     @Transactional
     @Override
-    public void setTransmodelIds(final List<PersistableLineIdMapping> idMappings) {
+    public void setJore4Ids(final List<PersistableLineIdMapping> idMappings) {
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)

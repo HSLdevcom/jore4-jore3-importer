@@ -18,7 +18,7 @@ public class RouteGeometryTestFactory {
 
     public static final UUID ROUTE_DIRECTION_ID = UUID.fromString("0269ee59-730b-499a-8cf4-bef6f7923b3c");
     public static final String ROUTE_DIRECTION_EXT_ID = "1001-2-20211004";
-    public static final UUID ROUTE_TRANSMODEL_ID = UUID.randomUUID();
+    public static final UUID ROUTE_JORE4_ID = UUID.randomUUID();
 
     public static final double REQUEST_ROUTE_GEOMETRY_START_X = 5;
     public static final double REQUEST_ROUTE_GEOMETRY_START_Y = 6;
@@ -54,7 +54,7 @@ public class RouteGeometryTestFactory {
         return ImporterRouteGeometry.from(routeLineString,
                 ROUTE_DIRECTION_ID,
                 ROUTE_DIRECTION_EXT_ID,
-                ROUTE_TRANSMODEL_ID
+                ROUTE_JORE4_ID
         );
     }
 

@@ -72,7 +72,7 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Importer
                 final DigiroadStop digiroadStop = digiroadStopContainer.get();
                 LOGGER.debug("Found Digiroad stop: {}", digiroadStop);
 
-                final Jore4ScheduledStopPoint transmodelStop = Jore4ScheduledStopPoint.of(
+                final Jore4ScheduledStopPoint jore4Stop = Jore4ScheduledStopPoint.of(
                         UUID.randomUUID(),
                         externalId.value(),
                         digiroadStop.digiroadLinkId(),
@@ -84,8 +84,8 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Importer
                         Optional.of(DEFAULT_VALIDITY_END)
                 );
 
-                LOGGER.debug("Created scheduled stop point: {}", transmodelStop);
-                return transmodelStop;
+                LOGGER.debug("Created scheduled stop point: {}", jore4Stop);
+                return jore4Stop;
             }
         }
 

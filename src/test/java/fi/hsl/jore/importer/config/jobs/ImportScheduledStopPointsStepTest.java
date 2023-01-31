@@ -97,7 +97,7 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
                 .contains(EXPECTED_SHORT_ID);
 
         softAssertions.assertThat(imported.transmodelId())
-                .as("transmodel id")
+                .as("Jore 4 id")
                 .isEmpty();
 
         softAssertions.assertThat(imported.usageInRoutes())

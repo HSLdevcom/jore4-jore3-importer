@@ -39,7 +39,7 @@ class ScheduledStopPointExportProcessorTest {
     private static final LocalDate VALIDITY_PERIOD_START = LocalDate.of(1990, 1, 1);
     private static final LocalDate VALIDITY_PERIOD_END = LocalDate.of(2051, 1, 1);
 
-    private final Jore4ScheduledStopPointDirection TRANSMODEL_STOP_POINT_DIRECTION_ON_INFRA_LINK = Jore4ScheduledStopPointDirection.BACKWARD;
+    private final Jore4ScheduledStopPointDirection JORE4_STOP_POINT_DIRECTION_ON_INFRA_LINK = Jore4ScheduledStopPointDirection.BACKWARD;
 
     private ScheduledStopPointExportProcessor processor;
 
@@ -110,7 +110,7 @@ class ScheduledStopPointExportProcessorTest {
             @DisplayName("Should return a scheduled stop point with the correct stop direction")
             void shouldReturnScheduledStopPointWithCorrectStopDirection() throws Exception {
                 final Jore4ScheduledStopPoint output = processor.process(jore3Stop);
-                assertThat(output.directionOnInfraLink()).isEqualTo(TRANSMODEL_STOP_POINT_DIRECTION_ON_INFRA_LINK);
+                assertThat(output.directionOnInfraLink()).isEqualTo(JORE4_STOP_POINT_DIRECTION_ON_INFRA_LINK);
             }
 
             @Test
@@ -200,7 +200,7 @@ class ScheduledStopPointExportProcessorTest {
             @DisplayName("Should return a scheduled stop point with the correct stop direction")
             void shouldReturnScheduledStopPointWithCorrectStopDirection() throws Exception {
                 final Jore4ScheduledStopPoint output = processor.process(jore3Stop);
-                assertThat(output.directionOnInfraLink()).isEqualTo(TRANSMODEL_STOP_POINT_DIRECTION_ON_INFRA_LINK);
+                assertThat(output.directionOnInfraLink()).isEqualTo(JORE4_STOP_POINT_DIRECTION_ON_INFRA_LINK);
             }
 
             @Test

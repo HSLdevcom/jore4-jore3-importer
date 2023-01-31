@@ -13,17 +13,17 @@ public interface IRouteDirectionImportRepository extends IImportRepository<Jore3
      * Sets the ids which identifies the journey patterns found from
      * the Jore 4 database.
      *
-     * @param idMappings    The information that's required to set the transmodel ids
+     * @param idMappings    The information that's required to set the Jore 4 ids
      *                      of journey patterns.
      */
-    void setJourneyPatternTransmodelIds(List<PersistableJourneyPatternIdMapping> idMappings);
+    void setJourneyPatternJore4Ids(List<PersistableJourneyPatternIdMapping> idMappings);
 
     /**
      * Sets the ids which identifies the routes found from
      * the Jore 4 database.
      *
-     * @param   idMappings   The information that's required to set the transmodel ids
+     * @param   idMappings   The information that's required to set the Jore 4 ids
      *                       of routes.
      */
-    void setRouteTransmodelIds(List<PersistableRouteIdMapping> idMappings);
+    void setRouteJore4Ids(List<PersistableRouteIdMapping> idMappings);
 }

@@ -206,7 +206,7 @@ class RouteImportRepositoryTest {
                             .isEqualTo(EXPECTED_SWEDISH_ROUTE_NAME);
 
                     softAssertions.assertThat(inserted.transmodelId())
-                            .as("transmodelId")
+                            .as("jore4Id")
                             .isEmpty();
 
                     softAssertions.assertThat(inserted.legacyHslMunicipalityCode())
@@ -276,7 +276,7 @@ class RouteImportRepositoryTest {
                             .isEqualTo(EXPECTED_SWEDISH_ROUTE_NAME);
 
                     softAssertions.assertThat(updated.transmodelId())
-                            .as("transmodelId")
+                            .as("jore4Id")
                             .isEmpty();
 
                     softAssertions.assertThat(updated.legacyHslMunicipalityCode())

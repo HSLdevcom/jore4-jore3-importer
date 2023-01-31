@@ -463,17 +463,17 @@ class RouteDirectionImportRepositoryTest {
     }
 
     @Nested
-    @DisplayName("Set journey pattern transmodel ids")
+    @DisplayName("Set journey pattern Jore 4 ids")
     @Sql(scripts = {
             "/sql/destination/drop_tables.sql",
             "/sql/destination/populate_lines.sql",
             "/sql/destination/populate_routes.sql",
             "/sql/destination/populate_route_directions.sql"
     })
-    class SetJourneyPatternTransmodelIds {
+    class SetJourneyPatternJore4Ids {
 
         private final UUID ROUTE_DIRECTION_ID = UUID.fromString("6f93fa6b-8a19-4b98-bd84-b8409e670c70");
-        private final UUID JOURNEY_PATTERN_TRANSMODEL_ID = UUID.fromString("b97185ef-0c27-4548-ac38-3d2cdd0023ac");
+        private final UUID JOURNEY_PATTERN_JORE4_ID = UUID.fromString("b97185ef-0c27-4548-ac38-3d2cdd0023ac");
 
 
         @Nested
@@ -483,13 +483,13 @@ class RouteDirectionImportRepositoryTest {
             private final UUID UNKNOWN_ROUTE_DIRECTION_ID = UUID.fromString("038174b2-985f-47f7-9676-83cf0b944d88");
             private final List<PersistableJourneyPatternIdMapping> INPUT = List.of(PersistableJourneyPatternIdMapping.of(
                     UNKNOWN_ROUTE_DIRECTION_ID,
-                    JOURNEY_PATTERN_TRANSMODEL_ID
+                    JOURNEY_PATTERN_JORE4_ID
             ));
 
             @Test
             @DisplayName("Should'nt update the journey pattern id of the existing route direction")
             void shouldNotUpdateJourneyPatternIdOfExistingRouteDirection() {
-                importRepository.setJourneyPatternTransmodelIds(INPUT);
+                importRepository.setJourneyPatternJore4Ids(INPUT);
 
                 final RouteDirection routeDirection = targetRepository.findById(RouteDirectionPK.of(ROUTE_DIRECTION_ID)).get();
                 assertThat(routeDirection.journeyPatternTransmodelId()).isEmpty();
@@ -502,32 +502,32 @@ class RouteDirectionImportRepositoryTest {
 
             private final List<PersistableJourneyPatternIdMapping> INPUT = List.of(PersistableJourneyPatternIdMapping.of(
                     ROUTE_DIRECTION_ID,
-                    JOURNEY_PATTERN_TRANSMODEL_ID
+                    JOURNEY_PATTERN_JORE4_ID
             ));
 
             @Test
             @DisplayName("Should update the journey pattern id of the existing route direction")
             void shouldUpdateJourneyPatternIdOfExistingRouteDirection() {
-                importRepository.setJourneyPatternTransmodelIds(INPUT);
+                importRepository.setJourneyPatternJore4Ids(INPUT);
 
                 final RouteDirection routeDirection = targetRepository.findById(RouteDirectionPK.of(ROUTE_DIRECTION_ID)).get();
-                assertThat(routeDirection.journeyPatternTransmodelId()).contains(JOURNEY_PATTERN_TRANSMODEL_ID);
+                assertThat(routeDirection.journeyPatternTransmodelId()).contains(JOURNEY_PATTERN_JORE4_ID);
             }
         }
     }
 
     @Nested
-    @DisplayName("Set route transmodel ids")
+    @DisplayName("Set route Jore 4 ids")
     @Sql(scripts = {
             "/sql/destination/drop_tables.sql",
             "/sql/destination/populate_lines.sql",
             "/sql/destination/populate_routes.sql",
             "/sql/destination/populate_route_directions.sql"
     })
-    class SetRouteTransmodelIds {
+    class SetRouteJore4Ids {
 
         private final UUID ROUTE_DIRECTION_ID = UUID.fromString("6f93fa6b-8a19-4b98-bd84-b8409e670c70");
-        private final UUID TRANSMODEL_ID = UUID.fromString("51f2686b-166c-4157-bd70-647337e44c8c");
+        private final UUID JORE4_ID = UUID.fromString("51f2686b-166c-4157-bd70-647337e44c8c");
 
         @Nested
         @DisplayName("When the route direction isn't found")
@@ -536,13 +536,13 @@ class RouteDirectionImportRepositoryTest {
             private final UUID UNKNOWN_ROUTE_DIRECTION_ID = UUID.fromString("038174b2-985f-47f7-9676-83cf0b944d88");
             private List<PersistableRouteIdMapping> INPUT = List.of(PersistableRouteIdMapping.of(
                     UNKNOWN_ROUTE_DIRECTION_ID,
-                    TRANSMODEL_ID
+                    JORE4_ID
             ));
 
             @Test
-            @DisplayName("Shouldn't update the transmodel id of the existing route direction")
-            void shouldNotUpdateTransmodelIdOfExistingRouteDirection() {
-                importRepository.setRouteTransmodelIds(INPUT);
+            @DisplayName("Shouldn't update the Jore 4 id of the existing route direction")
+            void shouldNotUpdateJore4IdOfExistingRouteDirection() {
+                importRepository.setRouteJore4Ids(INPUT);
 
                 final RouteDirection routeDirection = targetRepository.findById(RouteDirectionPK.of(ROUTE_DIRECTION_ID)).get();
                 assertThat(routeDirection.routeTransmodelId()).isEmpty();
@@ -555,16 +555,16 @@ class RouteDirectionImportRepositoryTest {
 
             private List<PersistableRouteIdMapping> INPUT = List.of(PersistableRouteIdMapping.of(
                     ROUTE_DIRECTION_ID,
-                    TRANSMODEL_ID
+                    JORE4_ID
             ));
 
             @Test
-            @DisplayName("Should update the transmodel id of the existing route direction")
-            void shouldUpdateTransmodelIdOfExistingRouteDirection() {
-                importRepository.setRouteTransmodelIds(INPUT);
+            @DisplayName("Should update the Jore 4 id of the existing route direction")
+            void shouldUpdateJore4IdOfExistingRouteDirection() {
+                importRepository.setRouteJore4Ids(INPUT);
 
                 final RouteDirection routeDirection = targetRepository.findById(RouteDirectionPK.of(ROUTE_DIRECTION_ID)).get();
-                assertThat(routeDirection.routeTransmodelId()).contains(TRANSMODEL_ID);
+                assertThat(routeDirection.routeTransmodelId()).contains(JORE4_ID);
             }
         }
     }
