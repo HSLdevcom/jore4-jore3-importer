@@ -25,7 +25,7 @@ class RouteExportProcessorTest {
     private static final int JORE4_ROUTE_PRIORITY = 10;
     private static final String FINNISH_NAME = "Keskustori - Etelä-Hervanta";
     private static final String SWEDISH_NAME = "Central torget - Södra Hervanta";
-    private static final UUID LINE_TRANSMODEL_ID = UUID.fromString("184b4710-9366-4500-aef3-39d03e95dde2");
+    private static final UUID LINE_JORE4_ID = UUID.fromString("184b4710-9366-4500-aef3-39d03e95dde2");
     private static final String ROUTE_NUMBER = "30";
     private static final Optional<Short> ROUTE_HIDDEN_VARIANT = Optional.of((short)1);
     private static final LocalDate VALIDITY_PERIOD_START_DAY = LocalDate.of(2021, 1, 1);
@@ -36,7 +36,7 @@ class RouteExportProcessorTest {
             IMPORTER_ROUTE_DIRECTION_ID,
             IMPORTER_ROUTE_DIRECTION,
             createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
-            LINE_TRANSMODEL_ID,
+            LINE_JORE4_ID,
             ROUTE_NUMBER,
             ROUTE_HIDDEN_VARIANT,
             DateRange.between(VALIDITY_PERIOD_START_DAY, VALIDITY_PERIOD_END_DAY),
@@ -97,10 +97,10 @@ class RouteExportProcessorTest {
     }
 
     @Test
-    @DisplayName("Should return a route with the correct line transmodel id")
-    void shouldReturnRouteWithCorrectLineTransmodelId() throws Exception {
+    @DisplayName("Should return a route with the correct line Jore 4 id")
+    void shouldReturnRouteWithCorrectLineJore4Id() throws Exception {
         final Jore4Route route = processor.process(INPUT);
-        assertThat(route.lineId()).isEqualTo(LINE_TRANSMODEL_ID);
+        assertThat(route.lineId()).isEqualTo(LINE_JORE4_ID);
     }
 
     @Test

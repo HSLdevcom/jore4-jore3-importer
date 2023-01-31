@@ -280,15 +280,15 @@ public class ScheduledStopPointImportRepositoryTest {
     }
 
     @Nested
-    @DisplayName("Set the transmodel ids of scheduled stop points")
+    @DisplayName("Set the Jore 4 ids of scheduled stop points")
     @Sql(scripts = {
             "/sql/destination/drop_tables.sql",
             "/sql/destination/populate_infrastructure_nodes.sql",
             "/sql/destination/populate_scheduled_stop_points.sql"
     })
-    class SetTransmodelIds {
+    class SetJore4Ids {
 
-        private final UUID TRANSMODEL_ID = UUID.fromString("51f2686b-166c-4157-bd70-647337e44c8c");
+        private final UUID JORE4_ID = UUID.fromString("51f2686b-166c-4157-bd70-647337e44c8c");
 
         @Nested
         @DisplayName("When the updated scheduled stop point isn't found")
@@ -296,13 +296,13 @@ public class ScheduledStopPointImportRepositoryTest {
 
             private static final String UNKNOWN_EXT_ID = "999999999";
             private List<PersistableScheduledStopPointIdMapping> INPUT = List.of(
-                    PersistableScheduledStopPointIdMapping.of(UNKNOWN_EXT_ID, TRANSMODEL_ID)
+                    PersistableScheduledStopPointIdMapping.of(UNKNOWN_EXT_ID, JORE4_ID)
             );
 
             @Test
-            @DisplayName("Shouldn't update the transmodel id of the existing scheduled stop point")
-            void shouldNotUpdateTransmodelIdOfExistingScheduledStopPoint() {
-                importRepository.setTransmodelIds(INPUT);
+            @DisplayName("Shouldn't update the Jore 4 id of the existing scheduled stop point")
+            void shouldNotUpdateJore4IdOfExistingScheduledStopPoint() {
+                importRepository.setJore4Ids(INPUT);
 
                 final ScheduledStopPoint updated = targetRepository.findByExternalId(ExternalId.of(EXTERNAL_ID)).get();
                 assertThat(updated.transmodelId()).isEmpty();
@@ -314,16 +314,16 @@ public class ScheduledStopPointImportRepositoryTest {
         class WhenUpdatedScheduledStopPointIsFound {
 
             private List<PersistableScheduledStopPointIdMapping> INPUT = List.of(
-                    PersistableScheduledStopPointIdMapping.of(EXTERNAL_ID, TRANSMODEL_ID)
+                    PersistableScheduledStopPointIdMapping.of(EXTERNAL_ID, JORE4_ID)
             );
 
             @Test
-            @DisplayName("Should update the transmodel id of the existing scheduled stop point")
-            void shouldUpdateTransmodelIdOfExistingScheduledStopPoint() {
-                importRepository.setTransmodelIds(INPUT);
+            @DisplayName("Should update the Jore 4 id of the existing scheduled stop point")
+            void shouldUpdateJore4IdOfExistingScheduledStopPoint() {
+                importRepository.setJore4Ids(INPUT);
 
                 final ScheduledStopPoint updated = targetRepository.findByExternalId(ExternalId.of(EXTERNAL_ID)).get();
-                assertThat(updated.transmodelId()).contains(TRANSMODEL_ID);
+                assertThat(updated.transmodelId()).contains(JORE4_ID);
             }
         }
     }

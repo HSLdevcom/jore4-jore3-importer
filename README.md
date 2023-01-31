@@ -225,7 +225,7 @@ these three components:
   Jore 4 database. It also generates an UUID which is the primary key of the row inserted to the Jore 4 database
   in the next process of this step.
 * An `ItemWriter<OUTPUT>` object inserts the imported data into the Jore 4 database. If the data was inserted into the
-  Jore 4 database, the `ItemWriter<OUTPUT>` object sets the transmodel ids of exported rows (performs an `UPDATE`
+  Jore 4 database, the `ItemWriter<OUTPUT>` object sets the Jore 4 ids of exported rows (performs an `UPDATE`
   statement to the importer's database). Currently, not all database constraints of Jore4 database are implemented or
   taken into account in internal data processing logic of Importer. Hence, writing a data item into Jore4 database may
   fail because of a database constraint violation. As a consequence of constraint violations, subsequent steps of Spring

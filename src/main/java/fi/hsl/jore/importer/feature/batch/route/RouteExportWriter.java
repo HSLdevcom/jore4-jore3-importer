@@ -27,12 +27,12 @@ public class RouteExportWriter implements ItemWriter<Jore4Route> {
     public void write(final List<? extends Jore4Route> items) throws Exception {
         jore4Repository.insert(items);
 
-        final io.vavr.collection.List<PersistableRouteIdMapping> transmodelIdMappings = items.stream()
+        final io.vavr.collection.List<PersistableRouteIdMapping> jore4IdMappings = items.stream()
                 .map(item -> PersistableRouteIdMapping.of(
                         item.directionExtId(),
                         item.routeId()
                 ))
                 .collect(io.vavr.collection.List.collector());
-        importerRepository.setRouteTransmodelIds(transmodelIdMappings);
+        importerRepository.setRouteJore4Ids(jore4IdMappings);
     }
 }

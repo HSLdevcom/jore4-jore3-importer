@@ -33,6 +33,6 @@ public class JourneyPatternExportWriter implements ItemWriter<Jore4JourneyPatter
                         item.journeyPatternId()
                 ))
                 .collect(io.vavr.collection.List.collector());
-        importerRepository.setJourneyPatternTransmodelIds(journeyPatternIdMappings);
+        importerRepository.setJourneyPatternJore4Ids(journeyPatternIdMappings);
     }
 }

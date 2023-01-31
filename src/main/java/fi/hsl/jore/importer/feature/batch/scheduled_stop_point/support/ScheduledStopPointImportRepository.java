@@ -171,7 +171,7 @@ public class ScheduledStopPointImportRepository
 
     @Transactional
     @Override
-    public void setTransmodelIds(final List<PersistableScheduledStopPointIdMapping> idMappings) {
+    public void setJore4Ids(final List<PersistableScheduledStopPointIdMapping> idMappings) {
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)

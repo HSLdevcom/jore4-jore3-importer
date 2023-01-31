@@ -142,16 +142,16 @@ public class LineImportRepositoryTest {
     }
 
     @Nested
-    @DisplayName("Set the transmodel ids of lines")
+    @DisplayName("Set the Jore 4 ids of lines")
 
     @Sql(scripts = {
             "/sql/destination/drop_tables.sql",
             "/sql/destination/populate_lines.sql"
     })
-    class SetTransmodelIds {
+    class SetJore4Ids {
 
         private final ExternalId EXT_ID = ExternalId.of("1001");
-        private final UUID TRANSMODEL_ID = UUID.fromString("51f2686b-166c-4157-bd70-647337e44c8c");
+        private final UUID JORE4_ID = UUID.fromString("51f2686b-166c-4157-bd70-647337e44c8c");
 
         @Nested
         @DisplayName("When the line isn't found")
@@ -159,13 +159,13 @@ public class LineImportRepositoryTest {
 
             private static final String UNKNOWN_EXT_ID = "999999999";
             private final List<PersistableLineIdMapping> INPUT = List.of(
-                    PersistableLineIdMapping.of(UNKNOWN_EXT_ID, TRANSMODEL_ID)
+                    PersistableLineIdMapping.of(UNKNOWN_EXT_ID, JORE4_ID)
             );
 
             @Test
-            @DisplayName("Shouldn't update the transmodel id of the existing line")
-            void shouldNotUpdateTransmodelIdOfExistingLine() {
-                importRepository.setTransmodelIds(INPUT);
+            @DisplayName("Shouldn't update the Jore 4 id of the existing line")
+            void shouldNotUpdateJore4IdOfExistingLine() {
+                importRepository.setJore4Ids(INPUT);
 
                 final Line existingLine = targetRepository.findByExternalId(EXT_ID).get();
                 assertThat(existingLine.transmodelId().isEmpty(), is(true));
@@ -177,16 +177,16 @@ public class LineImportRepositoryTest {
         class WhenLineIsFound {
 
             private final List<PersistableLineIdMapping> INPUT = List.of(
-                    PersistableLineIdMapping.of(EXT_ID.value(), TRANSMODEL_ID)
+                    PersistableLineIdMapping.of(EXT_ID.value(), JORE4_ID)
             );
 
             @Test
-            @DisplayName("Should update the transmodel id of the existing line")
-            void shouldUpdateTransmodelIdOfExistingLine() {
-                importRepository.setTransmodelIds(INPUT);
+            @DisplayName("Should update the Jore 4 id of the existing line")
+            void shouldUpdateJore4IdOfExistingLine() {
+                importRepository.setJore4Ids(INPUT);
 
                 final Line existingLine = targetRepository.findByExternalId(EXT_ID).get();
-                assertThat(existingLine.transmodelId(), equalTo(Optional.of(TRANSMODEL_ID)));
+                assertThat(existingLine.transmodelId(), equalTo(Optional.of(JORE4_ID)));
             }
         }
     }

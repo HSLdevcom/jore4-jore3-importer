@@ -68,14 +68,14 @@ class JourneyPatternStopExportReaderTest {
     @ExtendWith(SoftAssertionsExtension.class)
     class WhenSourceTableHasOneRouteWithTwoStops {
 
-        private final UUID JOURNEY_PATTERN_TRANSMODEL_ID = UUID.fromString("ec564137-f30c-4689-9322-4ef650768af3");
+        private final UUID JOURNEY_PATTERN_JORE4_ID = UUID.fromString("ec564137-f30c-4689-9322-4ef650768af3");
 
-        private final String FIRST_JOURNEY_PATTERN_STOP_TRANSMODEL_LABEL = "H1234";
+        private final String FIRST_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H1234";
         private static final int FIRST_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 1;
         private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_HASTUS_POINT = false;
         private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_VIA_POINT = false;
 
-        private final String SECOND_JOURNEY_PATTERN_STOP_TRANSMODEL_LABEL = "H4321";
+        private final String SECOND_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H4321";
         private static final int SECOND_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 2;
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_HASTUS_POINT = true;
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_VIA_POINT = true;
@@ -88,11 +88,11 @@ class JourneyPatternStopExportReaderTest {
             final ImporterJourneyPatternStop first = reader.read();
 
             softAssertions.assertThat(first.journeyPatternTransmodelId())
-                    .as("journeyPatternTransmodelId")
-                    .isEqualTo(JOURNEY_PATTERN_TRANSMODEL_ID);
+                    .as("journeyPatternJore4Id")
+                    .isEqualTo(JOURNEY_PATTERN_JORE4_ID);
             softAssertions.assertThat(first.scheduledStopPointTransmodelLabel())
-                    .as("scheduledStopPointTransmodelLabel")
-                    .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_TRANSMODEL_LABEL);
+                    .as("scheduledStopPointJore4Label")
+                    .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_JORE4_LABEL);
             softAssertions.assertThat(first.orderNumber())
                     .as("orderNumber")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_ORDER_NUMBER);
@@ -116,11 +116,11 @@ class JourneyPatternStopExportReaderTest {
 
             final ImporterJourneyPatternStop second = reader.read();
             softAssertions.assertThat(second.journeyPatternTransmodelId())
-                    .as("journeyPatternTransmodelId")
-                    .isEqualTo(JOURNEY_PATTERN_TRANSMODEL_ID);
+                    .as("journeyPatternJore4Id")
+                    .isEqualTo(JOURNEY_PATTERN_JORE4_ID);
             softAssertions.assertThat(second.scheduledStopPointTransmodelLabel())
-                    .as("scheduledStopPointTransmodelLabel")
-                    .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_TRANSMODEL_LABEL);
+                    .as("scheduledStopPointJore4Label")
+                    .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_JORE4_LABEL);
             softAssertions.assertThat(second.orderNumber())
                     .as("orderNumber")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_ORDER_NUMBER);

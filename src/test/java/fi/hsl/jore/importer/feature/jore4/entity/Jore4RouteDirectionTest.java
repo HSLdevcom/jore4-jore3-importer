@@ -26,10 +26,10 @@ class Jore4RouteDirectionTest {
         @DisplayName("When the direction type is known")
         class WhenDirectionTypeIsKnown {
 
-            @DisplayName("Create a new transmodel route direction from direction type")
-            @ParameterizedTest(name = "When the direction is: {0}, the transmodel route direction should be: {1}")
+            @DisplayName("Create a new Jore 4 route direction from direction type")
+            @ParameterizedTest(name = "When the direction is: {0}, the Jore 4 route direction should be: {1}")
             @ArgumentsSource(DirectionTypeArgumentsProvider.class)
-            void shouldReturnCorrectTransmodelRouteDirection(final DirectionType input, final Jore4RouteDirection expected) {
+            void shouldReturnCorrectJore4RouteDirection(final DirectionType input, final Jore4RouteDirection expected) {
                 final Jore4RouteDirection actual = Jore4RouteDirection.of(input);
                 assertThat(actual).isEqualTo(expected);
             }

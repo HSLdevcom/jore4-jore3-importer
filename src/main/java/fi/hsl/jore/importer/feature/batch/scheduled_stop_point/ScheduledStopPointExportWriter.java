@@ -31,12 +31,12 @@ public class ScheduledStopPointExportWriter implements ItemWriter<Jore4Scheduled
     public void write(final List<? extends Jore4ScheduledStopPoint> items) throws Exception {
         jore4Repository.insert(items);
 
-        final io.vavr.collection.List<PersistableScheduledStopPointIdMapping> transmodelIdMappings = items.stream()
+        final io.vavr.collection.List<PersistableScheduledStopPointIdMapping> jore4IdMappings = items.stream()
                 .map(item -> PersistableScheduledStopPointIdMapping.of(
                         item.externalScheduledStopPointId(),
                         item.scheduledStopPointId()
                 ))
                 .collect(io.vavr.collection.List.collector());
-        importerRepository.setTransmodelIds(transmodelIdMappings);
+        importerRepository.setJore4Ids(jore4IdMappings);
     }
 }

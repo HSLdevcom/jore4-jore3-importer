@@ -18,7 +18,7 @@ class JourneyPatternStopExportProcessorTest {
 
     private static final boolean IS_HASTUS_POINT = true;
     private static final boolean IS_VIA_POINT = true;
-    private static final UUID JOURNEY_PATTERN_TRANSMODEL_ID = UUID.fromString("55171cba-d8b7-4d6a-bbd4-cec0501c88f8");
+    private static final UUID JOURNEY_PATTERN_JORE4_ID = UUID.fromString("55171cba-d8b7-4d6a-bbd4-cec0501c88f8");
     private static final int ORDER_NUMBER = 1;
     private static final String SCHEDULED_STOP_POINT_LABEL = "stop1";
     private static final Map<Locale, String> VIA_POINT_NAME_MAP = Map.of(JoreLocaleUtil.FINNISH, "ViaSuomi", JoreLocaleUtil.SWEDISH, "ViaSverige");
@@ -28,7 +28,7 @@ class JourneyPatternStopExportProcessorTest {
             IS_HASTUS_POINT,
             IS_VIA_POINT,
             VIA_POINT_NAMES,
-            JOURNEY_PATTERN_TRANSMODEL_ID,
+            JOURNEY_PATTERN_JORE4_ID,
             ORDER_NUMBER,
             SCHEDULED_STOP_POINT_LABEL
     );
@@ -39,7 +39,7 @@ class JourneyPatternStopExportProcessorTest {
     @DisplayName("Should return a journey pattern stop with the correct journey pattern id")
     void shouldReturnJourneyPatternStopWithCorrectJourneyPatternId() throws Exception {
         final Jore4JourneyPatternStop output = processor.process(INPUT);
-        assertThat(output.journeyPatternId()).isEqualTo(JOURNEY_PATTERN_TRANSMODEL_ID);
+        assertThat(output.journeyPatternId()).isEqualTo(JOURNEY_PATTERN_JORE4_ID);
     }
 
     @Test

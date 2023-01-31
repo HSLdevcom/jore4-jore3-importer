@@ -160,7 +160,7 @@ public class RouteDirectionImportRepository
 
     @Transactional
     @Override
-    public void setJourneyPatternTransmodelIds(final List<PersistableJourneyPatternIdMapping> idMappings) {
+    public void setJourneyPatternJore4Ids(final List<PersistableJourneyPatternIdMapping> idMappings) {
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)
@@ -173,7 +173,7 @@ public class RouteDirectionImportRepository
 
     @Transactional
     @Override
-    public void setRouteTransmodelIds(final List<PersistableRouteIdMapping> idMappings) {
+    public void setRouteJore4Ids(final List<PersistableRouteIdMapping> idMappings) {
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)
