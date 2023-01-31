@@ -25,7 +25,7 @@ public class JourneyPatternExportProcessor implements ItemProcessor<ImporterJour
         return Jore4JourneyPattern.of(
                 UUID.randomUUID(),
                 input.routeDirectionId(),
-                input.routeTransmodelId()
+                input.routeJore4Id()
         );
     }
 }

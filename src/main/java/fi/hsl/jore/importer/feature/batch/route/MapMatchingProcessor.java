@@ -57,7 +57,7 @@ public class MapMatchingProcessor implements ItemProcessor<ImporterRouteGeometry
                 routePointsInput
         );
 
-        return createRouteGeometry(routeGeometryInput.routeTransmodelId(), mapMatchingResponse);
+        return createRouteGeometry(routeGeometryInput.routeJore4Id(), mapMatchingResponse);
     }
 
     private Jore4RouteGeometry createRouteGeometry(final UUID routeId,

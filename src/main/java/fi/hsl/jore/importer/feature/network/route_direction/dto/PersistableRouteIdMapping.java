@@ -15,13 +15,13 @@ public interface PersistableRouteIdMapping {
 
     UUID routeDirectionId();
 
-    UUID transmodelId();
+    UUID jore4Id();
 
     static PersistableRouteIdMapping of(final UUID routeDirectionId,
-                                        final UUID transmodelId) {
+                                        final UUID jore4Id) {
         return ImmutablePersistableRouteIdMapping.builder()
                 .routeDirectionId(routeDirectionId)
-                .transmodelId(transmodelId)
+                .jore4Id(jore4Id)
                 .build();
     }
 }

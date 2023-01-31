@@ -305,7 +305,7 @@ public class ScheduledStopPointImportRepositoryTest {
                 importRepository.setJore4Ids(INPUT);
 
                 final ScheduledStopPoint updated = targetRepository.findByExternalId(ExternalId.of(EXTERNAL_ID)).get();
-                assertThat(updated.transmodelId()).isEmpty();
+                assertThat(updated.jore4Id()).isEmpty();
             }
         }
 
@@ -323,7 +323,7 @@ public class ScheduledStopPointImportRepositoryTest {
                 importRepository.setJore4Ids(INPUT);
 
                 final ScheduledStopPoint updated = targetRepository.findByExternalId(ExternalId.of(EXTERNAL_ID)).get();
-                assertThat(updated.transmodelId()).contains(JORE4_ID);
+                assertThat(updated.jore4Id()).contains(JORE4_ID);
             }
         }
     }

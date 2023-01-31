@@ -492,7 +492,7 @@ class RouteDirectionImportRepositoryTest {
                 importRepository.setJourneyPatternJore4Ids(INPUT);
 
                 final RouteDirection routeDirection = targetRepository.findById(RouteDirectionPK.of(ROUTE_DIRECTION_ID)).get();
-                assertThat(routeDirection.journeyPatternTransmodelId()).isEmpty();
+                assertThat(routeDirection.journeyPatternJore4Id()).isEmpty();
             }
         }
 
@@ -511,7 +511,7 @@ class RouteDirectionImportRepositoryTest {
                 importRepository.setJourneyPatternJore4Ids(INPUT);
 
                 final RouteDirection routeDirection = targetRepository.findById(RouteDirectionPK.of(ROUTE_DIRECTION_ID)).get();
-                assertThat(routeDirection.journeyPatternTransmodelId()).contains(JOURNEY_PATTERN_JORE4_ID);
+                assertThat(routeDirection.journeyPatternJore4Id()).contains(JOURNEY_PATTERN_JORE4_ID);
             }
         }
     }
@@ -545,7 +545,7 @@ class RouteDirectionImportRepositoryTest {
                 importRepository.setRouteJore4Ids(INPUT);
 
                 final RouteDirection routeDirection = targetRepository.findById(RouteDirectionPK.of(ROUTE_DIRECTION_ID)).get();
-                assertThat(routeDirection.routeTransmodelId()).isEmpty();
+                assertThat(routeDirection.routeJore4Id()).isEmpty();
             }
         }
 
@@ -564,7 +564,7 @@ class RouteDirectionImportRepositoryTest {
                 importRepository.setRouteJore4Ids(INPUT);
 
                 final RouteDirection routeDirection = targetRepository.findById(RouteDirectionPK.of(ROUTE_DIRECTION_ID)).get();
-                assertThat(routeDirection.routeTransmodelId()).contains(JORE4_ID);
+                assertThat(routeDirection.routeJore4Id()).contains(JORE4_ID);
             }
         }
     }

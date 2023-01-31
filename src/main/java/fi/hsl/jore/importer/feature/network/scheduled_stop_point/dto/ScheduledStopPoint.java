@@ -28,7 +28,7 @@ public interface ScheduledStopPoint
 
     NodePK node();
 
-    Optional<UUID> transmodelId();
+    Optional<UUID> jore4Id();
 
     /**
      * Number of times used in routes
@@ -41,7 +41,7 @@ public interface ScheduledStopPoint
                                  final NodePK node,
                                  final MultilingualString name,
                                  final Optional<String> shortId,
-                                 final Optional<UUID> transmodelId,
+                                 final Optional<UUID> jore4Id,
                                  final int usageInRoutes,
                                  final TimeRange systemTime) {
         return ImmutableScheduledStopPoint.builder()
@@ -51,7 +51,7 @@ public interface ScheduledStopPoint
                 .node(node)
                 .name(name)
                 .shortId(shortId)
-                .transmodelId(transmodelId)
+                .jore4Id(jore4Id)
                 .systemTime(systemTime)
                 .usageInRoutes(usageInRoutes)
                 .build();

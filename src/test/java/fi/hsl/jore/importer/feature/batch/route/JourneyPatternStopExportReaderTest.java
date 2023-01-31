@@ -87,10 +87,10 @@ class JourneyPatternStopExportReaderTest {
         void firstInvocationOfReadMethodMustReturnInformationOfFirstStop(final SoftAssertions softAssertions) throws Exception {
             final ImporterJourneyPatternStop first = reader.read();
 
-            softAssertions.assertThat(first.journeyPatternTransmodelId())
+            softAssertions.assertThat(first.journeyPatternJore4Id())
                     .as("journeyPatternJore4Id")
                     .isEqualTo(JOURNEY_PATTERN_JORE4_ID);
-            softAssertions.assertThat(first.scheduledStopPointTransmodelLabel())
+            softAssertions.assertThat(first.scheduledStopPointJore4Label())
                     .as("scheduledStopPointJore4Label")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_JORE4_LABEL);
             softAssertions.assertThat(first.orderNumber())
@@ -115,10 +115,10 @@ class JourneyPatternStopExportReaderTest {
             assertThat(first).isNotNull();
 
             final ImporterJourneyPatternStop second = reader.read();
-            softAssertions.assertThat(second.journeyPatternTransmodelId())
+            softAssertions.assertThat(second.journeyPatternJore4Id())
                     .as("journeyPatternJore4Id")
                     .isEqualTo(JOURNEY_PATTERN_JORE4_ID);
-            softAssertions.assertThat(second.scheduledStopPointTransmodelLabel())
+            softAssertions.assertThat(second.scheduledStopPointJore4Label())
                     .as("scheduledStopPointJore4Label")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_JORE4_LABEL);
             softAssertions.assertThat(second.orderNumber())

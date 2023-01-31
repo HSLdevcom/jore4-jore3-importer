@@ -22,7 +22,7 @@ public interface ImporterRoute {
 
     MultilingualString name();
 
-    UUID lineTransmodelId();
+    UUID lineJore4Id();
 
     String routeNumber();
 
@@ -35,7 +35,7 @@ public interface ImporterRoute {
     static ImporterRoute of(final UUID directionId,
                             final DirectionType directionType,
                             final MultilingualString name,
-                            final UUID lineTransmodelId,
+                            final UUID lineJore4Id,
                             final String routeNumber,
                             final Optional<Short> hiddenVariant,
                             final DateRange  validDateRange,
@@ -44,7 +44,7 @@ public interface ImporterRoute {
                 .directionId(directionId)
                 .directionType(directionType)
                 .name(name)
-                .lineTransmodelId(lineTransmodelId)
+                .lineJore4Id(lineJore4Id)
                 .routeNumber(routeNumber)
                 .hiddenVariant(hiddenVariant)
                 .validDateRange(validDateRange)

@@ -20,17 +20,17 @@ public interface ImporterRouteGeometry {
 
     String routeDirectionExtId();
 
-    UUID routeTransmodelId();
+    UUID routeJore4Id();
 
     static ImporterRouteGeometry from(final LineString geometry,
                                       final UUID routeDirectionId,
                                       final String routeDirectionExtId,
-                                      final UUID routeTransmodelId) {
+                                      final UUID routeJore4Id) {
         return ImmutableImporterRouteGeometry.builder()
                 .geometry(geometry)
                 .routeDirectionId(routeDirectionId)
                 .routeDirectionExtId(routeDirectionExtId)
-                .routeTransmodelId(routeTransmodelId)
+                .routeJore4Id(routeJore4Id)
                 .build();
     }
 }

@@ -28,11 +28,11 @@ public interface RouteDirection
                 IHasSystemTime,
                 CommonFields<RouteDirection> {
 
-    Optional<UUID> journeyPatternTransmodelId();
+    Optional<UUID> journeyPatternJore4Id();
 
     RoutePK routeId();
 
-    Optional<UUID> routeTransmodelId();
+    Optional<UUID> routeJore4Id();
 
     static RouteDirection of(final RouteDirectionPK pk,
                              final RoutePK routeId,
@@ -45,8 +45,8 @@ public interface RouteDirection
                              final MultilingualString destination,
                              final DateRange validTime,
                              final TimeRange systemTime,
-                             final Optional<UUID> journeyPatternTransmodelId,
-                             final Optional<UUID> routeTransmodelId) {
+                             final Optional<UUID> journeyPatternJore4Id,
+                             final Optional<UUID> routeJore4Id) {
         return ImmutableRouteDirection.builder()
                                       .pk(pk)
                                       .routeId(routeId)
@@ -59,8 +59,8 @@ public interface RouteDirection
                                       .destination(destination)
                                       .validTime(validTime)
                                       .systemTime(systemTime)
-                                      .journeyPatternTransmodelId(journeyPatternTransmodelId)
-                                      .routeTransmodelId(routeTransmodelId)
+                                      .journeyPatternJore4Id(journeyPatternJore4Id)
+                                      .routeJore4Id(routeJore4Id)
                                       .build();
     }
 

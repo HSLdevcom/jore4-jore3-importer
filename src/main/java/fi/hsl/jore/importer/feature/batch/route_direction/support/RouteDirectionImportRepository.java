@@ -177,7 +177,7 @@ public class RouteDirectionImportRepository
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)
-                        .set(TARGET_TABLE.NETWORK_ROUTE_TRANSMODEL_ID, idMapping.transmodelId())
+                        .set(TARGET_TABLE.NETWORK_ROUTE_TRANSMODEL_ID, idMapping.jore4Id())
                         .where(TARGET_TABLE.NETWORK_ROUTE_DIRECTION_ID.eq(idMapping.routeDirectionId()))
                         .execute();
             });

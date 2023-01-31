@@ -205,7 +205,7 @@ class RouteImportRepositoryTest {
                             .as("updated Swedish route name")
                             .isEqualTo(EXPECTED_SWEDISH_ROUTE_NAME);
 
-                    softAssertions.assertThat(inserted.transmodelId())
+                    softAssertions.assertThat(inserted.jore4Id())
                             .as("jore4Id")
                             .isEmpty();
 
@@ -275,7 +275,7 @@ class RouteImportRepositoryTest {
                             .as("updated Swedish route name")
                             .isEqualTo(EXPECTED_SWEDISH_ROUTE_NAME);
 
-                    softAssertions.assertThat(updated.transmodelId())
+                    softAssertions.assertThat(updated.jore4Id())
                             .as("jore4Id")
                             .isEmpty();
 

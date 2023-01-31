@@ -17,27 +17,27 @@ public interface ImporterJourneyPatternStop {
 
     boolean isViaPoint();
 
-    UUID journeyPatternTransmodelId();
+    UUID journeyPatternJore4Id();
 
     int orderNumber();
 
-    String scheduledStopPointTransmodelLabel();
+    String scheduledStopPointJore4Label();
 
     Optional<MultilingualString> viaPointNames();
 
     static ImporterJourneyPatternStop of(final boolean isHastusPoint,
                                          final boolean isViaPoint,
                                          final Optional<MultilingualString> viaPointNames,
-                                         final UUID journeyPatternTransmodelId,
+                                         final UUID journeyPatternJore4Id,
                                          final int orderNumber,
-                                         final String scheduledStopPointTransmodelLabel) {
+                                         final String scheduledStopPointJore4Label) {
         return ImmutableImporterJourneyPatternStop.builder()
                 .isHastusPoint(isHastusPoint)
                 .isViaPoint(isViaPoint)
                 .viaPointNames(viaPointNames)
-                .journeyPatternTransmodelId(journeyPatternTransmodelId)
+                .journeyPatternJore4Id(journeyPatternJore4Id)
                 .orderNumber(orderNumber)
-                .scheduledStopPointTransmodelLabel(scheduledStopPointTransmodelLabel)
+                .scheduledStopPointJore4Label(scheduledStopPointJore4Label)
                 .build();
     }
 }
