@@ -6,9 +6,11 @@ valid rows found from the Jore 3 database are imported to the Jore 4 database.
 
 The import process has two steps:
 
-1. Read the imported data from the Jore 3 database and insert it into the database of this application. Note that this
-   step saves the version history of the imported data.
-2. Read the latest version of the imported data from the database of this application and insert it into the Jore 4 database.
+1. Read the imported data from the Jore 3 database (aka source)
+   and insert it into the database of this application (aka importer database) to the staging tables.
+   Note that this step saves the version history of the imported data.
+2. Read the latest version of the imported data from the staging tables from database of this application
+   and insert it into the Jore 4 database (aka target).
 
 ## Using the REST API
 
@@ -80,6 +82,18 @@ the subdirectories:
 * The _db/migration_ directory contains the Flyway database migration scripts.
 * The _jore4_ directory contains the SQL scripts which read the imported data from importer's PostgreSQL database.
 * The _jore3_ directory contains the SQL scripts which read the imported data from the Jore 3 MSSQL database.
+
+### DTO terminology
+
+There are several types of DTOs in this application.
+Generally they follow this naming scheme:
+
+- *Jore3* means that the item can be inserted into importer's own database (staging tables).
+  Used in the`importStep` of [Jore3 import phase](#importing-data-from-the-jore-3-database-to-the-importers-database)
+- *Importer* means that the information is read from the importer's own database and can be exported to an external system.
+  Used in the`commitStep` of [Jore3 import phase](#importing-data-from-the-jore-3-database-to-the-importers-database)
+- *Jore4* means that the information can be inserted into the Jore4 data model.
+  Used in the [Jore4 export phase](#importing-data-from-the-importers-database-to-the-jore-4-database)
 
 ## Technical Documentation
 

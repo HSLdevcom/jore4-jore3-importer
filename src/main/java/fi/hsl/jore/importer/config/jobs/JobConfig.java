@@ -102,7 +102,8 @@ public class JobConfig extends BatchConfig {
     public static final String JOB_NAME = "importJoreJob";
 
     @Bean
-    public Job importJob(final Flow importNodesFlow,
+    public Job importJob(/* Steps to import data from Jore 3 to importer staging DB. */
+                         final Flow importNodesFlow,
                          final Flow importLinksFlow,
                          final Flow importLinkPointsFlow,
                          final Flow importLinesFlow,
@@ -111,6 +112,7 @@ public class JobConfig extends BatchConfig {
                          final Flow importRouteDirectionsFlow,
                          final Flow importRouteLinksFlow,
                          final Flow importScheduledStopPointsFlow,
+                         /* Export data from the importer staging DB to Jore 4 DB. */
                          final Flow jore4ExportFlow) {
         return jobs.get(JOB_NAME)
                 .start(importNodesFlow)
