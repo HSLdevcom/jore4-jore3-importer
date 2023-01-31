@@ -78,8 +78,8 @@ the subdirectories:
 * The _configuration_ directory contains the properties files which configure the used database connections
   and the jOOQ integration of Spring Boot.
 * The _db/migration_ directory contains the Flyway database migration scripts.
-* The _export_ directory contains the SQL scripts which read the imported data from importer's PostgreSQL database.
-* The _import_ directory contains the SQL scripts which read the imported data from the Jore 3 MSSQL database.
+* The _jore4_ directory contains the SQL scripts which read the imported data from importer's PostgreSQL database.
+* The _jore3_ directory contains the SQL scripts which read the imported data from the Jore 3 MSSQL database.
 
 ## Technical Documentation
 
@@ -267,7 +267,7 @@ The process that imports scheduled stop points to Jore 4 follows these rules:
   * If the import process has iterated all ELY numbers and none of them was found from the Digiroad data, the importer
     ignores the processed stop point and won't transfer its information to the Jore 4 database.
 
-See the _/src/resources/export/export_scheduled_stop_points.sql_ file for more details.
+See the _/src/resources/jore4-export/export_scheduled_stop_points.sql_ file for more details.
 
 ##### Lines
 
@@ -276,7 +276,7 @@ See the _/src/resources/export/export_scheduled_stop_points.sql_ file for more d
   the source data from the importer's database. At the moment, the exported lines are ordered in descending order by
   using the value of the `network_line_header_valid_date_range` column as a sort criteria.
 
-See the _/src/resources/export/export_lines.sql_ file for more details.
+See the _/src/resources/jore4-export/export_lines.sql_ file for more details.
 
 ##### Routes
 
@@ -289,10 +289,10 @@ See the _/src/resources/export/export_lines.sql_ file for more details.
 * The priority of a route must be higher or equal than the priority of the line which owns the route. If this isn't the
   case, the route in question cannot be inserted into the Jore 4 database.
 * A route will be transferred to the Jore 4 database only if the processed route is valid at 1.1.2021 or it will be valid
-  after that date. If you change the valid date range found from the SQL query (_/src/main/resources/export/export_routes.sql_),
+  after that date. If you change the valid date range found from the SQL query (_/src/main/resources/jore4-export/export_routes.sql_),
   you should remember to make the required changes to the route data sets found from the _src/test/resources/sql/destination_ directory.
 
-See the _/src/resources/export/export_routes.sql_ file for more details.
+See the _/src/resources/jore4-export/export_routes.sql_ file for more details.
 
 ##### Stop Points of Journey Pattern
 
@@ -300,7 +300,7 @@ See the _/src/resources/export/export_routes.sql_ file for more details.
   will "group" stop points by using short id and for each group selects the one that was exported previously
   to Jore 4 database.
 
-See the _/src/resources/export/export_stops_of_journey_patterns.sql_ file for more details.
+See the _/src/resources/jore4-export/export_stops_of_journey_patterns.sql_ file for more details.
 
 ## Developer Guide
 

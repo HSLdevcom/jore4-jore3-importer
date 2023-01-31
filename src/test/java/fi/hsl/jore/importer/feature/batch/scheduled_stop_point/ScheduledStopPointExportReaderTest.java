@@ -42,7 +42,7 @@ class ScheduledStopPointExportReaderTest {
 
     @Nested
     @DisplayName("When the source table is empty")
-    @Sql(scripts = "/sql/destination/drop_tables.sql")
+    @Sql(scripts = "/sql/importer/drop_tables.sql")
     class WhenSourceTableIsEmpty {
 
         @Test
@@ -56,9 +56,9 @@ class ScheduledStopPointExportReaderTest {
     @Nested
     @DisplayName("When the source table has one scheduled stop point")
     @Sql(scripts = {
-            "/sql/destination/drop_tables.sql",
-            "/sql/destination/populate_infrastructure_nodes.sql",
-            "/sql/destination/populate_scheduled_stop_points.sql"
+            "/sql/importer/drop_tables.sql",
+            "/sql/importer/populate_infrastructure_nodes.sql",
+            "/sql/importer/populate_scheduled_stop_points.sql"
     })
     @ExtendWith(SoftAssertionsExtension.class)
     class WhenSourceTableHasOneScheduledStopPoint {
@@ -128,9 +128,9 @@ class ScheduledStopPointExportReaderTest {
     @Nested
     @DisplayName("When the source table has one scheduled stop point")
     @Sql(scripts = {
-            "/sql/destination/drop_tables.sql",
-            "/sql/destination/populate_infrastructure_nodes.sql",
-            "/sql/destination/populate_scheduled_stop_points_with_same_short_id.sql"
+            "/sql/importer/drop_tables.sql",
+            "/sql/importer/populate_infrastructure_nodes.sql",
+            "/sql/importer/populate_scheduled_stop_points_with_same_short_id.sql"
     })
     @ExtendWith(SoftAssertionsExtension.class)
     class WhenSourceTableHasTwoScheduledStopPointsWithSameShortId {

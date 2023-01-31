@@ -62,10 +62,10 @@ class Jore4RouteRepositoryTest {
     @DisplayName("Insert routes into the database")
     @Sql(
             scripts = {
-                    "/sql/transmodel/drop_tables.sql",
-                    "/sql/transmodel/populate_infrastructure_links.sql",
-                    "/sql/transmodel/populate_lines.sql",
-                    "/sql/transmodel/populate_scheduled_stop_points.sql"
+                    "/sql/jore4/drop_tables.sql",
+                    "/sql/jore4/populate_infrastructure_links.sql",
+                    "/sql/jore4/populate_lines.sql",
+                    "/sql/jore4/populate_scheduled_stop_points.sql"
             },
             config = @SqlConfig(dataSource = "jore4DataSource")
     )

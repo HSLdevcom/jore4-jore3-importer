@@ -18,7 +18,7 @@ import java.sql.SQLException;
  */
 public class LineExportMapper implements RowMapper<ImporterLine> {
 
-    public static final String SQL_PATH = "classpath:export/export_lines.sql";
+    public static final String SQL_PATH = "classpath:jore4-export/export_lines.sql";
     private static final DateRangeConverter DATE_RANGE_CONVERTER = DateRangeConverter.INSTANCE;
 
     private final IJsonbConverter jsonConverter;

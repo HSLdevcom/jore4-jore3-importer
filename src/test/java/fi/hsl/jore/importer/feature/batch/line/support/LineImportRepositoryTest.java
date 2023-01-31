@@ -46,7 +46,7 @@ public class LineImportRepositoryTest {
 
     @Nested
     @DisplayName("Commit staging to the target table")
-    @Sql(scripts = "/sql/destination/drop_tables.sql")
+    @Sql(scripts = "/sql/importer/drop_tables.sql")
     class CommitStagingToTarget {
 
         private static final String LINE_NUMBER = "1005";
@@ -145,8 +145,8 @@ public class LineImportRepositoryTest {
     @DisplayName("Set the Jore 4 ids of lines")
 
     @Sql(scripts = {
-            "/sql/destination/drop_tables.sql",
-            "/sql/destination/populate_lines.sql"
+            "/sql/importer/drop_tables.sql",
+            "/sql/importer/populate_lines.sql"
     })
     class SetJore4Ids {
 

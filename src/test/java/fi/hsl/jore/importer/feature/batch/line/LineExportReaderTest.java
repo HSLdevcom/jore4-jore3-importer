@@ -62,7 +62,7 @@ class LineExportReaderTest {
 
     @Nested
     @DisplayName("When the source tables are empty")
-    @Sql(scripts = "/sql/destination/drop_tables.sql")
+    @Sql(scripts = "/sql/importer/drop_tables.sql")
     class WhenSourceTablesAreEmpty {
 
         @Test
@@ -76,9 +76,9 @@ class LineExportReaderTest {
     @Nested
     @DisplayName("When the source tables have one line")
     @Sql(scripts = {
-            "/sql/destination/drop_tables.sql",
-            "/sql/destination/populate_lines.sql",
-            "/sql/destination/populate_line_headers.sql"
+            "/sql/importer/drop_tables.sql",
+            "/sql/importer/populate_lines.sql",
+            "/sql/importer/populate_line_headers.sql"
     })
     @ExtendWith(SoftAssertionsExtension.class)
     class WhenSourceTablesHaveOneLine {

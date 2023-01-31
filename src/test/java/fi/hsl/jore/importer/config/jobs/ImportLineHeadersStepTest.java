@@ -21,12 +21,12 @@ import static org.hamcrest.Matchers.is;
 
 @ContextConfiguration(classes = JobConfig.class)
 @Sql(scripts = {
-        "/sql/source/drop_tables.sql",
-        "/sql/source/populate_lines.sql",
-        "/sql/source/populate_line_headers.sql"
+        "/sql/jore3/drop_tables.sql",
+        "/sql/jore3/populate_lines.sql",
+        "/sql/jore3/populate_line_headers.sql"
 },
      config = @SqlConfig(dataSource = "sourceDataSource"))
-@Sql(scripts = "/sql/destination/drop_tables.sql")
+@Sql(scripts = "/sql/importer/drop_tables.sql")
 public class ImportLineHeadersStepTest extends BatchIntegrationTest {
 
     private static final List<String> STEPS = List.of("prepareLinesStep",

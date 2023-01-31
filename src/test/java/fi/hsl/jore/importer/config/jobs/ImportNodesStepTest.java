@@ -25,11 +25,11 @@ import static org.hamcrest.Matchers.is;
 
 @ContextConfiguration(classes = JobConfig.class)
 @Sql(scripts = {
-        "/sql/source/drop_tables.sql",
-        "/sql/source/populate_nodes.sql"
+        "/sql/jore3/drop_tables.sql",
+        "/sql/jore3/populate_nodes.sql"
 },
      config = @SqlConfig(dataSource = "sourceDataSource"))
-@Sql(scripts = "/sql/destination/drop_tables.sql")
+@Sql(scripts = "/sql/importer/drop_tables.sql")
 public class ImportNodesStepTest extends BatchIntegrationTest {
 
     private static final List<String> STEPS = List.of("prepareNodesStep",

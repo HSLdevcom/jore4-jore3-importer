@@ -15,7 +15,7 @@ import java.util.UUID;
  */
 public class JourneyPatternStopExportMapper implements RowMapper<ImporterJourneyPatternStop> {
 
-    public static final String SQL_PATH = "classpath:export/export_stops_of_journey_patterns.sql";
+    public static final String SQL_PATH = "classpath:jore4-export/export_stops_of_journey_patterns.sql";
 
     private final IJsonbConverter jsonConverter;
 

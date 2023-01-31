@@ -7,6 +7,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest
 @ActiveProfiles(Profiles.TEST_DATABASE)
-@Sql(scripts = "/sql/destination/drop_tables.sql")
+@Sql(scripts = "/sql/importer/drop_tables.sql")
 public abstract class IntegrationTest {
 }

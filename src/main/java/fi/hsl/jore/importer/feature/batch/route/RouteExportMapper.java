@@ -19,7 +19,7 @@ import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalShort;
  */
 public class RouteExportMapper implements RowMapper<ImporterRoute> {
 
-    public static final String SQL_PATH = "classpath:export/export_routes.sql";
+    public static final String SQL_PATH = "classpath:jore4-export/export_routes.sql";
     private static final DateRangeConverter DATE_RANGE_CONVERTER = DateRangeConverter.INSTANCE;
 
     private final IJsonbConverter jsonConverter;

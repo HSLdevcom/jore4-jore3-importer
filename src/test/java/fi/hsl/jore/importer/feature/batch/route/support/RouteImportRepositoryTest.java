@@ -47,7 +47,7 @@ class RouteImportRepositoryTest {
 
             @Nested
             @DisplayName("When the target table has no rows")
-            @Sql(scripts = "/sql/destination/drop_tables.sql")
+            @Sql(scripts = "/sql/importer/drop_tables.sql")
             class WhenTargetTableHasNoRows {
 
                 @BeforeEach
@@ -76,9 +76,9 @@ class RouteImportRepositoryTest {
             @DisplayName("When the target table has one row")
             @ExtendWith(SoftAssertionsExtension.class)
             @Sql(scripts = {
-                    "/sql/destination/drop_tables.sql",
-                    "/sql/destination/populate_lines.sql",
-                    "/sql/destination/populate_routes.sql"
+                    "/sql/importer/drop_tables.sql",
+                    "/sql/importer/populate_lines.sql",
+                    "/sql/importer/populate_routes.sql"
             })
             class WhenTargetTableHasOneRow {
 
@@ -123,9 +123,9 @@ class RouteImportRepositoryTest {
             @Nested
             @DisplayName("When the target table is empty")
             @Sql(scripts = {
-                    "/sql/destination/drop_tables.sql",
-                    "/sql/destination/populate_lines.sql",
-                    "/sql/destination/populate_routes_staging.sql"
+                    "/sql/importer/drop_tables.sql",
+                    "/sql/importer/populate_lines.sql",
+                    "/sql/importer/populate_routes_staging.sql"
             })
             class WhenTargetTableIsEmpty {
 
@@ -219,10 +219,10 @@ class RouteImportRepositoryTest {
             @DisplayName("When the target table contains the imported route")
             @ExtendWith(SoftAssertionsExtension.class)
             @Sql(scripts = {
-                    "/sql/destination/drop_tables.sql",
-                    "/sql/destination/populate_lines.sql",
-                    "/sql/destination/populate_routes_staging.sql",
-                    "/sql/destination/populate_routes.sql"
+                    "/sql/importer/drop_tables.sql",
+                    "/sql/importer/populate_lines.sql",
+                    "/sql/importer/populate_routes_staging.sql",
+                    "/sql/importer/populate_routes.sql"
             })
             class WhenTargetTableContainsImportedRoute {
 

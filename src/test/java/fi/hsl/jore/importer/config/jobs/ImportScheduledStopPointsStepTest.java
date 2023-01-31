@@ -22,16 +22,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = JobConfig.class)
 @Sql(scripts = {
-        "/sql/source/drop_tables.sql",
-        "/sql/source/populate_nodes.sql",
-        "/sql/source/populate_routes.sql",
-        "/sql/source/populate_route_links.sql",
-        "/sql/source/populate_scheduled_stop_points.sql"
+        "/sql/jore3/drop_tables.sql",
+        "/sql/jore3/populate_nodes.sql",
+        "/sql/jore3/populate_routes.sql",
+        "/sql/jore3/populate_route_links.sql",
+        "/sql/jore3/populate_scheduled_stop_points.sql"
 },
         config = @SqlConfig(dataSource = "sourceDataSource"))
 @Sql(scripts = {
-        "/sql/destination/drop_tables.sql",
-        "/sql/destination/populate_infrastructure_nodes.sql"
+        "/sql/importer/drop_tables.sql",
+        "/sql/importer/populate_infrastructure_nodes.sql"
 })
 @ExtendWith(SoftAssertionsExtension.class)
 class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {

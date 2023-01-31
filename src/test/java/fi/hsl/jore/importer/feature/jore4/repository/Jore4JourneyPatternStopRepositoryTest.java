@@ -45,13 +45,13 @@ class Jore4JourneyPatternStopRepositoryTest {
     @DisplayName("Insert a journey pattern stop into the database")
     @Sql(
             scripts = {
-                    "/sql/transmodel/drop_tables.sql",
-                    "/sql/transmodel/populate_infrastructure_links.sql",
-                    "/sql/transmodel/populate_lines.sql",
-                    "/sql/transmodel/populate_scheduled_stop_points.sql",
-                    "/sql/transmodel/populate_routes.sql",
-                    "/sql/transmodel/populate_journey_patterns.sql",
-                    "/sql/transmodel/populate_timing_places.sql"
+                    "/sql/jore4/drop_tables.sql",
+                    "/sql/jore4/populate_infrastructure_links.sql",
+                    "/sql/jore4/populate_lines.sql",
+                    "/sql/jore4/populate_scheduled_stop_points.sql",
+                    "/sql/jore4/populate_routes.sql",
+                    "/sql/jore4/populate_journey_patterns.sql",
+                    "/sql/jore4/populate_timing_places.sql"
             },
             config = @SqlConfig(dataSource = "jore4DataSource")
     )

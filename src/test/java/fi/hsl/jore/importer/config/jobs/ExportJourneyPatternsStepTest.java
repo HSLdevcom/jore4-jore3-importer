@@ -18,19 +18,19 @@ import static org.assertj.db.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = JobConfig.class)
 @Sql(scripts = {
-        "/sql/destination/drop_tables.sql",
-        "/sql/destination/populate_infrastructure_nodes.sql",
-        "/sql/destination/populate_lines_with_transmodel_ids.sql",
-        "/sql/destination/populate_routes.sql",
-        "/sql/destination/populate_route_directions_with_transmodel_ids.sql"
+        "/sql/importer/drop_tables.sql",
+        "/sql/importer/populate_infrastructure_nodes.sql",
+        "/sql/importer/populate_lines_with_jore4_ids.sql",
+        "/sql/importer/populate_routes.sql",
+        "/sql/importer/populate_route_directions_with_jore4_ids.sql"
 })
 @Sql(
         scripts = {
-                "/sql/transmodel/drop_tables.sql",
-                "/sql/transmodel/populate_infrastructure_links.sql",
-                "/sql/transmodel/populate_lines.sql",
-                "/sql/transmodel/populate_scheduled_stop_points.sql",
-                "/sql/transmodel/populate_routes.sql"
+                "/sql/jore4/drop_tables.sql",
+                "/sql/jore4/populate_infrastructure_links.sql",
+                "/sql/jore4/populate_lines.sql",
+                "/sql/jore4/populate_scheduled_stop_points.sql",
+                "/sql/jore4/populate_routes.sql"
         },
         config = @SqlConfig(dataSource = "jore4DataSource")
 )

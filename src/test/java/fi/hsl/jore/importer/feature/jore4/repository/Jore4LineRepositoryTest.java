@@ -68,7 +68,7 @@ class Jore4LineRepositoryTest {
     @DisplayName("Insert line into the database")
     @Sql(
             scripts = {
-                    "/sql/transmodel/drop_tables.sql"
+                    "/sql/jore4/drop_tables.sql"
             },
             config = @SqlConfig(dataSource = "jore4DataSource")
     )
