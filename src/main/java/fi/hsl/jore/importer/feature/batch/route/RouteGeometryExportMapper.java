@@ -29,7 +29,7 @@ public class RouteGeometryExportMapper implements RowMapper<ImporterRouteGeometr
                 routeGeometry,
                 UUID.fromString(resultSet.getString("route_direction_id")),
                 resultSet.getString("route_direction_ext_id"),
-                UUID.fromString(resultSet.getString("route_transmodel_id"))
+                UUID.fromString(resultSet.getString("route_jore4_id"))
         );
     }
 }

@@ -20,7 +20,7 @@ public class JourneyPatternExportMapper implements RowMapper<ImporterJourneyPatt
                                          final int rowNumber) throws SQLException {
         return ImporterJourneyPattern.of(
                 UUID.fromString(resultSet.getString("route_direction_id")),
-                UUID.fromString(resultSet.getString("route_transmodel_id"))
+                UUID.fromString(resultSet.getString("route_jore4_id"))
         );
     }
 }

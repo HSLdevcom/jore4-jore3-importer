@@ -30,7 +30,7 @@ public class JourneyPatternStopExportMapper implements RowMapper<ImporterJourney
                 resultSet.getBoolean("is_hastus_point"),
                 resultSet.getBoolean("is_via_point"),
                 Optional.ofNullable(resultSet.getString("via_names")).map(viaNames -> jsonConverter.fromJson(viaNames, MultilingualString.class)),
-                UUID.fromString(resultSet.getString("journey_pattern_transmodel_id")),
+                UUID.fromString(resultSet.getString("journey_pattern_jore4_id")),
                 resultSet.getInt("order_number"),
                 resultSet.getString("short_id")
         );

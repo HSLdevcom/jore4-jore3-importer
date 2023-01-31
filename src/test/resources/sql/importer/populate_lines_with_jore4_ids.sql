@@ -3,7 +3,7 @@ INSERT INTO network.network_lines (
         network_line_ext_id,
         network_line_number,
         infrastructure_network_type,
-        network_line_transmodel_id,
+        network_line_jore4_id,
         network_line_type_of_line,
         network_line_legacy_hsl_municipality_code
 )

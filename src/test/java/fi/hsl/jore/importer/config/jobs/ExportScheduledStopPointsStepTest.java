@@ -195,7 +195,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
 
         assertThat(importerTargetTable)
                 .row()
-                .value(IMPORTER_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_TRANSMODEL_ID.getName())
+                .value(IMPORTER_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_JORE4_ID.getName())
                 .isNotNull();
     }
 

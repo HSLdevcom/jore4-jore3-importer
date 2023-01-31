@@ -89,7 +89,7 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
 
         assertThat(importerTargetTable)
                 .row()
-                .value(IMPORTER_ROUTE_DIRECTIONS.JOURNEY_PATTERN_TRANSMODEL_ID.getName())
+                .value(IMPORTER_ROUTE_DIRECTIONS.JOURNEY_PATTERN_JORE4_ID.getName())
                 .isNotNull();
     }
 }

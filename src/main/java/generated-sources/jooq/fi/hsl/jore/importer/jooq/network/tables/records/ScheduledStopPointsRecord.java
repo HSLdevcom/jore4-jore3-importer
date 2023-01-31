@@ -139,17 +139,17 @@ public class ScheduledStopPointsRecord extends UpdatableRecordImpl<ScheduledStop
 
     /**
      * Setter for
-     * <code>network.scheduled_stop_points.scheduled_stop_point_transmodel_id</code>.
+     * <code>network.scheduled_stop_points.scheduled_stop_point_jore4_id</code>.
      */
-    public void setScheduledStopPointTransmodelId(UUID value) {
+    public void setScheduledStopPointJore4Id(UUID value) {
         set(7, value);
     }
 
     /**
      * Getter for
-     * <code>network.scheduled_stop_points.scheduled_stop_point_transmodel_id</code>.
+     * <code>network.scheduled_stop_points.scheduled_stop_point_jore4_id</code>.
      */
-    public UUID getScheduledStopPointTransmodelId() {
+    public UUID getScheduledStopPointJore4Id() {
         return (UUID) get(7);
     }
 
@@ -227,7 +227,7 @@ public class ScheduledStopPointsRecord extends UpdatableRecordImpl<ScheduledStop
 
     @Override
     public Field<UUID> field8() {
-        return ScheduledStopPoints.SCHEDULED_STOP_POINTS.SCHEDULED_STOP_POINT_TRANSMODEL_ID;
+        return ScheduledStopPoints.SCHEDULED_STOP_POINTS.SCHEDULED_STOP_POINT_JORE4_ID;
     }
 
     @Override
@@ -272,7 +272,7 @@ public class ScheduledStopPointsRecord extends UpdatableRecordImpl<ScheduledStop
 
     @Override
     public UUID component8() {
-        return getScheduledStopPointTransmodelId();
+        return getScheduledStopPointJore4Id();
     }
 
     @Override
@@ -317,7 +317,7 @@ public class ScheduledStopPointsRecord extends UpdatableRecordImpl<ScheduledStop
 
     @Override
     public UUID value8() {
-        return getScheduledStopPointTransmodelId();
+        return getScheduledStopPointJore4Id();
     }
 
     @Override
@@ -369,7 +369,7 @@ public class ScheduledStopPointsRecord extends UpdatableRecordImpl<ScheduledStop
 
     @Override
     public ScheduledStopPointsRecord value8(UUID value) {
-        setScheduledStopPointTransmodelId(value);
+        setScheduledStopPointJore4Id(value);
         return this;
     }
 
@@ -407,7 +407,7 @@ public class ScheduledStopPointsRecord extends UpdatableRecordImpl<ScheduledStop
     /**
      * Create a detached, initialised ScheduledStopPointsRecord
      */
-    public ScheduledStopPointsRecord(UUID scheduledStopPointId, String scheduledStopPointExtId, UUID infrastructureNodeId, Long scheduledStopPointElyNumber, JSONB scheduledStopPointName, TimeRange scheduledStopPointSysPeriod, String scheduledStopPointShortId, UUID scheduledStopPointTransmodelId, Integer usageInRoutes) {
+    public ScheduledStopPointsRecord(UUID scheduledStopPointId, String scheduledStopPointExtId, UUID infrastructureNodeId, Long scheduledStopPointElyNumber, JSONB scheduledStopPointName, TimeRange scheduledStopPointSysPeriod, String scheduledStopPointShortId, UUID scheduledStopPointJore4Id, Integer usageInRoutes) {
         super(ScheduledStopPoints.SCHEDULED_STOP_POINTS);
 
         setScheduledStopPointId(scheduledStopPointId);
@@ -417,7 +417,7 @@ public class ScheduledStopPointsRecord extends UpdatableRecordImpl<ScheduledStop
         setScheduledStopPointName(scheduledStopPointName);
         setScheduledStopPointSysPeriod(scheduledStopPointSysPeriod);
         setScheduledStopPointShortId(scheduledStopPointShortId);
-        setScheduledStopPointTransmodelId(scheduledStopPointTransmodelId);
+        setScheduledStopPointJore4Id(scheduledStopPointJore4Id);
         setUsageInRoutes(usageInRoutes);
     }
 }

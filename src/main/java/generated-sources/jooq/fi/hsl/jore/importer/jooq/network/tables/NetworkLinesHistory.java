@@ -77,9 +77,9 @@ public class NetworkLinesHistory extends TableImpl<NetworkLinesHistoryRecord> {
 
     /**
      * The column
-     * <code>network.network_lines_history.network_line_transmodel_id</code>.
+     * <code>network.network_lines_history.network_line_jore4_id</code>.
      */
-    public final TableField<NetworkLinesHistoryRecord, UUID> NETWORK_LINE_TRANSMODEL_ID = createField(DSL.name("network_line_transmodel_id"), SQLDataType.UUID, this, "");
+    public final TableField<NetworkLinesHistoryRecord, UUID> NETWORK_LINE_JORE4_ID = createField(DSL.name("network_line_jore4_id"), SQLDataType.UUID, this, "");
 
     /**
      * The column

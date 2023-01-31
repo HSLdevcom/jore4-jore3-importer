@@ -34,7 +34,7 @@ public class RouteExportMapper implements RowMapper<ImporterRoute> {
                 UUID.fromString(resultSet.getString("direction_id")),
                 DirectionType.of(resultSet.getString("direction_type")),
                 jsonConverter.fromJson(resultSet.getString("name"), MultilingualString.class),
-                UUID.fromString(resultSet.getString("line_transmodel_id")),
+                UUID.fromString(resultSet.getString("line_jore4_id")),
                 resultSet.getString("route_number"),
                 getOptionalShort(resultSet, "hidden_variant"),
                 DATE_RANGE_CONVERTER.from(resultSet.getString("valid_date_range")),

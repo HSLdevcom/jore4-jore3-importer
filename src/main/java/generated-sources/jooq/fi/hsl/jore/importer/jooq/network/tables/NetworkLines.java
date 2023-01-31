@@ -78,9 +78,9 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
     public final TableField<NetworkLinesRecord, TimeRange> NETWORK_LINE_SYS_PERIOD = createField(DSL.name("network_line_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
 
     /**
-     * The column <code>network.network_lines.network_line_transmodel_id</code>.
+     * The column <code>network.network_lines.network_line_jore4_id</code>.
      */
-    public final TableField<NetworkLinesRecord, UUID> NETWORK_LINE_TRANSMODEL_ID = createField(DSL.name("network_line_transmodel_id"), SQLDataType.UUID, this, "");
+    public final TableField<NetworkLinesRecord, UUID> NETWORK_LINE_JORE4_ID = createField(DSL.name("network_line_jore4_id"), SQLDataType.UUID, this, "");
 
     /**
      * The column <code>network.network_lines.network_line_type_of_line</code>.

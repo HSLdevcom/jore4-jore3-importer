@@ -164,7 +164,7 @@ public class RouteDirectionImportRepository
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)
-                        .set(TARGET_TABLE.JOURNEY_PATTERN_TRANSMODEL_ID, idMapping.journeyPatternId())
+                        .set(TARGET_TABLE.JOURNEY_PATTERN_JORE4_ID, idMapping.journeyPatternId())
                         .where(TARGET_TABLE.NETWORK_ROUTE_DIRECTION_ID.eq(idMapping.routeDirectionId()))
                         .execute();
             });
@@ -177,7 +177,7 @@ public class RouteDirectionImportRepository
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)
-                        .set(TARGET_TABLE.NETWORK_ROUTE_TRANSMODEL_ID, idMapping.jore4Id())
+                        .set(TARGET_TABLE.NETWORK_ROUTE_JORE4_ID, idMapping.jore4Id())
                         .where(TARGET_TABLE.NETWORK_ROUTE_DIRECTION_ID.eq(idMapping.routeDirectionId()))
                         .execute();
             });
