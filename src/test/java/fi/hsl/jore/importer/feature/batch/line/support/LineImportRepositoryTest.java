@@ -168,7 +168,7 @@ public class LineImportRepositoryTest {
                 importRepository.setJore4Ids(INPUT);
 
                 final Line existingLine = targetRepository.findByExternalId(EXT_ID).get();
-                assertThat(existingLine.transmodelId().isEmpty(), is(true));
+                assertThat(existingLine.jore4Id().isEmpty(), is(true));
             }
         }
 
@@ -186,7 +186,7 @@ public class LineImportRepositoryTest {
                 importRepository.setJore4Ids(INPUT);
 
                 final Line existingLine = targetRepository.findByExternalId(EXT_ID).get();
-                assertThat(existingLine.transmodelId(), equalTo(Optional.of(JORE4_ID)));
+                assertThat(existingLine.jore4Id(), equalTo(Optional.of(JORE4_ID)));
             }
         }
     }

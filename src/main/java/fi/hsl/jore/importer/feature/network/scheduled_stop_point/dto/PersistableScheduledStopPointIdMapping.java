@@ -15,13 +15,13 @@ public interface PersistableScheduledStopPointIdMapping {
 
     String externalId();
 
-    UUID transmodelId();
+    UUID jore4Id();
 
     static PersistableScheduledStopPointIdMapping of(final String externalId,
-                                                     final UUID transmodelId) {
+                                                     final UUID jore4Id) {
         return ImmutablePersistableScheduledStopPointIdMapping.builder()
                 .externalId(externalId)
-                .transmodelId(transmodelId)
+                .jore4Id(jore4Id)
                 .build();
     }
 }

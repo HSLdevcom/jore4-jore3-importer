@@ -25,9 +25,9 @@ public interface Route
 
     LinePK line();
 
-    Optional<UUID> transmodelId();
+    Optional<UUID> jore4Id();
 
-    Optional<UUID> journeyPatternTransmodelId();
+    Optional<UUID> journeyPatternJore4Id();
 
     static Route of(final RoutePK pk,
                     final ExternalId externalId,

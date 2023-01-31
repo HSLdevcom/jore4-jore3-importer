@@ -13,13 +13,13 @@ public interface ImporterJourneyPattern {
 
     UUID routeDirectionId();
 
-    UUID routeTransmodelId();
+    UUID routeJore4Id();
 
     static ImporterJourneyPattern of(final UUID routeDirectionId,
-                                     final UUID routeTransmodelId) {
+                                     final UUID routeJore4Id) {
         return ImmutableImporterJourneyPattern.builder()
                 .routeDirectionId(routeDirectionId)
-                .routeTransmodelId(routeTransmodelId)
+                .routeJore4Id(routeJore4Id)
                 .build();
     }
 }

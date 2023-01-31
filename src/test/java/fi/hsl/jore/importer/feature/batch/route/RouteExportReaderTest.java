@@ -92,7 +92,7 @@ class RouteExportReaderTest {
            softAssertions.assertThat(route.directionType())
                    .as("directionType")
                    .isEqualTo(EXPECTED_DIRECTION_TYPE);
-           softAssertions.assertThat(route.lineTransmodelId())
+           softAssertions.assertThat(route.lineJore4Id())
                    .as("lineJore4Id")
                    .isEqualTo(EXPECTED_LINE_JORE4_ID);
            softAssertions.assertThat(route.routeNumber())

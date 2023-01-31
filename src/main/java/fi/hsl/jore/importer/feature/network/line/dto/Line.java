@@ -21,7 +21,7 @@ public interface Line
                 IHasSystemTime,
                 CommonFields<Line> {
 
-    Optional<UUID> transmodelId();
+    Optional<UUID> jore4Id();
 
     LegacyHslMunicipalityCode legacyHslMunicipalityCode();
 
@@ -30,7 +30,7 @@ public interface Line
                    final NetworkType networkType,
                    final String lineNumber,
                    final TimeRange systemTime,
-                   final Optional<UUID> transmodelId,
+                   final Optional<UUID> jore4Id,
                    final TypeOfLine typeOfLine,
                    final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableLine.builder()
@@ -39,7 +39,7 @@ public interface Line
                             .networkType(networkType)
                             .lineNumber(lineNumber)
                             .systemTime(systemTime)
-                            .transmodelId(transmodelId)
+                            .jore4Id(jore4Id)
                             .typeOfLine(typeOfLine)
                             .legacyHslMunicipalityCode(legacyHslMunicipalityCode)
                             .build();

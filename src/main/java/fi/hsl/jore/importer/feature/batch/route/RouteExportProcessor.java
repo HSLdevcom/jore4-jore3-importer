@@ -33,7 +33,7 @@ public class RouteExportProcessor implements ItemProcessor<ImporterRoute, Jore4R
                 input.directionId(),
                 input.routeNumber(),
                 input.hiddenVariant(),
-                input.lineTransmodelId(),
+                input.lineJore4Id(),
                 DEFAULT_PRIORITY,
                 ValidityPeriodUtil.constructValidityPeriodStartDay(input.validDateRange().range()),
                 ValidityPeriodUtil.constructValidityPeriodEndDay(input.validDateRange().range()),

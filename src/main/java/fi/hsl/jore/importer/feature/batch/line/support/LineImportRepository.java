@@ -109,7 +109,7 @@ public class LineImportRepository
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)
-                        .set(TARGET_TABLE.NETWORK_LINE_TRANSMODEL_ID, idMapping.transmodelId())
+                        .set(TARGET_TABLE.NETWORK_LINE_TRANSMODEL_ID, idMapping.jore4Id())
                         .where(TARGET_TABLE.NETWORK_LINE_EXT_ID.eq(idMapping.externalId()))
                         .execute();
             });

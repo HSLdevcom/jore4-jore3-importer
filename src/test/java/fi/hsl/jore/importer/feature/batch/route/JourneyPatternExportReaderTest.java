@@ -76,7 +76,7 @@ class JourneyPatternExportReaderTest {
                     .as("routeDirectionId")
                     .isEqualTo(EXPECTED_ROUTE_DIRECTION_ID);
 
-            softAssertions.assertThat(first.routeTransmodelId())
+            softAssertions.assertThat(first.routeJore4Id())
                     .as("routeJore4Id")
                     .isEqualTo(EXPECTED_ROUTE_JORE4_ID);
         }
