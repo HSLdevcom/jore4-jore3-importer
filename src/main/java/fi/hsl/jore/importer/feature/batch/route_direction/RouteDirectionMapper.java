@@ -17,7 +17,7 @@ import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
 
 public class RouteDirectionMapper implements RowMapper<JrRouteDirection> {
 
-    public static final String SQL_PATH = "classpath:import/import_route_directions.sql";
+    public static final String SQL_PATH = "classpath:jore3-import/import_route_directions.sql";
 
     @Override
     @Nullable

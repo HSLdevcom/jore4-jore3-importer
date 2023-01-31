@@ -24,7 +24,7 @@ import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalString
  */
 public class ScheduledStopPointExportMapper implements RowMapper<ImporterScheduledStopPoint> {
 
-    public static final String SQL_PATH = "classpath:export/export_scheduled_stop_points.sql";
+    public static final String SQL_PATH = "classpath:jore4-export/export_scheduled_stop_points.sql";
     private static final GeometryConverter POINT_CONVERTER = new GeometryConverter(Geometry.TYPENAME_POINT);
 
     private final IJsonbConverter jsonConverter;

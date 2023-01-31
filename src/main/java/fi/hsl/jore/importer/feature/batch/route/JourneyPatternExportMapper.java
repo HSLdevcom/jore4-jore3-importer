@@ -13,7 +13,7 @@ import java.util.UUID;
  */
 public class JourneyPatternExportMapper implements RowMapper<ImporterJourneyPattern> {
 
-    public static final String SQL_PATH = "classpath:export/export_journey_patterns.sql";
+    public static final String SQL_PATH = "classpath:jore4-export/export_journey_patterns.sql";
 
     @Override
     public ImporterJourneyPattern mapRow(final ResultSet resultSet,

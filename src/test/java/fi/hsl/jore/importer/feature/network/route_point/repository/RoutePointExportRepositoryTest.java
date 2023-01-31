@@ -36,7 +36,7 @@ class RoutePointExportRepositoryTest {
 
         @Nested
         @DisplayName("When the source tables are empty")
-        @Sql(scripts = "/sql/destination/drop_tables.sql")
+        @Sql(scripts = "/sql/importer/drop_tables.sql")
         class WhenSourceTablesAreEmpty {
 
             @Test
@@ -50,14 +50,14 @@ class RoutePointExportRepositoryTest {
         @Nested
         @DisplayName("When the source tables have one route with three route points")
         @Sql(scripts = {
-                "/sql/destination/drop_tables.sql",
-                "/sql/destination/populate_infrastructure_nodes.sql",
-                "/sql/destination/populate_lines_with_transmodel_ids.sql",
-                "/sql/destination/populate_routes.sql",
-                "/sql/destination/populate_route_directions_with_journey_pattern_transmodel_ids.sql",
-                "/sql/destination/populate_route_points_for_jore4_export.sql",
-                "/sql/destination/populate_route_stop_points_for_jore4_export.sql",
-                "/sql/destination/populate_scheduled_stop_points_for_jore4_export.sql"
+                "/sql/importer/drop_tables.sql",
+                "/sql/importer/populate_infrastructure_nodes.sql",
+                "/sql/importer/populate_lines_with_jore4_ids.sql",
+                "/sql/importer/populate_routes.sql",
+                "/sql/importer/populate_route_directions_with_journey_pattern_jore4_ids.sql",
+                "/sql/importer/populate_route_points_for_jore4_export.sql",
+                "/sql/importer/populate_route_stop_points_for_jore4_export.sql",
+                "/sql/importer/populate_scheduled_stop_points_for_jore4_export.sql"
         })
         @ExtendWith(SoftAssertionsExtension.class)
         class WhenSourceTablesHaveOneRouteWithThreeRoutePoints {

@@ -34,17 +34,17 @@ import static org.hamcrest.Matchers.is;
 
 @ContextConfiguration(classes = JobConfig.class)
 @Sql(scripts = {
-        "/sql/source/drop_tables.sql",
-        "/sql/source/populate_nodes.sql",
-        "/sql/source/populate_links.sql",
-        "/sql/source/populate_lines.sql",
-        "/sql/source/populate_routes.sql",
-        "/sql/source/populate_route_directions.sql",
-        "/sql/source/populate_route_links.sql",
-        "/sql/source/populate_via_names.sql"
+        "/sql/jore3/drop_tables.sql",
+        "/sql/jore3/populate_nodes.sql",
+        "/sql/jore3/populate_links.sql",
+        "/sql/jore3/populate_lines.sql",
+        "/sql/jore3/populate_routes.sql",
+        "/sql/jore3/populate_route_directions.sql",
+        "/sql/jore3/populate_route_links.sql",
+        "/sql/jore3/populate_via_names.sql"
 },
         config = @SqlConfig(dataSource = "sourceDataSource"))
-@Sql(scripts = "/sql/destination/drop_tables.sql")
+@Sql(scripts = "/sql/importer/drop_tables.sql")
 public class ImportRouteLinksStepTest extends BatchIntegrationTest {
 
     private static final List<String> STEPS = List.of("prepareNodesStep",

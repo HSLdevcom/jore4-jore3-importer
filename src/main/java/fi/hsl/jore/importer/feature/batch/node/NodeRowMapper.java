@@ -14,7 +14,7 @@ import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
 
 public class NodeRowMapper implements RowMapper<JrNode> {
 
-    public static final String SQL_PATH = "classpath:import/import_nodes.sql";
+    public static final String SQL_PATH = "classpath:jore3-import/import_nodes.sql";
 
     @Override
     @Nullable

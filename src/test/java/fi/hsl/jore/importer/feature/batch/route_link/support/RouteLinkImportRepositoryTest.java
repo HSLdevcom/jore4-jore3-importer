@@ -44,7 +44,7 @@ class RouteLinkImportRepositoryTest {
 
             @Nested
             @DisplayName("When the target table has no rows")
-            @Sql(scripts = "/sql/destination/drop_tables.sql")
+            @Sql(scripts = "/sql/importer/drop_tables.sql")
             class WhenTargetTableHasNoRows {
 
                 @BeforeEach
@@ -73,14 +73,14 @@ class RouteLinkImportRepositoryTest {
             @DisplayName("When the target table has one row")
             @ExtendWith(SoftAssertionsExtension.class)
             @Sql(scripts = {
-                    "/sql/destination/drop_tables.sql",
-                    "/sql/destination/populate_infrastructure_nodes.sql",
-                    "/sql/destination/populate_infrastructure_links.sql",
-                    "/sql/destination/populate_lines.sql",
-                    "/sql/destination/populate_routes.sql",
-                    "/sql/destination/populate_route_directions.sql",
-                    "/sql/destination/populate_route_points.sql",
-                    "/sql/destination/populate_route_links.sql"
+                    "/sql/importer/drop_tables.sql",
+                    "/sql/importer/populate_infrastructure_nodes.sql",
+                    "/sql/importer/populate_infrastructure_links.sql",
+                    "/sql/importer/populate_lines.sql",
+                    "/sql/importer/populate_routes.sql",
+                    "/sql/importer/populate_route_directions.sql",
+                    "/sql/importer/populate_route_points.sql",
+                    "/sql/importer/populate_route_links.sql"
             })
             class WhenTargetTableHasOneRow {
 
@@ -123,14 +123,14 @@ class RouteLinkImportRepositoryTest {
             @Nested
             @DisplayName("When the target table is empty")
             @Sql(scripts = {
-                    "/sql/destination/drop_tables.sql",
-                    "/sql/destination/populate_infrastructure_nodes.sql",
-                    "/sql/destination/populate_infrastructure_links.sql",
-                    "/sql/destination/populate_lines.sql",
-                    "/sql/destination/populate_routes.sql",
-                    "/sql/destination/populate_route_directions.sql",
-                    "/sql/destination/populate_route_points.sql",
-                    "/sql/destination/populate_route_links_staging.sql"
+                    "/sql/importer/drop_tables.sql",
+                    "/sql/importer/populate_infrastructure_nodes.sql",
+                    "/sql/importer/populate_infrastructure_links.sql",
+                    "/sql/importer/populate_lines.sql",
+                    "/sql/importer/populate_routes.sql",
+                    "/sql/importer/populate_route_directions.sql",
+                    "/sql/importer/populate_route_points.sql",
+                    "/sql/importer/populate_route_links_staging.sql"
             })
             class WhenTargetTableIsEmpty {
 
@@ -221,15 +221,15 @@ class RouteLinkImportRepositoryTest {
             @Nested
             @DisplayName("When the target table is empty")
             @Sql(scripts = {
-                    "/sql/destination/drop_tables.sql",
-                    "/sql/destination/populate_infrastructure_nodes.sql",
-                    "/sql/destination/populate_infrastructure_links.sql",
-                    "/sql/destination/populate_lines.sql",
-                    "/sql/destination/populate_routes.sql",
-                    "/sql/destination/populate_route_directions.sql",
-                    "/sql/destination/populate_route_points.sql",
-                    "/sql/destination/populate_route_links.sql",
-                    "/sql/destination/populate_route_links_staging.sql"
+                    "/sql/importer/drop_tables.sql",
+                    "/sql/importer/populate_infrastructure_nodes.sql",
+                    "/sql/importer/populate_infrastructure_links.sql",
+                    "/sql/importer/populate_lines.sql",
+                    "/sql/importer/populate_routes.sql",
+                    "/sql/importer/populate_route_directions.sql",
+                    "/sql/importer/populate_route_points.sql",
+                    "/sql/importer/populate_route_links.sql",
+                    "/sql/importer/populate_route_links_staging.sql"
             })
             class WhenTargetTableContainsImportedRouteLink {
 

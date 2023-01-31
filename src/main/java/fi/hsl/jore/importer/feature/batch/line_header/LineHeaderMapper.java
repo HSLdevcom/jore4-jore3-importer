@@ -14,7 +14,7 @@ import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
 
 public class LineHeaderMapper implements RowMapper<JrLineHeader> {
 
-    public static final String SQL_PATH = "classpath:import/import_line_headers.sql";
+    public static final String SQL_PATH = "classpath:jore3-import/import_line_headers.sql";
 
     @Override
     @Nullable

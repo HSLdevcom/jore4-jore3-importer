@@ -26,7 +26,7 @@ import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
 
 public class RouteLinkRowMapper implements RowMapper<SingleRouteLinkAndParent> {
 
-    public static final String SQL_PATH = "classpath:import/import_route_links.sql";
+    public static final String SQL_PATH = "classpath:jore3-import/import_route_links.sql";
 
     @Override
     @Nullable

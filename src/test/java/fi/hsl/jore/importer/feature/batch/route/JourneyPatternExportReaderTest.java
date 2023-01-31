@@ -41,7 +41,7 @@ class JourneyPatternExportReaderTest {
 
     @Nested
     @DisplayName("When the source table is empty")
-    @Sql(scripts = "/sql/destination/drop_tables.sql")
+    @Sql(scripts = "/sql/importer/drop_tables.sql")
     class WhenSourceTablesAreEmpty {
 
         @Test
@@ -55,11 +55,11 @@ class JourneyPatternExportReaderTest {
     @Nested
     @DisplayName("When the source table has one route")
     @Sql(scripts = {
-            "/sql/destination/drop_tables.sql",
-            "/sql/destination/populate_infrastructure_nodes.sql",
-            "/sql/destination/populate_lines_with_transmodel_ids.sql",
-            "/sql/destination/populate_routes.sql",
-            "/sql/destination/populate_route_directions_with_transmodel_ids.sql"
+            "/sql/importer/drop_tables.sql",
+            "/sql/importer/populate_infrastructure_nodes.sql",
+            "/sql/importer/populate_lines_with_jore4_ids.sql",
+            "/sql/importer/populate_routes.sql",
+            "/sql/importer/populate_route_directions_with_jore4_ids.sql"
     })
     @ExtendWith(SoftAssertionsExtension.class)
     class WhenSourceTableHasOneRoute {

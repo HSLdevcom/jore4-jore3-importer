@@ -14,7 +14,7 @@ import java.util.UUID;
  */
 public class RouteGeometryExportMapper implements RowMapper<ImporterRouteGeometry> {
 
-    public static final String SQL_PATH = "classpath:export/export_route_geometries.sql";
+    public static final String SQL_PATH = "classpath:jore4-export/export_route_geometries.sql";
 
     @Override
     public ImporterRouteGeometry mapRow(final ResultSet resultSet,

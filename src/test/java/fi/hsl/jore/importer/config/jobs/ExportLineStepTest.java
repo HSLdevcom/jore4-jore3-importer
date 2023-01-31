@@ -25,13 +25,13 @@ import static org.assertj.db.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = JobConfig.class)
 @Sql(scripts = {
-        "/sql/destination/drop_tables.sql",
-        "/sql/destination/populate_lines.sql",
-        "/sql/destination/populate_line_headers.sql"
+        "/sql/importer/drop_tables.sql",
+        "/sql/importer/populate_lines.sql",
+        "/sql/importer/populate_line_headers.sql"
 })
 @Sql(
         scripts = {
-                "/sql/transmodel/drop_tables.sql"
+                "/sql/jore4/drop_tables.sql"
         },
         config = @SqlConfig(dataSource = "jore4DataSource")
 )
