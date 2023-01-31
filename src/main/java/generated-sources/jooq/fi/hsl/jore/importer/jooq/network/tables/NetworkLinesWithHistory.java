@@ -78,9 +78,9 @@ public class NetworkLinesWithHistory extends TableImpl<NetworkLinesWithHistoryRe
 
     /**
      * The column
-     * <code>network.network_lines_with_history.network_line_transmodel_id</code>.
+     * <code>network.network_lines_with_history.network_line_jore4_id</code>.
      */
-    public final TableField<NetworkLinesWithHistoryRecord, UUID> NETWORK_LINE_TRANSMODEL_ID = createField(DSL.name("network_line_transmodel_id"), SQLDataType.UUID, this, "");
+    public final TableField<NetworkLinesWithHistoryRecord, UUID> NETWORK_LINE_JORE4_ID = createField(DSL.name("network_line_jore4_id"), SQLDataType.UUID, this, "");
 
     /**
      * The column
@@ -99,7 +99,7 @@ public class NetworkLinesWithHistory extends TableImpl<NetworkLinesWithHistoryRe
     }
 
     private NetworkLinesWithHistory(Name alias, Table<NetworkLinesWithHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_lines_with_history\" as  SELECT network_lines.network_line_id,\n    network_lines.network_line_ext_id,\n    network_lines.network_line_number,\n    network_lines.infrastructure_network_type,\n    network_lines.network_line_sys_period,\n    network_lines.network_line_transmodel_id,\n    network_lines.network_line_type_of_line,\n    network_lines.network_line_legacy_hsl_municipality_code\n   FROM network.network_lines\nUNION ALL\n SELECT network_lines_history.network_line_id,\n    network_lines_history.network_line_ext_id,\n    network_lines_history.network_line_number,\n    network_lines_history.infrastructure_network_type,\n    network_lines_history.network_line_sys_period,\n    network_lines_history.network_line_transmodel_id,\n    network_lines_history.network_line_type_of_line,\n    network_lines_history.network_line_legacy_hsl_municipality_code\n   FROM network.network_lines_history;"));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_lines_with_history\" as  SELECT network_lines.network_line_id,\n    network_lines.network_line_ext_id,\n    network_lines.network_line_number,\n    network_lines.infrastructure_network_type,\n    network_lines.network_line_sys_period,\n    network_lines.network_line_jore4_id,\n    network_lines.network_line_type_of_line,\n    network_lines.network_line_legacy_hsl_municipality_code\n   FROM network.network_lines\nUNION ALL\n SELECT network_lines_history.network_line_id,\n    network_lines_history.network_line_ext_id,\n    network_lines_history.network_line_number,\n    network_lines_history.infrastructure_network_type,\n    network_lines_history.network_line_sys_period,\n    network_lines_history.network_line_jore4_id,\n    network_lines_history.network_line_type_of_line,\n    network_lines_history.network_line_legacy_hsl_municipality_code\n   FROM network.network_lines_history;"));
     }
 
     /**

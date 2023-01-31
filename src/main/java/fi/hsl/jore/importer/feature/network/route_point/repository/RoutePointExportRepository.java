@@ -33,7 +33,7 @@ public class RoutePointExportRepository implements IRoutePointExportRepository {
     @Transactional(readOnly = true)
     @Override
     public List<ImporterRoutePoint> findImporterRoutePointsByRouteDirectionId(final UUID routeDirectionId) {
-        return Stream.ofAll(db.select(NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_TRANSMODEL_ID,
+        return Stream.ofAll(db.select(NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_JORE4_ID,
                         SCHEDULED_STOP_POINTS.SCHEDULED_STOP_POINT_ELY_NUMBER,
                         SCHEDULED_STOP_POINTS.SCHEDULED_STOP_POINT_SHORT_ID,
                         NETWORK_ROUTE_POINTS.NETWORK_ROUTE_POINT_ORDER,
@@ -52,7 +52,7 @@ public class RoutePointExportRepository implements IRoutePointExportRepository {
                 .on(SCHEDULED_STOP_POINTS.INFRASTRUCTURE_NODE_ID.eq(INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_ID))
                 .where(
                         NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_DIRECTION_ID.eq(routeDirectionId),
-                        NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_TRANSMODEL_ID.isNotNull(),
+                        NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_JORE4_ID.isNotNull(),
                         INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_TYPE.eq(NodeType.STOP.value())
                                 .and(
                                         SCHEDULED_STOP_POINTS.SCHEDULED_STOP_POINT_ELY_NUMBER.isNotNull()

@@ -144,7 +144,7 @@ class ExportLineStepTest extends BatchIntegrationTest {
 
         assertThat(importerTargetTable)
                 .row()
-                .value(IMPORTER_LINE.NETWORK_LINE_TRANSMODEL_ID.getName())
+                .value(IMPORTER_LINE.NETWORK_LINE_JORE4_ID.getName())
                 .isNotNull();
     }
 }

@@ -203,33 +203,33 @@ public class NetworkRouteDirectionsWithHistoryRecord extends TableRecordImpl<Net
 
     /**
      * Setter for
-     * <code>network.network_route_directions_with_history.network_route_transmodel_id</code>.
+     * <code>network.network_route_directions_with_history.network_route_jore4_id</code>.
      */
-    public void setNetworkRouteTransmodelId(UUID value) {
+    public void setNetworkRouteJore4Id(UUID value) {
         set(11, value);
     }
 
     /**
      * Getter for
-     * <code>network.network_route_directions_with_history.network_route_transmodel_id</code>.
+     * <code>network.network_route_directions_with_history.network_route_jore4_id</code>.
      */
-    public UUID getNetworkRouteTransmodelId() {
+    public UUID getNetworkRouteJore4Id() {
         return (UUID) get(11);
     }
 
     /**
      * Setter for
-     * <code>network.network_route_directions_with_history.journey_pattern_transmodel_id</code>.
+     * <code>network.network_route_directions_with_history.journey_pattern_jore4_id</code>.
      */
-    public void setJourneyPatternTransmodelId(UUID value) {
+    public void setJourneyPatternJore4Id(UUID value) {
         set(12, value);
     }
 
     /**
      * Getter for
-     * <code>network.network_route_directions_with_history.journey_pattern_transmodel_id</code>.
+     * <code>network.network_route_directions_with_history.journey_pattern_jore4_id</code>.
      */
-    public UUID getJourneyPatternTransmodelId() {
+    public UUID getJourneyPatternJore4Id() {
         return (UUID) get(12);
     }
 
@@ -304,12 +304,12 @@ public class NetworkRouteDirectionsWithHistoryRecord extends TableRecordImpl<Net
 
     @Override
     public Field<UUID> field12() {
-        return NetworkRouteDirectionsWithHistory.NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY.NETWORK_ROUTE_TRANSMODEL_ID;
+        return NetworkRouteDirectionsWithHistory.NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY.NETWORK_ROUTE_JORE4_ID;
     }
 
     @Override
     public Field<UUID> field13() {
-        return NetworkRouteDirectionsWithHistory.NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY.JOURNEY_PATTERN_TRANSMODEL_ID;
+        return NetworkRouteDirectionsWithHistory.NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY.JOURNEY_PATTERN_JORE4_ID;
     }
 
     @Override
@@ -369,12 +369,12 @@ public class NetworkRouteDirectionsWithHistoryRecord extends TableRecordImpl<Net
 
     @Override
     public UUID component12() {
-        return getNetworkRouteTransmodelId();
+        return getNetworkRouteJore4Id();
     }
 
     @Override
     public UUID component13() {
-        return getJourneyPatternTransmodelId();
+        return getJourneyPatternJore4Id();
     }
 
     @Override
@@ -434,12 +434,12 @@ public class NetworkRouteDirectionsWithHistoryRecord extends TableRecordImpl<Net
 
     @Override
     public UUID value12() {
-        return getNetworkRouteTransmodelId();
+        return getNetworkRouteJore4Id();
     }
 
     @Override
     public UUID value13() {
-        return getJourneyPatternTransmodelId();
+        return getJourneyPatternJore4Id();
     }
 
     @Override
@@ -510,13 +510,13 @@ public class NetworkRouteDirectionsWithHistoryRecord extends TableRecordImpl<Net
 
     @Override
     public NetworkRouteDirectionsWithHistoryRecord value12(UUID value) {
-        setNetworkRouteTransmodelId(value);
+        setNetworkRouteJore4Id(value);
         return this;
     }
 
     @Override
     public NetworkRouteDirectionsWithHistoryRecord value13(UUID value) {
-        setJourneyPatternTransmodelId(value);
+        setJourneyPatternJore4Id(value);
         return this;
     }
 
@@ -552,7 +552,7 @@ public class NetworkRouteDirectionsWithHistoryRecord extends TableRecordImpl<Net
     /**
      * Create a detached, initialised NetworkRouteDirectionsWithHistoryRecord
      */
-    public NetworkRouteDirectionsWithHistoryRecord(UUID networkRouteDirectionId, UUID networkRouteId, String networkRouteDirectionType, String networkRouteDirectionExtId, Integer networkRouteDirectionLength, JSONB networkRouteDirectionName, JSONB networkRouteDirectionNameShort, JSONB networkRouteDirectionOrigin, JSONB networkRouteDirectionDestination, DateRange networkRouteDirectionValidDateRange, TimeRange networkRouteDirectionSysPeriod, UUID networkRouteTransmodelId, UUID journeyPatternTransmodelId) {
+    public NetworkRouteDirectionsWithHistoryRecord(UUID networkRouteDirectionId, UUID networkRouteId, String networkRouteDirectionType, String networkRouteDirectionExtId, Integer networkRouteDirectionLength, JSONB networkRouteDirectionName, JSONB networkRouteDirectionNameShort, JSONB networkRouteDirectionOrigin, JSONB networkRouteDirectionDestination, DateRange networkRouteDirectionValidDateRange, TimeRange networkRouteDirectionSysPeriod, UUID networkRouteJore4Id, UUID journeyPatternJore4Id) {
         super(NetworkRouteDirectionsWithHistory.NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY);
 
         setNetworkRouteDirectionId(networkRouteDirectionId);
@@ -566,7 +566,7 @@ public class NetworkRouteDirectionsWithHistoryRecord extends TableRecordImpl<Net
         setNetworkRouteDirectionDestination(networkRouteDirectionDestination);
         setNetworkRouteDirectionValidDateRange(networkRouteDirectionValidDateRange);
         setNetworkRouteDirectionSysPeriod(networkRouteDirectionSysPeriod);
-        setNetworkRouteTransmodelId(networkRouteTransmodelId);
-        setJourneyPatternTransmodelId(journeyPatternTransmodelId);
+        setNetworkRouteJore4Id(networkRouteJore4Id);
+        setJourneyPatternJore4Id(journeyPatternJore4Id);
     }
 }

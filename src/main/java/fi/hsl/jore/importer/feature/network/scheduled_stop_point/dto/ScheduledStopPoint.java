@@ -65,7 +65,7 @@ public interface ScheduledStopPoint
                 NodePK.of(record.getInfrastructureNodeId()),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
                 Optional.of(record.getScheduledStopPointShortId()),
-                Optional.ofNullable(record.getScheduledStopPointTransmodelId()),
+                Optional.ofNullable(record.getScheduledStopPointJore4Id()),
                 record.getUsageInRoutes(),
                 record.getScheduledStopPointSysPeriod()
         );
@@ -79,7 +79,7 @@ public interface ScheduledStopPoint
                 NodePK.of(record.getInfrastructureNodeId()),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
                 Optional.of(record.getScheduledStopPointShortId()),
-                Optional.ofNullable(record.getScheduledStopPointTransmodelId()),
+                Optional.ofNullable(record.getScheduledStopPointJore4Id()),
                 record.getUsageInRoutes(),
                 record.getScheduledStopPointSysPeriod()
         );

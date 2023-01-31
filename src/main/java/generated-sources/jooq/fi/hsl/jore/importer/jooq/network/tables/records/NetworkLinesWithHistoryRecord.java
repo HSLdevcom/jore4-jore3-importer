@@ -105,17 +105,17 @@ public class NetworkLinesWithHistoryRecord extends TableRecordImpl<NetworkLinesW
 
     /**
      * Setter for
-     * <code>network.network_lines_with_history.network_line_transmodel_id</code>.
+     * <code>network.network_lines_with_history.network_line_jore4_id</code>.
      */
-    public void setNetworkLineTransmodelId(UUID value) {
+    public void setNetworkLineJore4Id(UUID value) {
         set(5, value);
     }
 
     /**
      * Getter for
-     * <code>network.network_lines_with_history.network_line_transmodel_id</code>.
+     * <code>network.network_lines_with_history.network_line_jore4_id</code>.
      */
-    public UUID getNetworkLineTransmodelId() {
+    public UUID getNetworkLineJore4Id() {
         return (UUID) get(5);
     }
 
@@ -192,7 +192,7 @@ public class NetworkLinesWithHistoryRecord extends TableRecordImpl<NetworkLinesW
 
     @Override
     public Field<UUID> field6() {
-        return NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY.NETWORK_LINE_TRANSMODEL_ID;
+        return NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY.NETWORK_LINE_JORE4_ID;
     }
 
     @Override
@@ -232,7 +232,7 @@ public class NetworkLinesWithHistoryRecord extends TableRecordImpl<NetworkLinesW
 
     @Override
     public UUID component6() {
-        return getNetworkLineTransmodelId();
+        return getNetworkLineJore4Id();
     }
 
     @Override
@@ -272,7 +272,7 @@ public class NetworkLinesWithHistoryRecord extends TableRecordImpl<NetworkLinesW
 
     @Override
     public UUID value6() {
-        return getNetworkLineTransmodelId();
+        return getNetworkLineJore4Id();
     }
 
     @Override
@@ -317,7 +317,7 @@ public class NetworkLinesWithHistoryRecord extends TableRecordImpl<NetworkLinesW
 
     @Override
     public NetworkLinesWithHistoryRecord value6(UUID value) {
-        setNetworkLineTransmodelId(value);
+        setNetworkLineJore4Id(value);
         return this;
     }
 
@@ -360,7 +360,7 @@ public class NetworkLinesWithHistoryRecord extends TableRecordImpl<NetworkLinesW
     /**
      * Create a detached, initialised NetworkLinesWithHistoryRecord
      */
-    public NetworkLinesWithHistoryRecord(UUID networkLineId, String networkLineExtId, String networkLineNumber, String infrastructureNetworkType, TimeRange networkLineSysPeriod, UUID networkLineTransmodelId, String networkLineTypeOfLine, String networkLineLegacyHslMunicipalityCode) {
+    public NetworkLinesWithHistoryRecord(UUID networkLineId, String networkLineExtId, String networkLineNumber, String infrastructureNetworkType, TimeRange networkLineSysPeriod, UUID networkLineJore4Id, String networkLineTypeOfLine, String networkLineLegacyHslMunicipalityCode) {
         super(NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY);
 
         setNetworkLineId(networkLineId);
@@ -368,7 +368,7 @@ public class NetworkLinesWithHistoryRecord extends TableRecordImpl<NetworkLinesW
         setNetworkLineNumber(networkLineNumber);
         setInfrastructureNetworkType(infrastructureNetworkType);
         setNetworkLineSysPeriod(networkLineSysPeriod);
-        setNetworkLineTransmodelId(networkLineTransmodelId);
+        setNetworkLineJore4Id(networkLineJore4Id);
         setNetworkLineTypeOfLine(networkLineTypeOfLine);
         setNetworkLineLegacyHslMunicipalityCode(networkLineLegacyHslMunicipalityCode);
     }

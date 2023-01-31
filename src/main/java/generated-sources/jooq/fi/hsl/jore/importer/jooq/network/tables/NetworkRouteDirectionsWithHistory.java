@@ -118,22 +118,22 @@ public class NetworkRouteDirectionsWithHistory extends TableImpl<NetworkRouteDir
 
     /**
      * The column
-     * <code>network.network_route_directions_with_history.network_route_transmodel_id</code>.
+     * <code>network.network_route_directions_with_history.network_route_jore4_id</code>.
      */
-    public final TableField<NetworkRouteDirectionsWithHistoryRecord, UUID> NETWORK_ROUTE_TRANSMODEL_ID = createField(DSL.name("network_route_transmodel_id"), SQLDataType.UUID, this, "");
+    public final TableField<NetworkRouteDirectionsWithHistoryRecord, UUID> NETWORK_ROUTE_JORE4_ID = createField(DSL.name("network_route_jore4_id"), SQLDataType.UUID, this, "");
 
     /**
      * The column
-     * <code>network.network_route_directions_with_history.journey_pattern_transmodel_id</code>.
+     * <code>network.network_route_directions_with_history.journey_pattern_jore4_id</code>.
      */
-    public final TableField<NetworkRouteDirectionsWithHistoryRecord, UUID> JOURNEY_PATTERN_TRANSMODEL_ID = createField(DSL.name("journey_pattern_transmodel_id"), SQLDataType.UUID, this, "");
+    public final TableField<NetworkRouteDirectionsWithHistoryRecord, UUID> JOURNEY_PATTERN_JORE4_ID = createField(DSL.name("journey_pattern_jore4_id"), SQLDataType.UUID, this, "");
 
     private NetworkRouteDirectionsWithHistory(Name alias, Table<NetworkRouteDirectionsWithHistoryRecord> aliased) {
         this(alias, aliased, null);
     }
 
     private NetworkRouteDirectionsWithHistory(Name alias, Table<NetworkRouteDirectionsWithHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_route_directions_with_history\" as  SELECT network_route_directions.network_route_direction_id,\n    network_route_directions.network_route_id,\n    network_route_directions.network_route_direction_type,\n    network_route_directions.network_route_direction_ext_id,\n    network_route_directions.network_route_direction_length,\n    network_route_directions.network_route_direction_name,\n    network_route_directions.network_route_direction_name_short,\n    network_route_directions.network_route_direction_origin,\n    network_route_directions.network_route_direction_destination,\n    network_route_directions.network_route_direction_valid_date_range,\n    network_route_directions.network_route_direction_sys_period,\n    network_route_directions.network_route_transmodel_id,\n    network_route_directions.journey_pattern_transmodel_id\n   FROM network.network_route_directions\nUNION ALL\n SELECT network_route_directions_history.network_route_direction_id,\n    network_route_directions_history.network_route_id,\n    network_route_directions_history.network_route_direction_type,\n    network_route_directions_history.network_route_direction_ext_id,\n    network_route_directions_history.network_route_direction_length,\n    network_route_directions_history.network_route_direction_name,\n    network_route_directions_history.network_route_direction_name_short,\n    network_route_directions_history.network_route_direction_origin,\n    network_route_directions_history.network_route_direction_destination,\n    network_route_directions_history.network_route_direction_valid_date_range,\n    network_route_directions_history.network_route_direction_sys_period,\n    network_route_directions_history.network_route_transmodel_id,\n    network_route_directions_history.journey_pattern_transmodel_id\n   FROM network.network_route_directions_history;"));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_route_directions_with_history\" as  SELECT network_route_directions.network_route_direction_id,\n    network_route_directions.network_route_id,\n    network_route_directions.network_route_direction_type,\n    network_route_directions.network_route_direction_ext_id,\n    network_route_directions.network_route_direction_length,\n    network_route_directions.network_route_direction_name,\n    network_route_directions.network_route_direction_name_short,\n    network_route_directions.network_route_direction_origin,\n    network_route_directions.network_route_direction_destination,\n    network_route_directions.network_route_direction_valid_date_range,\n    network_route_directions.network_route_direction_sys_period,\n    network_route_directions.network_route_jore4_id,\n    network_route_directions.journey_pattern_jore4_id\n   FROM network.network_route_directions\nUNION ALL\n SELECT network_route_directions_history.network_route_direction_id,\n    network_route_directions_history.network_route_id,\n    network_route_directions_history.network_route_direction_type,\n    network_route_directions_history.network_route_direction_ext_id,\n    network_route_directions_history.network_route_direction_length,\n    network_route_directions_history.network_route_direction_name,\n    network_route_directions_history.network_route_direction_name_short,\n    network_route_directions_history.network_route_direction_origin,\n    network_route_directions_history.network_route_direction_destination,\n    network_route_directions_history.network_route_direction_valid_date_range,\n    network_route_directions_history.network_route_direction_sys_period,\n    network_route_directions_history.network_route_jore4_id,\n    network_route_directions_history.journey_pattern_jore4_id\n   FROM network.network_route_directions_history;"));
     }
 
     /**

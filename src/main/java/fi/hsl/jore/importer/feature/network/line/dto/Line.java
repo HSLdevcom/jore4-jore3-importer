@@ -52,7 +52,7 @@ public interface Line
                 NetworkType.of(record.getInfrastructureNetworkType()),
                 record.getNetworkLineNumber(),
                 record.getNetworkLineSysPeriod(),
-                Optional.ofNullable(record.getNetworkLineTransmodelId()),
+                Optional.ofNullable(record.getNetworkLineJore4Id()),
                 TypeOfLine.of(record.getNetworkLineTypeOfLine()),
                 LegacyHslMunicipalityCode.valueOf(record.getNetworkLineLegacyHslMunicipalityCode())
         );
@@ -65,7 +65,7 @@ public interface Line
                 NetworkType.of(record.getInfrastructureNetworkType()),
                 record.getNetworkLineNumber(),
                 record.getNetworkLineSysPeriod(),
-                Optional.ofNullable(record.getNetworkLineTransmodelId()),
+                Optional.ofNullable(record.getNetworkLineJore4Id()),
                 TypeOfLine.of(record.getNetworkLineTypeOfLine()),
                 LegacyHslMunicipalityCode.valueOf(record.getNetworkLineLegacyHslMunicipalityCode())
         );

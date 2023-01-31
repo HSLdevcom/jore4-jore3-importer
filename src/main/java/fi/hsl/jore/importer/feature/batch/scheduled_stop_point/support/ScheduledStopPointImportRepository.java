@@ -175,7 +175,7 @@ public class ScheduledStopPointImportRepository
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)
-                        .set(TARGET_TABLE.SCHEDULED_STOP_POINT_TRANSMODEL_ID, idMapping.jore4Id())
+                        .set(TARGET_TABLE.SCHEDULED_STOP_POINT_JORE4_ID, idMapping.jore4Id())
                         .where(TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID.eq(idMapping.externalId()))
                         .execute();
             });

@@ -9,8 +9,8 @@ INSERT INTO network.network_route_directions (
         network_route_direction_origin,
         network_route_direction_destination,
         network_route_direction_valid_date_range,
-        network_route_transmodel_id,
-        journey_pattern_transmodel_id
+        network_route_jore4_id,
+        journey_pattern_jore4_id
 ) VALUES (
           '6f93fa6b-8a19-4b98-bd84-b8409e670c70',
           '484d89ae-f365-4c9b-bb1a-8f7b783e95f3',

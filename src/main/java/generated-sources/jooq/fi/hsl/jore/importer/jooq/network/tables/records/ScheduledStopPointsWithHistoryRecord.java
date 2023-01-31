@@ -138,17 +138,17 @@ public class ScheduledStopPointsWithHistoryRecord extends TableRecordImpl<Schedu
 
     /**
      * Setter for
-     * <code>network.scheduled_stop_points_with_history.scheduled_stop_point_transmodel_id</code>.
+     * <code>network.scheduled_stop_points_with_history.scheduled_stop_point_jore4_id</code>.
      */
-    public void setScheduledStopPointTransmodelId(UUID value) {
+    public void setScheduledStopPointJore4Id(UUID value) {
         set(7, value);
     }
 
     /**
      * Getter for
-     * <code>network.scheduled_stop_points_with_history.scheduled_stop_point_transmodel_id</code>.
+     * <code>network.scheduled_stop_points_with_history.scheduled_stop_point_jore4_id</code>.
      */
-    public UUID getScheduledStopPointTransmodelId() {
+    public UUID getScheduledStopPointJore4Id() {
         return (UUID) get(7);
     }
 
@@ -219,7 +219,7 @@ public class ScheduledStopPointsWithHistoryRecord extends TableRecordImpl<Schedu
 
     @Override
     public Field<UUID> field8() {
-        return ScheduledStopPointsWithHistory.SCHEDULED_STOP_POINTS_WITH_HISTORY.SCHEDULED_STOP_POINT_TRANSMODEL_ID;
+        return ScheduledStopPointsWithHistory.SCHEDULED_STOP_POINTS_WITH_HISTORY.SCHEDULED_STOP_POINT_JORE4_ID;
     }
 
     @Override
@@ -264,7 +264,7 @@ public class ScheduledStopPointsWithHistoryRecord extends TableRecordImpl<Schedu
 
     @Override
     public UUID component8() {
-        return getScheduledStopPointTransmodelId();
+        return getScheduledStopPointJore4Id();
     }
 
     @Override
@@ -309,7 +309,7 @@ public class ScheduledStopPointsWithHistoryRecord extends TableRecordImpl<Schedu
 
     @Override
     public UUID value8() {
-        return getScheduledStopPointTransmodelId();
+        return getScheduledStopPointJore4Id();
     }
 
     @Override
@@ -361,7 +361,7 @@ public class ScheduledStopPointsWithHistoryRecord extends TableRecordImpl<Schedu
 
     @Override
     public ScheduledStopPointsWithHistoryRecord value8(UUID value) {
-        setScheduledStopPointTransmodelId(value);
+        setScheduledStopPointJore4Id(value);
         return this;
     }
 
@@ -399,7 +399,7 @@ public class ScheduledStopPointsWithHistoryRecord extends TableRecordImpl<Schedu
     /**
      * Create a detached, initialised ScheduledStopPointsWithHistoryRecord
      */
-    public ScheduledStopPointsWithHistoryRecord(UUID scheduledStopPointId, String scheduledStopPointExtId, UUID infrastructureNodeId, Long scheduledStopPointElyNumber, JSONB scheduledStopPointName, TimeRange scheduledStopPointSysPeriod, String scheduledStopPointShortId, UUID scheduledStopPointTransmodelId, Integer usageInRoutes) {
+    public ScheduledStopPointsWithHistoryRecord(UUID scheduledStopPointId, String scheduledStopPointExtId, UUID infrastructureNodeId, Long scheduledStopPointElyNumber, JSONB scheduledStopPointName, TimeRange scheduledStopPointSysPeriod, String scheduledStopPointShortId, UUID scheduledStopPointJore4Id, Integer usageInRoutes) {
         super(ScheduledStopPointsWithHistory.SCHEDULED_STOP_POINTS_WITH_HISTORY);
 
         setScheduledStopPointId(scheduledStopPointId);
@@ -409,7 +409,7 @@ public class ScheduledStopPointsWithHistoryRecord extends TableRecordImpl<Schedu
         setScheduledStopPointName(scheduledStopPointName);
         setScheduledStopPointSysPeriod(scheduledStopPointSysPeriod);
         setScheduledStopPointShortId(scheduledStopPointShortId);
-        setScheduledStopPointTransmodelId(scheduledStopPointTransmodelId);
+        setScheduledStopPointJore4Id(scheduledStopPointJore4Id);
         setUsageInRoutes(usageInRoutes);
     }
 }

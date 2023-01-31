@@ -77,8 +77,8 @@ public interface RouteDirection
                   converter.fromJson(record.getNetworkRouteDirectionDestination(), MultilingualString.class),
                   record.getNetworkRouteDirectionValidDateRange(),
                   record.getNetworkRouteDirectionSysPeriod(),
-                  Optional.ofNullable(record.getJourneyPatternTransmodelId()),
-                  Optional.ofNullable(record.getNetworkRouteTransmodelId())
+                  Optional.ofNullable(record.getJourneyPatternJore4Id()),
+                  Optional.ofNullable(record.getNetworkRouteJore4Id())
         );
     }
 
@@ -95,8 +95,8 @@ public interface RouteDirection
                   converter.fromJson(record.getNetworkRouteDirectionDestination(), MultilingualString.class),
                   record.getNetworkRouteDirectionValidDateRange(),
                   record.getNetworkRouteDirectionSysPeriod(),
-                  Optional.ofNullable(record.getJourneyPatternTransmodelId()),
-                  Optional.ofNullable(record.getNetworkRouteTransmodelId())
+                  Optional.ofNullable(record.getJourneyPatternJore4Id()),
+                  Optional.ofNullable(record.getNetworkRouteJore4Id())
         );
     }
 }

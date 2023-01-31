@@ -96,9 +96,9 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
 
     /**
      * The column
-     * <code>network.scheduled_stop_points.scheduled_stop_point_transmodel_id</code>.
+     * <code>network.scheduled_stop_points.scheduled_stop_point_jore4_id</code>.
      */
-    public final TableField<ScheduledStopPointsRecord, UUID> SCHEDULED_STOP_POINT_TRANSMODEL_ID = createField(DSL.name("scheduled_stop_point_transmodel_id"), SQLDataType.UUID, this, "");
+    public final TableField<ScheduledStopPointsRecord, UUID> SCHEDULED_STOP_POINT_JORE4_ID = createField(DSL.name("scheduled_stop_point_jore4_id"), SQLDataType.UUID, this, "");
 
     /**
      * The column <code>network.scheduled_stop_points.usage_in_routes</code>.

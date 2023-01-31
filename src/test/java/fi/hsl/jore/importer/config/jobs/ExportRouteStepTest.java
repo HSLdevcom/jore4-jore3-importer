@@ -190,7 +190,7 @@ public class ExportRouteStepTest  extends BatchIntegrationTest {
 
         assertThat(importerTargetTable)
                 .row()
-                .value(IMPORTER_ROUTE_DIRECTION.NETWORK_ROUTE_TRANSMODEL_ID.getName())
+                .value(IMPORTER_ROUTE_DIRECTION.NETWORK_ROUTE_JORE4_ID.getName())
                 .isNotNull();
     }
 }

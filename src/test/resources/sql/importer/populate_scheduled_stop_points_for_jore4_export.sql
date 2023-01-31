@@ -5,7 +5,7 @@ INSERT INTO network.scheduled_stop_points (
     scheduled_stop_point_ely_number,
     scheduled_stop_point_name,
     scheduled_stop_point_short_id,
-    scheduled_stop_point_transmodel_id,
+    scheduled_stop_point_jore4_id,
     usage_in_routes
 )
 VALUES (
@@ -26,7 +26,7 @@ INSERT INTO network.scheduled_stop_points (
     scheduled_stop_point_ely_number,
     scheduled_stop_point_name,
     scheduled_stop_point_short_id,
-    scheduled_stop_point_transmodel_id,
+    scheduled_stop_point_jore4_id,
     usage_in_routes
 )
 VALUES (
