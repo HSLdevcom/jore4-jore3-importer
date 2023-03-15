@@ -23,12 +23,14 @@ public interface Jore3ScheduledStopPoint
                                       final Optional<Long> elynumber,
                                       final MultilingualString name,
                                       final Optional<String> shortId,
+                                      final Optional<String> hastusPlaceId,
                                       final int usageInRoutes) {
         return ImmutableJore3ScheduledStopPoint.builder()
                 .externalId(externalId)
                 .elyNumber(elynumber)
                 .name(name)
                 .shortId(shortId)
+                .hastusPlaceId(hastusPlaceId)
                 .usageInRoutes(usageInRoutes)
                 .build();
     }

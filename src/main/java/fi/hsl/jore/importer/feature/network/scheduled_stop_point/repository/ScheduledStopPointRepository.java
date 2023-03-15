@@ -100,6 +100,7 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
         record.setScheduledStopPointElyNumber(entity.elyNumber().orElse(null));
         record.setScheduledStopPointName(jsonbConverter.asJson(entity.name()));
         record.setScheduledStopPointShortId(entity.shortId().orElse(null));
+        record.setHastusPlaceId(entity.hastusPlaceId().orElse(null));
 
         record.store();
 
@@ -130,6 +131,7 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
         record.setScheduledStopPointElyNumber(scheduledStopPoint.elyNumber().orElse(null));
         record.setScheduledStopPointName(jsonbConverter.asJson(scheduledStopPoint.name()));
         record.setScheduledStopPointShortId(scheduledStopPoint.shortId().orElse(null));
+        record.setHastusPlaceId(scheduledStopPoint.hastusPlaceId().orElse(null));
 
         record.store();
 

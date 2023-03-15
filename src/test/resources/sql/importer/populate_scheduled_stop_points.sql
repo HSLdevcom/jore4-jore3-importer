@@ -5,6 +5,7 @@ INSERT INTO network.scheduled_stop_points (
     scheduled_stop_point_ely_number,
     scheduled_stop_point_name,
     scheduled_stop_point_short_id,
+    hastus_place_id,
     usage_in_routes
 )
 VALUES (
@@ -14,5 +15,6 @@ VALUES (
     1234567890,
     '{"fi_FI": "Yliopisto vanha","sv_SE": "Universitetet gamla"}',
     'H1234',
+    '1KALA',
     1
 );

@@ -29,6 +29,7 @@ public class ScheduledStopPointImportMapper implements RowMapper<JrScheduledStop
                 getOptionalString(rs, "pysnimir"),
                 getOptionalString(rs, "sollistunnus"),
                 getOptionalString(rs, "solkirjain"),
+                getOptionalString(rs, "paitunnus"),
                 getIntOrThrow(rs, "usage_in_routes")
         );
     }

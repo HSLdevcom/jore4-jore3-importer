@@ -41,6 +41,7 @@ public interface ScheduledStopPoint
                                  final NodePK node,
                                  final MultilingualString name,
                                  final Optional<String> shortId,
+                                 final Optional<String> hastusPlaceId,
                                  final Optional<UUID> jore4Id,
                                  final int usageInRoutes,
                                  final TimeRange systemTime) {
@@ -51,6 +52,7 @@ public interface ScheduledStopPoint
                 .node(node)
                 .name(name)
                 .shortId(shortId)
+                .hastusPlaceId(hastusPlaceId)
                 .jore4Id(jore4Id)
                 .systemTime(systemTime)
                 .usageInRoutes(usageInRoutes)
@@ -65,6 +67,7 @@ public interface ScheduledStopPoint
                 NodePK.of(record.getInfrastructureNodeId()),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
                 Optional.of(record.getScheduledStopPointShortId()),
+                Optional.ofNullable(record.getHastusPlaceId()),
                 Optional.ofNullable(record.getScheduledStopPointJore4Id()),
                 record.getUsageInRoutes(),
                 record.getScheduledStopPointSysPeriod()
@@ -79,6 +82,7 @@ public interface ScheduledStopPoint
                 NodePK.of(record.getInfrastructureNodeId()),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
                 Optional.of(record.getScheduledStopPointShortId()),
+                Optional.ofNullable(record.getHastusPlaceId()),
                 Optional.ofNullable(record.getScheduledStopPointJore4Id()),
                 record.getUsageInRoutes(),
                 record.getScheduledStopPointSysPeriod()

@@ -12,4 +12,6 @@ public interface CommonFields<T> extends IHasExternalId {
     MultilingualString name();
 
     Optional<String> shortId();
+
+    Optional<String> hastusPlaceId();
 }

@@ -66,6 +66,7 @@ public class ScheduledStopPointImportRepository
                         TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
                         TARGET_TABLE.SCHEDULED_STOP_POINT_NAME,
                         TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID,
+                        TARGET_TABLE.HASTUS_PLACE_ID,
                         TARGET_TABLE.USAGE_IN_ROUTES
                 )
                 .select(
@@ -75,6 +76,7 @@ public class ScheduledStopPointImportRepository
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_NAME,
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID,
+                                STAGING_TABLE.HASTUS_PLACE_ID,
                                 STAGING_TABLE.USAGE_IN_ROUTES
                         )
                                 .from(STAGING_TABLE)
@@ -102,37 +104,29 @@ public class ScheduledStopPointImportRepository
                 .set(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER, STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER)
                 .set(TARGET_TABLE.SCHEDULED_STOP_POINT_NAME, STAGING_TABLE.SCHEDULED_STOP_POINT_NAME)
                 .set(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID, STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID)
+                .set(TARGET_TABLE.HASTUS_PLACE_ID, STAGING_TABLE.HASTUS_PLACE_ID)
                 .set(TARGET_TABLE.USAGE_IN_ROUTES, STAGING_TABLE.USAGE_IN_ROUTES)
                 .from(STAGING_TABLE)
                 .where(
                         TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID.eq(STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID)
-                                //A scheduled stop point is updated if:
-                                //Its name was changed
-                                .and(TARGET_TABLE.SCHEDULED_STOP_POINT_NAME.notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_NAME)
-                                        //Ely number is null in the target table but not in the staging table
-                                        .or(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER.isNull()
-                                                .and(STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER.isNotNull())
-                                        )
-                                        //Ely number isn't null in the target table but is null in the staging table
-                                        .or(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER.isNotNull()
-                                                .and(STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER.isNull())
-                                        )
-                                        //Ely number was changed
+                                // A scheduled stop point is updated if:
+                                // Its name was changed
+                                .and(TARGET_TABLE.SCHEDULED_STOP_POINT_NAME
+                                        .notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_NAME)
+
+                                        // ELY number was changed.
                                         .or(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER
-                                                .notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER)
-                                        )
-                                        //Short id is null in the target table but not null in the staging table
-                                        .or(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID.isNull()
-                                                .and(STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID.isNotNull())
-                                        )
-                                        //Short id isn't null in the target table but is null in the staging table
-                                        .or(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID.isNotNull()
-                                                .and(STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID.isNull())
-                                        )
-                                        //Short id was changed
+                                                .isDistinctFrom(STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER))
+
+                                        // Short ID was changed.
                                         .or(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID
-                                                .notEqual(STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID))
-                                        //Usage in routes was changed
+                                                .isDistinctFrom(STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID))
+
+                                        // Hastus place ID was changed.
+                                        .or(TARGET_TABLE.HASTUS_PLACE_ID
+                                                .isDistinctFrom(STAGING_TABLE.HASTUS_PLACE_ID))
+
+                                        // Usage in routes was changed.
                                         .or(TARGET_TABLE.USAGE_IN_ROUTES
                                                 .notEqual(STAGING_TABLE.USAGE_IN_ROUTES))
                                 )
@@ -153,9 +147,10 @@ public class ScheduledStopPointImportRepository
                         STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
                         STAGING_TABLE.SCHEDULED_STOP_POINT_NAME,
                         STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID,
+                        STAGING_TABLE.HASTUS_PLACE_ID,
                         STAGING_TABLE.USAGE_IN_ROUTES
                 )
-                        .values((String) null, null, null, null, 0)
+                        .values(null, null, null, null, null, 0)
         );
 
         items.forEach(item -> batch.bind(
@@ -163,6 +158,7 @@ public class ScheduledStopPointImportRepository
                 item.elyNumber().orElse(null),
                 jsonbConverter.asJson(item.name()),
                 item.shortId().orElse(null),
+                item.hastusPlaceId().orElse(null),
                 item.usageInRoutes()
         ));
 

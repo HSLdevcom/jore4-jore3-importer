@@ -42,6 +42,7 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
     private static final String EXPECTED_FINNISH_NAME = "Yliopisto";
     private static final String EXPECTED_SWEDISH_NAME = "Universitetet";
     private static final String EXPECTED_SHORT_ID = "H1234";
+    private static final String EXPECTED_HASTUS_PLACE_ID = "1ELIEL";
     private static final int EXPECTED_USAGE_IN_ROUTES = 1;
 
     private static final List<String> STEPS = List.of("prepareScheduledStopPointsStep",
@@ -99,6 +100,10 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
         softAssertions.assertThat(imported.jore4Id())
                 .as("Jore 4 id")
                 .isEmpty();
+
+        softAssertions.assertThat(imported.hastusPlaceId())
+                .as("hastusPlaceId")
+                .contains(EXPECTED_HASTUS_PLACE_ID);
 
         softAssertions.assertThat(imported.usageInRoutes())
                 .as("usage in routes")
