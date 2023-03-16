@@ -20,7 +20,7 @@ public interface ImporterScheduledStopPoint {
      * Exported scheduled stop points have multiple ely numbers and external ids
      * because the Jore 3 database can contain multiple instances of the same stop.
      * When we transfer this information to the Jore 4 database, importer must filter
-     * duplicate rows and ensure that only one stop is inserted into the Jore 4 datababase.
+     * duplicate rows and ensure that only one stop is inserted into the Jore 4 database.
      *
      * These lists (elyNumbers and externalIds) contain ely number and external id pairs
      * (list items which have the same index number are a pair) which refer to a single
@@ -38,17 +38,21 @@ public interface ImporterScheduledStopPoint {
 
     Optional<String> shortId();
 
+    Optional<String> hastusPlaceId();
+
     static ImmutableImporterScheduledStopPoint of(final List<ExternalId> externalIds,
                                                   final List<Long> elynumbers,
                                                   final Point location,
                                                   final MultilingualString name,
-                                                  final Optional<String> shortId) {
+                                                  final Optional<String> shortId,
+                                                  final Optional<String> hastusPlaceId) {
         return ImmutableImporterScheduledStopPoint.builder()
                 .externalIds(externalIds)
                 .elyNumbers(elynumbers)
                 .location(location)
                 .name(name)
                 .shortId(shortId)
+                .hastusPlaceId(hastusPlaceId)
                 .build();
     }
 }

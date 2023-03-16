@@ -10,6 +10,7 @@ import fi.hsl.jore.jore4.jooq.journey_pattern.JourneyPattern;
 import fi.hsl.jore.jore4.jooq.reusable_components.ReusableComponents;
 import fi.hsl.jore.jore4.jooq.route.Route;
 import fi.hsl.jore.jore4.jooq.service_pattern.ServicePattern;
+import fi.hsl.jore.jore4.jooq.timing_pattern.TimingPattern;
 
 import java.util.Arrays;
 import java.util.List;
@@ -62,6 +63,11 @@ public class DefaultCatalog extends CatalogImpl {
     public final ServicePattern SERVICE_PATTERN = ServicePattern.SERVICE_PATTERN;
 
     /**
+     * The schema <code>timing_pattern</code>.
+     */
+    public final TimingPattern TIMING_PATTERN = TimingPattern.TIMING_PATTERN;
+
+    /**
      * No further instances allowed
      */
     private DefaultCatalog() {
@@ -76,7 +82,8 @@ public class DefaultCatalog extends CatalogImpl {
             JourneyPattern.JOURNEY_PATTERN,
             ReusableComponents.REUSABLE_COMPONENTS,
             Route.ROUTE,
-            ServicePattern.SERVICE_PATTERN
+            ServicePattern.SERVICE_PATTERN,
+            TimingPattern.TIMING_PATTERN
         );
     }
 }
