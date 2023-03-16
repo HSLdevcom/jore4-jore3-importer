@@ -8,7 +8,8 @@ SELECT (
        ) AS ely_number,
        n.infrastructure_node_location AS location,
        s.scheduled_stop_point_name AS name,
-       s.scheduled_stop_point_short_id AS short_id
+       s.scheduled_stop_point_short_id AS short_id,
+       s.hastus_place_id AS hastus_place_id
 FROM network.scheduled_stop_points s
          JOIN infrastructure_network.infrastructure_nodes n ON (n.infrastructure_node_id = s.infrastructure_node_id)
 WHERE s.scheduled_stop_point_ely_number IS NOT NULL

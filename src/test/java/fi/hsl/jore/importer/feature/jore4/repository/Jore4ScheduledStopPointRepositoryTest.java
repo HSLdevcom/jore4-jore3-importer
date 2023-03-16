@@ -40,6 +40,8 @@ class Jore4ScheduledStopPointRepositoryTest {
     private static final String LABEL = "Ullanmäki";
     private static final double X_COORDINATE = 25.696376131;
     private static final double Y_COORDINATE = 61.207149801;
+    private static final String HASTUS_PLACE_ID = "Test Place 1";
+    private static final String EXPECTED_TIMING_PLACE_ID = "4cfb005b-eef8-4f5c-b0f1-43c8784a1f47";
     private static final int PRIORITY = 10;
 
     private static final LocalDate VALIDITY_PERIOD_START = LocalDate.of(1990, 1, 1);
@@ -59,9 +61,8 @@ class Jore4ScheduledStopPointRepositoryTest {
         this.jdbcTemplate = new JdbcTemplate(targetDataSource);
         this.repository = repository;
         this.scheduledStopPointTargetTable = new Table(targetDataSource, "service_pattern.scheduled_stop_point");
-        this.testRepository = new Jore4ValidityPeriodTestRepository(targetDataSource,
-                ValidityPeriodTargetTable.SCHEDULED_STOP_POINT
-        );
+        this.testRepository =
+                new Jore4ValidityPeriodTestRepository(targetDataSource, ValidityPeriodTargetTable.SCHEDULED_STOP_POINT);
         this.vehicleModeTargetTable = new Table(targetDataSource, "service_pattern.vehicle_mode_on_scheduled_stop_point");
     }
 
@@ -70,7 +71,8 @@ class Jore4ScheduledStopPointRepositoryTest {
     @Sql(
             scripts = {
                     "/sql/jore4/drop_tables.sql",
-                    "/sql/jore4/populate_infrastructure_links.sql"
+                    "/sql/jore4/populate_infrastructure_links.sql",
+                    "/sql/jore4/populate_timing_places.sql"
             },
             config = @SqlConfig(dataSource = "jore4DataSource")
     )
@@ -84,6 +86,7 @@ class Jore4ScheduledStopPointRepositoryTest {
                 DIRECTION_ON_INFRALINK,
                 LABEL,
                 JoreGeometryUtil.fromDbCoordinates(Y_COORDINATE, X_COORDINATE),
+                Optional.of(HASTUS_PLACE_ID),
                 PRIORITY,
                 Optional.of(VALIDITY_PERIOD_START),
                 Optional.of(VALIDITY_PERIOD_END)
@@ -162,6 +165,17 @@ class Jore4ScheduledStopPointRepositoryTest {
             softAssertions.assertThat(measuredLocation.getY())
                     .as("y")
                     .isEqualTo(Y_COORDINATE);
+        }
+
+        @Test
+        @DisplayName("Should save a new scheduled stop point with the correct timing place ID")
+        void shouldSaveNewScheduledStopPointWithCorrectTimingPlaceId() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(scheduledStopPointTargetTable)
+                    .row()
+                    .value(SCHEDULED_STOP_POINT.TIMING_PLACE_ID.getName())
+                    .isEqualTo(EXPECTED_TIMING_PLACE_ID);
         }
 
         @Test

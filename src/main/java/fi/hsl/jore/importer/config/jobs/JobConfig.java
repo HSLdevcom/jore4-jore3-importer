@@ -58,6 +58,9 @@ import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPoin
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointImportProcessor;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.ScheduledStopPointImportReader;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support.IScheduledStopPointImportRepository;
+import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.timing_place.TimingPlaceExportProcessor;
+import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.timing_place.TimingPlaceExportReader;
+import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.timing_place.TimingPlaceExportWriter;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Jore3Link;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.Jore3LinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Jore3Node;
@@ -73,6 +76,7 @@ import fi.hsl.jore.importer.feature.jore4.entity.Jore4Line;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4Route;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteGeometry;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPoint;
+import fi.hsl.jore.importer.feature.jore4.entity.Jore4TimingPlace;
 import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line_header.dto.Jore3LineHeader;
@@ -84,6 +88,7 @@ import fi.hsl.jore.importer.feature.network.route_direction.dto.Jore3RouteDirect
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImporterScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.Jore3ScheduledStopPoint;
+import fi.hsl.jore.importer.feature.network.scheduled_stop_point.timing_place.ImporterTimingPlace;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.FlowBuilder;
@@ -546,6 +551,7 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Flow jore4ExportFlow(final Step prepareJore4ExportStep,
+                                final Step exportTimingPlacesStep,
                                 final Step exportScheduledStopPointsStep,
                                 final Step exportLinesStep,
                                 final Step exportRoutesStep,
@@ -554,6 +560,7 @@ public class JobConfig extends BatchConfig {
                                 final Step exportJourneyPatternStopsStep) {
         return new FlowBuilder<SimpleFlow>("jore4ExportFlow")
                 .start(prepareJore4ExportStep)
+                .next(exportTimingPlacesStep)
                 .next(exportScheduledStopPointsStep)
                 .next(exportLinesStep)
                 .next(exportRoutesStep)
@@ -568,6 +575,21 @@ public class JobConfig extends BatchConfig {
         return steps.get("prepareJore4ExportStep")
                     .allowStartIfComplete(true)
                     .tasklet(cleanupTasklet)
+                    .build();
+    }
+
+    @Bean
+    public Step exportTimingPlacesStep(final TimingPlaceExportReader reader,
+                                       final TimingPlaceExportWriter writer) {
+        return steps.get("exportTimingPlacesStep")
+                    .allowStartIfComplete(true)
+                    .<ImporterTimingPlace, Jore4TimingPlace>chunk(1)
+                    .reader(reader.build())
+                    .processor(new TimingPlaceExportProcessor())
+                    .writer(writer)
+                    .faultTolerant()
+                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                    .listener(new StatisticsLoggingStepExecutionListener())
                     .build();
     }
 

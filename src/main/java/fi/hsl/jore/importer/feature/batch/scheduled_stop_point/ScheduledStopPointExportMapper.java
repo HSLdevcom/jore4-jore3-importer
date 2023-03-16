@@ -41,7 +41,8 @@ public class ScheduledStopPointExportMapper implements RowMapper<ImporterSchedul
                 csvToElyNumbers(resultSet.getString("ely_number")),
                 pointFromDatabaseObject(resultSet.getObject("location")),
                 jsonConverter.fromJson(resultSet.getString("name"), MultilingualString.class),
-                getOptionalString(resultSet, "short_id")
+                getOptionalString(resultSet, "short_id"),
+                getOptionalString(resultSet, "hastus_place_id")
         );
     }
 

@@ -35,6 +35,7 @@ public class Routines {
         , LocalDate validityEnd
         , Integer priority
         , String supportedVehicleMode
+        , UUID timingPlaceId
     ) {
         InsertScheduledStopPointWithVehicleMode p = new InsertScheduledStopPointWithVehicleMode();
         p.setScheduledStopPointId(scheduledStopPointId);
@@ -46,6 +47,7 @@ public class Routines {
         p.setValidityEnd(validityEnd);
         p.setPriority(priority);
         p.setSupportedVehicleMode(supportedVehicleMode);
+        p.setTimingPlaceId(timingPlaceId);
 
         p.execute(configuration);
     }

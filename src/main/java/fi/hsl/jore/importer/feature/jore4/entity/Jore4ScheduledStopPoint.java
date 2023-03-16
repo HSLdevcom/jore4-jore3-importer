@@ -26,6 +26,8 @@ public interface Jore4ScheduledStopPoint {
 
     Point measuredLocation();
 
+    Optional<String> hastusPlaceId();
+
     int priority();
 
     Optional<LocalDate> validityStart();
@@ -38,6 +40,7 @@ public interface Jore4ScheduledStopPoint {
                                                final Jore4ScheduledStopPointDirection directionOnInfraLink,
                                                final String label,
                                                final Point measuredLocation,
+                                               final Optional<String> hastusPlaceId,
                                                final int priority,
                                                final Optional<LocalDate> validityStart,
                                                final Optional<LocalDate> validityEnd) {
@@ -48,6 +51,7 @@ public interface Jore4ScheduledStopPoint {
                 .directionOnInfraLink(directionOnInfraLink)
                 .label(label)
                 .measuredLocation(measuredLocation)
+                .hastusPlaceId(hastusPlaceId)
                 .priority(priority)
                 .validityStart(validityStart)
                 .validityEnd(validityEnd)

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static fi.hsl.jore.jore4.jooq.infrastructure_network.Tables.INFRASTRUCTURE_LINK;
+import static fi.hsl.jore.jore4.jooq.timing_pattern.Tables.TIMING_PLACE;
 
 @Repository
 public class Jore4ScheduledStopPointRepository implements IJore4ScheduledStopPointRepository {
@@ -28,20 +29,37 @@ public class Jore4ScheduledStopPointRepository implements IJore4ScheduledStopPoi
     @Override
     public void insert(final List<? extends Jore4ScheduledStopPoint> stopPoints) {
         if (!stopPoints.isEmpty()) {
-            stopPoints.forEach(stopPoint -> Routines.insertScheduledStopPointWithVehicleMode(db.configuration(),
-                    stopPoint.scheduledStopPointId(),
-                    stopPoint.measuredLocation(),
-                    db.select(INFRASTRUCTURE_LINK.INFRASTRUCTURE_LINK_ID)
-                            .from(INFRASTRUCTURE_LINK)
-                            .where(INFRASTRUCTURE_LINK.EXTERNAL_LINK_ID.eq(stopPoint.externalInfrastructureLinkId()))
-                            .fetchOneInto(UUID.class),
-                    stopPoint.directionOnInfraLink().getValue(),
-                    stopPoint.label(),
-                    stopPoint.validityStart().orElse(null),
-                    stopPoint.validityEnd().orElse(null),
-                    stopPoint.priority(),
-                    VehicleMode.BUS.getValue()
-            ));
+            stopPoints.forEach(stopPoint -> {
+
+                final UUID infrastructureLinkId = db
+                        .select(INFRASTRUCTURE_LINK.INFRASTRUCTURE_LINK_ID)
+                        .from(INFRASTRUCTURE_LINK)
+                        .where(INFRASTRUCTURE_LINK.EXTERNAL_LINK_ID.eq(stopPoint.externalInfrastructureLinkId()))
+                        .fetchOneInto(UUID.class);
+
+                final UUID timingPlaceId = stopPoint
+                        .hastusPlaceId()
+                        .map(hastusPlaceId -> db
+                                .select(TIMING_PLACE.TIMING_PLACE_ID)
+                                .from(TIMING_PLACE)
+                                .where(TIMING_PLACE.LABEL.eq(hastusPlaceId))
+                                .fetchOneInto(UUID.class))
+                        .orElse(null);
+
+                Routines.insertScheduledStopPointWithVehicleMode(
+                        db.configuration(),
+                        stopPoint.scheduledStopPointId(),
+                        stopPoint.measuredLocation(),
+                        infrastructureLinkId,
+                        stopPoint.directionOnInfraLink().getValue(),
+                        stopPoint.label(),
+                        stopPoint.validityStart().orElse(null),
+                        stopPoint.validityEnd().orElse(null),
+                        stopPoint.priority(),
+                        VehicleMode.BUS.getValue(),
+                        timingPlaceId
+                );
+            });
         }
     }
 }

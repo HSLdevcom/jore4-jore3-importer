@@ -136,7 +136,7 @@ public class Route extends TableImpl<Record> {
      * The column <code>route.route.legacy_hsl_municipality_code</code>. Defines
      * the legacy municipality that is mainly used for data exports.
      */
-    public final TableField<Record, String> LEGACY_HSL_MUNICIPALITY_CODE = createField(DSL.name("legacy_hsl_municipality_code"), SQLDataType.CLOB.nullable(false), this, "Defines the legacy municipality that is mainly used for data exports.");
+    public final TableField<Record, String> LEGACY_HSL_MUNICIPALITY_CODE = createField(DSL.name("legacy_hsl_municipality_code"), SQLDataType.CLOB, this, "Defines the legacy municipality that is mainly used for data exports.");
 
     private Route(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);

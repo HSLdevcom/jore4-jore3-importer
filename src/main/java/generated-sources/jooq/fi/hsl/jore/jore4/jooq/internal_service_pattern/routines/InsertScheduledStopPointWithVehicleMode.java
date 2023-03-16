@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import org.jooq.Parameter;
 import org.jooq.impl.AbstractRoutine;
+import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.locationtech.jts.geom.Point;
@@ -80,6 +81,12 @@ public class InsertScheduledStopPointWithVehicleMode extends AbstractRoutine<jav
     public static final Parameter<String> SUPPORTED_VEHICLE_MODE = Internal.createParameter("supported_vehicle_mode", SQLDataType.CLOB, false, false);
 
     /**
+     * The parameter
+     * <code>internal_service_pattern.insert_scheduled_stop_point_with_vehicle_mode.timing_place_id</code>.
+     */
+    public static final Parameter<UUID> TIMING_PLACE_ID = Internal.createParameter("timing_place_id", SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID)), true, false);
+
+    /**
      * Create a new routine call instance
      */
     public InsertScheduledStopPointWithVehicleMode() {
@@ -94,6 +101,7 @@ public class InsertScheduledStopPointWithVehicleMode extends AbstractRoutine<jav
         addInParameter(VALIDITY_END);
         addInParameter(PRIORITY);
         addInParameter(SUPPORTED_VEHICLE_MODE);
+        addInParameter(TIMING_PLACE_ID);
     }
 
     /**
@@ -160,5 +168,12 @@ public class InsertScheduledStopPointWithVehicleMode extends AbstractRoutine<jav
      */
     public void setSupportedVehicleMode(String value) {
         setValue(SUPPORTED_VEHICLE_MODE, value);
+    }
+
+    /**
+     * Set the <code>timing_place_id</code> parameter IN value to the routine
+     */
+    public void setTimingPlaceId(UUID value) {
+        setValue(TIMING_PLACE_ID, value);
     }
 }

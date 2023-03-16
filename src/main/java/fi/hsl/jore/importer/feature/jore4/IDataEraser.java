@@ -6,5 +6,5 @@ public interface IDataEraser {
 
     void deleteRoutesAndLines();
 
-    void deleteScheduledStopPoints();
+    void deleteScheduledStopPointsAndTimingPlaces();
 }

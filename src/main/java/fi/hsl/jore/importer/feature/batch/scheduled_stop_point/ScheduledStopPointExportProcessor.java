@@ -62,7 +62,6 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Importer
             return null;
         }
 
-
         for (int index = 0; index < elyNumbers.size(); index++) {
             final ExternalId externalId = externalIds.get(index);
             final Long elyNumber = elyNumbers.get(index);
@@ -79,6 +78,7 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Importer
                         Jore4ScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),
                         jore3Stop.shortId().get(),
                         jore3Stop.location(),
+                        jore3Stop.hastusPlaceId(),
                         DEFAULT_PRIORITY,
                         Optional.of(DEFAULT_VALIDITY_START),
                         Optional.of(DEFAULT_VALIDITY_END)

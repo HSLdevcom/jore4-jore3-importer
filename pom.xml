@@ -474,6 +474,7 @@
                                         | reusable_components.*
                                         | route.*
                                         | service_pattern.*
+                                        | timing_pattern.*
                                     </includes>
                                     <excludes>
                                         AUTH_SESSION.*

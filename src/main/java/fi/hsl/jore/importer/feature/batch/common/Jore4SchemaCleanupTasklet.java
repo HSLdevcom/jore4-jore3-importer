@@ -28,7 +28,7 @@ public class Jore4SchemaCleanupTasklet implements Tasklet  {
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
         dataEraser.deleteJourneyPatterns();
         dataEraser.deleteRoutesAndLines();
-        dataEraser.deleteScheduledStopPoints();
+        dataEraser.deleteScheduledStopPointsAndTimingPlaces();
 
         return RepeatStatus.FINISHED;
     }

@@ -14,18 +14,18 @@ VALUES
         'c',
         'cc11a5db-2ae7-4220-adfe-aca5d6620909',
         1234567890,
-        '{"fi_FI": "Yliopisto vanha","sv_SE": "Universitetet gamla"}',
+        '{"fi_FI": "Yliopisto uusi","sv_SE": "Universitetet nya"}',
         'H1234',
-        '1KALA',
+        '1ELIEL',
         1
     ),
     (
         'c5390e54-1135-4b85-aab9-cf4a51c559bd',
         'd',
-        'cc11a5db-2ae7-4220-adfe-aca5d6620909',
+        'a799ab85-bfc3-4b6b-8ea2-590f4f3e96cf',
         9876543211,
         '{"fi_FI": "Yliopisto vanha","sv_SE": "Universitetet gamla"}',
-        'H1234',
+        'H5678',
         '1ELIEL',
         3
     );
