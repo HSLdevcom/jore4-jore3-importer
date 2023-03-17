@@ -101,9 +101,9 @@ public class JobConfig extends BatchConfig {
 
     public static final String JOB_NAME = "importJoreJob";
 
+    /* Steps to import data from Jore 3 to importer staging DB. */
     @Bean
-    public Job importJob(/* Steps to import data from Jore 3 to importer staging DB. */
-                         final Flow importNodesFlow,
+    public Job importJob(final Flow importNodesFlow,
                          final Flow importLinksFlow,
                          final Flow importLinkPointsFlow,
                          final Flow importLinesFlow,
@@ -112,21 +112,21 @@ public class JobConfig extends BatchConfig {
                          final Flow importRouteDirectionsFlow,
                          final Flow importRouteLinksFlow,
                          final Flow importScheduledStopPointsFlow,
-                         /* Export data from the importer staging DB to Jore 4 DB. */
+                         // Export data from the importer staging DB to Jore 4 DB.
                          final Flow jore4ExportFlow) {
         return jobs.get(JOB_NAME)
-                .start(importNodesFlow)
-                .next(importLinksFlow)
-                .next(importLinkPointsFlow)
-                .next(importLinesFlow)
-                .next(importLineHeadersFlow)
-                .next(importRoutesFlow)
-                .next(importRouteDirectionsFlow)
-                .next(importRouteLinksFlow)
-                .next(importScheduledStopPointsFlow)
-                .next(jore4ExportFlow)
-                .end()
-                .build();
+                   .start(importNodesFlow)
+                   .next(importLinksFlow)
+                   .next(importLinkPointsFlow)
+                   .next(importLinesFlow)
+                   .next(importLineHeadersFlow)
+                   .next(importRoutesFlow)
+                   .next(importRouteDirectionsFlow)
+                   .next(importRouteLinksFlow)
+                   .next(importScheduledStopPointsFlow)
+                   .next(jore4ExportFlow)
+                   .end()
+                   .build();
     }
 
     @Bean
@@ -153,6 +153,7 @@ public class JobConfig extends BatchConfig {
     public Step importNodesStep(final NodeReader nodeReader,
                                 final INodeImportRepository nodeImportRepository) {
         final int chunkSize = 1000;
+
         return steps.get("importNodesStep")
                     .allowStartIfComplete(true)
                     .<JrNode, Jore3Node>chunk(chunkSize)
@@ -318,14 +319,14 @@ public class JobConfig extends BatchConfig {
                                       final ILineHeaderImportRepository lineHeaderImportRepository) {
         final int chunkSize = 1;
         return steps.get("importLineHeadersStep")
-                .allowStartIfComplete(true)
-                .<JrLineHeader, Jore3LineHeader>chunk(chunkSize)
-                .reader(lineHeaderReader.build())
-                .processor(new LineHeaderProcessor())
-                .writer(new GenericImportWriter<>(lineHeaderImportRepository))
-                .faultTolerant()
-                .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                .build();
+                    .allowStartIfComplete(true)
+                    .<JrLineHeader, Jore3LineHeader>chunk(chunkSize)
+                    .reader(lineHeaderReader.build())
+                    .processor(new LineHeaderProcessor())
+                    .writer(new GenericImportWriter<>(lineHeaderImportRepository))
+                    .faultTolerant()
+                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                    .build();
     }
 
     @Bean
@@ -499,9 +500,9 @@ public class JobConfig extends BatchConfig {
     @Bean
     public Step commitRouteLinksStep(final IRouteLinkImportRepository routeLinkImportRepository) {
         return steps.get("commitRouteLinksStep")
-                .allowStartIfComplete(true)
-                .tasklet(new GenericCommitTasklet<>(routeLinkImportRepository))
-                .build();
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCommitTasklet<>(routeLinkImportRepository))
+                    .build();
     }
 
     @Bean
@@ -518,29 +519,29 @@ public class JobConfig extends BatchConfig {
     @Bean
     public Step prepareScheduledStopPointsStep(final IScheduledStopPointImportRepository repository) {
         return steps.get("prepareScheduledStopPointsStep")
-                .allowStartIfComplete(true)
-                .tasklet(new GenericCleanupTasklet<>(repository))
-                .build();
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCleanupTasklet<>(repository))
+                    .build();
     }
 
     @Bean
     public Step importScheduledStopPointsStep(final ScheduledStopPointImportReader reader,
                                               final IScheduledStopPointImportRepository repository) {
         return steps.get("importScheduledStopPointsStep")
-                .allowStartIfComplete(true)
-                .<JrScheduledStopPoint, Jore3ScheduledStopPoint>chunk(1000)
-                .reader(reader.build())
-                .processor(new ScheduledStopPointImportProcessor())
-                .writer(new GenericImportWriter<>(repository))
-                .build();
+                    .allowStartIfComplete(true)
+                    .<JrScheduledStopPoint, Jore3ScheduledStopPoint>chunk(1000)
+                    .reader(reader.build())
+                    .processor(new ScheduledStopPointImportProcessor())
+                    .writer(new GenericImportWriter<>(repository))
+                    .build();
     }
 
     @Bean
     public Step commitScheduledStopPointsStep(final IScheduledStopPointImportRepository repository) {
         return steps.get("commitScheduledStopPointsStep")
-                .allowStartIfComplete(true)
-                .tasklet(new GenericCommitTasklet<>(repository))
-                .build();
+                    .allowStartIfComplete(true)
+                    .tasklet(new GenericCommitTasklet<>(repository))
+                    .build();
     }
 
     @Bean
@@ -565,9 +566,9 @@ public class JobConfig extends BatchConfig {
     @Bean
     public Step prepareJore4ExportStep(final Jore4SchemaCleanupTasklet cleanupTasklet) {
         return steps.get("prepareJore4ExportStep")
-                .allowStartIfComplete(true)
-                .tasklet(cleanupTasklet)
-                .build();
+                    .allowStartIfComplete(true)
+                    .tasklet(cleanupTasklet)
+                    .build();
     }
 
     @Bean
@@ -575,15 +576,15 @@ public class JobConfig extends BatchConfig {
                                               final ScheduledStopPointExportProcessor processor,
                                               final ScheduledStopPointExportWriter writer) {
         return steps.get("exportScheduledStopPointsStep")
-                .allowStartIfComplete(true)
-                .<ImporterScheduledStopPoint, Jore4ScheduledStopPoint>chunk(1)
-                .reader(reader.build())
-                .processor(processor)
-                .writer(writer)
-                .faultTolerant()
-                .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                .listener(new StatisticsLoggingStepExecutionListener())
-                .build();
+                    .allowStartIfComplete(true)
+                    .<ImporterScheduledStopPoint, Jore4ScheduledStopPoint>chunk(1)
+                    .reader(reader.build())
+                    .processor(processor)
+                    .writer(writer)
+                    .faultTolerant()
+                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                    .listener(new StatisticsLoggingStepExecutionListener())
+                    .build();
     }
 
     @Bean
@@ -591,15 +592,15 @@ public class JobConfig extends BatchConfig {
                                 final LineExportProcessor processor,
                                 final LineExportWriter writer) {
         return steps.get("exportLinesStep")
-                .allowStartIfComplete(true)
-                .<ImporterLine, Jore4Line>chunk(1)
-                .reader(reader.build())
-                .processor(processor)
-                .writer(writer)
-                .faultTolerant()
-                .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                .listener(new StatisticsLoggingStepExecutionListener())
-                .build();
+                    .allowStartIfComplete(true)
+                    .<ImporterLine, Jore4Line>chunk(1)
+                    .reader(reader.build())
+                    .processor(processor)
+                    .writer(writer)
+                    .faultTolerant()
+                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                    .listener(new StatisticsLoggingStepExecutionListener())
+                    .build();
     }
 
     @Bean
@@ -607,15 +608,15 @@ public class JobConfig extends BatchConfig {
                                  final RouteExportProcessor processor,
                                  final RouteExportWriter writer) {
         return steps.get("exportRoutesStep")
-                .allowStartIfComplete(true)
-                .<ImporterRoute, Jore4Route>chunk(1)
-                .reader(reader.build())
-                .processor(processor)
-                .writer(writer)
-                .faultTolerant()
-                .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                .listener(new StatisticsLoggingStepExecutionListener())
-                .build();
+                    .allowStartIfComplete(true)
+                    .<ImporterRoute, Jore4Route>chunk(1)
+                    .reader(reader.build())
+                    .processor(processor)
+                    .writer(writer)
+                    .faultTolerant()
+                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                    .listener(new StatisticsLoggingStepExecutionListener())
+                    .build();
     }
 
     @Bean
@@ -623,15 +624,15 @@ public class JobConfig extends BatchConfig {
                                           final MapMatchingProcessor processor,
                                           final RouteGeometryExportWriter writer) {
         return steps.get("exportRouteGeometriesStep")
-                .allowStartIfComplete(true)
-                .<ImporterRouteGeometry, Jore4RouteGeometry>chunk(1)
-                .reader(reader.build())
-                .processor(processor)
-                .writer(writer)
-                .faultTolerant()
-                .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                .listener(new StatisticsLoggingStepExecutionListener())
-                .build();
+                    .allowStartIfComplete(true)
+                    .<ImporterRouteGeometry, Jore4RouteGeometry>chunk(1)
+                    .reader(reader.build())
+                    .processor(processor)
+                    .writer(writer)
+                    .faultTolerant()
+                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                    .listener(new StatisticsLoggingStepExecutionListener())
+                    .build();
     }
 
     @Bean
@@ -639,15 +640,15 @@ public class JobConfig extends BatchConfig {
                                           final JourneyPatternExportProcessor processor,
                                           final JourneyPatternExportWriter writer) {
         return steps.get("exportJourneyPatternsStep")
-                .allowStartIfComplete(true)
-                .<ImporterJourneyPattern, Jore4JourneyPattern>chunk(1)
-                .reader(reader.build())
-                .processor(processor)
-                .writer(writer)
-                .faultTolerant()
-                .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                .listener(new StatisticsLoggingStepExecutionListener())
-                .build();
+                    .allowStartIfComplete(true)
+                    .<ImporterJourneyPattern, Jore4JourneyPattern>chunk(1)
+                    .reader(reader.build())
+                    .processor(processor)
+                    .writer(writer)
+                    .faultTolerant()
+                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                    .listener(new StatisticsLoggingStepExecutionListener())
+                    .build();
     }
 
     @Bean
@@ -655,14 +656,14 @@ public class JobConfig extends BatchConfig {
                                               final JourneyPatternStopExportProcessor processor,
                                               final JourneyPatternStopExportWriter writer) {
         return steps.get("exportJourneyPatternStopsStep")
-                .allowStartIfComplete(true)
-                .<ImporterJourneyPatternStop, Jore4JourneyPatternStop>chunk(1000)
-                .reader(reader.build())
-                .processor(processor)
-                .writer(writer)
-                .faultTolerant()
-                .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                .listener(new StatisticsLoggingStepExecutionListener())
-                .build();
+                    .allowStartIfComplete(true)
+                    .<ImporterJourneyPatternStop, Jore4JourneyPatternStop>chunk(1000)
+                    .reader(reader.build())
+                    .processor(processor)
+                    .writer(writer)
+                    .faultTolerant()
+                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                    .listener(new StatisticsLoggingStepExecutionListener())
+                    .build();
     }
 }
