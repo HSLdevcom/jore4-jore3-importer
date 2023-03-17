@@ -5,8 +5,8 @@ import fi.hsl.jore.importer.feature.batch.route_link.dto.SingleRouteLinkAndParen
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteLink;
 import fi.hsl.jore.importer.feature.jore3.enumerated.Direction;
 import fi.hsl.jore.importer.feature.jore3.enumerated.NodeType;
+import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import fi.hsl.jore.importer.feature.jore3.enumerated.StopPointPurpose;
-import fi.hsl.jore.importer.feature.jore3.enumerated.TimingStopPoint;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.RouteId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
@@ -47,8 +47,8 @@ public class RouteLinkRowMapper implements RowMapper<SingleRouteLinkAndParent> {
                         NodeType.of(getStringOrThrow(rs, "relpysakki"))
                                 .orElse(NodeType.UNKNOWN),
                         getOptionalString(rs, "ajantaspys")
-                                .flatMap(TimingStopPoint::of)
-                                .orElse(TimingStopPoint.UNKNOWN),
+                                .flatMap(RegulatedTimingPointStatus::of)
+                                .orElse(RegulatedTimingPointStatus.UNKNOWN),
                         getOptionalString(rs, "relohaikpys")
                                 .flatMap(StopPointPurpose::of)
                                 .orElse(StopPointPurpose.UNKNOWN),

@@ -8,8 +8,8 @@ import fi.hsl.jore.importer.feature.jore3.entity.ImmutableJrRouteLink;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteLink;
 import fi.hsl.jore.importer.feature.jore3.enumerated.Direction;
 import fi.hsl.jore.importer.feature.jore3.enumerated.NodeType;
+import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import fi.hsl.jore.importer.feature.jore3.enumerated.StopPointPurpose;
-import fi.hsl.jore.importer.feature.jore3.enumerated.TimingStopPoint;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.RouteId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
@@ -57,7 +57,7 @@ public class RouteLinksProcessorGenerativeTest extends GenerativeTest {
                                                                                  .endNode(NodeId.of("end"))
                                                                                  .transitType(TransitType.BUS)
                                                                                  .stopPointPurpose(StopPointPurpose.BOARDING)
-                                                                                 .timingStopPoint(TimingStopPoint.NO)
+                                                                                 .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                                                                                  .includeInTimetable(true)
                                                                                  .timetableColumn(3)
                                                                                  .viaPoint(true)

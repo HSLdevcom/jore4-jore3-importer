@@ -2,8 +2,8 @@ package fi.hsl.jore.importer.feature.jore3.entity;
 
 import fi.hsl.jore.importer.feature.jore3.enumerated.Direction;
 import fi.hsl.jore.importer.feature.jore3.enumerated.NodeType;
+import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import fi.hsl.jore.importer.feature.jore3.enumerated.StopPointPurpose;
-import fi.hsl.jore.importer.feature.jore3.enumerated.TimingStopPoint;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.RouteId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
@@ -53,7 +53,7 @@ public interface JrRouteLink
     StopPointPurpose stopPointPurpose();
 
     @JoreColumn(name = "ajantaspys")
-    TimingStopPoint timingStopPoint();
+    RegulatedTimingPointStatus regulatedTimingPointStatus();
 
     @JoreColumn(name = "paikka")
     boolean hastusStopPoint();
@@ -101,7 +101,7 @@ public interface JrRouteLink
                           final NodeId startNode,
                           final NodeId endNode,
                           final NodeType startNodeType,
-                          final TimingStopPoint timingStopPoint,
+                          final RegulatedTimingPointStatus regulatedTimingPointStatus,
                           final StopPointPurpose stopPointPurpose,
                           final boolean hastusStopPoint,
                           final boolean includeInTimetable,
@@ -119,7 +119,7 @@ public interface JrRouteLink
                 .viaName(viaName)
                 .viaNameSwedish(viaNameSwedish)
                 .timetableColumn(timetableColumn)
-                .timingStopPoint(timingStopPoint)
+                .regulatedTimingPointStatus(regulatedTimingPointStatus)
                 .stopPointPurpose(stopPointPurpose)
                 .startNodeType(startNodeType)
                 // Foreign key fields to the route direction

@@ -7,8 +7,8 @@ import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteLink;
 import fi.hsl.jore.importer.feature.jore3.enumerated.Direction;
 import fi.hsl.jore.importer.feature.jore3.enumerated.NodeType;
+import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import fi.hsl.jore.importer.feature.jore3.enumerated.StopPointPurpose;
-import fi.hsl.jore.importer.feature.jore3.enumerated.TimingStopPoint;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.RouteId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
@@ -52,7 +52,7 @@ public class RouteLinksProcessorTest {
                 NodeId.of("a"),
                 NodeId.of("b"),
                 NodeType.BUS_STOP,
-                TimingStopPoint.NO,
+                RegulatedTimingPointStatus.NO,
                 StopPointPurpose.BOARDING,
                 false, // not explicitly a hastus point
                 true, // include in timetable,
@@ -125,7 +125,7 @@ public class RouteLinksProcessorTest {
                 NodeId.of("a"),
                 NodeId.of("b"),
                 NodeType.BUS_STOP,
-                TimingStopPoint.NO,
+                RegulatedTimingPointStatus.NO,
                 StopPointPurpose.BOARDING,
                 false, // not explicitly a hastus point
                 true, // include in timetable
@@ -187,7 +187,7 @@ public class RouteLinksProcessorTest {
                 NodeId.of("a"),
                 NodeId.of("b"),
                 NodeType.CROSSROADS,
-                TimingStopPoint.NO,
+                RegulatedTimingPointStatus.NO,
                 StopPointPurpose.BOARDING,
                 false, // not hastus point
                 false, // don't include in timetable
@@ -254,7 +254,7 @@ public class RouteLinksProcessorTest {
                         nodeA,
                         nodeB,
                         NodeType.BUS_STOP,
-                        TimingStopPoint.NO,
+                        RegulatedTimingPointStatus.NO,
                         StopPointPurpose.BOARDING,
                         true, // is a hastus point
                         true, // include in timetable
@@ -274,7 +274,7 @@ public class RouteLinksProcessorTest {
                         nodeB,
                         nodeC,
                         NodeType.CROSSROADS,
-                        TimingStopPoint.NO,
+                        RegulatedTimingPointStatus.NO,
                         StopPointPurpose.UNKNOWN,
                         false, // not a hastus point
                         false, // do not include in timetable
@@ -294,7 +294,7 @@ public class RouteLinksProcessorTest {
                         nodeC,
                         nodeD,
                         NodeType.CROSSROADS,
-                        TimingStopPoint.NO,
+                        RegulatedTimingPointStatus.NO,
                         StopPointPurpose.UNKNOWN,
                         false, // not a hastus point
                         false, // do not include in timetable,
@@ -314,7 +314,7 @@ public class RouteLinksProcessorTest {
                         nodeD,
                         nodeE,
                         NodeType.BUS_STOP_NOT_IN_USE,
-                        TimingStopPoint.NO,
+                        RegulatedTimingPointStatus.NO,
                         StopPointPurpose.NOT_IN_USE,
                         false, // not a hastus point
                         false, // do not include in timetable
@@ -334,7 +334,7 @@ public class RouteLinksProcessorTest {
                         nodeE,
                         nodeF,
                         NodeType.CROSSROADS,
-                        TimingStopPoint.NO,
+                        RegulatedTimingPointStatus.NO,
                         StopPointPurpose.UNKNOWN,
                         false, // not a hastus point
                         false, // do not include in timetable

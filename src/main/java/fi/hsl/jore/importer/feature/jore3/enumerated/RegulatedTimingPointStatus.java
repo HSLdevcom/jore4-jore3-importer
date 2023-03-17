@@ -7,22 +7,22 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.Optional;
 
-@JoreEnumeration(name = "Ajantasaus pysakki")
-public enum TimingStopPoint {
+@JoreEnumeration(name = "Ajantasauspysäkki")
+public enum RegulatedTimingPointStatus {
+
     NO(0, "Ei"),
     YES(1, "Kyllä"),
     YES_LOAD_TIME(2, "Kyllä, load time"),
 
-    UNKNOWN(-9999, "Unknown"),
-    ;
+    UNKNOWN(-9999, "Unknown");
 
-    private static final Logger LOG = LoggerFactory.getLogger(TimingStopPoint.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RegulatedTimingPointStatus.class);
 
     private final int value;
     private final String description;
 
-    TimingStopPoint(final int value,
-                    final String description) {
+    RegulatedTimingPointStatus(final int value,
+                               final String description) {
         this.value = value;
         this.description = description;
     }
@@ -35,13 +35,13 @@ public enum TimingStopPoint {
         return description;
     }
 
-    public static Optional<TimingStopPoint> of(final int i) {
+    public static Optional<RegulatedTimingPointStatus> of(final int i) {
         return Arrays.stream(values())
                      .filter(transportType -> transportType.value == i)
                      .findFirst();
     }
 
-    public static Optional<TimingStopPoint> of(final String s) {
+    public static Optional<RegulatedTimingPointStatus> of(final String s) {
         try {
             return of(Integer.parseInt(s));
         } catch (final NumberFormatException ignored) {
