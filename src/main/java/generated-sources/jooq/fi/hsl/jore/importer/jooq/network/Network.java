@@ -240,7 +240,7 @@ public class Network extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.asList(
+        return Arrays.<Table<?>>asList(
             NetworkDirectionTypes.NETWORK_DIRECTION_TYPES,
             NetworkLineHeaders.NETWORK_LINE_HEADERS,
             NetworkLineHeadersHistory.NETWORK_LINE_HEADERS_HISTORY,
@@ -273,7 +273,6 @@ public class Network extends SchemaImpl {
             ScheduledStopPoints.SCHEDULED_STOP_POINTS,
             ScheduledStopPointsHistory.SCHEDULED_STOP_POINTS_HISTORY,
             ScheduledStopPointsStaging.SCHEDULED_STOP_POINTS_STAGING,
-            ScheduledStopPointsWithHistory.SCHEDULED_STOP_POINTS_WITH_HISTORY
-        );
+            ScheduledStopPointsWithHistory.SCHEDULED_STOP_POINTS_WITH_HISTORY);
     }
 }

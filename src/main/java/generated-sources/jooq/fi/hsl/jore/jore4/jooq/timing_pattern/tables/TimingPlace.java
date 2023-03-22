@@ -23,10 +23,9 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * A set of SCHEDULED STOP POINTs against which the timing information necessary
- * to build schedules may be recorded. In HSL context this is "Hastus paikka".
- * Based on Transmodel entity TIMING POINT:
- * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:2:709 
+ * A set of SCHEDULED STOP POINTs against which the timing information necessary 
+ * to build schedules may be recorded. In HSL context this is "Hastus paikka". 
+ * Based on Transmodel entity TIMING POINT: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:2:709 
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TimingPlace extends TableImpl<Record> {
@@ -70,16 +69,14 @@ public class TimingPlace extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased <code>timing_pattern.timing_place</code> table
-     * reference
+     * Create an aliased <code>timing_pattern.timing_place</code> table reference
      */
     public TimingPlace(String alias) {
         this(DSL.name(alias), TIMING_PLACE);
     }
 
     /**
-     * Create an aliased <code>timing_pattern.timing_place</code> table
-     * reference
+     * Create an aliased <code>timing_pattern.timing_place</code> table reference
      */
     public TimingPlace(Name alias) {
         this(alias, TIMING_PLACE);
@@ -98,7 +95,7 @@ public class TimingPlace extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : TimingPattern.TIMING_PATTERN;
+        return TimingPattern.TIMING_PATTERN;
     }
 
     @Override

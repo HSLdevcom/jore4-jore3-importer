@@ -21,16 +21,14 @@ public class NetworkDirectionTypesRecord extends UpdatableRecordImpl<NetworkDire
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for
-     * <code>network.network_direction_types.network_direction_type</code>.
+     * Setter for <code>network.network_direction_types.network_direction_type</code>.
      */
     public void setNetworkDirectionType(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_direction_types.network_direction_type</code>.
+     * Getter for <code>network.network_direction_types.network_direction_type</code>.
      */
     public String getNetworkDirectionType() {
         return (String) get(0);

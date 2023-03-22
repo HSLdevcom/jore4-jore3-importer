@@ -24,128 +24,112 @@ public class NetworkLinesWithHistoryRecord extends TableRecordImpl<NetworkLinesW
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for
-     * <code>network.network_lines_with_history.network_line_id</code>.
+     * Setter for <code>network.network_lines_with_history.network_line_id</code>.
      */
     public void setNetworkLineId(UUID value) {
         set(0, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_lines_with_history.network_line_id</code>.
+     * Getter for <code>network.network_lines_with_history.network_line_id</code>.
      */
     public UUID getNetworkLineId() {
         return (UUID) get(0);
     }
 
     /**
-     * Setter for
-     * <code>network.network_lines_with_history.network_line_ext_id</code>.
+     * Setter for <code>network.network_lines_with_history.network_line_ext_id</code>.
      */
     public void setNetworkLineExtId(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_lines_with_history.network_line_ext_id</code>.
+     * Getter for <code>network.network_lines_with_history.network_line_ext_id</code>.
      */
     public String getNetworkLineExtId() {
         return (String) get(1);
     }
 
     /**
-     * Setter for
-     * <code>network.network_lines_with_history.network_line_number</code>.
+     * Setter for <code>network.network_lines_with_history.network_line_number</code>.
      */
     public void setNetworkLineNumber(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_lines_with_history.network_line_number</code>.
+     * Getter for <code>network.network_lines_with_history.network_line_number</code>.
      */
     public String getNetworkLineNumber() {
         return (String) get(2);
     }
 
     /**
-     * Setter for
-     * <code>network.network_lines_with_history.infrastructure_network_type</code>.
+     * Setter for <code>network.network_lines_with_history.infrastructure_network_type</code>.
      */
     public void setInfrastructureNetworkType(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_lines_with_history.infrastructure_network_type</code>.
+     * Getter for <code>network.network_lines_with_history.infrastructure_network_type</code>.
      */
     public String getInfrastructureNetworkType() {
         return (String) get(3);
     }
 
     /**
-     * Setter for
-     * <code>network.network_lines_with_history.network_line_sys_period</code>.
+     * Setter for <code>network.network_lines_with_history.network_line_sys_period</code>.
      */
     public void setNetworkLineSysPeriod(TimeRange value) {
         set(4, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_lines_with_history.network_line_sys_period</code>.
+     * Getter for <code>network.network_lines_with_history.network_line_sys_period</code>.
      */
     public TimeRange getNetworkLineSysPeriod() {
         return (TimeRange) get(4);
     }
 
     /**
-     * Setter for
-     * <code>network.network_lines_with_history.network_line_jore4_id</code>.
+     * Setter for <code>network.network_lines_with_history.network_line_jore4_id</code>.
      */
     public void setNetworkLineJore4Id(UUID value) {
         set(5, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_lines_with_history.network_line_jore4_id</code>.
+     * Getter for <code>network.network_lines_with_history.network_line_jore4_id</code>.
      */
     public UUID getNetworkLineJore4Id() {
         return (UUID) get(5);
     }
 
     /**
-     * Setter for
-     * <code>network.network_lines_with_history.network_line_type_of_line</code>.
+     * Setter for <code>network.network_lines_with_history.network_line_type_of_line</code>.
      */
     public void setNetworkLineTypeOfLine(String value) {
         set(6, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_lines_with_history.network_line_type_of_line</code>.
+     * Getter for <code>network.network_lines_with_history.network_line_type_of_line</code>.
      */
     public String getNetworkLineTypeOfLine() {
         return (String) get(6);
     }
 
     /**
-     * Setter for
-     * <code>network.network_lines_with_history.network_line_legacy_hsl_municipality_code</code>.
+     * Setter for <code>network.network_lines_with_history.network_line_legacy_hsl_municipality_code</code>.
      */
     public void setNetworkLineLegacyHslMunicipalityCode(String value) {
         set(7, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_lines_with_history.network_line_legacy_hsl_municipality_code</code>.
+     * Getter for <code>network.network_lines_with_history.network_line_legacy_hsl_municipality_code</code>.
      */
     public String getNetworkLineLegacyHslMunicipalityCode() {
         return (String) get(7);

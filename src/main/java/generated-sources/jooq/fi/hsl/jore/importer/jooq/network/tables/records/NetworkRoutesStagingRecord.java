@@ -23,96 +23,84 @@ public class NetworkRoutesStagingRecord extends UpdatableRecordImpl<NetworkRoute
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for
-     * <code>network.network_routes_staging.network_route_ext_id</code>.
+     * Setter for <code>network.network_routes_staging.network_route_ext_id</code>.
      */
     public void setNetworkRouteExtId(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_routes_staging.network_route_ext_id</code>.
+     * Getter for <code>network.network_routes_staging.network_route_ext_id</code>.
      */
     public String getNetworkRouteExtId() {
         return (String) get(0);
     }
 
     /**
-     * Setter for
-     * <code>network.network_routes_staging.network_line_ext_id</code>.
+     * Setter for <code>network.network_routes_staging.network_line_ext_id</code>.
      */
     public void setNetworkLineExtId(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_routes_staging.network_line_ext_id</code>.
+     * Getter for <code>network.network_routes_staging.network_line_ext_id</code>.
      */
     public String getNetworkLineExtId() {
         return (String) get(1);
     }
 
     /**
-     * Setter for
-     * <code>network.network_routes_staging.network_route_number</code>.
+     * Setter for <code>network.network_routes_staging.network_route_number</code>.
      */
     public void setNetworkRouteNumber(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_routes_staging.network_route_number</code>.
+     * Getter for <code>network.network_routes_staging.network_route_number</code>.
      */
     public String getNetworkRouteNumber() {
         return (String) get(2);
     }
 
     /**
-     * Setter for
-     * <code>network.network_routes_staging.network_route_name</code>.
+     * Setter for <code>network.network_routes_staging.network_route_name</code>.
      */
     public void setNetworkRouteName(JSONB value) {
         set(3, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_routes_staging.network_route_name</code>.
+     * Getter for <code>network.network_routes_staging.network_route_name</code>.
      */
     public JSONB getNetworkRouteName() {
         return (JSONB) get(3);
     }
 
     /**
-     * Setter for
-     * <code>network.network_routes_staging.network_route_hidden_variant</code>.
+     * Setter for <code>network.network_routes_staging.network_route_hidden_variant</code>.
      */
     public void setNetworkRouteHiddenVariant(Short value) {
         set(4, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_routes_staging.network_route_hidden_variant</code>.
+     * Getter for <code>network.network_routes_staging.network_route_hidden_variant</code>.
      */
     public Short getNetworkRouteHiddenVariant() {
         return (Short) get(4);
     }
 
     /**
-     * Setter for
-     * <code>network.network_routes_staging.network_route_legacy_hsl_municipality_code</code>.
+     * Setter for <code>network.network_routes_staging.network_route_legacy_hsl_municipality_code</code>.
      */
     public void setNetworkRouteLegacyHslMunicipalityCode(String value) {
         set(5, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_routes_staging.network_route_legacy_hsl_municipality_code</code>.
+     * Getter for <code>network.network_routes_staging.network_route_legacy_hsl_municipality_code</code>.
      */
     public String getNetworkRouteLegacyHslMunicipalityCode() {
         return (String) get(5);

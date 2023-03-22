@@ -46,9 +46,8 @@ public class DefaultCatalog extends CatalogImpl {
 
     @Override
     public final List<Schema> getSchemas() {
-        return Arrays.asList(
+        return Arrays.<Schema>asList(
             InfrastructureNetwork.INFRASTRUCTURE_NETWORK,
-            Network.NETWORK
-        );
+            Network.NETWORK);
     }
 }

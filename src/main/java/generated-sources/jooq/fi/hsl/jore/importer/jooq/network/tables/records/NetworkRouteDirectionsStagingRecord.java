@@ -24,144 +24,126 @@ public class NetworkRouteDirectionsStagingRecord extends UpdatableRecordImpl<Net
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for
-     * <code>network.network_route_directions_staging.network_route_direction_ext_id</code>.
+     * Setter for <code>network.network_route_directions_staging.network_route_direction_ext_id</code>.
      */
     public void setNetworkRouteDirectionExtId(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_directions_staging.network_route_direction_ext_id</code>.
+     * Getter for <code>network.network_route_directions_staging.network_route_direction_ext_id</code>.
      */
     public String getNetworkRouteDirectionExtId() {
         return (String) get(0);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_directions_staging.network_route_ext_id</code>.
+     * Setter for <code>network.network_route_directions_staging.network_route_ext_id</code>.
      */
     public void setNetworkRouteExtId(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_directions_staging.network_route_ext_id</code>.
+     * Getter for <code>network.network_route_directions_staging.network_route_ext_id</code>.
      */
     public String getNetworkRouteExtId() {
         return (String) get(1);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_directions_staging.network_route_direction_type</code>.
+     * Setter for <code>network.network_route_directions_staging.network_route_direction_type</code>.
      */
     public void setNetworkRouteDirectionType(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_directions_staging.network_route_direction_type</code>.
+     * Getter for <code>network.network_route_directions_staging.network_route_direction_type</code>.
      */
     public String getNetworkRouteDirectionType() {
         return (String) get(2);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_directions_staging.network_route_direction_length</code>.
+     * Setter for <code>network.network_route_directions_staging.network_route_direction_length</code>.
      */
     public void setNetworkRouteDirectionLength(Integer value) {
         set(3, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_directions_staging.network_route_direction_length</code>.
+     * Getter for <code>network.network_route_directions_staging.network_route_direction_length</code>.
      */
     public Integer getNetworkRouteDirectionLength() {
         return (Integer) get(3);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_directions_staging.network_route_direction_name</code>.
+     * Setter for <code>network.network_route_directions_staging.network_route_direction_name</code>.
      */
     public void setNetworkRouteDirectionName(JSONB value) {
         set(4, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_directions_staging.network_route_direction_name</code>.
+     * Getter for <code>network.network_route_directions_staging.network_route_direction_name</code>.
      */
     public JSONB getNetworkRouteDirectionName() {
         return (JSONB) get(4);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_directions_staging.network_route_direction_name_short</code>.
+     * Setter for <code>network.network_route_directions_staging.network_route_direction_name_short</code>.
      */
     public void setNetworkRouteDirectionNameShort(JSONB value) {
         set(5, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_directions_staging.network_route_direction_name_short</code>.
+     * Getter for <code>network.network_route_directions_staging.network_route_direction_name_short</code>.
      */
     public JSONB getNetworkRouteDirectionNameShort() {
         return (JSONB) get(5);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_directions_staging.network_route_direction_origin</code>.
+     * Setter for <code>network.network_route_directions_staging.network_route_direction_origin</code>.
      */
     public void setNetworkRouteDirectionOrigin(JSONB value) {
         set(6, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_directions_staging.network_route_direction_origin</code>.
+     * Getter for <code>network.network_route_directions_staging.network_route_direction_origin</code>.
      */
     public JSONB getNetworkRouteDirectionOrigin() {
         return (JSONB) get(6);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_directions_staging.network_route_direction_destination</code>.
+     * Setter for <code>network.network_route_directions_staging.network_route_direction_destination</code>.
      */
     public void setNetworkRouteDirectionDestination(JSONB value) {
         set(7, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_directions_staging.network_route_direction_destination</code>.
+     * Getter for <code>network.network_route_directions_staging.network_route_direction_destination</code>.
      */
     public JSONB getNetworkRouteDirectionDestination() {
         return (JSONB) get(7);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_directions_staging.network_route_direction_valid_date_range</code>.
+     * Setter for <code>network.network_route_directions_staging.network_route_direction_valid_date_range</code>.
      */
     public void setNetworkRouteDirectionValidDateRange(DateRange value) {
         set(8, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_directions_staging.network_route_direction_valid_date_range</code>.
+     * Getter for <code>network.network_route_directions_staging.network_route_direction_valid_date_range</code>.
      */
     public DateRange getNetworkRouteDirectionValidDateRange() {
         return (DateRange) get(8);

@@ -8,6 +8,9 @@ import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutePointsStagingRecord;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -32,8 +35,7 @@ public class NetworkRoutePointsStaging extends TableImpl<NetworkRoutePointsStagi
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>network.network_route_points_staging</code>
+     * The reference instance of <code>network.network_route_points_staging</code>
      */
     public static final NetworkRoutePointsStaging NETWORK_ROUTE_POINTS_STAGING = new NetworkRoutePointsStaging();
 
@@ -46,26 +48,22 @@ public class NetworkRoutePointsStaging extends TableImpl<NetworkRoutePointsStagi
     }
 
     /**
-     * The column
-     * <code>network.network_route_points_staging.network_route_point_ext_id</code>.
+     * The column <code>network.network_route_points_staging.network_route_point_ext_id</code>.
      */
     public final TableField<NetworkRoutePointsStagingRecord, String> NETWORK_ROUTE_POINT_EXT_ID = createField(DSL.name("network_route_point_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_route_points_staging.network_route_direction_ext_id</code>.
+     * The column <code>network.network_route_points_staging.network_route_direction_ext_id</code>.
      */
     public final TableField<NetworkRoutePointsStagingRecord, String> NETWORK_ROUTE_DIRECTION_EXT_ID = createField(DSL.name("network_route_direction_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_route_points_staging.infrastructure_node_ext_id</code>.
+     * The column <code>network.network_route_points_staging.infrastructure_node_ext_id</code>.
      */
     public final TableField<NetworkRoutePointsStagingRecord, String> INFRASTRUCTURE_NODE_EXT_ID = createField(DSL.name("infrastructure_node_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_route_points_staging.network_route_point_order</code>.
+     * The column <code>network.network_route_points_staging.network_route_point_order</code>.
      */
     public final TableField<NetworkRoutePointsStagingRecord, Integer> NETWORK_ROUTE_POINT_ORDER = createField(DSL.name("network_route_point_order"), SQLDataType.INTEGER.nullable(false), this, "");
 
@@ -78,24 +76,21 @@ public class NetworkRoutePointsStaging extends TableImpl<NetworkRoutePointsStagi
     }
 
     /**
-     * Create an aliased <code>network.network_route_points_staging</code> table
-     * reference
+     * Create an aliased <code>network.network_route_points_staging</code> table reference
      */
     public NetworkRoutePointsStaging(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_POINTS_STAGING);
     }
 
     /**
-     * Create an aliased <code>network.network_route_points_staging</code> table
-     * reference
+     * Create an aliased <code>network.network_route_points_staging</code> table reference
      */
     public NetworkRoutePointsStaging(Name alias) {
         this(alias, NETWORK_ROUTE_POINTS_STAGING);
     }
 
     /**
-     * Create a <code>network.network_route_points_staging</code> table
-     * reference
+     * Create a <code>network.network_route_points_staging</code> table reference
      */
     public NetworkRoutePointsStaging() {
         this(DSL.name("network_route_points_staging"), null);
@@ -107,12 +102,17 @@ public class NetworkRoutePointsStaging extends TableImpl<NetworkRoutePointsStagi
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Network.NETWORK;
+        return Network.NETWORK;
     }
 
     @Override
     public UniqueKey<NetworkRoutePointsStagingRecord> getPrimaryKey() {
         return Keys.NETWORK_ROUTE_POINTS_STAGING_PKEY;
+    }
+
+    @Override
+    public List<UniqueKey<NetworkRoutePointsStagingRecord>> getKeys() {
+        return Arrays.<UniqueKey<NetworkRoutePointsStagingRecord>>asList(Keys.NETWORK_ROUTE_POINTS_STAGING_PKEY);
     }
 
     @Override

@@ -34,8 +34,7 @@ public class NetworkRouteLinksHistory extends TableImpl<NetworkRouteLinksHistory
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>network.network_route_links_history</code>
+     * The reference instance of <code>network.network_route_links_history</code>
      */
     public static final NetworkRouteLinksHistory NETWORK_ROUTE_LINKS_HISTORY = new NetworkRouteLinksHistory();
 
@@ -48,38 +47,32 @@ public class NetworkRouteLinksHistory extends TableImpl<NetworkRouteLinksHistory
     }
 
     /**
-     * The column
-     * <code>network.network_route_links_history.network_route_link_id</code>.
+     * The column <code>network.network_route_links_history.network_route_link_id</code>.
      */
     public final TableField<NetworkRouteLinksHistoryRecord, UUID> NETWORK_ROUTE_LINK_ID = createField(DSL.name("network_route_link_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_route_links_history.network_route_direction_id</code>.
+     * The column <code>network.network_route_links_history.network_route_direction_id</code>.
      */
     public final TableField<NetworkRouteLinksHistoryRecord, UUID> NETWORK_ROUTE_DIRECTION_ID = createField(DSL.name("network_route_direction_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_route_links_history.infrastructure_link_id</code>.
+     * The column <code>network.network_route_links_history.infrastructure_link_id</code>.
      */
     public final TableField<NetworkRouteLinksHistoryRecord, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_route_links_history.network_route_link_ext_id</code>.
+     * The column <code>network.network_route_links_history.network_route_link_ext_id</code>.
      */
     public final TableField<NetworkRouteLinksHistoryRecord, String> NETWORK_ROUTE_LINK_EXT_ID = createField(DSL.name("network_route_link_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_route_links_history.network_route_link_order</code>.
+     * The column <code>network.network_route_links_history.network_route_link_order</code>.
      */
     public final TableField<NetworkRouteLinksHistoryRecord, Integer> NETWORK_ROUTE_LINK_ORDER = createField(DSL.name("network_route_link_order"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_route_links_history.network_route_link_sys_period</code>.
+     * The column <code>network.network_route_links_history.network_route_link_sys_period</code>.
      */
     public final TableField<NetworkRouteLinksHistoryRecord, TimeRange> NETWORK_ROUTE_LINK_SYS_PERIOD = createField(DSL.name("network_route_link_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
@@ -92,16 +85,14 @@ public class NetworkRouteLinksHistory extends TableImpl<NetworkRouteLinksHistory
     }
 
     /**
-     * Create an aliased <code>network.network_route_links_history</code> table
-     * reference
+     * Create an aliased <code>network.network_route_links_history</code> table reference
      */
     public NetworkRouteLinksHistory(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_LINKS_HISTORY);
     }
 
     /**
-     * Create an aliased <code>network.network_route_links_history</code> table
-     * reference
+     * Create an aliased <code>network.network_route_links_history</code> table reference
      */
     public NetworkRouteLinksHistory(Name alias) {
         this(alias, NETWORK_ROUTE_LINKS_HISTORY);
@@ -120,7 +111,7 @@ public class NetworkRouteLinksHistory extends TableImpl<NetworkRouteLinksHistory
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Network.NETWORK;
+        return Network.NETWORK;
     }
 
     @Override

@@ -21,8 +21,7 @@ public class DeleteScheduledStopPointLabel extends AbstractRoutine<java.lang.Voi
     private static final long serialVersionUID = 1L;
 
     /**
-     * The parameter
-     * <code>service_pattern.delete_scheduled_stop_point_label.old_label</code>.
+     * The parameter <code>service_pattern.delete_scheduled_stop_point_label.old_label</code>.
      */
     public static final Parameter<String> OLD_LABEL = Internal.createParameter("old_label", SQLDataType.CLOB, false, false);
 

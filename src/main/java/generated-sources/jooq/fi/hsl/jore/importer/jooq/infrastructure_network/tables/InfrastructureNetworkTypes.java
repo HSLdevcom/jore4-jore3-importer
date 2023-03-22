@@ -8,6 +8,9 @@ import fi.hsl.jore.importer.jooq.infrastructure_network.InfrastructureNetwork;
 import fi.hsl.jore.importer.jooq.infrastructure_network.Keys;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNetworkTypesRecord;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -32,8 +35,7 @@ public class InfrastructureNetworkTypes extends TableImpl<InfrastructureNetworkT
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>infrastructure_network.infrastructure_network_types</code>
+     * The reference instance of <code>infrastructure_network.infrastructure_network_types</code>
      */
     public static final InfrastructureNetworkTypes INFRASTRUCTURE_NETWORK_TYPES = new InfrastructureNetworkTypes();
 
@@ -46,8 +48,7 @@ public class InfrastructureNetworkTypes extends TableImpl<InfrastructureNetworkT
     }
 
     /**
-     * The column
-     * <code>infrastructure_network.infrastructure_network_types.infrastructure_network_type</code>.
+     * The column <code>infrastructure_network.infrastructure_network_types.infrastructure_network_type</code>.
      */
     public final TableField<InfrastructureNetworkTypesRecord, String> INFRASTRUCTURE_NETWORK_TYPE = createField(DSL.name("infrastructure_network_type"), SQLDataType.CLOB.nullable(false), this, "");
 
@@ -60,26 +61,21 @@ public class InfrastructureNetworkTypes extends TableImpl<InfrastructureNetworkT
     }
 
     /**
-     * Create an aliased
-     * <code>infrastructure_network.infrastructure_network_types</code> table
-     * reference
+     * Create an aliased <code>infrastructure_network.infrastructure_network_types</code> table reference
      */
     public InfrastructureNetworkTypes(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_NETWORK_TYPES);
     }
 
     /**
-     * Create an aliased
-     * <code>infrastructure_network.infrastructure_network_types</code> table
-     * reference
+     * Create an aliased <code>infrastructure_network.infrastructure_network_types</code> table reference
      */
     public InfrastructureNetworkTypes(Name alias) {
         this(alias, INFRASTRUCTURE_NETWORK_TYPES);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_network_types</code>
-     * table reference
+     * Create a <code>infrastructure_network.infrastructure_network_types</code> table reference
      */
     public InfrastructureNetworkTypes() {
         this(DSL.name("infrastructure_network_types"), null);
@@ -91,12 +87,17 @@ public class InfrastructureNetworkTypes extends TableImpl<InfrastructureNetworkT
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
     public UniqueKey<InfrastructureNetworkTypesRecord> getPrimaryKey() {
         return Keys.INFRASTRUCTURE_NETWORK_TYPES_PKEY;
+    }
+
+    @Override
+    public List<UniqueKey<InfrastructureNetworkTypesRecord>> getKeys() {
+        return Arrays.<UniqueKey<InfrastructureNetworkTypesRecord>>asList(Keys.INFRASTRUCTURE_NETWORK_TYPES_PKEY);
     }
 
     @Override

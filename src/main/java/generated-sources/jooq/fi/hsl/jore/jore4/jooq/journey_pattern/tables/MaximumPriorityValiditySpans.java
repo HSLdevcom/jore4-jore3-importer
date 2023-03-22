@@ -30,8 +30,7 @@ public class MaximumPriorityValiditySpans extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>journey_pattern.maximum_priority_validity_spans</code>
+     * The reference instance of <code>journey_pattern.maximum_priority_validity_spans</code>
      */
     public static final MaximumPriorityValiditySpans MAXIMUM_PRIORITY_VALIDITY_SPANS = new MaximumPriorityValiditySpans();
 
@@ -44,40 +43,22 @@ public class MaximumPriorityValiditySpans extends TableImpl<Record> {
     }
 
     /**
-     * The column
-     * <code>journey_pattern.maximum_priority_validity_spans.id</code>.
+     * The column <code>journey_pattern.maximum_priority_validity_spans.id</code>.
      */
     public final TableField<Record, UUID> ID = createField(DSL.name("id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column
-     * <code>journey_pattern.maximum_priority_validity_spans.validity_start</code>.
+     * The column <code>journey_pattern.maximum_priority_validity_spans.validity_start</code>.
      */
     public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "");
 
     /**
-     * The column
-     * <code>journey_pattern.maximum_priority_validity_spans.validity_end</code>.
+     * The column <code>journey_pattern.maximum_priority_validity_spans.validity_end</code>.
      */
     public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "");
 
     private MaximumPriorityValiditySpans(Name alias, Table<Record> aliased) {
-        this(alias, aliased, new Field[] {
-            DSL.val(null, SQLDataType.CLOB),
-            DSL.val(null, SQLDataType.CLOB.getArrayDataType()),
-            DSL.val(null, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
-            DSL.val(null, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
-            DSL.val(null, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER))),
-            DSL.val(null, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
-            DSL.val(null, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
-            DSL.val(null, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
-            DSL.val(null, org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").defaultValue(DSL.field("NULL::geography", org.jooq.impl.SQLDataType.OTHER))),
-            DSL.val(null, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
-            DSL.val(null, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
-            DSL.val(null, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
-            DSL.val(null, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
-            DSL.val(null, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER)))
-        });
+        this(alias, aliased, new Field[14]);
     }
 
     private MaximumPriorityValiditySpans(Name alias, Table<Record> aliased, Field<?>[] parameters) {
@@ -85,26 +66,21 @@ public class MaximumPriorityValiditySpans extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased
-     * <code>journey_pattern.maximum_priority_validity_spans</code> table
-     * reference
+     * Create an aliased <code>journey_pattern.maximum_priority_validity_spans</code> table reference
      */
     public MaximumPriorityValiditySpans(String alias) {
         this(DSL.name(alias), MAXIMUM_PRIORITY_VALIDITY_SPANS);
     }
 
     /**
-     * Create an aliased
-     * <code>journey_pattern.maximum_priority_validity_spans</code> table
-     * reference
+     * Create an aliased <code>journey_pattern.maximum_priority_validity_spans</code> table reference
      */
     public MaximumPriorityValiditySpans(Name alias) {
         this(alias, MAXIMUM_PRIORITY_VALIDITY_SPANS);
     }
 
     /**
-     * Create a <code>journey_pattern.maximum_priority_validity_spans</code>
-     * table reference
+     * Create a <code>journey_pattern.maximum_priority_validity_spans</code> table reference
      */
     public MaximumPriorityValiditySpans() {
         this(DSL.name("maximum_priority_validity_spans"), null);
@@ -112,7 +88,7 @@ public class MaximumPriorityValiditySpans extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : JourneyPattern.JOURNEY_PATTERN;
+        return JourneyPattern.JOURNEY_PATTERN;
     }
 
     @Override
@@ -161,20 +137,20 @@ public class MaximumPriorityValiditySpans extends TableImpl<Record> {
         , Integer newPriority
     ) {
         MaximumPriorityValiditySpans result = new MaximumPriorityValiditySpans(DSL.name("maximum_priority_validity_spans"), null, new Field[] {
-            DSL.val(entityType, SQLDataType.CLOB),
-            DSL.val(filterRouteLabels, SQLDataType.CLOB.getArrayDataType()),
-            DSL.val(filterValidityStart, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
-            DSL.val(filterValidityEnd, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
-            DSL.val(upperPriorityLimit, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER))),
-            DSL.val(replaceScheduledStopPointId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
-            DSL.val(newScheduledStopPointId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
-            DSL.val(newLocatedOnInfrastructureLinkId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
-            DSL.val(newMeasuredLocation, org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").defaultValue(DSL.field("NULL::geography", org.jooq.impl.SQLDataType.OTHER))),
-            DSL.val(newDirection, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
-            DSL.val(newLabel, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
-            DSL.val(newValidityStart, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
-            DSL.val(newValidityEnd, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
-            DSL.val(newPriority, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER)))
+              DSL.val(entityType, SQLDataType.CLOB)
+            , DSL.val(filterRouteLabels, SQLDataType.CLOB.getArrayDataType())
+            , DSL.val(filterValidityStart, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE)))
+            , DSL.val(filterValidityEnd, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE)))
+            , DSL.val(upperPriorityLimit, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER)))
+            , DSL.val(replaceScheduledStopPointId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID)))
+            , DSL.val(newScheduledStopPointId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID)))
+            , DSL.val(newLocatedOnInfrastructureLinkId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID)))
+            , DSL.val(newMeasuredLocation, org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").defaultValue(DSL.field("NULL::geography", org.jooq.impl.SQLDataType.OTHER)))
+            , DSL.val(newDirection, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB)))
+            , DSL.val(newLabel, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB)))
+            , DSL.val(newValidityStart, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE)))
+            , DSL.val(newValidityEnd, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE)))
+            , DSL.val(newPriority, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER)))
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;
@@ -200,20 +176,20 @@ public class MaximumPriorityValiditySpans extends TableImpl<Record> {
         , Field<Integer> newPriority
     ) {
         MaximumPriorityValiditySpans result = new MaximumPriorityValiditySpans(DSL.name("maximum_priority_validity_spans"), null, new Field[] {
-            entityType,
-            filterRouteLabels,
-            filterValidityStart,
-            filterValidityEnd,
-            upperPriorityLimit,
-            replaceScheduledStopPointId,
-            newScheduledStopPointId,
-            newLocatedOnInfrastructureLinkId,
-            newMeasuredLocation,
-            newDirection,
-            newLabel,
-            newValidityStart,
-            newValidityEnd,
-            newPriority
+              entityType
+            , filterRouteLabels
+            , filterValidityStart
+            , filterValidityEnd
+            , upperPriorityLimit
+            , replaceScheduledStopPointId
+            , newScheduledStopPointId
+            , newLocatedOnInfrastructureLinkId
+            , newMeasuredLocation
+            , newDirection
+            , newLabel
+            , newValidityStart
+            , newValidityEnd
+            , newPriority
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;

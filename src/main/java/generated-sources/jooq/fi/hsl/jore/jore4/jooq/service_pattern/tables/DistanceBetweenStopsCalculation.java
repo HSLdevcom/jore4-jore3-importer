@@ -23,8 +23,8 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * A dummy table that models the results of calculating the lengths of stop
- * intervals from the given journey patterns. The table exists due to the
+ * A dummy table that models the results of calculating the lengths of stop 
+ * intervals from the given journey patterns. The table exists due to the 
  * limitations of Hasura and there is no intention to insert anything to it.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
@@ -33,8 +33,7 @@ public class DistanceBetweenStopsCalculation extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>service_pattern.distance_between_stops_calculation</code>
+     * The reference instance of <code>service_pattern.distance_between_stops_calculation</code>
      */
     public static final DistanceBetweenStopsCalculation DISTANCE_BETWEEN_STOPS_CALCULATION = new DistanceBetweenStopsCalculation();
 
@@ -47,59 +46,42 @@ public class DistanceBetweenStopsCalculation extends TableImpl<Record> {
     }
 
     /**
-     * The column
-     * <code>service_pattern.distance_between_stops_calculation.journey_pattern_id</code>.
-     * The ID of the journey pattern.
+     * The column <code>service_pattern.distance_between_stops_calculation.journey_pattern_id</code>. The ID of the journey pattern.
      */
     public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false), this, "The ID of the journey pattern.");
 
     /**
-     * The column
-     * <code>service_pattern.distance_between_stops_calculation.route_id</code>.
-     * The ID of the route related to the journey pattern.
+     * The column <code>service_pattern.distance_between_stops_calculation.route_id</code>. The ID of the route related to the journey pattern.
      */
     public final TableField<Record, UUID> ROUTE_ID = createField(DSL.name("route_id"), SQLDataType.UUID.nullable(false), this, "The ID of the route related to the journey pattern.");
 
     /**
-     * The column
-     * <code>service_pattern.distance_between_stops_calculation.route_priority</code>.
-     * The priority of the route related to the journey pattern.
+     * The column <code>service_pattern.distance_between_stops_calculation.route_priority</code>. The priority of the route related to the journey pattern.
      */
     public final TableField<Record, Integer> ROUTE_PRIORITY = createField(DSL.name("route_priority"), SQLDataType.INTEGER.nullable(false), this, "The priority of the route related to the journey pattern.");
 
     /**
-     * The column
-     * <code>service_pattern.distance_between_stops_calculation.observation_date</code>.
-     * The observation date for the state of the route related to the journey
-     * pattern.
+     * The column <code>service_pattern.distance_between_stops_calculation.observation_date</code>. The observation date for the state of the route related to the journey pattern.
      */
     public final TableField<Record, LocalDate> OBSERVATION_DATE = createField(DSL.name("observation_date"), SQLDataType.LOCALDATE.nullable(false), this, "The observation date for the state of the route related to the journey pattern.");
 
     /**
-     * The column
-     * <code>service_pattern.distance_between_stops_calculation.stop_interval_sequence</code>.
-     * The sequence number of the stop interval within the journey pattern.
+     * The column <code>service_pattern.distance_between_stops_calculation.stop_interval_sequence</code>. The sequence number of the stop interval within the journey pattern.
      */
     public final TableField<Record, Integer> STOP_INTERVAL_SEQUENCE = createField(DSL.name("stop_interval_sequence"), SQLDataType.INTEGER.nullable(false), this, "The sequence number of the stop interval within the journey pattern.");
 
     /**
-     * The column
-     * <code>service_pattern.distance_between_stops_calculation.start_stop_label</code>.
-     * The label of the start stop of the stop interval.
+     * The column <code>service_pattern.distance_between_stops_calculation.start_stop_label</code>. The label of the start stop of the stop interval.
      */
     public final TableField<Record, String> START_STOP_LABEL = createField(DSL.name("start_stop_label"), SQLDataType.CLOB.nullable(false), this, "The label of the start stop of the stop interval.");
 
     /**
-     * The column
-     * <code>service_pattern.distance_between_stops_calculation.end_stop_label</code>.
-     * The label of the end stop of the stop interval.
+     * The column <code>service_pattern.distance_between_stops_calculation.end_stop_label</code>. The label of the end stop of the stop interval.
      */
     public final TableField<Record, String> END_STOP_LABEL = createField(DSL.name("end_stop_label"), SQLDataType.CLOB.nullable(false), this, "The label of the end stop of the stop interval.");
 
     /**
-     * The column
-     * <code>service_pattern.distance_between_stops_calculation.distance_in_metres</code>.
-     * The length of the stop interval in metres.
+     * The column <code>service_pattern.distance_between_stops_calculation.distance_in_metres</code>. The length of the stop interval in metres.
      */
     public final TableField<Record, Double> DISTANCE_IN_METRES = createField(DSL.name("distance_in_metres"), SQLDataType.DOUBLE.nullable(false), this, "The length of the stop interval in metres.");
 
@@ -112,26 +94,21 @@ public class DistanceBetweenStopsCalculation extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased
-     * <code>service_pattern.distance_between_stops_calculation</code> table
-     * reference
+     * Create an aliased <code>service_pattern.distance_between_stops_calculation</code> table reference
      */
     public DistanceBetweenStopsCalculation(String alias) {
         this(DSL.name(alias), DISTANCE_BETWEEN_STOPS_CALCULATION);
     }
 
     /**
-     * Create an aliased
-     * <code>service_pattern.distance_between_stops_calculation</code> table
-     * reference
+     * Create an aliased <code>service_pattern.distance_between_stops_calculation</code> table reference
      */
     public DistanceBetweenStopsCalculation(Name alias) {
         this(alias, DISTANCE_BETWEEN_STOPS_CALCULATION);
     }
 
     /**
-     * Create a <code>service_pattern.distance_between_stops_calculation</code>
-     * table reference
+     * Create a <code>service_pattern.distance_between_stops_calculation</code> table reference
      */
     public DistanceBetweenStopsCalculation() {
         this(DSL.name("distance_between_stops_calculation"), null);
@@ -143,7 +120,7 @@ public class DistanceBetweenStopsCalculation extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : ServicePattern.SERVICE_PATTERN;
+        return ServicePattern.SERVICE_PATTERN;
     }
 
     @Override

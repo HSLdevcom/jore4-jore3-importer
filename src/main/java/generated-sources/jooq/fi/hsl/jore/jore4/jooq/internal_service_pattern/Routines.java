@@ -14,15 +14,13 @@ import org.locationtech.jts.geom.Point;
 
 
 /**
- * Convenience access to all stored procedures and functions in
- * internal_service_pattern.
+ * Convenience access to all stored procedures and functions in internal_service_pattern.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Routines {
 
     /**
-     * Call
-     * <code>internal_service_pattern.insert_scheduled_stop_point_with_vehicle_mode</code>
+     * Call <code>internal_service_pattern.insert_scheduled_stop_point_with_vehicle_mode</code>
      */
     public static void insertScheduledStopPointWithVehicleMode(
           Configuration configuration

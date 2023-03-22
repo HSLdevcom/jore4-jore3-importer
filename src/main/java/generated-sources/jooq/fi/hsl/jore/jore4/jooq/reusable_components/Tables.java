@@ -15,14 +15,12 @@ import fi.hsl.jore.jore4.jooq.reusable_components.tables.VehicleSubmode;
 public class Tables {
 
     /**
-     * The vehicle modes from Transmodel:
-     * https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
+     * The vehicle modes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
      */
     public static final VehicleMode VEHICLE_MODE = VehicleMode.VEHICLE_MODE;
 
     /**
-     * The vehicle submode, which may have implications on which infrastructure
-     * links the vehicle can traverse
+     * The vehicle submode, which may have implications on which infrastructure links the vehicle can traverse
      */
     public static final VehicleSubmode VEHICLE_SUBMODE = VehicleSubmode.VEHICLE_SUBMODE;
 }

@@ -22,64 +22,56 @@ public class NetworkRoutePointsStagingRecord extends UpdatableRecordImpl<Network
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for
-     * <code>network.network_route_points_staging.network_route_point_ext_id</code>.
+     * Setter for <code>network.network_route_points_staging.network_route_point_ext_id</code>.
      */
     public void setNetworkRoutePointExtId(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_points_staging.network_route_point_ext_id</code>.
+     * Getter for <code>network.network_route_points_staging.network_route_point_ext_id</code>.
      */
     public String getNetworkRoutePointExtId() {
         return (String) get(0);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_points_staging.network_route_direction_ext_id</code>.
+     * Setter for <code>network.network_route_points_staging.network_route_direction_ext_id</code>.
      */
     public void setNetworkRouteDirectionExtId(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_points_staging.network_route_direction_ext_id</code>.
+     * Getter for <code>network.network_route_points_staging.network_route_direction_ext_id</code>.
      */
     public String getNetworkRouteDirectionExtId() {
         return (String) get(1);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_points_staging.infrastructure_node_ext_id</code>.
+     * Setter for <code>network.network_route_points_staging.infrastructure_node_ext_id</code>.
      */
     public void setInfrastructureNodeExtId(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_points_staging.infrastructure_node_ext_id</code>.
+     * Getter for <code>network.network_route_points_staging.infrastructure_node_ext_id</code>.
      */
     public String getInfrastructureNodeExtId() {
         return (String) get(2);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_points_staging.network_route_point_order</code>.
+     * Setter for <code>network.network_route_points_staging.network_route_point_order</code>.
      */
     public void setNetworkRoutePointOrder(Integer value) {
         set(3, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_points_staging.network_route_point_order</code>.
+     * Getter for <code>network.network_route_points_staging.network_route_point_order</code>.
      */
     public Integer getNetworkRoutePointOrder() {
         return (Integer) get(3);

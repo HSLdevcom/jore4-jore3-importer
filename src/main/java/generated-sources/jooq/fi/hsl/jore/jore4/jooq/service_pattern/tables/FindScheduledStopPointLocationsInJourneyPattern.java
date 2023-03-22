@@ -32,8 +32,7 @@ public class FindScheduledStopPointLocationsInJourneyPattern extends TableImpl<R
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>
+     * The reference instance of <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>
      */
     public static final FindScheduledStopPointLocationsInJourneyPattern FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN = new FindScheduledStopPointLocationsInJourneyPattern();
 
@@ -46,65 +45,52 @@ public class FindScheduledStopPointLocationsInJourneyPattern extends TableImpl<R
     }
 
     /**
-     * The column
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.journey_pattern_id</code>.
+     * The column <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.journey_pattern_id</code>.
      */
     public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.scheduled_stop_point_sequence</code>.
+     * The column <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.scheduled_stop_point_sequence</code>.
      */
     public final TableField<Record, Integer> SCHEDULED_STOP_POINT_SEQUENCE = createField(DSL.name("scheduled_stop_point_sequence"), SQLDataType.INTEGER, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.scheduled_stop_point_id</code>.
+     * The column <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.scheduled_stop_point_id</code>.
      */
     public final TableField<Record, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.label</code>.
+     * The column <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.label</code>.
      */
     public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.measured_location</code>.
+     * The column <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.measured_location</code>.
      */
     public final TableField<Record, Point> MEASURED_LOCATION = createField(DSL.name("measured_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\""), this, "", new PointBinding());
 
     /**
-     * The column
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.located_on_infrastructure_link_id</code>.
+     * The column <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.located_on_infrastructure_link_id</code>.
      */
     public final TableField<Record, UUID> LOCATED_ON_INFRASTRUCTURE_LINK_ID = createField(DSL.name("located_on_infrastructure_link_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.direction</code>.
+     * The column <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.direction</code>.
      */
     public final TableField<Record, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.relative_distance_from_link_start</code>.
+     * The column <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.relative_distance_from_link_start</code>.
      */
     public final TableField<Record, Double> RELATIVE_DISTANCE_FROM_LINK_START = createField(DSL.name("relative_distance_from_link_start"), SQLDataType.DOUBLE, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.timing_place_id</code>.
+     * The column <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern.timing_place_id</code>.
      */
     public final TableField<Record, UUID> TIMING_PLACE_ID = createField(DSL.name("timing_place_id"), SQLDataType.UUID, this, "");
 
     private FindScheduledStopPointLocationsInJourneyPattern(Name alias, Table<Record> aliased) {
-        this(alias, aliased, new Field[] {
-            DSL.val(null, SQLDataType.UUID),
-            DSL.val(null, SQLDataType.LOCALDATE),
-            DSL.val(null, SQLDataType.BOOLEAN)
-        });
+        this(alias, aliased, new Field[3]);
     }
 
     private FindScheduledStopPointLocationsInJourneyPattern(Name alias, Table<Record> aliased, Field<?>[] parameters) {
@@ -112,27 +98,21 @@ public class FindScheduledStopPointLocationsInJourneyPattern extends TableImpl<R
     }
 
     /**
-     * Create an aliased
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>
-     * table reference
+     * Create an aliased <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code> table reference
      */
     public FindScheduledStopPointLocationsInJourneyPattern(String alias) {
         this(DSL.name(alias), FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN);
     }
 
     /**
-     * Create an aliased
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>
-     * table reference
+     * Create an aliased <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code> table reference
      */
     public FindScheduledStopPointLocationsInJourneyPattern(Name alias) {
         this(alias, FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN);
     }
 
     /**
-     * Create a
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>
-     * table reference
+     * Create a <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code> table reference
      */
     public FindScheduledStopPointLocationsInJourneyPattern() {
         this(DSL.name("find_scheduled_stop_point_locations_in_journey_pattern"), null);
@@ -140,7 +120,7 @@ public class FindScheduledStopPointLocationsInJourneyPattern extends TableImpl<R
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : ServicePattern.SERVICE_PATTERN;
+        return ServicePattern.SERVICE_PATTERN;
     }
 
     @Override
@@ -178,9 +158,9 @@ public class FindScheduledStopPointLocationsInJourneyPattern extends TableImpl<R
         , Boolean includeDraftStops
     ) {
         FindScheduledStopPointLocationsInJourneyPattern result = new FindScheduledStopPointLocationsInJourneyPattern(DSL.name("find_scheduled_stop_point_locations_in_journey_pattern"), null, new Field[] {
-            DSL.val(filterJourneyPatternId, SQLDataType.UUID),
-            DSL.val(observationDate, SQLDataType.LOCALDATE),
-            DSL.val(includeDraftStops, SQLDataType.BOOLEAN)
+              DSL.val(filterJourneyPatternId, SQLDataType.UUID)
+            , DSL.val(observationDate, SQLDataType.LOCALDATE)
+            , DSL.val(includeDraftStops, SQLDataType.BOOLEAN)
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;
@@ -195,9 +175,9 @@ public class FindScheduledStopPointLocationsInJourneyPattern extends TableImpl<R
         , Field<Boolean> includeDraftStops
     ) {
         FindScheduledStopPointLocationsInJourneyPattern result = new FindScheduledStopPointLocationsInJourneyPattern(DSL.name("find_scheduled_stop_point_locations_in_journey_pattern"), null, new Field[] {
-            filterJourneyPatternId,
-            observationDate,
-            includeDraftStops
+              filterJourneyPatternId
+            , observationDate
+            , includeDraftStops
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;

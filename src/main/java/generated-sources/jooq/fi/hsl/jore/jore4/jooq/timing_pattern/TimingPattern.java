@@ -29,10 +29,7 @@ public class TimingPattern extends SchemaImpl {
     public static final TimingPattern TIMING_PATTERN = new TimingPattern();
 
     /**
-     * A set of SCHEDULED STOP POINTs against which the timing information
-     * necessary to build schedules may be recorded. In HSL context this is
-     * "Hastus paikka". Based on Transmodel entity TIMING POINT:
-     * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:2:709 
+     * A set of SCHEDULED STOP POINTs against which the timing information necessary to build schedules may be recorded. In HSL context this is "Hastus paikka". Based on Transmodel entity TIMING POINT: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:2:709 
      */
     public final TimingPlace TIMING_PLACE = TimingPlace.TIMING_PLACE;
 
@@ -51,8 +48,7 @@ public class TimingPattern extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.asList(
-            TimingPlace.TIMING_PLACE
-        );
+        return Arrays.<Table<?>>asList(
+            TimingPlace.TIMING_PLACE);
     }
 }
