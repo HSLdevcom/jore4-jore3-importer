@@ -25,96 +25,84 @@ public class InfrastructureNodesWithHistoryRecord extends TableRecordImpl<Infras
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for
-     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_id</code>.
+     * Setter for <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_id</code>.
      */
     public void setInfrastructureNodeId(UUID value) {
         set(0, value);
     }
 
     /**
-     * Getter for
-     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_id</code>.
+     * Getter for <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_id</code>.
      */
     public UUID getInfrastructureNodeId() {
         return (UUID) get(0);
     }
 
     /**
-     * Setter for
-     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_ext_id</code>.
+     * Setter for <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_ext_id</code>.
      */
     public void setInfrastructureNodeExtId(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for
-     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_ext_id</code>.
+     * Getter for <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_ext_id</code>.
      */
     public String getInfrastructureNodeExtId() {
         return (String) get(1);
     }
 
     /**
-     * Setter for
-     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_type</code>.
+     * Setter for <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_type</code>.
      */
     public void setInfrastructureNodeType(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for
-     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_type</code>.
+     * Getter for <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_type</code>.
      */
     public String getInfrastructureNodeType() {
         return (String) get(2);
     }
 
     /**
-     * Setter for
-     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_location</code>.
+     * Setter for <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_location</code>.
      */
     public void setInfrastructureNodeLocation(Point value) {
         set(3, value);
     }
 
     /**
-     * Getter for
-     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_location</code>.
+     * Getter for <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_location</code>.
      */
     public Point getInfrastructureNodeLocation() {
         return (Point) get(3);
     }
 
     /**
-     * Setter for
-     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_projected_location</code>.
+     * Setter for <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_projected_location</code>.
      */
     public void setInfrastructureNodeProjectedLocation(Point value) {
         set(4, value);
     }
 
     /**
-     * Getter for
-     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_projected_location</code>.
+     * Getter for <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_projected_location</code>.
      */
     public Point getInfrastructureNodeProjectedLocation() {
         return (Point) get(4);
     }
 
     /**
-     * Setter for
-     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_sys_period</code>.
+     * Setter for <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_sys_period</code>.
      */
     public void setInfrastructureNodeSysPeriod(TimeRange value) {
         set(5, value);
     }
 
     /**
-     * Getter for
-     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_sys_period</code>.
+     * Getter for <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_sys_period</code>.
      */
     public TimeRange getInfrastructureNodeSysPeriod() {
         return (TimeRange) get(5);

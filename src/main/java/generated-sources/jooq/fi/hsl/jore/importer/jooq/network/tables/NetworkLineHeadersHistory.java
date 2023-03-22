@@ -37,8 +37,7 @@ public class NetworkLineHeadersHistory extends TableImpl<NetworkLineHeadersHisto
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>network.network_line_headers_history</code>
+     * The reference instance of <code>network.network_line_headers_history</code>
      */
     public static final NetworkLineHeadersHistory NETWORK_LINE_HEADERS_HISTORY = new NetworkLineHeadersHistory();
 
@@ -51,56 +50,47 @@ public class NetworkLineHeadersHistory extends TableImpl<NetworkLineHeadersHisto
     }
 
     /**
-     * The column
-     * <code>network.network_line_headers_history.network_line_header_id</code>.
+     * The column <code>network.network_line_headers_history.network_line_header_id</code>.
      */
     public final TableField<NetworkLineHeadersHistoryRecord, UUID> NETWORK_LINE_HEADER_ID = createField(DSL.name("network_line_header_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_line_headers_history.network_line_id</code>.
+     * The column <code>network.network_line_headers_history.network_line_id</code>.
      */
     public final TableField<NetworkLineHeadersHistoryRecord, UUID> NETWORK_LINE_ID = createField(DSL.name("network_line_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_line_headers_history.network_line_header_ext_id</code>.
+     * The column <code>network.network_line_headers_history.network_line_header_ext_id</code>.
      */
     public final TableField<NetworkLineHeadersHistoryRecord, String> NETWORK_LINE_HEADER_EXT_ID = createField(DSL.name("network_line_header_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_line_headers_history.network_line_header_name</code>.
+     * The column <code>network.network_line_headers_history.network_line_header_name</code>.
      */
     public final TableField<NetworkLineHeadersHistoryRecord, JSONB> NETWORK_LINE_HEADER_NAME = createField(DSL.name("network_line_header_name"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_line_headers_history.network_line_header_name_short</code>.
+     * The column <code>network.network_line_headers_history.network_line_header_name_short</code>.
      */
     public final TableField<NetworkLineHeadersHistoryRecord, JSONB> NETWORK_LINE_HEADER_NAME_SHORT = createField(DSL.name("network_line_header_name_short"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_line_headers_history.network_line_header_origin_1</code>.
+     * The column <code>network.network_line_headers_history.network_line_header_origin_1</code>.
      */
     public final TableField<NetworkLineHeadersHistoryRecord, JSONB> NETWORK_LINE_HEADER_ORIGIN_1 = createField(DSL.name("network_line_header_origin_1"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_line_headers_history.network_line_header_origin_2</code>.
+     * The column <code>network.network_line_headers_history.network_line_header_origin_2</code>.
      */
     public final TableField<NetworkLineHeadersHistoryRecord, JSONB> NETWORK_LINE_HEADER_ORIGIN_2 = createField(DSL.name("network_line_header_origin_2"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_line_headers_history.network_line_header_valid_date_range</code>.
+     * The column <code>network.network_line_headers_history.network_line_header_valid_date_range</code>.
      */
     public final TableField<NetworkLineHeadersHistoryRecord, DateRange> NETWORK_LINE_HEADER_VALID_DATE_RANGE = createField(DSL.name("network_line_header_valid_date_range"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"daterange\"").nullable(false), this, "", new DateRangeBinding());
 
     /**
-     * The column
-     * <code>network.network_line_headers_history.network_line_header_sys_period</code>.
+     * The column <code>network.network_line_headers_history.network_line_header_sys_period</code>.
      */
     public final TableField<NetworkLineHeadersHistoryRecord, TimeRange> NETWORK_LINE_HEADER_SYS_PERIOD = createField(DSL.name("network_line_header_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
@@ -113,24 +103,21 @@ public class NetworkLineHeadersHistory extends TableImpl<NetworkLineHeadersHisto
     }
 
     /**
-     * Create an aliased <code>network.network_line_headers_history</code> table
-     * reference
+     * Create an aliased <code>network.network_line_headers_history</code> table reference
      */
     public NetworkLineHeadersHistory(String alias) {
         this(DSL.name(alias), NETWORK_LINE_HEADERS_HISTORY);
     }
 
     /**
-     * Create an aliased <code>network.network_line_headers_history</code> table
-     * reference
+     * Create an aliased <code>network.network_line_headers_history</code> table reference
      */
     public NetworkLineHeadersHistory(Name alias) {
         this(alias, NETWORK_LINE_HEADERS_HISTORY);
     }
 
     /**
-     * Create a <code>network.network_line_headers_history</code> table
-     * reference
+     * Create a <code>network.network_line_headers_history</code> table reference
      */
     public NetworkLineHeadersHistory() {
         this(DSL.name("network_line_headers_history"), null);
@@ -142,7 +129,7 @@ public class NetworkLineHeadersHistory extends TableImpl<NetworkLineHeadersHisto
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Network.NETWORK;
+        return Network.NETWORK;
     }
 
     @Override

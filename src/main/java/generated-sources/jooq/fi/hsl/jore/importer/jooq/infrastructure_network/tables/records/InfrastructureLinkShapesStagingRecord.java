@@ -23,32 +23,28 @@ public class InfrastructureLinkShapesStagingRecord extends UpdatableRecordImpl<I
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for
-     * <code>infrastructure_network.infrastructure_link_shapes_staging.infrastructure_link_ext_id</code>.
+     * Setter for <code>infrastructure_network.infrastructure_link_shapes_staging.infrastructure_link_ext_id</code>.
      */
     public void setInfrastructureLinkExtId(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for
-     * <code>infrastructure_network.infrastructure_link_shapes_staging.infrastructure_link_ext_id</code>.
+     * Getter for <code>infrastructure_network.infrastructure_link_shapes_staging.infrastructure_link_ext_id</code>.
      */
     public String getInfrastructureLinkExtId() {
         return (String) get(0);
     }
 
     /**
-     * Setter for
-     * <code>infrastructure_network.infrastructure_link_shapes_staging.infrastructure_link_shape</code>.
+     * Setter for <code>infrastructure_network.infrastructure_link_shapes_staging.infrastructure_link_shape</code>.
      */
     public void setInfrastructureLinkShape(LineString value) {
         set(1, value);
     }
 
     /**
-     * Getter for
-     * <code>infrastructure_network.infrastructure_link_shapes_staging.infrastructure_link_shape</code>.
+     * Getter for <code>infrastructure_network.infrastructure_link_shapes_staging.infrastructure_link_shape</code>.
      */
     public LineString getInfrastructureLinkShape() {
         return (LineString) get(1);

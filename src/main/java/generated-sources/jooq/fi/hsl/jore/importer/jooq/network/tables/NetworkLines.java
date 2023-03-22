@@ -67,8 +67,7 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
     public final TableField<NetworkLinesRecord, String> NETWORK_LINE_NUMBER = createField(DSL.name("network_line_number"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_lines.infrastructure_network_type</code>.
+     * The column <code>network.network_lines.infrastructure_network_type</code>.
      */
     public final TableField<NetworkLinesRecord, String> INFRASTRUCTURE_NETWORK_TYPE = createField(DSL.name("infrastructure_network_type"), SQLDataType.CLOB.nullable(false), this, "");
 
@@ -88,8 +87,7 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
     public final TableField<NetworkLinesRecord, String> NETWORK_LINE_TYPE_OF_LINE = createField(DSL.name("network_line_type_of_line"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_lines.network_line_legacy_hsl_municipality_code</code>.
+     * The column <code>network.network_lines.network_line_legacy_hsl_municipality_code</code>.
      */
     public final TableField<NetworkLinesRecord, String> NETWORK_LINE_LEGACY_HSL_MUNICIPALITY_CODE = createField(DSL.name("network_line_legacy_hsl_municipality_code"), SQLDataType.CLOB, this, "");
 
@@ -128,7 +126,7 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Network.NETWORK;
+        return Network.NETWORK;
     }
 
     @Override
@@ -137,8 +135,13 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
     }
 
     @Override
+    public List<UniqueKey<NetworkLinesRecord>> getKeys() {
+        return Arrays.<UniqueKey<NetworkLinesRecord>>asList(Keys.NETWORK_LINES_PKEY);
+    }
+
+    @Override
     public List<ForeignKey<NetworkLinesRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.NETWORK_LINES__NETWORK_LINES_INFRASTRUCTURE_NETWORK_TYPE_FKEY);
+        return Arrays.<ForeignKey<NetworkLinesRecord, ?>>asList(Keys.NETWORK_LINES__NETWORK_LINES_INFRASTRUCTURE_NETWORK_TYPE_FKEY);
     }
 
     private transient InfrastructureNetworkTypes _infrastructureNetworkTypes;

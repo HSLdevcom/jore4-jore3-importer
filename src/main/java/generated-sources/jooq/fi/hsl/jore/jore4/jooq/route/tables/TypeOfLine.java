@@ -20,8 +20,7 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * Type of line.
- * https://www.transmodel-cen.eu/model/EARoot/EA2/EA1/EA3/EA491.htm
+ * Type of line. https://www.transmodel-cen.eu/model/EARoot/EA2/EA1/EA3/EA491.htm
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TypeOfLine extends TableImpl<Record> {
@@ -42,8 +41,7 @@ public class TypeOfLine extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>route.type_of_line.type_of_line</code>. GTFS route type:
-     * https://developers.google.com/transit/gtfs/reference/extended-route-types
+     * The column <code>route.type_of_line.type_of_line</code>. GTFS route type: https://developers.google.com/transit/gtfs/reference/extended-route-types
      */
     public final TableField<Record, String> TYPE_OF_LINE_ = createField(DSL.name("type_of_line"), SQLDataType.CLOB.nullable(false), this, "GTFS route type: https://developers.google.com/transit/gtfs/reference/extended-route-types");
 
@@ -87,7 +85,7 @@ public class TypeOfLine extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Route.ROUTE;
+        return Route.ROUTE;
     }
 
     @Override

@@ -57,10 +57,7 @@ public class Routines {
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static Object scheduledStopPointClosestPointOnInfrastructureLink(
@@ -75,10 +72,7 @@ public class Routines {
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static Field<Object> scheduledStopPointClosestPointOnInfrastructureLink(
@@ -91,10 +85,7 @@ public class Routines {
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static Field<Object> scheduledStopPointClosestPointOnInfrastructureLink(
@@ -107,8 +98,7 @@ public class Routines {
     }
 
     /**
-     * Call
-     * <code>service_pattern.ssp_relative_distance_from_infrastructure_link_start</code>
+     * Call <code>service_pattern.ssp_relative_distance_from_infrastructure_link_start</code>
      */
     public static Double sspRelativeDistanceFromInfrastructureLinkStart(
           Configuration configuration
@@ -122,9 +112,7 @@ public class Routines {
     }
 
     /**
-     * Get
-     * <code>service_pattern.ssp_relative_distance_from_infrastructure_link_start</code>
-     * as a field.
+     * Get <code>service_pattern.ssp_relative_distance_from_infrastructure_link_start</code> as a field.
      */
     public static Field<Double> sspRelativeDistanceFromInfrastructureLinkStart(
           Record ssp
@@ -136,9 +124,7 @@ public class Routines {
     }
 
     /**
-     * Get
-     * <code>service_pattern.ssp_relative_distance_from_infrastructure_link_start</code>
-     * as a field.
+     * Get <code>service_pattern.ssp_relative_distance_from_infrastructure_link_start</code> as a field.
      */
     public static Field<Double> sspRelativeDistanceFromInfrastructureLinkStart(
           Field<Record> ssp
@@ -150,8 +136,7 @@ public class Routines {
     }
 
     /**
-     * Call
-     * <code>service_pattern.find_effective_scheduled_stop_points_in_journey_pattern</code>.
+     * Call <code>service_pattern.find_effective_scheduled_stop_points_in_journey_pattern</code>.
      */
     public static Result<Record> findEffectiveScheduledStopPointsInJourneyPattern(
           Configuration configuration
@@ -167,9 +152,7 @@ public class Routines {
     }
 
     /**
-     * Get
-     * <code>service_pattern.find_effective_scheduled_stop_points_in_journey_pattern</code>
-     * as a table.
+     * Get <code>service_pattern.find_effective_scheduled_stop_points_in_journey_pattern</code> as a table.
      */
     public static FindEffectiveScheduledStopPointsInJourneyPattern findEffectiveScheduledStopPointsInJourneyPattern(
           UUID filterJourneyPatternId
@@ -177,16 +160,14 @@ public class Routines {
         , Boolean includeDraftStops
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.FindEffectiveScheduledStopPointsInJourneyPattern.FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN.call(
-            filterJourneyPatternId,
-            observationDate,
-            includeDraftStops
+              filterJourneyPatternId
+            , observationDate
+            , includeDraftStops
         );
     }
 
     /**
-     * Get
-     * <code>service_pattern.find_effective_scheduled_stop_points_in_journey_pattern</code>
-     * as a table.
+     * Get <code>service_pattern.find_effective_scheduled_stop_points_in_journey_pattern</code> as a table.
      */
     public static FindEffectiveScheduledStopPointsInJourneyPattern findEffectiveScheduledStopPointsInJourneyPattern(
           Field<UUID> filterJourneyPatternId
@@ -194,15 +175,14 @@ public class Routines {
         , Field<Boolean> includeDraftStops
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.FindEffectiveScheduledStopPointsInJourneyPattern.FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN.call(
-            filterJourneyPatternId,
-            observationDate,
-            includeDraftStops
+              filterJourneyPatternId
+            , observationDate
+            , includeDraftStops
         );
     }
 
     /**
-     * Call
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>.
+     * Call <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>.
      */
     public static Result<Record> findScheduledStopPointLocationsInJourneyPattern(
           Configuration configuration
@@ -218,9 +198,7 @@ public class Routines {
     }
 
     /**
-     * Get
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>
-     * as a table.
+     * Get <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code> as a table.
      */
     public static FindScheduledStopPointLocationsInJourneyPattern findScheduledStopPointLocationsInJourneyPattern(
           UUID filterJourneyPatternId
@@ -228,16 +206,14 @@ public class Routines {
         , Boolean includeDraftStops
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.FindScheduledStopPointLocationsInJourneyPattern.FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN.call(
-            filterJourneyPatternId,
-            observationDate,
-            includeDraftStops
+              filterJourneyPatternId
+            , observationDate
+            , includeDraftStops
         );
     }
 
     /**
-     * Get
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>
-     * as a table.
+     * Get <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code> as a table.
      */
     public static FindScheduledStopPointLocationsInJourneyPattern findScheduledStopPointLocationsInJourneyPattern(
           Field<UUID> filterJourneyPatternId
@@ -245,15 +221,14 @@ public class Routines {
         , Field<Boolean> includeDraftStops
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.FindScheduledStopPointLocationsInJourneyPattern.FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN.call(
-            filterJourneyPatternId,
-            observationDate,
-            includeDraftStops
+              filterJourneyPatternId
+            , observationDate
+            , includeDraftStops
         );
     }
 
     /**
-     * Call
-     * <code>service_pattern.get_distances_between_stop_points_by_routes</code>.
+     * Call <code>service_pattern.get_distances_between_stop_points_by_routes</code>.
      */
     public static Result<Record> getDistancesBetweenStopPointsByRoutes(
           Configuration configuration
@@ -267,38 +242,33 @@ public class Routines {
     }
 
     /**
-     * Get
-     * <code>service_pattern.get_distances_between_stop_points_by_routes</code>
-     * as a table.
+     * Get <code>service_pattern.get_distances_between_stop_points_by_routes</code> as a table.
      */
     public static GetDistancesBetweenStopPointsByRoutes getDistancesBetweenStopPointsByRoutes(
           UUID[] routeIds
         , LocalDate observationDate
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsByRoutes.GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES.call(
-            routeIds,
-            observationDate
+              routeIds
+            , observationDate
         );
     }
 
     /**
-     * Get
-     * <code>service_pattern.get_distances_between_stop_points_by_routes</code>
-     * as a table.
+     * Get <code>service_pattern.get_distances_between_stop_points_by_routes</code> as a table.
      */
     public static GetDistancesBetweenStopPointsByRoutes getDistancesBetweenStopPointsByRoutes(
           Field<UUID[]> routeIds
         , Field<LocalDate> observationDate
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsByRoutes.GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES.call(
-            routeIds,
-            observationDate
+              routeIds
+            , observationDate
         );
     }
 
     /**
-     * Call
-     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>.
+     * Call <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>.
      */
     public static Result<Record> getDistancesBetweenStopPointsInJourneyPattern(
           Configuration configuration
@@ -314,9 +284,7 @@ public class Routines {
     }
 
     /**
-     * Get
-     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>
-     * as a table.
+     * Get <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code> as a table.
      */
     public static GetDistancesBetweenStopPointsInJourneyPattern getDistancesBetweenStopPointsInJourneyPattern(
           UUID journeyPatternId
@@ -324,16 +292,14 @@ public class Routines {
         , Boolean includeDraftStops
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPattern.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN.call(
-            journeyPatternId,
-            observationDate,
-            includeDraftStops
+              journeyPatternId
+            , observationDate
+            , includeDraftStops
         );
     }
 
     /**
-     * Get
-     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>
-     * as a table.
+     * Get <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code> as a table.
      */
     public static GetDistancesBetweenStopPointsInJourneyPattern getDistancesBetweenStopPointsInJourneyPattern(
           Field<UUID> journeyPatternId
@@ -341,15 +307,14 @@ public class Routines {
         , Field<Boolean> includeDraftStops
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPattern.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN.call(
-            journeyPatternId,
-            observationDate,
-            includeDraftStops
+              journeyPatternId
+            , observationDate
+            , includeDraftStops
         );
     }
 
     /**
-     * Call
-     * <code>service_pattern.get_distances_between_stop_points_in_journey_patterns</code>.
+     * Call <code>service_pattern.get_distances_between_stop_points_in_journey_patterns</code>.
      */
     public static Result<Record> getDistancesBetweenStopPointsInJourneyPatterns(
           Configuration configuration
@@ -365,9 +330,7 @@ public class Routines {
     }
 
     /**
-     * Get
-     * <code>service_pattern.get_distances_between_stop_points_in_journey_patterns</code>
-     * as a table.
+     * Get <code>service_pattern.get_distances_between_stop_points_in_journey_patterns</code> as a table.
      */
     public static GetDistancesBetweenStopPointsInJourneyPatterns getDistancesBetweenStopPointsInJourneyPatterns(
           UUID[] journeyPatternIds
@@ -375,16 +338,14 @@ public class Routines {
         , Boolean includeDraftStops
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPatterns.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS.call(
-            journeyPatternIds,
-            observationDate,
-            includeDraftStops
+              journeyPatternIds
+            , observationDate
+            , includeDraftStops
         );
     }
 
     /**
-     * Get
-     * <code>service_pattern.get_distances_between_stop_points_in_journey_patterns</code>
-     * as a table.
+     * Get <code>service_pattern.get_distances_between_stop_points_in_journey_patterns</code> as a table.
      */
     public static GetDistancesBetweenStopPointsInJourneyPatterns getDistancesBetweenStopPointsInJourneyPatterns(
           Field<UUID[]> journeyPatternIds
@@ -392,17 +353,14 @@ public class Routines {
         , Field<Boolean> includeDraftStops
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPatterns.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS.call(
-            journeyPatternIds,
-            observationDate,
-            includeDraftStops
+              journeyPatternIds
+            , observationDate
+            , includeDraftStops
         );
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static Result<Record> getScheduledStopPointsWithNew(
@@ -431,10 +389,7 @@ public class Routines {
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static GetScheduledStopPointsWithNew getScheduledStopPointsWithNew(
@@ -449,23 +404,20 @@ public class Routines {
         , Integer newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
-            replaceScheduledStopPointId,
-            newScheduledStopPointId,
-            newLocatedOnInfrastructureLinkId,
-            newMeasuredLocation,
-            newDirection,
-            newLabel,
-            newValidityStart,
-            newValidityEnd,
-            newPriority
+              replaceScheduledStopPointId
+            , newScheduledStopPointId
+            , newLocatedOnInfrastructureLinkId
+            , newMeasuredLocation
+            , newDirection
+            , newLabel
+            , newValidityStart
+            , newValidityEnd
+            , newPriority
         );
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static GetScheduledStopPointsWithNew getScheduledStopPointsWithNew(
@@ -480,15 +432,15 @@ public class Routines {
         , Field<Integer> newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
-            replaceScheduledStopPointId,
-            newScheduledStopPointId,
-            newLocatedOnInfrastructureLinkId,
-            newMeasuredLocation,
-            newDirection,
-            newLabel,
-            newValidityStart,
-            newValidityEnd,
-            newPriority
+              replaceScheduledStopPointId
+            , newScheduledStopPointId
+            , newLocatedOnInfrastructureLinkId
+            , newMeasuredLocation
+            , newDirection
+            , newLabel
+            , newValidityStart
+            , newValidityEnd
+            , newPriority
         );
     }
 }

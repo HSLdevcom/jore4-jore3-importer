@@ -26,144 +26,126 @@ public class NetworkLineHeadersHistoryRecord extends TableRecordImpl<NetworkLine
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for
-     * <code>network.network_line_headers_history.network_line_header_id</code>.
+     * Setter for <code>network.network_line_headers_history.network_line_header_id</code>.
      */
     public void setNetworkLineHeaderId(UUID value) {
         set(0, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_line_headers_history.network_line_header_id</code>.
+     * Getter for <code>network.network_line_headers_history.network_line_header_id</code>.
      */
     public UUID getNetworkLineHeaderId() {
         return (UUID) get(0);
     }
 
     /**
-     * Setter for
-     * <code>network.network_line_headers_history.network_line_id</code>.
+     * Setter for <code>network.network_line_headers_history.network_line_id</code>.
      */
     public void setNetworkLineId(UUID value) {
         set(1, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_line_headers_history.network_line_id</code>.
+     * Getter for <code>network.network_line_headers_history.network_line_id</code>.
      */
     public UUID getNetworkLineId() {
         return (UUID) get(1);
     }
 
     /**
-     * Setter for
-     * <code>network.network_line_headers_history.network_line_header_ext_id</code>.
+     * Setter for <code>network.network_line_headers_history.network_line_header_ext_id</code>.
      */
     public void setNetworkLineHeaderExtId(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_line_headers_history.network_line_header_ext_id</code>.
+     * Getter for <code>network.network_line_headers_history.network_line_header_ext_id</code>.
      */
     public String getNetworkLineHeaderExtId() {
         return (String) get(2);
     }
 
     /**
-     * Setter for
-     * <code>network.network_line_headers_history.network_line_header_name</code>.
+     * Setter for <code>network.network_line_headers_history.network_line_header_name</code>.
      */
     public void setNetworkLineHeaderName(JSONB value) {
         set(3, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_line_headers_history.network_line_header_name</code>.
+     * Getter for <code>network.network_line_headers_history.network_line_header_name</code>.
      */
     public JSONB getNetworkLineHeaderName() {
         return (JSONB) get(3);
     }
 
     /**
-     * Setter for
-     * <code>network.network_line_headers_history.network_line_header_name_short</code>.
+     * Setter for <code>network.network_line_headers_history.network_line_header_name_short</code>.
      */
     public void setNetworkLineHeaderNameShort(JSONB value) {
         set(4, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_line_headers_history.network_line_header_name_short</code>.
+     * Getter for <code>network.network_line_headers_history.network_line_header_name_short</code>.
      */
     public JSONB getNetworkLineHeaderNameShort() {
         return (JSONB) get(4);
     }
 
     /**
-     * Setter for
-     * <code>network.network_line_headers_history.network_line_header_origin_1</code>.
+     * Setter for <code>network.network_line_headers_history.network_line_header_origin_1</code>.
      */
     public void setNetworkLineHeaderOrigin_1(JSONB value) {
         set(5, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_line_headers_history.network_line_header_origin_1</code>.
+     * Getter for <code>network.network_line_headers_history.network_line_header_origin_1</code>.
      */
     public JSONB getNetworkLineHeaderOrigin_1() {
         return (JSONB) get(5);
     }
 
     /**
-     * Setter for
-     * <code>network.network_line_headers_history.network_line_header_origin_2</code>.
+     * Setter for <code>network.network_line_headers_history.network_line_header_origin_2</code>.
      */
     public void setNetworkLineHeaderOrigin_2(JSONB value) {
         set(6, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_line_headers_history.network_line_header_origin_2</code>.
+     * Getter for <code>network.network_line_headers_history.network_line_header_origin_2</code>.
      */
     public JSONB getNetworkLineHeaderOrigin_2() {
         return (JSONB) get(6);
     }
 
     /**
-     * Setter for
-     * <code>network.network_line_headers_history.network_line_header_valid_date_range</code>.
+     * Setter for <code>network.network_line_headers_history.network_line_header_valid_date_range</code>.
      */
     public void setNetworkLineHeaderValidDateRange(DateRange value) {
         set(7, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_line_headers_history.network_line_header_valid_date_range</code>.
+     * Getter for <code>network.network_line_headers_history.network_line_header_valid_date_range</code>.
      */
     public DateRange getNetworkLineHeaderValidDateRange() {
         return (DateRange) get(7);
     }
 
     /**
-     * Setter for
-     * <code>network.network_line_headers_history.network_line_header_sys_period</code>.
+     * Setter for <code>network.network_line_headers_history.network_line_header_sys_period</code>.
      */
     public void setNetworkLineHeaderSysPeriod(TimeRange value) {
         set(8, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_line_headers_history.network_line_header_sys_period</code>.
+     * Getter for <code>network.network_line_headers_history.network_line_header_sys_period</code>.
      */
     public TimeRange getNetworkLineHeaderSysPeriod() {
         return (TimeRange) get(8);

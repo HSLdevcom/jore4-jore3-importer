@@ -23,80 +23,70 @@ public class InfrastructureLinksStagingRecord extends UpdatableRecordImpl<Infras
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for
-     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_ext_id</code>.
+     * Setter for <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_ext_id</code>.
      */
     public void setInfrastructureLinkExtId(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for
-     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_ext_id</code>.
+     * Getter for <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_ext_id</code>.
      */
     public String getInfrastructureLinkExtId() {
         return (String) get(0);
     }
 
     /**
-     * Setter for
-     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_geog</code>.
+     * Setter for <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_geog</code>.
      */
     public void setInfrastructureLinkGeog(LineString value) {
         set(1, value);
     }
 
     /**
-     * Getter for
-     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_geog</code>.
+     * Getter for <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_geog</code>.
      */
     public LineString getInfrastructureLinkGeog() {
         return (LineString) get(1);
     }
 
     /**
-     * Setter for
-     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_network_type</code>.
+     * Setter for <code>infrastructure_network.infrastructure_links_staging.infrastructure_network_type</code>.
      */
     public void setInfrastructureNetworkType(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for
-     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_network_type</code>.
+     * Getter for <code>infrastructure_network.infrastructure_links_staging.infrastructure_network_type</code>.
      */
     public String getInfrastructureNetworkType() {
         return (String) get(2);
     }
 
     /**
-     * Setter for
-     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_start_node_ext_id</code>.
+     * Setter for <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_start_node_ext_id</code>.
      */
     public void setInfrastructureLinkStartNodeExtId(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for
-     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_start_node_ext_id</code>.
+     * Getter for <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_start_node_ext_id</code>.
      */
     public String getInfrastructureLinkStartNodeExtId() {
         return (String) get(3);
     }
 
     /**
-     * Setter for
-     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_end_node_ext_id</code>.
+     * Setter for <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_end_node_ext_id</code>.
      */
     public void setInfrastructureLinkEndNodeExtId(String value) {
         set(4, value);
     }
 
     /**
-     * Getter for
-     * <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_end_node_ext_id</code>.
+     * Getter for <code>infrastructure_network.infrastructure_links_staging.infrastructure_link_end_node_ext_id</code>.
      */
     public String getInfrastructureLinkEndNodeExtId() {
         return (String) get(4);

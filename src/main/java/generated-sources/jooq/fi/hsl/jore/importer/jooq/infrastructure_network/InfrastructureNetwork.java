@@ -47,20 +47,17 @@ public class InfrastructureNetwork extends SchemaImpl {
     public final InfrastructureLinkShapes INFRASTRUCTURE_LINK_SHAPES = InfrastructureLinkShapes.INFRASTRUCTURE_LINK_SHAPES;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_link_shapes_history</code>.
+     * The table <code>infrastructure_network.infrastructure_link_shapes_history</code>.
      */
     public final InfrastructureLinkShapesHistory INFRASTRUCTURE_LINK_SHAPES_HISTORY = InfrastructureLinkShapesHistory.INFRASTRUCTURE_LINK_SHAPES_HISTORY;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_link_shapes_staging</code>.
+     * The table <code>infrastructure_network.infrastructure_link_shapes_staging</code>.
      */
     public final InfrastructureLinkShapesStaging INFRASTRUCTURE_LINK_SHAPES_STAGING = InfrastructureLinkShapesStaging.INFRASTRUCTURE_LINK_SHAPES_STAGING;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_link_shapes_with_history</code>.
+     * The table <code>infrastructure_network.infrastructure_link_shapes_with_history</code>.
      */
     public final InfrastructureLinkShapesWithHistory INFRASTRUCTURE_LINK_SHAPES_WITH_HISTORY = InfrastructureLinkShapesWithHistory.INFRASTRUCTURE_LINK_SHAPES_WITH_HISTORY;
 
@@ -70,26 +67,22 @@ public class InfrastructureNetwork extends SchemaImpl {
     public final InfrastructureLinks INFRASTRUCTURE_LINKS = InfrastructureLinks.INFRASTRUCTURE_LINKS;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_links_history</code>.
+     * The table <code>infrastructure_network.infrastructure_links_history</code>.
      */
     public final InfrastructureLinksHistory INFRASTRUCTURE_LINKS_HISTORY = InfrastructureLinksHistory.INFRASTRUCTURE_LINKS_HISTORY;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_links_staging</code>.
+     * The table <code>infrastructure_network.infrastructure_links_staging</code>.
      */
     public final InfrastructureLinksStaging INFRASTRUCTURE_LINKS_STAGING = InfrastructureLinksStaging.INFRASTRUCTURE_LINKS_STAGING;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_links_with_history</code>.
+     * The table <code>infrastructure_network.infrastructure_links_with_history</code>.
      */
     public final InfrastructureLinksWithHistory INFRASTRUCTURE_LINKS_WITH_HISTORY = InfrastructureLinksWithHistory.INFRASTRUCTURE_LINKS_WITH_HISTORY;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_network_types</code>.
+     * The table <code>infrastructure_network.infrastructure_network_types</code>.
      */
     public final InfrastructureNetworkTypes INFRASTRUCTURE_NETWORK_TYPES = InfrastructureNetworkTypes.INFRASTRUCTURE_NETWORK_TYPES;
 
@@ -104,20 +97,17 @@ public class InfrastructureNetwork extends SchemaImpl {
     public final InfrastructureNodes INFRASTRUCTURE_NODES = InfrastructureNodes.INFRASTRUCTURE_NODES;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_nodes_history</code>.
+     * The table <code>infrastructure_network.infrastructure_nodes_history</code>.
      */
     public final InfrastructureNodesHistory INFRASTRUCTURE_NODES_HISTORY = InfrastructureNodesHistory.INFRASTRUCTURE_NODES_HISTORY;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_nodes_staging</code>.
+     * The table <code>infrastructure_network.infrastructure_nodes_staging</code>.
      */
     public final InfrastructureNodesStaging INFRASTRUCTURE_NODES_STAGING = InfrastructureNodesStaging.INFRASTRUCTURE_NODES_STAGING;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_nodes_with_history</code>.
+     * The table <code>infrastructure_network.infrastructure_nodes_with_history</code>.
      */
     public final InfrastructureNodesWithHistory INFRASTRUCTURE_NODES_WITH_HISTORY = InfrastructureNodesWithHistory.INFRASTRUCTURE_NODES_WITH_HISTORY;
 
@@ -136,7 +126,7 @@ public class InfrastructureNetwork extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.asList(
+        return Arrays.<Table<?>>asList(
             InfrastructureLinkShapes.INFRASTRUCTURE_LINK_SHAPES,
             InfrastructureLinkShapesHistory.INFRASTRUCTURE_LINK_SHAPES_HISTORY,
             InfrastructureLinkShapesStaging.INFRASTRUCTURE_LINK_SHAPES_STAGING,
@@ -150,7 +140,6 @@ public class InfrastructureNetwork extends SchemaImpl {
             InfrastructureNodes.INFRASTRUCTURE_NODES,
             InfrastructureNodesHistory.INFRASTRUCTURE_NODES_HISTORY,
             InfrastructureNodesStaging.INFRASTRUCTURE_NODES_STAGING,
-            InfrastructureNodesWithHistory.INFRASTRUCTURE_NODES_WITH_HISTORY
-        );
+            InfrastructureNodesWithHistory.INFRASTRUCTURE_NODES_WITH_HISTORY);
     }
 }

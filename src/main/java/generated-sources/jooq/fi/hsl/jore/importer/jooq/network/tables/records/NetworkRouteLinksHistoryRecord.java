@@ -24,96 +24,84 @@ public class NetworkRouteLinksHistoryRecord extends TableRecordImpl<NetworkRoute
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for
-     * <code>network.network_route_links_history.network_route_link_id</code>.
+     * Setter for <code>network.network_route_links_history.network_route_link_id</code>.
      */
     public void setNetworkRouteLinkId(UUID value) {
         set(0, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_links_history.network_route_link_id</code>.
+     * Getter for <code>network.network_route_links_history.network_route_link_id</code>.
      */
     public UUID getNetworkRouteLinkId() {
         return (UUID) get(0);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_links_history.network_route_direction_id</code>.
+     * Setter for <code>network.network_route_links_history.network_route_direction_id</code>.
      */
     public void setNetworkRouteDirectionId(UUID value) {
         set(1, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_links_history.network_route_direction_id</code>.
+     * Getter for <code>network.network_route_links_history.network_route_direction_id</code>.
      */
     public UUID getNetworkRouteDirectionId() {
         return (UUID) get(1);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_links_history.infrastructure_link_id</code>.
+     * Setter for <code>network.network_route_links_history.infrastructure_link_id</code>.
      */
     public void setInfrastructureLinkId(UUID value) {
         set(2, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_links_history.infrastructure_link_id</code>.
+     * Getter for <code>network.network_route_links_history.infrastructure_link_id</code>.
      */
     public UUID getInfrastructureLinkId() {
         return (UUID) get(2);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_links_history.network_route_link_ext_id</code>.
+     * Setter for <code>network.network_route_links_history.network_route_link_ext_id</code>.
      */
     public void setNetworkRouteLinkExtId(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_links_history.network_route_link_ext_id</code>.
+     * Getter for <code>network.network_route_links_history.network_route_link_ext_id</code>.
      */
     public String getNetworkRouteLinkExtId() {
         return (String) get(3);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_links_history.network_route_link_order</code>.
+     * Setter for <code>network.network_route_links_history.network_route_link_order</code>.
      */
     public void setNetworkRouteLinkOrder(Integer value) {
         set(4, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_links_history.network_route_link_order</code>.
+     * Getter for <code>network.network_route_links_history.network_route_link_order</code>.
      */
     public Integer getNetworkRouteLinkOrder() {
         return (Integer) get(4);
     }
 
     /**
-     * Setter for
-     * <code>network.network_route_links_history.network_route_link_sys_period</code>.
+     * Setter for <code>network.network_route_links_history.network_route_link_sys_period</code>.
      */
     public void setNetworkRouteLinkSysPeriod(TimeRange value) {
         set(5, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_route_links_history.network_route_link_sys_period</code>.
+     * Getter for <code>network.network_route_links_history.network_route_link_sys_period</code>.
      */
     public TimeRange getNetworkRouteLinkSysPeriod() {
         return (TimeRange) get(5);

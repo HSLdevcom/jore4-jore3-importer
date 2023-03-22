@@ -82,14 +82,12 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
     public final TableField<NetworkRoutesRecord, TimeRange> NETWORK_ROUTE_SYS_PERIOD = createField(DSL.name("network_route_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
 
     /**
-     * The column
-     * <code>network.network_routes.network_route_hidden_variant</code>.
+     * The column <code>network.network_routes.network_route_hidden_variant</code>.
      */
     public final TableField<NetworkRoutesRecord, Short> NETWORK_ROUTE_HIDDEN_VARIANT = createField(DSL.name("network_route_hidden_variant"), SQLDataType.SMALLINT, this, "");
 
     /**
-     * The column
-     * <code>network.network_routes.network_route_legacy_hsl_municipality_code</code>.
+     * The column <code>network.network_routes.network_route_legacy_hsl_municipality_code</code>.
      */
     public final TableField<NetworkRoutesRecord, String> NETWORK_ROUTE_LEGACY_HSL_MUNICIPALITY_CODE = createField(DSL.name("network_route_legacy_hsl_municipality_code"), SQLDataType.CLOB, this, "");
 
@@ -128,7 +126,7 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Network.NETWORK;
+        return Network.NETWORK;
     }
 
     @Override
@@ -137,8 +135,13 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
     }
 
     @Override
+    public List<UniqueKey<NetworkRoutesRecord>> getKeys() {
+        return Arrays.<UniqueKey<NetworkRoutesRecord>>asList(Keys.NETWORK_ROUTES_PKEY);
+    }
+
+    @Override
     public List<ForeignKey<NetworkRoutesRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.NETWORK_ROUTES__NETWORK_ROUTES_NETWORK_LINE_ID_FKEY);
+        return Arrays.<ForeignKey<NetworkRoutesRecord, ?>>asList(Keys.NETWORK_ROUTES__NETWORK_ROUTES_NETWORK_LINE_ID_FKEY);
     }
 
     private transient NetworkLines _networkLines;

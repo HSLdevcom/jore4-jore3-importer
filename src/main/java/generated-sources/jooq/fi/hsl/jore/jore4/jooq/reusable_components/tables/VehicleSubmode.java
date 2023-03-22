@@ -20,7 +20,7 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * The vehicle submode, which may have implications on which infrastructure
+ * The vehicle submode, which may have implications on which infrastructure 
  * links the vehicle can traverse
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
@@ -29,8 +29,7 @@ public class VehicleSubmode extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>reusable_components.vehicle_submode</code>
+     * The reference instance of <code>reusable_components.vehicle_submode</code>
      */
     public static final VehicleSubmode VEHICLE_SUBMODE = new VehicleSubmode();
 
@@ -43,18 +42,12 @@ public class VehicleSubmode extends TableImpl<Record> {
     }
 
     /**
-     * The column
-     * <code>reusable_components.vehicle_submode.vehicle_submode</code>. The
-     * vehicle submode, which may have implications on which infrastructure
-     * links the vehicle can traverse
+     * The column <code>reusable_components.vehicle_submode.vehicle_submode</code>. The vehicle submode, which may have implications on which infrastructure links the vehicle can traverse
      */
     public final TableField<Record, String> VEHICLE_SUBMODE_ = createField(DSL.name("vehicle_submode"), SQLDataType.CLOB.nullable(false), this, "The vehicle submode, which may have implications on which infrastructure links the vehicle can traverse");
 
     /**
-     * The column
-     * <code>reusable_components.vehicle_submode.belonging_to_vehicle_mode</code>.
-     * The vehicle mode the vehicle submode belongs to:
-     * https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
+     * The column <code>reusable_components.vehicle_submode.belonging_to_vehicle_mode</code>. The vehicle mode the vehicle submode belongs to: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
      */
     public final TableField<Record, String> BELONGING_TO_VEHICLE_MODE = createField(DSL.name("belonging_to_vehicle_mode"), SQLDataType.CLOB.nullable(false), this, "The vehicle mode the vehicle submode belongs to: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283");
 
@@ -67,16 +60,14 @@ public class VehicleSubmode extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased <code>reusable_components.vehicle_submode</code> table
-     * reference
+     * Create an aliased <code>reusable_components.vehicle_submode</code> table reference
      */
     public VehicleSubmode(String alias) {
         this(DSL.name(alias), VEHICLE_SUBMODE);
     }
 
     /**
-     * Create an aliased <code>reusable_components.vehicle_submode</code> table
-     * reference
+     * Create an aliased <code>reusable_components.vehicle_submode</code> table reference
      */
     public VehicleSubmode(Name alias) {
         this(alias, VEHICLE_SUBMODE);
@@ -95,7 +86,7 @@ public class VehicleSubmode extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : ReusableComponents.REUSABLE_COMPONENTS;
+        return ReusableComponents.REUSABLE_COMPONENTS;
     }
 
     @Override

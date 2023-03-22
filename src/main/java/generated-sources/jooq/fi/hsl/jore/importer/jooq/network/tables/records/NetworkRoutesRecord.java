@@ -110,32 +110,28 @@ public class NetworkRoutesRecord extends UpdatableRecordImpl<NetworkRoutesRecord
     }
 
     /**
-     * Setter for
-     * <code>network.network_routes.network_route_hidden_variant</code>.
+     * Setter for <code>network.network_routes.network_route_hidden_variant</code>.
      */
     public void setNetworkRouteHiddenVariant(Short value) {
         set(6, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_routes.network_route_hidden_variant</code>.
+     * Getter for <code>network.network_routes.network_route_hidden_variant</code>.
      */
     public Short getNetworkRouteHiddenVariant() {
         return (Short) get(6);
     }
 
     /**
-     * Setter for
-     * <code>network.network_routes.network_route_legacy_hsl_municipality_code</code>.
+     * Setter for <code>network.network_routes.network_route_legacy_hsl_municipality_code</code>.
      */
     public void setNetworkRouteLegacyHslMunicipalityCode(String value) {
         set(7, value);
     }
 
     /**
-     * Getter for
-     * <code>network.network_routes.network_route_legacy_hsl_municipality_code</code>.
+     * Getter for <code>network.network_routes.network_route_legacy_hsl_municipality_code</code>.
      */
     public String getNetworkRouteLegacyHslMunicipalityCode() {
         return (String) get(7);

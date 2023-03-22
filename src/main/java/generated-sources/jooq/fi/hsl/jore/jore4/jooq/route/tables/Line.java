@@ -24,8 +24,7 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * The line from Transmodel:
- * http://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:487
+ * The line from Transmodel: http://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:487
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Line extends TableImpl<Record> {
@@ -51,47 +50,37 @@ public class Line extends TableImpl<Record> {
     public final TableField<Record, UUID> LINE_ID = createField(DSL.name("line_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "The ID of the line.");
 
     /**
-     * The column <code>route.line.name_i18n</code>. The name of the line.
-     * Placeholder for multilingual strings.
+     * The column <code>route.line.name_i18n</code>. The name of the line. Placeholder for multilingual strings.
      */
     public final TableField<Record, JSONB> NAME_I18N = createField(DSL.name("name_i18n"), SQLDataType.JSONB.nullable(false), this, "The name of the line. Placeholder for multilingual strings.");
 
     /**
-     * The column <code>route.line.short_name_i18n</code>. The shorted name of
-     * the line. Placeholder for multilingual strings.
+     * The column <code>route.line.short_name_i18n</code>. The shorted name of the line. Placeholder for multilingual strings.
      */
     public final TableField<Record, JSONB> SHORT_NAME_I18N = createField(DSL.name("short_name_i18n"), SQLDataType.JSONB.nullable(false), this, "The shorted name of the line. Placeholder for multilingual strings.");
 
     /**
-     * The column <code>route.line.primary_vehicle_mode</code>. The mode of the
-     * vehicles used as primary on the line.
+     * The column <code>route.line.primary_vehicle_mode</code>. The mode of the vehicles used as primary on the line.
      */
     public final TableField<Record, String> PRIMARY_VEHICLE_MODE = createField(DSL.name("primary_vehicle_mode"), SQLDataType.CLOB.nullable(false), this, "The mode of the vehicles used as primary on the line.");
 
     /**
-     * The column <code>route.line.validity_start</code>. The point in time when
-     * the line becomes valid. If NULL, the line has been always valid.
+     * The column <code>route.line.validity_start</code>. The point in time when the line becomes valid. If NULL, the line has been always valid.
      */
     public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "The point in time when the line becomes valid. If NULL, the line has been always valid.");
 
     /**
-     * The column <code>route.line.validity_end</code>. The point in time from
-     * which onwards the line is no longer valid. If NULL, the line will be
-     * always valid.
+     * The column <code>route.line.validity_end</code>. The point in time from which onwards the line is no longer valid. If NULL, the line will be always valid.
      */
     public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "The point in time from which onwards the line is no longer valid. If NULL, the line will be always valid.");
 
     /**
-     * The column <code>route.line.priority</code>. The priority of the line
-     * definition. The definition may be overridden by higher priority
-     * definitions.
+     * The column <code>route.line.priority</code>. The priority of the line definition. The definition may be overridden by higher priority definitions.
      */
     public final TableField<Record, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER.nullable(false), this, "The priority of the line definition. The definition may be overridden by higher priority definitions.");
 
     /**
-     * The column <code>route.line.label</code>. The label of the line
-     * definition. The label is unique for a certain priority and validity
-     * period.
+     * The column <code>route.line.label</code>. The label of the line definition. The label is unique for a certain priority and validity period.
      */
     public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "The label of the line definition. The label is unique for a certain priority and validity period.");
 
@@ -106,8 +95,7 @@ public class Line extends TableImpl<Record> {
     public final TableField<Record, String> TRANSPORT_TARGET = createField(DSL.name("transport_target"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>route.line.legacy_hsl_municipality_code</code>. Defines
-     * the legacy municipality that is mainly used for data exports.
+     * The column <code>route.line.legacy_hsl_municipality_code</code>. Defines the legacy municipality that is mainly used for data exports.
      */
     public final TableField<Record, String> LEGACY_HSL_MUNICIPALITY_CODE = createField(DSL.name("legacy_hsl_municipality_code"), SQLDataType.CLOB, this, "Defines the legacy municipality that is mainly used for data exports.");
 
@@ -146,7 +134,7 @@ public class Line extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Route.ROUTE;
+        return Route.ROUTE;
     }
 
     @Override

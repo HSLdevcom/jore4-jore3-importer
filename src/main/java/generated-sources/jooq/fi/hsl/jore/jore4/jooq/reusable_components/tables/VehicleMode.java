@@ -20,8 +20,7 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * The vehicle modes from Transmodel:
- * https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
+ * The vehicle modes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VehicleMode extends TableImpl<Record> {
@@ -42,9 +41,7 @@ public class VehicleMode extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>reusable_components.vehicle_mode.vehicle_mode</code>.
-     * The vehicle mode from Transmodel:
-     * https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
+     * The column <code>reusable_components.vehicle_mode.vehicle_mode</code>. The vehicle mode from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
      */
     public final TableField<Record, String> VEHICLE_MODE_ = createField(DSL.name("vehicle_mode"), SQLDataType.CLOB.nullable(false), this, "The vehicle mode from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283");
 
@@ -57,16 +54,14 @@ public class VehicleMode extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased <code>reusable_components.vehicle_mode</code> table
-     * reference
+     * Create an aliased <code>reusable_components.vehicle_mode</code> table reference
      */
     public VehicleMode(String alias) {
         this(DSL.name(alias), VEHICLE_MODE);
     }
 
     /**
-     * Create an aliased <code>reusable_components.vehicle_mode</code> table
-     * reference
+     * Create an aliased <code>reusable_components.vehicle_mode</code> table reference
      */
     public VehicleMode(Name alias) {
         this(alias, VEHICLE_MODE);
@@ -85,7 +80,7 @@ public class VehicleMode extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : ReusableComponents.REUSABLE_COMPONENTS;
+        return ReusableComponents.REUSABLE_COMPONENTS;
     }
 
     @Override

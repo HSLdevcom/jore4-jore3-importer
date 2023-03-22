@@ -52,38 +52,32 @@ public class NetworkRouteLinks extends TableImpl<NetworkRouteLinksRecord> {
     }
 
     /**
-     * The column
-     * <code>network.network_route_links.network_route_link_id</code>.
+     * The column <code>network.network_route_links.network_route_link_id</code>.
      */
     public final TableField<NetworkRouteLinksRecord, UUID> NETWORK_ROUTE_LINK_ID = createField(DSL.name("network_route_link_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "");
 
     /**
-     * The column
-     * <code>network.network_route_links.network_route_direction_id</code>.
+     * The column <code>network.network_route_links.network_route_direction_id</code>.
      */
     public final TableField<NetworkRouteLinksRecord, UUID> NETWORK_ROUTE_DIRECTION_ID = createField(DSL.name("network_route_direction_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_route_links.infrastructure_link_id</code>.
+     * The column <code>network.network_route_links.infrastructure_link_id</code>.
      */
     public final TableField<NetworkRouteLinksRecord, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_route_links.network_route_link_ext_id</code>.
+     * The column <code>network.network_route_links.network_route_link_ext_id</code>.
      */
     public final TableField<NetworkRouteLinksRecord, String> NETWORK_ROUTE_LINK_EXT_ID = createField(DSL.name("network_route_link_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_route_links.network_route_link_order</code>.
+     * The column <code>network.network_route_links.network_route_link_order</code>.
      */
     public final TableField<NetworkRouteLinksRecord, Integer> NETWORK_ROUTE_LINK_ORDER = createField(DSL.name("network_route_link_order"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_route_links.network_route_link_sys_period</code>.
+     * The column <code>network.network_route_links.network_route_link_sys_period</code>.
      */
     public final TableField<NetworkRouteLinksRecord, TimeRange> NETWORK_ROUTE_LINK_SYS_PERIOD = createField(DSL.name("network_route_link_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
 
@@ -96,16 +90,14 @@ public class NetworkRouteLinks extends TableImpl<NetworkRouteLinksRecord> {
     }
 
     /**
-     * Create an aliased <code>network.network_route_links</code> table
-     * reference
+     * Create an aliased <code>network.network_route_links</code> table reference
      */
     public NetworkRouteLinks(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_LINKS);
     }
 
     /**
-     * Create an aliased <code>network.network_route_links</code> table
-     * reference
+     * Create an aliased <code>network.network_route_links</code> table reference
      */
     public NetworkRouteLinks(Name alias) {
         this(alias, NETWORK_ROUTE_LINKS);
@@ -124,7 +116,7 @@ public class NetworkRouteLinks extends TableImpl<NetworkRouteLinksRecord> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Network.NETWORK;
+        return Network.NETWORK;
     }
 
     @Override
@@ -133,8 +125,13 @@ public class NetworkRouteLinks extends TableImpl<NetworkRouteLinksRecord> {
     }
 
     @Override
+    public List<UniqueKey<NetworkRouteLinksRecord>> getKeys() {
+        return Arrays.<UniqueKey<NetworkRouteLinksRecord>>asList(Keys.NETWORK_ROUTE_LINKS_PKEY);
+    }
+
+    @Override
     public List<ForeignKey<NetworkRouteLinksRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_NETWORK_ROUTE_DIRECTION_ID_FKEY, Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_INFRASTRUCTURE_LINK_ID_FKEY);
+        return Arrays.<ForeignKey<NetworkRouteLinksRecord, ?>>asList(Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_NETWORK_ROUTE_DIRECTION_ID_FKEY, Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_INFRASTRUCTURE_LINK_ID_FKEY);
     }
 
     private transient NetworkRouteDirections _networkRouteDirections;

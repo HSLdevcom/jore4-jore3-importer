@@ -34,8 +34,7 @@ public class NetworkRoutePointsWithHistory extends TableImpl<NetworkRoutePointsW
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>network.network_route_points_with_history</code>
+     * The reference instance of <code>network.network_route_points_with_history</code>
      */
     public static final NetworkRoutePointsWithHistory NETWORK_ROUTE_POINTS_WITH_HISTORY = new NetworkRoutePointsWithHistory();
 
@@ -48,38 +47,32 @@ public class NetworkRoutePointsWithHistory extends TableImpl<NetworkRoutePointsW
     }
 
     /**
-     * The column
-     * <code>network.network_route_points_with_history.network_route_point_id</code>.
+     * The column <code>network.network_route_points_with_history.network_route_point_id</code>.
      */
     public final TableField<NetworkRoutePointsWithHistoryRecord, UUID> NETWORK_ROUTE_POINT_ID = createField(DSL.name("network_route_point_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column
-     * <code>network.network_route_points_with_history.network_route_direction_id</code>.
+     * The column <code>network.network_route_points_with_history.network_route_direction_id</code>.
      */
     public final TableField<NetworkRoutePointsWithHistoryRecord, UUID> NETWORK_ROUTE_DIRECTION_ID = createField(DSL.name("network_route_direction_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column
-     * <code>network.network_route_points_with_history.infrastructure_node</code>.
+     * The column <code>network.network_route_points_with_history.infrastructure_node</code>.
      */
     public final TableField<NetworkRoutePointsWithHistoryRecord, UUID> INFRASTRUCTURE_NODE = createField(DSL.name("infrastructure_node"), SQLDataType.UUID, this, "");
 
     /**
-     * The column
-     * <code>network.network_route_points_with_history.network_route_point_ext_id</code>.
+     * The column <code>network.network_route_points_with_history.network_route_point_ext_id</code>.
      */
     public final TableField<NetworkRoutePointsWithHistoryRecord, String> NETWORK_ROUTE_POINT_EXT_ID = createField(DSL.name("network_route_point_ext_id"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column
-     * <code>network.network_route_points_with_history.network_route_point_order</code>.
+     * The column <code>network.network_route_points_with_history.network_route_point_order</code>.
      */
     public final TableField<NetworkRoutePointsWithHistoryRecord, Integer> NETWORK_ROUTE_POINT_ORDER = createField(DSL.name("network_route_point_order"), SQLDataType.INTEGER, this, "");
 
     /**
-     * The column
-     * <code>network.network_route_points_with_history.network_route_point_sys_period</code>.
+     * The column <code>network.network_route_points_with_history.network_route_point_sys_period</code>.
      */
     public final TableField<NetworkRoutePointsWithHistoryRecord, TimeRange> NETWORK_ROUTE_POINT_SYS_PERIOD = createField(DSL.name("network_route_point_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\""), this, "", new TimeRangeBinding());
 
@@ -92,24 +85,21 @@ public class NetworkRoutePointsWithHistory extends TableImpl<NetworkRoutePointsW
     }
 
     /**
-     * Create an aliased <code>network.network_route_points_with_history</code>
-     * table reference
+     * Create an aliased <code>network.network_route_points_with_history</code> table reference
      */
     public NetworkRoutePointsWithHistory(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_POINTS_WITH_HISTORY);
     }
 
     /**
-     * Create an aliased <code>network.network_route_points_with_history</code>
-     * table reference
+     * Create an aliased <code>network.network_route_points_with_history</code> table reference
      */
     public NetworkRoutePointsWithHistory(Name alias) {
         this(alias, NETWORK_ROUTE_POINTS_WITH_HISTORY);
     }
 
     /**
-     * Create a <code>network.network_route_points_with_history</code> table
-     * reference
+     * Create a <code>network.network_route_points_with_history</code> table reference
      */
     public NetworkRoutePointsWithHistory() {
         this(DSL.name("network_route_points_with_history"), null);
@@ -121,7 +111,7 @@ public class NetworkRoutePointsWithHistory extends TableImpl<NetworkRoutePointsW
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Network.NETWORK;
+        return Network.NETWORK;
     }
 
     @Override

@@ -27,8 +27,7 @@ import org.jooq.Result;
 public class Routines {
 
     /**
-     * Call
-     * <code>journey_pattern.create_verify_infra_link_stop_refs_queue_temp_table</code>
+     * Call <code>journey_pattern.create_verify_infra_link_stop_refs_queue_temp_table</code>
      */
     public static void createVerifyInfraLinkStopRefsQueueTempTable(
           Configuration configuration
@@ -51,8 +50,7 @@ public class Routines {
     }
 
     /**
-     * Get <code>journey_pattern.infra_link_stop_refs_already_verified</code> as
-     * a field.
+     * Get <code>journey_pattern.infra_link_stop_refs_already_verified</code> as a field.
      */
     public static Field<Boolean> infraLinkStopRefsAlreadyVerified() {
         InfraLinkStopRefsAlreadyVerified f = new InfraLinkStopRefsAlreadyVerified();
@@ -61,10 +59,7 @@ public class Routines {
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static Result<Record> checkInfraLinkStopRefsWithNewScheduledStopPoint(
@@ -91,10 +86,7 @@ public class Routines {
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static CheckInfraLinkStopRefsWithNewScheduledStopPoint checkInfraLinkStopRefsWithNewScheduledStopPoint(
@@ -108,22 +100,19 @@ public class Routines {
         , Integer newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
-            replaceScheduledStopPointId,
-            newLocatedOnInfrastructureLinkId,
-            newMeasuredLocation,
-            newDirection,
-            newLabel,
-            newValidityStart,
-            newValidityEnd,
-            newPriority
+              replaceScheduledStopPointId
+            , newLocatedOnInfrastructureLinkId
+            , newMeasuredLocation
+            , newDirection
+            , newLabel
+            , newValidityStart
+            , newValidityEnd
+            , newPriority
         );
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static CheckInfraLinkStopRefsWithNewScheduledStopPoint checkInfraLinkStopRefsWithNewScheduledStopPoint(
@@ -137,14 +126,14 @@ public class Routines {
         , Field<Integer> newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
-            replaceScheduledStopPointId,
-            newLocatedOnInfrastructureLinkId,
-            newMeasuredLocation,
-            newDirection,
-            newLabel,
-            newValidityStart,
-            newValidityEnd,
-            newPriority
+              replaceScheduledStopPointId
+            , newLocatedOnInfrastructureLinkId
+            , newMeasuredLocation
+            , newDirection
+            , newLabel
+            , newValidityStart
+            , newValidityEnd
+            , newPriority
         );
     }
 
@@ -161,34 +150,29 @@ public class Routines {
     }
 
     /**
-     * Get <code>journey_pattern.get_broken_route_check_filters</code> as a
-     * table.
+     * Get <code>journey_pattern.get_broken_route_check_filters</code> as a table.
      */
     public static GetBrokenRouteCheckFilters getBrokenRouteCheckFilters(
           UUID[] filterRouteIds
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.GetBrokenRouteCheckFilters.GET_BROKEN_ROUTE_CHECK_FILTERS.call(
-            filterRouteIds
+              filterRouteIds
         );
     }
 
     /**
-     * Get <code>journey_pattern.get_broken_route_check_filters</code> as a
-     * table.
+     * Get <code>journey_pattern.get_broken_route_check_filters</code> as a table.
      */
     public static GetBrokenRouteCheckFilters getBrokenRouteCheckFilters(
           Field<UUID[]> filterRouteIds
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.GetBrokenRouteCheckFilters.GET_BROKEN_ROUTE_CHECK_FILTERS.call(
-            filterRouteIds
+              filterRouteIds
         );
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static Result<Record> getBrokenRouteJourneyPatterns(
@@ -217,10 +201,7 @@ public class Routines {
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static GetBrokenRouteJourneyPatterns getBrokenRouteJourneyPatterns(
@@ -235,23 +216,20 @@ public class Routines {
         , Integer newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.GetBrokenRouteJourneyPatterns.GET_BROKEN_ROUTE_JOURNEY_PATTERNS.call(
-            filterRouteIds,
-            replaceScheduledStopPointId,
-            newLocatedOnInfrastructureLinkId,
-            newMeasuredLocation,
-            newDirection,
-            newLabel,
-            newValidityStart,
-            newValidityEnd,
-            newPriority
+              filterRouteIds
+            , replaceScheduledStopPointId
+            , newLocatedOnInfrastructureLinkId
+            , newMeasuredLocation
+            , newDirection
+            , newLabel
+            , newValidityStart
+            , newValidityEnd
+            , newPriority
         );
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static GetBrokenRouteJourneyPatterns getBrokenRouteJourneyPatterns(
@@ -266,23 +244,20 @@ public class Routines {
         , Field<Integer> newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.GetBrokenRouteJourneyPatterns.GET_BROKEN_ROUTE_JOURNEY_PATTERNS.call(
-            filterRouteIds,
-            replaceScheduledStopPointId,
-            newLocatedOnInfrastructureLinkId,
-            newMeasuredLocation,
-            newDirection,
-            newLabel,
-            newValidityStart,
-            newValidityEnd,
-            newPriority
+              filterRouteIds
+            , replaceScheduledStopPointId
+            , newLocatedOnInfrastructureLinkId
+            , newMeasuredLocation
+            , newDirection
+            , newLabel
+            , newValidityStart
+            , newValidityEnd
+            , newPriority
         );
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static Result<Record> maximumPriorityValiditySpans(
@@ -321,10 +296,7 @@ public class Routines {
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static MaximumPriorityValiditySpans maximumPriorityValiditySpans(
@@ -344,28 +316,25 @@ public class Routines {
         , Integer newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.MaximumPriorityValiditySpans.MAXIMUM_PRIORITY_VALIDITY_SPANS.call(
-            entityType,
-            filterRouteLabels,
-            filterValidityStart,
-            filterValidityEnd,
-            upperPriorityLimit,
-            replaceScheduledStopPointId,
-            newScheduledStopPointId,
-            newLocatedOnInfrastructureLinkId,
-            newMeasuredLocation,
-            newDirection,
-            newLabel,
-            newValidityStart,
-            newValidityEnd,
-            newPriority
+              entityType
+            , filterRouteLabels
+            , filterValidityStart
+            , filterValidityEnd
+            , upperPriorityLimit
+            , replaceScheduledStopPointId
+            , newScheduledStopPointId
+            , newLocatedOnInfrastructureLinkId
+            , newMeasuredLocation
+            , newDirection
+            , newLabel
+            , newValidityStart
+            , newValidityEnd
+            , newPriority
         );
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static MaximumPriorityValiditySpans maximumPriorityValiditySpans(
@@ -385,20 +354,20 @@ public class Routines {
         , Field<Integer> newPriority
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.MaximumPriorityValiditySpans.MAXIMUM_PRIORITY_VALIDITY_SPANS.call(
-            entityType,
-            filterRouteLabels,
-            filterValidityStart,
-            filterValidityEnd,
-            upperPriorityLimit,
-            replaceScheduledStopPointId,
-            newScheduledStopPointId,
-            newLocatedOnInfrastructureLinkId,
-            newMeasuredLocation,
-            newDirection,
-            newLabel,
-            newValidityStart,
-            newValidityEnd,
-            newPriority
+              entityType
+            , filterRouteLabels
+            , filterValidityStart
+            , filterValidityEnd
+            , upperPriorityLimit
+            , replaceScheduledStopPointId
+            , newScheduledStopPointId
+            , newLocatedOnInfrastructureLinkId
+            , newMeasuredLocation
+            , newDirection
+            , newLabel
+            , newValidityStart
+            , newValidityEnd
+            , newPriority
         );
     }
 }

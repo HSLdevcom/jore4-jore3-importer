@@ -37,8 +37,7 @@ public class InfrastructureNodesStaging extends TableImpl<InfrastructureNodesSta
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>infrastructure_network.infrastructure_nodes_staging</code>
+     * The reference instance of <code>infrastructure_network.infrastructure_nodes_staging</code>
      */
     public static final InfrastructureNodesStaging INFRASTRUCTURE_NODES_STAGING = new InfrastructureNodesStaging();
 
@@ -51,26 +50,22 @@ public class InfrastructureNodesStaging extends TableImpl<InfrastructureNodesSta
     }
 
     /**
-     * The column
-     * <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_ext_id</code>.
+     * The column <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_ext_id</code>.
      */
     public final TableField<InfrastructureNodesStagingRecord, String> INFRASTRUCTURE_NODE_EXT_ID = createField(DSL.name("infrastructure_node_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_type</code>.
+     * The column <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_type</code>.
      */
     public final TableField<InfrastructureNodesStagingRecord, String> INFRASTRUCTURE_NODE_TYPE = createField(DSL.name("infrastructure_node_type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_location</code>.
+     * The column <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_location</code>.
      */
     public final TableField<InfrastructureNodesStagingRecord, Point> INFRASTRUCTURE_NODE_LOCATION = createField(DSL.name("infrastructure_node_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geometry\"").nullable(false), this, "", new PointBinding());
 
     /**
-     * The column
-     * <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_projected_location</code>.
+     * The column <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_projected_location</code>.
      */
     public final TableField<InfrastructureNodesStagingRecord, Point> INFRASTRUCTURE_NODE_PROJECTED_LOCATION = createField(DSL.name("infrastructure_node_projected_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geometry\""), this, "", new PointBinding());
 
@@ -83,26 +78,21 @@ public class InfrastructureNodesStaging extends TableImpl<InfrastructureNodesSta
     }
 
     /**
-     * Create an aliased
-     * <code>infrastructure_network.infrastructure_nodes_staging</code> table
-     * reference
+     * Create an aliased <code>infrastructure_network.infrastructure_nodes_staging</code> table reference
      */
     public InfrastructureNodesStaging(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_NODES_STAGING);
     }
 
     /**
-     * Create an aliased
-     * <code>infrastructure_network.infrastructure_nodes_staging</code> table
-     * reference
+     * Create an aliased <code>infrastructure_network.infrastructure_nodes_staging</code> table reference
      */
     public InfrastructureNodesStaging(Name alias) {
         this(alias, INFRASTRUCTURE_NODES_STAGING);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_nodes_staging</code>
-     * table reference
+     * Create a <code>infrastructure_network.infrastructure_nodes_staging</code> table reference
      */
     public InfrastructureNodesStaging() {
         this(DSL.name("infrastructure_nodes_staging"), null);
@@ -114,7 +104,7 @@ public class InfrastructureNodesStaging extends TableImpl<InfrastructureNodesSta
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
@@ -123,8 +113,13 @@ public class InfrastructureNodesStaging extends TableImpl<InfrastructureNodesSta
     }
 
     @Override
+    public List<UniqueKey<InfrastructureNodesStagingRecord>> getKeys() {
+        return Arrays.<UniqueKey<InfrastructureNodesStagingRecord>>asList(Keys.INFRASTRUCTURE_NODES_STAGING_PKEY);
+    }
+
+    @Override
     public List<ForeignKey<InfrastructureNodesStagingRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.INFRASTRUCTURE_NODES_STAGING__INFRASTRUCTURE_NODES_STAGING_INFRASTRUCTURE_NODE_TYPE_FKEY);
+        return Arrays.<ForeignKey<InfrastructureNodesStagingRecord, ?>>asList(Keys.INFRASTRUCTURE_NODES_STAGING__INFRASTRUCTURE_NODES_STAGING_INFRASTRUCTURE_NODE_TYPE_FKEY);
     }
 
     private transient InfrastructureNodeTypes _infrastructureNodeTypes;

@@ -32,20 +32,17 @@ public class Tables {
     public static final InfrastructureLinkShapes INFRASTRUCTURE_LINK_SHAPES = InfrastructureLinkShapes.INFRASTRUCTURE_LINK_SHAPES;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_link_shapes_history</code>.
+     * The table <code>infrastructure_network.infrastructure_link_shapes_history</code>.
      */
     public static final InfrastructureLinkShapesHistory INFRASTRUCTURE_LINK_SHAPES_HISTORY = InfrastructureLinkShapesHistory.INFRASTRUCTURE_LINK_SHAPES_HISTORY;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_link_shapes_staging</code>.
+     * The table <code>infrastructure_network.infrastructure_link_shapes_staging</code>.
      */
     public static final InfrastructureLinkShapesStaging INFRASTRUCTURE_LINK_SHAPES_STAGING = InfrastructureLinkShapesStaging.INFRASTRUCTURE_LINK_SHAPES_STAGING;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_link_shapes_with_history</code>.
+     * The table <code>infrastructure_network.infrastructure_link_shapes_with_history</code>.
      */
     public static final InfrastructureLinkShapesWithHistory INFRASTRUCTURE_LINK_SHAPES_WITH_HISTORY = InfrastructureLinkShapesWithHistory.INFRASTRUCTURE_LINK_SHAPES_WITH_HISTORY;
 
@@ -55,26 +52,22 @@ public class Tables {
     public static final InfrastructureLinks INFRASTRUCTURE_LINKS = InfrastructureLinks.INFRASTRUCTURE_LINKS;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_links_history</code>.
+     * The table <code>infrastructure_network.infrastructure_links_history</code>.
      */
     public static final InfrastructureLinksHistory INFRASTRUCTURE_LINKS_HISTORY = InfrastructureLinksHistory.INFRASTRUCTURE_LINKS_HISTORY;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_links_staging</code>.
+     * The table <code>infrastructure_network.infrastructure_links_staging</code>.
      */
     public static final InfrastructureLinksStaging INFRASTRUCTURE_LINKS_STAGING = InfrastructureLinksStaging.INFRASTRUCTURE_LINKS_STAGING;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_links_with_history</code>.
+     * The table <code>infrastructure_network.infrastructure_links_with_history</code>.
      */
     public static final InfrastructureLinksWithHistory INFRASTRUCTURE_LINKS_WITH_HISTORY = InfrastructureLinksWithHistory.INFRASTRUCTURE_LINKS_WITH_HISTORY;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_network_types</code>.
+     * The table <code>infrastructure_network.infrastructure_network_types</code>.
      */
     public static final InfrastructureNetworkTypes INFRASTRUCTURE_NETWORK_TYPES = InfrastructureNetworkTypes.INFRASTRUCTURE_NETWORK_TYPES;
 
@@ -89,20 +82,17 @@ public class Tables {
     public static final InfrastructureNodes INFRASTRUCTURE_NODES = InfrastructureNodes.INFRASTRUCTURE_NODES;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_nodes_history</code>.
+     * The table <code>infrastructure_network.infrastructure_nodes_history</code>.
      */
     public static final InfrastructureNodesHistory INFRASTRUCTURE_NODES_HISTORY = InfrastructureNodesHistory.INFRASTRUCTURE_NODES_HISTORY;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_nodes_staging</code>.
+     * The table <code>infrastructure_network.infrastructure_nodes_staging</code>.
      */
     public static final InfrastructureNodesStaging INFRASTRUCTURE_NODES_STAGING = InfrastructureNodesStaging.INFRASTRUCTURE_NODES_STAGING;
 
     /**
-     * The table
-     * <code>infrastructure_network.infrastructure_nodes_with_history</code>.
+     * The table <code>infrastructure_network.infrastructure_nodes_with_history</code>.
      */
     public static final InfrastructureNodesWithHistory INFRASTRUCTURE_NODES_WITH_HISTORY = InfrastructureNodesWithHistory.INFRASTRUCTURE_NODES_WITH_HISTORY;
 }

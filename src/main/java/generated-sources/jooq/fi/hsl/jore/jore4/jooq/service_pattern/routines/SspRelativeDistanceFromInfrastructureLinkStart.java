@@ -23,14 +23,12 @@ public class SspRelativeDistanceFromInfrastructureLinkStart extends AbstractRout
     private static final long serialVersionUID = 1L;
 
     /**
-     * The parameter
-     * <code>service_pattern.ssp_relative_distance_from_infrastructure_link_start.RETURN_VALUE</code>.
+     * The parameter <code>service_pattern.ssp_relative_distance_from_infrastructure_link_start.RETURN_VALUE</code>.
      */
     public static final Parameter<Double> RETURN_VALUE = Internal.createParameter("RETURN_VALUE", SQLDataType.DOUBLE, false, false);
 
     /**
-     * The parameter
-     * <code>service_pattern.ssp_relative_distance_from_infrastructure_link_start.ssp</code>.
+     * The parameter <code>service_pattern.ssp_relative_distance_from_infrastructure_link_start.ssp</code>.
      */
     public static final Parameter<Record> SSP = Internal.createParameter("ssp", fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPoint.SCHEDULED_STOP_POINT.getDataType(), false, false);
 
@@ -52,8 +50,7 @@ public class SspRelativeDistanceFromInfrastructureLinkStart extends AbstractRout
     }
 
     /**
-     * Set the <code>ssp</code> parameter to the function to be used with a
-     * {@link org.jooq.Select} statement
+     * Set the <code>ssp</code> parameter to the function to be used with a {@link org.jooq.Select} statement
      */
     public void setSsp(Field<Record> field) {
         setField(SSP, field);

@@ -28,8 +28,7 @@ public class ScheduledStopPointInvariant extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>service_pattern.scheduled_stop_point_invariant</code>
+     * The reference instance of <code>service_pattern.scheduled_stop_point_invariant</code>
      */
     public static final ScheduledStopPointInvariant SCHEDULED_STOP_POINT_INVARIANT = new ScheduledStopPointInvariant();
 
@@ -42,8 +41,7 @@ public class ScheduledStopPointInvariant extends TableImpl<Record> {
     }
 
     /**
-     * The column
-     * <code>service_pattern.scheduled_stop_point_invariant.label</code>.
+     * The column <code>service_pattern.scheduled_stop_point_invariant.label</code>.
      */
     public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "");
 
@@ -56,26 +54,21 @@ public class ScheduledStopPointInvariant extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased
-     * <code>service_pattern.scheduled_stop_point_invariant</code> table
-     * reference
+     * Create an aliased <code>service_pattern.scheduled_stop_point_invariant</code> table reference
      */
     public ScheduledStopPointInvariant(String alias) {
         this(DSL.name(alias), SCHEDULED_STOP_POINT_INVARIANT);
     }
 
     /**
-     * Create an aliased
-     * <code>service_pattern.scheduled_stop_point_invariant</code> table
-     * reference
+     * Create an aliased <code>service_pattern.scheduled_stop_point_invariant</code> table reference
      */
     public ScheduledStopPointInvariant(Name alias) {
         this(alias, SCHEDULED_STOP_POINT_INVARIANT);
     }
 
     /**
-     * Create a <code>service_pattern.scheduled_stop_point_invariant</code>
-     * table reference
+     * Create a <code>service_pattern.scheduled_stop_point_invariant</code> table reference
      */
     public ScheduledStopPointInvariant() {
         this(DSL.name("scheduled_stop_point_invariant"), null);
@@ -87,7 +80,7 @@ public class ScheduledStopPointInvariant extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : ServicePattern.SERVICE_PATTERN;
+        return ServicePattern.SERVICE_PATTERN;
     }
 
     @Override

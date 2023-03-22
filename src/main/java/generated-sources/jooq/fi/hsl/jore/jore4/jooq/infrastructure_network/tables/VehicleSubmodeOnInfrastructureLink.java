@@ -30,8 +30,7 @@ public class VehicleSubmodeOnInfrastructureLink extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code>
+     * The reference instance of <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code>
      */
     public static final VehicleSubmodeOnInfrastructureLink VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK = new VehicleSubmodeOnInfrastructureLink();
 
@@ -44,17 +43,12 @@ public class VehicleSubmodeOnInfrastructureLink extends TableImpl<Record> {
     }
 
     /**
-     * The column
-     * <code>infrastructure_network.vehicle_submode_on_infrastructure_link.infrastructure_link_id</code>.
-     * The infrastructure link that can be safely traversed by the vehicle
-     * submode.
+     * The column <code>infrastructure_network.vehicle_submode_on_infrastructure_link.infrastructure_link_id</code>. The infrastructure link that can be safely traversed by the vehicle submode.
      */
     public final TableField<Record, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "The infrastructure link that can be safely traversed by the vehicle submode.");
 
     /**
-     * The column
-     * <code>infrastructure_network.vehicle_submode_on_infrastructure_link.vehicle_submode</code>.
-     * The vehicle submode that can safely traverse the infrastructure link.
+     * The column <code>infrastructure_network.vehicle_submode_on_infrastructure_link.vehicle_submode</code>. The vehicle submode that can safely traverse the infrastructure link.
      */
     public final TableField<Record, String> VEHICLE_SUBMODE = createField(DSL.name("vehicle_submode"), SQLDataType.CLOB.nullable(false), this, "The vehicle submode that can safely traverse the infrastructure link.");
 
@@ -67,27 +61,21 @@ public class VehicleSubmodeOnInfrastructureLink extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased
-     * <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code>
-     * table reference
+     * Create an aliased <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code> table reference
      */
     public VehicleSubmodeOnInfrastructureLink(String alias) {
         this(DSL.name(alias), VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK);
     }
 
     /**
-     * Create an aliased
-     * <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code>
-     * table reference
+     * Create an aliased <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code> table reference
      */
     public VehicleSubmodeOnInfrastructureLink(Name alias) {
         this(alias, VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK);
     }
 
     /**
-     * Create a
-     * <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code>
-     * table reference
+     * Create a <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code> table reference
      */
     public VehicleSubmodeOnInfrastructureLink() {
         this(DSL.name("vehicle_submode_on_infrastructure_link"), null);
@@ -99,7 +87,7 @@ public class VehicleSubmodeOnInfrastructureLink extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override

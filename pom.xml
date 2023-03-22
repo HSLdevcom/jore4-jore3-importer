@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.4</version>
+        <version>2.7.11</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fi.hsl.jore</groupId>
@@ -20,10 +20,11 @@
         <guava.version>30.1-jre</guava.version>
         <vavr.version>0.10.3</vavr.version>
         <immutables.version>2.8.2</immutables.version>
-        <jooq.version>3.15.8</jooq.version>
         <geotools.version>25-RC</geotools.version>
         <geojson-jackson.version>1.14</geojson-jackson.version>
-        <postgresql.version>42.2.19</postgresql.version>
+        <!-- Sticking to old 9.X version to avoid having to configure trusted certificates
+             or just blindly trust any SQL server certificate. -->
+        <mssql-jdbc.version>9.4.1.jre11</mssql-jdbc.version>
 
         <!-- Test library version -->
         <quicktheories.version>0.26</quicktheories.version>
@@ -78,12 +79,12 @@
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
             <scope>runtime</scope>
+            <version>${mssql-jdbc.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -312,6 +313,8 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
+                <!-- version inherited from the spring-boot-dependencies POM -->
+                <version>${flyway.version}</version>
 
                 <configuration>
                     <skip>${skip.flyway.migration}</skip>

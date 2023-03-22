@@ -36,8 +36,7 @@ public class InfrastructureLinksHistory extends TableImpl<InfrastructureLinksHis
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>infrastructure_network.infrastructure_links_history</code>
+     * The reference instance of <code>infrastructure_network.infrastructure_links_history</code>
      */
     public static final InfrastructureLinksHistory INFRASTRUCTURE_LINKS_HISTORY = new InfrastructureLinksHistory();
 
@@ -50,44 +49,37 @@ public class InfrastructureLinksHistory extends TableImpl<InfrastructureLinksHis
     }
 
     /**
-     * The column
-     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_id</code>.
+     * The column <code>infrastructure_network.infrastructure_links_history.infrastructure_link_id</code>.
      */
     public final TableField<InfrastructureLinksHistoryRecord, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_ext_id</code>.
+     * The column <code>infrastructure_network.infrastructure_links_history.infrastructure_link_ext_id</code>.
      */
     public final TableField<InfrastructureLinksHistoryRecord, String> INFRASTRUCTURE_LINK_EXT_ID = createField(DSL.name("infrastructure_link_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_geog</code>.
+     * The column <code>infrastructure_network.infrastructure_links_history.infrastructure_link_geog</code>.
      */
     public final TableField<InfrastructureLinksHistoryRecord, LineString> INFRASTRUCTURE_LINK_GEOG = createField(DSL.name("infrastructure_link_geog"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").nullable(false), this, "", new LineStringBinding());
 
     /**
-     * The column
-     * <code>infrastructure_network.infrastructure_links_history.infrastructure_network_type</code>.
+     * The column <code>infrastructure_network.infrastructure_links_history.infrastructure_network_type</code>.
      */
     public final TableField<InfrastructureLinksHistoryRecord, String> INFRASTRUCTURE_NETWORK_TYPE = createField(DSL.name("infrastructure_network_type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_sys_period</code>.
+     * The column <code>infrastructure_network.infrastructure_links_history.infrastructure_link_sys_period</code>.
      */
     public final TableField<InfrastructureLinksHistoryRecord, TimeRange> INFRASTRUCTURE_LINK_SYS_PERIOD = createField(DSL.name("infrastructure_link_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
     /**
-     * The column
-     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_start_node</code>.
+     * The column <code>infrastructure_network.infrastructure_links_history.infrastructure_link_start_node</code>.
      */
     public final TableField<InfrastructureLinksHistoryRecord, UUID> INFRASTRUCTURE_LINK_START_NODE = createField(DSL.name("infrastructure_link_start_node"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>infrastructure_network.infrastructure_links_history.infrastructure_link_end_node</code>.
+     * The column <code>infrastructure_network.infrastructure_links_history.infrastructure_link_end_node</code>.
      */
     public final TableField<InfrastructureLinksHistoryRecord, UUID> INFRASTRUCTURE_LINK_END_NODE = createField(DSL.name("infrastructure_link_end_node"), SQLDataType.UUID.nullable(false), this, "");
 
@@ -100,26 +92,21 @@ public class InfrastructureLinksHistory extends TableImpl<InfrastructureLinksHis
     }
 
     /**
-     * Create an aliased
-     * <code>infrastructure_network.infrastructure_links_history</code> table
-     * reference
+     * Create an aliased <code>infrastructure_network.infrastructure_links_history</code> table reference
      */
     public InfrastructureLinksHistory(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_LINKS_HISTORY);
     }
 
     /**
-     * Create an aliased
-     * <code>infrastructure_network.infrastructure_links_history</code> table
-     * reference
+     * Create an aliased <code>infrastructure_network.infrastructure_links_history</code> table reference
      */
     public InfrastructureLinksHistory(Name alias) {
         this(alias, INFRASTRUCTURE_LINKS_HISTORY);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_links_history</code>
-     * table reference
+     * Create a <code>infrastructure_network.infrastructure_links_history</code> table reference
      */
     public InfrastructureLinksHistory() {
         this(DSL.name("infrastructure_links_history"), null);
@@ -131,7 +118,7 @@ public class InfrastructureLinksHistory extends TableImpl<InfrastructureLinksHis
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override

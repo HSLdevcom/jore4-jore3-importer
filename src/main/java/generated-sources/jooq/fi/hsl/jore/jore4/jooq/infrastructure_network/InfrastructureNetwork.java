@@ -42,14 +42,12 @@ public class InfrastructureNetwork extends SchemaImpl {
     public final ExternalSource EXTERNAL_SOURCE = ExternalSource.EXTERNAL_SOURCE;
 
     /**
-     * The infrastructure links, e.g. road or rail elements:
-     * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:1:1:453
+     * The infrastructure links, e.g. road or rail elements: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:1:1:453
      */
     public final InfrastructureLink INFRASTRUCTURE_LINK = InfrastructureLink.INFRASTRUCTURE_LINK;
 
     /**
-     * Which infrastructure links are safely traversed by which vehicle
-     * submodes?
+     * Which infrastructure links are safely traversed by which vehicle submodes?
      */
     public final VehicleSubmodeOnInfrastructureLink VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK = VehicleSubmodeOnInfrastructureLink.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK;
 
@@ -68,11 +66,10 @@ public class InfrastructureNetwork extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.asList(
+        return Arrays.<Table<?>>asList(
             Direction.DIRECTION,
             ExternalSource.EXTERNAL_SOURCE,
             InfrastructureLink.INFRASTRUCTURE_LINK,
-            VehicleSubmodeOnInfrastructureLink.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK
-        );
+            VehicleSubmodeOnInfrastructureLink.VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK);
     }
 }

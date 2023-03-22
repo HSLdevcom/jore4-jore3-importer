@@ -32,8 +32,7 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>service_pattern.get_scheduled_stop_points_with_new</code>
+     * The reference instance of <code>service_pattern.get_scheduled_stop_points_with_new</code>
      */
     public static final GetScheduledStopPointsWithNew GET_SCHEDULED_STOP_POINTS_WITH_NEW = new GetScheduledStopPointsWithNew();
 
@@ -46,80 +45,58 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
     }
 
     /**
-     * The column
-     * <code>service_pattern.get_scheduled_stop_points_with_new.scheduled_stop_point_id</code>.
+     * The column <code>service_pattern.get_scheduled_stop_points_with_new.scheduled_stop_point_id</code>.
      */
     public final TableField<Record, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.get_scheduled_stop_points_with_new.measured_location</code>.
+     * The column <code>service_pattern.get_scheduled_stop_points_with_new.measured_location</code>.
      */
     public final TableField<Record, Point> MEASURED_LOCATION = createField(DSL.name("measured_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\""), this, "", new PointBinding());
 
     /**
-     * The column
-     * <code>service_pattern.get_scheduled_stop_points_with_new.located_on_infrastructure_link_id</code>.
+     * The column <code>service_pattern.get_scheduled_stop_points_with_new.located_on_infrastructure_link_id</code>.
      */
     public final TableField<Record, UUID> LOCATED_ON_INFRASTRUCTURE_LINK_ID = createField(DSL.name("located_on_infrastructure_link_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.get_scheduled_stop_points_with_new.direction</code>.
+     * The column <code>service_pattern.get_scheduled_stop_points_with_new.direction</code>.
      */
     public final TableField<Record, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.get_scheduled_stop_points_with_new.label</code>.
+     * The column <code>service_pattern.get_scheduled_stop_points_with_new.label</code>.
      */
     public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.get_scheduled_stop_points_with_new.validity_start</code>.
+     * The column <code>service_pattern.get_scheduled_stop_points_with_new.validity_start</code>.
      */
     public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.get_scheduled_stop_points_with_new.validity_end</code>.
+     * The column <code>service_pattern.get_scheduled_stop_points_with_new.validity_end</code>.
      */
     public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.get_scheduled_stop_points_with_new.priority</code>.
+     * The column <code>service_pattern.get_scheduled_stop_points_with_new.priority</code>.
      */
     public final TableField<Record, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER, this, "");
 
     /**
-     * The column
-     * <code>service_pattern.get_scheduled_stop_points_with_new.relative_distance_from_infrastructure_link_start</code>.
+     * The column <code>service_pattern.get_scheduled_stop_points_with_new.relative_distance_from_infrastructure_link_start</code>.
      */
     public final TableField<Record, Double> RELATIVE_DISTANCE_FROM_INFRASTRUCTURE_LINK_START = createField(DSL.name("relative_distance_from_infrastructure_link_start"), SQLDataType.DOUBLE, this, "");
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public final TableField<Record, Object> CLOSEST_POINT_ON_INFRASTRUCTURE_LINK = createField(DSL.name("closest_point_on_infrastructure_link"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\""), this, "");
 
     private GetScheduledStopPointsWithNew(Name alias, Table<Record> aliased) {
-        this(alias, aliased, new Field[] {
-            DSL.val(null, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
-            DSL.val(null, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
-            DSL.val(null, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
-            DSL.val(null, org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").defaultValue(DSL.field("NULL::geography", org.jooq.impl.SQLDataType.OTHER))),
-            DSL.val(null, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
-            DSL.val(null, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
-            DSL.val(null, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
-            DSL.val(null, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
-            DSL.val(null, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER)))
-        });
+        this(alias, aliased, new Field[9]);
     }
 
     private GetScheduledStopPointsWithNew(Name alias, Table<Record> aliased, Field<?>[] parameters) {
@@ -127,26 +104,21 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased
-     * <code>service_pattern.get_scheduled_stop_points_with_new</code> table
-     * reference
+     * Create an aliased <code>service_pattern.get_scheduled_stop_points_with_new</code> table reference
      */
     public GetScheduledStopPointsWithNew(String alias) {
         this(DSL.name(alias), GET_SCHEDULED_STOP_POINTS_WITH_NEW);
     }
 
     /**
-     * Create an aliased
-     * <code>service_pattern.get_scheduled_stop_points_with_new</code> table
-     * reference
+     * Create an aliased <code>service_pattern.get_scheduled_stop_points_with_new</code> table reference
      */
     public GetScheduledStopPointsWithNew(Name alias) {
         this(alias, GET_SCHEDULED_STOP_POINTS_WITH_NEW);
     }
 
     /**
-     * Create a <code>service_pattern.get_scheduled_stop_points_with_new</code>
-     * table reference
+     * Create a <code>service_pattern.get_scheduled_stop_points_with_new</code> table reference
      */
     public GetScheduledStopPointsWithNew() {
         this(DSL.name("get_scheduled_stop_points_with_new"), null);
@@ -154,7 +126,7 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : ServicePattern.SERVICE_PATTERN;
+        return ServicePattern.SERVICE_PATTERN;
     }
 
     @Override
@@ -198,15 +170,15 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
         , Integer newPriority
     ) {
         GetScheduledStopPointsWithNew result = new GetScheduledStopPointsWithNew(DSL.name("get_scheduled_stop_points_with_new"), null, new Field[] {
-            DSL.val(replaceScheduledStopPointId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
-            DSL.val(newScheduledStopPointId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
-            DSL.val(newLocatedOnInfrastructureLinkId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID))),
-            DSL.val(newMeasuredLocation, org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").defaultValue(DSL.field("NULL::geography", org.jooq.impl.SQLDataType.OTHER))),
-            DSL.val(newDirection, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
-            DSL.val(newLabel, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB))),
-            DSL.val(newValidityStart, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
-            DSL.val(newValidityEnd, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE))),
-            DSL.val(newPriority, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER)))
+              DSL.val(replaceScheduledStopPointId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID)))
+            , DSL.val(newScheduledStopPointId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID)))
+            , DSL.val(newLocatedOnInfrastructureLinkId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID)))
+            , DSL.val(newMeasuredLocation, org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").defaultValue(DSL.field("NULL::geography", org.jooq.impl.SQLDataType.OTHER)))
+            , DSL.val(newDirection, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB)))
+            , DSL.val(newLabel, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB)))
+            , DSL.val(newValidityStart, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE)))
+            , DSL.val(newValidityEnd, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE)))
+            , DSL.val(newPriority, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER)))
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;
@@ -227,15 +199,15 @@ public class GetScheduledStopPointsWithNew extends TableImpl<Record> {
         , Field<Integer> newPriority
     ) {
         GetScheduledStopPointsWithNew result = new GetScheduledStopPointsWithNew(DSL.name("get_scheduled_stop_points_with_new"), null, new Field[] {
-            replaceScheduledStopPointId,
-            newScheduledStopPointId,
-            newLocatedOnInfrastructureLinkId,
-            newMeasuredLocation,
-            newDirection,
-            newLabel,
-            newValidityStart,
-            newValidityEnd,
-            newPriority
+              replaceScheduledStopPointId
+            , newScheduledStopPointId
+            , newLocatedOnInfrastructureLinkId
+            , newMeasuredLocation
+            , newDirection
+            , newLabel
+            , newValidityStart
+            , newValidityEnd
+            , newPriority
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;

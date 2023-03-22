@@ -76,14 +76,13 @@ public class DefaultCatalog extends CatalogImpl {
 
     @Override
     public final List<Schema> getSchemas() {
-        return Arrays.asList(
+        return Arrays.<Schema>asList(
             InfrastructureNetwork.INFRASTRUCTURE_NETWORK,
             InternalServicePattern.INTERNAL_SERVICE_PATTERN,
             JourneyPattern.JOURNEY_PATTERN,
             ReusableComponents.REUSABLE_COMPONENTS,
             Route.ROUTE,
             ServicePattern.SERVICE_PATTERN,
-            TimingPattern.TIMING_PATTERN
-        );
+            TimingPattern.TIMING_PATTERN);
     }
 }

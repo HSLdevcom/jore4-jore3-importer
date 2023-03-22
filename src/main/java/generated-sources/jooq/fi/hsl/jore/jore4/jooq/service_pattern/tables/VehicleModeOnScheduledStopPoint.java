@@ -30,8 +30,7 @@ public class VehicleModeOnScheduledStopPoint extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>service_pattern.vehicle_mode_on_scheduled_stop_point</code>
+     * The reference instance of <code>service_pattern.vehicle_mode_on_scheduled_stop_point</code>
      */
     public static final VehicleModeOnScheduledStopPoint VEHICLE_MODE_ON_SCHEDULED_STOP_POINT = new VehicleModeOnScheduledStopPoint();
 
@@ -44,16 +43,12 @@ public class VehicleModeOnScheduledStopPoint extends TableImpl<Record> {
     }
 
     /**
-     * The column
-     * <code>service_pattern.vehicle_mode_on_scheduled_stop_point.scheduled_stop_point_id</code>.
-     * The scheduled stop point that is serviced by the vehicle mode.
+     * The column <code>service_pattern.vehicle_mode_on_scheduled_stop_point.scheduled_stop_point_id</code>. The scheduled stop point that is serviced by the vehicle mode.
      */
     public final TableField<Record, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID.nullable(false), this, "The scheduled stop point that is serviced by the vehicle mode.");
 
     /**
-     * The column
-     * <code>service_pattern.vehicle_mode_on_scheduled_stop_point.vehicle_mode</code>.
-     * The vehicle mode servicing the scheduled stop point.
+     * The column <code>service_pattern.vehicle_mode_on_scheduled_stop_point.vehicle_mode</code>. The vehicle mode servicing the scheduled stop point.
      */
     public final TableField<Record, String> VEHICLE_MODE = createField(DSL.name("vehicle_mode"), SQLDataType.CLOB.nullable(false), this, "The vehicle mode servicing the scheduled stop point.");
 
@@ -66,27 +61,21 @@ public class VehicleModeOnScheduledStopPoint extends TableImpl<Record> {
     }
 
     /**
-     * Create an aliased
-     * <code>service_pattern.vehicle_mode_on_scheduled_stop_point</code> table
-     * reference
+     * Create an aliased <code>service_pattern.vehicle_mode_on_scheduled_stop_point</code> table reference
      */
     public VehicleModeOnScheduledStopPoint(String alias) {
         this(DSL.name(alias), VEHICLE_MODE_ON_SCHEDULED_STOP_POINT);
     }
 
     /**
-     * Create an aliased
-     * <code>service_pattern.vehicle_mode_on_scheduled_stop_point</code> table
-     * reference
+     * Create an aliased <code>service_pattern.vehicle_mode_on_scheduled_stop_point</code> table reference
      */
     public VehicleModeOnScheduledStopPoint(Name alias) {
         this(alias, VEHICLE_MODE_ON_SCHEDULED_STOP_POINT);
     }
 
     /**
-     * Create a
-     * <code>service_pattern.vehicle_mode_on_scheduled_stop_point</code> table
-     * reference
+     * Create a <code>service_pattern.vehicle_mode_on_scheduled_stop_point</code> table reference
      */
     public VehicleModeOnScheduledStopPoint() {
         this(DSL.name("vehicle_mode_on_scheduled_stop_point"), null);
@@ -98,7 +87,7 @@ public class VehicleModeOnScheduledStopPoint extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : ServicePattern.SERVICE_PATTERN;
+        return ServicePattern.SERVICE_PATTERN;
     }
 
     @Override

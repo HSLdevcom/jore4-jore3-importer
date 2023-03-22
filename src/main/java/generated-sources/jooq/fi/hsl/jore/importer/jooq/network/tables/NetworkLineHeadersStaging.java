@@ -10,6 +10,9 @@ import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLineHeadersStagingRecord;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.JSONB;
@@ -35,8 +38,7 @@ public class NetworkLineHeadersStaging extends TableImpl<NetworkLineHeadersStagi
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of
-     * <code>network.network_line_headers_staging</code>
+     * The reference instance of <code>network.network_line_headers_staging</code>
      */
     public static final NetworkLineHeadersStaging NETWORK_LINE_HEADERS_STAGING = new NetworkLineHeadersStaging();
 
@@ -49,44 +51,37 @@ public class NetworkLineHeadersStaging extends TableImpl<NetworkLineHeadersStagi
     }
 
     /**
-     * The column
-     * <code>network.network_line_headers_staging.network_line_header_ext_id</code>.
+     * The column <code>network.network_line_headers_staging.network_line_header_ext_id</code>.
      */
     public final TableField<NetworkLineHeadersStagingRecord, String> NETWORK_LINE_HEADER_EXT_ID = createField(DSL.name("network_line_header_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_line_headers_staging.network_line_ext_id</code>.
+     * The column <code>network.network_line_headers_staging.network_line_ext_id</code>.
      */
     public final TableField<NetworkLineHeadersStagingRecord, String> NETWORK_LINE_EXT_ID = createField(DSL.name("network_line_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_line_headers_staging.network_line_header_name</code>.
+     * The column <code>network.network_line_headers_staging.network_line_header_name</code>.
      */
     public final TableField<NetworkLineHeadersStagingRecord, JSONB> NETWORK_LINE_HEADER_NAME = createField(DSL.name("network_line_header_name"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_line_headers_staging.network_line_header_name_short</code>.
+     * The column <code>network.network_line_headers_staging.network_line_header_name_short</code>.
      */
     public final TableField<NetworkLineHeadersStagingRecord, JSONB> NETWORK_LINE_HEADER_NAME_SHORT = createField(DSL.name("network_line_header_name_short"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_line_headers_staging.network_line_header_origin_1</code>.
+     * The column <code>network.network_line_headers_staging.network_line_header_origin_1</code>.
      */
     public final TableField<NetworkLineHeadersStagingRecord, JSONB> NETWORK_LINE_HEADER_ORIGIN_1 = createField(DSL.name("network_line_header_origin_1"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_line_headers_staging.network_line_header_origin_2</code>.
+     * The column <code>network.network_line_headers_staging.network_line_header_origin_2</code>.
      */
     public final TableField<NetworkLineHeadersStagingRecord, JSONB> NETWORK_LINE_HEADER_ORIGIN_2 = createField(DSL.name("network_line_header_origin_2"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column
-     * <code>network.network_line_headers_staging.network_line_header_valid_date_range</code>.
+     * The column <code>network.network_line_headers_staging.network_line_header_valid_date_range</code>.
      */
     public final TableField<NetworkLineHeadersStagingRecord, DateRange> NETWORK_LINE_HEADER_VALID_DATE_RANGE = createField(DSL.name("network_line_header_valid_date_range"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"daterange\"").nullable(false), this, "", new DateRangeBinding());
 
@@ -99,24 +94,21 @@ public class NetworkLineHeadersStaging extends TableImpl<NetworkLineHeadersStagi
     }
 
     /**
-     * Create an aliased <code>network.network_line_headers_staging</code> table
-     * reference
+     * Create an aliased <code>network.network_line_headers_staging</code> table reference
      */
     public NetworkLineHeadersStaging(String alias) {
         this(DSL.name(alias), NETWORK_LINE_HEADERS_STAGING);
     }
 
     /**
-     * Create an aliased <code>network.network_line_headers_staging</code> table
-     * reference
+     * Create an aliased <code>network.network_line_headers_staging</code> table reference
      */
     public NetworkLineHeadersStaging(Name alias) {
         this(alias, NETWORK_LINE_HEADERS_STAGING);
     }
 
     /**
-     * Create a <code>network.network_line_headers_staging</code> table
-     * reference
+     * Create a <code>network.network_line_headers_staging</code> table reference
      */
     public NetworkLineHeadersStaging() {
         this(DSL.name("network_line_headers_staging"), null);
@@ -128,12 +120,17 @@ public class NetworkLineHeadersStaging extends TableImpl<NetworkLineHeadersStagi
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Network.NETWORK;
+        return Network.NETWORK;
     }
 
     @Override
     public UniqueKey<NetworkLineHeadersStagingRecord> getPrimaryKey() {
         return Keys.NETWORK_LINE_HEADERS_STAGING_PKEY;
+    }
+
+    @Override
+    public List<UniqueKey<NetworkLineHeadersStagingRecord>> getKeys() {
+        return Arrays.<UniqueKey<NetworkLineHeadersStagingRecord>>asList(Keys.NETWORK_LINE_HEADERS_STAGING_PKEY);
     }
 
     @Override
