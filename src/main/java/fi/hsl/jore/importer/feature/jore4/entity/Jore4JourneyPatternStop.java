@@ -13,30 +13,32 @@ import java.util.UUID;
 @Value.Immutable
 public interface Jore4JourneyPatternStop {
 
+    UUID journeyPatternId();
+
+    int scheduledStopPointSequence();
+
+    String scheduledStopPointLabel();
+
     boolean isTimingPoint();
 
     boolean isViaPoint();
 
-    UUID journeyPatternId();
-
-    String scheduledStopPointLabel();
-
-    int scheduledStopPointSequence();
-
     Optional<MultilingualString> viaPointNames();
 
-    static Jore4JourneyPatternStop of(final boolean isTimingPoint,
-                                      final boolean isViaPoint,
-        final Optional<MultilingualString> viaPointNames,
-                                      final UUID journeyPatternId,
+    static Jore4JourneyPatternStop of(final UUID journeyPatternId,
+                                      final int scheduledStopPointSequence,
                                       final String scheduledStopPointLabel,
-                                      final int scheduledStopPointSequence) {
-        return ImmutableJore4JourneyPatternStop.builder()
+                                      final boolean isTimingPoint,
+                                      final boolean isViaPoint,
+                                      final Optional<MultilingualString> viaPointNames) {
+
+        return ImmutableJore4JourneyPatternStop
+                .builder()
+                .journeyPatternId(journeyPatternId)
+                .scheduledStopPointSequence(scheduledStopPointSequence)
+                .scheduledStopPointLabel(scheduledStopPointLabel)
                 .isTimingPoint(isTimingPoint)
                 .isViaPoint(isViaPoint)
-                .journeyPatternId(journeyPatternId)
-                .scheduledStopPointLabel(scheduledStopPointLabel)
-                .scheduledStopPointSequence(scheduledStopPointSequence)
                 .viaPointNames(viaPointNames)
                 .build();
     }

@@ -1,8 +1,8 @@
 SELECT rd.journey_pattern_jore4_id AS journey_pattern_jore4_id,
-       rsp.network_route_stop_point_hastus_point AS is_hastus_point,
-       rsp.network_route_stop_point_via_point AS is_via_point,
        rsp.network_route_stop_point_order AS order_number,
        ssp.scheduled_stop_point_short_id AS short_id,
+       rsp.network_route_stop_point_hastus_point AS is_hastus_point,
+       rsp.network_route_stop_point_via_point AS is_via_point,
        rsp.network_route_stop_point_via_name AS via_names
 FROM network.network_route_directions rd
          JOIN network.network_route_points rp ON (rp.network_route_direction_id = rd.network_route_direction_id)

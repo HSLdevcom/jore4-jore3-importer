@@ -16,21 +16,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JourneyPatternStopExportProcessorTest {
 
-    private static final boolean IS_HASTUS_POINT = true;
-    private static final boolean IS_VIA_POINT = true;
     private static final UUID JOURNEY_PATTERN_JORE4_ID = UUID.fromString("55171cba-d8b7-4d6a-bbd4-cec0501c88f8");
     private static final int ORDER_NUMBER = 1;
     private static final String SCHEDULED_STOP_POINT_LABEL = "stop1";
-    private static final Map<Locale, String> VIA_POINT_NAME_MAP = Map.of(JoreLocaleUtil.FINNISH, "ViaSuomi", JoreLocaleUtil.SWEDISH, "ViaSverige");
+    private static final boolean IS_HASTUS_POINT = true;
+    private static final boolean IS_VIA_POINT = true;
+    private static final Map<Locale, String> VIA_POINT_NAME_MAP = Map.of(
+            JoreLocaleUtil.FINNISH, "ViaSuomi",
+            JoreLocaleUtil.SWEDISH, "ViaSverige"
+    );
     private static final Optional<MultilingualString> VIA_POINT_NAMES = Optional.of(MultilingualString.ofLocaleMap(VIA_POINT_NAME_MAP));
 
     private static final ImporterJourneyPatternStop INPUT = ImporterJourneyPatternStop.of(
-            IS_HASTUS_POINT,
-            IS_VIA_POINT,
-            VIA_POINT_NAMES,
             JOURNEY_PATTERN_JORE4_ID,
             ORDER_NUMBER,
-            SCHEDULED_STOP_POINT_LABEL
+            SCHEDULED_STOP_POINT_LABEL,
+            IS_HASTUS_POINT,
+            IS_VIA_POINT,
+            VIA_POINT_NAMES
     );
 
     private final JourneyPatternStopExportProcessor processor = new JourneyPatternStopExportProcessor();
@@ -43,17 +46,17 @@ class JourneyPatternStopExportProcessorTest {
     }
 
     @Test
-    @DisplayName("Should return a journey pattern stop with the correct scheduled stop point id")
-    void shouldReturnJourneyPatternStopWithCorrectScheduledStopPointId() throws Exception {
-        final Jore4JourneyPatternStop output = processor.process(INPUT);
-        assertThat(output.scheduledStopPointLabel()).isEqualTo(SCHEDULED_STOP_POINT_LABEL);
-    }
-
-    @Test
     @DisplayName("Should return a journey pattern stop with the correct scheduled stop point sequence")
     void shouldReturnJourneyPatternStopWithCorrectScheduledStopPointSequence() throws Exception {
         final Jore4JourneyPatternStop output = processor.process(INPUT);
         assertThat(output.scheduledStopPointSequence()).isEqualTo(ORDER_NUMBER);
+    }
+
+    @Test
+    @DisplayName("Should return a journey pattern stop with the correct scheduled stop point id")
+    void shouldReturnJourneyPatternStopWithCorrectScheduledStopPointId() throws Exception {
+        final Jore4JourneyPatternStop output = processor.process(INPUT);
+        assertThat(output.scheduledStopPointLabel()).isEqualTo(SCHEDULED_STOP_POINT_LABEL);
     }
 
     @Test
@@ -80,5 +83,4 @@ class JourneyPatternStopExportProcessorTest {
         final String swedishName = JoreLocaleUtil.getI18nString(output.viaPointNames().get(), JoreLocaleUtil.SWEDISH);
         assertThat(swedishName).isEqualTo(VIA_POINT_NAME_MAP.get(JoreLocaleUtil.SWEDISH));
     }
-
 }

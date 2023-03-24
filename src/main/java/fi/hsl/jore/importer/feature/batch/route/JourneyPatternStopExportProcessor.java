@@ -21,12 +21,12 @@ public class JourneyPatternStopExportProcessor implements ItemProcessor<Importer
         LOGGER.debug("Processing journey pattern stop: {}", input);
 
         return Jore4JourneyPatternStop.of(
+                input.journeyPatternJore4Id(),
+                input.orderNumber(),
+                input.scheduledStopPointJore4Label(),
                 input.isHastusPoint(),
                 input.isViaPoint(),
-                input.viaPointNames(),
-                input.journeyPatternJore4Id(),
-                input.scheduledStopPointJore4Label(),
-                input.orderNumber()
+                input.viaPointNames()
         );
     }
 }

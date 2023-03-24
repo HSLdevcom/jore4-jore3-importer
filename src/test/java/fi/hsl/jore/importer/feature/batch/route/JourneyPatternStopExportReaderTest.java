@@ -90,12 +90,12 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(first.journeyPatternJore4Id())
                     .as("journeyPatternJore4Id")
                     .isEqualTo(JOURNEY_PATTERN_JORE4_ID);
-            softAssertions.assertThat(first.scheduledStopPointJore4Label())
-                    .as("scheduledStopPointJore4Label")
-                    .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_JORE4_LABEL);
             softAssertions.assertThat(first.orderNumber())
                     .as("orderNumber")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_ORDER_NUMBER);
+            softAssertions.assertThat(first.scheduledStopPointJore4Label())
+                    .as("scheduledStopPointJore4Label")
+                    .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_JORE4_LABEL);
             softAssertions.assertThat(first.isHastusPoint())
                     .as("isHastusPoint")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_IS_HASTUS_POINT);
@@ -118,12 +118,12 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(second.journeyPatternJore4Id())
                     .as("journeyPatternJore4Id")
                     .isEqualTo(JOURNEY_PATTERN_JORE4_ID);
-            softAssertions.assertThat(second.scheduledStopPointJore4Label())
-                    .as("scheduledStopPointJore4Label")
-                    .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_JORE4_LABEL);
             softAssertions.assertThat(second.orderNumber())
                     .as("orderNumber")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_ORDER_NUMBER);
+            softAssertions.assertThat(second.scheduledStopPointJore4Label())
+                    .as("scheduledStopPointJore4Label")
+                    .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_JORE4_LABEL);
             softAssertions.assertThat(second.isHastusPoint())
                     .as("isHastusPoint")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_IS_HASTUS_POINT);

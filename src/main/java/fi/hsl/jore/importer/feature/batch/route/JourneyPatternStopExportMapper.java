@@ -27,12 +27,13 @@ public class JourneyPatternStopExportMapper implements RowMapper<ImporterJourney
     public ImporterJourneyPatternStop mapRow(final ResultSet resultSet,
                                              final int rowNumber) throws SQLException {
         return ImporterJourneyPatternStop.of(
-                resultSet.getBoolean("is_hastus_point"),
-                resultSet.getBoolean("is_via_point"),
-                Optional.ofNullable(resultSet.getString("via_names")).map(viaNames -> jsonConverter.fromJson(viaNames, MultilingualString.class)),
                 UUID.fromString(resultSet.getString("journey_pattern_jore4_id")),
                 resultSet.getInt("order_number"),
-                resultSet.getString("short_id")
+                resultSet.getString("short_id"),
+                resultSet.getBoolean("is_hastus_point"),
+                resultSet.getBoolean("is_via_point"),
+                Optional.ofNullable(resultSet.getString("via_names"))
+                        .map(viaNames -> jsonConverter.fromJson(viaNames, MultilingualString.class))
         );
     }
 }

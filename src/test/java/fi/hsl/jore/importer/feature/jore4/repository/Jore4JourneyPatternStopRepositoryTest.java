@@ -57,20 +57,23 @@ class Jore4JourneyPatternStopRepositoryTest {
     )
     class InsertJourneyPatternStopIntoDatabase {
 
+        private final UUID JOURNEY_PATTERN_ID = UUID.fromString("ec564137-f30c-4689-9322-4ef650768af3");
+        private static final int SCHEDULED_STOP_POINT_SEQUENCE = 1;
+        private final String SCHEDULED_STOP_POINT_LABEL  = "H1234";
         private static final boolean IS_USED_AS_TIMING_POINT = true;
         private static final boolean IS_VIA_POINT = true;
-        private final UUID JOURNEY_PATTERN_ID = UUID.fromString("ec564137-f30c-4689-9322-4ef650768af3");
-        private final String SCHEDULED_STOP_POINT_LABEL  = "H1234";
-        private static final int SCHEDULED_STOP_POINT_SEQUENCE = 1;
-        private final Optional<MultilingualString> VIA_POINT_NAMES = Optional.of(MultilingualString.of(Map.of("fi-FI", "Helsinki", "sv-FI", "Helsingfors")));
+        private final Optional<MultilingualString> VIA_POINT_NAMES = Optional.of(MultilingualString.of(Map.of(
+                "fi-FI", "Helsinki",
+                "sv-FI", "Helsingfors"
+        )));
 
         private final Jore4JourneyPatternStop INPUT = Jore4JourneyPatternStop.of(
+                JOURNEY_PATTERN_ID,
+                SCHEDULED_STOP_POINT_SEQUENCE,
+                SCHEDULED_STOP_POINT_LABEL,
                 IS_USED_AS_TIMING_POINT,
                 IS_VIA_POINT,
-                VIA_POINT_NAMES,
-                JOURNEY_PATTERN_ID,
-                SCHEDULED_STOP_POINT_LABEL,
-                SCHEDULED_STOP_POINT_SEQUENCE
+                VIA_POINT_NAMES
         );
 
         @Test
@@ -93,17 +96,6 @@ class Jore4JourneyPatternStopRepositoryTest {
         }
 
         @Test
-        @DisplayName("Should save a new journey pattern stop with the correct scheduled stop point id")
-        void shouldSaveNewJourneyPatternStopWithCorrectScheduledStopPointId() {
-            repository.insert(List.of(INPUT));
-
-            assertThat(targetTable)
-                    .row()
-                    .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_LABEL.getName())
-                    .isEqualTo(SCHEDULED_STOP_POINT_LABEL);
-        }
-
-        @Test
         @DisplayName("Should save a new journey pattern with the correct scheduled stop point sequence")
         void shouldSaveNewJourneyPatternWithCorrectScheduledStopPointSequence() {
             repository.insert(List.of(INPUT));
@@ -112,6 +104,17 @@ class Jore4JourneyPatternStopRepositoryTest {
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_SEQUENCE.getName())
                     .isEqualTo(SCHEDULED_STOP_POINT_SEQUENCE);
+        }
+
+        @Test
+        @DisplayName("Should save a new journey pattern stop with the correct scheduled stop point id")
+        void shouldSaveNewJourneyPatternStopWithCorrectScheduledStopPointId() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(targetTable)
+                    .row()
+                    .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_LABEL.getName())
+                    .isEqualTo(SCHEDULED_STOP_POINT_LABEL);
         }
 
         @Test
