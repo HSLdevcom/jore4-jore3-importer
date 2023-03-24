@@ -7,6 +7,7 @@ import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkTestRepository;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
+import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.RouteDirection;
 import fi.hsl.jore.importer.feature.network.route_direction.repository.IRouteDirectionTestRepository;
@@ -18,7 +19,7 @@ import fi.hsl.jore.importer.feature.network.route_stop_point.dto.RouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.repository.IRouteStopPointTestRepository;
 import io.vavr.Tuple;
 import io.vavr.Tuple4;
-import io.vavr.Tuple7;
+import io.vavr.Tuple8;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,16 +34,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 @ContextConfiguration(classes = JobConfig.class)
-@Sql(scripts = {
-        "/sql/jore3/drop_tables.sql",
-        "/sql/jore3/populate_nodes.sql",
-        "/sql/jore3/populate_links.sql",
-        "/sql/jore3/populate_lines.sql",
-        "/sql/jore3/populate_routes.sql",
-        "/sql/jore3/populate_route_directions.sql",
-        "/sql/jore3/populate_route_links.sql",
-        "/sql/jore3/populate_via_names.sql"
-},
+@Sql(
+        scripts = {
+                "/sql/jore3/drop_tables.sql",
+                "/sql/jore3/populate_nodes.sql",
+                "/sql/jore3/populate_links.sql",
+                "/sql/jore3/populate_lines.sql",
+                "/sql/jore3/populate_routes.sql",
+                "/sql/jore3/populate_route_directions.sql",
+                "/sql/jore3/populate_route_links.sql",
+                "/sql/jore3/populate_via_names.sql"
+        },
         config = @SqlConfig(dataSource = "sourceDataSource"))
 @Sql(scripts = "/sql/importer/drop_tables.sql")
 public class ImportRouteLinksStepTest extends BatchIntegrationTest {
@@ -96,25 +98,28 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
 
     // The external id of the route stop point
     // The order number of the route stop point
-    // The hastus point flag
+    // The Hastus point flag
+    // The regulated timing point status
     // The via point flag
     // and the timetable column (if any)
-    private static final List<Tuple7<ExternalId, Integer, Boolean, Boolean, String, String, Optional<Integer>>> ROUTE_STOP_POINTS = List.of(
-            Tuple.of(ExternalId.of("1337-c"),
-                    0,
-                    true,
-                    true,
-                    "Määränpää 2",
-                    "Mål 2",
-                    Optional.of(5)),
-            Tuple.of(ExternalId.of("1339-f"),
-                    1,
-                    true,
-                    false,
-                    null,
-                    null,
-                    Optional.of(7))
-    );
+    private static final List<Tuple8<ExternalId, Integer, Boolean, RegulatedTimingPointStatus, Boolean, String, String, Optional<Integer>>> ROUTE_STOP_POINTS =
+            List.of(Tuple.of(ExternalId.of("1337-c"),
+                             0,
+                             true,
+                             RegulatedTimingPointStatus.YES,
+                             true,
+                             "Määränpää 2",
+                             "Mål 2",
+                             Optional.of(5)),
+                    Tuple.of(ExternalId.of("1339-f"),
+                             1,
+                             true,
+                             RegulatedTimingPointStatus.UNKNOWN,
+                             false,
+                             null,
+                             null,
+                             Optional.of(7))
+            );
 
     // The external id of the route link
     // The order number of the route link
@@ -221,23 +226,27 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
                     stopPoint.orderNumber(),
                     is(expectedStopPointParams._2));
 
-            assertThat(String.format("stop point %s should have correct hastus point flag", externalId),
+            assertThat(String.format("stop point %s should have correct Hastus point flag", externalId),
                     stopPoint.hastusStopPoint(),
                     is(expectedStopPointParams._3));
 
+            assertThat(String.format("stop point %s should have correct regulated timing point status", externalId),
+                       stopPoint.regulatedTimingPointStatus(),
+                       is(expectedStopPointParams._4));
+
             assertThat(String.format("stop point %s should have correct via point flag", externalId),
                     stopPoint.viaPoint(),
-                    is(expectedStopPointParams._4));
+                    is(expectedStopPointParams._5));
 
-            if (expectedStopPointParams._5 != null) {
+            if (expectedStopPointParams._6 != null) {
                 final MultilingualString viaName = stopPoint.viaName().get();
                 assertThat(String.format("stop point %s should have correct Finnish via name", externalId),
                         JoreLocaleUtil.getI18nString(viaName, JoreLocaleUtil.FINNISH),
-                        is(expectedStopPointParams._5));
+                        is(expectedStopPointParams._6));
 
                 assertThat(String.format("stop point %s should have correct Swedish via name", externalId),
                         JoreLocaleUtil.getI18nString(viaName, JoreLocaleUtil.SWEDISH),
-                        is(expectedStopPointParams._6));
+                        is(expectedStopPointParams._7));
             }
             else {
                 assertThat("Stop point should not have via name",
@@ -248,7 +257,7 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
 
             assertThat(String.format("stop point %s should have correct timetable column", externalId),
                     stopPoint.timetableColumn(),
-                    is(expectedStopPointParams._7));
+                    is(expectedStopPointParams._8));
         });
     }
 

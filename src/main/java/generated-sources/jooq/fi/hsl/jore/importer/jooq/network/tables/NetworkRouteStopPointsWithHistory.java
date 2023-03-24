@@ -16,7 +16,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row9;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -96,12 +96,18 @@ public class NetworkRouteStopPointsWithHistory extends TableImpl<NetworkRouteSto
      */
     public final TableField<NetworkRouteStopPointsWithHistoryRecord, JSONB> NETWORK_ROUTE_STOP_POINT_VIA_NAME = createField(DSL.name("network_route_stop_point_via_name"), SQLDataType.JSONB, this, "");
 
+    /**
+     * The column
+     * <code>network.network_route_stop_points_with_history.network_route_stop_point_regulated_timing_point_status</code>.
+     */
+    public final TableField<NetworkRouteStopPointsWithHistoryRecord, Integer> NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS = createField(DSL.name("network_route_stop_point_regulated_timing_point_status"), SQLDataType.INTEGER, this, "");
+
     private NetworkRouteStopPointsWithHistory(Name alias, Table<NetworkRouteStopPointsWithHistoryRecord> aliased) {
         this(alias, aliased, null);
     }
 
     private NetworkRouteStopPointsWithHistory(Name alias, Table<NetworkRouteStopPointsWithHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_route_stop_points_with_history\" as  SELECT network_route_stop_points.network_route_point_id,\n    network_route_stop_points.network_route_stop_point_ext_id,\n    network_route_stop_points.network_route_stop_point_order,\n    network_route_stop_points.network_route_stop_point_hastus_point,\n    network_route_stop_points.network_route_stop_point_timetable_column,\n    network_route_stop_points.network_route_stop_point_sys_period,\n    network_route_stop_points.network_route_stop_point_via_point,\n    network_route_stop_points.network_route_stop_point_via_name\n   FROM network.network_route_stop_points\nUNION ALL\n SELECT network_route_stop_points_history.network_route_point_id,\n    network_route_stop_points_history.network_route_stop_point_ext_id,\n    network_route_stop_points_history.network_route_stop_point_order,\n    network_route_stop_points_history.network_route_stop_point_hastus_point,\n    network_route_stop_points_history.network_route_stop_point_timetable_column,\n    network_route_stop_points_history.network_route_stop_point_sys_period,\n    network_route_stop_points_history.network_route_stop_point_via_point,\n    network_route_stop_points_history.network_route_stop_point_via_name\n   FROM network.network_route_stop_points_history;"));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_route_stop_points_with_history\" as  SELECT network_route_stop_points.network_route_point_id,\n    network_route_stop_points.network_route_stop_point_ext_id,\n    network_route_stop_points.network_route_stop_point_order,\n    network_route_stop_points.network_route_stop_point_hastus_point,\n    network_route_stop_points.network_route_stop_point_timetable_column,\n    network_route_stop_points.network_route_stop_point_sys_period,\n    network_route_stop_points.network_route_stop_point_via_point,\n    network_route_stop_points.network_route_stop_point_via_name,\n    network_route_stop_points.network_route_stop_point_regulated_timing_point_status\n   FROM network.network_route_stop_points\nUNION ALL\n SELECT network_route_stop_points.network_route_point_id,\n    network_route_stop_points.network_route_stop_point_ext_id,\n    network_route_stop_points.network_route_stop_point_order,\n    network_route_stop_points.network_route_stop_point_hastus_point,\n    network_route_stop_points.network_route_stop_point_timetable_column,\n    network_route_stop_points.network_route_stop_point_sys_period,\n    network_route_stop_points.network_route_stop_point_via_point,\n    network_route_stop_points.network_route_stop_point_via_name,\n    network_route_stop_points.network_route_stop_point_regulated_timing_point_status\n   FROM network.network_route_stop_points;"));
     }
 
     /**
@@ -166,11 +172,11 @@ public class NetworkRouteStopPointsWithHistory extends TableImpl<NetworkRouteSto
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row9 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<UUID, String, Integer, Boolean, Integer, TimeRange, Boolean, JSONB> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row9<UUID, String, Integer, Boolean, Integer, TimeRange, Boolean, JSONB, Integer> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 }

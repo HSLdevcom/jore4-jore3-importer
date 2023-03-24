@@ -5,6 +5,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasSystemTime;
+import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.generated.RouteStopPointPK;
 import org.immutables.value.Value;
 
@@ -22,6 +23,7 @@ public interface RouteStopPoint
                              final ExternalId externalId,
                              final int orderNumber,
                              final boolean hastusStopPoint,
+                             final RegulatedTimingPointStatus regulatedTimingPointStatus,
                              final boolean viaPoint,
                              final Optional<MultilingualString> viaName,
                              final Optional<Integer> timetableColumn,
@@ -31,6 +33,7 @@ public interface RouteStopPoint
                                       .externalId(externalId)
                                       .orderNumber(orderNumber)
                                       .hastusStopPoint(hastusStopPoint)
+                                      .regulatedTimingPointStatus(regulatedTimingPointStatus)
                                       .viaPoint(viaPoint)
                                       .viaName(viaName)
                                       .timetableColumn(timetableColumn)

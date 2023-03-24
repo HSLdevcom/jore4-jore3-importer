@@ -52,16 +52,18 @@ public class RouteStopPointImportRepository
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_EXT_ID,
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_ORDER,
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT,
+                                                           STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS,
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT,
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_NAME,
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN)
-                                               .values((String) null, null, null, null, null, null));
+                                               .values((String) null, null, null, null, null, null, null));
 
         points.forEach(point -> {
             batch.bind(
                     point.externalId().value(),
                     point.orderNumber(),
                     point.hastusStopPoint(),
+                    point.regulatedTimingPointStatus().getValue(),
                     point.viaPoint(),
                     point.viaName().map(jsonbConverter::asJson).orElse(null),
                     point.timetableColumn().orElse(null)
@@ -91,6 +93,8 @@ public class RouteStopPointImportRepository
                       STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_ORDER)
                  .set(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT,
                       STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT)
+                 .set(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS,
+                      STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS)
                  .set(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT,
                       STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT)
                  .set(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_NAME,
@@ -105,6 +109,7 @@ public class RouteStopPointImportRepository
                  .and(
                          (TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_ORDER.ne(STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_ORDER))
                                  .or(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT.ne(STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT))
+                                 .or(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS.ne(STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS))
                                  .or(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT.ne(STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT))
 
                                  // Use distinctFrom for nullable columns.
@@ -124,6 +129,7 @@ public class RouteStopPointImportRepository
                           TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_EXT_ID,
                           TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_ORDER,
                           TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT,
+                          TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS,
                           TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT,
                           TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_NAME,
                           TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN)
@@ -131,6 +137,7 @@ public class RouteStopPointImportRepository
                                    STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_EXT_ID,
                                    STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_ORDER,
                                    STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT,
+                                   STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS,
                                    STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT,
                                    STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_NAME,
                                    STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN)

@@ -3,6 +3,7 @@ package fi.hsl.jore.importer.feature.network.route_stop_point.repository;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
+import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.PersistableRouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.RouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.generated.RouteStopPointPK;
@@ -49,6 +50,7 @@ public class RouteStopPointRepository
         r.setNetworkRouteStopPointExtId(point.externalId().value());
         r.setNetworkRouteStopPointOrder(point.orderNumber());
         r.setNetworkRouteStopPointHastusPoint(point.hastusStopPoint());
+        r.setNetworkRouteStopPointRegulatedTimingPointStatus(point.regulatedTimingPointStatus().getValue());
         r.setNetworkRouteStopPointTimetableColumn(point.timetableColumn().orElse(null));
 
         r.store();
@@ -80,6 +82,7 @@ public class RouteStopPointRepository
         r.setNetworkRouteStopPointExtId(point.externalId().value());
         r.setNetworkRouteStopPointOrder(point.orderNumber());
         r.setNetworkRouteStopPointHastusPoint(point.hastusStopPoint());
+        r.setNetworkRouteStopPointRegulatedTimingPointStatus(point.regulatedTimingPointStatus().getValue());
         r.setNetworkRouteStopPointTimetableColumn(point.timetableColumn().orElse(null));
 
         r.store();
@@ -184,6 +187,8 @@ public class RouteStopPointRepository
                 ExternalId.of(record.getNetworkRouteStopPointExtId()),
                 record.getNetworkRouteStopPointOrder(),
                 record.getNetworkRouteStopPointHastusPoint(),
+                // should never throw exception because of a database check constraint
+                RegulatedTimingPointStatus.of(record.getNetworkRouteStopPointRegulatedTimingPointStatus()).orElseThrow(),
                 record.getNetworkRouteStopPointViaPoint(),
                 Optional.ofNullable(converter.fromJson(record.getNetworkRouteStopPointViaName(), MultilingualString.class)),
                 Optional.ofNullable(record.getNetworkRouteStopPointTimetableColumn()),
@@ -197,6 +202,8 @@ public class RouteStopPointRepository
                 ExternalId.of(record.getNetworkRouteStopPointExtId()),
                 record.getNetworkRouteStopPointOrder(),
                 record.getNetworkRouteStopPointHastusPoint(),
+                // should never throw exception because of a database check constraint
+                RegulatedTimingPointStatus.of(record.getNetworkRouteStopPointRegulatedTimingPointStatus()).orElseThrow(),
                 record.getNetworkRouteStopPointViaPoint(),
                 Optional.ofNullable(converter.fromJson(record.getNetworkRouteStopPointViaName(), MultilingualString.class)),
                 Optional.ofNullable(record.getNetworkRouteStopPointTimetableColumn()),

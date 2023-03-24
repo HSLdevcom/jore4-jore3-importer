@@ -13,7 +13,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -81,6 +81,12 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
      * <code>network.network_route_stop_points_staging.network_route_stop_point_via_name</code>.
      */
     public final TableField<NetworkRouteStopPointsStagingRecord, JSONB> NETWORK_ROUTE_STOP_POINT_VIA_NAME = createField(DSL.name("network_route_stop_point_via_name"), SQLDataType.JSONB, this, "");
+
+    /**
+     * The column
+     * <code>network.network_route_stop_points_staging.network_route_stop_point_regulated_timing_point_status</code>.
+     */
+    public final TableField<NetworkRouteStopPointsStagingRecord, Integer> NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS = createField(DSL.name("network_route_stop_point_regulated_timing_point_status"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("'-9999'::integer", SQLDataType.INTEGER)), this, "");
 
     private NetworkRouteStopPointsStaging(Name alias, Table<NetworkRouteStopPointsStagingRecord> aliased) {
         this(alias, aliased, null);
@@ -155,11 +161,11 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<String, Integer, Boolean, Integer, Boolean, JSONB> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<String, Integer, Boolean, Integer, Boolean, JSONB, Integer> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

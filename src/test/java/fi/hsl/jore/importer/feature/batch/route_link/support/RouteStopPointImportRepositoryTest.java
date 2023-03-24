@@ -3,6 +3,7 @@ package fi.hsl.jore.importer.feature.batch.route_link.support;
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
+import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.RouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.generated.RouteStopPointPK;
@@ -120,6 +121,7 @@ class RouteStopPointImportRepositoryTest {
             private final String EXPECTED_NETWORK_ROUTE_STOP_POINT_EXT_ID = "1234528-1113227";
             private final int EXPECTED_NETWORK_ROUTE_STOP_POINT_ORDER_NUMBER = 6;
             private final boolean EXPECTED_NETWORK_ROUTE_STOP_POINT_HASTUS_POINT = true;
+            private final RegulatedTimingPointStatus EXPECTED_NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS = RegulatedTimingPointStatus.YES;
             private final boolean EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_POINT = true;
             private final String EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_NAME_FINNISH = "ViaSuomi";
             private final String EXPECTED_NETWORK_ROUTE_STOP_POINT_VIA_NAME_SWEDISH = "ViaSverige";
@@ -211,6 +213,14 @@ class RouteStopPointImportRepositoryTest {
                                     inserted.hastusStopPoint()
                             )
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_STOP_POINT_HASTUS_POINT);
+
+                    softAssertions.assertThat(inserted.regulatedTimingPointStatus())
+                                  .overridingErrorMessage(
+                                          "Expected the network route stop point regulated timing point status to be: %s but was: %s",
+                                          EXPECTED_NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS,
+                                          inserted.regulatedTimingPointStatus()
+                                  )
+                                  .isEqualTo(EXPECTED_NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS);
 
                     softAssertions.assertThat(inserted.viaPoint())
                             .overridingErrorMessage(
@@ -324,6 +334,14 @@ class RouteStopPointImportRepositoryTest {
                                     updated.hastusStopPoint()
                             )
                             .isEqualTo(EXPECTED_NETWORK_ROUTE_STOP_POINT_HASTUS_POINT);
+
+                    softAssertions.assertThat(updated.regulatedTimingPointStatus())
+                                  .overridingErrorMessage(
+                                          "Expected the network route stop point regulated timing point status to be: %s but was: %s",
+                                          EXPECTED_NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS,
+                                          updated.regulatedTimingPointStatus()
+                                  )
+                                  .isEqualTo(EXPECTED_NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS);
 
                     softAssertions.assertThat(updated.viaPoint())
                             .overridingErrorMessage(

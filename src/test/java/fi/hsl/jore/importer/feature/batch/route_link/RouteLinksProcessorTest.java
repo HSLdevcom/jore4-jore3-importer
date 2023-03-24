@@ -54,7 +54,7 @@ public class RouteLinksProcessorTest {
                 NodeType.BUS_STOP,
                 RegulatedTimingPointStatus.NO,
                 StopPointPurpose.BOARDING,
-                false, // not explicitly a hastus point
+                false, // not explicitly a Hastus point
                 true, // include in timetable,
                 true, // via point,
                 Optional.of(VIA_NAME),
@@ -72,7 +72,8 @@ public class RouteLinksProcessorTest {
         final Vector<Jore3RoutePoint> routePoints = result.routePoints();
 
         assertThat(routePoints,
-                is(Vector.of(ImmutableJore3RoutePoint.builder()
+                is(Vector.of(
+                        ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
                                 .externalId(ExternalId.of("1234-a"))
                                 .node(ExternalId.of("a"))
@@ -88,10 +89,12 @@ public class RouteLinksProcessorTest {
         final Vector<Jore3RouteStopPoint> stopPoints = result.stopPoints();
 
         assertThat(stopPoints,
-                is(Vector.of(ImmutableJore3RouteStopPoint.builder()
+                is(Vector.of(
+                        ImmutableJore3RouteStopPoint.builder()
                                 .orderNumber(0)
                                 .externalId(ExternalId.of("1234-a"))
                                 .hastusStopPoint(true)
+                                .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                                 .viaPoint(true)
                                 .viaName(JoreLocaleUtil.createMultilingualString(
                                         VIA_NAME,
@@ -103,6 +106,7 @@ public class RouteLinksProcessorTest {
                                 .orderNumber(1)
                                 .externalId(ExternalId.of("1234-b"))
                                 .hastusStopPoint(true)
+                                .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                                 .viaPoint(true)
                                 .viaName(JoreLocaleUtil.createMultilingualString(
                                         VIA_NAME,
@@ -113,7 +117,7 @@ public class RouteLinksProcessorTest {
     }
 
     @Test
-    public void givenLinkBetweenABusStopAndACrossroad_thenReturnRoutePoints_andSingleStopPoint() throws Exception {
+    public void givenLinkBetweenABusStopAndACrossroad_thenReturnRoutePoints_andSingleStopPoint() {
         // (A pathological) route consists of a single link between a bus stop and a crossroad junction
         final JrRouteLink link = JrRouteLink.of(
                 RouteLinkId.of(1234),
@@ -127,7 +131,7 @@ public class RouteLinksProcessorTest {
                 NodeType.BUS_STOP,
                 RegulatedTimingPointStatus.NO,
                 StopPointPurpose.BOARDING,
-                false, // not explicitly a hastus point
+                false, // not explicitly a Hastus point
                 true, // include in timetable
                 true, // via point
                 Optional.of(VIA_NAME),
@@ -145,7 +149,8 @@ public class RouteLinksProcessorTest {
         final Vector<Jore3RoutePoint> routePoints = result.routePoints();
 
         assertThat(routePoints,
-                is(Vector.of(ImmutableJore3RoutePoint.builder()
+                is(Vector.of(
+                        ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
                                 .externalId(ExternalId.of("1234-a"))
                                 .node(ExternalId.of("a"))
@@ -165,6 +170,7 @@ public class RouteLinksProcessorTest {
                         .orderNumber(0)
                         .externalId(ExternalId.of("1234-a"))
                         .hastusStopPoint(true)
+                        .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                         .viaPoint(true)
                         .viaName(JoreLocaleUtil.createMultilingualString(
                                 VIA_NAME,
@@ -189,7 +195,7 @@ public class RouteLinksProcessorTest {
                 NodeType.CROSSROADS,
                 RegulatedTimingPointStatus.NO,
                 StopPointPurpose.BOARDING,
-                false, // not hastus point
+                false, // not Hastus point
                 false, // don't include in timetable
                 true, // via point
                 Optional.of(VIA_NAME),
@@ -207,7 +213,8 @@ public class RouteLinksProcessorTest {
         final Vector<Jore3RoutePoint> routePoints = result.routePoints();
 
         assertThat(routePoints,
-                is(Vector.of(ImmutableJore3RoutePoint.builder()
+                is(Vector.of(
+                        ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
                                 .externalId(ExternalId.of("1234-a"))
                                 .node(ExternalId.of("a"))
@@ -237,10 +244,12 @@ public class RouteLinksProcessorTest {
         final NodeId nodeC = NodeId.of("c");
         // Node D is a bus stop, but not in use
         final NodeId nodeD = NodeId.of("d");
-        // Node E is a crossroads junction
+        // Node E is a bus stop as well as a regulated timing point (with load time)
         final NodeId nodeE = NodeId.of("e");
-        // Node F is a bus stop
+        // Node F is a crossroads junction
         final NodeId nodeF = NodeId.of("f");
+        // Node G is a bus stop
+        final NodeId nodeG = NodeId.of("g");
 
         final Vector<JrRouteLink> links = Vector.of(
                 // A->B
@@ -256,7 +265,7 @@ public class RouteLinksProcessorTest {
                         NodeType.BUS_STOP,
                         RegulatedTimingPointStatus.NO,
                         StopPointPurpose.BOARDING,
-                        true, // is a hastus point
+                        true, // is a Hastus point
                         true, // include in timetable
                         true, // via point
                         Optional.of(VIA_NAME),
@@ -276,7 +285,7 @@ public class RouteLinksProcessorTest {
                         NodeType.CROSSROADS,
                         RegulatedTimingPointStatus.NO,
                         StopPointPurpose.UNKNOWN,
-                        false, // not a hastus point
+                        false, // not a Hastus point
                         false, // do not include in timetable
                         true, // via point
                         Optional.of(VIA_NAME),
@@ -296,7 +305,7 @@ public class RouteLinksProcessorTest {
                         NodeType.CROSSROADS,
                         RegulatedTimingPointStatus.NO,
                         StopPointPurpose.UNKNOWN,
-                        false, // not a hastus point
+                        false, // not a Hastus point
                         false, // do not include in timetable,
                         true, // via point
                         Optional.of(VIA_NAME),
@@ -312,11 +321,11 @@ public class RouteLinksProcessorTest {
                         VALID_FROM,
                         TRANSIT,
                         nodeD,
-                        nodeE,
+                        nodeF,
                         NodeType.BUS_STOP_NOT_IN_USE,
                         RegulatedTimingPointStatus.NO,
                         StopPointPurpose.NOT_IN_USE,
-                        false, // not a hastus point
+                        false, // not a Hastus point
                         false, // do not include in timetable
                         true, // via point
                         Optional.of(VIA_NAME),
@@ -333,10 +342,30 @@ public class RouteLinksProcessorTest {
                         TRANSIT,
                         nodeE,
                         nodeF,
+                        NodeType.BUS_STOP,
+                        RegulatedTimingPointStatus.YES_LOAD_TIME,
+                        StopPointPurpose.BOARDING,
+                        true, // is a Hastus point
+                        true, // include in timetable
+                        false, // via point
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty()
+                ), // The column number isn't given because link isn't included in timetable
+                // F->G
+                JrRouteLink.of(
+                        RouteLinkId.of(10005),
+                        6,
+                        ROUTE,
+                        DIR,
+                        VALID_FROM,
+                        TRANSIT,
+                        nodeF,
+                        nodeG,
                         NodeType.CROSSROADS,
                         RegulatedTimingPointStatus.NO,
                         StopPointPurpose.UNKNOWN,
-                        false, // not a hastus point
+                        false, // not a Hastus point
                         false, // do not include in timetable
                         false, // via point,
                         Optional.empty(),
@@ -357,7 +386,8 @@ public class RouteLinksProcessorTest {
         final Vector<Jore3RoutePoint> routePoints = result.routePoints();
 
         assertThat(routePoints,
-                is(Vector.of(ImmutableJore3RoutePoint.builder()
+                is(Vector.of(
+                        ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
                                 .externalId(ExternalId.of("10000-a"))
                                 .node(ExternalId.of("a"))
@@ -387,11 +417,17 @@ public class RouteLinksProcessorTest {
                                 .node(ExternalId.of("e"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build(),
-                        // Note how the last route point "borrows" the link id from the final link
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(5)
-                                .externalId(ExternalId.of("10004-f"))
+                                .externalId(ExternalId.of("10005-f"))
                                 .node(ExternalId.of("f"))
+                                .routeDirection(ExternalId.of("1001-1-20200101"))
+                                .build(),
+                        // Note how the last route point "borrows" the link id from the final link
+                        ImmutableJore3RoutePoint.builder()
+                                .orderNumber(6)
+                                .externalId(ExternalId.of("10005-g"))
+                                .node(ExternalId.of("g"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build()
                 )));
@@ -399,10 +435,12 @@ public class RouteLinksProcessorTest {
         final Vector<Jore3RouteStopPoint> stopPoints = result.stopPoints();
 
         assertThat(stopPoints,
-                is(Vector.of(ImmutableJore3RouteStopPoint.builder()
+                is(Vector.of(
+                        ImmutableJore3RouteStopPoint.builder()
                                 .orderNumber(0)
                                 .externalId(ExternalId.of("10000-a"))
                                 .hastusStopPoint(true)
+                                .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                                 .viaPoint(true)
                                 .viaName(JoreLocaleUtil.createMultilingualString(
                                         VIA_NAME,
@@ -413,8 +451,16 @@ public class RouteLinksProcessorTest {
                         // Note how node D is absent, as it's a BUS_STOP_NOT_IN_USE
                         ImmutableJore3RouteStopPoint.builder()
                                 .orderNumber(1)
-                                .externalId(ExternalId.of("10004-f"))
+                                .externalId(ExternalId.of("10004-e"))
                                 .hastusStopPoint(true)
+                                .regulatedTimingPointStatus(RegulatedTimingPointStatus.YES_LOAD_TIME)
+                                .viaPoint(false)
+                                .build(),
+                        ImmutableJore3RouteStopPoint.builder()
+                                .orderNumber(2)
+                                .externalId(ExternalId.of("10005-g"))
+                                .hastusStopPoint(true)
+                                .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                                 .viaPoint(false)
                                 .timetableColumn(7)
                                 .build()
