@@ -103,7 +103,7 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
             Tuple.of(ExternalId.of("1337-c"),
                     0,
                     true,
-                    false,
+                    true,
                     "Määränpää 2",
                     "Mål 2",
                     Optional.of(5)),
