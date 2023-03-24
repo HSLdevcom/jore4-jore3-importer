@@ -17,6 +17,10 @@ public class JsonbConverter implements IJsonbConverter {
     }
 
     public JSONB asJson(final Object obj) {
+        if (obj == null) {
+            return null;
+        }
+
         try {
             return JSONB.jsonb(objectMapper.writeValueAsString(obj));
         } catch (final JsonProcessingException e) {
@@ -26,7 +30,7 @@ public class JsonbConverter implements IJsonbConverter {
 
     @Override
     public <T> T fromJson(final JSONB json, final Class<T> clazz) {
-        return fromJson(json.data(), clazz);
+        return json != null ? fromJson(json.data(), clazz) : null;
     }
 
     @Override
