@@ -55,17 +55,18 @@ public class RouteStopPointImportRepository
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT,
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_NAME,
                                                            STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN)
-                                               .values((String) null, null, null,null, null, null));
+                                               .values((String) null, null, null, null, null, null));
 
-        points.forEach(point ->
-                               batch.bind(
-                                       point.externalId().value(),
-                                       point.orderNumber(),
-                                       point.hastusStopPoint(),
-                                       point.viaPoint(),
-                                       jsonbConverter.asJson(point.viaName()),
-                                       point.timetableColumn().orElse(null)
-                               ));
+        points.forEach(point -> {
+            batch.bind(
+                    point.externalId().value(),
+                    point.orderNumber(),
+                    point.hastusStopPoint(),
+                    point.viaPoint(),
+                    point.viaName().map(jsonbConverter::asJson).orElse(null),
+                    point.timetableColumn().orElse(null)
+            );
+        });
 
         batch.execute();
     }
@@ -97,14 +98,17 @@ public class RouteStopPointImportRepository
                  .set(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN,
                       STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN)
                  .from(STAGING_TABLE)
-                 // Find source rows..
+                 // Find source rows...
                  .where(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_EXT_ID
                                 .eq(STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_EXT_ID))
-                 // .. with updated fields
+                 // ...with updated fields
                  .and(
                          (TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_ORDER.ne(STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_ORDER))
                                  .or(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT.ne(STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_HASTUS_POINT))
-                                 // timetable may be null => use distinct from
+                                 .or(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT.ne(STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_POINT))
+
+                                 // Use distinctFrom for nullable columns.
+                                 .or(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_NAME.isDistinctFrom(STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_VIA_NAME))
                                  .or(TARGET_TABLE.NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN.isDistinctFrom(STAGING_TABLE.NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN))
                  )
                  .returningResult(TARGET_TABLE.NETWORK_ROUTE_POINT_ID)
