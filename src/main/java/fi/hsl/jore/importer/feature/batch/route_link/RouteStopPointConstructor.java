@@ -21,34 +21,34 @@ public final class RouteStopPointConstructor {
 
     private static Optional<Integer> timetableColumn(final boolean includeInTimetable,
                                                      final Optional<Integer> timetableColumn) {
-        return includeInTimetable ?
-                timetableColumn :
-                Optional.empty();
+
+        return includeInTimetable ? timetableColumn : Optional.empty();
     }
 
     private static Jore3RouteStopPoint fromLink(final JrRouteLink link,
                                                 final int index) {
         return Jore3RouteStopPoint.of(ExternalIdUtil.forRouteLinkStartNode(link),
-                                           index,
-                                           link.hastusStopPoint(),
-                                           link.viaPoint(),
-                                           buildViaName(link),
-                                           timetableColumn(link.includeInTimetable(),
-                                                           link.timetableColumn()));
+                                      index,
+                                      link.hastusStopPoint(),
+                                      link.viaPoint(),
+                                      buildViaName(link),
+                                      timetableColumn(link.includeInTimetable(),
+                                                      link.timetableColumn()));
     }
 
     private static Jore3RouteStopPoint fromLastLink(final JrRouteLink link,
                                                     final int index,
                                                     final LastLinkAttributes attributes) {
-        // Final point is always a hastus point
+        // Final point is always a Hastus point.
         final boolean hastusPoint = true;
+
         return Jore3RouteStopPoint.of(ExternalIdUtil.forRouteLinkEndNode(link),
-                                           index,
-                                           hastusPoint,
-                                           link.viaPoint(),
-                                           buildViaName(link),
-                                           timetableColumn(attributes.includeInTimetable(),
-                                                           attributes.timetableColumn()));
+                                      index,
+                                      hastusPoint,
+                                      link.viaPoint(),
+                                      buildViaName(link),
+                                      timetableColumn(attributes.includeInTimetable(),
+                                                      attributes.timetableColumn()));
     }
 
     private static Optional<MultilingualString> buildViaName(final JrRouteLink link) {
@@ -67,10 +67,10 @@ public final class RouteStopPointConstructor {
     private static final Function<StopPointContext, StopPointContext> ADD_STOP_POINTS_FROM_STARTING_NODES =
             ctx -> {
                 final Vector<Jore3RouteStopPoint> points = ctx.linksAndAttributes()
-                                                                   .routeLinks()
-                                                                   .filter(link -> link.startNodeType() == NodeType.BUS_STOP)
-                                                                   .zipWithIndex()
-                                                                   .map(indexAndLink -> fromLink(indexAndLink._1, indexAndLink._2));
+                                                              .routeLinks()
+                                                              .filter(link -> link.startNodeType() == NodeType.BUS_STOP)
+                                                              .zipWithIndex()
+                                                              .map(indexAndLink -> fromLink(indexAndLink._1, indexAndLink._2));
                 return ctx.withStopPoints(ctx.stopPoints()
                                              .appendAll(points));
             };
@@ -81,13 +81,14 @@ public final class RouteStopPointConstructor {
 
                 if (attributes.nodeType() == NodeType.BUS_STOP) {
                     final int lastIndex = ctx.stopPoints().size();
+
                     return ctx
                             .withStopPoints(ctx.stopPoints()
                                                .append(fromLastLink(ctx.linksAndAttributes().routeLinks().last(),
                                                                     lastIndex,
                                                                     attributes)));
                 } else {
-                    // Special case: The last route point is not a bus stop
+                    // Special case: The last route point is not a stop point
                     return ctx;
                 }
             };
