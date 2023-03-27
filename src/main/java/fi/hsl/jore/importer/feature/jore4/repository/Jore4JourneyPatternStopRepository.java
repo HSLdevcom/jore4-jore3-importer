@@ -47,7 +47,7 @@ public class Jore4JourneyPatternStopRepository implements IJore4JourneyPatternSt
                     journeyPatternStop.journeyPatternId(),
                     journeyPatternStop.scheduledStopPointLabel(),
                     journeyPatternStop.scheduledStopPointSequence(),
-                    journeyPatternStop.isTimingPoint(),
+                    journeyPatternStop.isUsedAsTimingPoint(),
                     journeyPatternStop.isViaPoint(),
                     // Use the existing via name for both normal and short names
                     journeyPatternStop.viaPointNames().map(jsonbConverter::asJson).orElse(null),

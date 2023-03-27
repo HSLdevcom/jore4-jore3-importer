@@ -19,7 +19,7 @@ class JourneyPatternStopExportProcessorTest {
     private static final UUID JOURNEY_PATTERN_JORE4_ID = UUID.fromString("55171cba-d8b7-4d6a-bbd4-cec0501c88f8");
     private static final int ORDER_NUMBER = 1;
     private static final String SCHEDULED_STOP_POINT_LABEL = "stop1";
-    private static final boolean IS_HASTUS_POINT = true;
+    private static final boolean IS_USED_AS_TIMING_POINT = true;
     private static final boolean IS_VIA_POINT = true;
     private static final Map<Locale, String> VIA_POINT_NAME_MAP = Map.of(
             JoreLocaleUtil.FINNISH, "ViaSuomi",
@@ -31,7 +31,7 @@ class JourneyPatternStopExportProcessorTest {
             JOURNEY_PATTERN_JORE4_ID,
             ORDER_NUMBER,
             SCHEDULED_STOP_POINT_LABEL,
-            IS_HASTUS_POINT,
+            IS_USED_AS_TIMING_POINT,
             IS_VIA_POINT,
             VIA_POINT_NAMES
     );
@@ -60,15 +60,15 @@ class JourneyPatternStopExportProcessorTest {
     }
 
     @Test
-    @DisplayName("Should return a journey pattern stop with the correct timing point information")
-    void shouldReturnJourneyPatternStopWithCorrectTimingPointInformation() throws Exception {
+    @DisplayName("Should return a journey pattern stop with the correct is-used-as-timing-point information")
+    void shouldReturnJourneyPatternStopWithCorrectIsUsedAsTimingPointInformation() throws Exception {
         final Jore4JourneyPatternStop output = processor.process(INPUT);
-        assertThat(output.isTimingPoint()).isEqualTo(IS_HASTUS_POINT);
+        assertThat(output.isUsedAsTimingPoint()).isEqualTo(IS_USED_AS_TIMING_POINT);
     }
 
     @Test
-    @DisplayName("Should return a journey pattern stop with the correct via point information")
-    void shouldReturnJourneyPatternStopWithCorrectViaPointInformation() throws Exception {
+    @DisplayName("Should return a journey pattern stop with the correct is-via-point information")
+    void shouldReturnJourneyPatternStopWithCorrectIsViaPointInformation() throws Exception {
         final Jore4JourneyPatternStop output = processor.process(INPUT);
         assertThat(output.isViaPoint()).isEqualTo(IS_VIA_POINT);
     }

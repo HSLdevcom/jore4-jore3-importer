@@ -30,7 +30,7 @@ public class JourneyPatternStopExportMapper implements RowMapper<ImporterJourney
                 UUID.fromString(resultSet.getString("journey_pattern_jore4_id")),
                 resultSet.getInt("order_number"),
                 resultSet.getString("short_id"),
-                resultSet.getBoolean("is_hastus_point"),
+                resultSet.getBoolean("is_used_as_timing_point"),
                 resultSet.getBoolean("is_via_point"),
                 Optional.ofNullable(resultSet.getString("via_names"))
                         .map(viaNames -> jsonConverter.fromJson(viaNames, MultilingualString.class))

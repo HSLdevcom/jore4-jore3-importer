@@ -72,12 +72,12 @@ class JourneyPatternStopExportReaderTest {
 
         private final String FIRST_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H1234";
         private static final int FIRST_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 1;
-        private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_HASTUS_POINT = false;
+        private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT = false;
         private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_VIA_POINT = false;
 
         private final String SECOND_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H4321";
         private static final int SECOND_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 2;
-        private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_HASTUS_POINT = true;
+        private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT = true;
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_VIA_POINT = true;
         private final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_FINNISH = "ViaSuomi";
         private final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_SWEDISH = "ViaSverige";
@@ -96,9 +96,9 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(first.scheduledStopPointJore4Label())
                     .as("scheduledStopPointJore4Label")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_JORE4_LABEL);
-            softAssertions.assertThat(first.isHastusPoint())
-                    .as("isHastusPoint")
-                    .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_IS_HASTUS_POINT);
+            softAssertions.assertThat(first.isUsedAsTimingPoint())
+                    .as("isUsedAsTimingPoint")
+                    .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT);
             softAssertions.assertThat(first.isViaPoint())
                     .as("isViaPoint")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_IS_VIA_POINT);
@@ -124,9 +124,9 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(second.scheduledStopPointJore4Label())
                     .as("scheduledStopPointJore4Label")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_JORE4_LABEL);
-            softAssertions.assertThat(second.isHastusPoint())
-                    .as("isHastusPoint")
-                    .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_IS_HASTUS_POINT);
+            softAssertions.assertThat(second.isUsedAsTimingPoint())
+                    .as("isUsedAsTimingPoint")
+                    .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT);
             softAssertions.assertThat(second.isViaPoint())
                     .as("isViaPoint")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_IS_VIA_POINT);

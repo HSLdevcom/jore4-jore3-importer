@@ -19,7 +19,7 @@ public interface ImporterJourneyPatternStop {
 
     String scheduledStopPointJore4Label();
 
-    boolean isHastusPoint();
+    boolean isUsedAsTimingPoint();
 
     boolean isViaPoint();
 
@@ -28,7 +28,7 @@ public interface ImporterJourneyPatternStop {
     static ImporterJourneyPatternStop of(final UUID journeyPatternJore4Id,
                                          final int orderNumber,
                                          final String scheduledStopPointJore4Label,
-                                         final boolean isHastusPoint,
+                                         final boolean isUsedAsTimingPoint,
                                          final boolean isViaPoint,
                                          final Optional<MultilingualString> viaPointNames) {
         return ImmutableImporterJourneyPatternStop
@@ -36,7 +36,7 @@ public interface ImporterJourneyPatternStop {
                 .journeyPatternJore4Id(journeyPatternJore4Id)
                 .orderNumber(orderNumber)
                 .scheduledStopPointJore4Label(scheduledStopPointJore4Label)
-                .isHastusPoint(isHastusPoint)
+                .isUsedAsTimingPoint(isUsedAsTimingPoint)
                 .isViaPoint(isViaPoint)
                 .viaPointNames(viaPointNames)
                 .build();

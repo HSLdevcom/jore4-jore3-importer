@@ -118,8 +118,8 @@ class Jore4JourneyPatternStopRepositoryTest {
         }
 
         @Test
-        @DisplayName("Should save a new journey pattern with the correct timing point information")
-        void shouldSaveNewJourneyPatternWithCorrectTimingPointInformation() {
+        @DisplayName("Should save a new journey pattern with the correct is-used-as-timing-point information")
+        void shouldSaveNewJourneyPatternWithCorrectIsUsedAsTimingPointInformation() {
             repository.insert(List.of(INPUT));
 
             assertThat(targetTable)
@@ -129,8 +129,8 @@ class Jore4JourneyPatternStopRepositoryTest {
         }
 
         @Test
-        @DisplayName("Should save a new journey pattern with the correct via point information")
-        void shouldSaveNewJourneyPatternWithCorrectViaPointInformation() {
+        @DisplayName("Should save a new journey pattern with the correct is-via-point information")
+        void shouldSaveNewJourneyPatternWithCorrectIsViaPointInformation() {
             repository.insert(List.of(INPUT));
 
             assertThat(targetTable)

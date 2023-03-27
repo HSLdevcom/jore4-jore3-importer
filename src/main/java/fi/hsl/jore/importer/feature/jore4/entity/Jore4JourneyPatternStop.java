@@ -19,7 +19,7 @@ public interface Jore4JourneyPatternStop {
 
     String scheduledStopPointLabel();
 
-    boolean isTimingPoint();
+    boolean isUsedAsTimingPoint();
 
     boolean isViaPoint();
 
@@ -28,7 +28,7 @@ public interface Jore4JourneyPatternStop {
     static Jore4JourneyPatternStop of(final UUID journeyPatternId,
                                       final int scheduledStopPointSequence,
                                       final String scheduledStopPointLabel,
-                                      final boolean isTimingPoint,
+                                      final boolean isUsedAsTimingPoint,
                                       final boolean isViaPoint,
                                       final Optional<MultilingualString> viaPointNames) {
 
@@ -37,7 +37,7 @@ public interface Jore4JourneyPatternStop {
                 .journeyPatternId(journeyPatternId)
                 .scheduledStopPointSequence(scheduledStopPointSequence)
                 .scheduledStopPointLabel(scheduledStopPointLabel)
-                .isTimingPoint(isTimingPoint)
+                .isUsedAsTimingPoint(isUsedAsTimingPoint)
                 .isViaPoint(isViaPoint)
                 .viaPointNames(viaPointNames)
                 .build();

@@ -24,7 +24,7 @@ public class JourneyPatternStopExportProcessor implements ItemProcessor<Importer
                 input.journeyPatternJore4Id(),
                 input.orderNumber(),
                 input.scheduledStopPointJore4Label(),
-                input.isHastusPoint(),
+                input.isUsedAsTimingPoint(),
                 input.isViaPoint(),
                 input.viaPointNames()
         );
