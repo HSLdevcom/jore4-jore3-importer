@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.network.route.dto;
 
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
+import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import org.immutables.value.Value;
 
 import java.util.Optional;
@@ -25,6 +26,8 @@ public interface ImporterJourneyPatternStop {
 
     Optional<String> timingPlaceId();
 
+    RegulatedTimingPointStatus regulatedTimingPointStatus();
+
     boolean isViaPoint();
 
     Optional<MultilingualString> viaPointNames();
@@ -35,6 +38,7 @@ public interface ImporterJourneyPatternStop {
                                          final String scheduledStopPointJore4Label,
                                          final boolean isUsedAsTimingPoint,
                                          final Optional<String> timingPlaceId,
+                                         final RegulatedTimingPointStatus regulatedTimingPointStatus,
                                          final boolean isViaPoint,
                                          final Optional<MultilingualString> viaPointNames) {
         return ImmutableImporterJourneyPatternStop
@@ -45,6 +49,7 @@ public interface ImporterJourneyPatternStop {
                 .scheduledStopPointJore4Label(scheduledStopPointJore4Label)
                 .isUsedAsTimingPoint(isUsedAsTimingPoint)
                 .timingPlaceId(timingPlaceId)
+                .regulatedTimingPointStatus(regulatedTimingPointStatus)
                 .isViaPoint(isViaPoint)
                 .viaPointNames(viaPointNames)
                 .build();

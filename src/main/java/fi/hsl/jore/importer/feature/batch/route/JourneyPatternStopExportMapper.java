@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
+import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPatternStop;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -33,6 +34,9 @@ public class JourneyPatternStopExportMapper implements RowMapper<ImporterJourney
                 resultSet.getString("short_id"),
                 resultSet.getBoolean("is_used_as_timing_point"),
                 Optional.ofNullable(resultSet.getString("timing_place_id")),
+                // should never throw exception because of a database check constraint
+                RegulatedTimingPointStatus.of(resultSet.getInt("regulated_timing_point_status"))
+                                          .orElseThrow(),
                 resultSet.getBoolean("is_via_point"),
                 Optional.ofNullable(resultSet.getString("via_names"))
                         .map(viaNames -> jsonConverter.fromJson(viaNames, MultilingualString.class))

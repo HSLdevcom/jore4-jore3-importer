@@ -37,10 +37,12 @@ public class Jore4JourneyPatternStopRepository implements IJore4JourneyPatternSt
                     SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_LABEL,
                     SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_SEQUENCE,
                     SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_USED_AS_TIMING_POINT,
+                    SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_REGULATED_TIMING_POINT,
+                    SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_LOADING_TIME_ALLOWED,
                     SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_VIA_POINT,
                     SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.VIA_POINT_NAME_I18N,
                     SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.VIA_POINT_SHORT_NAME_I18N
-                ).values((UUID) null, null, null, null, null, null, null)
+                ).values((UUID) null, null, null, null, null, null, null, null, null)
             );
 
             journeyPatternStops.forEach(journeyPatternStop -> batch.bind(
@@ -48,6 +50,8 @@ public class Jore4JourneyPatternStopRepository implements IJore4JourneyPatternSt
                     journeyPatternStop.scheduledStopPointLabel(),
                     journeyPatternStop.scheduledStopPointSequence(),
                     journeyPatternStop.isUsedAsTimingPoint(),
+                    journeyPatternStop.isRegulatedTimingPoint(),
+                    journeyPatternStop.isLoadingTimeAllowed(),
                     journeyPatternStop.isViaPoint(),
                     // Use the existing via name for both normal and short names
                     journeyPatternStop.viaPointNames().map(jsonbConverter::asJson).orElse(null),

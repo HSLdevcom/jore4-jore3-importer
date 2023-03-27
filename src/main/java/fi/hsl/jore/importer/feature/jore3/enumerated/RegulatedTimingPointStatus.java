@@ -35,6 +35,10 @@ public enum RegulatedTimingPointStatus {
         return description;
     }
 
+    public boolean isRegulatedTimingPoint() {
+        return this == YES || this == YES_LOAD_TIME;
+    }
+
     public static Optional<RegulatedTimingPointStatus> of(final int i) {
         return Arrays.stream(values())
                      .filter(transportType -> transportType.value == i)

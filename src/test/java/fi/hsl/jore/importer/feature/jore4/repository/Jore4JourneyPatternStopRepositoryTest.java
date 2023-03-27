@@ -61,6 +61,8 @@ class Jore4JourneyPatternStopRepositoryTest {
         private static final int SCHEDULED_STOP_POINT_SEQUENCE = 1;
         private final String SCHEDULED_STOP_POINT_LABEL  = "H1234";
         private static final boolean IS_USED_AS_TIMING_POINT = true;
+        private static final boolean IS_REGULATED_TIMING_POINT = true;
+        private static final boolean IS_LOADING_TIME_ALLOWED = true;
         private static final boolean IS_VIA_POINT = true;
         private final Optional<MultilingualString> VIA_POINT_NAMES = Optional.of(MultilingualString.of(Map.of(
                 "fi-FI", "Helsinki",
@@ -72,6 +74,8 @@ class Jore4JourneyPatternStopRepositoryTest {
                 SCHEDULED_STOP_POINT_SEQUENCE,
                 SCHEDULED_STOP_POINT_LABEL,
                 IS_USED_AS_TIMING_POINT,
+                IS_REGULATED_TIMING_POINT,
+                IS_LOADING_TIME_ALLOWED,
                 IS_VIA_POINT,
                 VIA_POINT_NAMES
         );
@@ -126,6 +130,28 @@ class Jore4JourneyPatternStopRepositoryTest {
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_USED_AS_TIMING_POINT.getName())
                     .isEqualTo(IS_USED_AS_TIMING_POINT);
+        }
+
+        @Test
+        @DisplayName("Should save a new journey pattern with the correct is-regulated-timing-point information")
+        void shouldSaveNewJourneyPatternWithCorrectIsRegulatedTimingPointInformation() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(targetTable)
+                    .row()
+                    .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_REGULATED_TIMING_POINT.getName())
+                    .isEqualTo(IS_REGULATED_TIMING_POINT);
+        }
+
+        @Test
+        @DisplayName("Should save a new journey pattern with the correct is-loading-time-allowed information")
+        void shouldSaveNewJourneyPatternWithCorrectIsLoadingTimeAllowedInformation() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(targetTable)
+                    .row()
+                    .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_LOADING_TIME_ALLOWED.getName())
+                    .isEqualTo(IS_LOADING_TIME_ALLOWED);
         }
 
         @Test

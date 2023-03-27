@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.IntTest;
+import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPatternStop;
 import org.assertj.core.api.SoftAssertions;
@@ -75,6 +76,7 @@ class JourneyPatternStopExportReaderTest {
         private static final int FIRST_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 1;
         private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT = false;
         private static final String FIRST_JOURNEY_PATTERN_STOP_TIMING_PLACE_ID = "1ELIEL";
+        private final RegulatedTimingPointStatus FIRST_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS = RegulatedTimingPointStatus.NO;
         private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_VIA_POINT = false;
 
         private final String SECOND_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H4321";
@@ -82,6 +84,7 @@ class JourneyPatternStopExportReaderTest {
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT = true;
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_VIA_POINT = true;
         private static final String SECOND_JOURNEY_PATTERN_STOP_TIMING_PLACE_ID = "1KALA";
+        private final RegulatedTimingPointStatus SECOND_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS = RegulatedTimingPointStatus.YES_LOAD_TIME;
         private final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_FINNISH = "ViaSuomi";
         private final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_SWEDISH = "ViaSverige";
 
@@ -108,6 +111,9 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(first.timingPlaceId())
                     .as("timingPlaceId")
                     .contains(FIRST_JOURNEY_PATTERN_STOP_TIMING_PLACE_ID);
+            softAssertions.assertThat(first.regulatedTimingPointStatus())
+                    .as("regulatedTimingPointStatus")
+                    .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS);
             softAssertions.assertThat(first.isViaPoint())
                     .as("isViaPoint")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_IS_VIA_POINT);
@@ -142,6 +148,9 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(second.timingPlaceId())
                     .as("timingPlaceId")
                     .contains(SECOND_JOURNEY_PATTERN_STOP_TIMING_PLACE_ID);
+            softAssertions.assertThat(second.regulatedTimingPointStatus())
+                    .as("regulatedTimingPointStatus")
+                    .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS);
             softAssertions.assertThat(second.isViaPoint())
                     .as("isViaPoint")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_IS_VIA_POINT);

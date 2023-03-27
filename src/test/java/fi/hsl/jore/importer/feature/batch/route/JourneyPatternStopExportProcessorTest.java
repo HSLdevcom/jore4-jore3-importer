@@ -1,10 +1,12 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
+import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPatternStop;
 import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPatternStop;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
@@ -22,6 +24,7 @@ class JourneyPatternStopExportProcessorTest {
     private static final String SCHEDULED_STOP_POINT_LABEL = "stop1";
     private static final boolean IS_USED_AS_TIMING_POINT = true;
     private static final String TIMING_PLACE_ID = "1ELIEL";
+    private static final RegulatedTimingPointStatus REGULATED_TIMING_POINT_STATUS = RegulatedTimingPointStatus.YES_LOAD_TIME;
     private static final boolean IS_VIA_POINT = true;
     private static final Map<Locale, String> VIA_POINT_NAME_MAP = Map.of(
             JoreLocaleUtil.FINNISH, "ViaSuomi",
@@ -36,6 +39,7 @@ class JourneyPatternStopExportProcessorTest {
             SCHEDULED_STOP_POINT_LABEL,
             IS_USED_AS_TIMING_POINT,
             Optional.of(TIMING_PLACE_ID),
+            REGULATED_TIMING_POINT_STATUS,
             IS_VIA_POINT,
             VIA_POINT_NAMES
     );
@@ -71,6 +75,20 @@ class JourneyPatternStopExportProcessorTest {
     }
 
     @Test
+    @DisplayName("Should return a journey pattern stop with the correct is-regulated-timing-point information")
+    void shouldReturnJourneyPatternStopWithCorrectIsRegulatedTimingPointInformation() throws Exception {
+        final Jore4JourneyPatternStop output = processor.process(DEFAULT_INPUT);
+        assertThat(output.isRegulatedTimingPoint()).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("Should return a journey pattern stop with the correct is-loading-time-allowed information")
+    void shouldReturnJourneyPatternStopWithCorrectIsLoadingTimeAllowedInformation() throws Exception {
+        final Jore4JourneyPatternStop output = processor.process(DEFAULT_INPUT);
+        assertThat(output.isLoadingTimeAllowed()).isEqualTo(true);
+    }
+
+    @Test
     @DisplayName("Should return a journey pattern stop with the correct is-via-point information")
     void shouldReturnJourneyPatternStopWithCorrectIsViaPointInformation() throws Exception {
         final Jore4JourneyPatternStop output = processor.process(DEFAULT_INPUT);
@@ -88,21 +106,72 @@ class JourneyPatternStopExportProcessorTest {
         assertThat(swedishName).isEqualTo(VIA_POINT_NAME_MAP.get(JoreLocaleUtil.SWEDISH));
     }
 
-    @Test
-    @DisplayName("When used as timing point and timing place ID absent")
-    void whenUsedAsTimingPointAndTimingPlaceIdAbsent() throws Exception {
-        final ImporterJourneyPatternStop INPUT = ImporterJourneyPatternStop.of(
+    @Nested
+    @DisplayName("When timing place ID absent")
+    class WhenTimingPlaceIdAbsent {
+
+        private final ImporterJourneyPatternStop INPUT = ImporterJourneyPatternStop.of(
                 JOURNEY_PATTERN_JORE4_ID,
                 ROUTE_DIRECTION_JORE3_ID,
                 ORDER_NUMBER,
                 SCHEDULED_STOP_POINT_LABEL,
                 true, // isUsedAsTimingPoint
                 Optional.empty(), // timing place ID absent
+                RegulatedTimingPointStatus.YES_LOAD_TIME,
                 false,
                 Optional.empty()
         );
 
-        final Jore4JourneyPatternStop output = processor.process(INPUT);
-        assertThat(output.isUsedAsTimingPoint()).isEqualTo(false);
+        @Test
+        @DisplayName("is-used-as-timing-point should not be set")
+        void isUsedAsTimingPointShouldNotBeSet() throws Exception {
+            final Jore4JourneyPatternStop output = processor.process(INPUT);
+            assertThat(output.isUsedAsTimingPoint()).isEqualTo(false);
+        }
+
+        @Test
+        @DisplayName("is-regulated-timing-point should not be set")
+        void isRegulatedTimingPointShouldNotBeSet() throws Exception {
+            final Jore4JourneyPatternStop output = processor.process(INPUT);
+            assertThat(output.isRegulatedTimingPoint()).isEqualTo(false);
+        }
+
+        @Test
+        @DisplayName("is-loading-time-allowed should not be set")
+        void isLoadingTimeAllowedShouldNotBeSet() throws Exception {
+            final Jore4JourneyPatternStop output = processor.process(INPUT);
+            assertThat(output.isLoadingTimeAllowed()).isEqualTo(false);
+        }
+    }
+
+    @Nested
+    @DisplayName("When not used as timing point")
+    class WhenNotUsedAsTimingPoint {
+
+        private final ImporterJourneyPatternStop INPUT = ImporterJourneyPatternStop.of(
+                JOURNEY_PATTERN_JORE4_ID,
+                ROUTE_DIRECTION_JORE3_ID,
+                ORDER_NUMBER,
+                SCHEDULED_STOP_POINT_LABEL,
+                false, // isUsedAsTimingPoint
+                Optional.of(TIMING_PLACE_ID), // timing place ID is present
+                RegulatedTimingPointStatus.YES_LOAD_TIME,
+                false,
+                Optional.empty()
+        );
+
+        @Test
+        @DisplayName("is-regulated-timing-point should not be set")
+        void isRegulatedTimingPointShouldNotBeSet() throws Exception {
+            final Jore4JourneyPatternStop output = processor.process(INPUT);
+            assertThat(output.isRegulatedTimingPoint()).isEqualTo(false);
+        }
+
+        @Test
+        @DisplayName("is-loading-time-allowed should not be set")
+        void isLoadingTimeAllowedShouldNotBeSet() throws Exception {
+            final Jore4JourneyPatternStop output = processor.process(INPUT);
+            assertThat(output.isLoadingTimeAllowed()).isEqualTo(false);
+        }
     }
 }

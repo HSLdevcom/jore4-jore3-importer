@@ -4,6 +4,7 @@ SELECT rd.journey_pattern_jore4_id AS journey_pattern_jore4_id,
        ssp.scheduled_stop_point_short_id AS short_id,
        rsp.network_route_stop_point_hastus_point AS is_used_as_timing_point,
        ssp.hastus_place_id AS timing_place_id,
+       rsp.network_route_stop_point_regulated_timing_point_status AS regulated_timing_point_status,
        rsp.network_route_stop_point_via_point AS is_via_point,
        rsp.network_route_stop_point_via_name AS via_names
 FROM network.network_route_directions rd

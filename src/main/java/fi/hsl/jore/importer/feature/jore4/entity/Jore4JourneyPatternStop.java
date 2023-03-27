@@ -21,6 +21,10 @@ public interface Jore4JourneyPatternStop {
 
     boolean isUsedAsTimingPoint();
 
+    boolean isRegulatedTimingPoint();
+
+    boolean isLoadingTimeAllowed();
+
     boolean isViaPoint();
 
     Optional<MultilingualString> viaPointNames();
@@ -29,6 +33,8 @@ public interface Jore4JourneyPatternStop {
                                       final int scheduledStopPointSequence,
                                       final String scheduledStopPointLabel,
                                       final boolean isUsedAsTimingPoint,
+                                      final boolean isRegulatedTimingPoint,
+                                      final boolean isLoadingTimeAllowed,
                                       final boolean isViaPoint,
                                       final Optional<MultilingualString> viaPointNames) {
 
@@ -38,6 +44,8 @@ public interface Jore4JourneyPatternStop {
                 .scheduledStopPointSequence(scheduledStopPointSequence)
                 .scheduledStopPointLabel(scheduledStopPointLabel)
                 .isUsedAsTimingPoint(isUsedAsTimingPoint)
+                .isRegulatedTimingPoint(isRegulatedTimingPoint)
+                .isLoadingTimeAllowed(isLoadingTimeAllowed)
                 .isViaPoint(isViaPoint)
                 .viaPointNames(viaPointNames)
                 .build();

@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
+import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPatternStop;
 import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPatternStop;
 import org.slf4j.Logger;
@@ -21,11 +22,15 @@ public class JourneyPatternStopExportProcessor implements ItemProcessor<Importer
         LOGGER.debug("Processing journey pattern stop: {}", input);
 
         final boolean isUsedAsTimingPoint = isUsedAsTimingPoint(input);
+        final boolean isRegulatedTimingPoint = isRegulatedTimingPoint(input, isUsedAsTimingPoint);
+        final boolean isLoadingTimeAllowed = isLoadingTimeAllowed(input, isUsedAsTimingPoint);
 
         return Jore4JourneyPatternStop.of(input.journeyPatternJore4Id(),
                                           input.orderNumber(),
                                           input.scheduledStopPointJore4Label(),
                                           isUsedAsTimingPoint,
+                                          isRegulatedTimingPoint,
+                                          isLoadingTimeAllowed,
                                           input.isViaPoint(),
                                           input.viaPointNames()
         );
@@ -49,5 +54,30 @@ public class JourneyPatternStopExportProcessor implements ItemProcessor<Importer
         }
 
         return false;
+    }
+
+    private static boolean isRegulatedTimingPoint(final ImporterJourneyPatternStop stop,
+                                                  final boolean isUsedAsTimingPoint) {
+
+        if (stop.regulatedTimingPointStatus().isRegulatedTimingPoint()) {
+            if (isUsedAsTimingPoint) {
+                return true;
+            } else {
+                LOGGER.warn(
+                        "Jore3 route direction {}: route point {}: stop point marked as a regulated timing point, but "
+                                + "at the same time it is not used as a timing point => discarding regulated timing "
+                                + "point status",
+                        stop.routeDirectionJore3Id(),
+                        stop.orderNumber());
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean isLoadingTimeAllowed(final ImporterJourneyPatternStop stop,
+                                                final boolean isUsedAsTimingPoint) {
+
+        return isUsedAsTimingPoint && stop.regulatedTimingPointStatus() == RegulatedTimingPointStatus.YES_LOAD_TIME;
     }
 }
