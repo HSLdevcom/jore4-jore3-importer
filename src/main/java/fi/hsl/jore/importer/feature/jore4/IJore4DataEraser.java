@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.feature.jore4;
 
-public interface IDataEraser {
+public interface IJore4DataEraser {
 
     void deleteJourneyPatterns();
 

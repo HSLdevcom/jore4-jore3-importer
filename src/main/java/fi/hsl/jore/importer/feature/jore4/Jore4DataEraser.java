@@ -15,12 +15,12 @@ import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.SCHEDULED_STOP_POINT
 import static fi.hsl.jore.jore4.jooq.timing_pattern.Tables.TIMING_PLACE;
 
 @Component
-public class DataEraser implements IDataEraser {
+public class Jore4DataEraser implements IJore4DataEraser {
 
     private final DSLContext db;
 
     @Autowired
-    public DataEraser(@Qualifier("jore4Dsl") final DSLContext db) {
+    public Jore4DataEraser(@Qualifier("jore4Dsl") final DSLContext db) {
         this.db = db;
     }
 
