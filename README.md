@@ -426,9 +426,15 @@ environment by following these steps:
     ```
    Look up the jore3 database credentials from the Azure vault (e.g. `hsl-jore3-db-username` and `hsl-jore3-db-password`
    in the `hsl-jore4-dev-vault`) and insert them into your maven profile's `source.db.XXX` definitions.
-3. Adjust the `source.db.*` properties in `profiles/dev/config.<my-username>.properties` to your needs. Other configuration for destination database and test database may also be found from here.
-4. If you wish to connect to the original Jore 3 database, follow the instructions [here](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#creating-an-ssh-configuration-entry) on how to create a tunnel and connect to the database. After the tunnel is created, the Jore 3 database will be available on localhost:56239. Ask for the username and password from the project team.
-   During the importer run, the shell on the bastion host needs to be "touched" in regular intervals to keep it from timing out. (The `TMOUT` environment variable on the bastion host cannot be modified.) "Touching" can be done manually by issuing key presses into the shell every few minutes. AlternativELY, you can start a new subshell with the timeout disabled to keep the session open:
+3. Adjust the `source.db.*` properties in `profiles/dev/config.<my-username>.properties` to your needs.
+   Other configuration for destination database and test database may also be found from here.
+4. If you wish to connect to the original Jore 3 database,
+   follow the instructions [here](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#creating-an-ssh-configuration-entry)
+   on how to create a tunnel and connect to the database.
+   After the tunnel is created, the Jore 3 database will be available on localhost:56239. Ask for the username and password from the project team.
+   During the importer run, the shell on the bastion host needs to be "touched" in regular intervals to keep it from timing out.
+  (The `TMOUT` environment variable on the bastion host cannot be modified.) "Touching" can be done manually by issuing key presses into the shell every few minutes. 
+  Alternatively, you can start a new subshell with the timeout disabled to keep the session open:
    ```
    env TMOUT=0 bash
    ```
@@ -456,7 +462,8 @@ When you want to run this application, you can use one of these two options:
 Spring Boot Maven plugin. This is useful if you want to get an easy access to the log files written by importer.
 If you want to use this option, you have to follow these steps:
 
-1. Run the dependencies of this application by running the command: `./development.sh start:deps`. (This will bind a volume for the testdb container so that the imported data won't be lost during sessions. If you wish not to do so, run with with `--no-volume` parameter)
+1. Run the dependencies of this application by running the command: `./development.sh start:deps`.
+   (This will bind a volume for the testdb container so that the imported data won't be lost during sessions. If you wish not to do so, run with with `--no-volume` parameter)
 2. Run the application by running the command: `./run-local.sh`.
 
 **Second**, you can run everything with Docker. If you want to use this option, you have to run the command:
@@ -468,7 +475,9 @@ If you want to create a package that can be used for deployment, you have run th
 
 ### Restoring a Jore 3 Database Dump to the testing Database
 
-If you want to restore a database dump from Jore 3 to the testing database, there is a script provided for it. Put the jore3 .bak file to the `jore3dump` directory and run `./apply-jore3-database-backup.sh jore3dump.bak`, where `jore3dump.bak` should be replaced with the name of the .bak file you want to apply.
+If you want to restore a database dump from Jore 3 to the testing database, there is a script provided for it.
+Put the jore3 .bak file to the `jore3dump` directory and run `./apply-jore3-database-backup.sh jore3dump.bak`,
+where `jore3dump.bak` should be replaced with the name of the .bak file you want to apply.
 
 Some dump files can be found in [Google Drive](https://drive.google.com/drive/folders/1oTfv8vgM7nqg9Hkg5DkSoLTsc8MUAf-s).
 
@@ -487,7 +496,8 @@ that pgAdmin uses the default settings when it takes the database dump.
 
 #### Local Development environment
 
-If you want to restore a database dump on your local development environment, you should follow [these instructions](https://github.com/HSLdevcom/jore4-ui#loading-dump-into-development-database).
+If you want to restore a database dump on your local development environment,
+you should follow [these instructions](https://github.com/HSLdevcom/jore4-ui#loading-dump-into-development-database).
 
 #### Azure Dev Database
 
