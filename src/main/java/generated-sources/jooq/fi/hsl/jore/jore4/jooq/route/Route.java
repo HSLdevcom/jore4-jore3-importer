@@ -8,6 +8,7 @@ import fi.hsl.jore.jore4.jooq.DefaultCatalog;
 import fi.hsl.jore.jore4.jooq.route.tables.Direction;
 import fi.hsl.jore.jore4.jooq.route.tables.InfrastructureLinkAlongRoute;
 import fi.hsl.jore.jore4.jooq.route.tables.Line;
+import fi.hsl.jore.jore4.jooq.route.tables.LineExternalId;
 import fi.hsl.jore.jore4.jooq.route.tables.TypeOfLine;
 
 import java.util.Arrays;
@@ -49,6 +50,16 @@ public class Route extends SchemaImpl {
     public final Line LINE = Line.LINE;
 
     /**
+     * 
+     *   External identifiers for each line label.
+     *   Stored in separate table because multiple line rows can have same label
+     *   (if they have different priorities) and thus should have same label.
+     *   Old lines (from Jore3) use numbers between 1-1999.
+     *   The ids for new lines will start from 2001.
+     */
+    public final LineExternalId LINE_EXTERNAL_ID = LineExternalId.LINE_EXTERNAL_ID;
+
+    /**
      * The routes from Transmodel:
      * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
      */
@@ -79,6 +90,7 @@ public class Route extends SchemaImpl {
             Direction.DIRECTION,
             InfrastructureLinkAlongRoute.INFRASTRUCTURE_LINK_ALONG_ROUTE,
             Line.LINE,
+            LineExternalId.LINE_EXTERNAL_ID,
             fi.hsl.jore.jore4.jooq.route.tables.Route.ROUTE_,
             TypeOfLine.TYPE_OF_LINE
         );

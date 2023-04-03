@@ -43,6 +43,6 @@ services:
 
   jore4-hasura:
     # pin compatible version of jore4 data model
-    image: "hsldevcom/jore4-hasura:hsl-main--20230324-beb6ecbde2b638b79af499e7f18a568d85f1541e"
+    image: "hsldevcom/jore4-hasura:hsl-add-numeric-id-fields--20230417-7193ce6efeb1979dde29720dd899f90b548df4e5"
 networks:
     jore4:

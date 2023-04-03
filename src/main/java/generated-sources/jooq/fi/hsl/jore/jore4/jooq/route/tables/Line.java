@@ -70,16 +70,17 @@ public class Line extends TableImpl<Record> {
 
     /**
      * The column <code>route.line.validity_start</code>. The point in time when
-     * the line becomes valid. If NULL, the line has been always valid.
+     * the line becomes valid (inclusive). If NULL, the line has been always
+     * valid.
      */
-    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "The point in time when the line becomes valid. If NULL, the line has been always valid.");
+    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "The point in time when the line becomes valid (inclusive). If NULL, the line has been always valid.");
 
     /**
      * The column <code>route.line.validity_end</code>. The point in time from
-     * which onwards the line is no longer valid. If NULL, the line will be
-     * always valid.
+     * which onwards the line is no longer valid (inclusive). If NULL, the line
+     * will be always valid.
      */
-    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "The point in time from which onwards the line is no longer valid. If NULL, the line will be always valid.");
+    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "The point in time from which onwards the line is no longer valid (inclusive). If NULL, the line will be always valid.");
 
     /**
      * The column <code>route.line.priority</code>. The priority of the line

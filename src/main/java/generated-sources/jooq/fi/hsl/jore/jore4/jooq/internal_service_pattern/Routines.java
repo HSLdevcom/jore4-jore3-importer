@@ -4,7 +4,8 @@
 package fi.hsl.jore.jore4.jooq.internal_service_pattern;
 
 
-import fi.hsl.jore.jore4.jooq.internal_service_pattern.routines.InsertScheduledStopPointWithVehicleMode;
+import fi.hsl.jore.jore4.jooq.internal_service_pattern.routines.InsertScheduledStopPointWithVehicleMode1;
+import fi.hsl.jore.jore4.jooq.internal_service_pattern.routines.InsertScheduledStopPointWithVehicleMode2;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -24,7 +25,7 @@ public class Routines {
      * Call
      * <code>internal_service_pattern.insert_scheduled_stop_point_with_vehicle_mode</code>
      */
-    public static void insertScheduledStopPointWithVehicleMode(
+    public static void insertScheduledStopPointWithVehicleMode1(
           Configuration configuration
         , UUID scheduledStopPointId
         , Point measuredLocation
@@ -37,8 +38,42 @@ public class Routines {
         , String supportedVehicleMode
         , UUID timingPlaceId
     ) {
-        InsertScheduledStopPointWithVehicleMode p = new InsertScheduledStopPointWithVehicleMode();
+        InsertScheduledStopPointWithVehicleMode1 p = new InsertScheduledStopPointWithVehicleMode1();
         p.setScheduledStopPointId(scheduledStopPointId);
+        p.setMeasuredLocation(measuredLocation);
+        p.setLocatedOnInfrastructureLinkId(locatedOnInfrastructureLinkId);
+        p.setDirection(direction);
+        p.setLabel(label);
+        p.setValidityStart(validityStart);
+        p.setValidityEnd(validityEnd);
+        p.setPriority(priority);
+        p.setSupportedVehicleMode(supportedVehicleMode);
+        p.setTimingPlaceId(timingPlaceId);
+
+        p.execute(configuration);
+    }
+
+    /**
+     * Call
+     * <code>internal_service_pattern.insert_scheduled_stop_point_with_vehicle_mode</code>
+     */
+    public static void insertScheduledStopPointWithVehicleMode2(
+          Configuration configuration
+        , UUID scheduledStopPointId
+        , Integer externalId
+        , Point measuredLocation
+        , UUID locatedOnInfrastructureLinkId
+        , String direction
+        , String label
+        , LocalDate validityStart
+        , LocalDate validityEnd
+        , Integer priority
+        , String supportedVehicleMode
+        , UUID timingPlaceId
+    ) {
+        InsertScheduledStopPointWithVehicleMode2 p = new InsertScheduledStopPointWithVehicleMode2();
+        p.setScheduledStopPointId(scheduledStopPointId);
+        p.setExternalId(externalId);
         p.setMeasuredLocation(measuredLocation);
         p.setLocatedOnInfrastructureLinkId(locatedOnInfrastructureLinkId);
         p.setDirection(direction);

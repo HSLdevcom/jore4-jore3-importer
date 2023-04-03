@@ -63,17 +63,17 @@ public class Route extends TableImpl<Record> {
 
     /**
      * The column <code>route.route.validity_start</code>. The point in time
-     * when the route becomes valid. If NULL, the route has been always valid
-     * before end time of validity period.
+     * (inclusive) when the route becomes valid. If NULL, the route has been
+     * always valid before end time of validity period.
      */
-    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "The point in time when the route becomes valid. If NULL, the route has been always valid before end time of validity period.");
+    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "The point in time (inclusive) when the route becomes valid. If NULL, the route has been always valid before end time of validity period.");
 
     /**
-     * The column <code>route.route.validity_end</code>. The point in time from
-     * which onwards the route is no longer valid. If NULL, the route is valid
-     * indefinitely after the start time of the validity period.
+     * The column <code>route.route.validity_end</code>. The point in time
+     * (inclusive) from which onwards the route is no longer valid. If NULL, the
+     * route is valid indefinitely after the start time of the validity period.
      */
-    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "The point in time from which onwards the route is no longer valid. If NULL, the route is valid indefinitely after the start time of the validity period.");
+    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "The point in time (inclusive) from which onwards the route is no longer valid. If NULL, the route is valid indefinitely after the start time of the validity period.");
 
     /**
      * The column <code>route.route.priority</code>. The priority of the route
