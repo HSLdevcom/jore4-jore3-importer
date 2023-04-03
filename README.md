@@ -415,7 +415,7 @@ More properties can be found from `/profiles/prod/config.properties`
 Before you can run the application on your local development environment, you have to set up your development
 environment by following these steps:
 
-1. Install software that's is required to compile and run the importer application and its dependencies.
+1. Install software that is required to compile and run the importer application and its dependencies.
    Before you can run this application, you must install these tools:
     - Docker Desktop
     - OpenJDK 11
