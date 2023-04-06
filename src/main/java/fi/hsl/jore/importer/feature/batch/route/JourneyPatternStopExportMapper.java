@@ -28,9 +28,11 @@ public class JourneyPatternStopExportMapper implements RowMapper<ImporterJourney
                                              final int rowNumber) throws SQLException {
         return ImporterJourneyPatternStop.of(
                 UUID.fromString(resultSet.getString("journey_pattern_jore4_id")),
+                resultSet.getString("route_direction_jore3_id"),
                 resultSet.getInt("order_number"),
                 resultSet.getString("short_id"),
                 resultSet.getBoolean("is_used_as_timing_point"),
+                Optional.ofNullable(resultSet.getString("timing_place_id")),
                 resultSet.getBoolean("is_via_point"),
                 Optional.ofNullable(resultSet.getString("via_names"))
                         .map(viaNames -> jsonConverter.fromJson(viaNames, MultilingualString.class))

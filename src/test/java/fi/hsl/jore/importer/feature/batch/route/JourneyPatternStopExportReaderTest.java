@@ -69,16 +69,19 @@ class JourneyPatternStopExportReaderTest {
     class WhenSourceTableHasOneRouteWithTwoStops {
 
         private final UUID JOURNEY_PATTERN_JORE4_ID = UUID.fromString("ec564137-f30c-4689-9322-4ef650768af3");
+        private final String ROUTE_DIRECTION_JORE3_ID = "1001-2-20211004";
 
         private final String FIRST_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H1234";
         private static final int FIRST_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 1;
         private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT = false;
+        private static final String FIRST_JOURNEY_PATTERN_STOP_TIMING_PLACE_ID = "1ELIEL";
         private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_VIA_POINT = false;
 
         private final String SECOND_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H4321";
         private static final int SECOND_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 2;
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT = true;
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_VIA_POINT = true;
+        private static final String SECOND_JOURNEY_PATTERN_STOP_TIMING_PLACE_ID = "1KALA";
         private final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_FINNISH = "ViaSuomi";
         private final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_SWEDISH = "ViaSverige";
 
@@ -90,6 +93,9 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(first.journeyPatternJore4Id())
                     .as("journeyPatternJore4Id")
                     .isEqualTo(JOURNEY_PATTERN_JORE4_ID);
+            softAssertions.assertThat(first.routeDirectionJore3Id())
+                    .as("routeDirectionJore3Id")
+                    .isEqualTo(ROUTE_DIRECTION_JORE3_ID);
             softAssertions.assertThat(first.orderNumber())
                     .as("orderNumber")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_ORDER_NUMBER);
@@ -99,6 +105,9 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(first.isUsedAsTimingPoint())
                     .as("isUsedAsTimingPoint")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT);
+            softAssertions.assertThat(first.timingPlaceId())
+                    .as("timingPlaceId")
+                    .contains(FIRST_JOURNEY_PATTERN_STOP_TIMING_PLACE_ID);
             softAssertions.assertThat(first.isViaPoint())
                     .as("isViaPoint")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_IS_VIA_POINT);
@@ -118,6 +127,9 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(second.journeyPatternJore4Id())
                     .as("journeyPatternJore4Id")
                     .isEqualTo(JOURNEY_PATTERN_JORE4_ID);
+            softAssertions.assertThat(second.routeDirectionJore3Id())
+                    .as("routeDirectionJore3Id")
+                    .isEqualTo(ROUTE_DIRECTION_JORE3_ID);
             softAssertions.assertThat(second.orderNumber())
                     .as("orderNumber")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_ORDER_NUMBER);
@@ -127,6 +139,9 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(second.isUsedAsTimingPoint())
                     .as("isUsedAsTimingPoint")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT);
+            softAssertions.assertThat(second.timingPlaceId())
+                    .as("timingPlaceId")
+                    .contains(SECOND_JOURNEY_PATTERN_STOP_TIMING_PLACE_ID);
             softAssertions.assertThat(second.isViaPoint())
                     .as("isViaPoint")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_IS_VIA_POINT);

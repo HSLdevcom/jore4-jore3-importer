@@ -6,6 +6,7 @@ INSERT INTO network.scheduled_stop_points (
     scheduled_stop_point_name,
     scheduled_stop_point_short_id,
     scheduled_stop_point_jore4_id,
+    hastus_place_id,
     usage_in_routes
 )
 VALUES (
@@ -16,6 +17,7 @@ VALUES (
     '{"fi_FI": "Yliopisto vanha","sv_SE": "Universitetet gamla"}',
     'H1234',
     '45e83727-41fb-4e75-ad71-7e54d58f23ac',
+    '1ELIEL',
     1
 );
 
@@ -27,6 +29,7 @@ INSERT INTO network.scheduled_stop_points (
     scheduled_stop_point_name,
     scheduled_stop_point_short_id,
     scheduled_stop_point_jore4_id,
+    hastus_place_id,
     usage_in_routes
 )
 VALUES (
@@ -37,5 +40,6 @@ VALUES (
     '{"fi_FI": "Etelä-Hervanta vanha","sv_SE": "Södra Hervanta gamla"}',
     'H4321',
     '48a88a16-7b8c-4a97-ac2b-c9bf2ac3a08d',
+    '1KALA',
     1
 );
