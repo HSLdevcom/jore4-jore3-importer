@@ -211,6 +211,7 @@ database to the Jore 4 database. The steps of this import flow (`jore4ExportFlow
 The import flow consists of the following steps:
 
 * The `prepareJore4ExportStep` step deletes the data found from the target tables.
+* The `exportTimingPlacesStep` step extracts unique Hastus place IDs from the scheduled stop points of the importer's database to the Jore 4 database.
 * The `exportScheduledStopPointsStep` step imports scheduled stop points from the importer's database to the Jore 4 database.
   See also: [the non-obvious assumptions](#scheduled-stop-points).
 * The `exportLinesStep` step imports lines from the importer's database to the Jore 4 database.
