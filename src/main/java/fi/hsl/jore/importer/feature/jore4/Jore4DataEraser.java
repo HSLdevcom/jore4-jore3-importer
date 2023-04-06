@@ -12,6 +12,7 @@ import static fi.hsl.jore.jore4.jooq.route.Tables.INFRASTRUCTURE_LINK_ALONG_ROUT
 import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
 import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
 import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.SCHEDULED_STOP_POINT;
+import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT;
 import static fi.hsl.jore.jore4.jooq.timing_pattern.Tables.TIMING_PLACE;
 
 @Component
@@ -42,6 +43,7 @@ public class Jore4DataEraser implements IJore4DataEraser {
     @Transactional
     @Override
     public void deleteScheduledStopPointsAndTimingPlaces() {
+        db.truncateTable(VEHICLE_MODE_ON_SCHEDULED_STOP_POINT).restartIdentity().execute();
         db.truncateTable(SCHEDULED_STOP_POINT).restartIdentity().cascade().execute();
         db.truncateTable(TIMING_PLACE).restartIdentity().cascade().execute();
     }
