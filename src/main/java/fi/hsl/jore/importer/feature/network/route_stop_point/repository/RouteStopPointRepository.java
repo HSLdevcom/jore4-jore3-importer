@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.network.route_stop_point.repository;
 
-
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
+import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.PersistableRouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.RouteStopPoint;
@@ -9,6 +9,7 @@ import fi.hsl.jore.importer.feature.network.route_stop_point.dto.generated.Route
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPoints;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPointsWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsRecord;
+import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsWithHistoryRecord;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
@@ -104,7 +105,7 @@ public class RouteStopPointRepository
         return db.selectFrom(POINTS)
                  .where(PRIMARY_KEY.eq(id.value()))
                  .fetchStream()
-                 .map(r -> RouteStopPoint.from(r, jsonbConverter))
+                 .map(r -> from(r, jsonbConverter))
                  .findFirst();
     }
 
@@ -114,7 +115,7 @@ public class RouteStopPointRepository
         return db.selectFrom(POINTS)
                  .where(POINTS.NETWORK_ROUTE_STOP_POINT_EXT_ID.eq(externalId.value()))
                  .fetchStream()
-                 .map(r -> RouteStopPoint.from(r, jsonbConverter))
+                 .map(r -> from(r, jsonbConverter))
                  .findFirst();
     }
 
@@ -123,7 +124,7 @@ public class RouteStopPointRepository
     public List<RouteStopPoint> findAll() {
         return db.selectFrom(POINTS)
                  .fetchStream()
-                 .map(r -> RouteStopPoint.from(r, jsonbConverter))
+                 .map(r -> from(r, jsonbConverter))
                  .collect(List.collector());
     }
 
@@ -173,7 +174,33 @@ public class RouteStopPointRepository
         return db.selectFrom(HISTORY_VIEW)
                  .orderBy(HISTORY_VIEW.NETWORK_ROUTE_STOP_POINT_SYS_PERIOD.asc())
                  .fetchStream()
-                 .map(r -> RouteStopPoint.from(r, jsonbConverter))
+                 .map(r -> from(r, jsonbConverter))
                  .collect(List.collector());
+    }
+
+    private static RouteStopPoint from(final NetworkRouteStopPointsRecord record, final IJsonbConverter converter) {
+        return RouteStopPoint.of(
+                RouteStopPointPK.of(record.getNetworkRoutePointId()),
+                ExternalId.of(record.getNetworkRouteStopPointExtId()),
+                record.getNetworkRouteStopPointOrder(),
+                record.getNetworkRouteStopPointHastusPoint(),
+                record.getNetworkRouteStopPointViaPoint(),
+                Optional.ofNullable(converter.fromJson(record.getNetworkRouteStopPointViaName(), MultilingualString.class)),
+                Optional.ofNullable(record.getNetworkRouteStopPointTimetableColumn()),
+                record.getNetworkRouteStopPointSysPeriod()
+        );
+    }
+
+    private static RouteStopPoint from(final NetworkRouteStopPointsWithHistoryRecord record, final IJsonbConverter converter) {
+        return RouteStopPoint.of(
+                RouteStopPointPK.of(record.getNetworkRoutePointId()),
+                ExternalId.of(record.getNetworkRouteStopPointExtId()),
+                record.getNetworkRouteStopPointOrder(),
+                record.getNetworkRouteStopPointHastusPoint(),
+                record.getNetworkRouteStopPointViaPoint(),
+                Optional.ofNullable(converter.fromJson(record.getNetworkRouteStopPointViaName(), MultilingualString.class)),
+                Optional.ofNullable(record.getNetworkRouteStopPointTimetableColumn()),
+                record.getNetworkRouteStopPointSysPeriod()
+        );
     }
 }

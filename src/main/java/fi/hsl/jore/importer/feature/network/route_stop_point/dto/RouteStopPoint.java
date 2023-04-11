@@ -1,15 +1,11 @@
 package fi.hsl.jore.importer.feature.network.route_stop_point.dto;
 
-
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
-import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasSystemTime;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.generated.RouteStopPointPK;
-import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsRecord;
-import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsWithHistoryRecord;
 import org.immutables.value.Value;
 
 import java.util.Optional;
@@ -40,31 +36,5 @@ public interface RouteStopPoint
                                       .timetableColumn(timetableColumn)
                                       .systemTime(systemTime)
                                       .build();
-    }
-
-    static RouteStopPoint from(final NetworkRouteStopPointsRecord record, final IJsonbConverter converter) {
-        return of(
-                RouteStopPointPK.of(record.getNetworkRoutePointId()),
-                ExternalId.of(record.getNetworkRouteStopPointExtId()),
-                record.getNetworkRouteStopPointOrder(),
-                record.getNetworkRouteStopPointHastusPoint(),
-                record.getNetworkRouteStopPointViaPoint(),
-                Optional.ofNullable(converter.fromJson(record.getNetworkRouteStopPointViaName(), MultilingualString.class)),
-                Optional.ofNullable(record.getNetworkRouteStopPointTimetableColumn()),
-                record.getNetworkRouteStopPointSysPeriod()
-        );
-    }
-
-    static RouteStopPoint from(final NetworkRouteStopPointsWithHistoryRecord record, final IJsonbConverter converter) {
-        return of(
-                RouteStopPointPK.of(record.getNetworkRoutePointId()),
-                ExternalId.of(record.getNetworkRouteStopPointExtId()),
-                record.getNetworkRouteStopPointOrder(),
-                record.getNetworkRouteStopPointHastusPoint(),
-                record.getNetworkRouteStopPointViaPoint(),
-                Optional.ofNullable(converter.fromJson(record.getNetworkRouteStopPointViaName(), MultilingualString.class)),
-                Optional.ofNullable(record.getNetworkRouteStopPointTimetableColumn()),
-                record.getNetworkRouteStopPointSysPeriod()
-        );
     }
 }
