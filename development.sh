@@ -8,7 +8,7 @@ COMMAND=${1:-}
 
 # Define a Docker Compose project name to distinguish
 # the docker environment of this project from others
-export COMPOSE_PROJECT_NAME=JOREIMPORTER
+export COMPOSE_PROJECT_NAME=jore3-importer
 
 DOCKER_COMPOSE_CMD="docker-compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.testdb-volume.yml -f ./docker/docker-compose.custom.yml"
 
