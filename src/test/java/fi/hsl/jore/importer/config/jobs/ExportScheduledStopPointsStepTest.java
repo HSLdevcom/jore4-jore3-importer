@@ -47,6 +47,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     private static final Jore4ScheduledStopPointDirection DIRECTION_ON_INFRALINK = BACKWARD;
     private static final String EXPECTED_INFRASTRUCTURE_LINK_ID = "554c63e6-87b2-4dc8-a032-b6b0e2607696";
     private static final String LABEL = "H1234";
+    private static final Integer EXPECTED_EXTERNAL_ID = 1000003;
     private static final int EXPECTED_PRIORITY = 10;
 
     private static final LocalDate EXPECTED_VALIDITY_PERIOD_START = LocalDate.of(1990, 1, 1);
@@ -130,6 +131,17 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
                 .row()
                 .value(JORE4_SCHEDULED_STOP_POINT.LABEL.getName())
                 .isEqualTo(LABEL);
+    }
+
+    @Test
+    @DisplayName("Should save the exported scheduled stop point with the correct external id")
+    void shouldSaveExportedScheduledStopPointWithCorrectExternalId() {
+        runSteps(STEPS);
+
+        assertThat(jore4ScheduledStopPointTargetTable)
+                .row()
+                .value(JORE4_SCHEDULED_STOP_POINT.EXTERNAL_ID.getName())
+                .isEqualTo(EXPECTED_EXTERNAL_ID);
     }
 
     @Test

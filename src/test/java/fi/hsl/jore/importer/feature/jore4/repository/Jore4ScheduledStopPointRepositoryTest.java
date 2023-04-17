@@ -112,6 +112,17 @@ class Jore4ScheduledStopPointRepositoryTest {
         }
 
         @Test
+        @DisplayName("Should save a new scheduled stop point with the correct external id")
+        void shouldSaveNewScheduledStopPointWithCorrectExternalId() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(scheduledStopPointTargetTable)
+                    .row()
+                    .value(SCHEDULED_STOP_POINT.EXTERNAL_ID.getName())
+                    .isEqualTo(SCHEDULED_STOP_POINT_EXTERNAL_ID);
+        }
+
+        @Test
         @DisplayName("Should save a new scheduled stop point with the correct direction")
         void shouldSaveNewScheduledStopPointWithCorrectDirection() {
             repository.insert(List.of(INPUT));
