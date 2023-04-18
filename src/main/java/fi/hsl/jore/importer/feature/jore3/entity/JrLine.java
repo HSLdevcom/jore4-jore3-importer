@@ -30,6 +30,12 @@ public interface JrLine
         return JrLinePk.of(lineId());
     }
 
+    // Note: references in Jore3 are still by primary key even if this is called "id".
+    @JoreColumn(name = "id",
+                nullable = false,
+                example = "1001")
+    String id();
+
     @JoreColumn(name = "lintilorg",
                 nullable = true,
                 example = "HEL")
@@ -50,6 +56,7 @@ public interface JrLine
     boolean isTrunkLine();
 
     static JrLine of(final LineId lineId,
+                     final String id,
                      final TransitType transitType,
                      final ClientOrganization clientOrganization,
                      final PublicTransportType publicTransportType,
@@ -57,6 +64,7 @@ public interface JrLine
                      final boolean isTrunkLine) {
         return ImmutableJrLine.builder()
                               .lineId(lineId)
+                              .id(id)
                               .transitType(transitType)
                               .clientOrganization(clientOrganization)
                               .publicTransportType(publicTransportType)

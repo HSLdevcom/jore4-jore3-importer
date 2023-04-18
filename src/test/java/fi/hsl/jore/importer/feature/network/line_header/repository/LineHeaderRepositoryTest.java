@@ -32,6 +32,7 @@ public class LineHeaderRepositoryTest extends IntegrationTest {
     private static final String DISPLAY_LINE_NUMBER = "5";
     private static final LegacyHslMunicipalityCode LINE_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.of('1');
     private static final ExternalId LINE_EXT_ID = ExternalIdUtil.forLine(LineId.from(LINE_NUMBER));
+    private static final String LINE_EXPORT_ID = "496";
     private static final NetworkType NETWORK = NetworkType.ROAD;
     private static final MultilingualString NAME = MultilingualString.empty()
                                                                      .with(Locale.ENGLISH, "name");
@@ -70,6 +71,7 @@ public class LineHeaderRepositoryTest extends IntegrationTest {
     public void whenPersistingLine_thenPersistedLineIsEqual() {
         final LinePK lineId = lineRepository.insert(
                 PersistableLine.of(LINE_EXT_ID,
+                                   LINE_EXPORT_ID,
                                    DISPLAY_LINE_NUMBER,
                                    NETWORK,
                                    TYPE_OF_LINE,

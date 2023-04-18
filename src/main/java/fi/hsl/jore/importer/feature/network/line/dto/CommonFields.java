@@ -6,6 +6,8 @@ import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 
 public interface CommonFields<T> extends IHasExternalId {
 
+    String exportId();
+
     String lineNumber();
 
     NetworkType networkType();

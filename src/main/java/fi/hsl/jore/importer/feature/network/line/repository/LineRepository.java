@@ -43,6 +43,7 @@ public class LineRepository
         final NetworkLinesRecord r = db.newRecord(LINE);
 
         r.setNetworkLineExtId(line.externalId().value());
+        r.setNetworkLineExportId(line.exportId());
         r.setNetworkLineNumber(line.lineNumber());
         r.setInfrastructureNetworkType(line.networkType().label());
         r.setNetworkLineTypeOfLine(line.typeOfLine().getValue());

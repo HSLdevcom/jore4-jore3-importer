@@ -1,4 +1,5 @@
 SELECT l.lintunnus,
+       l.id,
        l.linverkko,
        l.lintilorg,
        l.linjoukkollaji,

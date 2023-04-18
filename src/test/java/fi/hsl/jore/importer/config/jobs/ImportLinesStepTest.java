@@ -48,6 +48,8 @@ public class ImportLinesStepTest extends BatchIntegrationTest {
                    is(true));
         assertThat(line.externalId(),
                    is(ExternalId.of("1001")));
+        assertThat(line.exportId(),
+                   is("28"));
         assertThat(line.lineNumber(),
                    is("1"));
         assertThat(line.networkType(),

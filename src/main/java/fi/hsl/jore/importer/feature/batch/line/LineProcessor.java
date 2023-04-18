@@ -20,6 +20,7 @@ public class LineProcessor implements ItemProcessor<JrLine, PersistableLine> {
         final LegacyPublicTransportDestination lineLegacyPublicTransportDestination = item.lineId().destination();
 
         return PersistableLine.of(ExternalIdUtil.forLine(item),
+                                  item.id(),
                                   lineNumber,
                                   TransitTypeToNetworkTypeMapper.resolveNetworkType(item.transitType()),
                                   LineClassificationUtil.resolveTypeOfLine(item.transitType(),
@@ -29,4 +30,5 @@ public class LineProcessor implements ItemProcessor<JrLine, PersistableLine> {
                                   LegacyHslMunicipalityCode.of(lineLegacyPublicTransportDestination)
         );
     }
+
 }

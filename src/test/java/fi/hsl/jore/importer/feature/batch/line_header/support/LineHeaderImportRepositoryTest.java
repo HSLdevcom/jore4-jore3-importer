@@ -37,6 +37,7 @@ import static org.hamcrest.Matchers.is;
 public class LineHeaderImportRepositoryTest extends IntegrationTest {
 
     private static final String LINE_NUMBER = "1005";
+    private static final String EXPORT_ID = "496";
     private static final String DISPLAY_LINE_NUMBER = "5";
     private static final LegacyHslMunicipalityCode LINE_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.of('1');
     private static final ExternalId LINE_EXT_ID = ExternalIdUtil.forLine(LineId.from(LINE_NUMBER));
@@ -88,6 +89,7 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
         // Insert the parent line
         lineRepository.insert(
                 PersistableLine.of(LINE_EXT_ID,
+                                   EXPORT_ID,
                                    DISPLAY_LINE_NUMBER,
                                    NETWORK,
                                    TYPE_OF_LINE,
@@ -138,6 +140,7 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
         // Insert the parent line
         final LinePK lineId = lineRepository.insert(
                 PersistableLine.of(LINE_EXT_ID,
+                                   EXPORT_ID,
                                    DISPLAY_LINE_NUMBER,
                                    NETWORK,
                                    TYPE_OF_LINE,
@@ -206,6 +209,7 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
         // Insert the parent line
         final LinePK lineId = lineRepository.insert(
                 PersistableLine.of(LINE_EXT_ID,
+                                   EXPORT_ID,
                                    DISPLAY_LINE_NUMBER,
                                    NETWORK,
                                    TYPE_OF_LINE,
@@ -284,6 +288,7 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
         // Insert the parent line
         final LinePK lineId = lineRepository.insert(
                 PersistableLine.of(LINE_EXT_ID,
+                                   EXPORT_ID,
                                    DISPLAY_LINE_NUMBER,
                                    NETWORK,
                                    TYPE_OF_LINE,
@@ -345,6 +350,7 @@ public class LineHeaderImportRepositoryTest extends IntegrationTest {
         // Insert the parent line
         final LinePK lineId = lineRepository.insert(
                 PersistableLine.of(LINE_EXT_ID,
+                                   EXPORT_ID,
                                    DISPLAY_LINE_NUMBER,
                                    NETWORK,
                                    TYPE_OF_LINE,
