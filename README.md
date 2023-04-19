@@ -438,14 +438,20 @@ environment by following these steps:
    ```
    env TMOUT=0 bash
    ```
-5. Retrieve the digiroad stop list csv:
-   1. Download the latest version of the csv from Azure from `hsl-jore4-common / jore4storage / jore4-digiroad / digiroad_stops_XXX.csv`
-   2. Alternatively you may clone the [jore4-digiroad-import](https://github.com/HSLdevcom/jore4-digiroad-import) repository and follow these steps:
-      1. Run the Digiroad import.
-      2. Export infrastructure links from the data imported from Digiroad and import these links to the Jore 4 database.
-      3. Export scheduled stop points from the data imported from Digiroad and write the exported data to a CSV file.
-6. Configure the absolute path of the CSV file which contains scheduled stop points exported from Digiroad in the
-   profile specific configuration file (`digiroad.stop.csv.file.path`)
+5. Set up the Digiroad infrastructure link and stop point data to use:
+   1. Import data from Digiroad:
+      1. Clone the [jore4-digiroad-import](https://github.com/HSLdevcom/jore4-digiroad-import) repository.
+      2. Run the Digiroad import (`import_digiroad_shapefiles.sh`).
+         See [the related README section](https://github.com/HSLdevcom/jore4-digiroad-import#importing-data-from-digiroad).
+      3. Export infrastructure links from the data imported from Digiroad (`export_infra_network_csv.sh`).
+         See [the related README section](https://github.com/HSLdevcom/jore4-digiroad-import#exporting-infrastructure-links-for-jore4).
+         Then, with `jore3-jore4-importer` dependencies set up,
+         import these infrastructure links to the Jore 4 database (`import_infra_network_csv.sh`).
+      4. Stop points are fetched from a remote URL during the import process.
+         If needed, run the scheduled stop point CSV export (`export_stops_csv.sh`)
+         and upload the result CSV file eg. to `jore4storage` in Azure.
+   2. In the profile specific configuration file, set `digiroad.stop.csv.file.url` to the Digiroad stops CSV to use
+      (eg. from `hsl-jore4-common / jore4storage / jore4-digiroad / digiroad_stops_XXX.csv`)
 
 ### Running the Tests
 
