@@ -52,7 +52,7 @@ public class ImportLinkPointsStepTest extends BatchIntegrationTest {
         assertThat(shapeRepository.count(),
                    is(1));
 
-        final LinkShape shape = shapeRepository.findByExternalId(ExternalId.of("1-c-d")).orElseThrow();
+        final LinkShape shape = shapeRepository.findByExternalId(ExternalId.of("1-1000003-1000004")).orElseThrow();
 
         final Coordinate nodeC = new Coordinate(13, 12);
         final Coordinate poCD1 = new Coordinate(14.5, 14.1);

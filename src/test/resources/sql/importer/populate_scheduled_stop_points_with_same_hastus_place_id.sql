@@ -11,7 +11,7 @@ INSERT INTO network.scheduled_stop_points (
 VALUES
     (
         '058a63b3-365b-4676-af51-809bef577cdd',
-        'c',
+        '1000003',
         'cc11a5db-2ae7-4220-adfe-aca5d6620909',
         1234567890,
         '{"fi_FI": "Yliopisto uusi","sv_SE": "Universitetet nya"}',
@@ -21,7 +21,7 @@ VALUES
     ),
     (
         'c5390e54-1135-4b85-aab9-cf4a51c559bd',
-        'd',
+        '1000004',
         'a799ab85-bfc3-4b6b-8ea2-590f4f3e96cf',
         9876543211,
         '{"fi_FI": "Yliopisto vanha","sv_SE": "Universitetet gamla"}',

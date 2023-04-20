@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SoftAssertionsExtension.class)
 class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
 
-    private static final String EXPECTED_EXTERNAL_ID = "c";
+    private static final String EXPECTED_EXTERNAL_ID = "1000003";
     private static final Long EXPECTED_ELY_NUMBER = 1234567890L;
     private static final UUID EXPECTED_INFRASTRUCTURE_NODE_ID = UUID.fromString("cc11a5db-2ae7-4220-adfe-aca5d6620909");
     private static final String EXPECTED_FINNISH_NAME = "Yliopisto";

@@ -64,7 +64,7 @@ class ScheduledStopPointExportReaderTest {
     class WhenSourceTableHasOneScheduledStopPoint {
 
         private static final long EXPECTED_ELY_NUMBER = 1234567890L;
-        private static final String EXPECTED_EXTERNAL_ID = "c";
+        private static final String EXPECTED_EXTERNAL_ID = "1000003";
         private static final double EXPECTED_X_COORDINATE = 6;
         private static final double EXPECTED_Y_COORDINATE = 5;
         private static final String EXPECTED_FINNISH_NAME = "Yliopisto vanha";
@@ -142,8 +142,8 @@ class ScheduledStopPointExportReaderTest {
 
         private static final long EXPECTED_ELY_NUMBER_ONE = 1234567890L;
         private static final long EXPECTED_ELY_NUMBER_TWO = 9876543211L;
-        private static final String EXPECTED_EXTERNAL_ID_ONE = "c";
-        private static final String EXPECTED_EXTERNAL_ID_TWO = "d";
+        private static final String EXPECTED_EXTERNAL_ID_ONE = "1000003";
+        private static final String EXPECTED_EXTERNAL_ID_TWO = "1000004";
         private static final double EXPECTED_X_COORDINATE = 6;
         private static final double EXPECTED_Y_COORDINATE = 5;
         private static final String EXPECTED_FINNISH_NAME = "Yliopisto vanha";

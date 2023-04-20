@@ -49,17 +49,17 @@ public class ImportLinksStepTest extends BatchIntegrationTest {
     // The line geometry
     // and the link network type
     private static final List<Tuple3<ExternalId, LineString, NetworkType>> LINKS = List.of(
-            Tuple.of(ExternalId.of("1-c-d"),
+            Tuple.of(ExternalId.of("1-1000003-1000004"),
                      GeometryUtil.toLineString(GeometryUtil.SRID_WGS84,
                                                List.of(NODE_C,
                                                        NODE_D)),
                      NetworkType.ROAD),
-            Tuple.of(ExternalId.of("1-d-e"),
+            Tuple.of(ExternalId.of("1-1000004-1000005"),
                      GeometryUtil.toLineString(GeometryUtil.SRID_WGS84,
                                                List.of(NODE_D,
                                                        NODE_E)),
                      NetworkType.ROAD),
-            Tuple.of(ExternalId.of("1-e-f"),
+            Tuple.of(ExternalId.of("1-1000005-1000006"),
                      GeometryUtil.toLineString(GeometryUtil.SRID_WGS84,
                                                List.of(NODE_E,
                                                        NODE_F)),

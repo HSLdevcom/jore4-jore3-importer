@@ -41,19 +41,19 @@ public class ImportNodesStepTest extends BatchIntegrationTest {
     // The node projected location,
     // and the node type
     private static final List<Tuple4<ExternalId, Point, Optional<Point>, NodeType>> NODES = List.of(
-            Tuple.of(ExternalId.of("c"),
+            Tuple.of(ExternalId.of("1000003"),
                      GeometryUtil.toPoint(GeometryUtil.SRID_WGS84, new Coordinate(6, 5)),
                      Optional.of(GeometryUtil.toPoint(GeometryUtil.SRID_WGS84, new Coordinate(13, 12))),
                      NodeType.STOP),
-            Tuple.of(ExternalId.of("d"),
+            Tuple.of(ExternalId.of("1000004"),
                      GeometryUtil.toPoint(GeometryUtil.SRID_WGS84, new Coordinate(17, 16)),
                      Optional.empty(),
                      NodeType.CROSSROADS),
-            Tuple.of(ExternalId.of("e"),
+            Tuple.of(ExternalId.of("1000005"),
                      GeometryUtil.toPoint(GeometryUtil.SRID_WGS84, new Coordinate(19, 18)),
                      Optional.empty(),
                      NodeType.CROSSROADS),
-            Tuple.of(ExternalId.of("f"),
+            Tuple.of(ExternalId.of("1000006"),
                      GeometryUtil.toPoint(GeometryUtil.SRID_WGS84, new Coordinate(8, 7)),
                      Optional.of(GeometryUtil.toPoint(GeometryUtil.SRID_WGS84, new Coordinate(21, 20))),
                      NodeType.STOP)

@@ -77,22 +77,22 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
     // The external id of the node
     // and the external id of the route direction
     private static final List<Tuple4<ExternalId, Integer, ExternalId, ExternalId>> ROUTE_POINTS = List.of(
-            Tuple.of(ExternalId.of("1337-c"),
+            Tuple.of(ExternalId.of("1337-1000003"),
                     0,
-                    ExternalId.of("c"),
+                    ExternalId.of("1000003"),
                     ExternalId.of("1001-1-20200603")),
-            Tuple.of(ExternalId.of("1338-d"),
+            Tuple.of(ExternalId.of("1338-1000004"),
                     1,
-                    ExternalId.of("d"),
+                    ExternalId.of("1000004"),
                     ExternalId.of("1001-1-20200603")),
-            Tuple.of(ExternalId.of("1339-e"),
+            Tuple.of(ExternalId.of("1339-1000005"),
                     2,
-                    ExternalId.of("e"),
+                    ExternalId.of("1000005"),
                     ExternalId.of("1001-1-20200603")),
             // Note how the last route point borrows the jore3 route link id!
-            Tuple.of(ExternalId.of("1339-f"),
+            Tuple.of(ExternalId.of("1339-1000006"),
                     3,
-                    ExternalId.of("f"),
+                    ExternalId.of("1000006"),
                     ExternalId.of("1001-1-20200603"))
     );
 
@@ -103,7 +103,7 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
     // The via point flag
     // and the timetable column (if any)
     private static final List<Tuple8<ExternalId, Integer, Boolean, RegulatedTimingPointStatus, Boolean, String, String, Optional<Integer>>> ROUTE_STOP_POINTS =
-            List.of(Tuple.of(ExternalId.of("1337-c"),
+            List.of(Tuple.of(ExternalId.of("1337-1000003"),
                              0,
                              true,
                              RegulatedTimingPointStatus.YES,
@@ -111,7 +111,7 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
                              "Määränpää 2",
                              "Mål 2",
                              Optional.of(5)),
-                    Tuple.of(ExternalId.of("1339-f"),
+                    Tuple.of(ExternalId.of("1339-1000006"),
                              1,
                              true,
                              RegulatedTimingPointStatus.UNKNOWN,
@@ -128,15 +128,15 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
     private static final List<Tuple4<ExternalId, Integer, ExternalId, ExternalId>> ROUTE_LINKS = List.of(
             Tuple.of(ExternalId.of("1337"),
                     0,
-                    ExternalId.of("1-c-d"),
+                    ExternalId.of("1-1000003-1000004"),
                     ExternalId.of("1001-1-20200603")),
             Tuple.of(ExternalId.of("1338"),
                     1,
-                    ExternalId.of("1-d-e"),
+                    ExternalId.of("1-1000004-1000005"),
                     ExternalId.of("1001-1-20200603")),
             Tuple.of(ExternalId.of("1339"),
                     2,
-                    ExternalId.of("1-e-f"),
+                    ExternalId.of("1-1000005-1000006"),
                     ExternalId.of("1001-1-20200603"))
     );
 
