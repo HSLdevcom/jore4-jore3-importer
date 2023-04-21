@@ -1,6 +1,5 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
-import fi.hsl.jore.importer.feature.jore3.util.StringParserUtil;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPoint;
 import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.Routines;
@@ -50,8 +49,7 @@ public class Jore4ScheduledStopPointRepository implements IJore4ScheduledStopPoi
                 Routines.insertScheduledStopPointWithVehicleMode2(
                         db.configuration(),
                         stopPoint.scheduledStopPointId(),
-                        // Jore3 stop ids are always supposed to be numbers, even if they were stored as strings.
-                        StringParserUtil.parseRequiredInteger("externalScheduledStopPointId", stopPoint.externalScheduledStopPointId()),
+                        stopPoint.externalIdForExport(),
                         stopPoint.measuredLocation(),
                         infrastructureLinkId,
                         stopPoint.directionOnInfraLink().getValue(),

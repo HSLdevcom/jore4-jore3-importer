@@ -34,6 +34,7 @@ class Jore4ScheduledStopPointRepositoryTest {
 
     private static final UUID SCHEDULED_STOP_POINT_ID = UUID.fromString("0259d692-7ee0-4792-b769-1141b248d102");
     private static final String SCHEDULED_STOP_POINT_EXTERNAL_ID = "1234567";
+    private static final Integer SCHEDULED_STOP_POINT_EXTERNAL_ID_FOR_EXPORT = 1234567;
     private static final Jore4ScheduledStopPointDirection DIRECTION_ON_INFRALINK = Jore4ScheduledStopPointDirection.FORWARD;
     private static final String INFRASTRUCTURE_LINK_EXTERNAL_ID = "133202";
     private static final String EXPECTED_INFRASTRUCTURE_LINK_ID = "554c63e6-87b2-4dc8-a032-b6b0e2607696";
@@ -82,6 +83,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         private final Jore4ScheduledStopPoint INPUT = Jore4ScheduledStopPoint.of(
                 SCHEDULED_STOP_POINT_ID,
                 SCHEDULED_STOP_POINT_EXTERNAL_ID,
+                SCHEDULED_STOP_POINT_EXTERNAL_ID_FOR_EXPORT,
                 INFRASTRUCTURE_LINK_EXTERNAL_ID,
                 DIRECTION_ON_INFRALINK,
                 LABEL,
@@ -119,7 +121,7 @@ class Jore4ScheduledStopPointRepositoryTest {
             assertThat(scheduledStopPointTargetTable)
                     .row()
                     .value(SCHEDULED_STOP_POINT.EXTERNAL_ID.getName())
-                    .isEqualTo(SCHEDULED_STOP_POINT_EXTERNAL_ID);
+                    .isEqualTo(SCHEDULED_STOP_POINT_EXTERNAL_ID_FOR_EXPORT);
         }
 
         @Test

@@ -30,6 +30,7 @@ class ScheduledStopPointExportProcessorTest {
     private static final String IMPORTER_SHORT_ID = "H1234";
 
     private static final String JORE_3_STOP_EXTERNAL_ID = "1234567";
+    private static final Integer JORE_3_STOP_EXTERNAL_ID_FOR_EXPORT = 1234567;
     private static final String JORE_3_STOP_FINNISH_NAME = "Ullanmäki (Jore3)";
     private static final String JORE_3_STOP_SWEDISH_NAME = "Ullasbacken (Jore3)";
     private static final double JORE_3_STOP_X_COORDINATE = 25.696376131;
@@ -103,6 +104,14 @@ class ScheduledStopPointExportProcessorTest {
             }
 
             @Test
+            @DisplayName("Should return a scheduled stop point with the correct external stop id for export")
+            void shouldReturnScheduledStopPointWithCorrectExternalStopIdForExport() throws Exception {
+                final Jore4ScheduledStopPoint output = processor.process(jore3Stop);
+                assertThat(output.externalIdForExport()).isEqualTo(JORE_3_STOP_EXTERNAL_ID_FOR_EXPORT);
+            }
+
+
+            @Test
             @DisplayName("Should return a scheduled stop point with the correct external id of infrastructure link")
             void shouldReturnScheduledStopPointWithCorrectExternalInfrastructureLinkId() throws Exception {
                 final Jore4ScheduledStopPoint output = processor.process(jore3Stop);
@@ -168,6 +177,28 @@ class ScheduledStopPointExportProcessorTest {
     }
 
     @Nested
+    @DisplayName("When the source stop has an invalid external id")
+    class WhenSourceStopHasInvalidExternalId {
+        private static final String INVALID_EXTERNAL_ID = "UNKNOWN";
+
+        private final ImporterScheduledStopPoint jore3Stop = ImporterScheduledStopPoint.of(
+                List.of(ExternalId.of(INVALID_EXTERNAL_ID)),
+                List.of(ELY_NUMBER),
+                JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
+                JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
+                Optional.of(IMPORTER_SHORT_ID),
+                Optional.of(JORE_3_STOP_HASTUS_PLACE_ID)
+        );
+
+        @Test
+        @DisplayName("Should abort processing of the scheduled stop point")
+        void shouldAbortProcessingOfScheduledStopPoint() throws Exception {
+            final Jore4ScheduledStopPoint output = processor.process(jore3Stop);
+            assertThat(output).isNull();
+        }
+    }
+
+    @Nested
     @DisplayName("When the source stop has two ely numbers")
     class WhenSourceStopHasTwoElyNumbers {
 
@@ -175,7 +206,7 @@ class ScheduledStopPointExportProcessorTest {
         @DisplayName("When a Digiroad stop is found with the secoond ely number of the source stop")
         class WhenDigiroadStopIsFoundWithSecondElyNumberOfSourceStop {
 
-            private static final String UNKNOWN_EXTERNAL_ID = "UNKNOWN";
+            private static final String UNKNOWN_EXTERNAL_ID = "9999999";
 
             private final ImporterScheduledStopPoint jore3Stop = ImporterScheduledStopPoint.of(
                     List.of(ExternalId.of(UNKNOWN_EXTERNAL_ID), ExternalId.of(JORE_3_STOP_EXTERNAL_ID)),
