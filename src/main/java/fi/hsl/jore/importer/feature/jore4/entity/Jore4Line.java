@@ -18,6 +18,8 @@ public interface Jore4Line {
 
     String externalLineId();
 
+    Short exportId();
+
     String label();
 
     MultilingualString name();
@@ -38,6 +40,7 @@ public interface Jore4Line {
 
     static ImmutableJore4Line of(final UUID lineId,
                                  final String externalLineId,
+                                 final Short exportId,
                                  final String label,
                                  final MultilingualString name,
                                  final MultilingualString shortName,
@@ -50,6 +53,7 @@ public interface Jore4Line {
         return ImmutableJore4Line.builder()
                 .lineId(lineId)
                 .externalLineId(externalLineId)
+                .exportId(exportId)
                 .label(label)
                 .name(name)
                 .shortName(shortName)

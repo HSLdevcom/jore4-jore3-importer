@@ -17,6 +17,8 @@ public interface ImporterLine {
 
     ExternalId externalId();
 
+    String exportId();
+
     String lineNumber();
 
     MultilingualString name();
@@ -32,6 +34,7 @@ public interface ImporterLine {
     LegacyHslMunicipalityCode legacyHslMunicipalityCode();
 
     static ImmutableImporterLine of (final ExternalId externalId,
+                                     final String exportId,
                                      final String lineNumber,
                                      final MultilingualString name,
                                      final NetworkType networkType,
@@ -41,6 +44,7 @@ public interface ImporterLine {
                                      final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableImporterLine.builder()
                 .externalId(externalId)
+                .exportId((exportId))
                 .lineNumber(lineNumber)
                 .name(name)
                 .networkType(networkType)

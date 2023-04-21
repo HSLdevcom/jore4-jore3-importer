@@ -1,5 +1,6 @@
 SELECT
         l.network_line_ext_id AS external_id,
+        l.network_line_export_id AS export_id,
         l.network_line_number AS line_number,
         l.infrastructure_network_type AS network_type,
         l.network_line_type_of_line AS type_of_line,

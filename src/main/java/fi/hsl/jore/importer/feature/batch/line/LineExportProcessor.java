@@ -25,10 +25,24 @@ public class LineExportProcessor implements ItemProcessor<ImporterLine, Jore4Lin
     @Override
     public Jore4Line process(final ImporterLine input) throws Exception {
         LOGGER.debug("Processing line: {}", input);
+        final String externalId = input.externalId().value();
+
+        final Short exportId = tryParseExportId(input.exportId());
+        if (exportId == null) {
+            // The id field is supposed to be a 4-digit number stored as string.
+            // The field is required, so abort processing of whole line if we can't handle it.
+            LOGGER.warn(
+                "Skipping importing line {} from Jore3: could not parse export_id as short: {}.",
+                externalId,
+                input.exportId()
+            );
+            return null;
+        }
 
         return Jore4Line.of(
                 UUID.randomUUID(),
-                input.externalId().value(),
+                externalId,
+                exportId,
                 input.lineNumber(),
                 input.name(),
                 input.shortName(),
@@ -39,5 +53,13 @@ public class LineExportProcessor implements ItemProcessor<ImporterLine, Jore4Lin
                 ValidityPeriodUtil.constructValidityPeriodEndDay(input.validDateRange().range()),
                 input.legacyHslMunicipalityCode()
         );
+    }
+
+    private Short tryParseExportId(String exportId) {
+         try {
+            return Short.parseShort(exportId);
+        } catch (final NumberFormatException ignored) {
+            return null;
+        }
     }
 }
