@@ -10,7 +10,7 @@ on:
 jobs:
   push_to_registry:
     name: Build & Push docker image to dockerhub
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest-4-cores
 
     steps:
       - name: Checkout code
