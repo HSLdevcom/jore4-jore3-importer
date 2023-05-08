@@ -11,7 +11,7 @@ INSERT INTO network.scheduled_stop_points (
 )
 VALUES (
     '058a63b3-365b-4676-af51-809bef577cdd',
-    'c',
+    '1000003',
     'cc11a5db-2ae7-4220-adfe-aca5d6620909',
     1234567890,
     '{"fi_FI": "Yliopisto vanha","sv_SE": "Universitetet gamla"}',
@@ -34,7 +34,7 @@ INSERT INTO network.scheduled_stop_points (
 )
 VALUES (
     '20d94223-ed84-4fd6-be3c-55650901f75b',
-    'd',
+    '1000004',
     '0009b559-0e7c-4549-99eb-5391727d1016',
     987654321,
     '{"fi_FI": "Etelä-Hervanta vanha","sv_SE": "Södra Hervanta gamla"}',

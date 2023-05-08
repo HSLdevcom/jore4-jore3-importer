@@ -13,12 +13,14 @@ public interface PersistableLine
     LegacyHslMunicipalityCode lineLegacyHslMunicipalityCode();
 
     static PersistableLine of(final ExternalId externalId,
+                              final String exportId,
                               final String lineNumber,
                               final NetworkType networkType,
                               final TypeOfLine typeOfLine,
                               final LegacyHslMunicipalityCode lineLegacyHslMunicipalityCode) {
         return ImmutablePersistableLine.builder()
                                        .externalId(externalId)
+                                       .exportId(exportId)
                                        .lineNumber(lineNumber)
                                        .networkType(networkType)
                                        .typeOfLine(typeOfLine)

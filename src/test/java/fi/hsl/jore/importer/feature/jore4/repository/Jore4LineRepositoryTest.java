@@ -31,6 +31,7 @@ class Jore4LineRepositoryTest {
 
     private static final UUID LINE_ID = UUID.fromString("237fa7b1-bd07-4206-b018-4144750ec689");
     private static final String EXTERNAL_LINE_ID = "9009";
+    private static final Short LINE_EXPORT_ID = 1234;
     private static final String LABEL = "1";
 
     private static final String EXPECTED_JORE4_NAME = "{\"fi_FI\":\"Vantaanportti-Lentoasema-Kerava\",\"sv_SE\":\"Vandaporten-Flygstationen-Kervo\"}";
@@ -77,6 +78,7 @@ class Jore4LineRepositoryTest {
         private final Jore4Line INPUT = Jore4Line.of(
                 LINE_ID,
                 EXTERNAL_LINE_ID,
+                LINE_EXPORT_ID,
                 LABEL,
                 JoreLocaleUtil.createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
                 JoreLocaleUtil.createMultilingualString(FINNISH_SHORT_NAME, SWEDISH_SHORT_NAME),

@@ -50,6 +50,7 @@ public class LineImportRepositoryTest {
     class CommitStagingToTarget {
 
         private static final String LINE_NUMBER = "1005";
+        private final String EXPORT_ID = "496";
         private static final String DISPLAY_LINE_NUMBER = "5";
         private final LegacyHslMunicipalityCode LINE_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.of('1');
         private final ExternalId EXT_ID = ExternalIdUtil.forLine(LineId.from(LINE_NUMBER));
@@ -73,6 +74,7 @@ public class LineImportRepositoryTest {
         public void whenNewStagedRowsAndCommit_andTargetDbEmpty_thenReturnResultWithInsertedId() {
             importRepository.submitToStaging(
                     List.of(PersistableLine.of(EXT_ID,
+                            EXPORT_ID,
                             DISPLAY_LINE_NUMBER,
                             NETWORK,
                             TYPE_OF_LINE,
@@ -112,6 +114,7 @@ public class LineImportRepositoryTest {
         public void whenNoStagedRowsAndCommit_andTargetNotEmpty_thenReturnResultWithDeletedId() {
             final LinePK existingId = targetRepository.insert(
                     PersistableLine.of(EXT_ID,
+                            EXPORT_ID,
                             DISPLAY_LINE_NUMBER,
                             NETWORK,
                             TYPE_OF_LINE,

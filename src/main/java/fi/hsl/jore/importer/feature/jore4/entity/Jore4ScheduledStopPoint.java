@@ -18,7 +18,16 @@ public interface Jore4ScheduledStopPoint {
 
     String externalInfrastructureLinkId();
 
+    /**
+     * The unprocessed external id from importer database.
+     * Required because write Jore4 ids back to importer database and use this for matching.
+     */
     String externalScheduledStopPointId();
+
+    /**
+     * Tha parsed external id that will be exported to Jore4 database.
+     */
+    Integer externalIdForExport();
 
     Jore4ScheduledStopPointDirection directionOnInfraLink();
 
@@ -36,6 +45,7 @@ public interface Jore4ScheduledStopPoint {
 
     static ImmutableJore4ScheduledStopPoint of(final UUID scheduledStopPointId,
                                                final String externalScheduledStopPointId,
+                                               final Integer externalIdForExport,
                                                final String externalInfrastructureLinkId,
                                                final Jore4ScheduledStopPointDirection directionOnInfraLink,
                                                final String label,
@@ -47,6 +57,7 @@ public interface Jore4ScheduledStopPoint {
         return ImmutableJore4ScheduledStopPoint.builder()
                 .scheduledStopPointId(scheduledStopPointId)
                 .externalScheduledStopPointId(externalScheduledStopPointId)
+                .externalIdForExport(externalIdForExport)
                 .externalInfrastructureLinkId(externalInfrastructureLinkId)
                 .directionOnInfraLink(directionOnInfraLink)
                 .label(label)

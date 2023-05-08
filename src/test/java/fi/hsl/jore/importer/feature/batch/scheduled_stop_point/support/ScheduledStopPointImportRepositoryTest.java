@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @IntTest
 public class ScheduledStopPointImportRepositoryTest {
 
-    private static final String EXTERNAL_ID = "c";
+    private static final String EXTERNAL_ID = "1000003";
 
     private final IScheduledStopPointImportRepository importRepository;
     private final IScheduledStopPointTestRepository targetRepository;

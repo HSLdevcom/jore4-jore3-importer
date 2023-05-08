@@ -46,9 +46,10 @@ public class Jore4ScheduledStopPointRepository implements IJore4ScheduledStopPoi
                                 .fetchOneInto(UUID.class))
                         .orElse(null);
 
-                Routines.insertScheduledStopPointWithVehicleMode(
+                Routines.insertScheduledStopPointWithVehicleMode2(
                         db.configuration(),
                         stopPoint.scheduledStopPointId(),
+                        stopPoint.externalIdForExport(),
                         stopPoint.measuredLocation(),
                         infrastructureLinkId,
                         stopPoint.directionOnInfraLink().getValue(),

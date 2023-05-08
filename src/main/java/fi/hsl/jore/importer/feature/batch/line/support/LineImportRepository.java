@@ -45,13 +45,15 @@ public class LineImportRepository
     public void submitToStaging(final Iterable<? extends PersistableLine> lines) {
         final BatchBindStep batch = db.batch(db.insertInto(STAGING_TABLE,
                                                            STAGING_TABLE.NETWORK_LINE_EXT_ID,
+                                                           STAGING_TABLE.NETWORK_LINE_EXPORT_ID,
                                                            STAGING_TABLE.NETWORK_LINE_NUMBER,
                                                            STAGING_TABLE.INFRASTRUCTURE_NETWORK_TYPE,
                                                            STAGING_TABLE.NETWORK_LINE_TYPE_OF_LINE,
                                                            STAGING_TABLE.NETWORK_LINE_LEGACY_HSL_MUNICIPALITY_CODE)
-                                               .values((String) null, null, null, null, null));
+                                               .values((String) null, null, null, null, null, null));
 
         lines.forEach(line -> batch.bind(line.externalId().value(),
+                                         line.exportId(),
                                          line.lineNumber(),
                                          line.networkType().label(),
                                          line.typeOfLine().getValue(),
@@ -83,11 +85,13 @@ public class LineImportRepository
     protected Set<LinePK> insert() {
         return db.insertInto(TARGET_TABLE)
                  .columns(TARGET_TABLE.NETWORK_LINE_EXT_ID,
+                          TARGET_TABLE.NETWORK_LINE_EXPORT_ID,
                           TARGET_TABLE.NETWORK_LINE_NUMBER,
                           TARGET_TABLE.INFRASTRUCTURE_NETWORK_TYPE,
                           TARGET_TABLE.NETWORK_LINE_TYPE_OF_LINE,
                           TARGET_TABLE.NETWORK_LINE_LEGACY_HSL_MUNICIPALITY_CODE)
                  .select(db.select(STAGING_TABLE.NETWORK_LINE_EXT_ID,
+                                   STAGING_TABLE.NETWORK_LINE_EXPORT_ID,
                                    STAGING_TABLE.NETWORK_LINE_NUMBER,
                                    STAGING_TABLE.INFRASTRUCTURE_NETWORK_TYPE,
                                    STAGING_TABLE.NETWORK_LINE_TYPE_OF_LINE,

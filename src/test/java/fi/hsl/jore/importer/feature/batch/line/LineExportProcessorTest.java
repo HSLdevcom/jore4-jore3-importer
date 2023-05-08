@@ -21,6 +21,8 @@ class LineExportProcessorTest {
 
     private static final String LINE_NUMBER = "35";
     private static final String EXTERNAL_ID = "7863";
+    private static final String EXPORT_ID_INPUT = "1234";
+    private static final Short EXPORT_ID_OUTPUT = 1234;
     private static final String FINNISH_NAME = "Vantaanportti-Lentoasema-Kerava";
     private static final String FINNISH_SHORT_NAME = "Vantaanp-Kerava";
     private static final String SWEDISH_NAME = "Vandaporten-Flygstationen-Kervo";
@@ -37,6 +39,7 @@ class LineExportProcessorTest {
 
     private static final ImporterLine INPUT = ImporterLine.of(
             ExternalId.of(EXTERNAL_ID),
+            EXPORT_ID_INPUT,
             LINE_NUMBER,
             JoreLocaleUtil.createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
             NETWORK_TYPE_ROAD,
@@ -47,7 +50,6 @@ class LineExportProcessorTest {
     );
 
     private final LineExportProcessor processor = new LineExportProcessor();
-
 
     @Nested
     @DisplayName("Transform exported line into Jore 4 format")
@@ -65,6 +67,13 @@ class LineExportProcessorTest {
         void shouldReturnLineWithCorrectExternalId() throws Exception {
             final Jore4Line line = processor.process(INPUT);
             assertThat(line.externalLineId()).isEqualTo(EXTERNAL_ID);
+        }
+
+        @Test
+        @DisplayName("Should return a line with the correct export id")
+        void shouldReturnLineWithCorrectExportId() throws Exception {
+            final Jore4Line line = processor.process(INPUT);
+            assertThat(line.exportId()).isEqualTo(EXPORT_ID_OUTPUT);
         }
 
         @Test
@@ -153,6 +162,32 @@ class LineExportProcessorTest {
         void shouldReturnLineWithCorrectLegacyHslMunicipalityCode() throws Exception {
             final Jore4Line line = processor.process(INPUT);
             assertThat(line.legacyHslMunicipalityCode()).isEqualTo(LEGACY_HSL_MUNICIPALITY_CODE);
+        }
+
+        @Nested
+        @DisplayName("When the source line has an invalid export id")
+        class WhenSourceLineHasInvalidExportId {
+            private static final String INVALID_EXPORT_ID = "ABCD";
+
+            private final ImporterLine JORE3_LINE = ImporterLine.of(
+                    INPUT.externalId(),
+                    INVALID_EXPORT_ID,
+                    INPUT.lineNumber(),
+                    INPUT.name(),
+                    INPUT.networkType(),
+                    INPUT.shortName(),
+                    INPUT.validDateRange(),
+                    INPUT.typeOfLine(),
+                    INPUT.legacyHslMunicipalityCode()
+            );
+
+            @Test
+            @DisplayName("Should abort processing of the line")
+            void shouldAbortProcessingOfLine() throws Exception {
+                final Jore4Line line = processor.process(JORE3_LINE);
+                assertThat(line).isNull();
+            }
+
         }
     }
 }

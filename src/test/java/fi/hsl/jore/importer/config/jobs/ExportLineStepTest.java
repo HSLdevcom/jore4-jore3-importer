@@ -40,6 +40,7 @@ class ExportLineStepTest extends BatchIntegrationTest {
     private static final List<String> STEPS = List.of("exportLinesStep");
 
     private static final String EXPECTED_LABEL = "1";
+    private static final Short EXPECTED_EXTERNAL_ID = 28;
     private static final String EXPECTED_NAME = "{\"fi_FI\":\"Eira - Töölö - Sörnäinen (M) - Käpylä\",\"sv_SE\":\"Eira - Tölö - Sörnäs (M) - Kottby\"}";
     private static final String EXPECTED_SHORT_NAME = "{\"fi_FI\":\"Eira-Töölö-Käpylä\",\"sv_SE\":\"Eira-Tölö-Kottby\"}";
 
@@ -53,9 +54,11 @@ class ExportLineStepTest extends BatchIntegrationTest {
 
     private static final fi.hsl.jore.importer.jooq.network.tables.NetworkLines IMPORTER_LINE = fi.hsl.jore.importer.jooq.network.Tables.NETWORK_LINES;
     private static final fi.hsl.jore.jore4.jooq.route.tables.Line JORE4_LINE = fi.hsl.jore.jore4.jooq.route.Tables.LINE;
+    private static final fi.hsl.jore.jore4.jooq.route.tables.LineExternalId JORE4_LINE_EXTERNAL_ID = fi.hsl.jore.jore4.jooq.route.Tables.LINE_EXTERNAL_ID;
 
     private final Table importerTargetTable;
     private final Table jore4TargetTable;
+    private final Table jore4TargetLineExternalIdTable;
     private final Jore4ValidityPeriodTestRepository testRepository;
 
     @Autowired
@@ -63,6 +66,7 @@ class ExportLineStepTest extends BatchIntegrationTest {
                        final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
         this.importerTargetTable = new Table(importerDataSource, "network.network_lines");
         this.jore4TargetTable = new Table(jore4DataSource, "route.line");
+        this.jore4TargetLineExternalIdTable = new Table(jore4DataSource, "route.line_external_id");
         this.testRepository = new Jore4ValidityPeriodTestRepository(jore4DataSource,
                 ValidityPeriodTargetTable.LINE
         );
@@ -135,6 +139,29 @@ class ExportLineStepTest extends BatchIntegrationTest {
         Assertions.assertThat(validityEnd)
                 .as(JORE4_LINE.VALIDITY_END.getName())
                 .isEqualTo(EXPECTED_VALIDITY_PERIOD_END);
+    }
+
+    @Test
+    @DisplayName("Should insert external ids for lines")
+    void shouldInsertExternalIdsForLines() {
+        runSteps(STEPS);
+
+        assertThat(jore4TargetLineExternalIdTable)
+                .hasNumberOfRows(1);
+
+        final SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(jore4TargetLineExternalIdTable)
+                .row()
+                .value(JORE4_LINE_EXTERNAL_ID.LABEL.getName())
+                .isEqualTo(EXPECTED_LABEL);
+
+        softAssertions.assertThat(jore4TargetLineExternalIdTable)
+                .row()
+                .value(JORE4_LINE_EXTERNAL_ID.EXTERNAL_ID.getName())
+                .isEqualTo(EXPECTED_EXTERNAL_ID);
+
+        softAssertions.assertAll();
     }
 
     @Test

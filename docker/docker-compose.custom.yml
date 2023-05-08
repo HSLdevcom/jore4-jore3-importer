@@ -36,13 +36,13 @@ services:
 
   jore4-mssqltestdb:
     # pin compatible version of mssql schema
-    image: "hsldevcom/jore4-mssql-testdb:schema-only-jr_linja_vaatimus-table--20220523-1854abfa889ee6432878c5203a115ad4945506d3"
+    image: "hsldevcom/jore4-mssql-testdb:schema-only-fix-jore-schema--20230420-9851067c8d776b75af133c48e8be1f277d861403"
     # volume to easily use jore3 database dump
     volumes:
       - ../jore3dump:/mnt/jore3dump
 
   jore4-hasura:
     # pin compatible version of jore4 data model
-    image: "hsldevcom/jore4-hasura:hsl-main--20230324-beb6ecbde2b638b79af499e7f18a568d85f1541e"
+    image: "hsldevcom/jore4-hasura:hsl-add-numeric-id-fields--20230417-7193ce6efeb1979dde29720dd899f90b548df4e5"
 networks:
     jore4:

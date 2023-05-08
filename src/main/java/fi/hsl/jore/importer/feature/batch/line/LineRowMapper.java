@@ -25,6 +25,7 @@ public class LineRowMapper implements RowMapper<JrLine> {
     public JrLine mapRow(final ResultSet rs,
                          final int rowNum) throws SQLException {
         return JrLine.of(LineId.from(getStringOrThrow(rs, "lintunnus")),
+                         getStringOrThrow(rs, "id"),
                          getOptionalString(rs, "linverkko")
                                  .flatMap(TransitType::of)
                                  .orElse(TransitType.UNKNOWN),

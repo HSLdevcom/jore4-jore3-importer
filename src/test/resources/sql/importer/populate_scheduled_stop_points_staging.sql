@@ -7,7 +7,7 @@ INSERT INTO network.scheduled_stop_points_staging (
     usage_in_routes
 )
 VALUES (
-    'c',
+    '1000003',
     1234567890,
     '{"fi_FI": "Yliopisto","sv_SE": "Universitetet"}',
     'H1234',

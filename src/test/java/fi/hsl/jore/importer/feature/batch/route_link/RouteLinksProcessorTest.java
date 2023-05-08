@@ -49,8 +49,8 @@ public class RouteLinksProcessorTest {
                 DIR,
                 VALID_FROM,
                 TRANSIT,
-                NodeId.of("a"),
-                NodeId.of("b"),
+                NodeId.of("1000001"),
+                NodeId.of("1000002"),
                 NodeType.BUS_STOP,
                 RegulatedTimingPointStatus.NO,
                 StopPointPurpose.BOARDING,
@@ -75,14 +75,14 @@ public class RouteLinksProcessorTest {
                 is(Vector.of(
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
-                                .externalId(ExternalId.of("1234-a"))
-                                .node(ExternalId.of("a"))
+                                .externalId(ExternalId.of("1234-1000001"))
+                                .node(ExternalId.of("1000001"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build(),
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(1)
-                                .externalId(ExternalId.of("1234-b"))
-                                .node(ExternalId.of("b"))
+                                .externalId(ExternalId.of("1234-1000002"))
+                                .node(ExternalId.of("1000002"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build())));
 
@@ -92,7 +92,7 @@ public class RouteLinksProcessorTest {
                 is(Vector.of(
                         ImmutableJore3RouteStopPoint.builder()
                                 .orderNumber(0)
-                                .externalId(ExternalId.of("1234-a"))
+                                .externalId(ExternalId.of("1234-1000001"))
                                 .hastusStopPoint(true)
                                 .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                                 .viaPoint(true)
@@ -104,7 +104,7 @@ public class RouteLinksProcessorTest {
                                 .build(),
                         ImmutableJore3RouteStopPoint.builder()
                                 .orderNumber(1)
-                                .externalId(ExternalId.of("1234-b"))
+                                .externalId(ExternalId.of("1234-1000002"))
                                 .hastusStopPoint(true)
                                 .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                                 .viaPoint(true)
@@ -126,8 +126,8 @@ public class RouteLinksProcessorTest {
                 DIR,
                 VALID_FROM,
                 TRANSIT,
-                NodeId.of("a"),
-                NodeId.of("b"),
+                NodeId.of("1000001"),
+                NodeId.of("1000002"),
                 NodeType.BUS_STOP,
                 RegulatedTimingPointStatus.NO,
                 StopPointPurpose.BOARDING,
@@ -152,14 +152,14 @@ public class RouteLinksProcessorTest {
                 is(Vector.of(
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
-                                .externalId(ExternalId.of("1234-a"))
-                                .node(ExternalId.of("a"))
+                                .externalId(ExternalId.of("1234-1000001"))
+                                .node(ExternalId.of("1000001"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build(),
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(1)
-                                .externalId(ExternalId.of("1234-b"))
-                                .node(ExternalId.of("b"))
+                                .externalId(ExternalId.of("1234-1000002"))
+                                .node(ExternalId.of("1000002"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build())));
 
@@ -168,7 +168,7 @@ public class RouteLinksProcessorTest {
         assertThat(stopPoints,
                 is(Vector.of(ImmutableJore3RouteStopPoint.builder()
                         .orderNumber(0)
-                        .externalId(ExternalId.of("1234-a"))
+                        .externalId(ExternalId.of("1234-1000001"))
                         .hastusStopPoint(true)
                         .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                         .viaPoint(true)
@@ -190,8 +190,8 @@ public class RouteLinksProcessorTest {
                 DIR,
                 VALID_FROM,
                 TRANSIT,
-                NodeId.of("a"),
-                NodeId.of("b"),
+                NodeId.of("1000001"),
+                NodeId.of("1000002"),
                 NodeType.CROSSROADS,
                 RegulatedTimingPointStatus.NO,
                 StopPointPurpose.BOARDING,
@@ -216,14 +216,14 @@ public class RouteLinksProcessorTest {
                 is(Vector.of(
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
-                                .externalId(ExternalId.of("1234-a"))
-                                .node(ExternalId.of("a"))
+                                .externalId(ExternalId.of("1234-1000001"))
+                                .node(ExternalId.of("1000001"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build(),
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(1)
-                                .externalId(ExternalId.of("1234-b"))
-                                .node(ExternalId.of("b"))
+                                .externalId(ExternalId.of("1234-1000002"))
+                                .node(ExternalId.of("1000002"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build())));
 
@@ -237,19 +237,19 @@ public class RouteLinksProcessorTest {
     @Test
     public void givenComplexRoute_thenReturnRoutePoints_andStopPoints() throws Exception {
         // Node A is a bus stop
-        final NodeId nodeA = NodeId.of("a");
+        final NodeId nodeA = NodeId.of("1000001");
         // Node B is a crossroads junction
-        final NodeId nodeB = NodeId.of("b");
+        final NodeId nodeB = NodeId.of("1000002");
         // Node C is a crossroads junction
-        final NodeId nodeC = NodeId.of("c");
+        final NodeId nodeC = NodeId.of("1000003");
         // Node D is a bus stop, but not in use
-        final NodeId nodeD = NodeId.of("d");
+        final NodeId nodeD = NodeId.of("1000004");
         // Node E is a bus stop as well as a regulated timing point (with load time)
-        final NodeId nodeE = NodeId.of("e");
+        final NodeId nodeE = NodeId.of("1000005");
         // Node F is a crossroads junction
-        final NodeId nodeF = NodeId.of("f");
+        final NodeId nodeF = NodeId.of("1000006");
         // Node G is a bus stop
-        final NodeId nodeG = NodeId.of("g");
+        final NodeId nodeG = NodeId.of("1000007");
 
         final Vector<JrRouteLink> links = Vector.of(
                 // A->B
@@ -389,45 +389,45 @@ public class RouteLinksProcessorTest {
                 is(Vector.of(
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
-                                .externalId(ExternalId.of("10000-a"))
-                                .node(ExternalId.of("a"))
+                                .externalId(ExternalId.of("10000-1000001"))
+                                .node(ExternalId.of("1000001"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build(),
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(1)
-                                .externalId(ExternalId.of("10001-b"))
-                                .node(ExternalId.of("b"))
+                                .externalId(ExternalId.of("10001-1000002"))
+                                .node(ExternalId.of("1000002"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build(),
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(2)
-                                .externalId(ExternalId.of("10002-c"))
-                                .node(ExternalId.of("c"))
+                                .externalId(ExternalId.of("10002-1000003"))
+                                .node(ExternalId.of("1000003"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build(),
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(3)
-                                .externalId(ExternalId.of("10003-d"))
-                                .node(ExternalId.of("d"))
+                                .externalId(ExternalId.of("10003-1000004"))
+                                .node(ExternalId.of("1000004"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build(),
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(4)
-                                .externalId(ExternalId.of("10004-e"))
-                                .node(ExternalId.of("e"))
+                                .externalId(ExternalId.of("10004-1000005"))
+                                .node(ExternalId.of("1000005"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build(),
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(5)
-                                .externalId(ExternalId.of("10005-f"))
-                                .node(ExternalId.of("f"))
+                                .externalId(ExternalId.of("10005-1000006"))
+                                .node(ExternalId.of("1000006"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build(),
                         // Note how the last route point "borrows" the link id from the final link
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(6)
-                                .externalId(ExternalId.of("10005-g"))
-                                .node(ExternalId.of("g"))
+                                .externalId(ExternalId.of("10005-1000007"))
+                                .node(ExternalId.of("1000007"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build()
                 )));
@@ -438,7 +438,7 @@ public class RouteLinksProcessorTest {
                 is(Vector.of(
                         ImmutableJore3RouteStopPoint.builder()
                                 .orderNumber(0)
-                                .externalId(ExternalId.of("10000-a"))
+                                .externalId(ExternalId.of("10000-1000001"))
                                 .hastusStopPoint(true)
                                 .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                                 .viaPoint(true)
@@ -451,14 +451,14 @@ public class RouteLinksProcessorTest {
                         // Note how node D is absent, as it's a BUS_STOP_NOT_IN_USE
                         ImmutableJore3RouteStopPoint.builder()
                                 .orderNumber(1)
-                                .externalId(ExternalId.of("10004-e"))
+                                .externalId(ExternalId.of("10004-1000005"))
                                 .hastusStopPoint(true)
                                 .regulatedTimingPointStatus(RegulatedTimingPointStatus.YES_LOAD_TIME)
                                 .viaPoint(false)
                                 .build(),
                         ImmutableJore3RouteStopPoint.builder()
                                 .orderNumber(2)
-                                .externalId(ExternalId.of("10005-g"))
+                                .externalId(ExternalId.of("10005-1000007"))
                                 .hastusStopPoint(true)
                                 .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                                 .viaPoint(false)

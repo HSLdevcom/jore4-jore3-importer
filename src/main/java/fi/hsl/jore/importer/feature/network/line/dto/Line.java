@@ -27,6 +27,7 @@ public interface Line
 
     static Line of(final LinePK pk,
                    final ExternalId externalId,
+                   final String exportId,
                    final NetworkType networkType,
                    final String lineNumber,
                    final TimeRange systemTime,
@@ -36,6 +37,7 @@ public interface Line
         return ImmutableLine.builder()
                             .pk(pk)
                             .externalId(externalId)
+                            .exportId(exportId)
                             .networkType(networkType)
                             .lineNumber(lineNumber)
                             .systemTime(systemTime)
@@ -49,6 +51,7 @@ public interface Line
         return of(
                 LinePK.of(record.getNetworkLineId()),
                 ExternalId.of(record.getNetworkLineExtId()),
+                record.getNetworkLineExportId(),
                 NetworkType.of(record.getInfrastructureNetworkType()),
                 record.getNetworkLineNumber(),
                 record.getNetworkLineSysPeriod(),
@@ -62,6 +65,7 @@ public interface Line
         return of(
                 LinePK.of(record.getNetworkLineId()),
                 ExternalId.of(record.getNetworkLineExtId()),
+                record.getNetworkLineExportId(),
                 NetworkType.of(record.getInfrastructureNetworkType()),
                 record.getNetworkLineNumber(),
                 record.getNetworkLineSysPeriod(),

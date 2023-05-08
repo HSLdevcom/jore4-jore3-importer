@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.is;
 public class LineRepositoryTest extends IntegrationTest {
 
     private static final String LINE_NUMBER = "1005";
+    private static final String EXPORT_ID = "496";
     private static final String DISPLAY_LINE_NUMBER = "5";
     private static final LegacyHslMunicipalityCode LINE_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.of('1');
     private static final ExternalId EXT_ID = ExternalIdUtil.forLine(LineId.from(LINE_NUMBER));
@@ -45,6 +46,7 @@ public class LineRepositoryTest extends IntegrationTest {
     public void whenPersistingLine_thenPersistedLineIsEqual() {
         final LinePK id = lineRepository.insert(
                 PersistableLine.of(EXT_ID,
+                                   EXPORT_ID,
                                    DISPLAY_LINE_NUMBER,
                                    NETWORK,
                                    TYPE_OF_LINE,
@@ -66,6 +68,8 @@ public class LineRepositoryTest extends IntegrationTest {
                    is(true));
         assertThat(line.externalId(),
                    is(EXT_ID));
+        assertThat(line.exportId(),
+                   is(EXPORT_ID));
         assertThat(line.lineNumber(),
                    is(DISPLAY_LINE_NUMBER));
         assertThat(line.networkType(),

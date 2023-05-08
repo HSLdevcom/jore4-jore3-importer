@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Schema;
@@ -88,17 +89,19 @@ public class ScheduledStopPoint extends TableImpl<Record> {
 
     /**
      * The column
-     * <code>service_pattern.scheduled_stop_point.validity_start</code>. end of
-     * the route's operating date span in the route's local time
+     * <code>service_pattern.scheduled_stop_point.validity_start</code>. start
+     * of the operating date span in the scheduled stop point's local time
+     * (inclusive).
      */
-    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "end of the route's operating date span in the route's local time");
+    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "start of the operating date span in the scheduled stop point's local time (inclusive).");
 
     /**
      * The column
      * <code>service_pattern.scheduled_stop_point.validity_end</code>. end of
      * the operating date span in the scheduled stop point's local time
+     * (inclusive).
      */
-    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "end of the operating date span in the scheduled stop point's local time");
+    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "end of the operating date span in the scheduled stop point's local time (inclusive).");
 
     /**
      * The column <code>service_pattern.scheduled_stop_point.priority</code>.
@@ -112,6 +115,16 @@ public class ScheduledStopPoint extends TableImpl<Record> {
      * is not used for timing.
      */
     public final TableField<Record, UUID> TIMING_PLACE_ID = createField(DSL.name("timing_place_id"), SQLDataType.UUID, this, "Optional reference to a TIMING PLACE. If NULL, the SCHEDULED STOP POINT is not used for timing.");
+
+    /**
+     * The column <code>service_pattern.scheduled_stop_point.external_id</code>.
+     * 
+     *   A numeric identifier for the stop.
+     *   Used mainly in exports.
+     *   Old stop points (from Jore3) use numbers starting with 1-6 or 9.
+     *   The ids for new stop points will start with 7.
+     */
+    public final TableField<Record, Integer> EXTERNAL_ID = createField(DSL.name("external_id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "\n  A numeric identifier for the stop.\n  Used mainly in exports.\n  Old stop points (from Jore3) use numbers starting with 1-6 or 9.\n  The ids for new stop points will start with 7.");
 
     private ScheduledStopPoint(Name alias, Table<Record> aliased) {
         this(alias, aliased, null);
@@ -152,6 +165,11 @@ public class ScheduledStopPoint extends TableImpl<Record> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : ServicePattern.SERVICE_PATTERN;
+    }
+
+    @Override
+    public Identity<Record, Integer> getIdentity() {
+        return (Identity<Record, Integer>) super.getIdentity();
     }
 
     @Override

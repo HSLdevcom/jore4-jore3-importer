@@ -65,6 +65,17 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Importer
         for (int index = 0; index < elyNumbers.size(); index++) {
             final ExternalId externalId = externalIds.get(index);
             final Long elyNumber = elyNumbers.get(index);
+            final Integer externalIdForExport = tryParseExternalId(externalId);
+            if (externalIdForExport == null) {
+                // Jore3 stop ids are always supposed to be numbers, even if they were stored as strings.
+                // The field is required, so abort processing of whole stop point if we can't handle it.
+                LOGGER.warn(
+                    "Skipping importing scheduled stop point {} from Jore3: could not parse external_id as integer: {}.",
+                    jore3Stop.shortId().get(),
+                    externalId.value()
+                );
+                continue;
+            }
 
             final Optional<DigiroadStop> digiroadStopContainer = digiroadStopService.findByNationalId(elyNumber);
             if (digiroadStopContainer.isPresent()) {
@@ -74,6 +85,7 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Importer
                 final Jore4ScheduledStopPoint jore4Stop = Jore4ScheduledStopPoint.of(
                         UUID.randomUUID(),
                         externalId.value(),
+                        externalIdForExport,
                         digiroadStop.digiroadLinkId(),
                         Jore4ScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),
                         jore3Stop.shortId().get(),
@@ -94,5 +106,13 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Importer
                 elyNumbers
         );
         return null;
+    }
+
+    private Integer tryParseExternalId(ExternalId externalId) {
+        try {
+            return Integer.parseInt(externalId.value());
+        } catch (final NumberFormatException ignored) {
+            return null;
+        }
     }
 }

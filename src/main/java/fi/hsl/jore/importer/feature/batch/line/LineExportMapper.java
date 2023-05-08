@@ -31,6 +31,7 @@ public class LineExportMapper implements RowMapper<ImporterLine> {
     public ImporterLine mapRow(final ResultSet resultSet, final int rowNumber) throws SQLException {
         return ImporterLine.of(
                 ExternalId.of(resultSet.getString("external_id")),
+                resultSet.getString("export_id"),
                 resultSet.getString("line_number"),
                 jsonConverter.fromJson(resultSet.getString("name"), MultilingualString.class),
                 NetworkType.of(resultSet.getString("network_type")),
