@@ -15,8 +15,8 @@ VALUES (
         false,
         0,
         1,
-        false,
-        NULL
+        true,
+        '{"fi_FI": "ViaSuomi","sv_SE": "ViaSverige"}'
 );
 
 INSERT INTO network.network_route_stop_points (
@@ -37,5 +37,5 @@ VALUES (
         2,
         1,
         true,
-        '{"fi_FI": "ViaSuomi","sv_SE": "ViaSverige"}'
+        '{"fi_FI": "","sv_SE": ""}'
 );
