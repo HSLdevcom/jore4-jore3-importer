@@ -11,9 +11,10 @@ import fi.hsl.jore.jore4.jooq.service_pattern.tables.FindScheduledStopPointLocat
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsByRoutes;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPattern;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPatterns;
-import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetScheduledStopPointsWithNew;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPoint;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPointInvariant;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPointsWithInfraLinkData;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.VehicleModeOnScheduledStopPoint;
 
 import java.time.LocalDate;
@@ -298,17 +299,16 @@ public class ServicePattern extends SchemaImpl {
     }
 
     /**
-     * The table <code>service_pattern.get_scheduled_stop_points_with_new</code>.
+     * The table <code>service_pattern.new_scheduled_stop_point_if_id_given</code>.
      */
-    public final GetScheduledStopPointsWithNew GET_SCHEDULED_STOP_POINTS_WITH_NEW = GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW;
+    public final NewScheduledStopPointIfIdGiven NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN = NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN;
 
     /**
      * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
-    public static Result<Record> GET_SCHEDULED_STOP_POINTS_WITH_NEW(
+    public static Result<Record> NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN(
           Configuration configuration
-        , UUID replaceScheduledStopPointId
         , UUID newScheduledStopPointId
         , UUID newLocatedOnInfrastructureLinkId
         , Object newMeasuredLocation
@@ -318,9 +318,8 @@ public class ServicePattern extends SchemaImpl {
         , LocalDate newValidityEnd
         , Integer newPriority
     ) {
-        return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
-              replaceScheduledStopPointId
-            , newScheduledStopPointId
+        return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN.call(
+              newScheduledStopPointId
             , newLocatedOnInfrastructureLinkId
             , newMeasuredLocation
             , newDirection
@@ -335,9 +334,8 @@ public class ServicePattern extends SchemaImpl {
      * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
-    public static GetScheduledStopPointsWithNew GET_SCHEDULED_STOP_POINTS_WITH_NEW(
-          UUID replaceScheduledStopPointId
-        , UUID newScheduledStopPointId
+    public static NewScheduledStopPointIfIdGiven NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN(
+          UUID newScheduledStopPointId
         , UUID newLocatedOnInfrastructureLinkId
         , Object newMeasuredLocation
         , String newDirection
@@ -346,9 +344,8 @@ public class ServicePattern extends SchemaImpl {
         , LocalDate newValidityEnd
         , Integer newPriority
     ) {
-        return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
-              replaceScheduledStopPointId
-            , newScheduledStopPointId
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN.call(
+              newScheduledStopPointId
             , newLocatedOnInfrastructureLinkId
             , newMeasuredLocation
             , newDirection
@@ -363,9 +360,8 @@ public class ServicePattern extends SchemaImpl {
      * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
-    public static GetScheduledStopPointsWithNew GET_SCHEDULED_STOP_POINTS_WITH_NEW(
-          Field<UUID> replaceScheduledStopPointId
-        , Field<UUID> newScheduledStopPointId
+    public static NewScheduledStopPointIfIdGiven NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN(
+          Field<UUID> newScheduledStopPointId
         , Field<UUID> newLocatedOnInfrastructureLinkId
         , Field<Object> newMeasuredLocation
         , Field<String> newDirection
@@ -374,9 +370,8 @@ public class ServicePattern extends SchemaImpl {
         , Field<LocalDate> newValidityEnd
         , Field<Integer> newPriority
     ) {
-        return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
-              replaceScheduledStopPointId
-            , newScheduledStopPointId
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN.call(
+              newScheduledStopPointId
             , newLocatedOnInfrastructureLinkId
             , newMeasuredLocation
             , newDirection
@@ -396,6 +391,11 @@ public class ServicePattern extends SchemaImpl {
      * The table <code>service_pattern.scheduled_stop_point_invariant</code>.
      */
     public final ScheduledStopPointInvariant SCHEDULED_STOP_POINT_INVARIANT = ScheduledStopPointInvariant.SCHEDULED_STOP_POINT_INVARIANT;
+
+    /**
+     * Contains scheduled_stop_points enriched with some infra link data.
+     */
+    public final ScheduledStopPointsWithInfraLinkData SCHEDULED_STOP_POINTS_WITH_INFRA_LINK_DATA = ScheduledStopPointsWithInfraLinkData.SCHEDULED_STOP_POINTS_WITH_INFRA_LINK_DATA;
 
     /**
      * Which scheduled stop points are serviced by which vehicle modes?
@@ -424,9 +424,10 @@ public class ServicePattern extends SchemaImpl {
             GetDistancesBetweenStopPointsByRoutes.GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES,
             GetDistancesBetweenStopPointsInJourneyPattern.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN,
             GetDistancesBetweenStopPointsInJourneyPatterns.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS,
-            GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW,
+            NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN,
             ScheduledStopPoint.SCHEDULED_STOP_POINT,
             ScheduledStopPointInvariant.SCHEDULED_STOP_POINT_INVARIANT,
+            ScheduledStopPointsWithInfraLinkData.SCHEDULED_STOP_POINTS_WITH_INFRA_LINK_DATA,
             VehicleModeOnScheduledStopPoint.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT);
     }
 }
