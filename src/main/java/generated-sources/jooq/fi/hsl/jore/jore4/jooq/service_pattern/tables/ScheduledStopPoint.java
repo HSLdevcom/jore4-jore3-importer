@@ -72,14 +72,14 @@ public class ScheduledStopPoint extends TableImpl<Record> {
     public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "The label is the short code that identifies the stop to the passengers. There can be at most one stop with the same label at a time. The label matches the GTFS stop_code.");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_point.validity_start</code>. end of the route's operating date span in the route's local time
+     * The column <code>service_pattern.scheduled_stop_point.validity_start</code>. start of the operating date span in the scheduled stop point's local time (inclusive).
      */
-    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "end of the route's operating date span in the route's local time");
+    public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "start of the operating date span in the scheduled stop point's local time (inclusive).");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_point.validity_end</code>. end of the operating date span in the scheduled stop point's local time
+     * The column <code>service_pattern.scheduled_stop_point.validity_end</code>. end of the operating date span in the scheduled stop point's local time (inclusive).
      */
-    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "end of the operating date span in the scheduled stop point's local time");
+    public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "end of the operating date span in the scheduled stop point's local time (inclusive).");
 
     /**
      * The column <code>service_pattern.scheduled_stop_point.priority</code>.

@@ -13,7 +13,7 @@ import fi.hsl.jore.jore4.jooq.service_pattern.tables.FindScheduledStopPointLocat
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsByRoutes;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPattern;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPatterns;
-import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetScheduledStopPointsWithNew;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -363,9 +363,8 @@ public class Routines {
      * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
-    public static Result<Record> getScheduledStopPointsWithNew(
+    public static Result<Record> newScheduledStopPointIfIdGiven(
           Configuration configuration
-        , UUID replaceScheduledStopPointId
         , UUID newScheduledStopPointId
         , UUID newLocatedOnInfrastructureLinkId
         , Object newMeasuredLocation
@@ -375,9 +374,8 @@ public class Routines {
         , LocalDate newValidityEnd
         , Integer newPriority
     ) {
-        return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
-              replaceScheduledStopPointId
-            , newScheduledStopPointId
+        return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN.call(
+              newScheduledStopPointId
             , newLocatedOnInfrastructureLinkId
             , newMeasuredLocation
             , newDirection
@@ -392,9 +390,8 @@ public class Routines {
      * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
-    public static GetScheduledStopPointsWithNew getScheduledStopPointsWithNew(
-          UUID replaceScheduledStopPointId
-        , UUID newScheduledStopPointId
+    public static NewScheduledStopPointIfIdGiven newScheduledStopPointIfIdGiven(
+          UUID newScheduledStopPointId
         , UUID newLocatedOnInfrastructureLinkId
         , Object newMeasuredLocation
         , String newDirection
@@ -403,9 +400,8 @@ public class Routines {
         , LocalDate newValidityEnd
         , Integer newPriority
     ) {
-        return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
-              replaceScheduledStopPointId
-            , newScheduledStopPointId
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN.call(
+              newScheduledStopPointId
             , newLocatedOnInfrastructureLinkId
             , newMeasuredLocation
             , newDirection
@@ -420,9 +416,8 @@ public class Routines {
      * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
-    public static GetScheduledStopPointsWithNew getScheduledStopPointsWithNew(
-          Field<UUID> replaceScheduledStopPointId
-        , Field<UUID> newScheduledStopPointId
+    public static NewScheduledStopPointIfIdGiven newScheduledStopPointIfIdGiven(
+          Field<UUID> newScheduledStopPointId
         , Field<UUID> newLocatedOnInfrastructureLinkId
         , Field<Object> newMeasuredLocation
         , Field<String> newDirection
@@ -431,9 +426,8 @@ public class Routines {
         , Field<LocalDate> newValidityEnd
         , Field<Integer> newPriority
     ) {
-        return fi.hsl.jore.jore4.jooq.service_pattern.tables.GetScheduledStopPointsWithNew.GET_SCHEDULED_STOP_POINTS_WITH_NEW.call(
-              replaceScheduledStopPointId
-            , newScheduledStopPointId
+        return fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN.call(
+              newScheduledStopPointId
             , newLocatedOnInfrastructureLinkId
             , newMeasuredLocation
             , newDirection
