@@ -14,6 +14,7 @@ INSERT INTO service_pattern.scheduled_stop_point (
         located_on_infrastructure_link_id,
         direction,
         label,
+        timing_place_id,
         validity_start,
         validity_end,
         priority
@@ -24,6 +25,7 @@ VALUES (
         '554c63e6-87b2-4dc8-a032-b6b0e2607696',
         'forward',
         'H1234',
+        '4cfb005b-eef8-4f5c-b0f1-43c8784a1f47',
         '2020-01-01 02:30:00+00',
         '2051-01-01 02:29:59+00',
         10
@@ -35,6 +37,7 @@ INSERT INTO service_pattern.scheduled_stop_point (
         located_on_infrastructure_link_id,
         direction,
         label,
+        timing_place_id,
         validity_start,
         validity_end,
         priority
@@ -45,6 +48,7 @@ VALUES (
         '554c63e6-87b2-4dc8-a032-b6b0e2607696',
         'forward',
         'H4321',
+        '30fc2925-8e81-4710-8a84-6aea2eece655',
         '2020-01-01 02:30:00+00',
         '2051-01-01 02:29:59+00',
         10

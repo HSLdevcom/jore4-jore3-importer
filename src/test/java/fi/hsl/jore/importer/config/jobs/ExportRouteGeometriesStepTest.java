@@ -35,8 +35,9 @@ import static org.assertj.db.api.Assertions.assertThat;
         scripts = {
                 "/sql/jore4/drop_tables.sql",
                 "/sql/jore4/populate_infrastructure_links.sql",
-                "/sql/jore4/populate_lines.sql",
+                "/sql/jore4/populate_timing_places.sql",
                 "/sql/jore4/populate_scheduled_stop_points.sql",
+                "/sql/jore4/populate_lines.sql",
                 "/sql/jore4/populate_routes_without_infrastructure_links.sql"
         },
         config = @SqlConfig(dataSource = "jore4DataSource")
