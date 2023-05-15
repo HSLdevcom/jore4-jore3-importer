@@ -1,5 +1,3 @@
-BEGIN;
-
 INSERT INTO route.route (
     route_id,
     name_i18n,
