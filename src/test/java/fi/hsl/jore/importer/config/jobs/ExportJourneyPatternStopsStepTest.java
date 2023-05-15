@@ -1,11 +1,15 @@
 package fi.hsl.jore.importer.config.jobs;
 
+import com.google.common.collect.ImmutableMap;
 import fi.hsl.jore.importer.BatchIntegrationTest;
+import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import io.vavr.collection.List;
+import org.assertj.core.api.Condition;
 import org.assertj.db.api.SoftAssertions;
 import org.assertj.db.type.Table;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,6 +17,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN;
 import static org.assertj.db.api.Assertions.assertThat;
@@ -55,12 +61,20 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
     private static final int EXPECTED_SECOND_SCHEDULED_STOP_POINT_SEQUENCE = 2;
     private static final boolean EXPECTED_SECOND_IS_USED_AS_TIMING_POINT = true;
     private static final boolean EXPECTED_SECOND_IS_VIA_POINT = true;
+    private static final Map<String, String> EXPECTED_SECOND_VIA_POINT_NAMES = ImmutableMap.<String, String>builder()
+            .put("fi_FI", "ViaSuomi")
+            .put("sv_SE", "ViaSverige")
+            .build();
 
     private final Table targetTable;
+    private final IJsonbConverter jsonbConverter;
 
     @Autowired
-    ExportJourneyPatternStopsStepTest(final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
-        targetTable = new Table(jore4DataSource, "journey_pattern.scheduled_stop_point_in_journey_pattern");
+    ExportJourneyPatternStopsStepTest(final @Qualifier("jore4DataSource") DataSource jore4DataSource,
+                                      final IJsonbConverter jsonbConverter) {
+
+        this.targetTable = new Table(jore4DataSource, "journey_pattern.scheduled_stop_point_in_journey_pattern");
+        this.jsonbConverter = jsonbConverter;
     }
 
     @Test
@@ -136,6 +150,22 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_VIA_POINT.getName())
                 .as("isViaPoint")
                 .isEqualTo(EXPECTED_SECOND_IS_VIA_POINT);
+        softAssertions.assertThat(targetTable)
+                .row(1)
+                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.VIA_POINT_NAME_I18N.getName())
+                .as("viaPointName")
+                .satisfies(new Condition<PGobject>(
+                        pgObject -> {
+                            final String jsonbAsString = pgObject.getValue();
+
+                            // Assert that conversion from PostgreSQL JSONB data type to a hash map
+                            // yields correct result.
+                            return jsonbConverter
+                                    .fromJson(jsonbAsString, HashMap.class)
+                                    .equals(EXPECTED_SECOND_VIA_POINT_NAMES);
+                        },
+                        "via name conversion"
+                ));
         softAssertions.assertAll();
     }
 }
