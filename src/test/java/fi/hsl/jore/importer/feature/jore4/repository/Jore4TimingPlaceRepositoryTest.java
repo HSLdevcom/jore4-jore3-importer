@@ -1,6 +1,8 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
 import fi.hsl.jore.importer.IntTest;
+import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
+import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4TimingPlace;
 import org.assertj.db.type.Table;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +25,8 @@ public class Jore4TimingPlaceRepositoryTest {
 
     private static final UUID TIMING_PLACE_ID = UUID.fromString("b5f56d68-c4cf-11ed-afa1-0242ac120002");
     private static final String TIMING_PLACE_LABEL = "1ELIEL";
+    private static final MultilingualString TIMING_PLACE_NAME =
+            MultilingualString.empty().with(JoreLocaleUtil.FINNISH, "Elielinaukio");
 
     private final Jore4TimingPlaceRepository repository;
     private final Table targetTable;
@@ -45,7 +49,8 @@ public class Jore4TimingPlaceRepositoryTest {
     )
     class InsertLineIntoDatabase {
 
-        private final Jore4TimingPlace INPUT = Jore4TimingPlace.of(TIMING_PLACE_ID, TIMING_PLACE_LABEL);
+        private final Jore4TimingPlace INPUT =
+                Jore4TimingPlace.of(TIMING_PLACE_ID, TIMING_PLACE_LABEL, TIMING_PLACE_NAME);
 
         @Test
         @DisplayName("Should insert one timing place into the database")

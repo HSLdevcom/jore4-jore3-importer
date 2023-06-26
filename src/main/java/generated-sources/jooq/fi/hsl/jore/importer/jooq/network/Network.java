@@ -14,6 +14,10 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesWithHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkPlaces;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkPlacesHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkPlacesStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkPlacesWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsStaging;
@@ -104,6 +108,26 @@ public class Network extends SchemaImpl {
      * The table <code>network.network_lines_with_history</code>.
      */
     public final NetworkLinesWithHistory NETWORK_LINES_WITH_HISTORY = NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY;
+
+    /**
+     * The table <code>network.network_places</code>.
+     */
+    public final NetworkPlaces NETWORK_PLACES = NetworkPlaces.NETWORK_PLACES;
+
+    /**
+     * The table <code>network.network_places_history</code>.
+     */
+    public final NetworkPlacesHistory NETWORK_PLACES_HISTORY = NetworkPlacesHistory.NETWORK_PLACES_HISTORY;
+
+    /**
+     * The table <code>network.network_places_staging</code>.
+     */
+    public final NetworkPlacesStaging NETWORK_PLACES_STAGING = NetworkPlacesStaging.NETWORK_PLACES_STAGING;
+
+    /**
+     * The table <code>network.network_places_with_history</code>.
+     */
+    public final NetworkPlacesWithHistory NETWORK_PLACES_WITH_HISTORY = NetworkPlacesWithHistory.NETWORK_PLACES_WITH_HISTORY;
 
     /**
      * The table <code>network.network_route_directions</code>.
@@ -250,6 +274,10 @@ public class Network extends SchemaImpl {
             NetworkLinesHistory.NETWORK_LINES_HISTORY,
             NetworkLinesStaging.NETWORK_LINES_STAGING,
             NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY,
+            NetworkPlaces.NETWORK_PLACES,
+            NetworkPlacesHistory.NETWORK_PLACES_HISTORY,
+            NetworkPlacesStaging.NETWORK_PLACES_STAGING,
+            NetworkPlacesWithHistory.NETWORK_PLACES_WITH_HISTORY,
             NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS,
             NetworkRouteDirectionsHistory.NETWORK_ROUTE_DIRECTIONS_HISTORY,
             NetworkRouteDirectionsStaging.NETWORK_ROUTE_DIRECTIONS_STAGING,

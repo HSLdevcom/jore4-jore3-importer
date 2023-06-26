@@ -10,9 +10,14 @@ public interface ImporterTimingPlace {
 
     String timingPlaceLabel();
 
-    static ImmutableImporterTimingPlace of(final String timingPlaceLabel) {
+    String timingPlaceName();
+
+    static ImmutableImporterTimingPlace of(final String timingPlaceLabel,
+                                           final String timingPlaceName) {
+
         return ImmutableImporterTimingPlace.builder()
                 .timingPlaceLabel(timingPlaceLabel)
+                .timingPlaceName(timingPlaceName)
                 .build();
     }
 }
