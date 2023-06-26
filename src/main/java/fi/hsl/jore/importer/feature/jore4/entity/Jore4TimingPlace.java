@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.jore4.entity;
 
+import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import org.immutables.value.Value;
 
 import java.util.UUID;
@@ -15,10 +16,12 @@ public interface Jore4TimingPlace {
 
     String timingPlaceLabel();
 
-    static ImmutableJore4TimingPlace of(final UUID timingPlaceId, final String timingPlaceLabel) {
+    static ImmutableJore4TimingPlace of(final UUID timingPlaceId,
+                                        final String timingPlaceLabel) {
+
         return ImmutableJore4TimingPlace.builder()
-                                        .timingPlaceId(timingPlaceId)
-                                        .timingPlaceLabel(timingPlaceLabel)
-                                        .build();
+                .timingPlaceId(timingPlaceId)
+                .timingPlaceLabel(timingPlaceLabel)
+                .build();
     }
 }

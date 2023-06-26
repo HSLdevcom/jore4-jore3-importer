@@ -25,6 +25,9 @@ import fi.hsl.jore.importer.feature.batch.link_shape.support.ILinkShapeImportRep
 import fi.hsl.jore.importer.feature.batch.node.NodeProcessor;
 import fi.hsl.jore.importer.feature.batch.node.NodeReader;
 import fi.hsl.jore.importer.feature.batch.node.support.INodeImportRepository;
+import fi.hsl.jore.importer.feature.batch.place.PlaceImportProcessor;
+import fi.hsl.jore.importer.feature.batch.place.PlaceImportRowReader;
+import fi.hsl.jore.importer.feature.batch.place.support.IPlaceImportRepository;
 import fi.hsl.jore.importer.feature.batch.route.JourneyPatternExportProcessor;
 import fi.hsl.jore.importer.feature.batch.route.JourneyPatternExportReader;
 import fi.hsl.jore.importer.feature.batch.route.JourneyPatternExportWriter;
@@ -67,6 +70,7 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.Jore3Node;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLine;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLineHeader;
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
+import fi.hsl.jore.importer.feature.jore3.entity.JrPlace;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
 import fi.hsl.jore.importer.feature.jore3.entity.JrScheduledStopPoint;
@@ -80,6 +84,7 @@ import fi.hsl.jore.importer.feature.jore4.entity.Jore4TimingPlace;
 import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line_header.dto.Jore3LineHeader;
+import fi.hsl.jore.importer.feature.network.place.dto.PersistablePlace;
 import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPattern;
 import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPatternStop;
 import fi.hsl.jore.importer.feature.network.route.dto.ImporterRoute;
@@ -116,6 +121,7 @@ public class JobConfig extends BatchConfig {
                          final Flow importRoutesFlow,
                          final Flow importRouteDirectionsFlow,
                          final Flow importRouteLinksFlow,
+                         final Flow importPlacesFlow,
                          final Flow importScheduledStopPointsFlow,
                          // Export data from the importer staging DB to Jore 4 DB.
                          final Flow jore4ExportFlow) {
@@ -128,6 +134,7 @@ public class JobConfig extends BatchConfig {
                    .next(importRoutesFlow)
                    .next(importRouteDirectionsFlow)
                    .next(importRouteLinksFlow)
+                   .next(importPlacesFlow)
                    .next(importScheduledStopPointsFlow)
                    .next(jore4ExportFlow)
                    .end()
@@ -508,6 +515,47 @@ public class JobConfig extends BatchConfig {
                     .allowStartIfComplete(true)
                     .tasklet(new GenericCommitTasklet<>(routeLinkImportRepository))
                     .build();
+    }
+
+    @Bean
+    public Flow importPlacesFlow(final Step preparePlacesStep,
+                                 final Step importPlacesStep,
+                                 final Step commitPlacesStep) {
+
+        return new FlowBuilder<SimpleFlow>("importPlacesFlow")
+                .start(preparePlacesStep)
+                .next(importPlacesStep)
+                .next(commitPlacesStep)
+                .build();
+    }
+
+    @Bean
+    public Step preparePlacesStep(final IPlaceImportRepository placeImportRepository) {
+        return steps.get("preparePlacesStep")
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(placeImportRepository))
+                .build();
+    }
+
+    @Bean
+    public Step importPlacesStep(final PlaceImportRowReader placeReader,
+                                 final IPlaceImportRepository placeImportRepository) {
+        final int chunkSize = 1000;
+        return steps.get("importPlacesStep")
+                .allowStartIfComplete(true)
+                .<JrPlace, PersistablePlace>chunk(chunkSize)
+                .reader(placeReader.build())
+                .processor(new PlaceImportProcessor())
+                .writer(new GenericImportWriter<>(placeImportRepository))
+                .build();
+    }
+
+    @Bean
+    public Step commitPlacesStep(final IPlaceImportRepository placeImportRepository) {
+        return steps.get("commitPlacesStep")
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(placeImportRepository))
+                .build();
     }
 
     @Bean

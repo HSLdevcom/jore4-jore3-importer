@@ -5,6 +5,7 @@ import fi.hsl.jore.importer.feature.jore3.entity.JrLine;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLineHeader;
 import fi.hsl.jore.importer.feature.jore3.entity.JrLink;
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
+import fi.hsl.jore.importer.feature.jore3.entity.JrPlace;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteLink;
@@ -13,11 +14,13 @@ import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.LineId;
 import fi.hsl.jore.importer.feature.jore3.field.RouteId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
+import fi.hsl.jore.importer.feature.jore3.field.generated.PlaceId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.RouteLinkId;
 import fi.hsl.jore.importer.feature.jore3.key.JrLineHeaderPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinePk;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrNodePk;
+import fi.hsl.jore.importer.feature.jore3.key.JrPlacePk;
 import fi.hsl.jore.importer.feature.jore3.key.JrRouteDirectionPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrRouteLinkPk;
 import fi.hsl.jore.importer.feature.jore3.key.JrRoutePk;
@@ -150,5 +153,17 @@ public final class ExternalIdUtil {
     public static ExternalId forRouteLinkEndNode(final JrRouteLink routeLink) {
         return forRouteLinkNode(routeLink,
                                 routeLink.endNode());
+    }
+
+    public static ExternalId forPlace(final PlaceId placeId) {
+        return ExternalId.of(placeId.value());
+    }
+
+    public static ExternalId forPlace(final JrPlacePk placePk) {
+        return forPlace(placePk.placeId());
+    }
+
+    public static ExternalId forPlace(final JrPlace place) {
+        return forPlace(place.pk());
     }
 }

@@ -15,6 +15,8 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkPlaces;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkPlacesStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteLinks;
@@ -32,6 +34,8 @@ import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLineHeadersRecord
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLineHeadersStagingRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesStagingRecord;
+import fi.hsl.jore.importer.jooq.network.tables.records.NetworkPlacesRecord;
+import fi.hsl.jore.importer.jooq.network.tables.records.NetworkPlacesStagingRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteDirectionsRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteDirectionsStagingRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteLinksRecord;
@@ -68,6 +72,8 @@ public class Keys {
     public static final UniqueKey<NetworkLineHeadersStagingRecord> NETWORK_LINE_HEADERS_STAGING_PKEY = Internal.createUniqueKey(NetworkLineHeadersStaging.NETWORK_LINE_HEADERS_STAGING, DSL.name("network_line_headers_staging_pkey"), new TableField[] { NetworkLineHeadersStaging.NETWORK_LINE_HEADERS_STAGING.NETWORK_LINE_HEADER_EXT_ID }, true);
     public static final UniqueKey<NetworkLinesRecord> NETWORK_LINES_PKEY = Internal.createUniqueKey(NetworkLines.NETWORK_LINES, DSL.name("network_lines_pkey"), new TableField[] { NetworkLines.NETWORK_LINES.NETWORK_LINE_ID }, true);
     public static final UniqueKey<NetworkLinesStagingRecord> NETWORK_LINES_STAGING_PKEY = Internal.createUniqueKey(NetworkLinesStaging.NETWORK_LINES_STAGING, DSL.name("network_lines_staging_pkey"), new TableField[] { NetworkLinesStaging.NETWORK_LINES_STAGING.NETWORK_LINE_EXT_ID }, true);
+    public static final UniqueKey<NetworkPlacesRecord> NETWORK_PLACES_PKEY = Internal.createUniqueKey(NetworkPlaces.NETWORK_PLACES, DSL.name("network_places_pkey"), new TableField[] { NetworkPlaces.NETWORK_PLACES.NETWORK_PLACE_ID }, true);
+    public static final UniqueKey<NetworkPlacesStagingRecord> NETWORK_PLACES_STAGING_PKEY = Internal.createUniqueKey(NetworkPlacesStaging.NETWORK_PLACES_STAGING, DSL.name("network_places_staging_pkey"), new TableField[] { NetworkPlacesStaging.NETWORK_PLACES_STAGING.NETWORK_PLACE_EXT_ID }, true);
     public static final UniqueKey<NetworkRouteDirectionsRecord> NETWORK_ROUTE_DIRECTIONS_PKEY = Internal.createUniqueKey(NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS, DSL.name("network_route_directions_pkey"), new TableField[] { NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS.NETWORK_ROUTE_DIRECTION_ID }, true);
     public static final UniqueKey<NetworkRouteDirectionsStagingRecord> NETWORK_ROUTE_DIRECTIONS_STAGING_PKEY = Internal.createUniqueKey(NetworkRouteDirectionsStaging.NETWORK_ROUTE_DIRECTIONS_STAGING, DSL.name("network_route_directions_staging_pkey"), new TableField[] { NetworkRouteDirectionsStaging.NETWORK_ROUTE_DIRECTIONS_STAGING.NETWORK_ROUTE_DIRECTION_EXT_ID }, true);
     public static final UniqueKey<NetworkRouteLinksRecord> NETWORK_ROUTE_LINKS_PKEY = Internal.createUniqueKey(NetworkRouteLinks.NETWORK_ROUTE_LINKS, DSL.name("network_route_links_pkey"), new TableField[] { NetworkRouteLinks.NETWORK_ROUTE_LINKS.NETWORK_ROUTE_LINK_ID }, true);

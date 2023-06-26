@@ -13,6 +13,10 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesWithHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkPlaces;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkPlacesHistory;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkPlacesStaging;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkPlacesWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsHistory;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsStaging;
@@ -89,6 +93,26 @@ public class Tables {
      * The table <code>network.network_lines_with_history</code>.
      */
     public static final NetworkLinesWithHistory NETWORK_LINES_WITH_HISTORY = NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY;
+
+    /**
+     * The table <code>network.network_places</code>.
+     */
+    public static final NetworkPlaces NETWORK_PLACES = NetworkPlaces.NETWORK_PLACES;
+
+    /**
+     * The table <code>network.network_places_history</code>.
+     */
+    public static final NetworkPlacesHistory NETWORK_PLACES_HISTORY = NetworkPlacesHistory.NETWORK_PLACES_HISTORY;
+
+    /**
+     * The table <code>network.network_places_staging</code>.
+     */
+    public static final NetworkPlacesStaging NETWORK_PLACES_STAGING = NetworkPlacesStaging.NETWORK_PLACES_STAGING;
+
+    /**
+     * The table <code>network.network_places_with_history</code>.
+     */
+    public static final NetworkPlacesWithHistory NETWORK_PLACES_WITH_HISTORY = NetworkPlacesWithHistory.NETWORK_PLACES_WITH_HISTORY;
 
     /**
      * The table <code>network.network_route_directions</code>.
