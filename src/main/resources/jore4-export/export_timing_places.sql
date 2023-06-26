@@ -1,4 +1,5 @@
-SELECT DISTINCT ssp.hastus_place_id AS timing_place_label
-FROM network.scheduled_stop_points ssp
-WHERE ssp.hastus_place_id IS NOT NULL
+SELECT
+    network_place_ext_id AS timing_place_label,
+    network_place_name AS timing_place_name
+FROM network.network_places
 ORDER BY timing_place_label ASC;

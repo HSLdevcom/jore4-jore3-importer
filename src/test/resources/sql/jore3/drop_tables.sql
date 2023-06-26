@@ -8,3 +8,4 @@ TRUNCATE TABLE jr_reitinsuunta
 TRUNCATE TABLE jr_reitinlinkki
 TRUNCATE TABLE jr_via_nimet
 TRUNCATE TABLE jr_pysakki
+TRUNCATE TABLE jr_paikka
