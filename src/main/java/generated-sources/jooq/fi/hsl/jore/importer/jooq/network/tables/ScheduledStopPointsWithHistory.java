@@ -93,16 +93,16 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
     public final TableField<ScheduledStopPointsWithHistoryRecord, Integer> USAGE_IN_ROUTES = createField(DSL.name("usage_in_routes"), SQLDataType.INTEGER, this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points_with_history.hastus_place_id</code>.
+     * The column <code>network.scheduled_stop_points_with_history.network_place_id</code>.
      */
-    public final TableField<ScheduledStopPointsWithHistoryRecord, String> HASTUS_PLACE_ID = createField(DSL.name("hastus_place_id"), SQLDataType.CLOB, this, "");
+    public final TableField<ScheduledStopPointsWithHistoryRecord, UUID> NETWORK_PLACE_ID = createField(DSL.name("network_place_id"), SQLDataType.UUID, this, "");
 
     private ScheduledStopPointsWithHistory(Name alias, Table<ScheduledStopPointsWithHistoryRecord> aliased) {
         this(alias, aliased, null);
     }
 
     private ScheduledStopPointsWithHistory(Name alias, Table<ScheduledStopPointsWithHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"scheduled_stop_points_with_history\" as  SELECT scheduled_stop_points.scheduled_stop_point_id,\n    scheduled_stop_points.scheduled_stop_point_ext_id,\n    scheduled_stop_points.infrastructure_node_id,\n    scheduled_stop_points.scheduled_stop_point_ely_number,\n    scheduled_stop_points.scheduled_stop_point_name,\n    scheduled_stop_points.scheduled_stop_point_sys_period,\n    scheduled_stop_points.scheduled_stop_point_short_id,\n    scheduled_stop_points.scheduled_stop_point_jore4_id,\n    scheduled_stop_points.usage_in_routes,\n    scheduled_stop_points.hastus_place_id\n   FROM network.scheduled_stop_points\nUNION ALL\n SELECT scheduled_stop_points_history.scheduled_stop_point_id,\n    scheduled_stop_points_history.scheduled_stop_point_ext_id,\n    scheduled_stop_points_history.infrastructure_node_id,\n    scheduled_stop_points_history.scheduled_stop_point_ely_number,\n    scheduled_stop_points_history.scheduled_stop_point_name,\n    scheduled_stop_points_history.scheduled_stop_point_sys_period,\n    scheduled_stop_points_history.scheduled_stop_point_short_id,\n    scheduled_stop_points_history.scheduled_stop_point_jore4_id,\n    scheduled_stop_points_history.usage_in_routes,\n    scheduled_stop_points_history.hastus_place_id\n   FROM network.scheduled_stop_points_history;"));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"scheduled_stop_points_with_history\" as  SELECT scheduled_stop_points.scheduled_stop_point_id,\n    scheduled_stop_points.scheduled_stop_point_ext_id,\n    scheduled_stop_points.infrastructure_node_id,\n    scheduled_stop_points.scheduled_stop_point_ely_number,\n    scheduled_stop_points.scheduled_stop_point_name,\n    scheduled_stop_points.scheduled_stop_point_sys_period,\n    scheduled_stop_points.scheduled_stop_point_short_id,\n    scheduled_stop_points.scheduled_stop_point_jore4_id,\n    scheduled_stop_points.usage_in_routes,\n    scheduled_stop_points.network_place_id\n   FROM network.scheduled_stop_points\nUNION ALL\n SELECT scheduled_stop_points_history.scheduled_stop_point_id,\n    scheduled_stop_points_history.scheduled_stop_point_ext_id,\n    scheduled_stop_points_history.infrastructure_node_id,\n    scheduled_stop_points_history.scheduled_stop_point_ely_number,\n    scheduled_stop_points_history.scheduled_stop_point_name,\n    scheduled_stop_points_history.scheduled_stop_point_sys_period,\n    scheduled_stop_points_history.scheduled_stop_point_short_id,\n    scheduled_stop_points_history.scheduled_stop_point_jore4_id,\n    scheduled_stop_points_history.usage_in_routes,\n    scheduled_stop_points_history.network_place_id\n   FROM network.scheduled_stop_points_history;"));
     }
 
     /**
@@ -166,7 +166,7 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<UUID, String, UUID, Long, JSONB, TimeRange, String, UUID, Integer, String> fieldsRow() {
+    public Row10<UUID, String, UUID, Long, JSONB, TimeRange, String, UUID, Integer, UUID> fieldsRow() {
         return (Row10) super.fieldsRow();
     }
 }

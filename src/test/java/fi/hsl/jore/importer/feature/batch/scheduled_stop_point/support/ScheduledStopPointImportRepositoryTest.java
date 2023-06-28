@@ -50,7 +50,7 @@ public class ScheduledStopPointImportRepositoryTest {
         private static final String EXPECTED_FINNISH_NAME = "Yliopisto";
         private static final String EXPECTED_SWEDISH_NAME = "Universitetet";
         private static final String EXPECTED_SHORT_ID = "H1234";
-        private static final String EXPECTED_PLACE_EXTERNAL_ID = "1MARIA";
+        private final UUID EXPECTED_PLACE_ID = UUID.fromString("26458311-99f7-401b-a0a1-0671a7df17bb");
 
         @Nested
         @DisplayName("When the staging table has no rows")
@@ -89,6 +89,7 @@ public class ScheduledStopPointImportRepositoryTest {
             @Sql(scripts = {
                     "/sql/importer/drop_tables.sql",
                     "/sql/importer/populate_infrastructure_nodes.sql",
+                    "/sql/importer/populate_places.sql",
                     "/sql/importer/populate_scheduled_stop_points.sql"
             })
             class WhenTargetTableHasOneRow {
@@ -128,6 +129,7 @@ public class ScheduledStopPointImportRepositoryTest {
             @Sql(scripts = {
                     "/sql/importer/drop_tables.sql",
                     "/sql/importer/populate_infrastructure_nodes.sql",
+                    "/sql/importer/populate_places.sql",
                     "/sql/importer/populate_scheduled_stop_points_staging.sql"
             })
             class WhenTargetTableIsEmpty {
@@ -208,9 +210,9 @@ public class ScheduledStopPointImportRepositoryTest {
                             .as("shortId")
                             .contains(EXPECTED_SHORT_ID);
 
-                    softAssertions.assertThat(inserted.placeExternalId())
-                            .as("placeExternalId")
-                            .contains(EXPECTED_PLACE_EXTERNAL_ID);
+                    softAssertions.assertThat(inserted.placeId())
+                            .as("placeId")
+                            .contains(EXPECTED_PLACE_ID);
                 }
             }
 
@@ -220,6 +222,7 @@ public class ScheduledStopPointImportRepositoryTest {
             @Sql(scripts = {
                     "/sql/importer/drop_tables.sql",
                     "/sql/importer/populate_infrastructure_nodes.sql",
+                    "/sql/importer/populate_places.sql",
                     "/sql/importer/populate_scheduled_stop_points.sql",
                     "/sql/importer/populate_scheduled_stop_points_staging.sql"
             })
@@ -280,9 +283,9 @@ public class ScheduledStopPointImportRepositoryTest {
                             .as("shortId")
                             .contains(EXPECTED_SHORT_ID);
 
-                    softAssertions.assertThat(updated.placeExternalId())
-                            .as("placeExternalId")
-                            .contains(EXPECTED_PLACE_EXTERNAL_ID);
+                    softAssertions.assertThat(updated.placeId())
+                            .as("placeId")
+                            .contains(EXPECTED_PLACE_ID);
                 }
             }
         }
@@ -293,6 +296,7 @@ public class ScheduledStopPointImportRepositoryTest {
     @Sql(scripts = {
             "/sql/importer/drop_tables.sql",
             "/sql/importer/populate_infrastructure_nodes.sql",
+            "/sql/importer/populate_places.sql",
             "/sql/importer/populate_scheduled_stop_points.sql"
     })
     class SetJore4Ids {
@@ -322,7 +326,7 @@ public class ScheduledStopPointImportRepositoryTest {
         @DisplayName("When the updated scheduled stop point is found")
         class WhenUpdatedScheduledStopPointIsFound {
 
-            private List<PersistableScheduledStopPointIdMapping> INPUT = List.of(
+            private final List<PersistableScheduledStopPointIdMapping> INPUT = List.of(
                     PersistableScheduledStopPointIdMapping.of(EXTERNAL_ID, JORE4_ID)
             );
 

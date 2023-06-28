@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 
+import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.jore3.entity.JrScheduledStopPoint;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
@@ -85,7 +86,7 @@ class ScheduledStopPointImportProcessorTest {
             final Jore3ScheduledStopPoint returned = processor.process(input);
             assertThat(returned.placeExternalId())
                     .as("placeExternalId")
-                    .contains(PLACE_EXTERNAL_ID);
+                    .contains(ExternalId.of(PLACE_EXTERNAL_ID));
         }
 
         @Nested

@@ -33,6 +33,7 @@ import static org.assertj.db.api.Assertions.assertThat;
         "/sql/importer/populate_route_directions.sql",
         "/sql/importer/populate_route_points_for_jore4_export.sql",
         "/sql/importer/populate_route_stop_points_for_jore4_export.sql",
+        "/sql/importer/populate_places.sql",
         "/sql/importer/populate_scheduled_stop_points_for_jore4_export.sql"
 })
 @Sql(
