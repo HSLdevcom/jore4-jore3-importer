@@ -13,4 +13,9 @@ VALUES
         '5992337c-6f19-4458-9234-090ef399537b',
         '1KALA',
         'Kalasatama'
+    ),
+    (
+        '26458311-99f7-401b-a0a1-0671a7df17bb',
+        '1MARIA',
+        'Mariankatu'
     );

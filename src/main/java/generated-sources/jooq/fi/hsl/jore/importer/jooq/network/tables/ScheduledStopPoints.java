@@ -98,9 +98,9 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
     public final TableField<ScheduledStopPointsRecord, Integer> USAGE_IN_ROUTES = createField(DSL.name("usage_in_routes"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points.hastus_place_id</code>.
+     * The column <code>network.scheduled_stop_points.network_place_id</code>.
      */
-    public final TableField<ScheduledStopPointsRecord, String> HASTUS_PLACE_ID = createField(DSL.name("hastus_place_id"), SQLDataType.CLOB, this, "");
+    public final TableField<ScheduledStopPointsRecord, UUID> NETWORK_PLACE_ID = createField(DSL.name("network_place_id"), SQLDataType.UUID, this, "");
 
     private ScheduledStopPoints(Name alias, Table<ScheduledStopPointsRecord> aliased) {
         this(alias, aliased, null);
@@ -152,16 +152,24 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
 
     @Override
     public List<ForeignKey<ScheduledStopPointsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ScheduledStopPointsRecord, ?>>asList(Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_INFRASTRUCTURE_NODE_ID_FKEY);
+        return Arrays.<ForeignKey<ScheduledStopPointsRecord, ?>>asList(Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_INFRASTRUCTURE_NODE_ID_FKEY, Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_NETWORK_PLACE_ID_FKEY);
     }
 
     private transient InfrastructureNodes _infrastructureNodes;
+    private transient NetworkPlaces _networkPlaces;
 
     public InfrastructureNodes infrastructureNodes() {
         if (_infrastructureNodes == null)
             _infrastructureNodes = new InfrastructureNodes(this, Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_INFRASTRUCTURE_NODE_ID_FKEY);
 
         return _infrastructureNodes;
+    }
+
+    public NetworkPlaces networkPlaces() {
+        if (_networkPlaces == null)
+            _networkPlaces = new NetworkPlaces(this, Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_NETWORK_PLACE_ID_FKEY);
+
+        return _networkPlaces;
     }
 
     @Override
@@ -195,7 +203,7 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<UUID, String, UUID, Long, JSONB, TimeRange, String, UUID, Integer, String> fieldsRow() {
+    public Row10<UUID, String, UUID, Long, JSONB, TimeRange, String, UUID, Integer, UUID> fieldsRow() {
         return (Row10) super.fieldsRow();
     }
 }

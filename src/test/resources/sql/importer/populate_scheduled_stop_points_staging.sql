@@ -3,7 +3,7 @@ INSERT INTO network.scheduled_stop_points_staging (
     scheduled_stop_point_ely_number,
     scheduled_stop_point_name,
     scheduled_stop_point_short_id,
-    hastus_place_id,
+    network_place_ext_id,
     usage_in_routes
 )
 VALUES (

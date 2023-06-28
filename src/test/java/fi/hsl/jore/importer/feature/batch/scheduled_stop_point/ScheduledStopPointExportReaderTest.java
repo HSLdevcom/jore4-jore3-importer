@@ -58,6 +58,7 @@ class ScheduledStopPointExportReaderTest {
     @Sql(scripts = {
             "/sql/importer/drop_tables.sql",
             "/sql/importer/populate_infrastructure_nodes.sql",
+            "/sql/importer/populate_places.sql",
             "/sql/importer/populate_scheduled_stop_points.sql"
     })
     @ExtendWith(SoftAssertionsExtension.class)
@@ -135,6 +136,7 @@ class ScheduledStopPointExportReaderTest {
     @Sql(scripts = {
             "/sql/importer/drop_tables.sql",
             "/sql/importer/populate_infrastructure_nodes.sql",
+            "/sql/importer/populate_places.sql",
             "/sql/importer/populate_scheduled_stop_points_with_same_short_id.sql"
     })
     @ExtendWith(SoftAssertionsExtension.class)

@@ -32,6 +32,7 @@ import static org.assertj.db.api.Assertions.assertThat;
 @Sql(scripts = {
         "/sql/importer/drop_tables.sql",
         "/sql/importer/populate_infrastructure_nodes.sql",
+        "/sql/importer/populate_places.sql",
         "/sql/importer/populate_scheduled_stop_points.sql"
 })
 @Sql(

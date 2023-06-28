@@ -25,7 +25,8 @@ public class ScheduledStopPointImportProcessor implements ItemProcessor<JrSchedu
                         .with(JoreLocaleUtil.FINNISH, input.nameFinnish())
                         .with(JoreLocaleUtil.SWEDISH, input.nameSwedish()),
                 constructShortId(input),
-                input.placeExternalId().filter(StringUtils::isNotBlank), // trim whitespace entries to empty (null)
+                // trim whitespace entries to empty (null)
+                input.placeExternalId().filter(StringUtils::isNotBlank).map(ExternalId::of),
                 input.usageInRoutes()
         );
     }

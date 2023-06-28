@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
+import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.Jore3ScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.PersistableScheduledStopPointIdMapping;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.generated.ScheduledStopPointPK;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import static fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes.INFRASTRUCTURE_NODES;
+import static fi.hsl.jore.importer.jooq.network.tables.NetworkPlaces.NETWORK_PLACES;
 
 @Repository
 public class ScheduledStopPointImportRepository
@@ -66,7 +68,7 @@ public class ScheduledStopPointImportRepository
                         TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
                         TARGET_TABLE.SCHEDULED_STOP_POINT_NAME,
                         TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID,
-                        TARGET_TABLE.HASTUS_PLACE_ID,
+                        TARGET_TABLE.NETWORK_PLACE_ID,
                         TARGET_TABLE.USAGE_IN_ROUTES
                 )
                 .select(
@@ -76,14 +78,19 @@ public class ScheduledStopPointImportRepository
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_NAME,
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID,
-                                STAGING_TABLE.HASTUS_PLACE_ID,
+                                NETWORK_PLACES.NETWORK_PLACE_ID,
                                 STAGING_TABLE.USAGE_IN_ROUTES
                         )
                                 .from(STAGING_TABLE)
-                                //An infrastructure node and a scheduled stop point use the same external identifier
-                                //which is called soltunnus in Jore3 database. You can verify this by taking a look
-                                //at the jr_solmu and jr_pysakki tables found from the Jore3 database.
+
+                                // An infrastructure node and a scheduled stop point use the same external identifier
+                                // which is called soltunnus in Jore3 database. You can verify this by taking a look
+                                // at the jr_solmu and jr_pysakki tables found from the Jore3 database.
                                 .join(INFRASTRUCTURE_NODES).on(INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_EXT_ID.eq(STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID))
+
+                                // Use left-join because all stop points are not associated with timing places.
+                                .leftJoin(NETWORK_PLACES).on(NETWORK_PLACES.NETWORK_PLACE_EXT_ID.eq(STAGING_TABLE.NETWORK_PLACE_EXT_ID))
+
                                 .whereNotExists(
                                         db.selectOne()
                                                 .from(TARGET_TABLE)
@@ -104,9 +111,11 @@ public class ScheduledStopPointImportRepository
                 .set(TARGET_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER, STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER)
                 .set(TARGET_TABLE.SCHEDULED_STOP_POINT_NAME, STAGING_TABLE.SCHEDULED_STOP_POINT_NAME)
                 .set(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID, STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID)
-                .set(TARGET_TABLE.HASTUS_PLACE_ID, STAGING_TABLE.HASTUS_PLACE_ID)
+                .set(TARGET_TABLE.NETWORK_PLACE_ID, NETWORK_PLACES.NETWORK_PLACE_ID)
                 .set(TARGET_TABLE.USAGE_IN_ROUTES, STAGING_TABLE.USAGE_IN_ROUTES)
-                .from(STAGING_TABLE)
+                .from(STAGING_TABLE
+                        .leftJoin(NETWORK_PLACES)
+                        .on(NETWORK_PLACES.NETWORK_PLACE_EXT_ID.eq(STAGING_TABLE.NETWORK_PLACE_EXT_ID)))
                 .where(
                         TARGET_TABLE.SCHEDULED_STOP_POINT_EXT_ID.eq(STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID)
                                 // A scheduled stop point is updated if:
@@ -122,9 +131,9 @@ public class ScheduledStopPointImportRepository
                                         .or(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID
                                                 .isDistinctFrom(STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID))
 
-                                        // Hastus place ID was changed.
-                                        .or(TARGET_TABLE.HASTUS_PLACE_ID
-                                                .isDistinctFrom(STAGING_TABLE.HASTUS_PLACE_ID))
+                                        // Place ID was changed.
+                                        .or(TARGET_TABLE.NETWORK_PLACE_ID
+                                                .isDistinctFrom(NETWORK_PLACES.NETWORK_PLACE_ID))
 
                                         // Usage in routes was changed.
                                         .or(TARGET_TABLE.USAGE_IN_ROUTES
@@ -147,7 +156,7 @@ public class ScheduledStopPointImportRepository
                         STAGING_TABLE.SCHEDULED_STOP_POINT_ELY_NUMBER,
                         STAGING_TABLE.SCHEDULED_STOP_POINT_NAME,
                         STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID,
-                        STAGING_TABLE.HASTUS_PLACE_ID,
+                        STAGING_TABLE.NETWORK_PLACE_EXT_ID,
                         STAGING_TABLE.USAGE_IN_ROUTES
                 )
                         .values(null, null, null, null, null, 0)
@@ -158,7 +167,7 @@ public class ScheduledStopPointImportRepository
                 item.elyNumber().orElse(null),
                 jsonbConverter.asJson(item.name()),
                 item.shortId().orElse(null),
-                item.placeExternalId().orElse(null),
+                item.placeExternalId().map(ExternalId::value).orElse(null),
                 item.usageInRoutes()
         ));
 
