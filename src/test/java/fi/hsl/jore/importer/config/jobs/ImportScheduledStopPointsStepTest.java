@@ -26,11 +26,13 @@ import static org.assertj.core.api.Assertions.assertThat;
         "/sql/jore3/populate_nodes.sql",
         "/sql/jore3/populate_routes.sql",
         "/sql/jore3/populate_route_links.sql",
+        "/sql/jore3/populate_places.sql",
         "/sql/jore3/populate_scheduled_stop_points.sql"
 },
         config = @SqlConfig(dataSource = "sourceDataSource"))
 @Sql(scripts = {
         "/sql/importer/drop_tables.sql",
+        "/sql/importer/populate_places.sql",
         "/sql/importer/populate_infrastructure_nodes.sql"
 })
 @ExtendWith(SoftAssertionsExtension.class)
@@ -42,7 +44,7 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
     private static final String EXPECTED_FINNISH_NAME = "Yliopisto";
     private static final String EXPECTED_SWEDISH_NAME = "Universitetet";
     private static final String EXPECTED_SHORT_ID = "H1234";
-    private static final String EXPECTED_PLACE_EXTERNAL_ID = "1ELIEL";
+    private static final UUID EXPECTED_PLACE_ID = UUID.fromString("dfdf8d1d-8649-43bf-9fda-6c23a500a189");
     private static final int EXPECTED_USAGE_IN_ROUTES = 1;
 
     private static final List<String> STEPS = List.of("prepareScheduledStopPointsStep",
@@ -101,9 +103,9 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
                 .as("Jore 4 id")
                 .isEmpty();
 
-        softAssertions.assertThat(imported.placeExternalId())
-                .as("placeExternalId")
-                .contains(EXPECTED_PLACE_EXTERNAL_ID);
+        softAssertions.assertThat(imported.placeId())
+                .as("placeId")
+                .contains(EXPECTED_PLACE_ID);
 
         softAssertions.assertThat(imported.usageInRoutes())
                 .as("usage in routes")

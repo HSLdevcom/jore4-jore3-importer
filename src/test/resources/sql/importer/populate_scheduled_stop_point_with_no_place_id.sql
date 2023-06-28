@@ -9,12 +9,12 @@ INSERT INTO network.scheduled_stop_points (
     usage_in_routes
 )
 VALUES (
-    '058a63b3-365b-4676-af51-809bef577cdd',
-    'c',
-    'cc11a5db-2ae7-4220-adfe-aca5d6620909',
-    1234567890,
-    '{"fi_FI": "Yliopisto vanha","sv_SE": "Universitetet gamla"}',
-    'H1234',
-    '5992337c-6f19-4458-9234-090ef399537b',
+    '20d94223-ed84-4fd6-be3c-55650901f75b',
+    'd',
+    '0009b559-0e7c-4549-99eb-5391727d1016',
+    987654321,
+    '{"fi_FI": "Etelä-Hervanta","sv_SE": "Södra Hervanta"}',
+    'H4321',
+    null,
     1
 );
