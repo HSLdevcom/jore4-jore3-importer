@@ -93,16 +93,16 @@ public class ScheduledStopPointsStagingRecord extends UpdatableRecordImpl<Schedu
     }
 
     /**
-     * Setter for <code>network.scheduled_stop_points_staging.hastus_place_id</code>.
+     * Setter for <code>network.scheduled_stop_points_staging.network_place_ext_id</code>.
      */
-    public void setHastusPlaceId(String value) {
+    public void setNetworkPlaceExtId(String value) {
         set(5, value);
     }
 
     /**
-     * Getter for <code>network.scheduled_stop_points_staging.hastus_place_id</code>.
+     * Getter for <code>network.scheduled_stop_points_staging.network_place_ext_id</code>.
      */
-    public String getHastusPlaceId() {
+    public String getNetworkPlaceExtId() {
         return (String) get(5);
     }
 
@@ -156,7 +156,7 @@ public class ScheduledStopPointsStagingRecord extends UpdatableRecordImpl<Schedu
 
     @Override
     public Field<String> field6() {
-        return ScheduledStopPointsStaging.SCHEDULED_STOP_POINTS_STAGING.HASTUS_PLACE_ID;
+        return ScheduledStopPointsStaging.SCHEDULED_STOP_POINTS_STAGING.NETWORK_PLACE_EXT_ID;
     }
 
     @Override
@@ -186,7 +186,7 @@ public class ScheduledStopPointsStagingRecord extends UpdatableRecordImpl<Schedu
 
     @Override
     public String component6() {
-        return getHastusPlaceId();
+        return getNetworkPlaceExtId();
     }
 
     @Override
@@ -216,7 +216,7 @@ public class ScheduledStopPointsStagingRecord extends UpdatableRecordImpl<Schedu
 
     @Override
     public String value6() {
-        return getHastusPlaceId();
+        return getNetworkPlaceExtId();
     }
 
     @Override
@@ -251,7 +251,7 @@ public class ScheduledStopPointsStagingRecord extends UpdatableRecordImpl<Schedu
 
     @Override
     public ScheduledStopPointsStagingRecord value6(String value) {
-        setHastusPlaceId(value);
+        setNetworkPlaceExtId(value);
         return this;
     }
 
@@ -280,7 +280,7 @@ public class ScheduledStopPointsStagingRecord extends UpdatableRecordImpl<Schedu
     /**
      * Create a detached, initialised ScheduledStopPointsStagingRecord
      */
-    public ScheduledStopPointsStagingRecord(String scheduledStopPointExtId, Long scheduledStopPointElyNumber, JSONB scheduledStopPointName, String scheduledStopPointShortId, Integer usageInRoutes, String hastusPlaceId) {
+    public ScheduledStopPointsStagingRecord(String scheduledStopPointExtId, Long scheduledStopPointElyNumber, JSONB scheduledStopPointName, String scheduledStopPointShortId, Integer usageInRoutes, String networkPlaceExtId) {
         super(ScheduledStopPointsStaging.SCHEDULED_STOP_POINTS_STAGING);
 
         setScheduledStopPointExtId(scheduledStopPointExtId);
@@ -288,6 +288,6 @@ public class ScheduledStopPointsStagingRecord extends UpdatableRecordImpl<Schedu
         setScheduledStopPointName(scheduledStopPointName);
         setScheduledStopPointShortId(scheduledStopPointShortId);
         setUsageInRoutes(usageInRoutes);
-        setHastusPlaceId(hastusPlaceId);
+        setNetworkPlaceExtId(networkPlaceExtId);
     }
 }

@@ -93,9 +93,9 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
     public final TableField<ScheduledStopPointsHistoryRecord, Integer> USAGE_IN_ROUTES = createField(DSL.name("usage_in_routes"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points_history.hastus_place_id</code>.
+     * The column <code>network.scheduled_stop_points_history.network_place_id</code>.
      */
-    public final TableField<ScheduledStopPointsHistoryRecord, String> HASTUS_PLACE_ID = createField(DSL.name("hastus_place_id"), SQLDataType.CLOB, this, "");
+    public final TableField<ScheduledStopPointsHistoryRecord, UUID> NETWORK_PLACE_ID = createField(DSL.name("network_place_id"), SQLDataType.UUID, this, "");
 
     private ScheduledStopPointsHistory(Name alias, Table<ScheduledStopPointsHistoryRecord> aliased) {
         this(alias, aliased, null);
@@ -166,7 +166,7 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<UUID, String, UUID, Long, JSONB, TimeRange, String, UUID, Integer, String> fieldsRow() {
+    public Row10<UUID, String, UUID, Long, JSONB, TimeRange, String, UUID, Integer, UUID> fieldsRow() {
         return (Row10) super.fieldsRow();
     }
 }

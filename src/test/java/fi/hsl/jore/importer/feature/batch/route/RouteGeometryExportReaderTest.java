@@ -63,6 +63,7 @@ public class RouteGeometryExportReaderTest {
             "/sql/importer/populate_route_directions_with_jore4_ids.sql",
             "/sql/importer/populate_route_points_for_jore4_export.sql",
             "/sql/importer/populate_route_stop_points_for_jore4_export.sql",
+            "/sql/importer/populate_places.sql",
             "/sql/importer/populate_scheduled_stop_points_for_jore4_export.sql",
             "/sql/importer/populate_infrastructure_links.sql",
             "/sql/importer/populate_route_links.sql"

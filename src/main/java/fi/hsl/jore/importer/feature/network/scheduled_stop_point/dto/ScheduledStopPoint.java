@@ -28,6 +28,8 @@ public interface ScheduledStopPoint
 
     NodePK node();
 
+    Optional<UUID> placeId();
+
     Optional<UUID> jore4Id();
 
     /**
@@ -36,23 +38,23 @@ public interface ScheduledStopPoint
     int usageInRoutes();
 
     static ScheduledStopPoint of(final ScheduledStopPointPK pk,
-                                 final ExternalId externalId,
+                                 final ExternalId stopPointExternalId,
                                  final Optional<Long> elyNumber,
                                  final NodePK node,
                                  final MultilingualString name,
                                  final Optional<String> shortId,
-                                 final Optional<String> placeExternalId,
+                                 final Optional<UUID> placeId,
                                  final Optional<UUID> jore4Id,
                                  final int usageInRoutes,
                                  final TimeRange systemTime) {
         return ImmutableScheduledStopPoint.builder()
                 .pk(pk)
-                .externalId(externalId)
+                .externalId(stopPointExternalId)
                 .elyNumber(elyNumber)
                 .node(node)
                 .name(name)
                 .shortId(shortId)
-                .placeExternalId(placeExternalId)
+                .placeId(placeId)
                 .jore4Id(jore4Id)
                 .systemTime(systemTime)
                 .usageInRoutes(usageInRoutes)
@@ -67,7 +69,7 @@ public interface ScheduledStopPoint
                 NodePK.of(record.getInfrastructureNodeId()),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
                 Optional.of(record.getScheduledStopPointShortId()),
-                Optional.ofNullable(record.getHastusPlaceId()),
+                Optional.ofNullable(record.getNetworkPlaceId()),
                 Optional.ofNullable(record.getScheduledStopPointJore4Id()),
                 record.getUsageInRoutes(),
                 record.getScheduledStopPointSysPeriod()
@@ -82,7 +84,7 @@ public interface ScheduledStopPoint
                 NodePK.of(record.getInfrastructureNodeId()),
                 converter.fromJson(record.getScheduledStopPointName(), MultilingualString.class),
                 Optional.of(record.getScheduledStopPointShortId()),
-                Optional.ofNullable(record.getHastusPlaceId()),
+                Optional.ofNullable(record.getNetworkPlaceId()),
                 Optional.ofNullable(record.getScheduledStopPointJore4Id()),
                 record.getUsageInRoutes(),
                 record.getScheduledStopPointSysPeriod()
