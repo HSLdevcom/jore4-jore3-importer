@@ -14,12 +14,12 @@ public interface PersistableScheduledStopPoint
     static PersistableScheduledStopPoint of(final ExternalId externalId,
                                             final Optional<Long> elyNumber,
                                             final MultilingualString name,
-                                            final String hastusPlaceId) {
+                                            final String placeExternalId) {
         return ImmutablePersistableScheduledStopPoint.builder()
                 .externalId(externalId)
                 .elyNumber(elyNumber)
                 .name(name)
-                .hastusPlaceId(hastusPlaceId)
+                .placeExternalId(placeExternalId)
                 .build();
     }
 }

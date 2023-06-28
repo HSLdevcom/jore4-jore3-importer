@@ -158,7 +158,7 @@ public class ScheduledStopPointImportRepository
                 item.elyNumber().orElse(null),
                 jsonbConverter.asJson(item.name()),
                 item.shortId().orElse(null),
-                item.hastusPlaceId().orElse(null),
+                item.placeExternalId().orElse(null),
                 item.usageInRoutes()
         ));
 

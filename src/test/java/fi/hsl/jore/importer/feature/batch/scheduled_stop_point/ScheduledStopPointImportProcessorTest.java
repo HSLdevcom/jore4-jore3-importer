@@ -21,7 +21,7 @@ class ScheduledStopPointImportProcessorTest {
     private static final String JORE3_SHORT_LETTER = "H";
     private static final String FINNISH_NAME = "";
     private static final String SWEDISH_NAME = "";
-    private static final String HASTUS_PLACE_ID = "1ELIEL";
+    private static final String PLACE_EXTERNAL_ID = "1ELIEL";
     private static final int USAGE_IN_ROUTES = 1;
 
     private final ScheduledStopPointImportProcessor processor = new ScheduledStopPointImportProcessor();
@@ -37,7 +37,7 @@ class ScheduledStopPointImportProcessorTest {
                 Optional.of(SWEDISH_NAME),
                 Optional.of(JORE3_SHORT_ID),
                 Optional.of(JORE3_SHORT_LETTER),
-                Optional.of(HASTUS_PLACE_ID),
+                Optional.of(PLACE_EXTERNAL_ID),
                 USAGE_IN_ROUTES
         );
 
@@ -80,12 +80,12 @@ class ScheduledStopPointImportProcessorTest {
         }
 
         @Test
-        @DisplayName("Should return a scheduled stop point with the correct Hastus place ID")
-        void shouldReturnScheduledStopPointWithCorrectHastusPlaceId() throws Exception {
+        @DisplayName("Should return a scheduled stop point with the correct place external ID")
+        void shouldReturnScheduledStopPointWithCorrectPlaceExternalId() throws Exception {
             final Jore3ScheduledStopPoint returned = processor.process(input);
-            assertThat(returned.hastusPlaceId())
-                    .as("hastusPlaceId")
-                    .contains(HASTUS_PLACE_ID);
+            assertThat(returned.placeExternalId())
+                    .as("placeExternalId")
+                    .contains(PLACE_EXTERNAL_ID);
         }
 
         @Nested
@@ -99,7 +99,7 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.of(SWEDISH_NAME),
                     Optional.empty(),
                     Optional.empty(),
-                    Optional.of(HASTUS_PLACE_ID),
+                    Optional.of(PLACE_EXTERNAL_ID),
                     USAGE_IN_ROUTES
             );
 
@@ -124,7 +124,7 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.of(SWEDISH_NAME),
                     Optional.empty(),
                     Optional.of(JORE3_SHORT_LETTER),
-                    Optional.of(HASTUS_PLACE_ID),
+                    Optional.of(PLACE_EXTERNAL_ID),
                     USAGE_IN_ROUTES
             );
 
@@ -149,7 +149,7 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.of(SWEDISH_NAME),
                     Optional.of(JORE3_SHORT_ID),
                     Optional.empty(),
-                    Optional.of(HASTUS_PLACE_ID),
+                    Optional.of(PLACE_EXTERNAL_ID),
                     USAGE_IN_ROUTES
             );
 
@@ -174,7 +174,7 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.of(SWEDISH_NAME),
                     Optional.of(JORE3_SHORT_ID),
                     Optional.of(JORE3_SHORT_LETTER),
-                    Optional.of(HASTUS_PLACE_ID),
+                    Optional.of(PLACE_EXTERNAL_ID),
                     USAGE_IN_ROUTES
             );
 
@@ -189,8 +189,8 @@ class ScheduledStopPointImportProcessorTest {
         }
 
         @Nested
-        @DisplayName("When Hastus place ID contains empty string")
-        class WhenHastusPlaceIdIsContainsEmptyString {
+        @DisplayName("When place external ID contains empty string")
+        class WhenPlaceExternalIdIsContainsEmptyString {
 
             private final JrScheduledStopPoint input = JrScheduledStopPoint.of(
                     NodeId.of(EXTERNAL_ID),
@@ -204,18 +204,18 @@ class ScheduledStopPointImportProcessorTest {
             );
 
             @Test
-            @DisplayName("Should return a scheduled stop point with empty Hastus place ID")
-            void shouldReturnScheduledStopPointWithEmptyHastusPlaceId() throws Exception {
+            @DisplayName("Should return a scheduled stop point with empty place external ID")
+            void shouldReturnScheduledStopPointWithEmptyPlaceExternalId() throws Exception {
                 final Jore3ScheduledStopPoint returned = processor.process(input);
-                assertThat(returned.hastusPlaceId())
-                        .as("hastusPlaceId")
+                assertThat(returned.placeExternalId())
+                        .as("placeExternalId")
                         .isEmpty();
             }
         }
 
         @Nested
-        @DisplayName("When Hastus place ID contains a whitespace string")
-        class WhenHastusPlaceIdIsAWhitespaceString {
+        @DisplayName("When place external ID contains a whitespace string")
+        class WhenPlaceExternalIdIsAWhitespaceString {
 
             private final JrScheduledStopPoint input = JrScheduledStopPoint.of(
                     NodeId.of(EXTERNAL_ID),
@@ -229,11 +229,11 @@ class ScheduledStopPointImportProcessorTest {
             );
 
             @Test
-            @DisplayName("Should return a scheduled stop point with empty Hastus place ID")
-            void shouldReturnScheduledStopPointWithEmptyHastusPlaceId() throws Exception {
+            @DisplayName("Should return a scheduled stop point with empty place external ID")
+            void shouldReturnScheduledStopPointWithEmptyPlaceExternalId() throws Exception {
                 final Jore3ScheduledStopPoint returned = processor.process(input);
-                assertThat(returned.hastusPlaceId())
-                        .as("hastusPlaceId")
+                assertThat(returned.placeExternalId())
+                        .as("placeExternalId")
                         .isEmpty();
             }
         }

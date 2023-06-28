@@ -38,21 +38,21 @@ public interface ImporterScheduledStopPoint {
 
     Optional<String> shortId();
 
-    Optional<String> hastusPlaceId();
+    Optional<String> placeExternalId();
 
     static ImmutableImporterScheduledStopPoint of(final List<ExternalId> externalIds,
                                                   final List<Long> elynumbers,
                                                   final Point location,
                                                   final MultilingualString name,
                                                   final Optional<String> shortId,
-                                                  final Optional<String> hastusPlaceId) {
+                                                  final Optional<String> placeExternalId) {
         return ImmutableImporterScheduledStopPoint.builder()
                 .externalIds(externalIds)
                 .elyNumbers(elynumbers)
                 .location(location)
                 .name(name)
                 .shortId(shortId)
-                .hastusPlaceId(hastusPlaceId)
+                .placeExternalId(placeExternalId)
                 .build();
     }
 }
