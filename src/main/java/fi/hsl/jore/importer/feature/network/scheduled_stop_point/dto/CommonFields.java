@@ -13,5 +13,5 @@ public interface CommonFields<T> extends IHasExternalId {
 
     Optional<String> shortId();
 
-    Optional<String> hastusPlaceId();
+    Optional<String> placeExternalId();
 }

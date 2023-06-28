@@ -50,7 +50,7 @@ public class ScheduledStopPointImportRepositoryTest {
         private static final String EXPECTED_FINNISH_NAME = "Yliopisto";
         private static final String EXPECTED_SWEDISH_NAME = "Universitetet";
         private static final String EXPECTED_SHORT_ID = "H1234";
-        private static final String EXPECTED_HASTUS_PLACE_ID = "1MARIA";
+        private static final String EXPECTED_PLACE_EXTERNAL_ID = "1MARIA";
 
         @Nested
         @DisplayName("When the staging table has no rows")
@@ -208,9 +208,9 @@ public class ScheduledStopPointImportRepositoryTest {
                             .as("shortId")
                             .contains(EXPECTED_SHORT_ID);
 
-                    softAssertions.assertThat(inserted.hastusPlaceId())
-                            .as("hastusPlaceId")
-                            .contains(EXPECTED_HASTUS_PLACE_ID);
+                    softAssertions.assertThat(inserted.placeExternalId())
+                            .as("placeExternalId")
+                            .contains(EXPECTED_PLACE_EXTERNAL_ID);
                 }
             }
 
@@ -280,9 +280,9 @@ public class ScheduledStopPointImportRepositoryTest {
                             .as("shortId")
                             .contains(EXPECTED_SHORT_ID);
 
-                    softAssertions.assertThat(updated.hastusPlaceId())
-                            .as("hastusPlaceId")
-                            .contains(EXPECTED_HASTUS_PLACE_ID);
+                    softAssertions.assertThat(updated.placeExternalId())
+                            .as("placeExternalId")
+                            .contains(EXPECTED_PLACE_EXTERNAL_ID);
                 }
             }
         }

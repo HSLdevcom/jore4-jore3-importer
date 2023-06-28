@@ -78,7 +78,7 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Importer
                         Jore4ScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),
                         importerStop.shortId().get(),
                         importerStop.location(),
-                        importerStop.hastusPlaceId(),
+                        importerStop.placeExternalId(),
                         DEFAULT_PRIORITY,
                         Optional.of(DEFAULT_VALIDITY_START),
                         Optional.of(DEFAULT_VALIDITY_END)

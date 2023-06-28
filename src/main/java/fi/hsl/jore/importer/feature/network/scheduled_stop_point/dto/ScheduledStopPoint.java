@@ -41,7 +41,7 @@ public interface ScheduledStopPoint
                                  final NodePK node,
                                  final MultilingualString name,
                                  final Optional<String> shortId,
-                                 final Optional<String> hastusPlaceId,
+                                 final Optional<String> placeExternalId,
                                  final Optional<UUID> jore4Id,
                                  final int usageInRoutes,
                                  final TimeRange systemTime) {
@@ -52,7 +52,7 @@ public interface ScheduledStopPoint
                 .node(node)
                 .name(name)
                 .shortId(shortId)
-                .hastusPlaceId(hastusPlaceId)
+                .placeExternalId(placeExternalId)
                 .jore4Id(jore4Id)
                 .systemTime(systemTime)
                 .usageInRoutes(usageInRoutes)

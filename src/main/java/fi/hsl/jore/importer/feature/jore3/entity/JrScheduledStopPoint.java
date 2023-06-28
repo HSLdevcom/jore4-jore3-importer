@@ -48,7 +48,7 @@ public interface JrScheduledStopPoint extends IHasPrimaryKey<JrScheduledStopPoin
     @JoreColumn(name = "paitunnus",
             example = "1ELIEL"
     )
-    Optional<String> hastusPlaceId();
+    Optional<String> placeExternalId();
 
     /**
      * Number of times used in routes
@@ -63,7 +63,7 @@ public interface JrScheduledStopPoint extends IHasPrimaryKey<JrScheduledStopPoin
                                    final Optional<String> nameSwedish,
                                    final Optional<String> shortId,
                                    final Optional<String> shortLetter,
-                                   final Optional<String> hastusPlaceId,
+                                   final Optional<String> placeExternalId,
                                    final int usageInRoutes) {
         return ImmutableJrScheduledStopPoint.builder()
                 .pk(JrScheduledStopPointPK.of(nodeId))
@@ -72,7 +72,7 @@ public interface JrScheduledStopPoint extends IHasPrimaryKey<JrScheduledStopPoin
                 .nameSwedish(nameSwedish)
                 .shortId(shortId)
                 .shortLetter(shortLetter)
-                .hastusPlaceId(hastusPlaceId)
+                .placeExternalId(placeExternalId)
                 .usageInRoutes(usageInRoutes)
                 .build();
     }

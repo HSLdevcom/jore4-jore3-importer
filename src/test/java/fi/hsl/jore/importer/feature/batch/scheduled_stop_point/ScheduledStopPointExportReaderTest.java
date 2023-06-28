@@ -69,7 +69,7 @@ class ScheduledStopPointExportReaderTest {
         private static final double EXPECTED_Y_COORDINATE = 5;
         private static final String EXPECTED_FINNISH_NAME = "Yliopisto vanha";
         private static final String EXPECTED_SWEDISH_NAME = "Universitetet gamla";
-        private static final String EXPECTED_HASTUS_PLACE_ID = "1KALA";
+        private static final String EXPECTED_PLACE_EXTERNAL_ID = "1KALA";
 
         @Test
         @DisplayName("The first invocation of the read() method must return the found scheduled stop point")
@@ -112,9 +112,9 @@ class ScheduledStopPointExportReaderTest {
                     .as("swedishName")
                     .isEqualTo(EXPECTED_SWEDISH_NAME);
 
-            softAssertions.assertThat(found.hastusPlaceId())
-                    .as("hastusPlaceId")
-                    .contains(EXPECTED_HASTUS_PLACE_ID);
+            softAssertions.assertThat(found.placeExternalId())
+                    .as("placeExternalId")
+                    .contains(EXPECTED_PLACE_EXTERNAL_ID);
         }
 
         @Test
@@ -148,7 +148,7 @@ class ScheduledStopPointExportReaderTest {
         private static final double EXPECTED_Y_COORDINATE = 5;
         private static final String EXPECTED_FINNISH_NAME = "Yliopisto vanha";
         private static final String EXPECTED_SWEDISH_NAME = "Universitetet gamla";
-        private static final String EXPECTED_HASTUS_PLACE_ID = "1KALA";
+        private static final String EXPECTED_PLACE_EXTERNAL_ID = "1KALA";
 
         @Test
         @DisplayName("The first invocation of the read() method must return the found scheduled stop point")
@@ -194,9 +194,9 @@ class ScheduledStopPointExportReaderTest {
                     .as("swedishName")
                     .isEqualTo(EXPECTED_SWEDISH_NAME);
 
-            softAssertions.assertThat(found.hastusPlaceId())
-                    .as("hastusPlaceId")
-                    .contains(EXPECTED_HASTUS_PLACE_ID);
+            softAssertions.assertThat(found.placeExternalId())
+                    .as("placeExternalId")
+                    .contains(EXPECTED_PLACE_EXTERNAL_ID);
         }
 
         @Test
