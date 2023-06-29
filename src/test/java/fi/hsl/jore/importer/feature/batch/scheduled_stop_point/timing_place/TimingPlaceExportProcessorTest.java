@@ -21,11 +21,11 @@ public class TimingPlaceExportProcessorTest {
     }
 
     @Test
-    @DisplayName("Should return correct Hastus place ID")
-    public void shouldReturnCorrectHastusPlaceId() throws Exception {
+    @DisplayName("Should return correct timing place label")
+    public void shouldReturnCorrectTimingPlaceLabel() throws Exception {
         final Jore4TimingPlace output = INSTANCE.process(INPUT);
 
         assertThat(output).isNotNull();
-        assertThat(output.hastusPlaceId()).isEqualTo(INPUT.hastusPlaceId());
+        assertThat(output.timingPlaceLabel()).isEqualTo(INPUT.timingPlaceLabel());
     }
 }

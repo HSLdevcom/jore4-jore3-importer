@@ -12,7 +12,7 @@ SELECT
     n.infrastructure_node_location AS location,
     s.scheduled_stop_point_name AS name,
     s.scheduled_stop_point_short_id AS short_id,
-    s.hastus_place_id AS hastus_place_id
+    s.hastus_place_id AS timing_place_label
 FROM network.scheduled_stop_points s
 JOIN infrastructure_network.infrastructure_nodes n USING (infrastructure_node_id)
 WHERE s.scheduled_stop_point_ely_number IS NOT NULL

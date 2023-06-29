@@ -42,7 +42,7 @@ public class ScheduledStopPointExportMapper implements RowMapper<ImporterSchedul
                 pointFromDatabaseObject(resultSet.getObject("location")),
                 jsonConverter.fromJson(resultSet.getString("name"), MultilingualString.class),
                 getOptionalString(resultSet, "short_id"),
-                getOptionalString(resultSet, "hastus_place_id")
+                getOptionalString(resultSet, "timing_place_label")
         );
     }
 

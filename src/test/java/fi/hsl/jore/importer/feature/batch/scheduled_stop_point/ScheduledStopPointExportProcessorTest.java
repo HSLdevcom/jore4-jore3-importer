@@ -34,7 +34,7 @@ class ScheduledStopPointExportProcessorTest {
     private static final String JORE_3_STOP_SWEDISH_NAME = "Ullasbacken (Jore3)";
     private static final double JORE_3_STOP_X_COORDINATE = 25.696376131;
     private static final double JORE_3_STOP_Y_COORDINATE = 61.207149801;
-    private static final String JORE_3_STOP_HASTUS_PLACE_ID = "1ELIEL";
+    private static final String JORE_3_STOP_PLACE_EXT_ID = "1ELIEL";
 
     private static final int PRIORITY = 10;
     private static final LocalDate VALIDITY_PERIOD_START = LocalDate.of(1990, 1, 1);
@@ -64,7 +64,7 @@ class ScheduledStopPointExportProcessorTest {
                     JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
                     JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
                     Optional.of(IMPORTER_SHORT_ID),
-                    Optional.of(JORE_3_STOP_HASTUS_PLACE_ID)
+                    Optional.of(JORE_3_STOP_PLACE_EXT_ID)
             );
 
             @Test
@@ -85,7 +85,7 @@ class ScheduledStopPointExportProcessorTest {
                     JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
                     JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
                     Optional.of(IMPORTER_SHORT_ID),
-                    Optional.of(JORE_3_STOP_HASTUS_PLACE_ID)
+                    Optional.of(JORE_3_STOP_PLACE_EXT_ID)
             );
 
             @Test
@@ -138,10 +138,10 @@ class ScheduledStopPointExportProcessorTest {
             }
 
             @Test
-            @DisplayName("Should return a scheduled stop point with the correct Hastus place ID")
-            void shouldReturnScheduledStopPointWithCorrectHastusPlaceId() throws Exception {
+            @DisplayName("Should return a scheduled stop point with the correct timing place label")
+            void shouldReturnScheduledStopPointWithCorrectTimingPlaceLabel() throws Exception {
                 final Jore4ScheduledStopPoint output = processor.process(jore3Stop);
-                assertThat(output.hastusPlaceId()).contains(JORE_3_STOP_HASTUS_PLACE_ID);
+                assertThat(output.timingPlaceLabel()).contains(JORE_3_STOP_PLACE_EXT_ID);
             }
 
             @Test
@@ -183,7 +183,7 @@ class ScheduledStopPointExportProcessorTest {
                     JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
                     JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
                     Optional.of(IMPORTER_SHORT_ID),
-                    Optional.of(JORE_3_STOP_HASTUS_PLACE_ID)
+                    Optional.of(JORE_3_STOP_PLACE_EXT_ID)
             );
 
             @Test
@@ -236,10 +236,10 @@ class ScheduledStopPointExportProcessorTest {
             }
 
             @Test
-            @DisplayName("Should return a scheduled stop point with the correct Hastus place ID")
-            void shouldReturnScheduledStopPointWithCorrectHastusPlaceId() throws Exception {
+            @DisplayName("Should return a scheduled stop point with the correct timing place label")
+            void shouldReturnScheduledStopPointWithCorrectTimingPlaceLabel() throws Exception {
                 final Jore4ScheduledStopPoint output = processor.process(jore3Stop);
-                assertThat(output.hastusPlaceId()).contains(JORE_3_STOP_HASTUS_PLACE_ID);
+                assertThat(output.timingPlaceLabel()).contains(JORE_3_STOP_PLACE_EXT_ID);
             }
 
             @Test

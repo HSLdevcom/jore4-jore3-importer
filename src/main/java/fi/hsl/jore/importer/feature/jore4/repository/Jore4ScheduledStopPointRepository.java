@@ -38,11 +38,11 @@ public class Jore4ScheduledStopPointRepository implements IJore4ScheduledStopPoi
                         .fetchOneInto(UUID.class);
 
                 final UUID timingPlaceId = stopPoint
-                        .hastusPlaceId()
-                        .map(hastusPlaceId -> db
+                        .timingPlaceLabel()
+                        .map(timingPlaceLabel -> db
                                 .select(TIMING_PLACE.TIMING_PLACE_ID)
                                 .from(TIMING_PLACE)
-                                .where(TIMING_PLACE.LABEL.eq(hastusPlaceId))
+                                .where(TIMING_PLACE.LABEL.eq(timingPlaceLabel))
                                 .fetchOneInto(UUID.class))
                         .orElse(null);
 
