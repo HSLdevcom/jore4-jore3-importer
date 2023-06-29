@@ -13,12 +13,12 @@ public interface Jore4TimingPlace {
 
     UUID timingPlaceId();
 
-    String hastusPlaceId();
+    String timingPlaceLabel();
 
-    static ImmutableJore4TimingPlace of(final UUID timingPlaceId, final String hastusPlaceId) {
+    static ImmutableJore4TimingPlace of(final UUID timingPlaceId, final String timingPlaceLabel) {
         return ImmutableJore4TimingPlace.builder()
                                         .timingPlaceId(timingPlaceId)
-                                        .hastusPlaceId(hastusPlaceId)
+                                        .timingPlaceLabel(timingPlaceLabel)
                                         .build();
     }
 }

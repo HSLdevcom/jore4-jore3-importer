@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 
 /**
- * Reads Hastus place IDs from scheduled stop points from the import schemas
+ * Reads timing place labels from scheduled stop points from the import schemas
  * which are found from the database of this Spring Boot application.
  */
 @Component

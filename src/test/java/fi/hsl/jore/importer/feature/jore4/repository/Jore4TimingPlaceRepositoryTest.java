@@ -22,7 +22,7 @@ import static org.assertj.db.api.Assertions.assertThat;
 public class Jore4TimingPlaceRepositoryTest {
 
     private static final UUID TIMING_PLACE_ID = UUID.fromString("b5f56d68-c4cf-11ed-afa1-0242ac120002");
-    private static final String HASTUS_PLACE_ID = "Test Place 1";
+    private static final String TIMING_PLACE_LABEL = "1ELIEL";
 
     private final Jore4TimingPlaceRepository repository;
     private final Table targetTable;
@@ -45,7 +45,7 @@ public class Jore4TimingPlaceRepositoryTest {
     )
     class InsertLineIntoDatabase {
 
-        private final Jore4TimingPlace INPUT = Jore4TimingPlace.of(TIMING_PLACE_ID, HASTUS_PLACE_ID);
+        private final Jore4TimingPlace INPUT = Jore4TimingPlace.of(TIMING_PLACE_ID, TIMING_PLACE_LABEL);
 
         @Test
         @DisplayName("Should insert one timing place into the database")
@@ -73,7 +73,7 @@ public class Jore4TimingPlaceRepositoryTest {
             assertThat(targetTable)
                     .row()
                     .value(TIMING_PLACE.LABEL.getName())
-                    .isEqualTo(HASTUS_PLACE_ID);
+                    .isEqualTo(TIMING_PLACE_LABEL);
         }
     }
 }

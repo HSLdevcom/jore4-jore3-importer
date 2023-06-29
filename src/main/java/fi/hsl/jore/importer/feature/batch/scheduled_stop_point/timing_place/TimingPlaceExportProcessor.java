@@ -17,7 +17,7 @@ public class TimingPlaceExportProcessor implements ItemProcessor<ImporterTimingP
         LOGGER.debug("Processing timing place input: {}", timingPlace);
 
         final Jore4TimingPlace jore4TimingPlace = Jore4TimingPlace.of(UUID.randomUUID(),
-                                                                      timingPlace.hastusPlaceId());
+                                                                      timingPlace.timingPlaceLabel());
 
         LOGGER.debug("Created timing place output: {}", jore4TimingPlace);
 

@@ -36,7 +36,7 @@ public class Jore4TimingPlaceRepository implements IJore4TimingPlaceRepository {
 
             timingPlaces.forEach(timingPlace -> batch.bind(
                     timingPlace.timingPlaceId(),
-                    timingPlace.hastusPlaceId()
+                    timingPlace.timingPlaceLabel()
             ));
 
             batch.execute();

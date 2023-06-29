@@ -38,16 +38,16 @@ public class JourneyPatternStopExportProcessor implements ItemProcessor<Importer
 
     private static boolean isUsedAsTimingPoint(final ImporterJourneyPatternStop stop) {
         // There is a constraint in the Jore4 database that requires that when a stop point is
-        // marked as a timing point, it must also have a Hastus place ID. If this constraint is not
-        // met, the stop point (as part of journey pattern) is rejected.
+        // marked as a timing point, it must also have a timing place label. If this constraint is
+        // not met, the stop point (as part of journey pattern) is rejected.
 
         if (stop.isUsedAsTimingPoint()) {
             if (stop.timingPlaceId().isPresent()) {
                 return true;
             } else {
                 LOGGER.warn(
-                        "Jore3 route direction {}: route point {}: stop point marked as a timing point but no Hastus "
-                                + "place ID present => setting isUsedAsTimingPoint flag to false",
+                        "Jore3 route direction {}: route point {}: stop point marked as a timing point but no timing "
+                                + "place label present => setting isUsedAsTimingPoint flag to false",
                         stop.routeDirectionJore3Id(),
                         stop.orderNumber());
             }
