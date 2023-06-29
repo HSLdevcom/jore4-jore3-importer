@@ -11,4 +11,13 @@ import org.springframework.context.annotation.Configuration;
 public class FlywayConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(FlywayConfig.class);
+
+    @Bean
+    @Conditional(BlockMigrationsCondition.class)
+    public FlywayMigrationStrategy noMigration() {
+        LOG.warn("Not running migrations");
+        return flyway -> {
+            // do nothing
+        };
+    }
 }
