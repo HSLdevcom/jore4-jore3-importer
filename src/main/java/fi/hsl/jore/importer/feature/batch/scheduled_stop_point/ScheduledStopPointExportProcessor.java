@@ -46,16 +46,16 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Importer
     }
 
     @Override
-    public Jore4ScheduledStopPoint process(final ImporterScheduledStopPoint jore3Stop) throws Exception {
-        LOGGER.debug("Processing Jore 3 stop: {}", jore3Stop);
+    public Jore4ScheduledStopPoint process(final ImporterScheduledStopPoint importerStop) throws Exception {
+        LOGGER.debug("Processing stop point in Importer's database: {}", importerStop);
 
-        final List<ExternalId> externalIds = jore3Stop.externalIds();
-        final List<Long> elyNumbers = jore3Stop.elyNumbers();
+        final List<ExternalId> externalIds = importerStop.externalIds();
+        final List<Long> elyNumbers = importerStop.elyNumbers();
 
         if (externalIds.size() != elyNumbers.size()) {
             LOGGER.debug(
-                    "Error processing the Jore 3 stop with short id: {}. The amount of external IDs {} differs from the amount of ELY numbers {} which blocks processing any further.",
-                    jore3Stop.shortId(),
+                    "Error processing the the stop with short ID: {}. The amount of external IDs {} differs from the amount of ELY numbers {} which blocks processing any further.",
+                    importerStop.shortId(),
                     externalIds.size(),
                     elyNumbers.size()
             );
@@ -76,9 +76,9 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Importer
                         externalId.value(),
                         digiroadStop.digiroadLinkId(),
                         Jore4ScheduledStopPointDirection.valueOf(digiroadStop.directionOnInfraLink().name()),
-                        jore3Stop.shortId().get(),
-                        jore3Stop.location(),
-                        jore3Stop.hastusPlaceId(),
+                        importerStop.shortId().get(),
+                        importerStop.location(),
+                        importerStop.hastusPlaceId(),
                         DEFAULT_PRIORITY,
                         Optional.of(DEFAULT_VALIDITY_START),
                         Optional.of(DEFAULT_VALIDITY_END)
@@ -89,8 +89,8 @@ public class ScheduledStopPointExportProcessor implements ItemProcessor<Importer
             }
         }
 
-        LOGGER.error("Jore 3 stop with short id: {} isn't processed any further no digiroad stop was found with national ids: {}",
-                jore3Stop.shortId().get(),
+        LOGGER.error("Stop point with short ID: {} isn't processed any further no digiroad stop was found with national ids: {}",
+                importerStop.shortId().get(),
                 elyNumbers
         );
         return null;
