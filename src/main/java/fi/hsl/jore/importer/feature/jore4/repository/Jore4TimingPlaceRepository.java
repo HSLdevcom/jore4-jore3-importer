@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
+import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4TimingPlace;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
@@ -18,9 +19,13 @@ public class Jore4TimingPlaceRepository implements IJore4TimingPlaceRepository {
 
     private final DSLContext db;
 
+    private final IJsonbConverter jsonbConverter;
+
     @Autowired
-    public Jore4TimingPlaceRepository(@Qualifier("jore4Dsl") final DSLContext db) {
+    public Jore4TimingPlaceRepository(@Qualifier("jore4Dsl") final DSLContext db,
+                                      final IJsonbConverter jsonbConverter) {
         this.db = db;
+        this.jsonbConverter = jsonbConverter;
     }
 
     @Transactional
@@ -28,15 +33,17 @@ public class Jore4TimingPlaceRepository implements IJore4TimingPlaceRepository {
     public void insert(final List<? extends Jore4TimingPlace> timingPlaces) {
         if (!timingPlaces.isEmpty()) {
             final BatchBindStep batch = db.batch(db.insertInto(
-                                                           TIMING_PLACE,
-                                                           TIMING_PLACE.TIMING_PLACE_ID,
-                                                           TIMING_PLACE.LABEL
-                                                   )
-                                                   .values((UUID) null, null));
+                            TIMING_PLACE,
+                            TIMING_PLACE.TIMING_PLACE_ID,
+                            TIMING_PLACE.LABEL,
+                            TIMING_PLACE.DESCRIPTION
+                    )
+                    .values((UUID) null, null, null));
 
             timingPlaces.forEach(timingPlace -> batch.bind(
                     timingPlace.timingPlaceId(),
-                    timingPlace.timingPlaceLabel()
+                    timingPlace.timingPlaceLabel(),
+                    jsonbConverter.asJson(timingPlace.timingPlaceName())
             ));
 
             batch.execute();

@@ -16,12 +16,16 @@ public interface Jore4TimingPlace {
 
     String timingPlaceLabel();
 
+    MultilingualString timingPlaceName();
+
     static ImmutableJore4TimingPlace of(final UUID timingPlaceId,
-                                        final String timingPlaceLabel) {
+                                        final String timingPlaceLabel,
+                                        final MultilingualString timingPlaceName) {
 
         return ImmutableJore4TimingPlace.builder()
                 .timingPlaceId(timingPlaceId)
                 .timingPlaceLabel(timingPlaceLabel)
+                .timingPlaceName(timingPlaceName)
                 .build();
     }
 }

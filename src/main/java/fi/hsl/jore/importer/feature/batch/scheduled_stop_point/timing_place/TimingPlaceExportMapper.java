@@ -17,6 +17,8 @@ public class TimingPlaceExportMapper implements RowMapper<ImporterTimingPlace> {
     public ImporterTimingPlace mapRow(final ResultSet resultSet,
                                       final int rowNumber) throws SQLException {
 
-        return ImporterTimingPlace.of((resultSet.getString("timing_place_label")));
+        return ImporterTimingPlace.of(
+                resultSet.getString("timing_place_label"),
+                resultSet.getString("timing_place_name"));
     }
 }
