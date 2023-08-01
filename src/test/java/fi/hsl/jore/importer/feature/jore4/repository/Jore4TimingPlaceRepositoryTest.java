@@ -24,11 +24,11 @@ public class Jore4TimingPlaceRepositoryTest {
     private static final UUID TIMING_PLACE_ID = UUID.fromString("b5f56d68-c4cf-11ed-afa1-0242ac120002");
     private static final String TIMING_PLACE_LABEL = "1ELIEL";
 
-    private final Jore4TimingPlaceRepository repository;
+    private final IJore4TimingPlaceRepository repository;
     private final Table targetTable;
 
     @Autowired
-    Jore4TimingPlaceRepositoryTest(final Jore4TimingPlaceRepository repository,
+    Jore4TimingPlaceRepositoryTest(final IJore4TimingPlaceRepository repository,
                                    @Qualifier("jore4DataSource") final DataSource targetDataSource) {
 
         this.repository = repository;
