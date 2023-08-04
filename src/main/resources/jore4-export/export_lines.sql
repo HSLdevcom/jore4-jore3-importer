@@ -14,11 +14,8 @@ ids_of_last_line_headers AS (
 ),
 overridden_line_headers AS (
     SELECT
-        lh.network_line_header_id AS overridden_network_line_header_id,
-        daterange(
-            lower(lh.network_line_header_valid_date_range),
-            max(upper(rd.network_route_direction_valid_date_range))
-        ) AS overridden_network_line_header_valid_date_range
+        lh.network_line_header_id,
+        max(upper(rd.network_route_direction_valid_date_range)) AS overridden_network_line_header_end_date_excl
     FROM ids_of_last_line_headers last
     JOIN network.network_line_headers lh ON lh.network_line_header_id = last.last_header_id
     JOIN network.network_lines l USING (network_line_id)
@@ -37,13 +34,16 @@ range_extended_lines AS (
         lh.network_line_header_name AS name,
         lh.network_line_header_name_short AS short_name,
         CASE
-            WHEN (olh.overridden_network_line_header_id IS NOT NULL)
-                THEN olh.overridden_network_line_header_valid_date_range
+            WHEN olh.overridden_network_line_header_end_date_excl IS NOT NULL
+                THEN daterange(
+                    lower(lh.network_line_header_valid_date_range),
+                    olh.overridden_network_line_header_end_date_excl
+                )
             ELSE lh.network_line_header_valid_date_range
         END AS valid_date_range
     FROM network.network_lines l
     JOIN network.network_line_headers lh USING (network_line_id)
-    LEFT JOIN overridden_line_headers olh ON olh.overridden_network_line_header_id = lh.network_line_header_id
+    LEFT JOIN overridden_line_headers olh USING (network_line_header_id)
 )
 SELECT *
 FROM range_extended_lines
