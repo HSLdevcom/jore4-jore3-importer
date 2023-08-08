@@ -42,7 +42,7 @@ public class JourneyPatternStopExportProcessor implements ItemProcessor<Importer
         // not met, the stop point (as part of journey pattern) is rejected.
 
         if (stop.isUsedAsTimingPoint()) {
-            if (stop.timingPlaceId().isPresent()) {
+            if (stop.timingPlaceLabel().isPresent()) {
                 return true;
             } else {
                 LOGGER.warn(

@@ -33,7 +33,7 @@ public class JourneyPatternStopExportMapper implements RowMapper<ImporterJourney
                 resultSet.getInt("order_number"),
                 resultSet.getString("short_id"),
                 resultSet.getBoolean("is_used_as_timing_point"),
-                Optional.ofNullable(resultSet.getString("timing_place_id")),
+                Optional.ofNullable(resultSet.getString("timing_place_label")),
                 // should never throw exception because of a database check constraint
                 RegulatedTimingPointStatus.of(resultSet.getInt("regulated_timing_point_status"))
                                           .orElseThrow(),

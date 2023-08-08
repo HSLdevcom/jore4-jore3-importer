@@ -23,7 +23,7 @@ class JourneyPatternStopExportProcessorTest {
     private static final int ORDER_NUMBER = 1;
     private static final String SCHEDULED_STOP_POINT_LABEL = "stop1";
     private static final boolean IS_USED_AS_TIMING_POINT = true;
-    private static final String TIMING_PLACE_ID = "1ELIEL";
+    private static final String TIMING_PLACE_LABEL = "1ELIEL";
     private static final RegulatedTimingPointStatus REGULATED_TIMING_POINT_STATUS = RegulatedTimingPointStatus.YES_LOAD_TIME;
     private static final boolean IS_VIA_POINT = true;
     private static final Map<Locale, String> VIA_POINT_NAME_MAP = Map.of(
@@ -38,7 +38,7 @@ class JourneyPatternStopExportProcessorTest {
             ORDER_NUMBER,
             SCHEDULED_STOP_POINT_LABEL,
             IS_USED_AS_TIMING_POINT,
-            Optional.of(TIMING_PLACE_ID),
+            Optional.of(TIMING_PLACE_LABEL),
             REGULATED_TIMING_POINT_STATUS,
             IS_VIA_POINT,
             VIA_POINT_NAMES
@@ -154,7 +154,7 @@ class JourneyPatternStopExportProcessorTest {
                 ORDER_NUMBER,
                 SCHEDULED_STOP_POINT_LABEL,
                 false, // isUsedAsTimingPoint
-                Optional.of(TIMING_PLACE_ID), // timing place ID is present
+                Optional.of(TIMING_PLACE_LABEL), // timing place label is present
                 RegulatedTimingPointStatus.YES_LOAD_TIME,
                 false,
                 Optional.empty()

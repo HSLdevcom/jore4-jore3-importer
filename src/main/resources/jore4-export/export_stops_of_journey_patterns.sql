@@ -44,7 +44,7 @@ jore4_journey_pattern_stop_point AS (
         rsp.network_route_stop_point_order AS order_number,
         rsp.scheduled_stop_point_short_id AS short_id,
         rsp.network_route_stop_point_hastus_point AS is_used_as_timing_point,
-        rsp.hastus_place_id AS timing_place_id,
+        rsp.hastus_place_id AS timing_place_label,
         rsp.network_route_stop_point_regulated_timing_point_status AS regulated_timing_point_status,
         (vp.network_route_stop_point_via_name IS NOT NULL) AS is_via_point,
         vp.network_route_stop_point_via_name AS via_names

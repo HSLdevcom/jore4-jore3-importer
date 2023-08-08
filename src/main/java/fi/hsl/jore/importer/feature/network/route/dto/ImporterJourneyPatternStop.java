@@ -24,7 +24,7 @@ public interface ImporterJourneyPatternStop {
 
     boolean isUsedAsTimingPoint();
 
-    Optional<String> timingPlaceId();
+    Optional<String> timingPlaceLabel();
 
     RegulatedTimingPointStatus regulatedTimingPointStatus();
 
@@ -37,7 +37,7 @@ public interface ImporterJourneyPatternStop {
                                          final int orderNumber,
                                          final String scheduledStopPointJore4Label,
                                          final boolean isUsedAsTimingPoint,
-                                         final Optional<String> timingPlaceId,
+                                         final Optional<String> timingPlaceLabel,
                                          final RegulatedTimingPointStatus regulatedTimingPointStatus,
                                          final boolean isViaPoint,
                                          final Optional<MultilingualString> viaPointNames) {
@@ -48,7 +48,7 @@ public interface ImporterJourneyPatternStop {
                 .orderNumber(orderNumber)
                 .scheduledStopPointJore4Label(scheduledStopPointJore4Label)
                 .isUsedAsTimingPoint(isUsedAsTimingPoint)
-                .timingPlaceId(timingPlaceId)
+                .timingPlaceLabel(timingPlaceLabel)
                 .regulatedTimingPointStatus(regulatedTimingPointStatus)
                 .isViaPoint(isViaPoint)
                 .viaPointNames(viaPointNames)

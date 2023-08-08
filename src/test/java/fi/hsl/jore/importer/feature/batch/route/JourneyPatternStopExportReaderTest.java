@@ -55,7 +55,7 @@ class JourneyPatternStopExportReaderTest {
     }
 
     @Nested
-    @DisplayName("When the source table has one route")
+    @DisplayName("When the source table has one route with two stops")
     @Sql(scripts = {
             "/sql/importer/drop_tables.sql",
             "/sql/importer/populate_infrastructure_nodes.sql",
@@ -72,21 +72,21 @@ class JourneyPatternStopExportReaderTest {
         private final UUID JOURNEY_PATTERN_JORE4_ID = UUID.fromString("ec564137-f30c-4689-9322-4ef650768af3");
         private final String ROUTE_DIRECTION_JORE3_ID = "1001-2-20211004";
 
-        private final String FIRST_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H1234";
+        private static final String FIRST_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H1234";
         private static final int FIRST_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 1;
         private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT = false;
-        private static final String FIRST_JOURNEY_PATTERN_STOP_TIMING_PLACE_ID = "1ELIEL";
+        private static final String FIRST_JOURNEY_PATTERN_STOP_TIMING_PLACE_LABEL = "1ELIEL";
         private final RegulatedTimingPointStatus FIRST_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS = RegulatedTimingPointStatus.NO;
         private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_VIA_POINT = false;
 
-        private final String SECOND_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H4321";
+        private static final String SECOND_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H4321";
         private static final int SECOND_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 2;
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT = true;
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_VIA_POINT = true;
-        private static final String SECOND_JOURNEY_PATTERN_STOP_TIMING_PLACE_ID = "1KALA";
+        private static final String SECOND_JOURNEY_PATTERN_STOP_TIMING_PLACE_LABEL = "1KALA";
         private final RegulatedTimingPointStatus SECOND_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS = RegulatedTimingPointStatus.YES_LOAD_TIME;
-        private final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_FINNISH = "ViaSuomi";
-        private final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_SWEDISH = "ViaSverige";
+        private static final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_FINNISH = "ViaSuomi";
+        private static final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_SWEDISH = "ViaSverige";
 
         @Test
         @DisplayName("The first invocation of the read() method must return the information of the second stop")
@@ -108,9 +108,9 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(first.isUsedAsTimingPoint())
                     .as("isUsedAsTimingPoint")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT);
-            softAssertions.assertThat(first.timingPlaceId())
-                    .as("timingPlaceId")
-                    .contains(FIRST_JOURNEY_PATTERN_STOP_TIMING_PLACE_ID);
+            softAssertions.assertThat(first.timingPlaceLabel())
+                    .as("timingPlaceLabel")
+                    .contains(FIRST_JOURNEY_PATTERN_STOP_TIMING_PLACE_LABEL);
             softAssertions.assertThat(first.regulatedTimingPointStatus())
                     .as("regulatedTimingPointStatus")
                     .isEqualTo(FIRST_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS);
@@ -145,9 +145,9 @@ class JourneyPatternStopExportReaderTest {
             softAssertions.assertThat(second.isUsedAsTimingPoint())
                     .as("isUsedAsTimingPoint")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT);
-            softAssertions.assertThat(second.timingPlaceId())
-                    .as("timingPlaceId")
-                    .contains(SECOND_JOURNEY_PATTERN_STOP_TIMING_PLACE_ID);
+            softAssertions.assertThat(second.timingPlaceLabel())
+                    .as("timingPlaceLabel")
+                    .contains(SECOND_JOURNEY_PATTERN_STOP_TIMING_PLACE_LABEL);
             softAssertions.assertThat(second.regulatedTimingPointStatus())
                     .as("regulatedTimingPointStatus")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS);
