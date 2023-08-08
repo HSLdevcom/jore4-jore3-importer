@@ -90,7 +90,7 @@ class RoutePointExportRepositoryTest {
             @DisplayName("Should return a list that has three importer route points")
             void shouldReturnListThatHasThreeImporterRoutePoints() {
                 final List<ImporterRoutePoint> routePoints = repository.findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID);
-                assertThat(routePoints).hasSize(3);
+                assertThat(routePoints).hasSize(4);
             }
 
             @Test

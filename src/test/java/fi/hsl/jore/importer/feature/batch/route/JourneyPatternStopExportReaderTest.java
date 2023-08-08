@@ -55,7 +55,7 @@ class JourneyPatternStopExportReaderTest {
     }
 
     @Nested
-    @DisplayName("When the source table has one route with two stops")
+    @DisplayName("When the source table has one route with three stops")
     @Sql(scripts = {
             "/sql/importer/drop_tables.sql",
             "/sql/importer/populate_infrastructure_nodes.sql",
@@ -68,26 +68,32 @@ class JourneyPatternStopExportReaderTest {
             "/sql/importer/populate_scheduled_stop_points_for_jore4_export.sql"
     })
     @ExtendWith(SoftAssertionsExtension.class)
-    class WhenSourceTableHasOneRouteWithTwoStops {
+    class WhenSourceTableHasOneRouteWithThreeStops {
 
         private final UUID JOURNEY_PATTERN_JORE4_ID = UUID.fromString("ec564137-f30c-4689-9322-4ef650768af3");
         private final String ROUTE_DIRECTION_JORE3_ID = "1001-2-20211004";
 
-        private static final String FIRST_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H1234";
         private static final int FIRST_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 1;
-        private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT = false;
+        private static final String FIRST_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H1234";
+        private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT = true;
         private static final String FIRST_JOURNEY_PATTERN_STOP_TIMING_PLACE_LABEL = "1ELIEL";
-        private final RegulatedTimingPointStatus FIRST_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS = RegulatedTimingPointStatus.NO;
+        private final RegulatedTimingPointStatus FIRST_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS = RegulatedTimingPointStatus.YES;
         private static final boolean FIRST_JOURNEY_PATTERN_STOP_IS_VIA_POINT = false;
 
-        private static final String SECOND_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H4321";
         private static final int SECOND_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 2;
-        private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT = true;
+        private static final String SECOND_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H4321";
+        private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT = false;
+        private final RegulatedTimingPointStatus SECOND_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS = RegulatedTimingPointStatus.NO;
         private static final boolean SECOND_JOURNEY_PATTERN_STOP_IS_VIA_POINT = true;
-        private static final String SECOND_JOURNEY_PATTERN_STOP_TIMING_PLACE_LABEL = "1KALA";
-        private final RegulatedTimingPointStatus SECOND_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS = RegulatedTimingPointStatus.YES_LOAD_TIME;
         private static final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_FINNISH = "ViaSuomi";
         private static final String SECOND_JOURNEY_PATTERN_STOP_VIA_NAME_SWEDISH = "ViaSverige";
+
+        private static final int THIRD_JOURNEY_PATTERN_STOP_ORDER_NUMBER = 3;
+        private static final String THIRD_JOURNEY_PATTERN_STOP_JORE4_LABEL = "H5678";
+        private static final boolean THIRD_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT = true;
+        private static final String THIRD_JOURNEY_PATTERN_STOP_TIMING_PLACE_LABEL = "1KALA";
+        private final RegulatedTimingPointStatus THIRD_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS = RegulatedTimingPointStatus.YES_LOAD_TIME;
+        private static final boolean THIRD_JOURNEY_PATTERN_STOP_IS_VIA_POINT = false;
 
         @Test
         @DisplayName("The first invocation of the read() method must return the information of the second stop")
@@ -126,7 +132,7 @@ class JourneyPatternStopExportReaderTest {
         @Test
         @DisplayName("The second invocation of the read() method must return the information of the second stop")
         void secondInvocationOfReadMethodMustReturnInformationOfSecondStop(SoftAssertions softAssertions) throws Exception {
-            //The first invocation returns the journey pattern stop found from the database.
+            // The first invocation returns the journey pattern stop found from the database.
             final ImporterJourneyPatternStop first = reader.read();
             assertThat(first).isNotNull();
 
@@ -148,7 +154,7 @@ class JourneyPatternStopExportReaderTest {
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT);
             softAssertions.assertThat(second.timingPlaceLabel())
                     .as("timingPlaceLabel")
-                    .contains(SECOND_JOURNEY_PATTERN_STOP_TIMING_PLACE_LABEL);
+                    .isEmpty();
             softAssertions.assertThat(second.regulatedTimingPointStatus())
                     .as("regulatedTimingPointStatus")
                     .isEqualTo(SECOND_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS);
@@ -164,19 +170,61 @@ class JourneyPatternStopExportReaderTest {
         }
 
         @Test
-        @DisplayName("The third invocation of the read method must return null")
-        void thirdInvocationOfReaderMethodMustReturnNull() throws Exception {
-            //The first invocation returns the journey pattern stop found from the database.
+        @DisplayName("The third invocation of the read() method must return the information of the third stop")
+        void thirdInvocationOfReadMethodMustReturnInformationOfFirstStop(final SoftAssertions softAssertions) throws Exception {
+            // The first invocation returns the journey pattern stop found from the database.
             final ImporterJourneyPatternStop first = reader.read();
             assertThat(first).isNotNull();
 
-            //The second invocation returns the journey pattern stop found from the database.
             final ImporterJourneyPatternStop second = reader.read();
             assertThat(second).isNotNull();
 
-            //Because there are no more journey pattern stops, this invocation must return null.
             final ImporterJourneyPatternStop third = reader.read();
-            assertThat(third).isNull();
+
+            softAssertions.assertThat(third.journeyPatternJore4Id())
+                    .as("journeyPatternJore4Id")
+                    .isEqualTo(JOURNEY_PATTERN_JORE4_ID);
+            softAssertions.assertThat(third.routeDirectionJore3Id())
+                    .as("routeDirectionJore3Id")
+                    .isEqualTo(ROUTE_DIRECTION_JORE3_ID);
+            softAssertions.assertThat(third.orderNumber())
+                    .as("orderNumber")
+                    .isEqualTo(THIRD_JOURNEY_PATTERN_STOP_ORDER_NUMBER);
+            softAssertions.assertThat(third.scheduledStopPointJore4Label())
+                    .as("scheduledStopPointJore4Label")
+                    .isEqualTo(THIRD_JOURNEY_PATTERN_STOP_JORE4_LABEL);
+            softAssertions.assertThat(third.isUsedAsTimingPoint())
+                    .as("isUsedAsTimingPoint")
+                    .isEqualTo(THIRD_JOURNEY_PATTERN_STOP_IS_USED_AS_TIMING_POINT);
+            softAssertions.assertThat(third.timingPlaceLabel())
+                    .as("timingPlaceLabel")
+                    .contains(THIRD_JOURNEY_PATTERN_STOP_TIMING_PLACE_LABEL);
+            softAssertions.assertThat(third.regulatedTimingPointStatus())
+                    .as("regulatedTimingPointStatus")
+                    .isEqualTo(THIRD_JOURNEY_PATTERN_STOP_REGULATED_TIMING_POINT_STATUS);
+            softAssertions.assertThat(third.isViaPoint())
+                    .as("isViaPoint")
+                    .isEqualTo(THIRD_JOURNEY_PATTERN_STOP_IS_VIA_POINT);
+        }
+
+        @Test
+        @DisplayName("The fourth invocation of the read method must return null")
+        void fourthInvocationOfReaderMethodMustReturnNull() throws Exception {
+            // The first invocation returns the journey pattern stop found from the database.
+            final ImporterJourneyPatternStop first = reader.read();
+            assertThat(first).isNotNull();
+
+            // The second invocation returns the journey pattern stop found from the database.
+            final ImporterJourneyPatternStop second = reader.read();
+            assertThat(second).isNotNull();
+
+            // The third invocation returns the journey pattern stop found from the database.
+            final ImporterJourneyPatternStop third = reader.read();
+            assertThat(third).isNotNull();
+
+            // Because there are no more journey pattern stops, this invocation must return null.
+            final ImporterJourneyPatternStop fourth = reader.read();
+            assertThat(fourth).isNull();
         }
     }
 }

@@ -55,17 +55,22 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
 
     private static final String EXPECTED_FIRST_SCHEDULED_STOP_POINT_LABEL = "H1234";
     private static final int EXPECTED_FIRST_SCHEDULED_STOP_POINT_SEQUENCE = 1;
-    private static final boolean EXPECTED_FIRST_IS_USED_AS_TIMING_POINT = false;
+    private static final boolean EXPECTED_FIRST_IS_USED_AS_TIMING_POINT = true;
     private static final boolean EXPECTED_FIRST_IS_VIA_POINT = false;
 
     private static final String EXPECTED_SECOND_SCHEDULED_STOP_POINT_LABEL = "H4321";
     private static final int EXPECTED_SECOND_SCHEDULED_STOP_POINT_SEQUENCE = 2;
-    private static final boolean EXPECTED_SECOND_IS_USED_AS_TIMING_POINT = true;
+    private static final boolean EXPECTED_SECOND_IS_USED_AS_TIMING_POINT = false;
     private static final boolean EXPECTED_SECOND_IS_VIA_POINT = true;
     private static final Map<String, String> EXPECTED_SECOND_VIA_POINT_NAMES = ImmutableMap.<String, String>builder()
             .put("fi_FI", "ViaSuomi")
             .put("sv_SE", "ViaSverige")
             .build();
+
+    private static final String EXPECTED_THIRD_SCHEDULED_STOP_POINT_LABEL = "H5678";
+    private static final int EXPECTED_THIRD_SCHEDULED_STOP_POINT_SEQUENCE = 3;
+    private static final boolean EXPECTED_THIRD_IS_USED_AS_TIMING_POINT = true;
+    private static final boolean EXPECTED_THIRD_IS_VIA_POINT = false;
 
     private final Table targetTable;
     private final IJsonbConverter jsonbConverter;
@@ -79,11 +84,11 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should insert two journey pattern stops into the Jore4 database")
+    @DisplayName("Should insert three journey pattern stops into the Jore4 database")
     void shouldInsertTwoJourneyPatternStopsIntoJore4Database() {
         runSteps(STEPS);
 
-        assertThat(targetTable).hasNumberOfRows(2);
+        assertThat(targetTable).hasNumberOfRows(3);
     }
 
     @Test
@@ -167,6 +172,40 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                         },
                         "via name conversion"
                 ));
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Should insert the correct information of the third journey pattern stop into the Jore 4 database")
+    void shouldInsertCorrectInformationOfThirdJourneyPatternStopIntoJore4Database() {
+        runSteps(STEPS);
+
+        final SoftAssertions softAssertions = new SoftAssertions();
+        softAssertions.assertThat(targetTable)
+                .row(2)
+                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.JOURNEY_PATTERN_ID.getName())
+                .as("journeyPatternId")
+                .isEqualTo(EXPECTED_JOURNEY_PATTERN_ID);
+        softAssertions.assertThat(targetTable)
+                .row(2)
+                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_LABEL.getName())
+                .as("scheduledStopPointLabel")
+                .isEqualTo(EXPECTED_THIRD_SCHEDULED_STOP_POINT_LABEL);
+        softAssertions.assertThat(targetTable)
+                .row(2)
+                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_SEQUENCE.getName())
+                .as("scheduledStopPointSequence")
+                .isEqualTo(EXPECTED_THIRD_SCHEDULED_STOP_POINT_SEQUENCE);
+        softAssertions.assertThat(targetTable)
+                .row(2)
+                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_USED_AS_TIMING_POINT.getName())
+                .as("isTimingPoint")
+                .isEqualTo(EXPECTED_THIRD_IS_USED_AS_TIMING_POINT);
+        softAssertions.assertThat(targetTable)
+                .row(2)
+                .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_VIA_POINT.getName())
+                .as("isViaPoint")
+                .isEqualTo(EXPECTED_THIRD_IS_VIA_POINT);
         softAssertions.assertAll();
     }
 }

@@ -11,21 +11,31 @@ INSERT INTO network.network_route_stop_points (
 VALUES
     (
         '00000cc9-d691-492e-b55c-294b903fca33',
-        '1234528-c',
+        '1111111-c',
         1,
-        false,
-        0,
+        true,
+        1,
         1,
         true,
         '{"fi_FI": "ViaSuomi","sv_SE": "ViaSverige"}'
     ),
     (
         '67f69468-882b-49ec-8e3b-925cc1c0de6e',
-        '1234528-d',
+        '2222222-d',
         2,
+        false,
+        0,
+        0,
+        true,
+        '{"fi_FI": "","sv_SE": ""}'
+    ),
+    (
+        'ed4e22ff-42f9-4a21-83fd-1fd99429320c',
+        '4444444-6080216',
+        3,
         true,
         2,
         1,
-        true,
-        '{"fi_FI": "","sv_SE": ""}'
+        false,
+        null
     );

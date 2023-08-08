@@ -29,6 +29,17 @@ VALUES
         '{"fi_FI": "Etelä-Hervanta vanha","sv_SE": "Södra Hervanta gamla"}',
         'H4321',
         '48a88a16-7b8c-4a97-ac2b-c9bf2ac3a08d',
+        null,
+        1
+    ),
+    (
+        'c0330e4a-5285-4bd8-94bf-ce53bfca21fb',
+        '6080216',
+        '00002c7a-bd85-43ed-afb9-389b498aaa06',
+        23456789,
+        '{"fi_FI": "Pasila","sv_SE": "Böle"}',
+        'H5678',
+        'd3fa4777-0479-418c-ba35-779a4f4d8941',
         '5992337c-6f19-4458-9234-090ef399537b',
         1
     );
