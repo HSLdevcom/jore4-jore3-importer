@@ -14,7 +14,7 @@
     <name>importer</name>
     <description>Import legacy data from Jore 3</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
 
         <!-- Library versions -->
         <guava.version>30.1-jre</guava.version>
@@ -24,12 +24,13 @@
         <geojson-jackson.version>1.14</geojson-jackson.version>
         <!-- Sticking to old 9.X version to avoid having to configure trusted certificates
              or just blindly trust any SQL server certificate. -->
-        <mssql-jdbc.version>9.4.1.jre11</mssql-jdbc.version>
+        <mssql-jdbc.version>9.5.0.jre17-preview</mssql-jdbc.version>
 
         <!-- Test library version -->
         <quicktheories.version>0.26</quicktheories.version>
 
         <!-- Maven plugins -->
+        <maven-compiler.plugin.version>3.11.0</maven-compiler.plugin.version>
         <maven-properties.plugin.version>1.0.0</maven-properties.plugin.version>
 
         <!-- Packaging -->
@@ -285,6 +286,32 @@
 
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <message>You are running an older version of Maven. Maven >= 3.3.9 is required</message>
+                                    <version>[3.3.9,)</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <message>You are running an incompatible version of Java. JDK ${java.version} is required</message>
+                                    <version>${java.version}</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
@@ -313,7 +340,7 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <!-- version inherited from the spring-boot-dependencies POM -->
+                <!-- version inherited from the Spring Boot parent POM -->
                 <version>${flyway.version}</version>
 
                 <configuration>
@@ -359,7 +386,7 @@
                     <dependency>
                         <groupId>org.postgresql</groupId>
                         <artifactId>postgresql</artifactId>
-                        <!-- from spring-boot-dependencies-<VERSION>.RELEASE.pom -->
+                        <!-- version inherited from the Spring Boot parent POM -->
                         <version>${postgresql.version}</version>
                     </dependency>
                 </dependencies>
@@ -370,6 +397,7 @@
             <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
+                <!-- version inherited from the Spring Boot parent POM -->
                 <version>${jooq.version}</version>
 
                 <executions>
@@ -556,7 +584,7 @@
                     <dependency>
                         <groupId>org.postgresql</groupId>
                         <artifactId>postgresql</artifactId>
-                        <!-- from spring-boot-dependencies-<VERSION>.RELEASE.pom -->
+                        <!-- version inherited from the Spring Boot parent POM -->
                         <version>${postgresql.version}</version>
                     </dependency>
                 </dependencies>
@@ -581,6 +609,16 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler.plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
             </plugin>
 
             <!-- skip integration tests on build -->
