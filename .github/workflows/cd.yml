@@ -10,7 +10,7 @@ on:
 jobs:
   push_to_registry:
     name: Build & Push docker image to dockerhub
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout code
@@ -60,12 +60,12 @@ jobs:
   run_e2e_tests:
     needs: push_to_registry
     name: Run E2E tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Extract metadata to env variables
         uses: HSLdevcom/jore4-tools/github-actions/extract-metadata@extract-metadata-v1
 
-      - name: start e2e env
+      - name: Start e2e env
         uses: HSLdevcom/jore4-tools/github-actions/setup-e2e-environment@setup-e2e-environment-v1
         with:
           jore3importer_version: "${{ env.IMAGE_NAME }}:${{ env.COMMIT_ID }}"
