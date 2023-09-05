@@ -418,7 +418,7 @@ environment by following these steps:
 1. Install software that is required to compile and run the importer application and its dependencies.
    Before you can run this application, you must install these tools:
     - Docker Desktop
-    - OpenJDK 11
+    - OpenJDK 17
     - Maven
 2. Make a copy of the maven `dev`-profile for your user:
     ```
