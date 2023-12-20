@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Start e2e env
         uses: HSLdevcom/jore4-tools/github-actions/setup-e2e-environment@setup-e2e-environment-v1
@@ -20,7 +20,7 @@ jobs:
           custom_docker_compose: ./docker/docker-compose.custom.yml
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: "17"
           java-package: jdk
