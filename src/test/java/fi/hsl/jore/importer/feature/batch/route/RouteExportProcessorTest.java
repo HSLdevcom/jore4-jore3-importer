@@ -33,12 +33,12 @@ class RouteExportProcessorTest {
     private static final LegacyHslMunicipalityCode ROUTE_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.HELSINKI;
 
     private static final ImporterRoute INPUT = ImporterRoute.of(
+            ROUTE_NUMBER,
+            ROUTE_HIDDEN_VARIANT,
             IMPORTER_ROUTE_DIRECTION_ID,
             IMPORTER_ROUTE_DIRECTION,
             createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
             LINE_JORE4_ID,
-            ROUTE_NUMBER,
-            ROUTE_HIDDEN_VARIANT,
             DateRange.between(VALIDITY_PERIOD_START_DAY, VALIDITY_PERIOD_END_DAY),
             ROUTE_LEGACY_HSL_MUNICIPALITY_CODE
     );
