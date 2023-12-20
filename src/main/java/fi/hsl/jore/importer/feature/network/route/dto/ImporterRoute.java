@@ -32,13 +32,13 @@ public interface ImporterRoute {
 
     LegacyHslMunicipalityCode legacyHslMunicipalityCode();
 
-    static ImporterRoute of(final UUID directionId,
+    static ImporterRoute of(final String routeNumber,
+                            final Optional<Short> hiddenVariant,
+                            final UUID directionId,
                             final DirectionType directionType,
                             final MultilingualString name,
                             final UUID lineJore4Id,
-                            final String routeNumber,
-                            final Optional<Short> hiddenVariant,
-                            final DateRange  validDateRange,
+                            final DateRange validDateRange,
                             final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableImporterRoute.builder()
                 .directionId(directionId)
