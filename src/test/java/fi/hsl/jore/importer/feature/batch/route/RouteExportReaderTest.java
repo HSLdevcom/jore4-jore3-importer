@@ -76,8 +76,8 @@ class RouteExportReaderTest {
        private final DirectionType EXPECTED_DIRECTION_TYPE = DirectionType.INBOUND;
        private final UUID EXPECTED_LINE_JORE4_ID = UUID.fromString("5aa7d9fc-2cf9-466d-8ac0-f442d60c261f");
        private static final String EXPECTED_ROUTE_NUMBER = "1";
-       private static final String EXPECTED_FINNISH_NAME = "Keskustori - Etelä-Hervanta vanha";
-       private static final String EXPECTED_SWEDISH_NAME = "Central torget - Södra Hervanta gamla";
+       private static final String EXPECTED_FINNISH_NAME = "Keskustori - Kaleva - Etelä-Hervanta vanha";
+       private static final String EXPECTED_SWEDISH_NAME = "Central torget - Kaleva - Södra Hervanta gamla";
 
        private final LocalDate EXPECTED_VALID_DATE_RANGE_START = LocalDate.of(2021, 1, 1);
        private final LocalDate EXPECTED_VALID_DATE_RANGE_END  = LocalDate.of(2022, 1, 1);
