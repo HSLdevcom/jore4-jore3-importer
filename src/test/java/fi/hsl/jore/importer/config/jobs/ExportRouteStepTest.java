@@ -53,7 +53,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     private final String EXPECTED_DIRECTION = Jore4RouteDirection.INBOUND.getValue();
     private final UUID EXPECTED_LINE_JORE4_ID = UUID.fromString("5aa7d9fc-2cf9-466d-8ac0-f442d60c261f");
     private static final String EXPECTED_LABEL = "1";
-    private static final String EXPECTED_DESCRIPTION = "{\"fi_FI\":\"Keskustori - Etelä-Hervanta vanha\",\"sv_SE\":\"Central torget - Södra Hervanta gamla\"}";
+    private static final String EXPECTED_DESCRIPTION = "{\"fi_FI\":\"Keskustori - Kaleva - Etelä-Hervanta vanha\",\"sv_SE\":\"Central torget - Kaleva - Södra Hervanta gamla\"}";
     private static final int EXPECTED_PRIORITY = 10;
     private static final LegacyHslMunicipalityCode EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.HELSINKI;
 
