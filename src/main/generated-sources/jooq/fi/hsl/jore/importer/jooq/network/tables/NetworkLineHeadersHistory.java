@@ -18,7 +18,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row9;
+import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -94,6 +94,11 @@ public class NetworkLineHeadersHistory extends TableImpl<NetworkLineHeadersHisto
      */
     public final TableField<NetworkLineHeadersHistoryRecord, TimeRange> NETWORK_LINE_HEADER_SYS_PERIOD = createField(DSL.name("network_line_header_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
+    /**
+     * The column <code>network.network_line_headers_history.jore4_line_id</code>.
+     */
+    public final TableField<NetworkLineHeadersHistoryRecord, UUID> JORE4_LINE_ID = createField(DSL.name("jore4_line_id"), SQLDataType.UUID, this, "");
+
     private NetworkLineHeadersHistory(Name alias, Table<NetworkLineHeadersHistoryRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -159,11 +164,11 @@ public class NetworkLineHeadersHistory extends TableImpl<NetworkLineHeadersHisto
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<UUID, UUID, String, JSONB, JSONB, JSONB, JSONB, DateRange, TimeRange> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row10<UUID, UUID, String, JSONB, JSONB, JSONB, JSONB, DateRange, TimeRange, UUID> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 }

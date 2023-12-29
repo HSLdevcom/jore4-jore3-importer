@@ -10,7 +10,6 @@ import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import fi.hsl.jore.importer.feature.network.line.dto.Line;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
-import fi.hsl.jore.importer.feature.network.line.dto.PersistableLineIdMapping;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
 import fi.hsl.jore.importer.feature.network.line.repository.ILineTestRepository;
 import io.vavr.collection.HashMap;
@@ -26,10 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @IntTest
@@ -138,56 +135,6 @@ public class LineImportRepositoryTest {
             assertThat("Target repository (including history) should contain a single row",
                     targetRepository.countHistory(),
                     is(1));
-        }
-    }
-
-    @Nested
-    @DisplayName("Set the Jore 4 ids of lines")
-
-    @Sql(scripts = {
-            "/sql/importer/drop_tables.sql",
-            "/sql/importer/populate_lines.sql"
-    })
-    class SetJore4Ids {
-
-        private final ExternalId EXT_ID = ExternalId.of("1001");
-        private final UUID JORE4_ID = UUID.fromString("51f2686b-166c-4157-bd70-647337e44c8c");
-
-        @Nested
-        @DisplayName("When the line isn't found")
-        class WhenLineIsNotFound {
-
-            private static final String UNKNOWN_EXT_ID = "999999999";
-            private final List<PersistableLineIdMapping> INPUT = List.of(
-                    PersistableLineIdMapping.of(UNKNOWN_EXT_ID, JORE4_ID)
-            );
-
-            @Test
-            @DisplayName("Shouldn't update the Jore 4 id of the existing line")
-            void shouldNotUpdateJore4IdOfExistingLine() {
-                importRepository.setJore4Ids(INPUT);
-
-                final Line existingLine = targetRepository.findByExternalId(EXT_ID).get();
-                assertThat(existingLine.jore4Id().isEmpty(), is(true));
-            }
-        }
-
-        @Nested
-        @DisplayName("When the line is found")
-        class WhenLineIsFound {
-
-            private final List<PersistableLineIdMapping> INPUT = List.of(
-                    PersistableLineIdMapping.of(EXT_ID.value(), JORE4_ID)
-            );
-
-            @Test
-            @DisplayName("Should update the Jore 4 id of the existing line")
-            void shouldUpdateJore4IdOfExistingLine() {
-                importRepository.setJore4Ids(INPUT);
-
-                final Line existingLine = targetRepository.findByExternalId(EXT_ID).get();
-                assertThat(existingLine.jore4Id(), equalTo(Optional.of(JORE4_ID)));
-            }
         }
     }
 }

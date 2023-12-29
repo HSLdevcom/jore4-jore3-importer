@@ -21,8 +21,6 @@ public interface Line
                 IHasSystemTime,
                 CommonFields<Line> {
 
-    Optional<UUID> jore4Id();
-
     LegacyHslMunicipalityCode legacyHslMunicipalityCode();
 
     static Line of(final LinePK pk,
@@ -30,7 +28,6 @@ public interface Line
                    final NetworkType networkType,
                    final String lineNumber,
                    final TimeRange systemTime,
-                   final Optional<UUID> jore4Id,
                    final TypeOfLine typeOfLine,
                    final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableLine.builder()
@@ -39,7 +36,6 @@ public interface Line
                             .networkType(networkType)
                             .lineNumber(lineNumber)
                             .systemTime(systemTime)
-                            .jore4Id(jore4Id)
                             .typeOfLine(typeOfLine)
                             .legacyHslMunicipalityCode(legacyHslMunicipalityCode)
                             .build();
@@ -52,7 +48,6 @@ public interface Line
                 NetworkType.of(record.getInfrastructureNetworkType()),
                 record.getNetworkLineNumber(),
                 record.getNetworkLineSysPeriod(),
-                Optional.ofNullable(record.getNetworkLineJore4Id()),
                 TypeOfLine.of(record.getNetworkLineTypeOfLine()),
                 LegacyHslMunicipalityCode.valueOf(record.getNetworkLineLegacyHslMunicipalityCode())
         );
@@ -65,7 +60,6 @@ public interface Line
                 NetworkType.of(record.getInfrastructureNetworkType()),
                 record.getNetworkLineNumber(),
                 record.getNetworkLineSysPeriod(),
-                Optional.ofNullable(record.getNetworkLineJore4Id()),
                 TypeOfLine.of(record.getNetworkLineTypeOfLine()),
                 LegacyHslMunicipalityCode.valueOf(record.getNetworkLineLegacyHslMunicipalityCode())
         );

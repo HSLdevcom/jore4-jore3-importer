@@ -15,7 +15,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -70,11 +70,6 @@ public class NetworkLinesHistory extends TableImpl<NetworkLinesHistoryRecord> {
      * The column <code>network.network_lines_history.network_line_sys_period</code>.
      */
     public final TableField<NetworkLinesHistoryRecord, TimeRange> NETWORK_LINE_SYS_PERIOD = createField(DSL.name("network_line_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
-
-    /**
-     * The column <code>network.network_lines_history.network_line_jore4_id</code>.
-     */
-    public final TableField<NetworkLinesHistoryRecord, UUID> NETWORK_LINE_JORE4_ID = createField(DSL.name("network_line_jore4_id"), SQLDataType.UUID, this, "");
 
     /**
      * The column <code>network.network_lines_history.network_line_type_of_line</code>.
@@ -151,11 +146,11 @@ public class NetworkLinesHistory extends TableImpl<NetworkLinesHistoryRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<UUID, String, String, String, TimeRange, UUID, String, String> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row7<UUID, String, String, String, TimeRange, String, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }
