@@ -13,6 +13,9 @@ import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLineHeadersRecord
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLineHeadersWithHistoryRecord;
 import org.immutables.value.Value;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Value.Immutable
 public interface LineHeader
         extends IHasPK<LineHeaderPK>,
@@ -20,6 +23,8 @@ public interface LineHeader
                 CommonFields<LineHeader> {
 
     LinePK line();
+
+    Optional<UUID> jore4IdOfLine();
 
     static LineHeader of(final LineHeaderPK pk,
                          final LinePK line,
@@ -29,7 +34,8 @@ public interface LineHeader
                          final MultilingualString origin1,
                          final MultilingualString origin2,
                          final DateRange validTime,
-                         final TimeRange systemTime) {
+                         final TimeRange systemTime,
+                         final Optional<UUID> jore4IfOfLine) {
         return ImmutableLineHeader.builder()
                                   .pk(pk)
                                   .line(line)
@@ -40,11 +46,11 @@ public interface LineHeader
                                   .origin2(origin2)
                                   .validTime(validTime)
                                   .systemTime(systemTime)
+                                  .jore4IdOfLine(jore4IfOfLine)
                                   .build();
     }
 
-    static LineHeader from(final NetworkLineHeadersRecord record,
-                           final IJsonbConverter converter) {
+    static LineHeader from(final NetworkLineHeadersRecord record, final IJsonbConverter converter) {
         return of(LineHeaderPK.of(record.getNetworkLineHeaderId()),
                   LinePK.of(record.getNetworkLineId()),
                   ExternalId.of(record.getNetworkLineHeaderExtId()),
@@ -53,12 +59,11 @@ public interface LineHeader
                   converter.fromJson(record.getNetworkLineHeaderOrigin_1(), MultilingualString.class),
                   converter.fromJson(record.getNetworkLineHeaderOrigin_2(), MultilingualString.class),
                   record.getNetworkLineHeaderValidDateRange(),
-                  record.getNetworkLineHeaderSysPeriod());
-
+                  record.getNetworkLineHeaderSysPeriod(),
+                  Optional.ofNullable(record.getJore4LineId()));
     }
 
-    static LineHeader from(final NetworkLineHeadersWithHistoryRecord record,
-                           final IJsonbConverter converter) {
+    static LineHeader from(final NetworkLineHeadersWithHistoryRecord record, final IJsonbConverter converter) {
         return of(LineHeaderPK.of(record.getNetworkLineHeaderId()),
                   LinePK.of(record.getNetworkLineId()),
                   ExternalId.of(record.getNetworkLineHeaderExtId()),
@@ -67,6 +72,7 @@ public interface LineHeader
                   converter.fromJson(record.getNetworkLineHeaderOrigin_1(), MultilingualString.class),
                   converter.fromJson(record.getNetworkLineHeaderOrigin_2(), MultilingualString.class),
                   record.getNetworkLineHeaderValidDateRange(),
-                  record.getNetworkLineHeaderSysPeriod());
+                  record.getNetworkLineHeaderSysPeriod(),
+                  Optional.ofNullable(record.getJore4LineId()));
     }
 }

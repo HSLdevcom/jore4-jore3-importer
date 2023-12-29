@@ -27,7 +27,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @IntTest
 class LineExportReaderTest {
 
-    private static final String EXPECTED_EXTERNAL_ID_OF_LINE = "1001";
+    private static final String EXPECTED_EXTERNAL_ID_OF_LINE_HEADER = "1001-20211004";
 
     private static final String EXPECTED_LINE_NUMBER = "1";
 
@@ -88,9 +88,9 @@ class LineExportReaderTest {
         void firstInvocationOfReadMethodMustReturnFoundLine(final SoftAssertions softAssertions) throws Exception {
             final ImporterLine line = reader.read();
 
-            softAssertions.assertThat(line.externalIdOfLine().value())
-                    .as("externalIdOfLine")
-                    .isEqualTo(EXPECTED_EXTERNAL_ID_OF_LINE);
+            softAssertions.assertThat(line.externalIdOfLineHeader().value())
+                    .as("externalIdOfLineHeader")
+                    .isEqualTo(EXPECTED_EXTERNAL_ID_OF_LINE_HEADER);
 
             softAssertions.assertThat(line.lineNumber())
                     .as("lineNumber")

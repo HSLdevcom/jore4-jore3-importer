@@ -15,7 +15,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 public interface ImporterLine {
 
-    ExternalId externalIdOfLine();
+    ExternalId externalIdOfLineHeader();
 
     String lineNumber();
 
@@ -31,7 +31,7 @@ public interface ImporterLine {
 
     LegacyHslMunicipalityCode legacyHslMunicipalityCode();
 
-    static ImmutableImporterLine of (final ExternalId externalIdOfLine,
+    static ImmutableImporterLine of (final ExternalId externalIdOfLineHeader,
                                      final String lineNumber,
                                      final MultilingualString name,
                                      final NetworkType networkType,
@@ -40,7 +40,7 @@ public interface ImporterLine {
                                      final TypeOfLine typeOfLine,
                                      final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableImporterLine.builder()
-                .externalIdOfLine(externalIdOfLine)
+                .externalIdOfLineHeader(externalIdOfLineHeader)
                 .lineNumber(lineNumber)
                 .name(name)
                 .networkType(networkType)

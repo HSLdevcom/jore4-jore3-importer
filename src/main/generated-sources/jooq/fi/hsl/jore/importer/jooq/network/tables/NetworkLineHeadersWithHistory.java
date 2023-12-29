@@ -18,7 +18,7 @@ import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row9;
+import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -94,12 +94,17 @@ public class NetworkLineHeadersWithHistory extends TableImpl<NetworkLineHeadersW
      */
     public final TableField<NetworkLineHeadersWithHistoryRecord, TimeRange> NETWORK_LINE_HEADER_SYS_PERIOD = createField(DSL.name("network_line_header_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\""), this, "", new TimeRangeBinding());
 
+    /**
+     * The column <code>network.network_line_headers_with_history.jore4_line_id</code>.
+     */
+    public final TableField<NetworkLineHeadersWithHistoryRecord, UUID> JORE4_LINE_ID = createField(DSL.name("jore4_line_id"), SQLDataType.UUID, this, "");
+
     private NetworkLineHeadersWithHistory(Name alias, Table<NetworkLineHeadersWithHistoryRecord> aliased) {
         this(alias, aliased, null);
     }
 
     private NetworkLineHeadersWithHistory(Name alias, Table<NetworkLineHeadersWithHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_line_headers_with_history\" as  SELECT network_line_headers.network_line_header_id,\n    network_line_headers.network_line_id,\n    network_line_headers.network_line_header_ext_id,\n    network_line_headers.network_line_header_name,\n    network_line_headers.network_line_header_name_short,\n    network_line_headers.network_line_header_origin_1,\n    network_line_headers.network_line_header_origin_2,\n    network_line_headers.network_line_header_valid_date_range,\n    network_line_headers.network_line_header_sys_period\n   FROM network.network_line_headers\nUNION ALL\n SELECT network_line_headers_history.network_line_header_id,\n    network_line_headers_history.network_line_id,\n    network_line_headers_history.network_line_header_ext_id,\n    network_line_headers_history.network_line_header_name,\n    network_line_headers_history.network_line_header_name_short,\n    network_line_headers_history.network_line_header_origin_1,\n    network_line_headers_history.network_line_header_origin_2,\n    network_line_headers_history.network_line_header_valid_date_range,\n    network_line_headers_history.network_line_header_sys_period\n   FROM network.network_line_headers_history;"));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_line_headers_with_history\" as  SELECT network_line_headers.network_line_header_id,\n    network_line_headers.network_line_id,\n    network_line_headers.network_line_header_ext_id,\n    network_line_headers.network_line_header_name,\n    network_line_headers.network_line_header_name_short,\n    network_line_headers.network_line_header_origin_1,\n    network_line_headers.network_line_header_origin_2,\n    network_line_headers.network_line_header_valid_date_range,\n    network_line_headers.network_line_header_sys_period,\n    network_line_headers.jore4_line_id\n   FROM network.network_line_headers\nUNION ALL\n SELECT network_line_headers_history.network_line_header_id,\n    network_line_headers_history.network_line_id,\n    network_line_headers_history.network_line_header_ext_id,\n    network_line_headers_history.network_line_header_name,\n    network_line_headers_history.network_line_header_name_short,\n    network_line_headers_history.network_line_header_origin_1,\n    network_line_headers_history.network_line_header_origin_2,\n    network_line_headers_history.network_line_header_valid_date_range,\n    network_line_headers_history.network_line_header_sys_period,\n    network_line_headers_history.jore4_line_id\n   FROM network.network_line_headers_history;"));
     }
 
     /**
@@ -159,11 +164,11 @@ public class NetworkLineHeadersWithHistory extends TableImpl<NetworkLineHeadersW
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<UUID, UUID, String, JSONB, JSONB, JSONB, JSONB, DateRange, TimeRange> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row10<UUID, UUID, String, JSONB, JSONB, JSONB, JSONB, DateRange, TimeRange, UUID> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 }

@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class LineExportProcessorTest {
 
     private static final String LINE_NUMBER = "35";
-    private static final String EXTERNAL_ID_OF_LINE = "7863";
+    private static final String EXTERNAL_ID_OF_LINE_HEADER = "1035-20240101";
     private static final String FINNISH_NAME = "Vantaanportti-Lentoasema-Kerava";
     private static final String FINNISH_SHORT_NAME = "Vantaanp-Kerava";
     private static final String SWEDISH_NAME = "Vandaporten-Flygstationen-Kervo";
@@ -36,7 +36,7 @@ class LineExportProcessorTest {
     private static final int EXPECTED_PRIORITY = 10;
 
     private static final ImporterLine INPUT = ImporterLine.of(
-            ExternalId.of(EXTERNAL_ID_OF_LINE),
+            ExternalId.of(EXTERNAL_ID_OF_LINE_HEADER),
             LINE_NUMBER,
             JoreLocaleUtil.createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
             NETWORK_TYPE_ROAD,
@@ -61,10 +61,10 @@ class LineExportProcessorTest {
         }
 
         @Test
-        @DisplayName("Should return a line with the correct external ID")
-        void shouldReturnLineWithCorrectExternalId() throws Exception {
+        @DisplayName("Should return a line with the correct external ID of line header")
+        void shouldReturnLineWithCorrectExternalIdOfLineHeader() throws Exception {
             final Jore4Line line = processor.process(INPUT);
-            assertThat(line.externalIdOfLine()).isEqualTo(EXTERNAL_ID_OF_LINE);
+            assertThat(line.externalIdOfLineHeader()).isEqualTo(EXTERNAL_ID_OF_LINE_HEADER);
         }
 
         @Test
