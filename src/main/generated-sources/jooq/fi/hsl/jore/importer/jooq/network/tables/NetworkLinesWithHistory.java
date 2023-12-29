@@ -15,7 +15,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -72,11 +72,6 @@ public class NetworkLinesWithHistory extends TableImpl<NetworkLinesWithHistoryRe
     public final TableField<NetworkLinesWithHistoryRecord, TimeRange> NETWORK_LINE_SYS_PERIOD = createField(DSL.name("network_line_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\""), this, "", new TimeRangeBinding());
 
     /**
-     * The column <code>network.network_lines_with_history.network_line_jore4_id</code>.
-     */
-    public final TableField<NetworkLinesWithHistoryRecord, UUID> NETWORK_LINE_JORE4_ID = createField(DSL.name("network_line_jore4_id"), SQLDataType.UUID, this, "");
-
-    /**
      * The column <code>network.network_lines_with_history.network_line_type_of_line</code>.
      */
     public final TableField<NetworkLinesWithHistoryRecord, String> NETWORK_LINE_TYPE_OF_LINE = createField(DSL.name("network_line_type_of_line"), SQLDataType.CLOB, this, "");
@@ -91,7 +86,7 @@ public class NetworkLinesWithHistory extends TableImpl<NetworkLinesWithHistoryRe
     }
 
     private NetworkLinesWithHistory(Name alias, Table<NetworkLinesWithHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_lines_with_history\" as  SELECT network_lines.network_line_id,\n    network_lines.network_line_ext_id,\n    network_lines.network_line_number,\n    network_lines.infrastructure_network_type,\n    network_lines.network_line_sys_period,\n    network_lines.network_line_jore4_id,\n    network_lines.network_line_type_of_line,\n    network_lines.network_line_legacy_hsl_municipality_code\n   FROM network.network_lines\nUNION ALL\n SELECT network_lines_history.network_line_id,\n    network_lines_history.network_line_ext_id,\n    network_lines_history.network_line_number,\n    network_lines_history.infrastructure_network_type,\n    network_lines_history.network_line_sys_period,\n    network_lines_history.network_line_jore4_id,\n    network_lines_history.network_line_type_of_line,\n    network_lines_history.network_line_legacy_hsl_municipality_code\n   FROM network.network_lines_history;"));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_lines_with_history\" as  SELECT network_lines.network_line_id,\n    network_lines.network_line_ext_id,\n    network_lines.network_line_number,\n    network_lines.infrastructure_network_type,\n    network_lines.network_line_sys_period,\n    network_lines.network_line_type_of_line,\n    network_lines.network_line_legacy_hsl_municipality_code\n   FROM network.network_lines\nUNION ALL\n SELECT network_lines_history.network_line_id,\n    network_lines_history.network_line_ext_id,\n    network_lines_history.network_line_number,\n    network_lines_history.infrastructure_network_type,\n    network_lines_history.network_line_sys_period,\n    network_lines_history.network_line_type_of_line,\n    network_lines_history.network_line_legacy_hsl_municipality_code\n   FROM network.network_lines_history;"));
     }
 
     /**
@@ -151,11 +146,11 @@ public class NetworkLinesWithHistory extends TableImpl<NetworkLinesWithHistoryRe
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<UUID, String, String, String, TimeRange, UUID, String, String> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row7<UUID, String, String, String, TimeRange, String, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

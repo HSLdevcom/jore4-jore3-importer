@@ -2,12 +2,14 @@ package fi.hsl.jore.importer.feature.batch.line_header.support;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
+import fi.hsl.jore.importer.feature.network.line.dto.PersistableLineIdMapping;
 import fi.hsl.jore.importer.feature.network.line_header.dto.Jore3LineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.generated.LineHeaderPK;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import io.vavr.collection.HashSet;
+import io.vavr.collection.List;
 import io.vavr.collection.Set;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
@@ -138,5 +140,18 @@ public class LineHeaderImportRepository
                  .stream()
                  .map(row -> LineHeaderPK.of(row.value1()))
                  .collect(HashSet.collector());
+    }
+
+    @Transactional
+    @Override
+    public void setJore4Ids(final List<PersistableLineIdMapping> idMappings) {
+        db.batched(c -> {
+            idMappings.forEach(idMapping -> {
+                c.dsl().update(TARGET_TABLE)
+                        .set(TARGET_TABLE.JORE4_LINE_ID, idMapping.jore4IdOfLine())
+                        .where(TARGET_TABLE.NETWORK_LINE_HEADER_EXT_ID.eq(idMapping.externalIdOfLineHeader()))
+                        .execute();
+            });
+        });
     }
 }

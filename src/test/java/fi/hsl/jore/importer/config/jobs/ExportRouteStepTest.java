@@ -28,7 +28,8 @@ import static org.assertj.db.api.Assertions.assertThat;
 @Sql(scripts = {
         "/sql/importer/drop_tables.sql",
         "/sql/importer/populate_infrastructure_nodes.sql",
-        "/sql/importer/populate_lines_with_jore4_ids.sql",
+        "/sql/importer/populate_lines.sql",
+        "/sql/importer/populate_line_headers_with_jore4_ids.sql",
         "/sql/importer/populate_routes.sql",
         "/sql/importer/populate_route_directions.sql",
         "/sql/importer/populate_route_points_for_jore4_export.sql",

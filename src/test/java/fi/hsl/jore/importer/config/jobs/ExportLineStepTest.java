@@ -5,6 +5,7 @@ import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import fi.hsl.jore.importer.feature.jore4.repository.Jore4ValidityPeriodTestRepository;
 import fi.hsl.jore.importer.feature.jore4.repository.ValidityPeriodTargetTable;
+import fi.hsl.jore.importer.jooq.network.Tables;
 import io.vavr.collection.List;
 import org.assertj.core.api.Assertions;
 import org.assertj.db.api.SoftAssertions;
@@ -51,18 +52,18 @@ class ExportLineStepTest extends BatchIntegrationTest {
     // validity period end is specified with an open upper boundary
     private static final LocalDate EXPECTED_VALIDITY_PERIOD_END = LocalDate.of(2051, 1, 1).minusDays(1);
 
-    private static final fi.hsl.jore.importer.jooq.network.tables.NetworkLines IMPORTER_LINE = fi.hsl.jore.importer.jooq.network.Tables.NETWORK_LINES;
+    private static final fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders IMPORTER_LINE_HEADER = Tables.NETWORK_LINE_HEADERS;
     private static final fi.hsl.jore.jore4.jooq.route.tables.Line JORE4_LINE = fi.hsl.jore.jore4.jooq.route.Tables.LINE;
 
-    private final Table importerTargetTable;
-    private final Table jore4TargetTable;
+    private final Table importerLineHeaderTable;
+    private final Table jore4LineTable;
     private final Jore4ValidityPeriodTestRepository testRepository;
 
     @Autowired
     ExportLineStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
                        final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
-        this.importerTargetTable = new Table(importerDataSource, "network.network_lines");
-        this.jore4TargetTable = new Table(jore4DataSource, "route.line");
+        this.importerLineHeaderTable = new Table(importerDataSource, "network.network_line_headers");
+        this.jore4LineTable = new Table(jore4DataSource, "route.line");
         this.testRepository = new Jore4ValidityPeriodTestRepository(jore4DataSource,
                 ValidityPeriodTargetTable.LINE
         );
@@ -73,7 +74,7 @@ class ExportLineStepTest extends BatchIntegrationTest {
     void shouldInsertOneLineIntoJoreDatabase() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable).hasNumberOfRows(1);
+        assertThat(jore4LineTable).hasNumberOfRows(1);
     }
 
     @Test
@@ -81,7 +82,7 @@ class ExportLineStepTest extends BatchIntegrationTest {
     void shouldGenerateNewIdForExportedLine() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable)
+        assertThat(jore4LineTable)
                 .row()
                 .value(JORE4_LINE.LINE_ID.getName())
                 .isNotNull();
@@ -94,32 +95,32 @@ class ExportLineStepTest extends BatchIntegrationTest {
 
         final SoftAssertions softAssertions = new SoftAssertions();
 
-        softAssertions.assertThat(jore4TargetTable)
+        softAssertions.assertThat(jore4LineTable)
                 .row()
                 .value(JORE4_LINE.NAME_I18N.getName())
                 .is(equalJson(EXPECTED_NAME));
 
-        softAssertions.assertThat(jore4TargetTable)
+        softAssertions.assertThat(jore4LineTable)
                 .row()
                 .value(JORE4_LINE.LABEL.getName())
                 .isEqualTo(EXPECTED_LABEL);
 
-        softAssertions.assertThat(jore4TargetTable)
+        softAssertions.assertThat(jore4LineTable)
                 .row()
                 .value(JORE4_LINE.SHORT_NAME_I18N.getName())
                 .is(equalJson(EXPECTED_SHORT_NAME));
 
-        softAssertions.assertThat(jore4TargetTable)
+        softAssertions.assertThat(jore4LineTable)
                 .row()
                 .value(JORE4_LINE.PRIMARY_VEHICLE_MODE.getName())
                 .isEqualTo(EXPECTED_PRIMARY_VEHICLE_MODE.getValue());
 
-        softAssertions.assertThat(jore4TargetTable)
+        softAssertions.assertThat(jore4LineTable)
                 .row()
                 .value(JORE4_LINE.PRIORITY.getName())
                 .isEqualTo(EXPECTED_PRIORITY);
 
-        softAssertions.assertThat(jore4TargetTable)
+        softAssertions.assertThat(jore4LineTable)
                 .row()
                 .value(JORE4_LINE.LEGACY_HSL_MUNICIPALITY_CODE.getName())
                 .isEqualTo(EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE.getJore4Value());
@@ -138,13 +139,13 @@ class ExportLineStepTest extends BatchIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should update the Jore 4 id of the line found from the importer's database")
+    @DisplayName("Should update the Jore 4 ID to the line header found from the importer's database")
     void shouldUpdateJore4IdOfLineFoundFromImportersDatabase() {
         runSteps(STEPS);
 
-        assertThat(importerTargetTable)
+        assertThat(importerLineHeaderTable)
                 .row()
-                .value(IMPORTER_LINE.NETWORK_LINE_JORE4_ID.getName())
+                .value(IMPORTER_LINE_HEADER.JORE4_LINE_ID.getName())
                 .isNotNull();
     }
 }

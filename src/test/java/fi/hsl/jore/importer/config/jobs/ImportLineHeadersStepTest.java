@@ -78,5 +78,7 @@ public class ImportLineHeadersStepTest extends BatchIntegrationTest {
         assertThat(header.validTime(),
                    is(DateRange.between(LocalDate.of(2020, 6, 3),
                                         LocalDate.of(2021, 7, 5))));
+        assertThat(header.jore4IdOfLine().isEmpty(),
+                is(true));
     }
 }

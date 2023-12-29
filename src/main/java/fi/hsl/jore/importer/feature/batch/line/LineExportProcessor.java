@@ -28,7 +28,7 @@ public class LineExportProcessor implements ItemProcessor<ImporterLine, Jore4Lin
 
         return Jore4Line.of(
                 UUID.randomUUID(),
-                input.externalIdOfLine().value(),
+                input.externalIdOflineHeader().value(),
                 input.lineNumber(),
                 input.name(),
                 input.shortName(),
