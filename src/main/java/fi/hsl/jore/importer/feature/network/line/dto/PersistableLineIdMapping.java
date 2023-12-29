@@ -6,20 +6,20 @@ import java.util.UUID;
 
 /**
  * Contains the information that's required to update the Jore 4 ID (primary
- * key of a line found from the Jore 4 database) of a line stored in the
- * database of the importer application.
+ * key of a line found from Jore 4 database) to the line header stored in the
+ * internal database of the importer application.
  */
 @Value.Immutable
 public interface PersistableLineIdMapping {
 
-    String externalIdOfLine();
+    String externalIdOfLineHeader();
 
     UUID jore4IdOfLine();
 
-    static PersistableLineIdMapping of(final String externalIdOfLine,
+    static PersistableLineIdMapping of(final String externalIdOfLineHeader,
                                        final UUID jore4IdOfLine) {
         return ImmutablePersistableLineIdMapping.builder()
-                .externalIdOfLine(externalIdOfLine)
+                .externalIdOfLineHeader(externalIdOfLineHeader)
                 .jore4IdOfLine(jore4IdOfLine)
                 .build();
     }

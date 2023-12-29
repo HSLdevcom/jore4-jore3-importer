@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.line;
 
-import fi.hsl.jore.importer.feature.batch.line.support.ILineImportRepository;
+import fi.hsl.jore.importer.feature.batch.line_header.support.ILineHeaderImportRepository;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4Line;
 import fi.hsl.jore.importer.feature.jore4.repository.IJore4LineRepository;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLineIdMapping;
@@ -16,26 +16,26 @@ import java.util.List;
 @Component
 public class LineExportWriter implements ItemWriter<Jore4Line> {
 
-    private final ILineImportRepository importerRepository;
-    private final IJore4LineRepository jore4Repository;
+    private final IJore4LineRepository jore4LineRepository;
+    private final ILineHeaderImportRepository importerLineHeaderRepository;
 
     @Autowired
-    public LineExportWriter(final ILineImportRepository importerRepository,
-                            final IJore4LineRepository jore4Repository) {
-        this.importerRepository = importerRepository;
-        this.jore4Repository = jore4Repository;
+    public LineExportWriter(final IJore4LineRepository jore4LineRepository,
+                            final ILineHeaderImportRepository importerLineHeaderRepository) {
+        this.jore4LineRepository = jore4LineRepository;
+        this.importerLineHeaderRepository = importerLineHeaderRepository;
     }
 
     @Override
     public void write(final List<? extends Jore4Line> items) throws Exception {
-        jore4Repository.insert(items);
+        jore4LineRepository.insert(items);
 
         final io.vavr.collection.List<PersistableLineIdMapping> jore4IdMappings = items.stream()
                 .map(item -> PersistableLineIdMapping.of(
-                        item.externalIdOfLine(),
+                        item.externalIdOfLineHeader(),
                         item.lineId()
                 ))
                 .collect(io.vavr.collection.List.collector());
-        importerRepository.setJore4Ids(jore4IdMappings);
+        importerLineHeaderRepository.setJore4Ids(jore4IdMappings);
     }
 }

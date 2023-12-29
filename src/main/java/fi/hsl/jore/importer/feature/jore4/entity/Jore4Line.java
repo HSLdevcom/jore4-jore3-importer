@@ -16,7 +16,7 @@ public interface Jore4Line {
 
     UUID lineId();
 
-    String externalIdOfLine();
+    String externalIdOfLineHeader();
 
     String label();
 
@@ -37,7 +37,7 @@ public interface Jore4Line {
     LegacyHslMunicipalityCode legacyHslMunicipalityCode();
 
     static ImmutableJore4Line of(final UUID lineId,
-                                 final String externalIdOfLine,
+                                 final String externalIdOfLineHeader,
                                  final String label,
                                  final MultilingualString name,
                                  final MultilingualString shortName,
@@ -49,7 +49,7 @@ public interface Jore4Line {
                                  final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableJore4Line.builder()
                 .lineId(lineId)
-                .externalIdOfLine(externalIdOfLine)
+                .externalIdOfLineHeader(externalIdOfLineHeader)
                 .label(label)
                 .name(name)
                 .shortName(shortName)
