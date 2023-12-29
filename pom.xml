@@ -475,7 +475,7 @@
                                 </database>
                                 <target>
                                     <packageName>fi.hsl.jore.importer.jooq</packageName>
-                                    <directory>${project.build.sourceDirectory}/generated-sources/jooq</directory>
+                                    <directory>${project.basedir}/src/main/generated-sources/jooq</directory>
                                 </target>
                             </generator>
                         </configuration>
@@ -573,7 +573,7 @@
                                 </generate>
                                 <target>
                                     <packageName>fi.hsl.jore.jore4.jooq</packageName>
-                                    <directory>${project.build.sourceDirectory}/generated-sources/jooq</directory>
+                                    <directory>${project.basedir}/src/main/generated-sources/jooq</directory>
                                 </target>
                             </generator>
                         </configuration>
@@ -604,7 +604,7 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>${project.build.sourceDirectory}/generated-sources/jooq</source>
+                                <source>${project.basedir}/src/main/generated-sources/jooq</source>
                             </sources>
                         </configuration>
                     </execution>
