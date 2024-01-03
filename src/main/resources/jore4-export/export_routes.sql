@@ -10,5 +10,5 @@ SELECT
 FROM network.network_routes r
 JOIN network.network_route_directions rd USING (network_route_id)
 JOIN network.network_lines l USING (network_line_id)
-WHERE NOT isempty(rd.network_route_direction_valid_date_range * '[2021-01-01, 2050-01-01)'::daterange)
-ORDER BY rd.network_route_direction_valid_date_range DESC
+WHERE rd.network_route_direction_valid_date_range && '[2021-01-01, 2050-01-01)'::daterange
+ORDER BY rd.network_route_direction_valid_date_range DESC;
