@@ -9,13 +9,13 @@ import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import org.immutables.value.Value;
 
 /**
- * Contains the information of a line which is required when
- * we want to export lines to the Jore 4 transmodel schema.
+ * Contains the information of a line that is required when
+ * we want to export lines to the Jore 4 Transmodel schema.
  */
 @Value.Immutable
 public interface ImporterLine {
 
-    ExternalId externalId();
+    ExternalId externalIdOfLine();
 
     String lineNumber();
 
@@ -31,7 +31,7 @@ public interface ImporterLine {
 
     LegacyHslMunicipalityCode legacyHslMunicipalityCode();
 
-    static ImmutableImporterLine of (final ExternalId externalId,
+    static ImmutableImporterLine of (final ExternalId externalIdOfLine,
                                      final String lineNumber,
                                      final MultilingualString name,
                                      final NetworkType networkType,
@@ -40,7 +40,7 @@ public interface ImporterLine {
                                      final TypeOfLine typeOfLine,
                                      final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableImporterLine.builder()
-                .externalId(externalId)
+                .externalIdOfLine(externalIdOfLine)
                 .lineNumber(lineNumber)
                 .name(name)
                 .networkType(networkType)

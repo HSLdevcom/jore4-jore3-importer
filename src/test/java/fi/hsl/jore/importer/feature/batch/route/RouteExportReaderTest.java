@@ -74,7 +74,7 @@ class RouteExportReaderTest {
 
        private final UUID EXPECTED_DIRECTION_ID = UUID.fromString("6f93fa6b-8a19-4b98-bd84-b8409e670c70");
        private final DirectionType EXPECTED_DIRECTION_TYPE = DirectionType.INBOUND;
-       private final UUID EXPECTED_LINE_JORE4_ID = UUID.fromString("5aa7d9fc-2cf9-466d-8ac0-f442d60c261f");
+       private final UUID EXPECTED_JORE4_ID_OF_LINE = UUID.fromString("5aa7d9fc-2cf9-466d-8ac0-f442d60c261f");
        private static final String EXPECTED_ROUTE_NUMBER = "1";
        private static final String EXPECTED_FINNISH_NAME = "Keskustori - Kaleva - Etelä-Hervanta vanha";
        private static final String EXPECTED_SWEDISH_NAME = "Central torget - Kaleva - Södra Hervanta gamla";
@@ -93,9 +93,9 @@ class RouteExportReaderTest {
            softAssertions.assertThat(route.directionType())
                    .as("directionType")
                    .isEqualTo(EXPECTED_DIRECTION_TYPE);
-           softAssertions.assertThat(route.lineJore4Id())
-                   .as("lineJore4Id")
-                   .isEqualTo(EXPECTED_LINE_JORE4_ID);
+           softAssertions.assertThat(route.jore4IdOfLine())
+                   .as("jore4IdOfLine")
+                   .isEqualTo(EXPECTED_JORE4_ID_OF_LINE);
            softAssertions.assertThat(route.routeNumber())
                    .as("routeNumber")
                    .isEqualTo(EXPECTED_ROUTE_NUMBER);

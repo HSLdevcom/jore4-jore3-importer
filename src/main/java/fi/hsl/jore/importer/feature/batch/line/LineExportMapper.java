@@ -32,10 +32,10 @@ public class LineExportMapper implements RowMapper<ImporterLine> {
         return ImporterLine.of(
                 ExternalId.of(resultSet.getString("external_id")),
                 resultSet.getString("line_number"),
-                jsonConverter.fromJson(resultSet.getString("name"), MultilingualString.class),
+                jsonConverter.fromJson(resultSet.getString("line_header_name"), MultilingualString.class),
                 NetworkType.of(resultSet.getString("network_type")),
-                jsonConverter.fromJson(resultSet.getString("short_name"), MultilingualString.class),
-                DATE_RANGE_CONVERTER.from(resultSet.getString("valid_date_range")),
+                jsonConverter.fromJson(resultSet.getString("line_header_short_name"), MultilingualString.class),
+                DATE_RANGE_CONVERTER.from(resultSet.getString("line_header_valid_date_range")),
                 TypeOfLine.of(resultSet.getString("type_of_line")),
                 LegacyHslMunicipalityCode.valueOf(resultSet.getString("legacy_hsl_municipality_code"))
         );

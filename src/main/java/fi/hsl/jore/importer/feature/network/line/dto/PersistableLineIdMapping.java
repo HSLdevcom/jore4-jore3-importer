@@ -5,23 +5,22 @@ import org.immutables.value.Value;
 import java.util.UUID;
 
 /**
- * Contains the information that's required to update
- * the Jore 4 id (primary key of a line found from
- * Jore 4 database) of a line stored in the database
- * of the importer application.
+ * Contains the information that's required to update the Jore 4 ID (primary
+ * key of a line found from the Jore 4 database) of a line stored in the
+ * database of the importer application.
  */
 @Value.Immutable
 public interface PersistableLineIdMapping {
 
-    String externalId();
+    String externalIdOfLine();
 
-    UUID jore4Id();
+    UUID jore4IdOfLine();
 
-    static PersistableLineIdMapping of(final String externalId,
-                                       final UUID jore4Id) {
+    static PersistableLineIdMapping of(final String externalIdOfLine,
+                                       final UUID jore4IdOfLine) {
         return ImmutablePersistableLineIdMapping.builder()
-                .externalId(externalId)
-                .jore4Id(jore4Id)
+                .externalIdOfLine(externalIdOfLine)
+                .jore4IdOfLine(jore4IdOfLine)
                 .build();
     }
 }

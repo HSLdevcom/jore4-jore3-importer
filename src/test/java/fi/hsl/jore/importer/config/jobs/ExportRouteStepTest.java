@@ -51,7 +51,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     private static final List<String> STEPS = List.of("exportRoutesStep");
 
     private final String EXPECTED_DIRECTION = Jore4RouteDirection.INBOUND.getValue();
-    private final UUID EXPECTED_LINE_JORE4_ID = UUID.fromString("5aa7d9fc-2cf9-466d-8ac0-f442d60c261f");
+    private final UUID EXPECTED_JORE4_ID_OF_LINE = UUID.fromString("5aa7d9fc-2cf9-466d-8ac0-f442d60c261f");
     private static final String EXPECTED_LABEL = "1";
     private static final String EXPECTED_DESCRIPTION = "{\"fi_FI\":\"Keskustori - Kaleva - Etelä-Hervanta vanha\",\"sv_SE\":\"Central torget - Kaleva - Södra Hervanta gamla\"}";
     private static final int EXPECTED_PRIORITY = 10;
@@ -131,14 +131,14 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should save the exported route with the correct line id")
+    @DisplayName("Should save the exported route with the correct line ID")
     void shouldSaveExportedRouteWithCorrectLineId() {
         runSteps(STEPS);
 
         assertThat(jore4TargetTable)
                 .row()
                 .value(JORE4_ROUTE.ON_LINE_ID.getName())
-                .isEqualTo(EXPECTED_LINE_JORE4_ID);
+                .isEqualTo(EXPECTED_JORE4_ID_OF_LINE);
     }
 
     @Test

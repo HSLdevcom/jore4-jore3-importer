@@ -13,7 +13,7 @@ SELECT
     rd.network_route_direction_id AS direction_id,
     rd.network_route_direction_type AS direction_type,
     rd.network_route_direction_name AS name,
-    l.network_line_jore4_id AS line_jore4_id,
+    l.network_line_jore4_id AS jore4_id_of_line,
     rd.network_route_direction_valid_date_range AS valid_date_range,
     r.network_route_legacy_hsl_municipality_code AS legacy_hsl_municipality_code
 FROM network.network_routes r

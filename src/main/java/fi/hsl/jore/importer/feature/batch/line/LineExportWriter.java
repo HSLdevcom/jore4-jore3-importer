@@ -32,7 +32,7 @@ public class LineExportWriter implements ItemWriter<Jore4Line> {
 
         final io.vavr.collection.List<PersistableLineIdMapping> jore4IdMappings = items.stream()
                 .map(item -> PersistableLineIdMapping.of(
-                        item.externalLineId(),
+                        item.externalIdOfLine(),
                         item.lineId()
                 ))
                 .collect(io.vavr.collection.List.collector());

@@ -109,8 +109,8 @@ public class LineImportRepository
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)
-                        .set(TARGET_TABLE.NETWORK_LINE_JORE4_ID, idMapping.jore4Id())
-                        .where(TARGET_TABLE.NETWORK_LINE_EXT_ID.eq(idMapping.externalId()))
+                        .set(TARGET_TABLE.NETWORK_LINE_JORE4_ID, idMapping.jore4IdOfLine())
+                        .where(TARGET_TABLE.NETWORK_LINE_EXT_ID.eq(idMapping.externalIdOfLine()))
                         .execute();
             });
         });

@@ -36,7 +36,7 @@ public class RouteExportMapper implements RowMapper<ImporterRoute> {
                 UUID.fromString(resultSet.getString("direction_id")),
                 DirectionType.of(resultSet.getString("direction_type")),
                 jsonConverter.fromJson(resultSet.getString("name"), MultilingualString.class),
-                UUID.fromString(resultSet.getString("line_jore4_id")),
+                UUID.fromString(resultSet.getString("jore4_id_of_line")),
                 DATE_RANGE_CONVERTER.from(resultSet.getString("valid_date_range")),
                 LegacyHslMunicipalityCode.valueOf(resultSet.getString("legacy_hsl_municipality_code"))
         );

@@ -10,8 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Contains the source data of a route which is exported
- * to the Jore 4 database.
+ * Contains the source data of a route which is exported to the Jore 4 database.
  */
 @Value.Immutable
 public interface ImporterRoute {
@@ -22,7 +21,7 @@ public interface ImporterRoute {
 
     MultilingualString name();
 
-    UUID lineJore4Id();
+    UUID jore4IdOfLine();
 
     String routeNumber();
 
@@ -37,14 +36,14 @@ public interface ImporterRoute {
                             final UUID directionId,
                             final DirectionType directionType,
                             final MultilingualString name,
-                            final UUID lineJore4Id,
+                            final UUID jore4IdOfLine,
                             final DateRange validDateRange,
                             final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableImporterRoute.builder()
                 .directionId(directionId)
                 .directionType(directionType)
                 .name(name)
-                .lineJore4Id(lineJore4Id)
+                .jore4IdOfLine(jore4IdOfLine)
                 .routeNumber(routeNumber)
                 .hiddenVariant(hiddenVariant)
                 .validDateRange(validDateRange)

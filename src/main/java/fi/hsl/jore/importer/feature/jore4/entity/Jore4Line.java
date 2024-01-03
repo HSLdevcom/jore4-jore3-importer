@@ -8,15 +8,15 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Contains the information of a line which can
- * inserted into the Jore 4 transmodel schema.
+ * Contains the information of a line which can inserted into the Jore 4
+ * Transmodel schema.
  */
 @Value.Immutable
 public interface Jore4Line {
 
     UUID lineId();
 
-    String externalLineId();
+    String externalIdOfLine();
 
     String label();
 
@@ -37,7 +37,7 @@ public interface Jore4Line {
     LegacyHslMunicipalityCode legacyHslMunicipalityCode();
 
     static ImmutableJore4Line of(final UUID lineId,
-                                 final String externalLineId,
+                                 final String externalIdOfLine,
                                  final String label,
                                  final MultilingualString name,
                                  final MultilingualString shortName,
@@ -49,7 +49,7 @@ public interface Jore4Line {
                                  final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableJore4Line.builder()
                 .lineId(lineId)
-                .externalLineId(externalLineId)
+                .externalIdOfLine(externalIdOfLine)
                 .label(label)
                 .name(name)
                 .shortName(shortName)
