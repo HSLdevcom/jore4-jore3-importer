@@ -59,7 +59,7 @@ class JourneyPatternStopExportReaderTest {
     @Sql(scripts = {
             "/sql/importer/drop_tables.sql",
             "/sql/importer/populate_infrastructure_nodes.sql",
-            "/sql/importer/populate_lines_with_jore4_ids.sql",
+            "/sql/importer/populate_lines.sql",
             "/sql/importer/populate_routes.sql",
             "/sql/importer/populate_route_directions_with_journey_pattern_jore4_ids.sql",
             "/sql/importer/populate_route_points_for_jore4_export.sql",

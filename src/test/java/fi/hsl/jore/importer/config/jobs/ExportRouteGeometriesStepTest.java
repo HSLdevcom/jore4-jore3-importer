@@ -23,7 +23,7 @@ import static org.assertj.db.api.Assertions.assertThat;
         "/sql/importer/populate_infrastructure_nodes.sql",
         "/sql/importer/populate_infrastructure_links.sql",
         "/sql/importer/populate_infrastructure_link_shapes.sql",
-        "/sql/importer/populate_lines_with_jore4_ids.sql",
+        "/sql/importer/populate_lines.sql",
         "/sql/importer/populate_routes.sql",
         "/sql/importer/populate_route_directions_with_jore4_ids.sql",
         "/sql/importer/populate_route_links.sql",
