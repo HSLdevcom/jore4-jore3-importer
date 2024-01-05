@@ -28,10 +28,10 @@ class RouteExportReaderTest {
 
     private final JdbcCursorItemReader<ImporterRoute> reader;
 
-   @Autowired
-   RouteExportReaderTest(RouteExportReader reader) {
-       this.reader = reader.build();
-   }
+    @Autowired
+    RouteExportReaderTest(final RouteExportReader reader) {
+        this.reader = reader.build();
+    }
 
     @BeforeEach
     void openReader() {

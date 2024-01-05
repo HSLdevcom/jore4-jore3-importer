@@ -10,7 +10,7 @@ VALUES (
         '579db108-1f52-4364-9815-5f17c84ce3fb',
         '1001',
         '1',
-        'tram_track',
-        'city_tram_service',
+        'road',
+        'stopping_bus_service',
         'HELSINKI'
 );

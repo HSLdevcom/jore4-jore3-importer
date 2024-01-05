@@ -36,8 +36,8 @@ class LineExportReaderTest {
     private static final String EXPECTED_SWEDISH_NAME = "Eira - Tölö - Sörnäs (M) - Kottby";
     private static final String EXPECTED_SWEDISH_SHORT_NAME = "Eira-Tölö-Kottby";
 
-    private static final NetworkType EXPECTED_NETWORK_TYPE = NetworkType.TRAM_TRACK;
-    private static final TypeOfLine EXPECTED_TYPE_OF_LINE = TypeOfLine.CITY_TRAM_SERVICE;
+    private static final NetworkType EXPECTED_NETWORK_TYPE = NetworkType.ROAD;
+    private static final TypeOfLine EXPECTED_TYPE_OF_LINE = TypeOfLine.STOPPING_BUS_SERVICE;
     private static final LegacyHslMunicipalityCode EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.HELSINKI;
 
     private static final LocalDate EXPECTED_VALID_DATE_RANGE_START = LocalDate.of(2021, 10, 4);
