@@ -1,8 +1,11 @@
--- Since few years ago the last three digits of the line number were not
--- unique, and since in Jore4 the line number uses only those last three digits
--- (stripping the preceding digit for the legacy municipality code), the lines
--- of the 'LEGACY_NOT_USED' legacy municipality code are filtered out to avoid
--- uniqueness constraint problems in Jore4 database.
+-- Since a few years ago the last three digits of the line number were not
+-- unique, and since in Jore4 the line number consists of only those last three
+-- digits (stripping the first digit), the lines starting with the legacy
+-- municipality code of '0' (roughly meaning "legacy, not used") are filtered
+-- out to prevent unique constraint violations in the Jore4 database during
+-- export. In addition, the lines starting with the municipality code '8'
+-- ("testing, not used") are also filtered out, because they are not real lines
+-- and can cause the mentioned constraint violations.
 
 -- Currently, only bus and ferry lines are exported to Jore4.
 
