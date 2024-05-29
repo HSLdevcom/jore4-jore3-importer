@@ -1,4 +1,4 @@
-name: Push image to docker hub and run e2e tests
+name: Run Java tests, push image to Docker hub and run e2e tests
 
 on:
   push:
@@ -8,8 +8,13 @@ on:
   workflow_dispatch:
 
 jobs:
+  run_java_tests:
+    name: Run Java tests
+    uses: ./.github/workflows/java-tests.yml
+
   push_to_registry:
-    name: Build & Push docker image to dockerhub
+    needs: run_java_tests
+    name: Build & Push Docker image to Docker Hub
     runs-on: ubuntu-22.04
 
     steps:
@@ -58,7 +63,9 @@ jobs:
           docker push $IMAGE_NAME:latest
 
   run_e2e_tests:
-    needs: push_to_registry
+    needs:
+      - run_java_tests
+      - push_to_registry
     name: Run E2E tests
     runs-on: ubuntu-22.04
     steps:
