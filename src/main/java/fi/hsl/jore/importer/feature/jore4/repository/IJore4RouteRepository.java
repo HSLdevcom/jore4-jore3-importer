@@ -14,5 +14,5 @@ public interface IJore4RouteRepository {
      * Insert new routes into the database.
      * @param routes    The information of the inserted routes.
      */
-    void insert(List<? extends Jore4Route> routes);
+    void insert(Iterable<? extends Jore4Route> routes);
 }

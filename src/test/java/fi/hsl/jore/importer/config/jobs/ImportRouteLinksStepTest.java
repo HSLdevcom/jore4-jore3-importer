@@ -45,7 +45,7 @@ import static org.hamcrest.Matchers.is;
                 "/sql/jore3/populate_route_links.sql",
                 "/sql/jore3/populate_via_names.sql"
         },
-        config = @SqlConfig(dataSource = "sourceDataSource"))
+        config = @SqlConfig(dataSource = "sourceDataSource", transactionManager = "sourceTransactionManager"))
 @Sql(scripts = "/sql/importer/drop_tables.sql")
 public class ImportRouteLinksStepTest extends BatchIntegrationTest {
 

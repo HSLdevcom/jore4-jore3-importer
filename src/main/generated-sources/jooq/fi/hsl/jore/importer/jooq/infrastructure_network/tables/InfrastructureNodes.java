@@ -9,23 +9,36 @@ import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
 import fi.hsl.jore.importer.jooq.infrastructure_network.InfrastructureNetwork;
 import fi.hsl.jore.importer.jooq.infrastructure_network.Keys;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinks.InfrastructureLinksPath;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodeTypes.InfrastructureNodeTypesPath;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNodesRecord;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePoints.NetworkRoutePointsPath;
+import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints.ScheduledStopPointsPath;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 import org.locationtech.jts.geom.Point;
@@ -40,7 +53,8 @@ public class InfrastructureNodes extends TableImpl<InfrastructureNodesRecord> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.infrastructure_nodes</code>
+     * The reference instance of
+     * <code>infrastructure_network.infrastructure_nodes</code>
      */
     public static final InfrastructureNodes INFRASTRUCTURE_NODES = new InfrastructureNodes();
 
@@ -53,71 +67,109 @@ public class InfrastructureNodes extends TableImpl<InfrastructureNodesRecord> {
     }
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes.infrastructure_node_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes.infrastructure_node_id</code>.
      */
-    public final TableField<InfrastructureNodesRecord, UUID> INFRASTRUCTURE_NODE_ID = createField(DSL.name("infrastructure_node_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "");
+    public final TableField<InfrastructureNodesRecord, UUID> INFRASTRUCTURE_NODE_ID = createField(DSL.name("infrastructure_node_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes.infrastructure_node_ext_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes.infrastructure_node_ext_id</code>.
      */
     public final TableField<InfrastructureNodesRecord, String> INFRASTRUCTURE_NODE_EXT_ID = createField(DSL.name("infrastructure_node_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes.infrastructure_node_type</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes.infrastructure_node_type</code>.
      */
     public final TableField<InfrastructureNodesRecord, String> INFRASTRUCTURE_NODE_TYPE = createField(DSL.name("infrastructure_node_type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes.infrastructure_node_location</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes.infrastructure_node_location</code>.
      */
-    public final TableField<InfrastructureNodesRecord, Point> INFRASTRUCTURE_NODE_LOCATION = createField(DSL.name("infrastructure_node_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geometry\"").nullable(false), this, "", new PointBinding());
+    public final TableField<InfrastructureNodesRecord, Point> INFRASTRUCTURE_NODE_LOCATION = createField(DSL.name("infrastructure_node_location"), SQLDataType.OTHER.nullable(false), this, "", new PointBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes.infrastructure_node_projected_location</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes.infrastructure_node_projected_location</code>.
      */
-    public final TableField<InfrastructureNodesRecord, Point> INFRASTRUCTURE_NODE_PROJECTED_LOCATION = createField(DSL.name("infrastructure_node_projected_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geometry\""), this, "", new PointBinding());
+    public final TableField<InfrastructureNodesRecord, Point> INFRASTRUCTURE_NODE_PROJECTED_LOCATION = createField(DSL.name("infrastructure_node_projected_location"), SQLDataType.OTHER, this, "", new PointBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes.infrastructure_node_sys_period</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes.infrastructure_node_sys_period</code>.
      */
-    public final TableField<InfrastructureNodesRecord, TimeRange> INFRASTRUCTURE_NODE_SYS_PERIOD = createField(DSL.name("infrastructure_node_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
+    public final TableField<InfrastructureNodesRecord, TimeRange> INFRASTRUCTURE_NODE_SYS_PERIOD = createField(DSL.name("infrastructure_node_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field(DSL.raw("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)"), org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
 
     private InfrastructureNodes(Name alias, Table<InfrastructureNodesRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private InfrastructureNodes(Name alias, Table<InfrastructureNodesRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private InfrastructureNodes(Name alias, Table<InfrastructureNodesRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_nodes</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_nodes</code> table reference
      */
     public InfrastructureNodes(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_NODES);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_nodes</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_nodes</code> table reference
      */
     public InfrastructureNodes(Name alias) {
         this(alias, INFRASTRUCTURE_NODES);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_nodes</code> table reference
+     * Create a <code>infrastructure_network.infrastructure_nodes</code> table
+     * reference
      */
     public InfrastructureNodes() {
         this(DSL.name("infrastructure_nodes"), null);
     }
 
-    public <O extends Record> InfrastructureNodes(Table<O> child, ForeignKey<O, InfrastructureNodesRecord> key) {
-        super(child, key, INFRASTRUCTURE_NODES);
+    public <O extends Record> InfrastructureNodes(Table<O> path, ForeignKey<O, InfrastructureNodesRecord> childPath, InverseForeignKey<O, InfrastructureNodesRecord> parentPath) {
+        super(path, childPath, parentPath, INFRASTRUCTURE_NODES);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class InfrastructureNodesPath extends InfrastructureNodes implements Path<InfrastructureNodesRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> InfrastructureNodesPath(Table<O> path, ForeignKey<O, InfrastructureNodesRecord> childPath, InverseForeignKey<O, InfrastructureNodesRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private InfrastructureNodesPath(Name alias, Table<InfrastructureNodesRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public InfrastructureNodesPath as(String alias) {
+            return new InfrastructureNodesPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public InfrastructureNodesPath as(Name alias) {
+            return new InfrastructureNodesPath(alias, this);
+        }
+
+        @Override
+        public InfrastructureNodesPath as(Table<?> alias) {
+            return new InfrastructureNodesPath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
@@ -126,22 +178,75 @@ public class InfrastructureNodes extends TableImpl<InfrastructureNodesRecord> {
     }
 
     @Override
-    public List<UniqueKey<InfrastructureNodesRecord>> getKeys() {
-        return Arrays.<UniqueKey<InfrastructureNodesRecord>>asList(Keys.INFRASTRUCTURE_NODES_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<InfrastructureNodesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<InfrastructureNodesRecord, ?>>asList(Keys.INFRASTRUCTURE_NODES__INFRASTRUCTURE_NODES_INFRASTRUCTURE_NODE_TYPE_FKEY);
+        return Arrays.asList(Keys.INFRASTRUCTURE_NODES__INFRASTRUCTURE_NODES_INFRASTRUCTURE_NODE_TYPE_FKEY);
     }
 
-    private transient InfrastructureNodeTypes _infrastructureNodeTypes;
+    private transient InfrastructureNodeTypesPath _infrastructureNodeTypes;
 
-    public InfrastructureNodeTypes infrastructureNodeTypes() {
+    /**
+     * Get the implicit join path to the
+     * <code>infrastructure_network.infrastructure_node_types</code> table.
+     */
+    public InfrastructureNodeTypesPath infrastructureNodeTypes() {
         if (_infrastructureNodeTypes == null)
-            _infrastructureNodeTypes = new InfrastructureNodeTypes(this, Keys.INFRASTRUCTURE_NODES__INFRASTRUCTURE_NODES_INFRASTRUCTURE_NODE_TYPE_FKEY);
+            _infrastructureNodeTypes = new InfrastructureNodeTypesPath(this, Keys.INFRASTRUCTURE_NODES__INFRASTRUCTURE_NODES_INFRASTRUCTURE_NODE_TYPE_FKEY, null);
 
         return _infrastructureNodeTypes;
+    }
+
+    private transient InfrastructureLinksPath _infrastructureLinksInfrastructureLinkEndNodeFkey;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>infrastructure_network.infrastructure_links</code> table, via the
+     * <code>infrastructure_links_infrastructure_link_end_node_fkey</code> key
+     */
+    public InfrastructureLinksPath infrastructureLinksInfrastructureLinkEndNodeFkey() {
+        if (_infrastructureLinksInfrastructureLinkEndNodeFkey == null)
+            _infrastructureLinksInfrastructureLinkEndNodeFkey = new InfrastructureLinksPath(this, null, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_END_NODE_FKEY.getInverseKey());
+
+        return _infrastructureLinksInfrastructureLinkEndNodeFkey;
+    }
+
+    private transient InfrastructureLinksPath _infrastructureLinksInfrastructureLinkStartNodeFkey;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>infrastructure_network.infrastructure_links</code> table, via the
+     * <code>infrastructure_links_infrastructure_link_start_node_fkey</code> key
+     */
+    public InfrastructureLinksPath infrastructureLinksInfrastructureLinkStartNodeFkey() {
+        if (_infrastructureLinksInfrastructureLinkStartNodeFkey == null)
+            _infrastructureLinksInfrastructureLinkStartNodeFkey = new InfrastructureLinksPath(this, null, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_START_NODE_FKEY.getInverseKey());
+
+        return _infrastructureLinksInfrastructureLinkStartNodeFkey;
+    }
+
+    private transient NetworkRoutePointsPath _networkRoutePoints;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>network.network_route_points</code> table
+     */
+    public NetworkRoutePointsPath networkRoutePoints() {
+        if (_networkRoutePoints == null)
+            _networkRoutePoints = new NetworkRoutePointsPath(this, null, fi.hsl.jore.importer.jooq.network.Keys.NETWORK_ROUTE_POINTS__NETWORK_ROUTE_POINTS_INFRASTRUCTURE_NODE_FKEY.getInverseKey());
+
+        return _networkRoutePoints;
+    }
+
+    private transient ScheduledStopPointsPath _scheduledStopPoints;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>network.scheduled_stop_points</code> table
+     */
+    public ScheduledStopPointsPath scheduledStopPoints() {
+        if (_scheduledStopPoints == null)
+            _scheduledStopPoints = new ScheduledStopPointsPath(this, null, fi.hsl.jore.importer.jooq.network.Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_INFRASTRUCTURE_NODE_ID_FKEY.getInverseKey());
+
+        return _scheduledStopPoints;
     }
 
     @Override
@@ -152,6 +257,11 @@ public class InfrastructureNodes extends TableImpl<InfrastructureNodesRecord> {
     @Override
     public InfrastructureNodes as(Name alias) {
         return new InfrastructureNodes(alias, this);
+    }
+
+    @Override
+    public InfrastructureNodes as(Table<?> alias) {
+        return new InfrastructureNodes(alias.getQualifiedName(), this);
     }
 
     /**
@@ -170,12 +280,95 @@ public class InfrastructureNodes extends TableImpl<InfrastructureNodesRecord> {
         return new InfrastructureNodes(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row6 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row6<UUID, String, String, Point, Point, TimeRange> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public InfrastructureNodes rename(Table<?> name) {
+        return new InfrastructureNodes(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodes where(Condition condition) {
+        return new InfrastructureNodes(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodes where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodes where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodes where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodes where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodes where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodes where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodes where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodes whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodes whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

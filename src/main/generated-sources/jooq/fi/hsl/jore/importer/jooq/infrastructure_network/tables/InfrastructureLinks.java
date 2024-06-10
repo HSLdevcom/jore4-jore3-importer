@@ -9,23 +9,36 @@ import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
 import fi.hsl.jore.importer.jooq.infrastructure_network.InfrastructureNetwork;
 import fi.hsl.jore.importer.jooq.infrastructure_network.Keys;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinkShapes.InfrastructureLinkShapesPath;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNetworkTypes.InfrastructureNetworkTypesPath;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes.InfrastructureNodesPath;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureLinksRecord;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteLinks.NetworkRouteLinksPath;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 import org.locationtech.jts.geom.LineString;
@@ -40,7 +53,8 @@ public class InfrastructureLinks extends TableImpl<InfrastructureLinksRecord> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.infrastructure_links</code>
+     * The reference instance of
+     * <code>infrastructure_network.infrastructure_links</code>
      */
     public static final InfrastructureLinks INFRASTRUCTURE_LINKS = new InfrastructureLinks();
 
@@ -53,76 +67,115 @@ public class InfrastructureLinks extends TableImpl<InfrastructureLinksRecord> {
     }
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_link_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_link_id</code>.
      */
-    public final TableField<InfrastructureLinksRecord, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "");
+    public final TableField<InfrastructureLinksRecord, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_link_ext_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_link_ext_id</code>.
      */
     public final TableField<InfrastructureLinksRecord, String> INFRASTRUCTURE_LINK_EXT_ID = createField(DSL.name("infrastructure_link_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_link_geog</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_link_geog</code>.
      */
-    public final TableField<InfrastructureLinksRecord, LineString> INFRASTRUCTURE_LINK_GEOG = createField(DSL.name("infrastructure_link_geog"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").nullable(false), this, "", new LineStringBinding());
+    public final TableField<InfrastructureLinksRecord, LineString> INFRASTRUCTURE_LINK_GEOG = createField(DSL.name("infrastructure_link_geog"), SQLDataType.OTHER.nullable(false), this, "", new LineStringBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_network_type</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_network_type</code>.
      */
     public final TableField<InfrastructureLinksRecord, String> INFRASTRUCTURE_NETWORK_TYPE = createField(DSL.name("infrastructure_network_type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_link_sys_period</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_link_sys_period</code>.
      */
-    public final TableField<InfrastructureLinksRecord, TimeRange> INFRASTRUCTURE_LINK_SYS_PERIOD = createField(DSL.name("infrastructure_link_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
+    public final TableField<InfrastructureLinksRecord, TimeRange> INFRASTRUCTURE_LINK_SYS_PERIOD = createField(DSL.name("infrastructure_link_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field(DSL.raw("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)"), org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_link_start_node</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_link_start_node</code>.
      */
     public final TableField<InfrastructureLinksRecord, UUID> INFRASTRUCTURE_LINK_START_NODE = createField(DSL.name("infrastructure_link_start_node"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_links.infrastructure_link_end_node</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_links.infrastructure_link_end_node</code>.
      */
     public final TableField<InfrastructureLinksRecord, UUID> INFRASTRUCTURE_LINK_END_NODE = createField(DSL.name("infrastructure_link_end_node"), SQLDataType.UUID.nullable(false), this, "");
 
     private InfrastructureLinks(Name alias, Table<InfrastructureLinksRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private InfrastructureLinks(Name alias, Table<InfrastructureLinksRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private InfrastructureLinks(Name alias, Table<InfrastructureLinksRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_links</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_links</code> table reference
      */
     public InfrastructureLinks(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_LINKS);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_links</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_links</code> table reference
      */
     public InfrastructureLinks(Name alias) {
         this(alias, INFRASTRUCTURE_LINKS);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_links</code> table reference
+     * Create a <code>infrastructure_network.infrastructure_links</code> table
+     * reference
      */
     public InfrastructureLinks() {
         this(DSL.name("infrastructure_links"), null);
     }
 
-    public <O extends Record> InfrastructureLinks(Table<O> child, ForeignKey<O, InfrastructureLinksRecord> key) {
-        super(child, key, INFRASTRUCTURE_LINKS);
+    public <O extends Record> InfrastructureLinks(Table<O> path, ForeignKey<O, InfrastructureLinksRecord> childPath, InverseForeignKey<O, InfrastructureLinksRecord> parentPath) {
+        super(path, childPath, parentPath, INFRASTRUCTURE_LINKS);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class InfrastructureLinksPath extends InfrastructureLinks implements Path<InfrastructureLinksRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> InfrastructureLinksPath(Table<O> path, ForeignKey<O, InfrastructureLinksRecord> childPath, InverseForeignKey<O, InfrastructureLinksRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private InfrastructureLinksPath(Name alias, Table<InfrastructureLinksRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public InfrastructureLinksPath as(String alias) {
+            return new InfrastructureLinksPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public InfrastructureLinksPath as(Name alias) {
+            return new InfrastructureLinksPath(alias, this);
+        }
+
+        @Override
+        public InfrastructureLinksPath as(Table<?> alias) {
+            return new InfrastructureLinksPath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
@@ -131,38 +184,76 @@ public class InfrastructureLinks extends TableImpl<InfrastructureLinksRecord> {
     }
 
     @Override
-    public List<UniqueKey<InfrastructureLinksRecord>> getKeys() {
-        return Arrays.<UniqueKey<InfrastructureLinksRecord>>asList(Keys.INFRASTRUCTURE_LINKS_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<InfrastructureLinksRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<InfrastructureLinksRecord, ?>>asList(Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_NETWORK_TYPE_FKEY, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_START_NODE_FKEY, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_END_NODE_FKEY);
+        return Arrays.asList(Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_NETWORK_TYPE_FKEY, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_START_NODE_FKEY, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_END_NODE_FKEY);
     }
 
-    private transient InfrastructureNetworkTypes _infrastructureNetworkTypes;
-    private transient InfrastructureNodes _infrastructureLinksInfrastructureLinkStartNodeFkey;
-    private transient InfrastructureNodes _infrastructureLinksInfrastructureLinkEndNodeFkey;
+    private transient InfrastructureNetworkTypesPath _infrastructureNetworkTypes;
 
-    public InfrastructureNetworkTypes infrastructureNetworkTypes() {
+    /**
+     * Get the implicit join path to the
+     * <code>infrastructure_network.infrastructure_network_types</code> table.
+     */
+    public InfrastructureNetworkTypesPath infrastructureNetworkTypes() {
         if (_infrastructureNetworkTypes == null)
-            _infrastructureNetworkTypes = new InfrastructureNetworkTypes(this, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_NETWORK_TYPE_FKEY);
+            _infrastructureNetworkTypes = new InfrastructureNetworkTypesPath(this, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_NETWORK_TYPE_FKEY, null);
 
         return _infrastructureNetworkTypes;
     }
 
-    public InfrastructureNodes infrastructureLinksInfrastructureLinkStartNodeFkey() {
+    private transient InfrastructureNodesPath _infrastructureLinksInfrastructureLinkStartNodeFkey;
+
+    /**
+     * Get the implicit join path to the
+     * <code>infrastructure_network.infrastructure_nodes</code> table, via the
+     * <code>infrastructure_links_infrastructure_link_start_node_fkey</code>
+     * key.
+     */
+    public InfrastructureNodesPath infrastructureLinksInfrastructureLinkStartNodeFkey() {
         if (_infrastructureLinksInfrastructureLinkStartNodeFkey == null)
-            _infrastructureLinksInfrastructureLinkStartNodeFkey = new InfrastructureNodes(this, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_START_NODE_FKEY);
+            _infrastructureLinksInfrastructureLinkStartNodeFkey = new InfrastructureNodesPath(this, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_START_NODE_FKEY, null);
 
         return _infrastructureLinksInfrastructureLinkStartNodeFkey;
     }
 
-    public InfrastructureNodes infrastructureLinksInfrastructureLinkEndNodeFkey() {
+    private transient InfrastructureNodesPath _infrastructureLinksInfrastructureLinkEndNodeFkey;
+
+    /**
+     * Get the implicit join path to the
+     * <code>infrastructure_network.infrastructure_nodes</code> table, via the
+     * <code>infrastructure_links_infrastructure_link_end_node_fkey</code> key.
+     */
+    public InfrastructureNodesPath infrastructureLinksInfrastructureLinkEndNodeFkey() {
         if (_infrastructureLinksInfrastructureLinkEndNodeFkey == null)
-            _infrastructureLinksInfrastructureLinkEndNodeFkey = new InfrastructureNodes(this, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_END_NODE_FKEY);
+            _infrastructureLinksInfrastructureLinkEndNodeFkey = new InfrastructureNodesPath(this, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_END_NODE_FKEY, null);
 
         return _infrastructureLinksInfrastructureLinkEndNodeFkey;
+    }
+
+    private transient InfrastructureLinkShapesPath _infrastructureLinkShapes;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>infrastructure_network.infrastructure_link_shapes</code> table
+     */
+    public InfrastructureLinkShapesPath infrastructureLinkShapes() {
+        if (_infrastructureLinkShapes == null)
+            _infrastructureLinkShapes = new InfrastructureLinkShapesPath(this, null, Keys.INFRASTRUCTURE_LINK_SHAPES__INFRASTRUCTURE_LINK_SHAPES_INFRASTRUCTURE_LINK_ID_FKEY.getInverseKey());
+
+        return _infrastructureLinkShapes;
+    }
+
+    private transient NetworkRouteLinksPath _networkRouteLinks;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>network.network_route_links</code> table
+     */
+    public NetworkRouteLinksPath networkRouteLinks() {
+        if (_networkRouteLinks == null)
+            _networkRouteLinks = new NetworkRouteLinksPath(this, null, fi.hsl.jore.importer.jooq.network.Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_INFRASTRUCTURE_LINK_ID_FKEY.getInverseKey());
+
+        return _networkRouteLinks;
     }
 
     @Override
@@ -173,6 +264,11 @@ public class InfrastructureLinks extends TableImpl<InfrastructureLinksRecord> {
     @Override
     public InfrastructureLinks as(Name alias) {
         return new InfrastructureLinks(alias, this);
+    }
+
+    @Override
+    public InfrastructureLinks as(Table<?> alias) {
+        return new InfrastructureLinks(alias.getQualifiedName(), this);
     }
 
     /**
@@ -191,12 +287,95 @@ public class InfrastructureLinks extends TableImpl<InfrastructureLinksRecord> {
         return new InfrastructureLinks(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row7 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row7<UUID, String, LineString, String, TimeRange, UUID, UUID> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public InfrastructureLinks rename(Table<?> name) {
+        return new InfrastructureLinks(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinks where(Condition condition) {
+        return new InfrastructureLinks(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinks where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinks where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinks where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureLinks where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureLinks where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureLinks where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureLinks where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinks whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinks whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

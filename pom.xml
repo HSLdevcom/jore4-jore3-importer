@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.18</version>
+        <version>3.3.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fi.hsl.jore</groupId>
@@ -16,22 +16,33 @@
     <properties>
         <java.version>17</java.version>
 
+        <!-- 3.6.3 is the last version of maven 3 that has been relased. Back in 2019 😬 -->
+        <maven-enforcer.plugin.mvn-min-version>3.6.3</maven-enforcer.plugin.mvn-min-version>
+
         <!-- Library versions -->
-        <guava.version>33.0.0-jre</guava.version>
-        <vavr.version>0.10.3</vavr.version>
-        <immutables.version>2.10.0</immutables.version>
-        <geotools.version>29.1</geotools.version>
+        <guava.version>33.1.0-jre</guava.version>
+        <vavr.version>0.10.4</vavr.version>
+        <vavr-jackson.version>0.10.3</vavr-jackson.version>
+        <immutables.version>2.10.1</immutables.version>
+        <geotools.version>31.1</geotools.version>
         <geojson-jackson.version>1.14</geojson-jackson.version>
         <!-- Sticking to old 9.X version to avoid having to configure trusted certificates
              or just blindly trust any SQL server certificate. -->
         <mssql-jdbc.version>9.5.0.jre17-preview</mssql-jdbc.version>
+        <!-- Used as the DB for Spring Batch -->
+        <hsqldb.version>2.7.3</hsqldb.version>
 
         <!-- Test library version -->
         <quicktheories.version>0.26</quicktheories.version>
+        <wiremock.version>3.6.0</wiremock.version>
+        <assertj-db.version>2.0.2</assertj-db.version>
+        <jsonassert.version>1.5.1</jsonassert.version>
 
         <!-- Maven plugins -->
-        <maven-compiler.plugin.version>3.11.0</maven-compiler.plugin.version>
-        <maven-properties.plugin.version>1.0.0</maven-properties.plugin.version>
+        <maven-compiler.plugin.version>3.13.0</maven-compiler.plugin.version>
+        <maven-properties.plugin.version>1.2.1</maven-properties.plugin.version>
+        <maven-enforcer.plugin.version>3.5.0</maven-enforcer.plugin.version>
+        <maven-build-helper.plugin.version>3.6.0</maven-build-helper.plugin.version>
 
         <!-- Packaging -->
         <build.profile.id>dev</build.profile.id>
@@ -39,6 +50,7 @@
         <skip.jooq.generation>false</skip.jooq.generation>
         <skip.flyway.migration>false</skip.flyway.migration>
         <skip.integration.tests>false</skip.integration.tests>
+        <flyway.cleanDisabled>false</flyway.cleanDisabled>
     </properties>
 
     <repositories>
@@ -116,16 +128,25 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock</artifactId>
-            <version>2.27.2</version>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>${hsqldb.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wiremock</groupId>
+            <!-- Using the standalone version as the non-standalone version
+                conflicts with Spring's Netty version -->
+            <artifactId>wiremock-standalone</artifactId>
+            <version>${wiremock.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-db</artifactId>
-            <version>2.0.2</version>
+            <version>${assertj-db.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -144,7 +165,7 @@
         <dependency>
             <groupId>io.vavr</groupId>
             <artifactId>vavr-jackson</artifactId>
-            <version>${vavr.version}</version>
+            <version>${vavr-jackson.version}</version>
         </dependency>
 
         <dependency>
@@ -183,6 +204,10 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+        </dependency>
 
         <!--jOOQ-->
         <dependency>
@@ -208,7 +233,7 @@
         <dependency>
             <groupId>org.skyscreamer</groupId>
             <artifactId>jsonassert</artifactId>
-            <version>1.5.1</version>
+            <version>${jsonassert.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -288,7 +313,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>${maven-enforcer.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>enforce-versions</id>
@@ -298,8 +323,8 @@
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
-                                    <message>You are running an older version of Maven. Maven >= 3.3.9 is required</message>
-                                    <version>[3.3.9,)</version>
+                                    <message>You are running an older version of Maven. Maven >= ${maven-enforcer.plugin.mvn-min-version} is required</message>
+                                    <version>[${maven-enforcer.plugin.mvn-min-version},)</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
                                     <message>You are running an incompatible version of Java. JDK ${java.version} is required</message>
@@ -417,6 +442,9 @@
                             </jdbc>
                             <generator>
                                 <name>org.jooq.codegen.JavaGenerator</name>
+                                <generate>
+                                    <spatialTypes>false</spatialTypes>
+                                </generate>
                                 <database>
                                     <name>${jooq.generator.db.dialect}</name>
                                     <includes>infrastructure_network.* | network.*</includes>
@@ -450,24 +478,26 @@
                                     <includeSystemIndexes>false</includeSystemIndexes>
                                     <forcedTypes>
                                         <forcedType>
+                                            <name>GEOMETRY</name>
                                             <userType>org.locationtech.jts.geom.LineString</userType>
-                                            <converter>fi.hsl.jore.importer.config.jooq.converter.geometry.LineStringBinding</converter>
+                                            <binding>fi.hsl.jore.importer.config.jooq.converter.geometry.LineStringBinding</binding>
                                             <includeExpression>.*\.infrastructure_link_geog|.*\.infrastructure_link_shape</includeExpression>
                                         </forcedType>
                                         <forcedType>
+                                            <name>GEOMETRY</name>
                                             <userType>org.locationtech.jts.geom.Point</userType>
-                                            <converter>fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding</converter>
+                                            <binding>fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding</binding>
                                             <includeExpression>.*\.infrastructure_node_location | .*\.infrastructure_node_projected_location | .*\.scheduled_stop_point_location</includeExpression>
                                         </forcedType>
                                         <forcedType>
                                             <userType>fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange</userType>
-                                            <converter>fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding</converter>
+                                            <binding>fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding</binding>
                                             <includeExpression>.*\..*_SYS_PERIOD.*</includeExpression>
                                             <includeTypes>.*</includeTypes>
                                         </forcedType>
                                         <forcedType>
                                             <userType>fi.hsl.jore.importer.config.jooq.converter.date_range.DateRange</userType>
-                                            <converter>fi.hsl.jore.importer.config.jooq.converter.date_range.DateRangeBinding</converter>
+                                            <binding>fi.hsl.jore.importer.config.jooq.converter.date_range.DateRangeBinding</binding>
                                             <includeExpression>.*\..*_DATE_RANGE</includeExpression>
                                             <includeTypes>.*</includeTypes>
                                         </forcedType>
@@ -545,24 +575,26 @@
                                     <includeSystemIndexes>false</includeSystemIndexes>
                                     <forcedTypes>
                                         <forcedType>
+                                            <name>GEOMETRY</name>
                                             <userType>org.locationtech.jts.geom.LineString</userType>
-                                            <converter>fi.hsl.jore.importer.config.jooq.converter.geometry.LineStringBinding</converter>
+                                            <binding>fi.hsl.jore.importer.config.jooq.converter.geometry.LineStringBinding</binding>
                                             <includeExpression>.*\.shape</includeExpression>
                                         </forcedType>
                                         <forcedType>
+                                            <name>GEOMETRY</name>
                                             <userType>org.locationtech.jts.geom.Point</userType>
-                                            <converter>fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding</converter>
+                                            <binding>fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding</binding>
                                             <includeExpression>.*\.measured_location</includeExpression>
                                         </forcedType>
                                         <forcedType>
                                             <userType>fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange</userType>
-                                            <converter>fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding</converter>
+                                            <binding>fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding</binding>
                                             <includeExpression>.*\..*_SYS_PERIOD.*</includeExpression>
                                             <includeTypes>.*</includeTypes>
                                         </forcedType>
                                         <forcedType>
                                             <userType>fi.hsl.jore.importer.config.jooq.converter.date_range.DateRange</userType>
-                                            <converter>fi.hsl.jore.importer.config.jooq.converter.date_range.DateRangeBinding</converter>
+                                            <binding>fi.hsl.jore.importer.config.jooq.converter.date_range.DateRangeBinding</binding>
                                             <includeExpression>.*\..*_DATE_RANGE</includeExpression>
                                             <includeTypes>.*</includeTypes>
                                         </forcedType>
@@ -570,6 +602,7 @@
                                 </database>
                                 <generate>
                                     <records>false</records>
+                                    <spatialTypes>false</spatialTypes>
                                 </generate>
                                 <target>
                                     <packageName>fi.hsl.jore.jore4.jooq</packageName>
@@ -594,7 +627,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>${maven-build-helper.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>add-source</id>

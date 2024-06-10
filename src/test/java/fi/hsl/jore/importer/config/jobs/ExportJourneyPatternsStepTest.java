@@ -33,7 +33,7 @@ import static org.assertj.db.api.Assertions.assertThat;
                 "/sql/jore4/populate_lines.sql",
                 "/sql/jore4/populate_routes.sql"
         },
-        config = @SqlConfig(dataSource = "jore4DataSource")
+        config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
 )
 public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
 

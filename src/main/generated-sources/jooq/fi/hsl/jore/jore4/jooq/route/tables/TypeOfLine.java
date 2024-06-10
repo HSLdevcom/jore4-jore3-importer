@@ -6,11 +6,18 @@ package fi.hsl.jore.jore4.jooq.route.tables;
 
 import fi.hsl.jore.jore4.jooq.route.Route;
 
+import java.util.Collection;
+
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -20,7 +27,8 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * Type of line. https://www.transmodel-cen.eu/model/EARoot/EA2/EA1/EA3/EA491.htm
+ * Type of line.
+ * https://www.transmodel-cen.eu/model/EARoot/EA2/EA1/EA3/EA491.htm
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TypeOfLine extends TableImpl<Record> {
@@ -41,7 +49,8 @@ public class TypeOfLine extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>route.type_of_line.type_of_line</code>. GTFS route type: https://developers.google.com/transit/gtfs/reference/extended-route-types
+     * The column <code>route.type_of_line.type_of_line</code>. GTFS route type:
+     * https://developers.google.com/transit/gtfs/reference/extended-route-types
      */
     public final TableField<Record, String> TYPE_OF_LINE_ = createField(DSL.name("type_of_line"), SQLDataType.CLOB.nullable(false), this, "GTFS route type: https://developers.google.com/transit/gtfs/reference/extended-route-types");
 
@@ -51,11 +60,11 @@ public class TypeOfLine extends TableImpl<Record> {
     public final TableField<Record, String> BELONGING_TO_VEHICLE_MODE = createField(DSL.name("belonging_to_vehicle_mode"), SQLDataType.CLOB.nullable(false), this, "");
 
     private TypeOfLine(Name alias, Table<Record> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private TypeOfLine(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("Type of line. https://www.transmodel-cen.eu/model/EARoot/EA2/EA1/EA3/EA491.htm"), TableOptions.table());
+    private TypeOfLine(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment("Type of line. https://www.transmodel-cen.eu/model/EARoot/EA2/EA1/EA3/EA491.htm"), TableOptions.table(), where);
     }
 
     /**
@@ -79,13 +88,9 @@ public class TypeOfLine extends TableImpl<Record> {
         this(DSL.name("type_of_line"), null);
     }
 
-    public <O extends Record> TypeOfLine(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, TYPE_OF_LINE);
-    }
-
     @Override
     public Schema getSchema() {
-        return Route.ROUTE;
+        return aliased() ? null : Route.ROUTE;
     }
 
     @Override
@@ -96,6 +101,11 @@ public class TypeOfLine extends TableImpl<Record> {
     @Override
     public TypeOfLine as(Name alias) {
         return new TypeOfLine(alias, this);
+    }
+
+    @Override
+    public TypeOfLine as(Table<?> alias) {
+        return new TypeOfLine(alias.getQualifiedName(), this);
     }
 
     /**
@@ -112,5 +122,97 @@ public class TypeOfLine extends TableImpl<Record> {
     @Override
     public TypeOfLine rename(Name name) {
         return new TypeOfLine(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public TypeOfLine rename(Table<?> name) {
+        return new TypeOfLine(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public TypeOfLine where(Condition condition) {
+        return new TypeOfLine(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public TypeOfLine where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public TypeOfLine where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public TypeOfLine where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public TypeOfLine where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public TypeOfLine where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public TypeOfLine where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public TypeOfLine where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public TypeOfLine whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public TypeOfLine whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

@@ -16,7 +16,7 @@ public interface IRouteDirectionImportRepository extends IImportRepository<Jore3
      * @param idMappings    The information that's required to set the Jore 4 ids
      *                      of journey patterns.
      */
-    void setJourneyPatternJore4Ids(List<PersistableJourneyPatternIdMapping> idMappings);
+    void setJourneyPatternJore4Ids(Iterable<PersistableJourneyPatternIdMapping> idMappings);
 
     /**
      * Sets the ids which identifies the routes found from
@@ -25,5 +25,5 @@ public interface IRouteDirectionImportRepository extends IImportRepository<Jore3
      * @param   idMappings   The information that's required to set the Jore 4 ids
      *                       of routes.
      */
-    void setRouteJore4Ids(List<PersistableRouteIdMapping> idMappings);
+    void setRouteJore4Ids(Iterable<PersistableRouteIdMapping> idMappings);
 }

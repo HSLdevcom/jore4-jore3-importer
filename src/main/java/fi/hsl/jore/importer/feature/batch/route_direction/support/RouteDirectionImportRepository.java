@@ -75,7 +75,9 @@ public class RouteDirectionImportRepository
                                                 routeDirection.validTime()
                                         ));
 
-        batch.execute();
+        if (batch.size() > 0) {
+            batch.execute();
+        }
     }
 
     protected Set<RouteDirectionPK> delete() {
@@ -160,7 +162,7 @@ public class RouteDirectionImportRepository
 
     @Transactional
     @Override
-    public void setJourneyPatternJore4Ids(final List<PersistableJourneyPatternIdMapping> idMappings) {
+    public void setJourneyPatternJore4Ids(final Iterable<PersistableJourneyPatternIdMapping> idMappings) {
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)
@@ -173,7 +175,7 @@ public class RouteDirectionImportRepository
 
     @Transactional
     @Override
-    public void setRouteJore4Ids(final List<PersistableRouteIdMapping> idMappings) {
+    public void setRouteJore4Ids(final Iterable<PersistableRouteIdMapping> idMappings) {
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)

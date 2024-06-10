@@ -6,11 +6,18 @@ package fi.hsl.jore.jore4.jooq.infrastructure_network.tables;
 
 import fi.hsl.jore.jore4.jooq.infrastructure_network.InfrastructureNetwork;
 
+import java.util.Collection;
+
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -28,7 +35,8 @@ public class ExternalSource extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.external_source</code>
+     * The reference instance of
+     * <code>infrastructure_network.external_source</code>
      */
     public static final ExternalSource EXTERNAL_SOURCE = new ExternalSource();
 
@@ -46,41 +54,40 @@ public class ExternalSource extends TableImpl<Record> {
     public final TableField<Record, String> VALUE = createField(DSL.name("value"), SQLDataType.CLOB.nullable(false), this, "");
 
     private ExternalSource(Name alias, Table<Record> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private ExternalSource(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("An external source from which infrastructure network parts are imported"), TableOptions.table());
+    private ExternalSource(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment("An external source from which infrastructure network parts are imported"), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.external_source</code> table reference
+     * Create an aliased <code>infrastructure_network.external_source</code>
+     * table reference
      */
     public ExternalSource(String alias) {
         this(DSL.name(alias), EXTERNAL_SOURCE);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.external_source</code> table reference
+     * Create an aliased <code>infrastructure_network.external_source</code>
+     * table reference
      */
     public ExternalSource(Name alias) {
         this(alias, EXTERNAL_SOURCE);
     }
 
     /**
-     * Create a <code>infrastructure_network.external_source</code> table reference
+     * Create a <code>infrastructure_network.external_source</code> table
+     * reference
      */
     public ExternalSource() {
         this(DSL.name("external_source"), null);
     }
 
-    public <O extends Record> ExternalSource(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, EXTERNAL_SOURCE);
-    }
-
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
@@ -91,6 +98,11 @@ public class ExternalSource extends TableImpl<Record> {
     @Override
     public ExternalSource as(Name alias) {
         return new ExternalSource(alias, this);
+    }
+
+    @Override
+    public ExternalSource as(Table<?> alias) {
+        return new ExternalSource(alias.getQualifiedName(), this);
     }
 
     /**
@@ -107,5 +119,97 @@ public class ExternalSource extends TableImpl<Record> {
     @Override
     public ExternalSource rename(Name name) {
         return new ExternalSource(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public ExternalSource rename(Table<?> name) {
+        return new ExternalSource(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ExternalSource where(Condition condition) {
+        return new ExternalSource(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ExternalSource where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ExternalSource where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ExternalSource where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ExternalSource where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ExternalSource where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ExternalSource where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ExternalSource where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ExternalSource whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ExternalSource whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

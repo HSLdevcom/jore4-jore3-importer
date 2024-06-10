@@ -68,7 +68,7 @@ class Jore4RouteRepositoryTest {
                     "/sql/jore4/populate_scheduled_stop_points.sql",
                     "/sql/jore4/populate_lines.sql"
             },
-            config = @SqlConfig(dataSource = "jore4DataSource")
+            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
     )
     class InsertRoutesIntoDatabase {
 

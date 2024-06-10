@@ -42,7 +42,7 @@ class Jore4JourneyPatternRepositoryTest {
                     "/sql/jore4/populate_lines.sql",
                     "/sql/jore4/populate_routes.sql"
             },
-            config = @SqlConfig(dataSource = "jore4DataSource")
+            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
     )
     class InsertJourneyPatternIntoDatabase {
 

@@ -32,7 +32,8 @@ public class Route extends SchemaImpl {
     public static final Route ROUTE = new Route();
 
     /**
-     * The route directions from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:480
+     * The route directions from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:480
      */
     public final Direction DIRECTION = Direction.DIRECTION;
 
@@ -42,17 +43,20 @@ public class Route extends SchemaImpl {
     public final InfrastructureLinkAlongRoute INFRASTRUCTURE_LINK_ALONG_ROUTE = InfrastructureLinkAlongRoute.INFRASTRUCTURE_LINK_ALONG_ROUTE;
 
     /**
-     * The line from Transmodel: http://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:487
+     * The line from Transmodel:
+     * http://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:487
      */
     public final Line LINE = Line.LINE;
 
     /**
-     * The routes from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
+     * The routes from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
      */
     public final fi.hsl.jore.jore4.jooq.route.tables.Route ROUTE_ = fi.hsl.jore.jore4.jooq.route.tables.Route.ROUTE_;
 
     /**
-     * Type of line. https://www.transmodel-cen.eu/model/EARoot/EA2/EA1/EA3/EA491.htm
+     * Type of line.
+     * https://www.transmodel-cen.eu/model/EARoot/EA2/EA1/EA3/EA491.htm
      */
     public final TypeOfLine TYPE_OF_LINE = TypeOfLine.TYPE_OF_LINE;
 
@@ -71,11 +75,12 @@ public class Route extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.<Table<?>>asList(
+        return Arrays.asList(
             Direction.DIRECTION,
             InfrastructureLinkAlongRoute.INFRASTRUCTURE_LINK_ALONG_ROUTE,
             Line.LINE,
             fi.hsl.jore.jore4.jooq.route.tables.Route.ROUTE_,
-            TypeOfLine.TYPE_OF_LINE);
+            TypeOfLine.TYPE_OF_LINE
+        );
     }
 }

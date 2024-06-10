@@ -15,12 +15,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.annotation.Resource;
+import javax.sql.DataSource;
+import jakarta.annotation.Resource;
+
 
 @Configuration
 public class DatasourceConfig {
-
     @Configuration
     @StandardDatabase
     @Import({
@@ -111,5 +114,25 @@ public class DatasourceConfig {
     @Qualifier("jore4DataSource")
     public HikariDataSource jore4DataSource(@Qualifier("jore4DataSourceConfig") final DataSourceConfigDto dataSourceConfigDto) {
         return new HikariDataSource(dataSourceConfigDto.buildHikariConfig());
+    }
+
+
+    @Bean
+    @Qualifier("sourceTransactionManager")
+    public PlatformTransactionManager sourceTransactionManager(@Qualifier("sourceDataSource") DataSource sourceDataSource) {
+        return new DataSourceTransactionManager(sourceDataSource);
+    }
+
+    @Bean
+    @Primary
+    @Qualifier("importerTransactionManager")
+    public PlatformTransactionManager importerTransactionManager(@Qualifier("importerDataSource") DataSource importerDataSource) {
+        return new DataSourceTransactionManager(importerDataSource);
+    }
+
+    @Bean
+    @Qualifier("jore4TransactionManager")
+    public PlatformTransactionManager jore4TransactionManager(@Qualifier("jore4DataSource") DataSource jore4DataSource) {
+        return new DataSourceTransactionManager(jore4DataSource);
     }
 }

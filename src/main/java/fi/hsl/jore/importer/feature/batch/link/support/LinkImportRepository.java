@@ -58,7 +58,9 @@ public class LinkImportRepository
                                          link.fromNode().value(),
                                          link.toNode().value()));
 
-        batch.execute();
+        if (batch.size() > 0) {
+            batch.execute();
+        }
     }
 
     protected Set<LinkPK> delete() {

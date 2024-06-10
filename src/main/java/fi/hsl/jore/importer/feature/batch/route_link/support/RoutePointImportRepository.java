@@ -60,7 +60,9 @@ public class RoutePointImportRepository
                                        point.orderNumber()
                                ));
 
-        batch.execute();
+        if (batch.size() > 0) {
+            batch.execute();
+        }
     }
 
     protected Set<RoutePointPK> delete() {

@@ -64,7 +64,9 @@ public class RouteImportRepository
                                            route.legacyHslMunicipalityCode().name()
         ));
 
-        batch.execute();
+        if (batch.size() > 0) {
+            batch.execute();
+        }
     }
 
     protected Set<RoutePK> delete() {

@@ -9,18 +9,23 @@ import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkPlacesWithHistoryRecord;
 
+import java.util.Collection;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
-import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -34,7 +39,8 @@ public class NetworkPlacesWithHistory extends TableImpl<NetworkPlacesWithHistory
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>network.network_places_with_history</code>
+     * The reference instance of
+     * <code>network.network_places_with_history</code>
      */
     public static final NetworkPlacesWithHistory NETWORK_PLACES_WITH_HISTORY = new NetworkPlacesWithHistory();
 
@@ -47,42 +53,60 @@ public class NetworkPlacesWithHistory extends TableImpl<NetworkPlacesWithHistory
     }
 
     /**
-     * The column <code>network.network_places_with_history.network_place_id</code>.
+     * The column
+     * <code>network.network_places_with_history.network_place_id</code>.
      */
     public final TableField<NetworkPlacesWithHistoryRecord, UUID> NETWORK_PLACE_ID = createField(DSL.name("network_place_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column <code>network.network_places_with_history.network_place_ext_id</code>.
+     * The column
+     * <code>network.network_places_with_history.network_place_ext_id</code>.
      */
     public final TableField<NetworkPlacesWithHistoryRecord, String> NETWORK_PLACE_EXT_ID = createField(DSL.name("network_place_ext_id"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>network.network_places_with_history.network_place_name</code>.
+     * The column
+     * <code>network.network_places_with_history.network_place_name</code>.
      */
     public final TableField<NetworkPlacesWithHistoryRecord, String> NETWORK_PLACE_NAME = createField(DSL.name("network_place_name"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>network.network_places_with_history.network_place_sys_period</code>.
+     * The column
+     * <code>network.network_places_with_history.network_place_sys_period</code>.
      */
-    public final TableField<NetworkPlacesWithHistoryRecord, TimeRange> NETWORK_PLACE_SYS_PERIOD = createField(DSL.name("network_place_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\""), this, "", new TimeRangeBinding());
+    public final TableField<NetworkPlacesWithHistoryRecord, TimeRange> NETWORK_PLACE_SYS_PERIOD = createField(DSL.name("network_place_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\""), this, "", new TimeRangeBinding());
 
     private NetworkPlacesWithHistory(Name alias, Table<NetworkPlacesWithHistoryRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private NetworkPlacesWithHistory(Name alias, Table<NetworkPlacesWithHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_places_with_history\" as  SELECT network_places.network_place_id,\n    network_places.network_place_ext_id,\n    network_places.network_place_name,\n    network_places.network_place_sys_period\n   FROM network.network_places\nUNION ALL\n SELECT network_places_history.network_place_id,\n    network_places_history.network_place_ext_id,\n    network_places_history.network_place_name,\n    network_places_history.network_place_sys_period\n   FROM network.network_places_history;"));
+    private NetworkPlacesWithHistory(Name alias, Table<NetworkPlacesWithHistoryRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
+         create view "network_places_with_history" as  SELECT network_places.network_place_id,
+            network_places.network_place_ext_id,
+            network_places.network_place_name,
+            network_places.network_place_sys_period
+           FROM network.network_places
+        UNION ALL
+         SELECT network_places_history.network_place_id,
+            network_places_history.network_place_ext_id,
+            network_places_history.network_place_name,
+            network_places_history.network_place_sys_period
+           FROM network.network_places_history;
+        """), where);
     }
 
     /**
-     * Create an aliased <code>network.network_places_with_history</code> table reference
+     * Create an aliased <code>network.network_places_with_history</code> table
+     * reference
      */
     public NetworkPlacesWithHistory(String alias) {
         this(DSL.name(alias), NETWORK_PLACES_WITH_HISTORY);
     }
 
     /**
-     * Create an aliased <code>network.network_places_with_history</code> table reference
+     * Create an aliased <code>network.network_places_with_history</code> table
+     * reference
      */
     public NetworkPlacesWithHistory(Name alias) {
         this(alias, NETWORK_PLACES_WITH_HISTORY);
@@ -95,13 +119,9 @@ public class NetworkPlacesWithHistory extends TableImpl<NetworkPlacesWithHistory
         this(DSL.name("network_places_with_history"), null);
     }
 
-    public <O extends Record> NetworkPlacesWithHistory(Table<O> child, ForeignKey<O, NetworkPlacesWithHistoryRecord> key) {
-        super(child, key, NETWORK_PLACES_WITH_HISTORY);
-    }
-
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
@@ -112,6 +132,11 @@ public class NetworkPlacesWithHistory extends TableImpl<NetworkPlacesWithHistory
     @Override
     public NetworkPlacesWithHistory as(Name alias) {
         return new NetworkPlacesWithHistory(alias, this);
+    }
+
+    @Override
+    public NetworkPlacesWithHistory as(Table<?> alias) {
+        return new NetworkPlacesWithHistory(alias.getQualifiedName(), this);
     }
 
     /**
@@ -130,12 +155,95 @@ public class NetworkPlacesWithHistory extends TableImpl<NetworkPlacesWithHistory
         return new NetworkPlacesWithHistory(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row4 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row4<UUID, String, String, TimeRange> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public NetworkPlacesWithHistory rename(Table<?> name) {
+        return new NetworkPlacesWithHistory(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkPlacesWithHistory where(Condition condition) {
+        return new NetworkPlacesWithHistory(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkPlacesWithHistory where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkPlacesWithHistory where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkPlacesWithHistory where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkPlacesWithHistory where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkPlacesWithHistory where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkPlacesWithHistory where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkPlacesWithHistory where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkPlacesWithHistory whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkPlacesWithHistory whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

@@ -9,18 +9,23 @@ import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteLinksHistoryRecord;
 
+import java.util.Collection;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
-import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -34,7 +39,8 @@ public class NetworkRouteLinksHistory extends TableImpl<NetworkRouteLinksHistory
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>network.network_route_links_history</code>
+     * The reference instance of
+     * <code>network.network_route_links_history</code>
      */
     public static final NetworkRouteLinksHistory NETWORK_ROUTE_LINKS_HISTORY = new NetworkRouteLinksHistory();
 
@@ -47,52 +53,60 @@ public class NetworkRouteLinksHistory extends TableImpl<NetworkRouteLinksHistory
     }
 
     /**
-     * The column <code>network.network_route_links_history.network_route_link_id</code>.
+     * The column
+     * <code>network.network_route_links_history.network_route_link_id</code>.
      */
     public final TableField<NetworkRouteLinksHistoryRecord, UUID> NETWORK_ROUTE_LINK_ID = createField(DSL.name("network_route_link_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_links_history.network_route_direction_id</code>.
+     * The column
+     * <code>network.network_route_links_history.network_route_direction_id</code>.
      */
     public final TableField<NetworkRouteLinksHistoryRecord, UUID> NETWORK_ROUTE_DIRECTION_ID = createField(DSL.name("network_route_direction_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_links_history.infrastructure_link_id</code>.
+     * The column
+     * <code>network.network_route_links_history.infrastructure_link_id</code>.
      */
     public final TableField<NetworkRouteLinksHistoryRecord, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_links_history.network_route_link_ext_id</code>.
+     * The column
+     * <code>network.network_route_links_history.network_route_link_ext_id</code>.
      */
     public final TableField<NetworkRouteLinksHistoryRecord, String> NETWORK_ROUTE_LINK_EXT_ID = createField(DSL.name("network_route_link_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_links_history.network_route_link_order</code>.
+     * The column
+     * <code>network.network_route_links_history.network_route_link_order</code>.
      */
     public final TableField<NetworkRouteLinksHistoryRecord, Integer> NETWORK_ROUTE_LINK_ORDER = createField(DSL.name("network_route_link_order"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_links_history.network_route_link_sys_period</code>.
+     * The column
+     * <code>network.network_route_links_history.network_route_link_sys_period</code>.
      */
-    public final TableField<NetworkRouteLinksHistoryRecord, TimeRange> NETWORK_ROUTE_LINK_SYS_PERIOD = createField(DSL.name("network_route_link_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
+    public final TableField<NetworkRouteLinksHistoryRecord, TimeRange> NETWORK_ROUTE_LINK_SYS_PERIOD = createField(DSL.name("network_route_link_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
     private NetworkRouteLinksHistory(Name alias, Table<NetworkRouteLinksHistoryRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private NetworkRouteLinksHistory(Name alias, Table<NetworkRouteLinksHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private NetworkRouteLinksHistory(Name alias, Table<NetworkRouteLinksHistoryRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>network.network_route_links_history</code> table reference
+     * Create an aliased <code>network.network_route_links_history</code> table
+     * reference
      */
     public NetworkRouteLinksHistory(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_LINKS_HISTORY);
     }
 
     /**
-     * Create an aliased <code>network.network_route_links_history</code> table reference
+     * Create an aliased <code>network.network_route_links_history</code> table
+     * reference
      */
     public NetworkRouteLinksHistory(Name alias) {
         this(alias, NETWORK_ROUTE_LINKS_HISTORY);
@@ -105,13 +119,9 @@ public class NetworkRouteLinksHistory extends TableImpl<NetworkRouteLinksHistory
         this(DSL.name("network_route_links_history"), null);
     }
 
-    public <O extends Record> NetworkRouteLinksHistory(Table<O> child, ForeignKey<O, NetworkRouteLinksHistoryRecord> key) {
-        super(child, key, NETWORK_ROUTE_LINKS_HISTORY);
-    }
-
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
@@ -122,6 +132,11 @@ public class NetworkRouteLinksHistory extends TableImpl<NetworkRouteLinksHistory
     @Override
     public NetworkRouteLinksHistory as(Name alias) {
         return new NetworkRouteLinksHistory(alias, this);
+    }
+
+    @Override
+    public NetworkRouteLinksHistory as(Table<?> alias) {
+        return new NetworkRouteLinksHistory(alias.getQualifiedName(), this);
     }
 
     /**
@@ -140,12 +155,95 @@ public class NetworkRouteLinksHistory extends TableImpl<NetworkRouteLinksHistory
         return new NetworkRouteLinksHistory(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row6 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row6<UUID, UUID, UUID, String, Integer, TimeRange> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public NetworkRouteLinksHistory rename(Table<?> name) {
+        return new NetworkRouteLinksHistory(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteLinksHistory where(Condition condition) {
+        return new NetworkRouteLinksHistory(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteLinksHistory where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteLinksHistory where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteLinksHistory where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteLinksHistory where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteLinksHistory where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteLinksHistory where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteLinksHistory where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteLinksHistory whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteLinksHistory whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

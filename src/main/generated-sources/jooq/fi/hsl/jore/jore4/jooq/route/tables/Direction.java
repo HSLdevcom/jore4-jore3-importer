@@ -6,11 +6,18 @@ package fi.hsl.jore.jore4.jooq.route.tables;
 
 import fi.hsl.jore.jore4.jooq.route.Route;
 
+import java.util.Collection;
+
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -20,7 +27,8 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * The route directions from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:480
+ * The route directions from Transmodel:
+ * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:480
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Direction extends TableImpl<Record> {
@@ -41,21 +49,23 @@ public class Direction extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>route.direction.direction</code>. The name of the route direction.
+     * The column <code>route.direction.direction</code>. The name of the route
+     * direction.
      */
     public final TableField<Record, String> DIRECTION_ = createField(DSL.name("direction"), SQLDataType.CLOB.nullable(false), this, "The name of the route direction.");
 
     /**
-     * The column <code>route.direction.the_opposite_of_direction</code>. The opposite direction.
+     * The column <code>route.direction.the_opposite_of_direction</code>. The
+     * opposite direction.
      */
     public final TableField<Record, String> THE_OPPOSITE_OF_DIRECTION = createField(DSL.name("the_opposite_of_direction"), SQLDataType.CLOB, this, "The opposite direction.");
 
     private Direction(Name alias, Table<Record> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private Direction(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("The route directions from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:480"), TableOptions.table());
+    private Direction(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment("The route directions from Transmodel: https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:480"), TableOptions.table(), where);
     }
 
     /**
@@ -79,13 +89,9 @@ public class Direction extends TableImpl<Record> {
         this(DSL.name("direction"), null);
     }
 
-    public <O extends Record> Direction(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, DIRECTION);
-    }
-
     @Override
     public Schema getSchema() {
-        return Route.ROUTE;
+        return aliased() ? null : Route.ROUTE;
     }
 
     @Override
@@ -96,6 +102,11 @@ public class Direction extends TableImpl<Record> {
     @Override
     public Direction as(Name alias) {
         return new Direction(alias, this);
+    }
+
+    @Override
+    public Direction as(Table<?> alias) {
+        return new Direction(alias.getQualifiedName(), this);
     }
 
     /**
@@ -112,5 +123,97 @@ public class Direction extends TableImpl<Record> {
     @Override
     public Direction rename(Name name) {
         return new Direction(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public Direction rename(Table<?> name) {
+        return new Direction(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Direction where(Condition condition) {
+        return new Direction(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Direction where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Direction where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Direction where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Direction where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Direction where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Direction where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Direction where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Direction whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Direction whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

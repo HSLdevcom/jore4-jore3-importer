@@ -21,7 +21,7 @@ public class PointConverterTest {
                         GeometryUtil.SRID_WGS84,
                         new Coordinate(60.168988620, 24.949328727, 0));
 
-        final String output = (String) CONVERTER.to(point);
+        final Object output = CONVERTER.to(point);
         final String expected = "SRID=4326;POINT Z(60.16898862 24.949328727 0)";
 
         assertThat(output,
@@ -35,7 +35,7 @@ public class PointConverterTest {
                         GeometryUtil.SRID_WGS84,
                         new Coordinate(60.168988620, 24.949328727));
 
-        final String output = (String) CONVERTER.to(point);
+        final Object output = CONVERTER.to(point);
         final String expected = "SRID=4326;POINT (60.16898862 24.949328727)";
 
         assertThat(output,

@@ -21,7 +21,8 @@ public class InsertScheduledStopPointLabel extends AbstractRoutine<java.lang.Voi
     private static final long serialVersionUID = 1L;
 
     /**
-     * The parameter <code>service_pattern.insert_scheduled_stop_point_label.new_label</code>.
+     * The parameter
+     * <code>service_pattern.insert_scheduled_stop_point_label.new_label</code>.
      */
     public static final Parameter<String> NEW_LABEL = Internal.createParameter("new_label", SQLDataType.CLOB, false, false);
 

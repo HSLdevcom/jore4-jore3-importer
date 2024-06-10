@@ -16,5 +16,5 @@ public interface IScheduledStopPointImportRepository
      * @param   idMappings   The information that's required to set the Jore 4 ids
      *                       of scheduled stop points.
      */
-    void setJore4Ids(List<PersistableScheduledStopPointIdMapping> idMappings);
+    void setJore4Ids(Iterable<PersistableScheduledStopPointIdMapping> idMappings);
 }

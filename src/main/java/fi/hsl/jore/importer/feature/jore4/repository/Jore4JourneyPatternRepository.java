@@ -23,18 +23,20 @@ public class Jore4JourneyPatternRepository implements IJore4JourneyPatternReposi
     }
 
     @Override
-    public void insert(final List<? extends Jore4JourneyPattern> journeyPatterns) {
-        if (!journeyPatterns.isEmpty()) {
-            final BatchBindStep batch = db.batch(db.insertInto(JOURNEY_PATTERN_,
-                            JOURNEY_PATTERN_.JOURNEY_PATTERN_ID,
-                            JOURNEY_PATTERN_.ON_ROUTE_ID
-            ).values((UUID) null, null));
+    public void insert(final Iterable<? extends Jore4JourneyPattern> journeyPatterns) {
+        BatchBindStep batch = db.batch(db.insertInto(JOURNEY_PATTERN_,
+            JOURNEY_PATTERN_.JOURNEY_PATTERN_ID,
+            JOURNEY_PATTERN_.ON_ROUTE_ID
+        ).values((UUID) null, null));
 
-            journeyPatterns.forEach(journeyPattern -> batch.bind(
-                    journeyPattern.journeyPatternId(),
-                    journeyPattern.routeId()
-            ));
+        for (final Jore4JourneyPattern journeyPattern : journeyPatterns) {
+            batch = batch.bind(
+                journeyPattern.journeyPatternId(),
+                journeyPattern.routeId()
+            );
+        }
 
+        if (batch.size() > 0) {
             batch.execute();
         }
     }

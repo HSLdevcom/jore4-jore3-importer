@@ -9,6 +9,7 @@ import fi.hsl.jore.jore4.jooq.service_pattern.ServicePattern;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.Name;
 import org.jooq.Record;
@@ -30,7 +31,8 @@ public class GetDistancesBetweenStopPointsInJourneyPattern extends TableImpl<Rec
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>
+     * The reference instance of
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>
      */
     public static final GetDistancesBetweenStopPointsInJourneyPattern GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN = new GetDistancesBetweenStopPointsInJourneyPattern();
 
@@ -43,69 +45,91 @@ public class GetDistancesBetweenStopPointsInJourneyPattern extends TableImpl<Rec
     }
 
     /**
-     * The column <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.journey_pattern_id</code>.
+     * The column
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.journey_pattern_id</code>.
      */
     public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.route_id</code>.
+     * The column
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.route_id</code>.
      */
     public final TableField<Record, UUID> ROUTE_ID = createField(DSL.name("route_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.route_priority</code>.
+     * The column
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.route_priority</code>.
      */
     public final TableField<Record, Integer> ROUTE_PRIORITY = createField(DSL.name("route_priority"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.observation_date</code>.
+     * The column
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.observation_date</code>.
      */
     public final TableField<Record, LocalDate> OBSERVATION_DATE = createField(DSL.name("observation_date"), SQLDataType.LOCALDATE.nullable(false), this, "");
 
     /**
-     * The column <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.stop_interval_sequence</code>.
+     * The column
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.stop_interval_sequence</code>.
      */
     public final TableField<Record, Integer> STOP_INTERVAL_SEQUENCE = createField(DSL.name("stop_interval_sequence"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.start_stop_label</code>.
+     * The column
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.start_stop_label</code>.
      */
     public final TableField<Record, String> START_STOP_LABEL = createField(DSL.name("start_stop_label"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.end_stop_label</code>.
+     * The column
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.end_stop_label</code>.
      */
     public final TableField<Record, String> END_STOP_LABEL = createField(DSL.name("end_stop_label"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.distance_in_metres</code>.
+     * The column
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern.distance_in_metres</code>.
      */
     public final TableField<Record, Double> DISTANCE_IN_METRES = createField(DSL.name("distance_in_metres"), SQLDataType.DOUBLE.nullable(false), this, "");
 
     private GetDistancesBetweenStopPointsInJourneyPattern(Name alias, Table<Record> aliased) {
-        this(alias, aliased, new Field[3]);
+        this(alias, aliased, new Field[] {
+            DSL.val(null, SQLDataType.UUID),
+            DSL.val(null, SQLDataType.LOCALDATE),
+            DSL.val(null, SQLDataType.BOOLEAN)
+        });
     }
 
     private GetDistancesBetweenStopPointsInJourneyPattern(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.function());
+        this(alias, aliased, parameters, null);
+    }
+
+    private GetDistancesBetweenStopPointsInJourneyPattern(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.function(), where);
     }
 
     /**
-     * Create an aliased <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code> table reference
+     * Create an aliased
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>
+     * table reference
      */
     public GetDistancesBetweenStopPointsInJourneyPattern(String alias) {
         this(DSL.name(alias), GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN);
     }
 
     /**
-     * Create an aliased <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code> table reference
+     * Create an aliased
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>
+     * table reference
      */
     public GetDistancesBetweenStopPointsInJourneyPattern(Name alias) {
         this(alias, GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN);
     }
 
     /**
-     * Create a <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code> table reference
+     * Create a
+     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>
+     * table reference
      */
     public GetDistancesBetweenStopPointsInJourneyPattern() {
         this(DSL.name("get_distances_between_stop_points_in_journey_pattern"), null);
@@ -113,7 +137,7 @@ public class GetDistancesBetweenStopPointsInJourneyPattern extends TableImpl<Rec
 
     @Override
     public Schema getSchema() {
-        return ServicePattern.SERVICE_PATTERN;
+        return aliased() ? null : ServicePattern.SERVICE_PATTERN;
     }
 
     @Override
@@ -124,6 +148,11 @@ public class GetDistancesBetweenStopPointsInJourneyPattern extends TableImpl<Rec
     @Override
     public GetDistancesBetweenStopPointsInJourneyPattern as(Name alias) {
         return new GetDistancesBetweenStopPointsInJourneyPattern(alias, this, parameters);
+    }
+
+    @Override
+    public GetDistancesBetweenStopPointsInJourneyPattern as(Table<?> alias) {
+        return new GetDistancesBetweenStopPointsInJourneyPattern(alias.getQualifiedName(), this, parameters);
     }
 
     /**
@@ -143,6 +172,14 @@ public class GetDistancesBetweenStopPointsInJourneyPattern extends TableImpl<Rec
     }
 
     /**
+     * Rename this table
+     */
+    @Override
+    public GetDistancesBetweenStopPointsInJourneyPattern rename(Table<?> name) {
+        return new GetDistancesBetweenStopPointsInJourneyPattern(name.getQualifiedName(), null, parameters);
+    }
+
+    /**
      * Call this table-valued function
      */
     public GetDistancesBetweenStopPointsInJourneyPattern call(
@@ -151,9 +188,9 @@ public class GetDistancesBetweenStopPointsInJourneyPattern extends TableImpl<Rec
         , Boolean includeDraftStops
     ) {
         GetDistancesBetweenStopPointsInJourneyPattern result = new GetDistancesBetweenStopPointsInJourneyPattern(DSL.name("get_distances_between_stop_points_in_journey_pattern"), null, new Field[] {
-              DSL.val(journeyPatternId, SQLDataType.UUID)
-            , DSL.val(observationDate, SQLDataType.LOCALDATE)
-            , DSL.val(includeDraftStops, SQLDataType.BOOLEAN)
+            DSL.val(journeyPatternId, SQLDataType.UUID),
+            DSL.val(observationDate, SQLDataType.LOCALDATE),
+            DSL.val(includeDraftStops, SQLDataType.BOOLEAN)
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;
@@ -168,9 +205,9 @@ public class GetDistancesBetweenStopPointsInJourneyPattern extends TableImpl<Rec
         , Field<Boolean> includeDraftStops
     ) {
         GetDistancesBetweenStopPointsInJourneyPattern result = new GetDistancesBetweenStopPointsInJourneyPattern(DSL.name("get_distances_between_stop_points_in_journey_pattern"), null, new Field[] {
-              journeyPatternId
-            , observationDate
-            , includeDraftStops
+            journeyPatternId,
+            observationDate,
+            includeDraftStops
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;

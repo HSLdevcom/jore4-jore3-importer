@@ -8,13 +8,19 @@ import fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding;
 import fi.hsl.jore.jore4.jooq.service_pattern.ServicePattern;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -33,7 +39,8 @@ public class ScheduledStopPointsWithInfraLinkData extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>service_pattern.scheduled_stop_points_with_infra_link_data</code>
+     * The reference instance of
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data</code>
      */
     public static final ScheduledStopPointsWithInfraLinkData SCHEDULED_STOP_POINTS_WITH_INFRA_LINK_DATA = new ScheduledStopPointsWithInfraLinkData();
 
@@ -46,86 +53,109 @@ public class ScheduledStopPointsWithInfraLinkData extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>service_pattern.scheduled_stop_points_with_infra_link_data.scheduled_stop_point_id</code>.
+     * The column
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data.scheduled_stop_point_id</code>.
      */
     public final TableField<Record, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_points_with_infra_link_data.measured_location</code>.
+     * The column
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data.measured_location</code>.
      */
-    public final TableField<Record, Point> MEASURED_LOCATION = createField(DSL.name("measured_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\""), this, "", new PointBinding());
+    public final TableField<Record, Point> MEASURED_LOCATION = createField(DSL.name("measured_location"), SQLDataType.OTHER, this, "", new PointBinding());
 
     /**
-     * The column <code>service_pattern.scheduled_stop_points_with_infra_link_data.located_on_infrastructure_link_id</code>.
+     * The column
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data.located_on_infrastructure_link_id</code>.
      */
     public final TableField<Record, UUID> LOCATED_ON_INFRASTRUCTURE_LINK_ID = createField(DSL.name("located_on_infrastructure_link_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_points_with_infra_link_data.direction</code>.
+     * The column
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data.direction</code>.
      */
     public final TableField<Record, String> DIRECTION = createField(DSL.name("direction"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_points_with_infra_link_data.label</code>.
+     * The column
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data.label</code>.
      */
     public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_points_with_infra_link_data.validity_start</code>.
+     * The column
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data.validity_start</code>.
      */
     public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_points_with_infra_link_data.validity_end</code>.
+     * The column
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data.validity_end</code>.
      */
     public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_points_with_infra_link_data.priority</code>.
+     * The column
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data.priority</code>.
      */
     public final TableField<Record, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER, this, "");
 
     /**
-     * The column <code>service_pattern.scheduled_stop_points_with_infra_link_data.relative_distance_from_infrastructure_link_start</code>.
+     * The column
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data.relative_distance_from_infrastructure_link_start</code>.
      */
     public final TableField<Record, Double> RELATIVE_DISTANCE_FROM_INFRASTRUCTURE_LINK_START = createField(DSL.name("relative_distance_from_infrastructure_link_start"), SQLDataType.DOUBLE, this, "");
 
     private ScheduledStopPointsWithInfraLinkData(Name alias, Table<Record> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private ScheduledStopPointsWithInfraLinkData(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("Contains scheduled_stop_points enriched with some infra link data."), TableOptions.view("create view \"scheduled_stop_points_with_infra_link_data\" as  SELECT ssp.scheduled_stop_point_id,\n    ssp.measured_location,\n    ssp.located_on_infrastructure_link_id,\n    ssp.direction,\n    ssp.label,\n    ssp.validity_start,\n    ssp.validity_end,\n    ssp.priority,\n    internal_utils.st_linelocatepoint(il.shape, ssp.measured_location) AS relative_distance_from_infrastructure_link_start\n   FROM (service_pattern.scheduled_stop_point ssp\n     JOIN infrastructure_network.infrastructure_link il ON ((ssp.located_on_infrastructure_link_id = il.infrastructure_link_id)));"));
+    private ScheduledStopPointsWithInfraLinkData(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment("Contains scheduled_stop_points enriched with some infra link data."), TableOptions.view("""
+        create view "scheduled_stop_points_with_infra_link_data" as  SELECT ssp.scheduled_stop_point_id,
+         ssp.measured_location,
+         ssp.located_on_infrastructure_link_id,
+         ssp.direction,
+         ssp.label,
+         ssp.validity_start,
+         ssp.validity_end,
+         ssp.priority,
+         internal_utils.st_linelocatepoint(il.shape, ssp.measured_location) AS relative_distance_from_infrastructure_link_start
+        FROM (service_pattern.scheduled_stop_point ssp
+          JOIN infrastructure_network.infrastructure_link il ON ((ssp.located_on_infrastructure_link_id = il.infrastructure_link_id)));
+        """), where);
     }
 
     /**
-     * Create an aliased <code>service_pattern.scheduled_stop_points_with_infra_link_data</code> table reference
+     * Create an aliased
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data</code>
+     * table reference
      */
     public ScheduledStopPointsWithInfraLinkData(String alias) {
         this(DSL.name(alias), SCHEDULED_STOP_POINTS_WITH_INFRA_LINK_DATA);
     }
 
     /**
-     * Create an aliased <code>service_pattern.scheduled_stop_points_with_infra_link_data</code> table reference
+     * Create an aliased
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data</code>
+     * table reference
      */
     public ScheduledStopPointsWithInfraLinkData(Name alias) {
         this(alias, SCHEDULED_STOP_POINTS_WITH_INFRA_LINK_DATA);
     }
 
     /**
-     * Create a <code>service_pattern.scheduled_stop_points_with_infra_link_data</code> table reference
+     * Create a
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data</code>
+     * table reference
      */
     public ScheduledStopPointsWithInfraLinkData() {
         this(DSL.name("scheduled_stop_points_with_infra_link_data"), null);
     }
 
-    public <O extends Record> ScheduledStopPointsWithInfraLinkData(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, SCHEDULED_STOP_POINTS_WITH_INFRA_LINK_DATA);
-    }
-
     @Override
     public Schema getSchema() {
-        return ServicePattern.SERVICE_PATTERN;
+        return aliased() ? null : ServicePattern.SERVICE_PATTERN;
     }
 
     @Override
@@ -136,6 +166,11 @@ public class ScheduledStopPointsWithInfraLinkData extends TableImpl<Record> {
     @Override
     public ScheduledStopPointsWithInfraLinkData as(Name alias) {
         return new ScheduledStopPointsWithInfraLinkData(alias, this);
+    }
+
+    @Override
+    public ScheduledStopPointsWithInfraLinkData as(Table<?> alias) {
+        return new ScheduledStopPointsWithInfraLinkData(alias.getQualifiedName(), this);
     }
 
     /**
@@ -152,5 +187,97 @@ public class ScheduledStopPointsWithInfraLinkData extends TableImpl<Record> {
     @Override
     public ScheduledStopPointsWithInfraLinkData rename(Name name) {
         return new ScheduledStopPointsWithInfraLinkData(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public ScheduledStopPointsWithInfraLinkData rename(Table<?> name) {
+        return new ScheduledStopPointsWithInfraLinkData(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPointsWithInfraLinkData where(Condition condition) {
+        return new ScheduledStopPointsWithInfraLinkData(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPointsWithInfraLinkData where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPointsWithInfraLinkData where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPointsWithInfraLinkData where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ScheduledStopPointsWithInfraLinkData where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ScheduledStopPointsWithInfraLinkData where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ScheduledStopPointsWithInfraLinkData where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ScheduledStopPointsWithInfraLinkData where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPointsWithInfraLinkData whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPointsWithInfraLinkData whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

@@ -1,41 +1,53 @@
 package fi.hsl.jore.importer.config.jobs;
 
-import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.batch.core.configuration.support.DefaultBatchConfiguration;
+import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.boot.autoconfigure.batch.BatchTransactionManager;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
-
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import javax.sql.DataSource;
+import org.springframework.transaction.PlatformTransactionManager;
 
+@Configuration
 @ComponentScan(basePackages = "fi.hsl.jore.importer.feature")
-@EnableBatchProcessing
-public class BatchConfig extends DefaultBatchConfigurer {
-
-    @Autowired
-    protected JobBuilderFactory jobs;
-
-    @Autowired
-    protected StepBuilderFactory steps;
+public class BatchConfig extends DefaultBatchConfiguration  {
+    private DataSource batchDataSource;
+    private DataSourceTransactionManager batchTransactionManager;
 
     @Override
-    public void setDataSource(final DataSource dataSource) {
-        // Do not assign a datasource to spring-batch even if one is available
-        // -> batch information is stored in memory using MapJobRepositoryFactoryBean
+    protected DataSource getDataSource() {
+        if (batchDataSource == null) {
+            batchDataSource = new EmbeddedDatabaseBuilder()
+                .setType(EmbeddedDatabaseType.HSQL)
+                .addScript("/org/springframework/batch/core/schema-hsqldb.sql")
+                .generateUniqueName(true)
+                .build();
+        }
+
+        return this.batchDataSource;
     }
 
     @Override
-    protected JobLauncher createJobLauncher() throws Exception {
-        final SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
-        jobLauncher.setJobRepository(getJobRepository());
-        // Use the async executor, so that a new thread is spawned for each job
-        // instead of blocking the main thread when running a job
-        jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
-        jobLauncher.afterPropertiesSet();
-        return jobLauncher;
+    public DataSourceTransactionManager getTransactionManager() {
+        if (batchTransactionManager == null) {
+            batchTransactionManager = new DataSourceTransactionManager(getDataSource());
+        }
+
+        return batchTransactionManager;
+    }
+
+    @Bean
+    @BatchTransactionManager
+    public PlatformTransactionManager batchTransactionManager() {
+        return getTransactionManager();
+    }
+
+    @Bean
+    public static BeanDefinitionRegistryPostProcessor jobRegistryBeanPostProcessorRemover() {
+        return registry -> registry.removeBeanDefinition("jobRegistryBeanPostProcessor");
     }
 }

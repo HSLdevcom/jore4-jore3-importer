@@ -6,11 +6,18 @@ package fi.hsl.jore.jore4.jooq.reusable_components.tables;
 
 import fi.hsl.jore.jore4.jooq.reusable_components.ReusableComponents;
 
+import java.util.Collection;
+
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -20,7 +27,7 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * The vehicle submode, which may have implications on which infrastructure 
+ * The vehicle submode, which may have implications on which infrastructure
  * links the vehicle can traverse
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
@@ -29,7 +36,8 @@ public class VehicleSubmode extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>reusable_components.vehicle_submode</code>
+     * The reference instance of
+     * <code>reusable_components.vehicle_submode</code>
      */
     public static final VehicleSubmode VEHICLE_SUBMODE = new VehicleSubmode();
 
@@ -42,32 +50,40 @@ public class VehicleSubmode extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>reusable_components.vehicle_submode.vehicle_submode</code>. The vehicle submode, which may have implications on which infrastructure links the vehicle can traverse
+     * The column
+     * <code>reusable_components.vehicle_submode.vehicle_submode</code>. The
+     * vehicle submode, which may have implications on which infrastructure
+     * links the vehicle can traverse
      */
     public final TableField<Record, String> VEHICLE_SUBMODE_ = createField(DSL.name("vehicle_submode"), SQLDataType.CLOB.nullable(false), this, "The vehicle submode, which may have implications on which infrastructure links the vehicle can traverse");
 
     /**
-     * The column <code>reusable_components.vehicle_submode.belonging_to_vehicle_mode</code>. The vehicle mode the vehicle submode belongs to: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
+     * The column
+     * <code>reusable_components.vehicle_submode.belonging_to_vehicle_mode</code>.
+     * The vehicle mode the vehicle submode belongs to:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283
      */
     public final TableField<Record, String> BELONGING_TO_VEHICLE_MODE = createField(DSL.name("belonging_to_vehicle_mode"), SQLDataType.CLOB.nullable(false), this, "The vehicle mode the vehicle submode belongs to: https://www.transmodel-cen.eu/model/index.htm?goto=1:6:1:283");
 
     private VehicleSubmode(Name alias, Table<Record> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private VehicleSubmode(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("The vehicle submode, which may have implications on which infrastructure links the vehicle can traverse"), TableOptions.table());
+    private VehicleSubmode(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment("The vehicle submode, which may have implications on which infrastructure links the vehicle can traverse"), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>reusable_components.vehicle_submode</code> table reference
+     * Create an aliased <code>reusable_components.vehicle_submode</code> table
+     * reference
      */
     public VehicleSubmode(String alias) {
         this(DSL.name(alias), VEHICLE_SUBMODE);
     }
 
     /**
-     * Create an aliased <code>reusable_components.vehicle_submode</code> table reference
+     * Create an aliased <code>reusable_components.vehicle_submode</code> table
+     * reference
      */
     public VehicleSubmode(Name alias) {
         this(alias, VEHICLE_SUBMODE);
@@ -80,13 +96,9 @@ public class VehicleSubmode extends TableImpl<Record> {
         this(DSL.name("vehicle_submode"), null);
     }
 
-    public <O extends Record> VehicleSubmode(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, VEHICLE_SUBMODE);
-    }
-
     @Override
     public Schema getSchema() {
-        return ReusableComponents.REUSABLE_COMPONENTS;
+        return aliased() ? null : ReusableComponents.REUSABLE_COMPONENTS;
     }
 
     @Override
@@ -97,6 +109,11 @@ public class VehicleSubmode extends TableImpl<Record> {
     @Override
     public VehicleSubmode as(Name alias) {
         return new VehicleSubmode(alias, this);
+    }
+
+    @Override
+    public VehicleSubmode as(Table<?> alias) {
+        return new VehicleSubmode(alias.getQualifiedName(), this);
     }
 
     /**
@@ -113,5 +130,97 @@ public class VehicleSubmode extends TableImpl<Record> {
     @Override
     public VehicleSubmode rename(Name name) {
         return new VehicleSubmode(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public VehicleSubmode rename(Table<?> name) {
+        return new VehicleSubmode(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public VehicleSubmode where(Condition condition) {
+        return new VehicleSubmode(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public VehicleSubmode where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public VehicleSubmode where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public VehicleSubmode where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public VehicleSubmode where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public VehicleSubmode where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public VehicleSubmode where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public VehicleSubmode where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public VehicleSubmode whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public VehicleSubmode whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

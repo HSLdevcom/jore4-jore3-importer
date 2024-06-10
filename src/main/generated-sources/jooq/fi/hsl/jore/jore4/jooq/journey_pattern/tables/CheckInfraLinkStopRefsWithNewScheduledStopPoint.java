@@ -9,6 +9,7 @@ import fi.hsl.jore.jore4.jooq.journey_pattern.JourneyPattern;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.Name;
 import org.jooq.Record;
@@ -17,6 +18,7 @@ import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -30,7 +32,8 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point</code>
+     * The reference instance of
+     * <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point</code>
      */
     public static final CheckInfraLinkStopRefsWithNewScheduledStopPoint CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT = new CheckInfraLinkStopRefsWithNewScheduledStopPoint();
 
@@ -43,39 +46,60 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
     }
 
     /**
-     * The column <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point.journey_pattern_id</code>.
+     * The column
+     * <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point.journey_pattern_id</code>.
      */
-    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "");
+    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "");
 
     /**
-     * The column <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point.on_route_id</code>.
+     * The column
+     * <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point.on_route_id</code>.
      */
     public final TableField<Record, UUID> ON_ROUTE_ID = createField(DSL.name("on_route_id"), SQLDataType.UUID.nullable(false), this, "");
 
     private CheckInfraLinkStopRefsWithNewScheduledStopPoint(Name alias, Table<Record> aliased) {
-        this(alias, aliased, new Field[8]);
+        this(alias, aliased, new Field[] {
+            DSL.val(null, SQLDataType.UUID),
+            DSL.val(null, SQLDataType.UUID),
+            DSL.val(null, DefaultDataType.getDefaultDataType("\"public\".\"geography\"")),
+            DSL.val(null, SQLDataType.CLOB),
+            DSL.val(null, SQLDataType.CLOB),
+            DSL.val(null, SQLDataType.LOCALDATE),
+            DSL.val(null, SQLDataType.LOCALDATE),
+            DSL.val(null, SQLDataType.INTEGER)
+        });
     }
 
     private CheckInfraLinkStopRefsWithNewScheduledStopPoint(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.function());
+        this(alias, aliased, parameters, null);
+    }
+
+    private CheckInfraLinkStopRefsWithNewScheduledStopPoint(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.function(), where);
     }
 
     /**
-     * Create an aliased <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point</code> table reference
+     * Create an aliased
+     * <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point</code>
+     * table reference
      */
     public CheckInfraLinkStopRefsWithNewScheduledStopPoint(String alias) {
         this(DSL.name(alias), CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT);
     }
 
     /**
-     * Create an aliased <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point</code> table reference
+     * Create an aliased
+     * <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point</code>
+     * table reference
      */
     public CheckInfraLinkStopRefsWithNewScheduledStopPoint(Name alias) {
         this(alias, CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT);
     }
 
     /**
-     * Create a <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point</code> table reference
+     * Create a
+     * <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point</code>
+     * table reference
      */
     public CheckInfraLinkStopRefsWithNewScheduledStopPoint() {
         this(DSL.name("check_infra_link_stop_refs_with_new_scheduled_stop_point"), null);
@@ -83,7 +107,7 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
 
     @Override
     public Schema getSchema() {
-        return JourneyPattern.JOURNEY_PATTERN;
+        return aliased() ? null : JourneyPattern.JOURNEY_PATTERN;
     }
 
     @Override
@@ -94,6 +118,11 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
     @Override
     public CheckInfraLinkStopRefsWithNewScheduledStopPoint as(Name alias) {
         return new CheckInfraLinkStopRefsWithNewScheduledStopPoint(alias, this, parameters);
+    }
+
+    @Override
+    public CheckInfraLinkStopRefsWithNewScheduledStopPoint as(Table<?> alias) {
+        return new CheckInfraLinkStopRefsWithNewScheduledStopPoint(alias.getQualifiedName(), this, parameters);
     }
 
     /**
@@ -113,6 +142,14 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
     }
 
     /**
+     * Rename this table
+     */
+    @Override
+    public CheckInfraLinkStopRefsWithNewScheduledStopPoint rename(Table<?> name) {
+        return new CheckInfraLinkStopRefsWithNewScheduledStopPoint(name.getQualifiedName(), null, parameters);
+    }
+
+    /**
      * Call this table-valued function
      */
     public CheckInfraLinkStopRefsWithNewScheduledStopPoint call(
@@ -126,14 +163,14 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
         , Integer newPriority
     ) {
         CheckInfraLinkStopRefsWithNewScheduledStopPoint result = new CheckInfraLinkStopRefsWithNewScheduledStopPoint(DSL.name("check_infra_link_stop_refs_with_new_scheduled_stop_point"), null, new Field[] {
-              DSL.val(replaceScheduledStopPointId, SQLDataType.UUID)
-            , DSL.val(newLocatedOnInfrastructureLinkId, SQLDataType.UUID)
-            , DSL.val(newMeasuredLocation, org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\""))
-            , DSL.val(newDirection, SQLDataType.CLOB)
-            , DSL.val(newLabel, SQLDataType.CLOB)
-            , DSL.val(newValidityStart, SQLDataType.LOCALDATE)
-            , DSL.val(newValidityEnd, SQLDataType.LOCALDATE)
-            , DSL.val(newPriority, SQLDataType.INTEGER)
+            DSL.val(replaceScheduledStopPointId, SQLDataType.UUID),
+            DSL.val(newLocatedOnInfrastructureLinkId, SQLDataType.UUID),
+            DSL.val(newMeasuredLocation, DefaultDataType.getDefaultDataType("\"public\".\"geography\"")),
+            DSL.val(newDirection, SQLDataType.CLOB),
+            DSL.val(newLabel, SQLDataType.CLOB),
+            DSL.val(newValidityStart, SQLDataType.LOCALDATE),
+            DSL.val(newValidityEnd, SQLDataType.LOCALDATE),
+            DSL.val(newPriority, SQLDataType.INTEGER)
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;
@@ -153,14 +190,14 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
         , Field<Integer> newPriority
     ) {
         CheckInfraLinkStopRefsWithNewScheduledStopPoint result = new CheckInfraLinkStopRefsWithNewScheduledStopPoint(DSL.name("check_infra_link_stop_refs_with_new_scheduled_stop_point"), null, new Field[] {
-              replaceScheduledStopPointId
-            , newLocatedOnInfrastructureLinkId
-            , newMeasuredLocation
-            , newDirection
-            , newLabel
-            , newValidityStart
-            , newValidityEnd
-            , newPriority
+            replaceScheduledStopPointId,
+            newLocatedOnInfrastructureLinkId,
+            newMeasuredLocation,
+            newDirection,
+            newLabel,
+            newValidityStart,
+            newValidityEnd,
+            newPriority
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;

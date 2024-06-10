@@ -49,25 +49,29 @@ public class LineHeaderImportRepository
     @Override
     @Transactional
     public void submitToStaging(final Iterable<? extends Jore3LineHeader> headers) {
-        final BatchBindStep batch = db.batch(db.insertInto(STAGING_TABLE,
-                                                           STAGING_TABLE.NETWORK_LINE_HEADER_EXT_ID,
-                                                           STAGING_TABLE.NETWORK_LINE_EXT_ID,
-                                                           STAGING_TABLE.NETWORK_LINE_HEADER_NAME,
-                                                           STAGING_TABLE.NETWORK_LINE_HEADER_NAME_SHORT,
-                                                           STAGING_TABLE.NETWORK_LINE_HEADER_ORIGIN_1,
-                                                           STAGING_TABLE.NETWORK_LINE_HEADER_ORIGIN_2,
-                                                           STAGING_TABLE.NETWORK_LINE_HEADER_VALID_DATE_RANGE)
-                                               .values((String) null, null, null, null, null, null, null));
+        BatchBindStep batch = db.batch(db.insertInto(STAGING_TABLE,
+                                                     STAGING_TABLE.NETWORK_LINE_HEADER_EXT_ID,
+                                                     STAGING_TABLE.NETWORK_LINE_EXT_ID,
+                                                     STAGING_TABLE.NETWORK_LINE_HEADER_NAME,
+                                                     STAGING_TABLE.NETWORK_LINE_HEADER_NAME_SHORT,
+                                                     STAGING_TABLE.NETWORK_LINE_HEADER_ORIGIN_1,
+                                                     STAGING_TABLE.NETWORK_LINE_HEADER_ORIGIN_2,
+                                                     STAGING_TABLE.NETWORK_LINE_HEADER_VALID_DATE_RANGE)
+                                          .values((String) null, null, null, null, null, null, null));
 
-        headers.forEach(header -> batch.bind(header.externalId().value(),
-                                             header.lineId().value(),
-                                             jsonbConverter.asJson(header.name()),
-                                             jsonbConverter.asJson(header.nameShort()),
-                                             jsonbConverter.asJson(header.origin1()),
-                                             jsonbConverter.asJson(header.origin2()),
-                                             header.validTime()));
+        for (final Jore3LineHeader header : headers) {
+            batch = batch.bind(header.externalId().value(),
+                header.lineId().value(),
+                jsonbConverter.asJson(header.name()),
+                jsonbConverter.asJson(header.nameShort()),
+                jsonbConverter.asJson(header.origin1()),
+                jsonbConverter.asJson(header.origin2()),
+                header.validTime());
+        }
 
-        batch.execute();
+        if (batch.size() > 0) {
+            batch.execute();
+        }
     }
 
     protected Set<LineHeaderPK> delete() {
@@ -144,7 +148,7 @@ public class LineHeaderImportRepository
 
     @Transactional
     @Override
-    public void setJore4Ids(final List<PersistableLineIdMapping> idMappings) {
+    public void setJore4Ids(final Iterable<PersistableLineIdMapping> idMappings) {
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)

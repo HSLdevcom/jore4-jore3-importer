@@ -50,7 +50,9 @@ public class PlaceImportRepository
                 place.name()
         ));
 
-        batch.execute();
+        if (batch.size() > 0) {
+            batch.execute();
+        }
     }
 
     protected Set<PlacePK> insert() {

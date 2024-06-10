@@ -97,19 +97,35 @@ import fi.hsl.jore.importer.feature.network.scheduled_stop_point.timing_place.Im
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.FlowBuilder;
+import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.core.job.flow.support.SimpleFlow;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.skip.AlwaysSkipItemSkipPolicy;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.batch.BatchTransactionManager;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableAutoConfiguration
-public class JobConfig extends BatchConfig {
-
+@ComponentScan(basePackages = "fi.hsl.jore.importer.feature")
+public class JobConfig {
     public static final String JOB_NAME = "importJoreJob";
+
+    private final JobRepository jobRepository;
+    private final PlatformTransactionManager transactionManager;
+
+    public JobConfig(
+        final JobRepository jobRepository,
+        @BatchTransactionManager final PlatformTransactionManager transactionManager
+    ) {
+        this.jobRepository = jobRepository;
+        this.transactionManager = transactionManager;
+    }
 
     /* Steps to import data from Jore 3 to importer staging DB. */
     @Bean
@@ -125,7 +141,7 @@ public class JobConfig extends BatchConfig {
                          final Flow importScheduledStopPointsFlow,
                          // Export data from the importer staging DB to Jore 4 DB.
                          final Flow jore4ExportFlow) {
-        return jobs.get(JOB_NAME)
+        return new JobBuilder(JOB_NAME,jobRepository)
                    .start(importNodesFlow)
                    .next(importLinksFlow)
                    .next(importLinkPointsFlow)
@@ -155,9 +171,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step prepareNodesStep(final INodeImportRepository nodeImportRepository) {
-        return steps.get("prepareNodesStep")
+        return new StepBuilder("prepareNodesStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(nodeImportRepository))
+                    .tasklet(new GenericCleanupTasklet<>(nodeImportRepository), transactionManager)
                     .build();
     }
 
@@ -166,9 +182,9 @@ public class JobConfig extends BatchConfig {
                                 final INodeImportRepository nodeImportRepository) {
         final int chunkSize = 1000;
 
-        return steps.get("importNodesStep")
+        return new StepBuilder("importNodesStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<JrNode, Jore3Node>chunk(chunkSize)
+                    .<JrNode, Jore3Node>chunk(chunkSize, transactionManager)
                     .reader(nodeReader.build())
                     .processor(new NodeProcessor())
                     .writer(new GenericImportWriter<>(nodeImportRepository))
@@ -177,9 +193,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step commitNodesStep(final INodeImportRepository nodeImportRepository) {
-        return steps.get("commitNodesStep")
+        return new StepBuilder("commitNodesStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(nodeImportRepository))
+                    .tasklet(new GenericCommitTasklet<>(nodeImportRepository), transactionManager)
                     .build();
     }
 
@@ -197,9 +213,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step prepareLinksStep(final ILinkImportRepository linkImportRepository) {
-        return steps.get("prepareLinksStep")
+        return new StepBuilder("prepareLinksStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(linkImportRepository))
+                    .tasklet(new GenericCleanupTasklet<>(linkImportRepository), transactionManager)
                     .build();
     }
 
@@ -207,9 +223,9 @@ public class JobConfig extends BatchConfig {
     public Step importLinksStep(final LinkRowReader linkReader,
                                 final ILinkImportRepository linkImportRepository) {
         final int chunkSize = 1000;
-        return steps.get("importLinksStep")
+        return new StepBuilder("importLinksStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<LinkRow, Jore3Link>chunk(chunkSize)
+                    .<LinkRow, Jore3Link>chunk(chunkSize, transactionManager)
                     .reader(linkReader.build())
                     .processor(new LinkRowProcessor())
                     .writer(new GenericImportWriter<>(linkImportRepository))
@@ -218,9 +234,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step commitLinksStep(final ILinkImportRepository linkImportRepository) {
-        return steps.get("commitLinksStep")
+        return new StepBuilder("commitLinksStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(linkImportRepository))
+                    .tasklet(new GenericCommitTasklet<>(linkImportRepository), transactionManager)
                     .build();
     }
 
@@ -238,9 +254,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step prepareLinkPointsStep(final ILinkShapeImportRepository linkPointImportRepository) {
-        return steps.get("prepareLinkPointsStep")
+        return new StepBuilder("prepareLinkPointsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(linkPointImportRepository))
+                    .tasklet(new GenericCleanupTasklet<>(linkPointImportRepository), transactionManager)
                     .build();
     }
 
@@ -248,9 +264,9 @@ public class JobConfig extends BatchConfig {
     public Step importLinkPointsStep(final PointReader pointReader,
                                      final ILinkShapeImportRepository linkPointImportRepository) {
         final int chunkSize = 100;
-        return steps.get("importLinkPointsStep")
+        return new StepBuilder("importLinkPointsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<LinkPoints, Jore3LinkShape>chunk(chunkSize)
+                    .<LinkPoints, Jore3LinkShape>chunk(chunkSize, transactionManager)
                     .reader(new LinkPointReader(pointReader.build()))
                     .processor(new LinkPointProcessor())
                     .writer(new GenericImportWriter<>(linkPointImportRepository))
@@ -259,9 +275,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step commitLinkPointsStep(final ILinkShapeImportRepository linkPointImportRepository) {
-        return steps.get("commitLinkPointsStep")
+        return new StepBuilder("commitLinkPointsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(linkPointImportRepository))
+                    .tasklet(new GenericCommitTasklet<>(linkPointImportRepository), transactionManager)
                     .build();
     }
 
@@ -279,9 +295,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step prepareLinesStep(final ILineImportRepository lineImportRepository) {
-        return steps.get("prepareLinesStep")
+        return new StepBuilder("prepareLinesStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(lineImportRepository))
+                    .tasklet(new GenericCleanupTasklet<>(lineImportRepository), transactionManager)
                     .build();
     }
 
@@ -289,9 +305,9 @@ public class JobConfig extends BatchConfig {
     public Step importLinesStep(final LineRowReader lineReader,
                                 final ILineImportRepository lineImportRepository) {
         final int chunkSize = 1000;
-        return steps.get("importLinesStep")
+        return new StepBuilder("importLinesStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<JrLine, PersistableLine>chunk(chunkSize)
+                    .<JrLine, PersistableLine>chunk(chunkSize, transactionManager)
                     .reader(lineReader.build())
                     .processor(new LineProcessor())
                     .writer(new GenericImportWriter<>(lineImportRepository))
@@ -300,9 +316,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step commitLinesStep(final ILineImportRepository lineImportRepository) {
-        return steps.get("commitLinesStep")
+        return new StepBuilder("commitLinesStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(lineImportRepository))
+                    .tasklet(new GenericCommitTasklet<>(lineImportRepository), transactionManager)
                     .build();
     }
 
@@ -320,9 +336,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step prepareLineHeadersStep(final ILineHeaderImportRepository lineHeaderImportRepository) {
-        return steps.get("prepareLineHeadersStep")
+        return new StepBuilder("prepareLineHeadersStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(lineHeaderImportRepository))
+                    .tasklet(new GenericCleanupTasklet<>(lineHeaderImportRepository), transactionManager)
                     .build();
     }
 
@@ -330,9 +346,9 @@ public class JobConfig extends BatchConfig {
     public Step importLineHeadersStep(final LineHeaderReader lineHeaderReader,
                                       final ILineHeaderImportRepository lineHeaderImportRepository) {
         final int chunkSize = 1;
-        return steps.get("importLineHeadersStep")
+        return new StepBuilder("importLineHeadersStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<JrLineHeader, Jore3LineHeader>chunk(chunkSize)
+                    .<JrLineHeader, Jore3LineHeader>chunk(chunkSize, transactionManager)
                     .reader(lineHeaderReader.build())
                     .processor(new LineHeaderProcessor())
                     .writer(new GenericImportWriter<>(lineHeaderImportRepository))
@@ -343,9 +359,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step commitLineHeadersStep(final ILineHeaderImportRepository lineHeaderImportRepository) {
-        return steps.get("commitLineHeadersStep")
+        return new StepBuilder("commitLineHeadersStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(lineHeaderImportRepository))
+                    .tasklet(new GenericCommitTasklet<>(lineHeaderImportRepository), transactionManager)
                     .build();
     }
 
@@ -363,9 +379,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step prepareRoutesStep(final IRouteImportRepository routeImportRepository) {
-        return steps.get("prepareRoutesStep")
+        return new StepBuilder("prepareRoutesStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(routeImportRepository))
+                    .tasklet(new GenericCleanupTasklet<>(routeImportRepository), transactionManager)
                     .build();
     }
 
@@ -373,9 +389,9 @@ public class JobConfig extends BatchConfig {
     public Step importRoutesStep(final RouteReader routeReader,
                                  final IRouteImportRepository routeImportRepository) {
         final int chunkSize = 1000;
-        return steps.get("importRoutesStep")
+        return new StepBuilder("importRoutesStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<JrRoute, Jore3Route>chunk(chunkSize)
+                    .<JrRoute, Jore3Route>chunk(chunkSize, transactionManager)
                     .reader(routeReader.build())
                     .processor(new RouteProcessor())
                     .writer(new GenericImportWriter<>(routeImportRepository))
@@ -384,9 +400,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step commitRoutesStep(final IRouteImportRepository routeImportRepository) {
-        return steps.get("commitRoutesStep")
+        return new StepBuilder("commitRoutesStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(routeImportRepository))
+                    .tasklet(new GenericCommitTasklet<>(routeImportRepository), transactionManager)
                     .build();
     }
 
@@ -404,9 +420,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step prepareRouteDirectionsStep(final IRouteDirectionImportRepository routeDirectionImportRepository) {
-        return steps.get("prepareRouteDirectionsStep")
+        return new StepBuilder("prepareRouteDirectionsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(routeDirectionImportRepository))
+                    .tasklet(new GenericCleanupTasklet<>(routeDirectionImportRepository), transactionManager)
                     .build();
     }
 
@@ -414,9 +430,9 @@ public class JobConfig extends BatchConfig {
     public Step importRouteDirectionsStep(final RouteDirectionReader routeDirectionReader,
                                           final IRouteDirectionImportRepository routeDirectionImportRepository) {
         final int chunkSize = 1000;
-        return steps.get("importRouteDirectionsStep")
+        return new StepBuilder("importRouteDirectionsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<JrRouteDirection, Jore3RouteDirection>chunk(chunkSize)
+                    .<JrRouteDirection, Jore3RouteDirection>chunk(chunkSize, transactionManager)
                     .reader(routeDirectionReader.build())
                     .processor(new RouteDirectionProcessor())
                     .writer(new GenericImportWriter<>(routeDirectionImportRepository))
@@ -425,9 +441,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step commitRouteDirectionsStep(final IRouteDirectionImportRepository routeDirectionImportRepository) {
-        return steps.get("commitRouteDirectionsStep")
+        return new StepBuilder("commitRouteDirectionsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(routeDirectionImportRepository))
+                    .tasklet(new GenericCommitTasklet<>(routeDirectionImportRepository), transactionManager)
                     .build();
     }
 
@@ -453,25 +469,25 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step prepareRoutePointsStep(final IRoutePointImportRepository routePointImportRepository) {
-        return steps.get("prepareRoutePointsStep")
+        return new StepBuilder("prepareRoutePointsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(routePointImportRepository))
+                    .tasklet(new GenericCleanupTasklet<>(routePointImportRepository), transactionManager)
                     .build();
     }
 
     @Bean
     public Step prepareRouteStopPointsStep(final IRouteStopPointImportRepository routeStopPointImportRepository) {
-        return steps.get("prepareRouteStopPointsStep")
+        return new StepBuilder("prepareRouteStopPointsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(routeStopPointImportRepository))
+                    .tasklet(new GenericCleanupTasklet<>(routeStopPointImportRepository), transactionManager)
                     .build();
     }
 
     @Bean
     public Step prepareRouteLinksStep(final IRouteLinkImportRepository routeLinkImportRepository) {
-        return steps.get("prepareRouteLinksStep")
+        return new StepBuilder("prepareRouteLinksStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(routeLinkImportRepository))
+                    .tasklet(new GenericCleanupTasklet<>(routeLinkImportRepository), transactionManager)
                     .build();
     }
 
@@ -481,9 +497,9 @@ public class JobConfig extends BatchConfig {
                                      final IRouteStopPointImportRepository routeStopPointImportRepository,
                                      final IRouteLinkImportRepository routeLinkImportRepository) {
         final int chunkSize = 100;
-        return steps.get("importRouteLinksStep")
+        return new StepBuilder("importRouteLinksStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<RouteLinksAndAttributes, Jore3RoutePointsAndLinks>chunk(chunkSize)
+                    .<RouteLinksAndAttributes, Jore3RoutePointsAndLinks>chunk(chunkSize, transactionManager)
                     .reader(new RouteLinksReader(routeLinkReader.build()))
                     .processor(new RouteLinksProcessor())
                     // Note how we write the route points, stop points, and route links to three different repositories
@@ -495,25 +511,25 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step commitRoutePointsStep(final IRoutePointImportRepository routePointImportRepository) {
-        return steps.get("commitRoutePointsStep")
+        return new StepBuilder("commitRoutePointsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(routePointImportRepository))
+                    .tasklet(new GenericCommitTasklet<>(routePointImportRepository), transactionManager)
                     .build();
     }
 
     @Bean
     public Step commitRouteStopPointsStep(final IRouteStopPointImportRepository routeStopPointImportRepository) {
-        return steps.get("commitRouteStopPointsStep")
+        return new StepBuilder("commitRouteStopPointsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(routeStopPointImportRepository))
+                    .tasklet(new GenericCommitTasklet<>(routeStopPointImportRepository), transactionManager)
                     .build();
     }
 
     @Bean
     public Step commitRouteLinksStep(final IRouteLinkImportRepository routeLinkImportRepository) {
-        return steps.get("commitRouteLinksStep")
+        return new StepBuilder("commitRouteLinksStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(routeLinkImportRepository))
+                    .tasklet(new GenericCommitTasklet<>(routeLinkImportRepository), transactionManager)
                     .build();
     }
 
@@ -531,9 +547,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step preparePlacesStep(final IPlaceImportRepository placeImportRepository) {
-        return steps.get("preparePlacesStep")
+        return new StepBuilder("preparePlacesStep", jobRepository)
                 .allowStartIfComplete(true)
-                .tasklet(new GenericCleanupTasklet<>(placeImportRepository))
+                .tasklet(new GenericCleanupTasklet<>(placeImportRepository), transactionManager)
                 .build();
     }
 
@@ -541,9 +557,9 @@ public class JobConfig extends BatchConfig {
     public Step importPlacesStep(final PlaceImportRowReader placeReader,
                                  final IPlaceImportRepository placeImportRepository) {
         final int chunkSize = 1000;
-        return steps.get("importPlacesStep")
+        return new StepBuilder("importPlacesStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<JrPlace, PersistablePlace>chunk(chunkSize)
+                .<JrPlace, PersistablePlace>chunk(chunkSize, transactionManager)
                 .reader(placeReader.build())
                 .processor(new PlaceImportProcessor())
                 .writer(new GenericImportWriter<>(placeImportRepository))
@@ -552,9 +568,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step commitPlacesStep(final IPlaceImportRepository placeImportRepository) {
-        return steps.get("commitPlacesStep")
+        return new StepBuilder("commitPlacesStep", jobRepository)
                 .allowStartIfComplete(true)
-                .tasklet(new GenericCommitTasklet<>(placeImportRepository))
+                .tasklet(new GenericCommitTasklet<>(placeImportRepository), transactionManager)
                 .build();
     }
 
@@ -571,18 +587,18 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step prepareScheduledStopPointsStep(final IScheduledStopPointImportRepository repository) {
-        return steps.get("prepareScheduledStopPointsStep")
+        return new StepBuilder("prepareScheduledStopPointsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(repository))
+                    .tasklet(new GenericCleanupTasklet<>(repository), transactionManager)
                     .build();
     }
 
     @Bean
     public Step importScheduledStopPointsStep(final ScheduledStopPointImportReader reader,
                                               final IScheduledStopPointImportRepository repository) {
-        return steps.get("importScheduledStopPointsStep")
+        return new StepBuilder("importScheduledStopPointsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<JrScheduledStopPoint, Jore3ScheduledStopPoint>chunk(1000)
+                    .<JrScheduledStopPoint, Jore3ScheduledStopPoint>chunk(1000, transactionManager)
                     .reader(reader.build())
                     .processor(new ScheduledStopPointImportProcessor())
                     .writer(new GenericImportWriter<>(repository))
@@ -591,9 +607,9 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step commitScheduledStopPointsStep(final IScheduledStopPointImportRepository repository) {
-        return steps.get("commitScheduledStopPointsStep")
+        return new StepBuilder("commitScheduledStopPointsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(repository))
+                    .tasklet(new GenericCommitTasklet<>(repository), transactionManager)
                     .build();
     }
 
@@ -620,18 +636,18 @@ public class JobConfig extends BatchConfig {
 
     @Bean
     public Step prepareJore4ExportStep(final Jore4SchemaCleanupTasklet cleanupTasklet) {
-        return steps.get("prepareJore4ExportStep")
+        return new StepBuilder("prepareJore4ExportStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .tasklet(cleanupTasklet)
+                    .tasklet(cleanupTasklet, transactionManager)
                     .build();
     }
 
     @Bean
     public Step exportTimingPlacesStep(final TimingPlaceExportReader reader,
                                        final TimingPlaceExportWriter writer) {
-        return steps.get("exportTimingPlacesStep")
+        return new StepBuilder("exportTimingPlacesStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<ImporterTimingPlace, Jore4TimingPlace>chunk(1)
+                    .<ImporterTimingPlace, Jore4TimingPlace>chunk(1, transactionManager)
                     .reader(reader.build())
                     .processor(new TimingPlaceExportProcessor())
                     .writer(writer)
@@ -645,9 +661,9 @@ public class JobConfig extends BatchConfig {
     public Step exportScheduledStopPointsStep(final ScheduledStopPointExportReader reader,
                                               final ScheduledStopPointExportProcessor processor,
                                               final ScheduledStopPointExportWriter writer) {
-        return steps.get("exportScheduledStopPointsStep")
+        return new StepBuilder("exportScheduledStopPointsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<ImporterScheduledStopPoint, Jore4ScheduledStopPoint>chunk(1)
+                    .<ImporterScheduledStopPoint, Jore4ScheduledStopPoint>chunk(1, transactionManager)
                     .reader(reader.build())
                     .processor(processor)
                     .writer(writer)
@@ -661,9 +677,9 @@ public class JobConfig extends BatchConfig {
     public Step exportLinesStep(final LineExportReader reader,
                                 final LineExportProcessor processor,
                                 final LineExportWriter writer) {
-        return steps.get("exportLinesStep")
+        return new StepBuilder("exportLinesStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<ImporterLine, Jore4Line>chunk(1)
+                    .<ImporterLine, Jore4Line>chunk(1, transactionManager)
                     .reader(reader.build())
                     .processor(processor)
                     .writer(writer)
@@ -677,9 +693,9 @@ public class JobConfig extends BatchConfig {
     public Step exportRoutesStep(final RouteExportReader reader,
                                  final RouteExportProcessor processor,
                                  final RouteExportWriter writer) {
-        return steps.get("exportRoutesStep")
+        return new StepBuilder("exportRoutesStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<ImporterRoute, Jore4Route>chunk(1)
+                    .<ImporterRoute, Jore4Route>chunk(1, transactionManager)
                     .reader(reader.build())
                     .processor(processor)
                     .writer(writer)
@@ -693,9 +709,9 @@ public class JobConfig extends BatchConfig {
     public Step exportRouteGeometriesStep(final RouteGeometryExportReader reader,
                                           final MapMatchingProcessor processor,
                                           final RouteGeometryExportWriter writer) {
-        return steps.get("exportRouteGeometriesStep")
+        return new StepBuilder("exportRouteGeometriesStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<ImporterRouteGeometry, Jore4RouteGeometry>chunk(1)
+                    .<ImporterRouteGeometry, Jore4RouteGeometry>chunk(1, transactionManager)
                     .reader(reader.build())
                     .processor(processor)
                     .writer(writer)
@@ -709,9 +725,9 @@ public class JobConfig extends BatchConfig {
     public Step exportJourneyPatternsStep(final JourneyPatternExportReader reader,
                                           final JourneyPatternExportProcessor processor,
                                           final JourneyPatternExportWriter writer) {
-        return steps.get("exportJourneyPatternsStep")
+        return new StepBuilder("exportJourneyPatternsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<ImporterJourneyPattern, Jore4JourneyPattern>chunk(1)
+                    .<ImporterJourneyPattern, Jore4JourneyPattern>chunk(1, transactionManager)
                     .reader(reader.build())
                     .processor(processor)
                     .writer(writer)
@@ -725,9 +741,9 @@ public class JobConfig extends BatchConfig {
     public Step exportJourneyPatternStopsStep(final JourneyPatternStopExportReader reader,
                                               final JourneyPatternStopExportProcessor processor,
                                               final JourneyPatternStopExportWriter writer) {
-        return steps.get("exportJourneyPatternStopsStep")
+        return new StepBuilder("exportJourneyPatternStopsStep", jobRepository)
                     .allowStartIfComplete(true)
-                    .<ImporterJourneyPatternStop, Jore4JourneyPatternStop>chunk(1000)
+                    .<ImporterJourneyPatternStop, Jore4JourneyPatternStop>chunk(1000, transactionManager)
                     .reader(reader.build())
                     .processor(processor)
                     .writer(writer)

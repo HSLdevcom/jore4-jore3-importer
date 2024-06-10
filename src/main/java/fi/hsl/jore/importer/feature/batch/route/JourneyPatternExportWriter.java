@@ -1,9 +1,11 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
+import com.google.common.collect.FluentIterable;
 import fi.hsl.jore.importer.feature.batch.route_direction.support.IRouteDirectionImportRepository;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPattern;
 import fi.hsl.jore.importer.feature.jore4.repository.IJore4JourneyPatternRepository;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableJourneyPatternIdMapping;
+import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,15 +26,16 @@ public class JourneyPatternExportWriter implements ItemWriter<Jore4JourneyPatter
     }
 
     @Override
-    public void write(final List<? extends Jore4JourneyPattern> items) throws Exception {
+    public void write(final Chunk<? extends Jore4JourneyPattern> items) throws Exception {
         jore4Repository.insert(items);
 
-        final io.vavr.collection.List<PersistableJourneyPatternIdMapping> journeyPatternIdMappings = items.stream()
-                .map(item -> PersistableJourneyPatternIdMapping.of(
-                        item.routeDirectionExtId(),
-                        item.journeyPatternId()
+        importerRepository.setJourneyPatternJore4Ids(
+            FluentIterable
+                .from(items)
+                .transform(item -> PersistableJourneyPatternIdMapping.of(
+                    item.routeDirectionExtId(),
+                    item.journeyPatternId()
                 ))
-                .collect(io.vavr.collection.List.collector());
-        importerRepository.setJourneyPatternJore4Ids(journeyPatternIdMappings);
+        );
     }
 }
