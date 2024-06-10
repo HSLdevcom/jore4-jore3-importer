@@ -1,9 +1,11 @@
 package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 
+import com.google.common.collect.FluentIterable;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support.IScheduledStopPointImportRepository;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPoint;
 import fi.hsl.jore.importer.feature.jore4.repository.IJore4ScheduledStopPointRepository;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.PersistableScheduledStopPointIdMapping;
+import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,15 +30,14 @@ public class ScheduledStopPointExportWriter implements ItemWriter<Jore4Scheduled
     }
 
     @Override
-    public void write(final List<? extends Jore4ScheduledStopPoint> items) throws Exception {
+    public void write(final Chunk<? extends Jore4ScheduledStopPoint> items) throws Exception {
         jore4Repository.insert(items);
 
-        final io.vavr.collection.List<PersistableScheduledStopPointIdMapping> jore4IdMappings = items.stream()
-                .map(item -> PersistableScheduledStopPointIdMapping.of(
-                        item.externalScheduledStopPointId(),
-                        item.scheduledStopPointId()
-                ))
-                .collect(io.vavr.collection.List.collector());
-        importerRepository.setJore4Ids(jore4IdMappings);
+        importerRepository.setJore4Ids(
+            FluentIterable.from(items).transform(item -> PersistableScheduledStopPointIdMapping.of(
+                item.externalScheduledStopPointId(),
+                item.scheduledStopPointId()
+            ))
+        );
     }
 }

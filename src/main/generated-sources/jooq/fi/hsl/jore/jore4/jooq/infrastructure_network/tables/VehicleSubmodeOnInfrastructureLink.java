@@ -6,13 +6,19 @@ package fi.hsl.jore.jore4.jooq.infrastructure_network.tables;
 
 import fi.hsl.jore.jore4.jooq.infrastructure_network.InfrastructureNetwork;
 
+import java.util.Collection;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -30,7 +36,8 @@ public class VehicleSubmodeOnInfrastructureLink extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code>
+     * The reference instance of
+     * <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code>
      */
     public static final VehicleSubmodeOnInfrastructureLink VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK = new VehicleSubmodeOnInfrastructureLink();
 
@@ -43,51 +50,58 @@ public class VehicleSubmodeOnInfrastructureLink extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>infrastructure_network.vehicle_submode_on_infrastructure_link.infrastructure_link_id</code>. The infrastructure link that can be safely traversed by the vehicle submode.
+     * The column
+     * <code>infrastructure_network.vehicle_submode_on_infrastructure_link.infrastructure_link_id</code>.
+     * The infrastructure link that can be safely traversed by the vehicle
+     * submode.
      */
     public final TableField<Record, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "The infrastructure link that can be safely traversed by the vehicle submode.");
 
     /**
-     * The column <code>infrastructure_network.vehicle_submode_on_infrastructure_link.vehicle_submode</code>. The vehicle submode that can safely traverse the infrastructure link.
+     * The column
+     * <code>infrastructure_network.vehicle_submode_on_infrastructure_link.vehicle_submode</code>.
+     * The vehicle submode that can safely traverse the infrastructure link.
      */
     public final TableField<Record, String> VEHICLE_SUBMODE = createField(DSL.name("vehicle_submode"), SQLDataType.CLOB.nullable(false), this, "The vehicle submode that can safely traverse the infrastructure link.");
 
     private VehicleSubmodeOnInfrastructureLink(Name alias, Table<Record> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private VehicleSubmodeOnInfrastructureLink(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("Which infrastructure links are safely traversed by which vehicle submodes?"), TableOptions.table());
+    private VehicleSubmodeOnInfrastructureLink(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment("Which infrastructure links are safely traversed by which vehicle submodes?"), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code>
+     * table reference
      */
     public VehicleSubmodeOnInfrastructureLink(String alias) {
         this(DSL.name(alias), VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code>
+     * table reference
      */
     public VehicleSubmodeOnInfrastructureLink(Name alias) {
         this(alias, VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK);
     }
 
     /**
-     * Create a <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code> table reference
+     * Create a
+     * <code>infrastructure_network.vehicle_submode_on_infrastructure_link</code>
+     * table reference
      */
     public VehicleSubmodeOnInfrastructureLink() {
         this(DSL.name("vehicle_submode_on_infrastructure_link"), null);
     }
 
-    public <O extends Record> VehicleSubmodeOnInfrastructureLink(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, VEHICLE_SUBMODE_ON_INFRASTRUCTURE_LINK);
-    }
-
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
@@ -98,6 +112,11 @@ public class VehicleSubmodeOnInfrastructureLink extends TableImpl<Record> {
     @Override
     public VehicleSubmodeOnInfrastructureLink as(Name alias) {
         return new VehicleSubmodeOnInfrastructureLink(alias, this);
+    }
+
+    @Override
+    public VehicleSubmodeOnInfrastructureLink as(Table<?> alias) {
+        return new VehicleSubmodeOnInfrastructureLink(alias.getQualifiedName(), this);
     }
 
     /**
@@ -114,5 +133,97 @@ public class VehicleSubmodeOnInfrastructureLink extends TableImpl<Record> {
     @Override
     public VehicleSubmodeOnInfrastructureLink rename(Name name) {
         return new VehicleSubmodeOnInfrastructureLink(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public VehicleSubmodeOnInfrastructureLink rename(Table<?> name) {
+        return new VehicleSubmodeOnInfrastructureLink(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public VehicleSubmodeOnInfrastructureLink where(Condition condition) {
+        return new VehicleSubmodeOnInfrastructureLink(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public VehicleSubmodeOnInfrastructureLink where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public VehicleSubmodeOnInfrastructureLink where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public VehicleSubmodeOnInfrastructureLink where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public VehicleSubmodeOnInfrastructureLink where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public VehicleSubmodeOnInfrastructureLink where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public VehicleSubmodeOnInfrastructureLink where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public VehicleSubmodeOnInfrastructureLink where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public VehicleSubmodeOnInfrastructureLink whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public VehicleSubmodeOnInfrastructureLink whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

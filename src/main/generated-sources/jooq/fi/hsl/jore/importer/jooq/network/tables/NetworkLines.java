@@ -6,26 +6,37 @@ package fi.hsl.jore.importer.jooq.network.tables;
 
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
-import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNetworkTypes;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNetworkTypes.InfrastructureNetworkTypesPath;
 import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders.NetworkLineHeadersPath;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes.NetworkRoutesPath;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesRecord;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -54,7 +65,7 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
     /**
      * The column <code>network.network_lines.network_line_id</code>.
      */
-    public final TableField<NetworkLinesRecord, UUID> NETWORK_LINE_ID = createField(DSL.name("network_line_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "");
+    public final TableField<NetworkLinesRecord, UUID> NETWORK_LINE_ID = createField(DSL.name("network_line_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "");
 
     /**
      * The column <code>network.network_lines.network_line_ext_id</code>.
@@ -67,14 +78,15 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
     public final TableField<NetworkLinesRecord, String> NETWORK_LINE_NUMBER = createField(DSL.name("network_line_number"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_lines.infrastructure_network_type</code>.
+     * The column
+     * <code>network.network_lines.infrastructure_network_type</code>.
      */
     public final TableField<NetworkLinesRecord, String> INFRASTRUCTURE_NETWORK_TYPE = createField(DSL.name("infrastructure_network_type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>network.network_lines.network_line_sys_period</code>.
      */
-    public final TableField<NetworkLinesRecord, TimeRange> NETWORK_LINE_SYS_PERIOD = createField(DSL.name("network_line_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
+    public final TableField<NetworkLinesRecord, TimeRange> NETWORK_LINE_SYS_PERIOD = createField(DSL.name("network_line_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field(DSL.raw("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)"), org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
 
     /**
      * The column <code>network.network_lines.network_line_type_of_line</code>.
@@ -82,16 +94,17 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
     public final TableField<NetworkLinesRecord, String> NETWORK_LINE_TYPE_OF_LINE = createField(DSL.name("network_line_type_of_line"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_lines.network_line_legacy_hsl_municipality_code</code>.
+     * The column
+     * <code>network.network_lines.network_line_legacy_hsl_municipality_code</code>.
      */
     public final TableField<NetworkLinesRecord, String> NETWORK_LINE_LEGACY_HSL_MUNICIPALITY_CODE = createField(DSL.name("network_line_legacy_hsl_municipality_code"), SQLDataType.CLOB, this, "");
 
     private NetworkLines(Name alias, Table<NetworkLinesRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private NetworkLines(Name alias, Table<NetworkLinesRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private NetworkLines(Name alias, Table<NetworkLinesRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
@@ -115,13 +128,42 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
         this(DSL.name("network_lines"), null);
     }
 
-    public <O extends Record> NetworkLines(Table<O> child, ForeignKey<O, NetworkLinesRecord> key) {
-        super(child, key, NETWORK_LINES);
+    public <O extends Record> NetworkLines(Table<O> path, ForeignKey<O, NetworkLinesRecord> childPath, InverseForeignKey<O, NetworkLinesRecord> parentPath) {
+        super(path, childPath, parentPath, NETWORK_LINES);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class NetworkLinesPath extends NetworkLines implements Path<NetworkLinesRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> NetworkLinesPath(Table<O> path, ForeignKey<O, NetworkLinesRecord> childPath, InverseForeignKey<O, NetworkLinesRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private NetworkLinesPath(Name alias, Table<NetworkLinesRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public NetworkLinesPath as(String alias) {
+            return new NetworkLinesPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public NetworkLinesPath as(Name alias) {
+            return new NetworkLinesPath(alias, this);
+        }
+
+        @Override
+        public NetworkLinesPath as(Table<?> alias) {
+            return new NetworkLinesPath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
@@ -130,22 +172,47 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
     }
 
     @Override
-    public List<UniqueKey<NetworkLinesRecord>> getKeys() {
-        return Arrays.<UniqueKey<NetworkLinesRecord>>asList(Keys.NETWORK_LINES_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<NetworkLinesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<NetworkLinesRecord, ?>>asList(Keys.NETWORK_LINES__NETWORK_LINES_INFRASTRUCTURE_NETWORK_TYPE_FKEY);
+        return Arrays.asList(Keys.NETWORK_LINES__NETWORK_LINES_INFRASTRUCTURE_NETWORK_TYPE_FKEY);
     }
 
-    private transient InfrastructureNetworkTypes _infrastructureNetworkTypes;
+    private transient InfrastructureNetworkTypesPath _infrastructureNetworkTypes;
 
-    public InfrastructureNetworkTypes infrastructureNetworkTypes() {
+    /**
+     * Get the implicit join path to the
+     * <code>infrastructure_network.infrastructure_network_types</code> table.
+     */
+    public InfrastructureNetworkTypesPath infrastructureNetworkTypes() {
         if (_infrastructureNetworkTypes == null)
-            _infrastructureNetworkTypes = new InfrastructureNetworkTypes(this, Keys.NETWORK_LINES__NETWORK_LINES_INFRASTRUCTURE_NETWORK_TYPE_FKEY);
+            _infrastructureNetworkTypes = new InfrastructureNetworkTypesPath(this, Keys.NETWORK_LINES__NETWORK_LINES_INFRASTRUCTURE_NETWORK_TYPE_FKEY, null);
 
         return _infrastructureNetworkTypes;
+    }
+
+    private transient NetworkLineHeadersPath _networkLineHeaders;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>network.network_line_headers</code> table
+     */
+    public NetworkLineHeadersPath networkLineHeaders() {
+        if (_networkLineHeaders == null)
+            _networkLineHeaders = new NetworkLineHeadersPath(this, null, Keys.NETWORK_LINE_HEADERS__NETWORK_LINE_HEADERS_NETWORK_LINE_ID_FKEY.getInverseKey());
+
+        return _networkLineHeaders;
+    }
+
+    private transient NetworkRoutesPath _networkRoutes;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>network.network_routes</code> table
+     */
+    public NetworkRoutesPath networkRoutes() {
+        if (_networkRoutes == null)
+            _networkRoutes = new NetworkRoutesPath(this, null, Keys.NETWORK_ROUTES__NETWORK_ROUTES_NETWORK_LINE_ID_FKEY.getInverseKey());
+
+        return _networkRoutes;
     }
 
     @Override
@@ -156,6 +223,11 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
     @Override
     public NetworkLines as(Name alias) {
         return new NetworkLines(alias, this);
+    }
+
+    @Override
+    public NetworkLines as(Table<?> alias) {
+        return new NetworkLines(alias.getQualifiedName(), this);
     }
 
     /**
@@ -174,12 +246,95 @@ public class NetworkLines extends TableImpl<NetworkLinesRecord> {
         return new NetworkLines(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row7 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row7<UUID, String, String, String, TimeRange, String, String> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public NetworkLines rename(Table<?> name) {
+        return new NetworkLines(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkLines where(Condition condition) {
+        return new NetworkLines(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkLines where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkLines where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkLines where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkLines where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkLines where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkLines where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkLines where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkLines whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkLines whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

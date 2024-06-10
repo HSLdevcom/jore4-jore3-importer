@@ -56,7 +56,9 @@ public class LineImportRepository
                                          line.lineLegacyHslMunicipalityCode().name()
         ));
 
-        batch.execute();
+        if (batch.size() > 0) {
+            batch.execute();
+        }
     }
 
     protected Set<LinePK> delete() {

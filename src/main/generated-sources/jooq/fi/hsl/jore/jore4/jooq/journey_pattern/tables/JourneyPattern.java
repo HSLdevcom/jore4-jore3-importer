@@ -4,13 +4,19 @@
 package fi.hsl.jore.jore4.jooq.journey_pattern.tables;
 
 
+import java.util.Collection;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -20,8 +26,8 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * The journey patterns, i.e. the ordered lists of stops and timing points 
- * along routes: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:1:813
+ * The journey patterns, i.e. the ordered lists of stops and timing points along
+ * routes: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:1:813
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class JourneyPattern extends TableImpl<Record> {
@@ -42,32 +48,37 @@ public class JourneyPattern extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>journey_pattern.journey_pattern.journey_pattern_id</code>. The ID of the journey pattern.
+     * The column
+     * <code>journey_pattern.journey_pattern.journey_pattern_id</code>. The ID
+     * of the journey pattern.
      */
-    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "The ID of the journey pattern.");
+    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "The ID of the journey pattern.");
 
     /**
-     * The column <code>journey_pattern.journey_pattern.on_route_id</code>. The ID of the route the journey pattern is on.
+     * The column <code>journey_pattern.journey_pattern.on_route_id</code>. The
+     * ID of the route the journey pattern is on.
      */
     public final TableField<Record, UUID> ON_ROUTE_ID = createField(DSL.name("on_route_id"), SQLDataType.UUID.nullable(false), this, "The ID of the route the journey pattern is on.");
 
     private JourneyPattern(Name alias, Table<Record> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private JourneyPattern(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("The journey patterns, i.e. the ordered lists of stops and timing points along routes: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:1:813"), TableOptions.table());
+    private JourneyPattern(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment("The journey patterns, i.e. the ordered lists of stops and timing points along routes: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:1:813"), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>journey_pattern.journey_pattern</code> table reference
+     * Create an aliased <code>journey_pattern.journey_pattern</code> table
+     * reference
      */
     public JourneyPattern(String alias) {
         this(DSL.name(alias), JOURNEY_PATTERN_);
     }
 
     /**
-     * Create an aliased <code>journey_pattern.journey_pattern</code> table reference
+     * Create an aliased <code>journey_pattern.journey_pattern</code> table
+     * reference
      */
     public JourneyPattern(Name alias) {
         this(alias, JOURNEY_PATTERN_);
@@ -80,13 +91,9 @@ public class JourneyPattern extends TableImpl<Record> {
         this(DSL.name("journey_pattern"), null);
     }
 
-    public <O extends Record> JourneyPattern(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, JOURNEY_PATTERN_);
-    }
-
     @Override
     public Schema getSchema() {
-        return fi.hsl.jore.jore4.jooq.journey_pattern.JourneyPattern.JOURNEY_PATTERN;
+        return aliased() ? null : fi.hsl.jore.jore4.jooq.journey_pattern.JourneyPattern.JOURNEY_PATTERN;
     }
 
     @Override
@@ -97,6 +104,11 @@ public class JourneyPattern extends TableImpl<Record> {
     @Override
     public JourneyPattern as(Name alias) {
         return new JourneyPattern(alias, this);
+    }
+
+    @Override
+    public JourneyPattern as(Table<?> alias) {
+        return new JourneyPattern(alias.getQualifiedName(), this);
     }
 
     /**
@@ -113,5 +125,97 @@ public class JourneyPattern extends TableImpl<Record> {
     @Override
     public JourneyPattern rename(Name name) {
         return new JourneyPattern(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public JourneyPattern rename(Table<?> name) {
+        return new JourneyPattern(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public JourneyPattern where(Condition condition) {
+        return new JourneyPattern(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public JourneyPattern where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public JourneyPattern where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public JourneyPattern where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public JourneyPattern where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public JourneyPattern where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public JourneyPattern where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public JourneyPattern where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public JourneyPattern whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public JourneyPattern whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

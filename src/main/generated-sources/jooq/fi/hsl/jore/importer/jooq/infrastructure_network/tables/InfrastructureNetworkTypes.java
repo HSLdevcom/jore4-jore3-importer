@@ -6,17 +6,27 @@ package fi.hsl.jore.importer.jooq.infrastructure_network.tables;
 
 import fi.hsl.jore.importer.jooq.infrastructure_network.InfrastructureNetwork;
 import fi.hsl.jore.importer.jooq.infrastructure_network.Keys;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinks.InfrastructureLinksPath;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinksStaging.InfrastructureLinksStagingPath;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNetworkTypesRecord;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkLines.NetworkLinesPath;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging.NetworkLinesStagingPath;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.Row1;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -35,7 +45,8 @@ public class InfrastructureNetworkTypes extends TableImpl<InfrastructureNetworkT
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.infrastructure_network_types</code>
+     * The reference instance of
+     * <code>infrastructure_network.infrastructure_network_types</code>
      */
     public static final InfrastructureNetworkTypes INFRASTRUCTURE_NETWORK_TYPES = new InfrastructureNetworkTypes();
 
@@ -48,46 +59,81 @@ public class InfrastructureNetworkTypes extends TableImpl<InfrastructureNetworkT
     }
 
     /**
-     * The column <code>infrastructure_network.infrastructure_network_types.infrastructure_network_type</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_network_types.infrastructure_network_type</code>.
      */
     public final TableField<InfrastructureNetworkTypesRecord, String> INFRASTRUCTURE_NETWORK_TYPE = createField(DSL.name("infrastructure_network_type"), SQLDataType.CLOB.nullable(false), this, "");
 
     private InfrastructureNetworkTypes(Name alias, Table<InfrastructureNetworkTypesRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private InfrastructureNetworkTypes(Name alias, Table<InfrastructureNetworkTypesRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private InfrastructureNetworkTypes(Name alias, Table<InfrastructureNetworkTypesRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_network_types</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_network_types</code> table
+     * reference
      */
     public InfrastructureNetworkTypes(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_NETWORK_TYPES);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_network_types</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_network_types</code> table
+     * reference
      */
     public InfrastructureNetworkTypes(Name alias) {
         this(alias, INFRASTRUCTURE_NETWORK_TYPES);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_network_types</code> table reference
+     * Create a <code>infrastructure_network.infrastructure_network_types</code>
+     * table reference
      */
     public InfrastructureNetworkTypes() {
         this(DSL.name("infrastructure_network_types"), null);
     }
 
-    public <O extends Record> InfrastructureNetworkTypes(Table<O> child, ForeignKey<O, InfrastructureNetworkTypesRecord> key) {
-        super(child, key, INFRASTRUCTURE_NETWORK_TYPES);
+    public <O extends Record> InfrastructureNetworkTypes(Table<O> path, ForeignKey<O, InfrastructureNetworkTypesRecord> childPath, InverseForeignKey<O, InfrastructureNetworkTypesRecord> parentPath) {
+        super(path, childPath, parentPath, INFRASTRUCTURE_NETWORK_TYPES);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class InfrastructureNetworkTypesPath extends InfrastructureNetworkTypes implements Path<InfrastructureNetworkTypesRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> InfrastructureNetworkTypesPath(Table<O> path, ForeignKey<O, InfrastructureNetworkTypesRecord> childPath, InverseForeignKey<O, InfrastructureNetworkTypesRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private InfrastructureNetworkTypesPath(Name alias, Table<InfrastructureNetworkTypesRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public InfrastructureNetworkTypesPath as(String alias) {
+            return new InfrastructureNetworkTypesPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public InfrastructureNetworkTypesPath as(Name alias) {
+            return new InfrastructureNetworkTypesPath(alias, this);
+        }
+
+        @Override
+        public InfrastructureNetworkTypesPath as(Table<?> alias) {
+            return new InfrastructureNetworkTypesPath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
@@ -95,9 +141,56 @@ public class InfrastructureNetworkTypes extends TableImpl<InfrastructureNetworkT
         return Keys.INFRASTRUCTURE_NETWORK_TYPES_PKEY;
     }
 
-    @Override
-    public List<UniqueKey<InfrastructureNetworkTypesRecord>> getKeys() {
-        return Arrays.<UniqueKey<InfrastructureNetworkTypesRecord>>asList(Keys.INFRASTRUCTURE_NETWORK_TYPES_PKEY);
+    private transient InfrastructureLinksPath _infrastructureLinks;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>infrastructure_network.infrastructure_links</code> table
+     */
+    public InfrastructureLinksPath infrastructureLinks() {
+        if (_infrastructureLinks == null)
+            _infrastructureLinks = new InfrastructureLinksPath(this, null, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_NETWORK_TYPE_FKEY.getInverseKey());
+
+        return _infrastructureLinks;
+    }
+
+    private transient InfrastructureLinksStagingPath _infrastructureLinksStaging;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>infrastructure_network.infrastructure_links_staging</code> table
+     */
+    public InfrastructureLinksStagingPath infrastructureLinksStaging() {
+        if (_infrastructureLinksStaging == null)
+            _infrastructureLinksStaging = new InfrastructureLinksStagingPath(this, null, Keys.INFRASTRUCTURE_LINKS_STAGING__INFRASTRUCTURE_LINKS_STAGING_INFRASTRUCTURE_NETWORK_TYPE_FKEY.getInverseKey());
+
+        return _infrastructureLinksStaging;
+    }
+
+    private transient NetworkLinesPath _networkLines;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>network.network_lines</code> table
+     */
+    public NetworkLinesPath networkLines() {
+        if (_networkLines == null)
+            _networkLines = new NetworkLinesPath(this, null, fi.hsl.jore.importer.jooq.network.Keys.NETWORK_LINES__NETWORK_LINES_INFRASTRUCTURE_NETWORK_TYPE_FKEY.getInverseKey());
+
+        return _networkLines;
+    }
+
+    private transient NetworkLinesStagingPath _networkLinesStaging;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>network.network_lines_staging</code> table
+     */
+    public NetworkLinesStagingPath networkLinesStaging() {
+        if (_networkLinesStaging == null)
+            _networkLinesStaging = new NetworkLinesStagingPath(this, null, fi.hsl.jore.importer.jooq.network.Keys.NETWORK_LINES_STAGING__NETWORK_LINES_STAGING_INFRASTRUCTURE_NETWORK_TYPE_FKEY.getInverseKey());
+
+        return _networkLinesStaging;
     }
 
     @Override
@@ -108,6 +201,11 @@ public class InfrastructureNetworkTypes extends TableImpl<InfrastructureNetworkT
     @Override
     public InfrastructureNetworkTypes as(Name alias) {
         return new InfrastructureNetworkTypes(alias, this);
+    }
+
+    @Override
+    public InfrastructureNetworkTypes as(Table<?> alias) {
+        return new InfrastructureNetworkTypes(alias.getQualifiedName(), this);
     }
 
     /**
@@ -126,12 +224,95 @@ public class InfrastructureNetworkTypes extends TableImpl<InfrastructureNetworkT
         return new InfrastructureNetworkTypes(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row1 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row1<String> fieldsRow() {
-        return (Row1) super.fieldsRow();
+    public InfrastructureNetworkTypes rename(Table<?> name) {
+        return new InfrastructureNetworkTypes(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNetworkTypes where(Condition condition) {
+        return new InfrastructureNetworkTypes(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNetworkTypes where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNetworkTypes where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNetworkTypes where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNetworkTypes where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNetworkTypes where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNetworkTypes where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNetworkTypes where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNetworkTypes whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNetworkTypes whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

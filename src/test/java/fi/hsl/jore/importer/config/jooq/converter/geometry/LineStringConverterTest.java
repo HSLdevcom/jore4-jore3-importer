@@ -22,8 +22,8 @@ public class LineStringConverterTest {
                         new Coordinate(60.168988620, 24.949328727, 0),
                         new Coordinate(60.168896355, 24.945549266, 0));
 
-        final String output = (String) CONVERTER.to(line);
-        final String expected = "SRID=4326;LINESTRING Z(60.16898862 24.949328727 0, 60.168896355 24.945549266 0)";
+        final var output = CONVERTER.to(line);
+        final var expected = "SRID=4326;LINESTRING Z(60.16898862 24.949328727 0, 60.168896355 24.945549266 0)";
 
         assertThat(output,
                    is(expected));
@@ -37,8 +37,8 @@ public class LineStringConverterTest {
                         new Coordinate(60.168988620, 24.949328727),
                         new Coordinate(60.168896355, 24.945549266));
 
-        final String output = (String) CONVERTER.to(line);
-        final String expected = "SRID=4326;LINESTRING (60.16898862 24.949328727, 60.168896355 24.945549266)";
+        final var output = CONVERTER.to(line);
+        final var expected = "SRID=4326;LINESTRING (60.16898862 24.949328727, 60.168896355 24.945549266)";
 
         assertThat(output,
                    is(expected));

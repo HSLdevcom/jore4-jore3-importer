@@ -6,11 +6,18 @@ package fi.hsl.jore.jore4.jooq.infrastructure_network.tables;
 
 import fi.hsl.jore.jore4.jooq.infrastructure_network.InfrastructureNetwork;
 
+import java.util.Collection;
+
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -46,22 +53,24 @@ public class Direction extends TableImpl<Record> {
     public final TableField<Record, String> VALUE = createField(DSL.name("value"), SQLDataType.CLOB.nullable(false), this, "");
 
     private Direction(Name alias, Table<Record> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private Direction(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("The direction in which an e.g. infrastructure link can be traversed"), TableOptions.table());
+    private Direction(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment("The direction in which an e.g. infrastructure link can be traversed"), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.direction</code> table reference
+     * Create an aliased <code>infrastructure_network.direction</code> table
+     * reference
      */
     public Direction(String alias) {
         this(DSL.name(alias), DIRECTION);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.direction</code> table reference
+     * Create an aliased <code>infrastructure_network.direction</code> table
+     * reference
      */
     public Direction(Name alias) {
         this(alias, DIRECTION);
@@ -74,13 +83,9 @@ public class Direction extends TableImpl<Record> {
         this(DSL.name("direction"), null);
     }
 
-    public <O extends Record> Direction(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, DIRECTION);
-    }
-
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
@@ -91,6 +96,11 @@ public class Direction extends TableImpl<Record> {
     @Override
     public Direction as(Name alias) {
         return new Direction(alias, this);
+    }
+
+    @Override
+    public Direction as(Table<?> alias) {
+        return new Direction(alias.getQualifiedName(), this);
     }
 
     /**
@@ -107,5 +117,97 @@ public class Direction extends TableImpl<Record> {
     @Override
     public Direction rename(Name name) {
         return new Direction(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public Direction rename(Table<?> name) {
+        return new Direction(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Direction where(Condition condition) {
+        return new Direction(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Direction where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Direction where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Direction where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Direction where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Direction where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Direction where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Direction where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Direction whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Direction whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

@@ -2,12 +2,11 @@ package fi.hsl.jore.importer.feature.api.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.time.LocalDateTime;
 import org.immutables.value.Value;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.Optional;
 
 @Value.Immutable
@@ -23,9 +22,9 @@ public interface JobStatus {
 
     Optional<String> exitDescription();
 
-    Optional<Instant> startTime();
+    Optional<LocalDateTime> startTime();
 
-    Optional<Instant> endTime();
+    Optional<LocalDateTime> endTime();
 
     static JobStatus from(final JobExecution execution) {
         return ImmutableJobStatus.builder()
@@ -35,8 +34,8 @@ public interface JobStatus {
                                  .exitDescription(Optional.of(execution.getExitStatus().getExitDescription())
                                                           .filter(description -> !description.isEmpty())
                                                           .map(description -> description.split(System.lineSeparator())[0]))
-                                 .startTime(Optional.ofNullable(execution.getStartTime()).map(Date::toInstant))
-                                 .endTime(Optional.ofNullable(execution.getEndTime()).map(Date::toInstant))
+                                 .startTime(Optional.ofNullable(execution.getStartTime()))
+                                 .endTime(Optional.ofNullable(execution.getEndTime()))
                                  .build();
     }
 }

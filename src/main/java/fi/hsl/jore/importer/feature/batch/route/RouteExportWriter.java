@@ -1,9 +1,11 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
+import com.google.common.collect.FluentIterable;
 import fi.hsl.jore.importer.feature.batch.route_direction.support.IRouteDirectionImportRepository;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4Route;
 import fi.hsl.jore.importer.feature.jore4.repository.IJore4RouteRepository;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableRouteIdMapping;
+import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,15 +26,16 @@ public class RouteExportWriter implements ItemWriter<Jore4Route> {
     }
 
     @Override
-    public void write(final List<? extends Jore4Route> items) throws Exception {
+    public void write(final Chunk<? extends Jore4Route> items) throws Exception {
         jore4Repository.insert(items);
 
-        final io.vavr.collection.List<PersistableRouteIdMapping> jore4IdMappings = items.stream()
-                .map(item -> PersistableRouteIdMapping.of(
-                        item.directionExtId(),
-                        item.routeId()
+        importerRepository.setRouteJore4Ids(
+            FluentIterable
+                .from(items)
+                .transform(item -> PersistableRouteIdMapping.of(
+                    item.directionExtId(),
+                    item.routeId()
                 ))
-                .collect(io.vavr.collection.List.collector());
-        importerRepository.setRouteJore4Ids(jore4IdMappings);
+        );
     }
 }

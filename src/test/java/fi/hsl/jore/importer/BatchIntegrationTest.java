@@ -4,28 +4,27 @@ import fi.hsl.jore.importer.config.DatasourceConfig;
 import fi.hsl.jore.importer.config.DigiroadServiceConfig;
 import fi.hsl.jore.importer.config.MapMatchingConfig;
 import fi.hsl.jore.importer.config.jackson.VavrModuleConfig;
+import fi.hsl.jore.importer.config.jobs.BatchConfig;
 import fi.hsl.jore.importer.config.jooq.JOOQConfig;
 import fi.hsl.jore.importer.config.profile.Profiles;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
+import org.springframework.batch.core.launch.support.TaskExecutorJobLauncher;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.batch.test.JobRepositoryTestUtils;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-@ExtendWith(SpringExtension.class)
 @SpringBatchTest
 @ComponentScan(basePackages = "fi.hsl.jore.importer.feature")
 @ContextConfiguration(classes = {
@@ -33,7 +32,8 @@ import static org.hamcrest.Matchers.is;
         JOOQConfig.class,
         VavrModuleConfig.class,
         DigiroadServiceConfig.class,
-        MapMatchingConfig.class
+        MapMatchingConfig.class,
+        BatchConfig.class
 })
 @ActiveProfiles(Profiles.TEST_DATABASE)
 public class BatchIntegrationTest {
@@ -53,8 +53,9 @@ public class BatchIntegrationTest {
 
     private JobLauncher createBlockingJobLauncher() {
         // Override the default async JobLauncher with a blocking one for tests
-        final SimpleJobLauncher launcher = new SimpleJobLauncher();
+        final TaskExecutorJobLauncher launcher = new TaskExecutorJobLauncher();
         launcher.setJobRepository(jobLauncherTestUtils.getJobRepository());
+        launcher.setTaskExecutor(new SyncTaskExecutor());
         try {
             launcher.afterPropertiesSet();
         } catch (final Exception e) {

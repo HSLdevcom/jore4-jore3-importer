@@ -2,6 +2,8 @@ package fi.hsl.jore.importer.feature.jore4.repository;
 
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4TimingPlace;
+import java.util.stream.Stream;
+import org.apache.commons.lang3.stream.Streams;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.util.StreamUtils;
 
 import static fi.hsl.jore.jore4.jooq.timing_pattern.Tables.TIMING_PLACE;
 
@@ -30,22 +33,24 @@ public class Jore4TimingPlaceRepository implements IJore4TimingPlaceRepository {
 
     @Transactional
     @Override
-    public void insert(final List<? extends Jore4TimingPlace> timingPlaces) {
-        if (!timingPlaces.isEmpty()) {
-            final BatchBindStep batch = db.batch(db.insertInto(
-                            TIMING_PLACE,
-                            TIMING_PLACE.TIMING_PLACE_ID,
-                            TIMING_PLACE.LABEL,
-                            TIMING_PLACE.DESCRIPTION
-                    )
-                    .values((UUID) null, null, null));
+    public void insert(final Iterable<? extends Jore4TimingPlace> timingPlaces) {
+        BatchBindStep batch = db.batch(db.insertInto(
+                TIMING_PLACE,
+                TIMING_PLACE.TIMING_PLACE_ID,
+                TIMING_PLACE.LABEL,
+                TIMING_PLACE.DESCRIPTION
+            )
+            .values((UUID) null, null, null));
 
-            timingPlaces.forEach(timingPlace -> batch.bind(
-                    timingPlace.timingPlaceId(),
-                    timingPlace.timingPlaceLabel(),
-                    jsonbConverter.asJson(timingPlace.timingPlaceName())
-            ));
+        for (Jore4TimingPlace timingPlace : timingPlaces) {
+            batch = batch.bind(
+                timingPlace.timingPlaceId(),
+                timingPlace.timingPlaceLabel(),
+                jsonbConverter.asJson(timingPlace.timingPlaceName())
+            );
+        }
 
+        if (batch.size() > 0) {
             batch.execute();
         }
     }

@@ -25,14 +25,14 @@ import static org.hamcrest.Matchers.is;
         "/sql/jore3/populate_places.sql",
         "/sql/jore3/populate_scheduled_stop_points.sql"
 },
-     config = @SqlConfig(dataSource = "sourceDataSource"))
+     config = @SqlConfig(dataSource = "sourceDataSource", transactionManager = "sourceTransactionManager"))
 @Sql(scripts = "/sql/importer/drop_tables.sql")
 @Sql(
         scripts = {
                 "/sql/jore4/drop_tables.sql",
                 "/sql/jore4/populate_infrastructure_links.sql"
         },
-        config = @SqlConfig(dataSource = "jore4DataSource")
+        config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
 )
 public class ImportJobBatchTest extends BatchIntegrationTest {
 

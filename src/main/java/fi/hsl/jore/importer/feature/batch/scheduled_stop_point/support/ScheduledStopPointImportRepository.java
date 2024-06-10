@@ -171,12 +171,14 @@ public class ScheduledStopPointImportRepository
                 item.usageInRoutes()
         ));
 
-        batch.execute();
+        if (batch.size() > 0) {
+            batch.execute();
+        }
     }
 
     @Transactional
     @Override
-    public void setJore4Ids(final List<PersistableScheduledStopPointIdMapping> idMappings) {
+    public void setJore4Ids(final Iterable<PersistableScheduledStopPointIdMapping> idMappings) {
         db.batched(c -> {
             idMappings.forEach(idMapping -> {
                 c.dsl().update(TARGET_TABLE)

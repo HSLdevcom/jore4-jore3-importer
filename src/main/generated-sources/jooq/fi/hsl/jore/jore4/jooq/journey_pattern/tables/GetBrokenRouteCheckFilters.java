@@ -9,6 +9,7 @@ import fi.hsl.jore.jore4.jooq.journey_pattern.JourneyPattern;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.Name;
 import org.jooq.Record;
@@ -30,7 +31,8 @@ public class GetBrokenRouteCheckFilters extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>journey_pattern.get_broken_route_check_filters</code>
+     * The reference instance of
+     * <code>journey_pattern.get_broken_route_check_filters</code>
      */
     public static final GetBrokenRouteCheckFilters GET_BROKEN_ROUTE_CHECK_FILTERS = new GetBrokenRouteCheckFilters();
 
@@ -43,44 +45,58 @@ public class GetBrokenRouteCheckFilters extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>journey_pattern.get_broken_route_check_filters.labels</code>.
+     * The column
+     * <code>journey_pattern.get_broken_route_check_filters.labels</code>.
      */
-    public final TableField<Record, String[]> LABELS = createField(DSL.name("labels"), SQLDataType.CLOB.getArrayDataType(), this, "");
+    public final TableField<Record, String[]> LABELS = createField(DSL.name("labels"), SQLDataType.CLOB.array(), this, "");
 
     /**
-     * The column <code>journey_pattern.get_broken_route_check_filters.validity_start</code>.
+     * The column
+     * <code>journey_pattern.get_broken_route_check_filters.validity_start</code>.
      */
     public final TableField<Record, LocalDate> VALIDITY_START = createField(DSL.name("validity_start"), SQLDataType.LOCALDATE, this, "");
 
     /**
-     * The column <code>journey_pattern.get_broken_route_check_filters.validity_end</code>.
+     * The column
+     * <code>journey_pattern.get_broken_route_check_filters.validity_end</code>.
      */
     public final TableField<Record, LocalDate> VALIDITY_END = createField(DSL.name("validity_end"), SQLDataType.LOCALDATE, this, "");
 
     private GetBrokenRouteCheckFilters(Name alias, Table<Record> aliased) {
-        this(alias, aliased, new Field[1]);
+        this(alias, aliased, new Field[] {
+            DSL.val(null, SQLDataType.UUID.array())
+        });
     }
 
     private GetBrokenRouteCheckFilters(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.function());
+        this(alias, aliased, parameters, null);
+    }
+
+    private GetBrokenRouteCheckFilters(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.function(), where);
     }
 
     /**
-     * Create an aliased <code>journey_pattern.get_broken_route_check_filters</code> table reference
+     * Create an aliased
+     * <code>journey_pattern.get_broken_route_check_filters</code> table
+     * reference
      */
     public GetBrokenRouteCheckFilters(String alias) {
         this(DSL.name(alias), GET_BROKEN_ROUTE_CHECK_FILTERS);
     }
 
     /**
-     * Create an aliased <code>journey_pattern.get_broken_route_check_filters</code> table reference
+     * Create an aliased
+     * <code>journey_pattern.get_broken_route_check_filters</code> table
+     * reference
      */
     public GetBrokenRouteCheckFilters(Name alias) {
         this(alias, GET_BROKEN_ROUTE_CHECK_FILTERS);
     }
 
     /**
-     * Create a <code>journey_pattern.get_broken_route_check_filters</code> table reference
+     * Create a <code>journey_pattern.get_broken_route_check_filters</code>
+     * table reference
      */
     public GetBrokenRouteCheckFilters() {
         this(DSL.name("get_broken_route_check_filters"), null);
@@ -88,7 +104,7 @@ public class GetBrokenRouteCheckFilters extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return JourneyPattern.JOURNEY_PATTERN;
+        return aliased() ? null : JourneyPattern.JOURNEY_PATTERN;
     }
 
     @Override
@@ -99,6 +115,11 @@ public class GetBrokenRouteCheckFilters extends TableImpl<Record> {
     @Override
     public GetBrokenRouteCheckFilters as(Name alias) {
         return new GetBrokenRouteCheckFilters(alias, this, parameters);
+    }
+
+    @Override
+    public GetBrokenRouteCheckFilters as(Table<?> alias) {
+        return new GetBrokenRouteCheckFilters(alias.getQualifiedName(), this, parameters);
     }
 
     /**
@@ -118,13 +139,21 @@ public class GetBrokenRouteCheckFilters extends TableImpl<Record> {
     }
 
     /**
+     * Rename this table
+     */
+    @Override
+    public GetBrokenRouteCheckFilters rename(Table<?> name) {
+        return new GetBrokenRouteCheckFilters(name.getQualifiedName(), null, parameters);
+    }
+
+    /**
      * Call this table-valued function
      */
     public GetBrokenRouteCheckFilters call(
           UUID[] filterRouteIds
     ) {
         GetBrokenRouteCheckFilters result = new GetBrokenRouteCheckFilters(DSL.name("get_broken_route_check_filters"), null, new Field[] {
-              DSL.val(filterRouteIds, SQLDataType.UUID.getArrayDataType())
+            DSL.val(filterRouteIds, SQLDataType.UUID.array())
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;
@@ -137,7 +166,7 @@ public class GetBrokenRouteCheckFilters extends TableImpl<Record> {
           Field<UUID[]> filterRouteIds
     ) {
         GetBrokenRouteCheckFilters result = new GetBrokenRouteCheckFilters(DSL.name("get_broken_route_check_filters"), null, new Field[] {
-              filterRouteIds
+            filterRouteIds
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;

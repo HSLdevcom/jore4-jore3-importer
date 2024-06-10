@@ -9,23 +9,33 @@ import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
 import fi.hsl.jore.importer.jooq.infrastructure_network.InfrastructureNetwork;
 import fi.hsl.jore.importer.jooq.infrastructure_network.Keys;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinks.InfrastructureLinksPath;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureLinkShapesRecord;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 import org.locationtech.jts.geom.LineString;
@@ -40,7 +50,8 @@ public class InfrastructureLinkShapes extends TableImpl<InfrastructureLinkShapes
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.infrastructure_link_shapes</code>
+     * The reference instance of
+     * <code>infrastructure_network.infrastructure_link_shapes</code>
      */
     public static final InfrastructureLinkShapes INFRASTRUCTURE_LINK_SHAPES = new InfrastructureLinkShapes();
 
@@ -53,66 +64,105 @@ public class InfrastructureLinkShapes extends TableImpl<InfrastructureLinkShapes
     }
 
     /**
-     * The column <code>infrastructure_network.infrastructure_link_shapes.infrastructure_link_shape_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_link_shapes.infrastructure_link_shape_id</code>.
      */
-    public final TableField<InfrastructureLinkShapesRecord, UUID> INFRASTRUCTURE_LINK_SHAPE_ID = createField(DSL.name("infrastructure_link_shape_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "");
+    public final TableField<InfrastructureLinkShapesRecord, UUID> INFRASTRUCTURE_LINK_SHAPE_ID = createField(DSL.name("infrastructure_link_shape_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_link_shapes.infrastructure_link_ext_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_link_shapes.infrastructure_link_ext_id</code>.
      */
     public final TableField<InfrastructureLinkShapesRecord, String> INFRASTRUCTURE_LINK_EXT_ID = createField(DSL.name("infrastructure_link_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_link_shapes.infrastructure_link_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_link_shapes.infrastructure_link_id</code>.
      */
     public final TableField<InfrastructureLinkShapesRecord, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_link_shapes.infrastructure_link_shape</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_link_shapes.infrastructure_link_shape</code>.
      */
-    public final TableField<InfrastructureLinkShapesRecord, LineString> INFRASTRUCTURE_LINK_SHAPE = createField(DSL.name("infrastructure_link_shape"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").nullable(false), this, "", new LineStringBinding());
+    public final TableField<InfrastructureLinkShapesRecord, LineString> INFRASTRUCTURE_LINK_SHAPE = createField(DSL.name("infrastructure_link_shape"), SQLDataType.OTHER.nullable(false), this, "", new LineStringBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_link_shapes.infrastructure_link_shape_sys_period</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_link_shapes.infrastructure_link_shape_sys_period</code>.
      */
-    public final TableField<InfrastructureLinkShapesRecord, TimeRange> INFRASTRUCTURE_LINK_SHAPE_SYS_PERIOD = createField(DSL.name("infrastructure_link_shape_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
+    public final TableField<InfrastructureLinkShapesRecord, TimeRange> INFRASTRUCTURE_LINK_SHAPE_SYS_PERIOD = createField(DSL.name("infrastructure_link_shape_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field(DSL.raw("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)"), org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
 
     private InfrastructureLinkShapes(Name alias, Table<InfrastructureLinkShapesRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private InfrastructureLinkShapes(Name alias, Table<InfrastructureLinkShapesRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private InfrastructureLinkShapes(Name alias, Table<InfrastructureLinkShapesRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_link_shapes</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_link_shapes</code> table
+     * reference
      */
     public InfrastructureLinkShapes(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_LINK_SHAPES);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_link_shapes</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_link_shapes</code> table
+     * reference
      */
     public InfrastructureLinkShapes(Name alias) {
         this(alias, INFRASTRUCTURE_LINK_SHAPES);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_link_shapes</code> table reference
+     * Create a <code>infrastructure_network.infrastructure_link_shapes</code>
+     * table reference
      */
     public InfrastructureLinkShapes() {
         this(DSL.name("infrastructure_link_shapes"), null);
     }
 
-    public <O extends Record> InfrastructureLinkShapes(Table<O> child, ForeignKey<O, InfrastructureLinkShapesRecord> key) {
-        super(child, key, INFRASTRUCTURE_LINK_SHAPES);
+    public <O extends Record> InfrastructureLinkShapes(Table<O> path, ForeignKey<O, InfrastructureLinkShapesRecord> childPath, InverseForeignKey<O, InfrastructureLinkShapesRecord> parentPath) {
+        super(path, childPath, parentPath, INFRASTRUCTURE_LINK_SHAPES);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class InfrastructureLinkShapesPath extends InfrastructureLinkShapes implements Path<InfrastructureLinkShapesRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> InfrastructureLinkShapesPath(Table<O> path, ForeignKey<O, InfrastructureLinkShapesRecord> childPath, InverseForeignKey<O, InfrastructureLinkShapesRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private InfrastructureLinkShapesPath(Name alias, Table<InfrastructureLinkShapesRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public InfrastructureLinkShapesPath as(String alias) {
+            return new InfrastructureLinkShapesPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public InfrastructureLinkShapesPath as(Name alias) {
+            return new InfrastructureLinkShapesPath(alias, this);
+        }
+
+        @Override
+        public InfrastructureLinkShapesPath as(Table<?> alias) {
+            return new InfrastructureLinkShapesPath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
@@ -121,20 +171,19 @@ public class InfrastructureLinkShapes extends TableImpl<InfrastructureLinkShapes
     }
 
     @Override
-    public List<UniqueKey<InfrastructureLinkShapesRecord>> getKeys() {
-        return Arrays.<UniqueKey<InfrastructureLinkShapesRecord>>asList(Keys.INFRASTRUCTURE_LINK_SHAPES_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<InfrastructureLinkShapesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<InfrastructureLinkShapesRecord, ?>>asList(Keys.INFRASTRUCTURE_LINK_SHAPES__INFRASTRUCTURE_LINK_SHAPES_INFRASTRUCTURE_LINK_ID_FKEY);
+        return Arrays.asList(Keys.INFRASTRUCTURE_LINK_SHAPES__INFRASTRUCTURE_LINK_SHAPES_INFRASTRUCTURE_LINK_ID_FKEY);
     }
 
-    private transient InfrastructureLinks _infrastructureLinks;
+    private transient InfrastructureLinksPath _infrastructureLinks;
 
-    public InfrastructureLinks infrastructureLinks() {
+    /**
+     * Get the implicit join path to the
+     * <code>infrastructure_network.infrastructure_links</code> table.
+     */
+    public InfrastructureLinksPath infrastructureLinks() {
         if (_infrastructureLinks == null)
-            _infrastructureLinks = new InfrastructureLinks(this, Keys.INFRASTRUCTURE_LINK_SHAPES__INFRASTRUCTURE_LINK_SHAPES_INFRASTRUCTURE_LINK_ID_FKEY);
+            _infrastructureLinks = new InfrastructureLinksPath(this, Keys.INFRASTRUCTURE_LINK_SHAPES__INFRASTRUCTURE_LINK_SHAPES_INFRASTRUCTURE_LINK_ID_FKEY, null);
 
         return _infrastructureLinks;
     }
@@ -147,6 +196,11 @@ public class InfrastructureLinkShapes extends TableImpl<InfrastructureLinkShapes
     @Override
     public InfrastructureLinkShapes as(Name alias) {
         return new InfrastructureLinkShapes(alias, this);
+    }
+
+    @Override
+    public InfrastructureLinkShapes as(Table<?> alias) {
+        return new InfrastructureLinkShapes(alias.getQualifiedName(), this);
     }
 
     /**
@@ -165,12 +219,95 @@ public class InfrastructureLinkShapes extends TableImpl<InfrastructureLinkShapes
         return new InfrastructureLinkShapes(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row5 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row5<UUID, String, UUID, LineString, TimeRange> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public InfrastructureLinkShapes rename(Table<?> name) {
+        return new InfrastructureLinkShapes(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinkShapes where(Condition condition) {
+        return new InfrastructureLinkShapes(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinkShapes where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinkShapes where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinkShapes where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureLinkShapes where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureLinkShapes where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureLinkShapes where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureLinkShapes where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinkShapes whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinkShapes whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

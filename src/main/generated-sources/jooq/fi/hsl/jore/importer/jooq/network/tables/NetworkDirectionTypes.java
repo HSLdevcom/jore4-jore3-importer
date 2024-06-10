@@ -6,17 +6,25 @@ package fi.hsl.jore.importer.jooq.network.tables;
 
 import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections.NetworkRouteDirectionsPath;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsStaging.NetworkRouteDirectionsStagingPath;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkDirectionTypesRecord;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.Row1;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -48,27 +56,30 @@ public class NetworkDirectionTypes extends TableImpl<NetworkDirectionTypesRecord
     }
 
     /**
-     * The column <code>network.network_direction_types.network_direction_type</code>.
+     * The column
+     * <code>network.network_direction_types.network_direction_type</code>.
      */
     public final TableField<NetworkDirectionTypesRecord, String> NETWORK_DIRECTION_TYPE = createField(DSL.name("network_direction_type"), SQLDataType.CLOB.nullable(false), this, "");
 
     private NetworkDirectionTypes(Name alias, Table<NetworkDirectionTypesRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private NetworkDirectionTypes(Name alias, Table<NetworkDirectionTypesRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private NetworkDirectionTypes(Name alias, Table<NetworkDirectionTypesRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>network.network_direction_types</code> table reference
+     * Create an aliased <code>network.network_direction_types</code> table
+     * reference
      */
     public NetworkDirectionTypes(String alias) {
         this(DSL.name(alias), NETWORK_DIRECTION_TYPES);
     }
 
     /**
-     * Create an aliased <code>network.network_direction_types</code> table reference
+     * Create an aliased <code>network.network_direction_types</code> table
+     * reference
      */
     public NetworkDirectionTypes(Name alias) {
         this(alias, NETWORK_DIRECTION_TYPES);
@@ -81,13 +92,42 @@ public class NetworkDirectionTypes extends TableImpl<NetworkDirectionTypesRecord
         this(DSL.name("network_direction_types"), null);
     }
 
-    public <O extends Record> NetworkDirectionTypes(Table<O> child, ForeignKey<O, NetworkDirectionTypesRecord> key) {
-        super(child, key, NETWORK_DIRECTION_TYPES);
+    public <O extends Record> NetworkDirectionTypes(Table<O> path, ForeignKey<O, NetworkDirectionTypesRecord> childPath, InverseForeignKey<O, NetworkDirectionTypesRecord> parentPath) {
+        super(path, childPath, parentPath, NETWORK_DIRECTION_TYPES);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class NetworkDirectionTypesPath extends NetworkDirectionTypes implements Path<NetworkDirectionTypesRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> NetworkDirectionTypesPath(Table<O> path, ForeignKey<O, NetworkDirectionTypesRecord> childPath, InverseForeignKey<O, NetworkDirectionTypesRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private NetworkDirectionTypesPath(Name alias, Table<NetworkDirectionTypesRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public NetworkDirectionTypesPath as(String alias) {
+            return new NetworkDirectionTypesPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public NetworkDirectionTypesPath as(Name alias) {
+            return new NetworkDirectionTypesPath(alias, this);
+        }
+
+        @Override
+        public NetworkDirectionTypesPath as(Table<?> alias) {
+            return new NetworkDirectionTypesPath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
@@ -95,9 +135,30 @@ public class NetworkDirectionTypes extends TableImpl<NetworkDirectionTypesRecord
         return Keys.NETWORK_DIRECTION_TYPES_PKEY;
     }
 
-    @Override
-    public List<UniqueKey<NetworkDirectionTypesRecord>> getKeys() {
-        return Arrays.<UniqueKey<NetworkDirectionTypesRecord>>asList(Keys.NETWORK_DIRECTION_TYPES_PKEY);
+    private transient NetworkRouteDirectionsPath _networkRouteDirections;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>network.network_route_directions</code> table
+     */
+    public NetworkRouteDirectionsPath networkRouteDirections() {
+        if (_networkRouteDirections == null)
+            _networkRouteDirections = new NetworkRouteDirectionsPath(this, null, Keys.NETWORK_ROUTE_DIRECTIONS__NETWORK_ROUTE_DIRECTIONS_NETWORK_ROUTE_DIRECTION_TYPE_FKEY.getInverseKey());
+
+        return _networkRouteDirections;
+    }
+
+    private transient NetworkRouteDirectionsStagingPath _networkRouteDirectionsStaging;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>network.network_route_directions_staging</code> table
+     */
+    public NetworkRouteDirectionsStagingPath networkRouteDirectionsStaging() {
+        if (_networkRouteDirectionsStaging == null)
+            _networkRouteDirectionsStaging = new NetworkRouteDirectionsStagingPath(this, null, Keys.NETWORK_ROUTE_DIRECTIONS_STAGING__NETWORK_ROUTE_DIRECTIONS_STAG_NETWORK_ROUTE_DIRECTION_TYPE_FKEY.getInverseKey());
+
+        return _networkRouteDirectionsStaging;
     }
 
     @Override
@@ -108,6 +169,11 @@ public class NetworkDirectionTypes extends TableImpl<NetworkDirectionTypesRecord
     @Override
     public NetworkDirectionTypes as(Name alias) {
         return new NetworkDirectionTypes(alias, this);
+    }
+
+    @Override
+    public NetworkDirectionTypes as(Table<?> alias) {
+        return new NetworkDirectionTypes(alias.getQualifiedName(), this);
     }
 
     /**
@@ -126,12 +192,95 @@ public class NetworkDirectionTypes extends TableImpl<NetworkDirectionTypesRecord
         return new NetworkDirectionTypes(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row1 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row1<String> fieldsRow() {
-        return (Row1) super.fieldsRow();
+    public NetworkDirectionTypes rename(Table<?> name) {
+        return new NetworkDirectionTypes(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkDirectionTypes where(Condition condition) {
+        return new NetworkDirectionTypes(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkDirectionTypes where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkDirectionTypes where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkDirectionTypes where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkDirectionTypes where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkDirectionTypes where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkDirectionTypes where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkDirectionTypes where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkDirectionTypes whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkDirectionTypes whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

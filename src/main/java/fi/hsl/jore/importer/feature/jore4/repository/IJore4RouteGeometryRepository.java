@@ -14,5 +14,5 @@ public interface IJore4RouteGeometryRepository {
      * Insert the route geometries into the database.
      * @param routeGeometries   The inserted route geometries.
      */
-    void insert(List<? extends Jore4RouteGeometry> routeGeometries);
+    void insert(Iterable<? extends Jore4RouteGeometry> routeGeometries);
 }

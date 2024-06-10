@@ -14,5 +14,5 @@ public interface IJore4ScheduledStopPointRepository {
      * Inserts new scheduled stop points to the database.
      * @param stopPoints    The information of the stop points.
      */
-    void insert(List<? extends Jore4ScheduledStopPoint> stopPoints);
+    void insert(Iterable<? extends Jore4ScheduledStopPoint> stopPoints);
 }

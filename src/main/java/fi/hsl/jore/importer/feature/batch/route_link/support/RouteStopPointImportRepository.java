@@ -70,7 +70,9 @@ public class RouteStopPointImportRepository
             );
         });
 
-        batch.execute();
+        if (batch.size() > 0) {
+            batch.execute();
+        }
     }
 
     protected Set<RouteStopPointPK> delete() {

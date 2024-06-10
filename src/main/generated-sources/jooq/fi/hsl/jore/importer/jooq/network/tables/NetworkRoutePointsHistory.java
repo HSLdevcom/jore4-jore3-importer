@@ -9,18 +9,23 @@ import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutePointsHistoryRecord;
 
+import java.util.Collection;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
-import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -34,7 +39,8 @@ public class NetworkRoutePointsHistory extends TableImpl<NetworkRoutePointsHisto
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>network.network_route_points_history</code>
+     * The reference instance of
+     * <code>network.network_route_points_history</code>
      */
     public static final NetworkRoutePointsHistory NETWORK_ROUTE_POINTS_HISTORY = new NetworkRoutePointsHistory();
 
@@ -47,71 +53,76 @@ public class NetworkRoutePointsHistory extends TableImpl<NetworkRoutePointsHisto
     }
 
     /**
-     * The column <code>network.network_route_points_history.network_route_point_id</code>.
+     * The column
+     * <code>network.network_route_points_history.network_route_point_id</code>.
      */
     public final TableField<NetworkRoutePointsHistoryRecord, UUID> NETWORK_ROUTE_POINT_ID = createField(DSL.name("network_route_point_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_points_history.network_route_direction_id</code>.
+     * The column
+     * <code>network.network_route_points_history.network_route_direction_id</code>.
      */
     public final TableField<NetworkRoutePointsHistoryRecord, UUID> NETWORK_ROUTE_DIRECTION_ID = createField(DSL.name("network_route_direction_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_points_history.infrastructure_node</code>.
+     * The column
+     * <code>network.network_route_points_history.infrastructure_node</code>.
      */
     public final TableField<NetworkRoutePointsHistoryRecord, UUID> INFRASTRUCTURE_NODE = createField(DSL.name("infrastructure_node"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_points_history.network_route_point_ext_id</code>.
+     * The column
+     * <code>network.network_route_points_history.network_route_point_ext_id</code>.
      */
     public final TableField<NetworkRoutePointsHistoryRecord, String> NETWORK_ROUTE_POINT_EXT_ID = createField(DSL.name("network_route_point_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_points_history.network_route_point_order</code>.
+     * The column
+     * <code>network.network_route_points_history.network_route_point_order</code>.
      */
     public final TableField<NetworkRoutePointsHistoryRecord, Integer> NETWORK_ROUTE_POINT_ORDER = createField(DSL.name("network_route_point_order"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_points_history.network_route_point_sys_period</code>.
+     * The column
+     * <code>network.network_route_points_history.network_route_point_sys_period</code>.
      */
-    public final TableField<NetworkRoutePointsHistoryRecord, TimeRange> NETWORK_ROUTE_POINT_SYS_PERIOD = createField(DSL.name("network_route_point_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
+    public final TableField<NetworkRoutePointsHistoryRecord, TimeRange> NETWORK_ROUTE_POINT_SYS_PERIOD = createField(DSL.name("network_route_point_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
     private NetworkRoutePointsHistory(Name alias, Table<NetworkRoutePointsHistoryRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private NetworkRoutePointsHistory(Name alias, Table<NetworkRoutePointsHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private NetworkRoutePointsHistory(Name alias, Table<NetworkRoutePointsHistoryRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>network.network_route_points_history</code> table reference
+     * Create an aliased <code>network.network_route_points_history</code> table
+     * reference
      */
     public NetworkRoutePointsHistory(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_POINTS_HISTORY);
     }
 
     /**
-     * Create an aliased <code>network.network_route_points_history</code> table reference
+     * Create an aliased <code>network.network_route_points_history</code> table
+     * reference
      */
     public NetworkRoutePointsHistory(Name alias) {
         this(alias, NETWORK_ROUTE_POINTS_HISTORY);
     }
 
     /**
-     * Create a <code>network.network_route_points_history</code> table reference
+     * Create a <code>network.network_route_points_history</code> table
+     * reference
      */
     public NetworkRoutePointsHistory() {
         this(DSL.name("network_route_points_history"), null);
     }
 
-    public <O extends Record> NetworkRoutePointsHistory(Table<O> child, ForeignKey<O, NetworkRoutePointsHistoryRecord> key) {
-        super(child, key, NETWORK_ROUTE_POINTS_HISTORY);
-    }
-
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
@@ -122,6 +133,11 @@ public class NetworkRoutePointsHistory extends TableImpl<NetworkRoutePointsHisto
     @Override
     public NetworkRoutePointsHistory as(Name alias) {
         return new NetworkRoutePointsHistory(alias, this);
+    }
+
+    @Override
+    public NetworkRoutePointsHistory as(Table<?> alias) {
+        return new NetworkRoutePointsHistory(alias.getQualifiedName(), this);
     }
 
     /**
@@ -140,12 +156,95 @@ public class NetworkRoutePointsHistory extends TableImpl<NetworkRoutePointsHisto
         return new NetworkRoutePointsHistory(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row6 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row6<UUID, UUID, UUID, String, Integer, TimeRange> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public NetworkRoutePointsHistory rename(Table<?> name) {
+        return new NetworkRoutePointsHistory(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRoutePointsHistory where(Condition condition) {
+        return new NetworkRoutePointsHistory(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRoutePointsHistory where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRoutePointsHistory where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRoutePointsHistory where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRoutePointsHistory where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRoutePointsHistory where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRoutePointsHistory where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRoutePointsHistory where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRoutePointsHistory whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRoutePointsHistory whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

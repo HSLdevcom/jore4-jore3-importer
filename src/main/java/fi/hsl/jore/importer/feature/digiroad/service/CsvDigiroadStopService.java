@@ -3,11 +3,11 @@ package fi.hsl.jore.importer.feature.digiroad.service;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
-import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

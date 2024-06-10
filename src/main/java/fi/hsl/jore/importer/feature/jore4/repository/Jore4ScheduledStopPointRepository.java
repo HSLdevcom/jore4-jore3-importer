@@ -27,39 +27,36 @@ public class Jore4ScheduledStopPointRepository implements IJore4ScheduledStopPoi
 
     @Transactional
     @Override
-    public void insert(final List<? extends Jore4ScheduledStopPoint> stopPoints) {
-        if (!stopPoints.isEmpty()) {
-            stopPoints.forEach(stopPoint -> {
+    public void insert(final Iterable<? extends Jore4ScheduledStopPoint> stopPoints) {
+        for (Jore4ScheduledStopPoint stopPoint : stopPoints) {
+            final UUID infrastructureLinkId = db
+                .select(INFRASTRUCTURE_LINK.INFRASTRUCTURE_LINK_ID)
+                .from(INFRASTRUCTURE_LINK)
+                .where(INFRASTRUCTURE_LINK.EXTERNAL_LINK_ID.eq(stopPoint.externalInfrastructureLinkId()))
+                .fetchOneInto(UUID.class);
 
-                final UUID infrastructureLinkId = db
-                        .select(INFRASTRUCTURE_LINK.INFRASTRUCTURE_LINK_ID)
-                        .from(INFRASTRUCTURE_LINK)
-                        .where(INFRASTRUCTURE_LINK.EXTERNAL_LINK_ID.eq(stopPoint.externalInfrastructureLinkId()))
-                        .fetchOneInto(UUID.class);
+            final UUID timingPlaceId = stopPoint
+                .timingPlaceLabel()
+                .map(timingPlaceLabel -> db
+                    .select(TIMING_PLACE.TIMING_PLACE_ID)
+                    .from(TIMING_PLACE)
+                    .where(TIMING_PLACE.LABEL.eq(timingPlaceLabel))
+                    .fetchOneInto(UUID.class))
+                .orElse(null);
 
-                final UUID timingPlaceId = stopPoint
-                        .timingPlaceLabel()
-                        .map(timingPlaceLabel -> db
-                                .select(TIMING_PLACE.TIMING_PLACE_ID)
-                                .from(TIMING_PLACE)
-                                .where(TIMING_PLACE.LABEL.eq(timingPlaceLabel))
-                                .fetchOneInto(UUID.class))
-                        .orElse(null);
-
-                Routines.insertScheduledStopPointWithVehicleMode(
-                        db.configuration(),
-                        stopPoint.scheduledStopPointId(),
-                        stopPoint.measuredLocation(),
-                        infrastructureLinkId,
-                        stopPoint.directionOnInfraLink().getValue(),
-                        stopPoint.label(),
-                        stopPoint.validityStart().orElse(null),
-                        stopPoint.validityEnd().orElse(null),
-                        stopPoint.priority(),
-                        VehicleMode.BUS.getValue(),
-                        timingPlaceId
-                );
-            });
+            Routines.insertScheduledStopPointWithVehicleMode(
+                db.configuration(),
+                stopPoint.scheduledStopPointId(),
+                stopPoint.measuredLocation(),
+                infrastructureLinkId,
+                stopPoint.directionOnInfraLink().getValue(),
+                stopPoint.label(),
+                stopPoint.validityStart().orElse(null),
+                stopPoint.validityEnd().orElse(null),
+                stopPoint.priority(),
+                VehicleMode.BUS.getValue(),
+                timingPlaceId
+            );
         }
     }
 }

@@ -53,7 +53,7 @@ class Jore4JourneyPatternStopRepositoryTest {
                     "/sql/jore4/populate_routes.sql",
                     "/sql/jore4/populate_journey_patterns.sql"
             },
-            config = @SqlConfig(dataSource = "jore4DataSource")
+            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
     )
     class InsertJourneyPatternStopIntoDatabase {
 

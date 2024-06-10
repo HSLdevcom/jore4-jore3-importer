@@ -3,6 +3,7 @@ package fi.hsl.jore.importer.feature.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.hsl.jore.importer.feature.api.dto.ImmutableJobStatus;
 import fi.hsl.jore.importer.feature.api.dto.JobStatus;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
@@ -17,9 +18,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import java.time.Instant;
-import java.util.Date;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -69,14 +67,14 @@ public class JobControllerTest {
     @Test
     public void whenJobRun_thenReturnLastStatus() throws Exception {
         final long id = 1L;
-        final Instant startTime = Instant.parse("2021-04-06T14:33:00.00Z");
-        final Instant endTime = Instant.parse("2021-04-06T14:33:12.00Z");
+        final var startTime = LocalDateTime.of(2021, 4, 6, 14, 33, 0);
+        final var endTime = LocalDateTime.of(2021, 4, 6, 14, 33, 12);
         final JobExecution execution = new JobExecution(id);
 
         execution.setStatus(BatchStatus.COMPLETED);
         execution.setExitStatus(ExitStatus.COMPLETED);
-        execution.setStartTime(Date.from(startTime));
-        execution.setEndTime(Date.from(endTime));
+        execution.setStartTime(startTime);
+        execution.setEndTime(endTime);
 
         when(jobRepository.getLastJobExecution(anyString(), any()))
                 .thenReturn(execution);
@@ -112,8 +110,8 @@ public class JobControllerTest {
     @Test
     public void whenJobFailed_thenReturnLastStatus() throws Exception {
         final long id = 2L;
-        final Instant startTime = Instant.parse("2021-04-06T14:33:00.00Z");
-        final Instant endTime = Instant.parse("2021-04-06T14:33:12.00Z");
+        final var startTime = LocalDateTime.of(2021, 4, 6, 14, 33);
+        final var endTime = LocalDateTime.of(2021, 4, 6, 14, 33, 12);
         final JobExecution execution = new JobExecution(id);
 
         final Throwable error = new RuntimeException("Guru mediation error!");
@@ -121,8 +119,8 @@ public class JobControllerTest {
         execution.setStatus(BatchStatus.FAILED);
         execution.setExitStatus(ExitStatus.FAILED
                                         .addExitDescription(error));
-        execution.setStartTime(Date.from(startTime));
-        execution.setEndTime(Date.from(endTime));
+        execution.setStartTime(startTime);
+        execution.setEndTime(endTime);
 
         when(jobRepository.getLastJobExecution(anyString(), any()))
                 .thenReturn(execution);
@@ -196,12 +194,12 @@ public class JobControllerTest {
     @Test
     public void whenStartingJobWhileRunning_thenReturnCurrentStatus() throws Exception {
         final long id = 4L;
-        final Instant startTime = Instant.parse("2021-04-06T14:33:00.00Z");
+        final var startTime = LocalDateTime.of(2021, 4, 6, 14, 33);
         final JobExecution execution = new JobExecution(id);
 
         execution.setStatus(BatchStatus.STARTED);
         execution.setExitStatus(ExitStatus.UNKNOWN);
-        execution.setStartTime(Date.from(startTime));
+        execution.setStartTime(startTime);
 
         when(jobLauncher.run(any(), any()))
                 .thenThrow(new JobExecutionAlreadyRunningException("It's already running.."));

@@ -10,18 +10,23 @@ import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
 import fi.hsl.jore.importer.jooq.infrastructure_network.InfrastructureNetwork;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNodesWithHistoryRecord;
 
+import java.util.Collection;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
-import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 import org.locationtech.jts.geom.Point;
@@ -36,7 +41,8 @@ public class InfrastructureNodesWithHistory extends TableImpl<InfrastructureNode
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.infrastructure_nodes_with_history</code>
+     * The reference instance of
+     * <code>infrastructure_network.infrastructure_nodes_with_history</code>
      */
     public static final InfrastructureNodesWithHistory INFRASTRUCTURE_NODES_WITH_HISTORY = new InfrastructureNodesWithHistory();
 
@@ -49,71 +55,95 @@ public class InfrastructureNodesWithHistory extends TableImpl<InfrastructureNode
     }
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_id</code>.
      */
     public final TableField<InfrastructureNodesWithHistoryRecord, UUID> INFRASTRUCTURE_NODE_ID = createField(DSL.name("infrastructure_node_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_ext_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_ext_id</code>.
      */
     public final TableField<InfrastructureNodesWithHistoryRecord, String> INFRASTRUCTURE_NODE_EXT_ID = createField(DSL.name("infrastructure_node_ext_id"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_type</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_type</code>.
      */
     public final TableField<InfrastructureNodesWithHistoryRecord, String> INFRASTRUCTURE_NODE_TYPE = createField(DSL.name("infrastructure_node_type"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_location</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_location</code>.
      */
-    public final TableField<InfrastructureNodesWithHistoryRecord, Point> INFRASTRUCTURE_NODE_LOCATION = createField(DSL.name("infrastructure_node_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geometry\""), this, "", new PointBinding());
+    public final TableField<InfrastructureNodesWithHistoryRecord, Point> INFRASTRUCTURE_NODE_LOCATION = createField(DSL.name("infrastructure_node_location"), SQLDataType.OTHER, this, "", new PointBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_projected_location</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_projected_location</code>.
      */
-    public final TableField<InfrastructureNodesWithHistoryRecord, Point> INFRASTRUCTURE_NODE_PROJECTED_LOCATION = createField(DSL.name("infrastructure_node_projected_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geometry\""), this, "", new PointBinding());
+    public final TableField<InfrastructureNodesWithHistoryRecord, Point> INFRASTRUCTURE_NODE_PROJECTED_LOCATION = createField(DSL.name("infrastructure_node_projected_location"), SQLDataType.OTHER, this, "", new PointBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_sys_period</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_with_history.infrastructure_node_sys_period</code>.
      */
-    public final TableField<InfrastructureNodesWithHistoryRecord, TimeRange> INFRASTRUCTURE_NODE_SYS_PERIOD = createField(DSL.name("infrastructure_node_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\""), this, "", new TimeRangeBinding());
+    public final TableField<InfrastructureNodesWithHistoryRecord, TimeRange> INFRASTRUCTURE_NODE_SYS_PERIOD = createField(DSL.name("infrastructure_node_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\""), this, "", new TimeRangeBinding());
 
     private InfrastructureNodesWithHistory(Name alias, Table<InfrastructureNodesWithHistoryRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private InfrastructureNodesWithHistory(Name alias, Table<InfrastructureNodesWithHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"infrastructure_nodes_with_history\" as  SELECT infrastructure_nodes.infrastructure_node_id,\n    infrastructure_nodes.infrastructure_node_ext_id,\n    infrastructure_nodes.infrastructure_node_type,\n    infrastructure_nodes.infrastructure_node_location,\n    infrastructure_nodes.infrastructure_node_projected_location,\n    infrastructure_nodes.infrastructure_node_sys_period\n   FROM infrastructure_network.infrastructure_nodes\nUNION ALL\n SELECT infrastructure_nodes_history.infrastructure_node_id,\n    infrastructure_nodes_history.infrastructure_node_ext_id,\n    infrastructure_nodes_history.infrastructure_node_type,\n    infrastructure_nodes_history.infrastructure_node_location,\n    infrastructure_nodes_history.infrastructure_node_projected_location,\n    infrastructure_nodes_history.infrastructure_node_sys_period\n   FROM infrastructure_network.infrastructure_nodes_history;"));
+    private InfrastructureNodesWithHistory(Name alias, Table<InfrastructureNodesWithHistoryRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
+         create view "infrastructure_nodes_with_history" as  SELECT infrastructure_nodes.infrastructure_node_id,
+            infrastructure_nodes.infrastructure_node_ext_id,
+            infrastructure_nodes.infrastructure_node_type,
+            infrastructure_nodes.infrastructure_node_location,
+            infrastructure_nodes.infrastructure_node_projected_location,
+            infrastructure_nodes.infrastructure_node_sys_period
+           FROM infrastructure_network.infrastructure_nodes
+        UNION ALL
+         SELECT infrastructure_nodes_history.infrastructure_node_id,
+            infrastructure_nodes_history.infrastructure_node_ext_id,
+            infrastructure_nodes_history.infrastructure_node_type,
+            infrastructure_nodes_history.infrastructure_node_location,
+            infrastructure_nodes_history.infrastructure_node_projected_location,
+            infrastructure_nodes_history.infrastructure_node_sys_period
+           FROM infrastructure_network.infrastructure_nodes_history;
+        """), where);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_nodes_with_history</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_nodes_with_history</code>
+     * table reference
      */
     public InfrastructureNodesWithHistory(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_NODES_WITH_HISTORY);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_nodes_with_history</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_nodes_with_history</code>
+     * table reference
      */
     public InfrastructureNodesWithHistory(Name alias) {
         this(alias, INFRASTRUCTURE_NODES_WITH_HISTORY);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_nodes_with_history</code> table reference
+     * Create a
+     * <code>infrastructure_network.infrastructure_nodes_with_history</code>
+     * table reference
      */
     public InfrastructureNodesWithHistory() {
         this(DSL.name("infrastructure_nodes_with_history"), null);
     }
 
-    public <O extends Record> InfrastructureNodesWithHistory(Table<O> child, ForeignKey<O, InfrastructureNodesWithHistoryRecord> key) {
-        super(child, key, INFRASTRUCTURE_NODES_WITH_HISTORY);
-    }
-
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
@@ -124,6 +154,11 @@ public class InfrastructureNodesWithHistory extends TableImpl<InfrastructureNode
     @Override
     public InfrastructureNodesWithHistory as(Name alias) {
         return new InfrastructureNodesWithHistory(alias, this);
+    }
+
+    @Override
+    public InfrastructureNodesWithHistory as(Table<?> alias) {
+        return new InfrastructureNodesWithHistory(alias.getQualifiedName(), this);
     }
 
     /**
@@ -142,12 +177,95 @@ public class InfrastructureNodesWithHistory extends TableImpl<InfrastructureNode
         return new InfrastructureNodesWithHistory(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row6 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row6<UUID, String, String, Point, Point, TimeRange> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public InfrastructureNodesWithHistory rename(Table<?> name) {
+        return new InfrastructureNodesWithHistory(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodesWithHistory where(Condition condition) {
+        return new InfrastructureNodesWithHistory(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodesWithHistory where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodesWithHistory where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodesWithHistory where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodesWithHistory where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodesWithHistory where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodesWithHistory where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodesWithHistory where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodesWithHistory whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodesWithHistory whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }
