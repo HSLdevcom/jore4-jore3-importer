@@ -70,7 +70,7 @@ class Jore4LineRepositoryTest {
             scripts = {
                     "/sql/jore4/drop_tables.sql"
             },
-            config = @SqlConfig(dataSource = "jore4DataSource")
+            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
     )
     class InsertLineIntoDatabase {
 

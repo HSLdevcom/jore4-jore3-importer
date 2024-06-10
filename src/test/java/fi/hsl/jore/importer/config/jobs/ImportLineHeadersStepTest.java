@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.is;
         "/sql/jore3/populate_lines.sql",
         "/sql/jore3/populate_line_headers.sql"
 },
-     config = @SqlConfig(dataSource = "sourceDataSource"))
+     config = @SqlConfig(dataSource = "sourceDataSource", transactionManager = "sourceTransactionManager"))
 @Sql(scripts = "/sql/importer/drop_tables.sql")
 public class ImportLineHeadersStepTest extends BatchIntegrationTest {
 

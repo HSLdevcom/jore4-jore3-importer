@@ -6,26 +6,36 @@ package fi.hsl.jore.importer.jooq.network.tables;
 
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
-import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinks;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinks.InfrastructureLinksPath;
 import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections.NetworkRouteDirectionsPath;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteLinksRecord;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -52,52 +62,60 @@ public class NetworkRouteLinks extends TableImpl<NetworkRouteLinksRecord> {
     }
 
     /**
-     * The column <code>network.network_route_links.network_route_link_id</code>.
+     * The column
+     * <code>network.network_route_links.network_route_link_id</code>.
      */
-    public final TableField<NetworkRouteLinksRecord, UUID> NETWORK_ROUTE_LINK_ID = createField(DSL.name("network_route_link_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "");
+    public final TableField<NetworkRouteLinksRecord, UUID> NETWORK_ROUTE_LINK_ID = createField(DSL.name("network_route_link_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "");
 
     /**
-     * The column <code>network.network_route_links.network_route_direction_id</code>.
+     * The column
+     * <code>network.network_route_links.network_route_direction_id</code>.
      */
     public final TableField<NetworkRouteLinksRecord, UUID> NETWORK_ROUTE_DIRECTION_ID = createField(DSL.name("network_route_direction_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_links.infrastructure_link_id</code>.
+     * The column
+     * <code>network.network_route_links.infrastructure_link_id</code>.
      */
     public final TableField<NetworkRouteLinksRecord, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_links.network_route_link_ext_id</code>.
+     * The column
+     * <code>network.network_route_links.network_route_link_ext_id</code>.
      */
     public final TableField<NetworkRouteLinksRecord, String> NETWORK_ROUTE_LINK_EXT_ID = createField(DSL.name("network_route_link_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_links.network_route_link_order</code>.
+     * The column
+     * <code>network.network_route_links.network_route_link_order</code>.
      */
     public final TableField<NetworkRouteLinksRecord, Integer> NETWORK_ROUTE_LINK_ORDER = createField(DSL.name("network_route_link_order"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_links.network_route_link_sys_period</code>.
+     * The column
+     * <code>network.network_route_links.network_route_link_sys_period</code>.
      */
-    public final TableField<NetworkRouteLinksRecord, TimeRange> NETWORK_ROUTE_LINK_SYS_PERIOD = createField(DSL.name("network_route_link_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
+    public final TableField<NetworkRouteLinksRecord, TimeRange> NETWORK_ROUTE_LINK_SYS_PERIOD = createField(DSL.name("network_route_link_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field(DSL.raw("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)"), org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
 
     private NetworkRouteLinks(Name alias, Table<NetworkRouteLinksRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private NetworkRouteLinks(Name alias, Table<NetworkRouteLinksRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private NetworkRouteLinks(Name alias, Table<NetworkRouteLinksRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>network.network_route_links</code> table reference
+     * Create an aliased <code>network.network_route_links</code> table
+     * reference
      */
     public NetworkRouteLinks(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_LINKS);
     }
 
     /**
-     * Create an aliased <code>network.network_route_links</code> table reference
+     * Create an aliased <code>network.network_route_links</code> table
+     * reference
      */
     public NetworkRouteLinks(Name alias) {
         this(alias, NETWORK_ROUTE_LINKS);
@@ -110,13 +128,42 @@ public class NetworkRouteLinks extends TableImpl<NetworkRouteLinksRecord> {
         this(DSL.name("network_route_links"), null);
     }
 
-    public <O extends Record> NetworkRouteLinks(Table<O> child, ForeignKey<O, NetworkRouteLinksRecord> key) {
-        super(child, key, NETWORK_ROUTE_LINKS);
+    public <O extends Record> NetworkRouteLinks(Table<O> path, ForeignKey<O, NetworkRouteLinksRecord> childPath, InverseForeignKey<O, NetworkRouteLinksRecord> parentPath) {
+        super(path, childPath, parentPath, NETWORK_ROUTE_LINKS);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class NetworkRouteLinksPath extends NetworkRouteLinks implements Path<NetworkRouteLinksRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> NetworkRouteLinksPath(Table<O> path, ForeignKey<O, NetworkRouteLinksRecord> childPath, InverseForeignKey<O, NetworkRouteLinksRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private NetworkRouteLinksPath(Name alias, Table<NetworkRouteLinksRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public NetworkRouteLinksPath as(String alias) {
+            return new NetworkRouteLinksPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public NetworkRouteLinksPath as(Name alias) {
+            return new NetworkRouteLinksPath(alias, this);
+        }
+
+        @Override
+        public NetworkRouteLinksPath as(Table<?> alias) {
+            return new NetworkRouteLinksPath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
@@ -125,28 +172,32 @@ public class NetworkRouteLinks extends TableImpl<NetworkRouteLinksRecord> {
     }
 
     @Override
-    public List<UniqueKey<NetworkRouteLinksRecord>> getKeys() {
-        return Arrays.<UniqueKey<NetworkRouteLinksRecord>>asList(Keys.NETWORK_ROUTE_LINKS_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<NetworkRouteLinksRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<NetworkRouteLinksRecord, ?>>asList(Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_NETWORK_ROUTE_DIRECTION_ID_FKEY, Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_INFRASTRUCTURE_LINK_ID_FKEY);
+        return Arrays.asList(Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_NETWORK_ROUTE_DIRECTION_ID_FKEY, Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_INFRASTRUCTURE_LINK_ID_FKEY);
     }
 
-    private transient NetworkRouteDirections _networkRouteDirections;
-    private transient InfrastructureLinks _infrastructureLinks;
+    private transient NetworkRouteDirectionsPath _networkRouteDirections;
 
-    public NetworkRouteDirections networkRouteDirections() {
+    /**
+     * Get the implicit join path to the
+     * <code>network.network_route_directions</code> table.
+     */
+    public NetworkRouteDirectionsPath networkRouteDirections() {
         if (_networkRouteDirections == null)
-            _networkRouteDirections = new NetworkRouteDirections(this, Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_NETWORK_ROUTE_DIRECTION_ID_FKEY);
+            _networkRouteDirections = new NetworkRouteDirectionsPath(this, Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_NETWORK_ROUTE_DIRECTION_ID_FKEY, null);
 
         return _networkRouteDirections;
     }
 
-    public InfrastructureLinks infrastructureLinks() {
+    private transient InfrastructureLinksPath _infrastructureLinks;
+
+    /**
+     * Get the implicit join path to the
+     * <code>infrastructure_network.infrastructure_links</code> table.
+     */
+    public InfrastructureLinksPath infrastructureLinks() {
         if (_infrastructureLinks == null)
-            _infrastructureLinks = new InfrastructureLinks(this, Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_INFRASTRUCTURE_LINK_ID_FKEY);
+            _infrastructureLinks = new InfrastructureLinksPath(this, Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_INFRASTRUCTURE_LINK_ID_FKEY, null);
 
         return _infrastructureLinks;
     }
@@ -159,6 +210,11 @@ public class NetworkRouteLinks extends TableImpl<NetworkRouteLinksRecord> {
     @Override
     public NetworkRouteLinks as(Name alias) {
         return new NetworkRouteLinks(alias, this);
+    }
+
+    @Override
+    public NetworkRouteLinks as(Table<?> alias) {
+        return new NetworkRouteLinks(alias.getQualifiedName(), this);
     }
 
     /**
@@ -177,12 +233,95 @@ public class NetworkRouteLinks extends TableImpl<NetworkRouteLinksRecord> {
         return new NetworkRouteLinks(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row6 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row6<UUID, UUID, UUID, String, Integer, TimeRange> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public NetworkRouteLinks rename(Table<?> name) {
+        return new NetworkRouteLinks(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteLinks where(Condition condition) {
+        return new NetworkRouteLinks(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteLinks where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteLinks where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteLinks where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteLinks where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteLinks where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteLinks where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteLinks where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteLinks whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteLinks whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

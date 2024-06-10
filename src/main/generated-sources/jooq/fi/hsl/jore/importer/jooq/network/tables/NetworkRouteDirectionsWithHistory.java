@@ -11,19 +11,24 @@ import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteDirectionsWithHistoryRecord;
 
+import java.util.Collection;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
-import org.jooq.Record;
-import org.jooq.Row13;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -37,7 +42,8 @@ public class NetworkRouteDirectionsWithHistory extends TableImpl<NetworkRouteDir
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>network.network_route_directions_with_history</code>
+     * The reference instance of
+     * <code>network.network_route_directions_with_history</code>
      */
     public static final NetworkRouteDirectionsWithHistory NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY = new NetworkRouteDirectionsWithHistory();
 
@@ -50,106 +56,150 @@ public class NetworkRouteDirectionsWithHistory extends TableImpl<NetworkRouteDir
     }
 
     /**
-     * The column <code>network.network_route_directions_with_history.network_route_direction_id</code>.
+     * The column
+     * <code>network.network_route_directions_with_history.network_route_direction_id</code>.
      */
     public final TableField<NetworkRouteDirectionsWithHistoryRecord, UUID> NETWORK_ROUTE_DIRECTION_ID = createField(DSL.name("network_route_direction_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column <code>network.network_route_directions_with_history.network_route_id</code>.
+     * The column
+     * <code>network.network_route_directions_with_history.network_route_id</code>.
      */
     public final TableField<NetworkRouteDirectionsWithHistoryRecord, UUID> NETWORK_ROUTE_ID = createField(DSL.name("network_route_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column <code>network.network_route_directions_with_history.network_route_direction_type</code>.
+     * The column
+     * <code>network.network_route_directions_with_history.network_route_direction_type</code>.
      */
     public final TableField<NetworkRouteDirectionsWithHistoryRecord, String> NETWORK_ROUTE_DIRECTION_TYPE = createField(DSL.name("network_route_direction_type"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>network.network_route_directions_with_history.network_route_direction_ext_id</code>.
+     * The column
+     * <code>network.network_route_directions_with_history.network_route_direction_ext_id</code>.
      */
     public final TableField<NetworkRouteDirectionsWithHistoryRecord, String> NETWORK_ROUTE_DIRECTION_EXT_ID = createField(DSL.name("network_route_direction_ext_id"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>network.network_route_directions_with_history.network_route_direction_length</code>.
+     * The column
+     * <code>network.network_route_directions_with_history.network_route_direction_length</code>.
      */
     public final TableField<NetworkRouteDirectionsWithHistoryRecord, Integer> NETWORK_ROUTE_DIRECTION_LENGTH = createField(DSL.name("network_route_direction_length"), SQLDataType.INTEGER, this, "");
 
     /**
-     * The column <code>network.network_route_directions_with_history.network_route_direction_name</code>.
+     * The column
+     * <code>network.network_route_directions_with_history.network_route_direction_name</code>.
      */
     public final TableField<NetworkRouteDirectionsWithHistoryRecord, JSONB> NETWORK_ROUTE_DIRECTION_NAME = createField(DSL.name("network_route_direction_name"), SQLDataType.JSONB, this, "");
 
     /**
-     * The column <code>network.network_route_directions_with_history.network_route_direction_name_short</code>.
+     * The column
+     * <code>network.network_route_directions_with_history.network_route_direction_name_short</code>.
      */
     public final TableField<NetworkRouteDirectionsWithHistoryRecord, JSONB> NETWORK_ROUTE_DIRECTION_NAME_SHORT = createField(DSL.name("network_route_direction_name_short"), SQLDataType.JSONB, this, "");
 
     /**
-     * The column <code>network.network_route_directions_with_history.network_route_direction_origin</code>.
+     * The column
+     * <code>network.network_route_directions_with_history.network_route_direction_origin</code>.
      */
     public final TableField<NetworkRouteDirectionsWithHistoryRecord, JSONB> NETWORK_ROUTE_DIRECTION_ORIGIN = createField(DSL.name("network_route_direction_origin"), SQLDataType.JSONB, this, "");
 
     /**
-     * The column <code>network.network_route_directions_with_history.network_route_direction_destination</code>.
+     * The column
+     * <code>network.network_route_directions_with_history.network_route_direction_destination</code>.
      */
     public final TableField<NetworkRouteDirectionsWithHistoryRecord, JSONB> NETWORK_ROUTE_DIRECTION_DESTINATION = createField(DSL.name("network_route_direction_destination"), SQLDataType.JSONB, this, "");
 
     /**
-     * The column <code>network.network_route_directions_with_history.network_route_direction_valid_date_range</code>.
+     * The column
+     * <code>network.network_route_directions_with_history.network_route_direction_valid_date_range</code>.
      */
-    public final TableField<NetworkRouteDirectionsWithHistoryRecord, DateRange> NETWORK_ROUTE_DIRECTION_VALID_DATE_RANGE = createField(DSL.name("network_route_direction_valid_date_range"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"daterange\""), this, "", new DateRangeBinding());
+    public final TableField<NetworkRouteDirectionsWithHistoryRecord, DateRange> NETWORK_ROUTE_DIRECTION_VALID_DATE_RANGE = createField(DSL.name("network_route_direction_valid_date_range"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"daterange\""), this, "", new DateRangeBinding());
 
     /**
-     * The column <code>network.network_route_directions_with_history.network_route_direction_sys_period</code>.
+     * The column
+     * <code>network.network_route_directions_with_history.network_route_direction_sys_period</code>.
      */
-    public final TableField<NetworkRouteDirectionsWithHistoryRecord, TimeRange> NETWORK_ROUTE_DIRECTION_SYS_PERIOD = createField(DSL.name("network_route_direction_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\""), this, "", new TimeRangeBinding());
+    public final TableField<NetworkRouteDirectionsWithHistoryRecord, TimeRange> NETWORK_ROUTE_DIRECTION_SYS_PERIOD = createField(DSL.name("network_route_direction_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\""), this, "", new TimeRangeBinding());
 
     /**
-     * The column <code>network.network_route_directions_with_history.network_route_jore4_id</code>.
+     * The column
+     * <code>network.network_route_directions_with_history.network_route_jore4_id</code>.
      */
     public final TableField<NetworkRouteDirectionsWithHistoryRecord, UUID> NETWORK_ROUTE_JORE4_ID = createField(DSL.name("network_route_jore4_id"), SQLDataType.UUID, this, "");
 
     /**
-     * The column <code>network.network_route_directions_with_history.journey_pattern_jore4_id</code>.
+     * The column
+     * <code>network.network_route_directions_with_history.journey_pattern_jore4_id</code>.
      */
     public final TableField<NetworkRouteDirectionsWithHistoryRecord, UUID> JOURNEY_PATTERN_JORE4_ID = createField(DSL.name("journey_pattern_jore4_id"), SQLDataType.UUID, this, "");
 
     private NetworkRouteDirectionsWithHistory(Name alias, Table<NetworkRouteDirectionsWithHistoryRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private NetworkRouteDirectionsWithHistory(Name alias, Table<NetworkRouteDirectionsWithHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"network_route_directions_with_history\" as  SELECT network_route_directions.network_route_direction_id,\n    network_route_directions.network_route_id,\n    network_route_directions.network_route_direction_type,\n    network_route_directions.network_route_direction_ext_id,\n    network_route_directions.network_route_direction_length,\n    network_route_directions.network_route_direction_name,\n    network_route_directions.network_route_direction_name_short,\n    network_route_directions.network_route_direction_origin,\n    network_route_directions.network_route_direction_destination,\n    network_route_directions.network_route_direction_valid_date_range,\n    network_route_directions.network_route_direction_sys_period,\n    network_route_directions.network_route_jore4_id,\n    network_route_directions.journey_pattern_jore4_id\n   FROM network.network_route_directions\nUNION ALL\n SELECT network_route_directions_history.network_route_direction_id,\n    network_route_directions_history.network_route_id,\n    network_route_directions_history.network_route_direction_type,\n    network_route_directions_history.network_route_direction_ext_id,\n    network_route_directions_history.network_route_direction_length,\n    network_route_directions_history.network_route_direction_name,\n    network_route_directions_history.network_route_direction_name_short,\n    network_route_directions_history.network_route_direction_origin,\n    network_route_directions_history.network_route_direction_destination,\n    network_route_directions_history.network_route_direction_valid_date_range,\n    network_route_directions_history.network_route_direction_sys_period,\n    network_route_directions_history.network_route_jore4_id,\n    network_route_directions_history.journey_pattern_jore4_id\n   FROM network.network_route_directions_history;"));
+    private NetworkRouteDirectionsWithHistory(Name alias, Table<NetworkRouteDirectionsWithHistoryRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
+         create view "network_route_directions_with_history" as  SELECT network_route_directions.network_route_direction_id,
+            network_route_directions.network_route_id,
+            network_route_directions.network_route_direction_type,
+            network_route_directions.network_route_direction_ext_id,
+            network_route_directions.network_route_direction_length,
+            network_route_directions.network_route_direction_name,
+            network_route_directions.network_route_direction_name_short,
+            network_route_directions.network_route_direction_origin,
+            network_route_directions.network_route_direction_destination,
+            network_route_directions.network_route_direction_valid_date_range,
+            network_route_directions.network_route_direction_sys_period,
+            network_route_directions.network_route_jore4_id,
+            network_route_directions.journey_pattern_jore4_id
+           FROM network.network_route_directions
+        UNION ALL
+         SELECT network_route_directions_history.network_route_direction_id,
+            network_route_directions_history.network_route_id,
+            network_route_directions_history.network_route_direction_type,
+            network_route_directions_history.network_route_direction_ext_id,
+            network_route_directions_history.network_route_direction_length,
+            network_route_directions_history.network_route_direction_name,
+            network_route_directions_history.network_route_direction_name_short,
+            network_route_directions_history.network_route_direction_origin,
+            network_route_directions_history.network_route_direction_destination,
+            network_route_directions_history.network_route_direction_valid_date_range,
+            network_route_directions_history.network_route_direction_sys_period,
+            network_route_directions_history.network_route_jore4_id,
+            network_route_directions_history.journey_pattern_jore4_id
+           FROM network.network_route_directions_history;
+        """), where);
     }
 
     /**
-     * Create an aliased <code>network.network_route_directions_with_history</code> table reference
+     * Create an aliased
+     * <code>network.network_route_directions_with_history</code> table
+     * reference
      */
     public NetworkRouteDirectionsWithHistory(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY);
     }
 
     /**
-     * Create an aliased <code>network.network_route_directions_with_history</code> table reference
+     * Create an aliased
+     * <code>network.network_route_directions_with_history</code> table
+     * reference
      */
     public NetworkRouteDirectionsWithHistory(Name alias) {
         this(alias, NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY);
     }
 
     /**
-     * Create a <code>network.network_route_directions_with_history</code> table reference
+     * Create a <code>network.network_route_directions_with_history</code> table
+     * reference
      */
     public NetworkRouteDirectionsWithHistory() {
         this(DSL.name("network_route_directions_with_history"), null);
     }
 
-    public <O extends Record> NetworkRouteDirectionsWithHistory(Table<O> child, ForeignKey<O, NetworkRouteDirectionsWithHistoryRecord> key) {
-        super(child, key, NETWORK_ROUTE_DIRECTIONS_WITH_HISTORY);
-    }
-
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
@@ -160,6 +210,11 @@ public class NetworkRouteDirectionsWithHistory extends TableImpl<NetworkRouteDir
     @Override
     public NetworkRouteDirectionsWithHistory as(Name alias) {
         return new NetworkRouteDirectionsWithHistory(alias, this);
+    }
+
+    @Override
+    public NetworkRouteDirectionsWithHistory as(Table<?> alias) {
+        return new NetworkRouteDirectionsWithHistory(alias.getQualifiedName(), this);
     }
 
     /**
@@ -178,12 +233,95 @@ public class NetworkRouteDirectionsWithHistory extends TableImpl<NetworkRouteDir
         return new NetworkRouteDirectionsWithHistory(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row13 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row13<UUID, UUID, String, String, Integer, JSONB, JSONB, JSONB, JSONB, DateRange, TimeRange, UUID, UUID> fieldsRow() {
-        return (Row13) super.fieldsRow();
+    public NetworkRouteDirectionsWithHistory rename(Table<?> name) {
+        return new NetworkRouteDirectionsWithHistory(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteDirectionsWithHistory where(Condition condition) {
+        return new NetworkRouteDirectionsWithHistory(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteDirectionsWithHistory where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteDirectionsWithHistory where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteDirectionsWithHistory where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteDirectionsWithHistory where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteDirectionsWithHistory where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteDirectionsWithHistory where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteDirectionsWithHistory where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteDirectionsWithHistory whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteDirectionsWithHistory whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

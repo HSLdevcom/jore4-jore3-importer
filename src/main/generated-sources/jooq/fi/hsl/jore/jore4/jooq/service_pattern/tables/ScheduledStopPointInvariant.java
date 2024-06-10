@@ -6,11 +6,18 @@ package fi.hsl.jore.jore4.jooq.service_pattern.tables;
 
 import fi.hsl.jore.jore4.jooq.service_pattern.ServicePattern;
 
+import java.util.Collection;
+
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -28,7 +35,8 @@ public class ScheduledStopPointInvariant extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>service_pattern.scheduled_stop_point_invariant</code>
+     * The reference instance of
+     * <code>service_pattern.scheduled_stop_point_invariant</code>
      */
     public static final ScheduledStopPointInvariant SCHEDULED_STOP_POINT_INVARIANT = new ScheduledStopPointInvariant();
 
@@ -41,46 +49,48 @@ public class ScheduledStopPointInvariant extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>service_pattern.scheduled_stop_point_invariant.label</code>.
+     * The column
+     * <code>service_pattern.scheduled_stop_point_invariant.label</code>.
      */
     public final TableField<Record, String> LABEL = createField(DSL.name("label"), SQLDataType.CLOB.nullable(false), this, "");
 
     private ScheduledStopPointInvariant(Name alias, Table<Record> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private ScheduledStopPointInvariant(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private ScheduledStopPointInvariant(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>service_pattern.scheduled_stop_point_invariant</code> table reference
+     * Create an aliased
+     * <code>service_pattern.scheduled_stop_point_invariant</code> table
+     * reference
      */
     public ScheduledStopPointInvariant(String alias) {
         this(DSL.name(alias), SCHEDULED_STOP_POINT_INVARIANT);
     }
 
     /**
-     * Create an aliased <code>service_pattern.scheduled_stop_point_invariant</code> table reference
+     * Create an aliased
+     * <code>service_pattern.scheduled_stop_point_invariant</code> table
+     * reference
      */
     public ScheduledStopPointInvariant(Name alias) {
         this(alias, SCHEDULED_STOP_POINT_INVARIANT);
     }
 
     /**
-     * Create a <code>service_pattern.scheduled_stop_point_invariant</code> table reference
+     * Create a <code>service_pattern.scheduled_stop_point_invariant</code>
+     * table reference
      */
     public ScheduledStopPointInvariant() {
         this(DSL.name("scheduled_stop_point_invariant"), null);
     }
 
-    public <O extends Record> ScheduledStopPointInvariant(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, SCHEDULED_STOP_POINT_INVARIANT);
-    }
-
     @Override
     public Schema getSchema() {
-        return ServicePattern.SERVICE_PATTERN;
+        return aliased() ? null : ServicePattern.SERVICE_PATTERN;
     }
 
     @Override
@@ -91,6 +101,11 @@ public class ScheduledStopPointInvariant extends TableImpl<Record> {
     @Override
     public ScheduledStopPointInvariant as(Name alias) {
         return new ScheduledStopPointInvariant(alias, this);
+    }
+
+    @Override
+    public ScheduledStopPointInvariant as(Table<?> alias) {
+        return new ScheduledStopPointInvariant(alias.getQualifiedName(), this);
     }
 
     /**
@@ -107,5 +122,97 @@ public class ScheduledStopPointInvariant extends TableImpl<Record> {
     @Override
     public ScheduledStopPointInvariant rename(Name name) {
         return new ScheduledStopPointInvariant(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public ScheduledStopPointInvariant rename(Table<?> name) {
+        return new ScheduledStopPointInvariant(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPointInvariant where(Condition condition) {
+        return new ScheduledStopPointInvariant(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPointInvariant where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPointInvariant where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPointInvariant where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ScheduledStopPointInvariant where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ScheduledStopPointInvariant where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ScheduledStopPointInvariant where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ScheduledStopPointInvariant where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPointInvariant whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPointInvariant whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

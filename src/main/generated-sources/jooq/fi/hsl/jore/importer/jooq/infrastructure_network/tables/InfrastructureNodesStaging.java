@@ -7,17 +7,26 @@ package fi.hsl.jore.importer.jooq.infrastructure_network.tables;
 import fi.hsl.jore.importer.config.jooq.converter.geometry.PointBinding;
 import fi.hsl.jore.importer.jooq.infrastructure_network.InfrastructureNetwork;
 import fi.hsl.jore.importer.jooq.infrastructure_network.Keys;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodeTypes.InfrastructureNodeTypesPath;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNodesStagingRecord;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -37,7 +46,8 @@ public class InfrastructureNodesStaging extends TableImpl<InfrastructureNodesSta
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.infrastructure_nodes_staging</code>
+     * The reference instance of
+     * <code>infrastructure_network.infrastructure_nodes_staging</code>
      */
     public static final InfrastructureNodesStaging INFRASTRUCTURE_NODES_STAGING = new InfrastructureNodesStaging();
 
@@ -50,61 +60,99 @@ public class InfrastructureNodesStaging extends TableImpl<InfrastructureNodesSta
     }
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_ext_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_ext_id</code>.
      */
     public final TableField<InfrastructureNodesStagingRecord, String> INFRASTRUCTURE_NODE_EXT_ID = createField(DSL.name("infrastructure_node_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_type</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_type</code>.
      */
     public final TableField<InfrastructureNodesStagingRecord, String> INFRASTRUCTURE_NODE_TYPE = createField(DSL.name("infrastructure_node_type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_location</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_location</code>.
      */
-    public final TableField<InfrastructureNodesStagingRecord, Point> INFRASTRUCTURE_NODE_LOCATION = createField(DSL.name("infrastructure_node_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geometry\"").nullable(false), this, "", new PointBinding());
+    public final TableField<InfrastructureNodesStagingRecord, Point> INFRASTRUCTURE_NODE_LOCATION = createField(DSL.name("infrastructure_node_location"), SQLDataType.OTHER.nullable(false), this, "", new PointBinding());
 
     /**
-     * The column <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_projected_location</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_nodes_staging.infrastructure_node_projected_location</code>.
      */
-    public final TableField<InfrastructureNodesStagingRecord, Point> INFRASTRUCTURE_NODE_PROJECTED_LOCATION = createField(DSL.name("infrastructure_node_projected_location"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geometry\""), this, "", new PointBinding());
+    public final TableField<InfrastructureNodesStagingRecord, Point> INFRASTRUCTURE_NODE_PROJECTED_LOCATION = createField(DSL.name("infrastructure_node_projected_location"), SQLDataType.OTHER, this, "", new PointBinding());
 
     private InfrastructureNodesStaging(Name alias, Table<InfrastructureNodesStagingRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private InfrastructureNodesStaging(Name alias, Table<InfrastructureNodesStagingRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private InfrastructureNodesStaging(Name alias, Table<InfrastructureNodesStagingRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_nodes_staging</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_nodes_staging</code> table
+     * reference
      */
     public InfrastructureNodesStaging(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_NODES_STAGING);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_nodes_staging</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_nodes_staging</code> table
+     * reference
      */
     public InfrastructureNodesStaging(Name alias) {
         this(alias, INFRASTRUCTURE_NODES_STAGING);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_nodes_staging</code> table reference
+     * Create a <code>infrastructure_network.infrastructure_nodes_staging</code>
+     * table reference
      */
     public InfrastructureNodesStaging() {
         this(DSL.name("infrastructure_nodes_staging"), null);
     }
 
-    public <O extends Record> InfrastructureNodesStaging(Table<O> child, ForeignKey<O, InfrastructureNodesStagingRecord> key) {
-        super(child, key, INFRASTRUCTURE_NODES_STAGING);
+    public <O extends Record> InfrastructureNodesStaging(Table<O> path, ForeignKey<O, InfrastructureNodesStagingRecord> childPath, InverseForeignKey<O, InfrastructureNodesStagingRecord> parentPath) {
+        super(path, childPath, parentPath, INFRASTRUCTURE_NODES_STAGING);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class InfrastructureNodesStagingPath extends InfrastructureNodesStaging implements Path<InfrastructureNodesStagingRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> InfrastructureNodesStagingPath(Table<O> path, ForeignKey<O, InfrastructureNodesStagingRecord> childPath, InverseForeignKey<O, InfrastructureNodesStagingRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private InfrastructureNodesStagingPath(Name alias, Table<InfrastructureNodesStagingRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public InfrastructureNodesStagingPath as(String alias) {
+            return new InfrastructureNodesStagingPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public InfrastructureNodesStagingPath as(Name alias) {
+            return new InfrastructureNodesStagingPath(alias, this);
+        }
+
+        @Override
+        public InfrastructureNodesStagingPath as(Table<?> alias) {
+            return new InfrastructureNodesStagingPath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
@@ -113,20 +161,19 @@ public class InfrastructureNodesStaging extends TableImpl<InfrastructureNodesSta
     }
 
     @Override
-    public List<UniqueKey<InfrastructureNodesStagingRecord>> getKeys() {
-        return Arrays.<UniqueKey<InfrastructureNodesStagingRecord>>asList(Keys.INFRASTRUCTURE_NODES_STAGING_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<InfrastructureNodesStagingRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<InfrastructureNodesStagingRecord, ?>>asList(Keys.INFRASTRUCTURE_NODES_STAGING__INFRASTRUCTURE_NODES_STAGING_INFRASTRUCTURE_NODE_TYPE_FKEY);
+        return Arrays.asList(Keys.INFRASTRUCTURE_NODES_STAGING__INFRASTRUCTURE_NODES_STAGING_INFRASTRUCTURE_NODE_TYPE_FKEY);
     }
 
-    private transient InfrastructureNodeTypes _infrastructureNodeTypes;
+    private transient InfrastructureNodeTypesPath _infrastructureNodeTypes;
 
-    public InfrastructureNodeTypes infrastructureNodeTypes() {
+    /**
+     * Get the implicit join path to the
+     * <code>infrastructure_network.infrastructure_node_types</code> table.
+     */
+    public InfrastructureNodeTypesPath infrastructureNodeTypes() {
         if (_infrastructureNodeTypes == null)
-            _infrastructureNodeTypes = new InfrastructureNodeTypes(this, Keys.INFRASTRUCTURE_NODES_STAGING__INFRASTRUCTURE_NODES_STAGING_INFRASTRUCTURE_NODE_TYPE_FKEY);
+            _infrastructureNodeTypes = new InfrastructureNodeTypesPath(this, Keys.INFRASTRUCTURE_NODES_STAGING__INFRASTRUCTURE_NODES_STAGING_INFRASTRUCTURE_NODE_TYPE_FKEY, null);
 
         return _infrastructureNodeTypes;
     }
@@ -139,6 +186,11 @@ public class InfrastructureNodesStaging extends TableImpl<InfrastructureNodesSta
     @Override
     public InfrastructureNodesStaging as(Name alias) {
         return new InfrastructureNodesStaging(alias, this);
+    }
+
+    @Override
+    public InfrastructureNodesStaging as(Table<?> alias) {
+        return new InfrastructureNodesStaging(alias.getQualifiedName(), this);
     }
 
     /**
@@ -157,12 +209,95 @@ public class InfrastructureNodesStaging extends TableImpl<InfrastructureNodesSta
         return new InfrastructureNodesStaging(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row4 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row4<String, String, Point, Point> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public InfrastructureNodesStaging rename(Table<?> name) {
+        return new InfrastructureNodesStaging(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodesStaging where(Condition condition) {
+        return new InfrastructureNodesStaging(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodesStaging where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodesStaging where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodesStaging where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodesStaging where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodesStaging where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodesStaging where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodesStaging where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodesStaging whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodesStaging whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

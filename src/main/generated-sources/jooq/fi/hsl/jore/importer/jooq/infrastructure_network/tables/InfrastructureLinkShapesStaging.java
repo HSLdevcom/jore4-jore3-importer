@@ -9,15 +9,17 @@ import fi.hsl.jore.importer.jooq.infrastructure_network.InfrastructureNetwork;
 import fi.hsl.jore.importer.jooq.infrastructure_network.Keys;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureLinkShapesStagingRecord;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
-import org.jooq.Record;
-import org.jooq.Row2;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -37,7 +39,8 @@ public class InfrastructureLinkShapesStaging extends TableImpl<InfrastructureLin
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.infrastructure_link_shapes_staging</code>
+     * The reference instance of
+     * <code>infrastructure_network.infrastructure_link_shapes_staging</code>
      */
     public static final InfrastructureLinkShapesStaging INFRASTRUCTURE_LINK_SHAPES_STAGING = new InfrastructureLinkShapesStaging();
 
@@ -50,61 +53,60 @@ public class InfrastructureLinkShapesStaging extends TableImpl<InfrastructureLin
     }
 
     /**
-     * The column <code>infrastructure_network.infrastructure_link_shapes_staging.infrastructure_link_ext_id</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_link_shapes_staging.infrastructure_link_ext_id</code>.
      */
     public final TableField<InfrastructureLinkShapesStagingRecord, String> INFRASTRUCTURE_LINK_EXT_ID = createField(DSL.name("infrastructure_link_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_link_shapes_staging.infrastructure_link_shape</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_link_shapes_staging.infrastructure_link_shape</code>.
      */
-    public final TableField<InfrastructureLinkShapesStagingRecord, LineString> INFRASTRUCTURE_LINK_SHAPE = createField(DSL.name("infrastructure_link_shape"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").nullable(false), this, "", new LineStringBinding());
+    public final TableField<InfrastructureLinkShapesStagingRecord, LineString> INFRASTRUCTURE_LINK_SHAPE = createField(DSL.name("infrastructure_link_shape"), SQLDataType.OTHER.nullable(false), this, "", new LineStringBinding());
 
     private InfrastructureLinkShapesStaging(Name alias, Table<InfrastructureLinkShapesStagingRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private InfrastructureLinkShapesStaging(Name alias, Table<InfrastructureLinkShapesStagingRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private InfrastructureLinkShapesStaging(Name alias, Table<InfrastructureLinkShapesStagingRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_link_shapes_staging</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_link_shapes_staging</code>
+     * table reference
      */
     public InfrastructureLinkShapesStaging(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_LINK_SHAPES_STAGING);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_link_shapes_staging</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_link_shapes_staging</code>
+     * table reference
      */
     public InfrastructureLinkShapesStaging(Name alias) {
         this(alias, INFRASTRUCTURE_LINK_SHAPES_STAGING);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_link_shapes_staging</code> table reference
+     * Create a
+     * <code>infrastructure_network.infrastructure_link_shapes_staging</code>
+     * table reference
      */
     public InfrastructureLinkShapesStaging() {
         this(DSL.name("infrastructure_link_shapes_staging"), null);
     }
 
-    public <O extends Record> InfrastructureLinkShapesStaging(Table<O> child, ForeignKey<O, InfrastructureLinkShapesStagingRecord> key) {
-        super(child, key, INFRASTRUCTURE_LINK_SHAPES_STAGING);
-    }
-
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
     public UniqueKey<InfrastructureLinkShapesStagingRecord> getPrimaryKey() {
         return Keys.INFRASTRUCTURE_LINK_SHAPES_STAGING_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<InfrastructureLinkShapesStagingRecord>> getKeys() {
-        return Arrays.<UniqueKey<InfrastructureLinkShapesStagingRecord>>asList(Keys.INFRASTRUCTURE_LINK_SHAPES_STAGING_PKEY);
     }
 
     @Override
@@ -115,6 +117,11 @@ public class InfrastructureLinkShapesStaging extends TableImpl<InfrastructureLin
     @Override
     public InfrastructureLinkShapesStaging as(Name alias) {
         return new InfrastructureLinkShapesStaging(alias, this);
+    }
+
+    @Override
+    public InfrastructureLinkShapesStaging as(Table<?> alias) {
+        return new InfrastructureLinkShapesStaging(alias.getQualifiedName(), this);
     }
 
     /**
@@ -133,12 +140,95 @@ public class InfrastructureLinkShapesStaging extends TableImpl<InfrastructureLin
         return new InfrastructureLinkShapesStaging(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row2 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row2<String, LineString> fieldsRow() {
-        return (Row2) super.fieldsRow();
+    public InfrastructureLinkShapesStaging rename(Table<?> name) {
+        return new InfrastructureLinkShapesStaging(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinkShapesStaging where(Condition condition) {
+        return new InfrastructureLinkShapesStaging(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinkShapesStaging where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinkShapesStaging where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinkShapesStaging where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureLinkShapesStaging where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureLinkShapesStaging where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureLinkShapesStaging where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureLinkShapesStaging where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinkShapesStaging whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureLinkShapesStaging whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

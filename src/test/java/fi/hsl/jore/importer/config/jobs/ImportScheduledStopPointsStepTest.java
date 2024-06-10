@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
         "/sql/jore3/populate_places.sql",
         "/sql/jore3/populate_scheduled_stop_points.sql"
 },
-        config = @SqlConfig(dataSource = "sourceDataSource"))
+        config = @SqlConfig(dataSource = "sourceDataSource", transactionManager = "sourceTransactionManager"))
 @Sql(scripts = {
         "/sql/importer/drop_tables.sql",
         "/sql/importer/populate_places.sql",

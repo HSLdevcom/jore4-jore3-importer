@@ -8,16 +8,18 @@ import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsStagingRecord;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
-import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -36,7 +38,8 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>network.network_route_stop_points_staging</code>
+     * The reference instance of
+     * <code>network.network_route_stop_points_staging</code>
      */
     public static final NetworkRouteStopPointsStaging NETWORK_ROUTE_STOP_POINTS_STAGING = new NetworkRouteStopPointsStaging();
 
@@ -49,86 +52,87 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
     }
 
     /**
-     * The column <code>network.network_route_stop_points_staging.network_route_stop_point_ext_id</code>.
+     * The column
+     * <code>network.network_route_stop_points_staging.network_route_stop_point_ext_id</code>.
      */
     public final TableField<NetworkRouteStopPointsStagingRecord, String> NETWORK_ROUTE_STOP_POINT_EXT_ID = createField(DSL.name("network_route_stop_point_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_staging.network_route_stop_point_order</code>.
+     * The column
+     * <code>network.network_route_stop_points_staging.network_route_stop_point_order</code>.
      */
     public final TableField<NetworkRouteStopPointsStagingRecord, Integer> NETWORK_ROUTE_STOP_POINT_ORDER = createField(DSL.name("network_route_stop_point_order"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_staging.network_route_stop_point_hastus_point</code>.
+     * The column
+     * <code>network.network_route_stop_points_staging.network_route_stop_point_hastus_point</code>.
      */
     public final TableField<NetworkRouteStopPointsStagingRecord, Boolean> NETWORK_ROUTE_STOP_POINT_HASTUS_POINT = createField(DSL.name("network_route_stop_point_hastus_point"), SQLDataType.BOOLEAN.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_staging.network_route_stop_point_timetable_column</code>.
+     * The column
+     * <code>network.network_route_stop_points_staging.network_route_stop_point_timetable_column</code>.
      */
     public final TableField<NetworkRouteStopPointsStagingRecord, Integer> NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN = createField(DSL.name("network_route_stop_point_timetable_column"), SQLDataType.INTEGER, this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_staging.network_route_stop_point_via_point</code>.
+     * The column
+     * <code>network.network_route_stop_points_staging.network_route_stop_point_via_point</code>.
      */
     public final TableField<NetworkRouteStopPointsStagingRecord, Boolean> NETWORK_ROUTE_STOP_POINT_VIA_POINT = createField(DSL.name("network_route_stop_point_via_point"), SQLDataType.BOOLEAN.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_staging.network_route_stop_point_via_name</code>.
+     * The column
+     * <code>network.network_route_stop_points_staging.network_route_stop_point_via_name</code>.
      */
     public final TableField<NetworkRouteStopPointsStagingRecord, JSONB> NETWORK_ROUTE_STOP_POINT_VIA_NAME = createField(DSL.name("network_route_stop_point_via_name"), SQLDataType.JSONB, this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_staging.network_route_stop_point_regulated_timing_point_status</code>.
+     * The column
+     * <code>network.network_route_stop_points_staging.network_route_stop_point_regulated_timing_point_status</code>.
      */
-    public final TableField<NetworkRouteStopPointsStagingRecord, Integer> NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS = createField(DSL.name("network_route_stop_point_regulated_timing_point_status"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("'-9999'::integer", SQLDataType.INTEGER)), this, "");
+    public final TableField<NetworkRouteStopPointsStagingRecord, Integer> NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS = createField(DSL.name("network_route_stop_point_regulated_timing_point_status"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field(DSL.raw("'-9999'::integer"), SQLDataType.INTEGER)), this, "");
 
     private NetworkRouteStopPointsStaging(Name alias, Table<NetworkRouteStopPointsStagingRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private NetworkRouteStopPointsStaging(Name alias, Table<NetworkRouteStopPointsStagingRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private NetworkRouteStopPointsStaging(Name alias, Table<NetworkRouteStopPointsStagingRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>network.network_route_stop_points_staging</code> table reference
+     * Create an aliased <code>network.network_route_stop_points_staging</code>
+     * table reference
      */
     public NetworkRouteStopPointsStaging(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_STOP_POINTS_STAGING);
     }
 
     /**
-     * Create an aliased <code>network.network_route_stop_points_staging</code> table reference
+     * Create an aliased <code>network.network_route_stop_points_staging</code>
+     * table reference
      */
     public NetworkRouteStopPointsStaging(Name alias) {
         this(alias, NETWORK_ROUTE_STOP_POINTS_STAGING);
     }
 
     /**
-     * Create a <code>network.network_route_stop_points_staging</code> table reference
+     * Create a <code>network.network_route_stop_points_staging</code> table
+     * reference
      */
     public NetworkRouteStopPointsStaging() {
         this(DSL.name("network_route_stop_points_staging"), null);
     }
 
-    public <O extends Record> NetworkRouteStopPointsStaging(Table<O> child, ForeignKey<O, NetworkRouteStopPointsStagingRecord> key) {
-        super(child, key, NETWORK_ROUTE_STOP_POINTS_STAGING);
-    }
-
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
     public UniqueKey<NetworkRouteStopPointsStagingRecord> getPrimaryKey() {
         return Keys.NETWORK_ROUTE_STOP_POINTS_STAGING_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<NetworkRouteStopPointsStagingRecord>> getKeys() {
-        return Arrays.<UniqueKey<NetworkRouteStopPointsStagingRecord>>asList(Keys.NETWORK_ROUTE_STOP_POINTS_STAGING_PKEY);
     }
 
     @Override
@@ -139,6 +143,11 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
     @Override
     public NetworkRouteStopPointsStaging as(Name alias) {
         return new NetworkRouteStopPointsStaging(alias, this);
+    }
+
+    @Override
+    public NetworkRouteStopPointsStaging as(Table<?> alias) {
+        return new NetworkRouteStopPointsStaging(alias.getQualifiedName(), this);
     }
 
     /**
@@ -157,12 +166,95 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
         return new NetworkRouteStopPointsStaging(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row7 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row7<String, Integer, Boolean, Integer, Boolean, JSONB, Integer> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public NetworkRouteStopPointsStaging rename(Table<?> name) {
+        return new NetworkRouteStopPointsStaging(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteStopPointsStaging where(Condition condition) {
+        return new NetworkRouteStopPointsStaging(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteStopPointsStaging where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteStopPointsStaging where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteStopPointsStaging where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteStopPointsStaging where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteStopPointsStaging where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteStopPointsStaging where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteStopPointsStaging where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteStopPointsStaging whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteStopPointsStaging whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

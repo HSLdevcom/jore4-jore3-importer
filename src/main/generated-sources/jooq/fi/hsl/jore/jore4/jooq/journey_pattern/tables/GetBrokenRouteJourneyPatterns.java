@@ -9,6 +9,7 @@ import fi.hsl.jore.jore4.jooq.journey_pattern.JourneyPattern;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.Name;
 import org.jooq.Record;
@@ -17,6 +18,7 @@ import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -30,7 +32,8 @@ public class GetBrokenRouteJourneyPatterns extends TableImpl<Record> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>journey_pattern.get_broken_route_journey_patterns</code>
+     * The reference instance of
+     * <code>journey_pattern.get_broken_route_journey_patterns</code>
      */
     public static final GetBrokenRouteJourneyPatterns GET_BROKEN_ROUTE_JOURNEY_PATTERNS = new GetBrokenRouteJourneyPatterns();
 
@@ -43,39 +46,60 @@ public class GetBrokenRouteJourneyPatterns extends TableImpl<Record> {
     }
 
     /**
-     * The column <code>journey_pattern.get_broken_route_journey_patterns.journey_pattern_id</code>.
+     * The column
+     * <code>journey_pattern.get_broken_route_journey_patterns.journey_pattern_id</code>.
      */
-    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "");
+    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "");
 
     /**
-     * The column <code>journey_pattern.get_broken_route_journey_patterns.on_route_id</code>.
+     * The column
+     * <code>journey_pattern.get_broken_route_journey_patterns.on_route_id</code>.
      */
     public final TableField<Record, UUID> ON_ROUTE_ID = createField(DSL.name("on_route_id"), SQLDataType.UUID.nullable(false), this, "");
 
     private GetBrokenRouteJourneyPatterns(Name alias, Table<Record> aliased) {
-        this(alias, aliased, new Field[9]);
+        this(alias, aliased, new Field[] {
+            DSL.val(null, SQLDataType.UUID.array()),
+            DSL.val(null, SQLDataType.UUID.defaultValue(DSL.field(DSL.raw("NULL::uuid"), SQLDataType.UUID))),
+            DSL.val(null, SQLDataType.UUID.defaultValue(DSL.field(DSL.raw("NULL::uuid"), SQLDataType.UUID))),
+            DSL.val(null, DefaultDataType.getDefaultDataType("\"public\".\"geography\"").defaultValue(DSL.field(DSL.raw("NULL::geography"), org.jooq.impl.SQLDataType.OTHER))),
+            DSL.val(null, SQLDataType.CLOB.defaultValue(DSL.field(DSL.raw("NULL::text"), SQLDataType.CLOB))),
+            DSL.val(null, SQLDataType.CLOB.defaultValue(DSL.field(DSL.raw("NULL::text"), SQLDataType.CLOB))),
+            DSL.val(null, SQLDataType.LOCALDATE.defaultValue(DSL.field(DSL.raw("NULL::date"), SQLDataType.LOCALDATE))),
+            DSL.val(null, SQLDataType.LOCALDATE.defaultValue(DSL.field(DSL.raw("NULL::date"), SQLDataType.LOCALDATE))),
+            DSL.val(null, SQLDataType.INTEGER.defaultValue(DSL.field(DSL.raw("NULL::integer"), SQLDataType.INTEGER)))
+        });
     }
 
     private GetBrokenRouteJourneyPatterns(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.function());
+        this(alias, aliased, parameters, null);
+    }
+
+    private GetBrokenRouteJourneyPatterns(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.function(), where);
     }
 
     /**
-     * Create an aliased <code>journey_pattern.get_broken_route_journey_patterns</code> table reference
+     * Create an aliased
+     * <code>journey_pattern.get_broken_route_journey_patterns</code> table
+     * reference
      */
     public GetBrokenRouteJourneyPatterns(String alias) {
         this(DSL.name(alias), GET_BROKEN_ROUTE_JOURNEY_PATTERNS);
     }
 
     /**
-     * Create an aliased <code>journey_pattern.get_broken_route_journey_patterns</code> table reference
+     * Create an aliased
+     * <code>journey_pattern.get_broken_route_journey_patterns</code> table
+     * reference
      */
     public GetBrokenRouteJourneyPatterns(Name alias) {
         this(alias, GET_BROKEN_ROUTE_JOURNEY_PATTERNS);
     }
 
     /**
-     * Create a <code>journey_pattern.get_broken_route_journey_patterns</code> table reference
+     * Create a <code>journey_pattern.get_broken_route_journey_patterns</code>
+     * table reference
      */
     public GetBrokenRouteJourneyPatterns() {
         this(DSL.name("get_broken_route_journey_patterns"), null);
@@ -83,7 +107,7 @@ public class GetBrokenRouteJourneyPatterns extends TableImpl<Record> {
 
     @Override
     public Schema getSchema() {
-        return JourneyPattern.JOURNEY_PATTERN;
+        return aliased() ? null : JourneyPattern.JOURNEY_PATTERN;
     }
 
     @Override
@@ -94,6 +118,11 @@ public class GetBrokenRouteJourneyPatterns extends TableImpl<Record> {
     @Override
     public GetBrokenRouteJourneyPatterns as(Name alias) {
         return new GetBrokenRouteJourneyPatterns(alias, this, parameters);
+    }
+
+    @Override
+    public GetBrokenRouteJourneyPatterns as(Table<?> alias) {
+        return new GetBrokenRouteJourneyPatterns(alias.getQualifiedName(), this, parameters);
     }
 
     /**
@@ -113,6 +142,14 @@ public class GetBrokenRouteJourneyPatterns extends TableImpl<Record> {
     }
 
     /**
+     * Rename this table
+     */
+    @Override
+    public GetBrokenRouteJourneyPatterns rename(Table<?> name) {
+        return new GetBrokenRouteJourneyPatterns(name.getQualifiedName(), null, parameters);
+    }
+
+    /**
      * Call this table-valued function
      */
     public GetBrokenRouteJourneyPatterns call(
@@ -127,15 +164,15 @@ public class GetBrokenRouteJourneyPatterns extends TableImpl<Record> {
         , Integer newPriority
     ) {
         GetBrokenRouteJourneyPatterns result = new GetBrokenRouteJourneyPatterns(DSL.name("get_broken_route_journey_patterns"), null, new Field[] {
-              DSL.val(filterRouteIds, SQLDataType.UUID.getArrayDataType())
-            , DSL.val(replaceScheduledStopPointId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID)))
-            , DSL.val(newLocatedOnInfrastructureLinkId, SQLDataType.UUID.defaultValue(DSL.field("NULL::uuid", SQLDataType.UUID)))
-            , DSL.val(newMeasuredLocation, org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"geography\"").defaultValue(DSL.field("NULL::geography", org.jooq.impl.SQLDataType.OTHER)))
-            , DSL.val(newDirection, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB)))
-            , DSL.val(newLabel, SQLDataType.CLOB.defaultValue(DSL.field("NULL::text", SQLDataType.CLOB)))
-            , DSL.val(newValidityStart, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE)))
-            , DSL.val(newValidityEnd, SQLDataType.LOCALDATE.defaultValue(DSL.field("NULL::date", SQLDataType.LOCALDATE)))
-            , DSL.val(newPriority, SQLDataType.INTEGER.defaultValue(DSL.field("NULL::integer", SQLDataType.INTEGER)))
+            DSL.val(filterRouteIds, SQLDataType.UUID.array()),
+            DSL.val(replaceScheduledStopPointId, SQLDataType.UUID.defaultValue(DSL.field(DSL.raw("NULL::uuid"), SQLDataType.UUID))),
+            DSL.val(newLocatedOnInfrastructureLinkId, SQLDataType.UUID.defaultValue(DSL.field(DSL.raw("NULL::uuid"), SQLDataType.UUID))),
+            DSL.val(newMeasuredLocation, DefaultDataType.getDefaultDataType("\"public\".\"geography\"").defaultValue(DSL.field(DSL.raw("NULL::geography"), org.jooq.impl.SQLDataType.OTHER))),
+            DSL.val(newDirection, SQLDataType.CLOB.defaultValue(DSL.field(DSL.raw("NULL::text"), SQLDataType.CLOB))),
+            DSL.val(newLabel, SQLDataType.CLOB.defaultValue(DSL.field(DSL.raw("NULL::text"), SQLDataType.CLOB))),
+            DSL.val(newValidityStart, SQLDataType.LOCALDATE.defaultValue(DSL.field(DSL.raw("NULL::date"), SQLDataType.LOCALDATE))),
+            DSL.val(newValidityEnd, SQLDataType.LOCALDATE.defaultValue(DSL.field(DSL.raw("NULL::date"), SQLDataType.LOCALDATE))),
+            DSL.val(newPriority, SQLDataType.INTEGER.defaultValue(DSL.field(DSL.raw("NULL::integer"), SQLDataType.INTEGER)))
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;
@@ -156,15 +193,15 @@ public class GetBrokenRouteJourneyPatterns extends TableImpl<Record> {
         , Field<Integer> newPriority
     ) {
         GetBrokenRouteJourneyPatterns result = new GetBrokenRouteJourneyPatterns(DSL.name("get_broken_route_journey_patterns"), null, new Field[] {
-              filterRouteIds
-            , replaceScheduledStopPointId
-            , newLocatedOnInfrastructureLinkId
-            , newMeasuredLocation
-            , newDirection
-            , newLabel
-            , newValidityStart
-            , newValidityEnd
-            , newPriority
+            filterRouteIds,
+            replaceScheduledStopPointId,
+            newLocatedOnInfrastructureLinkId,
+            newMeasuredLocation,
+            newDirection,
+            newLabel,
+            newValidityStart,
+            newValidityEnd,
+            newPriority
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;

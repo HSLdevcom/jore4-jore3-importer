@@ -21,7 +21,8 @@ public class InfraLinkStopRefsAlreadyVerified extends AbstractRoutine<Boolean> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The parameter <code>journey_pattern.infra_link_stop_refs_already_verified.RETURN_VALUE</code>.
+     * The parameter
+     * <code>journey_pattern.infra_link_stop_refs_already_verified.RETURN_VALUE</code>.
      */
     public static final Parameter<Boolean> RETURN_VALUE = Internal.createParameter("RETURN_VALUE", SQLDataType.BOOLEAN, false, false);
 

@@ -6,27 +6,37 @@ package fi.hsl.jore.importer.jooq.network.tables;
 
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
-import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes.InfrastructureNodesPath;
 import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
+import fi.hsl.jore.importer.jooq.network.tables.NetworkPlaces.NetworkPlacesPath;
 import fi.hsl.jore.importer.jooq.network.tables.records.ScheduledStopPointsRecord;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.InverseForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.Row10;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -53,49 +63,57 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
     }
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_id</code>.
      */
-    public final TableField<ScheduledStopPointsRecord, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "");
+    public final TableField<ScheduledStopPointsRecord, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_ext_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_ext_id</code>.
      */
     public final TableField<ScheduledStopPointsRecord, String> SCHEDULED_STOP_POINT_EXT_ID = createField(DSL.name("scheduled_stop_point_ext_id"), SQLDataType.VARCHAR(7).nullable(false), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points.infrastructure_node_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points.infrastructure_node_id</code>.
      */
     public final TableField<ScheduledStopPointsRecord, UUID> INFRASTRUCTURE_NODE_ID = createField(DSL.name("infrastructure_node_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_ely_number</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_ely_number</code>.
      */
     public final TableField<ScheduledStopPointsRecord, Long> SCHEDULED_STOP_POINT_ELY_NUMBER = createField(DSL.name("scheduled_stop_point_ely_number"), SQLDataType.BIGINT, this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_name</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_name</code>.
      */
     public final TableField<ScheduledStopPointsRecord, JSONB> SCHEDULED_STOP_POINT_NAME = createField(DSL.name("scheduled_stop_point_name"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_sys_period</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_sys_period</code>.
      */
-    public final TableField<ScheduledStopPointsRecord, TimeRange> SCHEDULED_STOP_POINT_SYS_PERIOD = createField(DSL.name("scheduled_stop_point_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)", org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
+    public final TableField<ScheduledStopPointsRecord, TimeRange> SCHEDULED_STOP_POINT_SYS_PERIOD = createField(DSL.name("scheduled_stop_point_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field(DSL.raw("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)"), org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_short_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_short_id</code>.
      */
     public final TableField<ScheduledStopPointsRecord, String> SCHEDULED_STOP_POINT_SHORT_ID = createField(DSL.name("scheduled_stop_point_short_id"), SQLDataType.VARCHAR(6), this, "");
 
     /**
-     * The column <code>network.scheduled_stop_points.scheduled_stop_point_jore4_id</code>.
+     * The column
+     * <code>network.scheduled_stop_points.scheduled_stop_point_jore4_id</code>.
      */
     public final TableField<ScheduledStopPointsRecord, UUID> SCHEDULED_STOP_POINT_JORE4_ID = createField(DSL.name("scheduled_stop_point_jore4_id"), SQLDataType.UUID, this, "");
 
     /**
      * The column <code>network.scheduled_stop_points.usage_in_routes</code>.
      */
-    public final TableField<ScheduledStopPointsRecord, Integer> USAGE_IN_ROUTES = createField(DSL.name("usage_in_routes"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
+    public final TableField<ScheduledStopPointsRecord, Integer> USAGE_IN_ROUTES = createField(DSL.name("usage_in_routes"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field(DSL.raw("0"), SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>network.scheduled_stop_points.network_place_id</code>.
@@ -103,22 +121,24 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
     public final TableField<ScheduledStopPointsRecord, UUID> NETWORK_PLACE_ID = createField(DSL.name("network_place_id"), SQLDataType.UUID, this, "");
 
     private ScheduledStopPoints(Name alias, Table<ScheduledStopPointsRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private ScheduledStopPoints(Name alias, Table<ScheduledStopPointsRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private ScheduledStopPoints(Name alias, Table<ScheduledStopPointsRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>network.scheduled_stop_points</code> table reference
+     * Create an aliased <code>network.scheduled_stop_points</code> table
+     * reference
      */
     public ScheduledStopPoints(String alias) {
         this(DSL.name(alias), SCHEDULED_STOP_POINTS);
     }
 
     /**
-     * Create an aliased <code>network.scheduled_stop_points</code> table reference
+     * Create an aliased <code>network.scheduled_stop_points</code> table
+     * reference
      */
     public ScheduledStopPoints(Name alias) {
         this(alias, SCHEDULED_STOP_POINTS);
@@ -131,13 +151,42 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
         this(DSL.name("scheduled_stop_points"), null);
     }
 
-    public <O extends Record> ScheduledStopPoints(Table<O> child, ForeignKey<O, ScheduledStopPointsRecord> key) {
-        super(child, key, SCHEDULED_STOP_POINTS);
+    public <O extends Record> ScheduledStopPoints(Table<O> path, ForeignKey<O, ScheduledStopPointsRecord> childPath, InverseForeignKey<O, ScheduledStopPointsRecord> parentPath) {
+        super(path, childPath, parentPath, SCHEDULED_STOP_POINTS);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class ScheduledStopPointsPath extends ScheduledStopPoints implements Path<ScheduledStopPointsRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> ScheduledStopPointsPath(Table<O> path, ForeignKey<O, ScheduledStopPointsRecord> childPath, InverseForeignKey<O, ScheduledStopPointsRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private ScheduledStopPointsPath(Name alias, Table<ScheduledStopPointsRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public ScheduledStopPointsPath as(String alias) {
+            return new ScheduledStopPointsPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public ScheduledStopPointsPath as(Name alias) {
+            return new ScheduledStopPointsPath(alias, this);
+        }
+
+        @Override
+        public ScheduledStopPointsPath as(Table<?> alias) {
+            return new ScheduledStopPointsPath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
@@ -146,28 +195,32 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
     }
 
     @Override
-    public List<UniqueKey<ScheduledStopPointsRecord>> getKeys() {
-        return Arrays.<UniqueKey<ScheduledStopPointsRecord>>asList(Keys.SCHEDULED_STOP_POINTS_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<ScheduledStopPointsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ScheduledStopPointsRecord, ?>>asList(Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_INFRASTRUCTURE_NODE_ID_FKEY, Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_NETWORK_PLACE_ID_FKEY);
+        return Arrays.asList(Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_INFRASTRUCTURE_NODE_ID_FKEY, Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_NETWORK_PLACE_ID_FKEY);
     }
 
-    private transient InfrastructureNodes _infrastructureNodes;
-    private transient NetworkPlaces _networkPlaces;
+    private transient InfrastructureNodesPath _infrastructureNodes;
 
-    public InfrastructureNodes infrastructureNodes() {
+    /**
+     * Get the implicit join path to the
+     * <code>infrastructure_network.infrastructure_nodes</code> table.
+     */
+    public InfrastructureNodesPath infrastructureNodes() {
         if (_infrastructureNodes == null)
-            _infrastructureNodes = new InfrastructureNodes(this, Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_INFRASTRUCTURE_NODE_ID_FKEY);
+            _infrastructureNodes = new InfrastructureNodesPath(this, Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_INFRASTRUCTURE_NODE_ID_FKEY, null);
 
         return _infrastructureNodes;
     }
 
-    public NetworkPlaces networkPlaces() {
+    private transient NetworkPlacesPath _networkPlaces;
+
+    /**
+     * Get the implicit join path to the <code>network.network_places</code>
+     * table.
+     */
+    public NetworkPlacesPath networkPlaces() {
         if (_networkPlaces == null)
-            _networkPlaces = new NetworkPlaces(this, Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_NETWORK_PLACE_ID_FKEY);
+            _networkPlaces = new NetworkPlacesPath(this, Keys.SCHEDULED_STOP_POINTS__SCHEDULED_STOP_POINTS_NETWORK_PLACE_ID_FKEY, null);
 
         return _networkPlaces;
     }
@@ -180,6 +233,11 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
     @Override
     public ScheduledStopPoints as(Name alias) {
         return new ScheduledStopPoints(alias, this);
+    }
+
+    @Override
+    public ScheduledStopPoints as(Table<?> alias) {
+        return new ScheduledStopPoints(alias.getQualifiedName(), this);
     }
 
     /**
@@ -198,12 +256,95 @@ public class ScheduledStopPoints extends TableImpl<ScheduledStopPointsRecord> {
         return new ScheduledStopPoints(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row10 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row10<UUID, String, UUID, Long, JSONB, TimeRange, String, UUID, Integer, UUID> fieldsRow() {
-        return (Row10) super.fieldsRow();
+    public ScheduledStopPoints rename(Table<?> name) {
+        return new ScheduledStopPoints(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPoints where(Condition condition) {
+        return new ScheduledStopPoints(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPoints where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPoints where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPoints where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ScheduledStopPoints where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ScheduledStopPoints where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ScheduledStopPoints where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ScheduledStopPoints where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPoints whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ScheduledStopPoints whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

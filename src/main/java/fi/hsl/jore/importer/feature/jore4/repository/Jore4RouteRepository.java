@@ -29,39 +29,41 @@ public class Jore4RouteRepository implements IJore4RouteRepository {
 
     @Transactional
     @Override
-    public void insert(final List<? extends Jore4Route> routes) {
-        if (!routes.isEmpty()) {
-            final BatchBindStep batch = db.batch(db.insertInto(
-                                    ROUTE_,
-                                    ROUTE_.ROUTE_ID,
-                                    ROUTE_.NAME_I18N,
-                                    ROUTE_.DESCRIPTION_I18N,
-                                    ROUTE_.DIRECTION,
-                                    ROUTE_.LABEL,
-                                    ROUTE_.VARIANT,
-                                    ROUTE_.ON_LINE_ID,
-                                    ROUTE_.PRIORITY,
-                                    ROUTE_.VALIDITY_START,
-                                    ROUTE_.VALIDITY_END,
-                                    ROUTE_.LEGACY_HSL_MUNICIPALITY_CODE
-                            )
-                            .values((UUID) null, null, null, null, null, null, null, null, null, null, null)
+    public void insert(final Iterable<? extends Jore4Route> routes) {
+        BatchBindStep batch = db.batch(db.insertInto(
+                    ROUTE_,
+                    ROUTE_.ROUTE_ID,
+                    ROUTE_.NAME_I18N,
+                    ROUTE_.DESCRIPTION_I18N,
+                    ROUTE_.DIRECTION,
+                    ROUTE_.LABEL,
+                    ROUTE_.VARIANT,
+                    ROUTE_.ON_LINE_ID,
+                    ROUTE_.PRIORITY,
+                    ROUTE_.VALIDITY_START,
+                    ROUTE_.VALIDITY_END,
+                    ROUTE_.LEGACY_HSL_MUNICIPALITY_CODE
+                )
+                .values((UUID) null, null, null, null, null, null, null, null, null, null, null)
+        );
+
+        for (final Jore4Route route : routes) {
+            batch = batch.bind(
+                route.routeId(),
+                jsonbConverter.asJson(route.description()),
+                jsonbConverter.asJson(route.description()),
+                route.direction().getValue(),
+                route.label(),
+                route.hiddenVariant().orElse(null),
+                route.lineId(),
+                route.priority(),
+                route.validityStart().orElse(null),
+                route.validityEnd().orElse(null),
+                route.legacyHslMunicipalityCode().getJore4Value()
             );
+        }
 
-            routes.forEach(route -> batch.bind(
-                    route.routeId(),
-                    jsonbConverter.asJson(route.description()),
-                    jsonbConverter.asJson(route.description()),
-                    route.direction().getValue(),
-                    route.label(),
-                    route.hiddenVariant().orElse(null),
-                    route.lineId(),
-                    route.priority(),
-                    route.validityStart().orElse(null),
-                    route.validityEnd().orElse(null),
-                    route.legacyHslMunicipalityCode().getJore4Value()
-            ));
-
+        if (batch.size() > 0) {
             batch.execute();
         }
     }

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 import static fi.hsl.jore.jore4.jooq.timing_pattern.Tables.TIMING_PLACE;
@@ -30,22 +29,24 @@ public class Jore4TimingPlaceRepository implements IJore4TimingPlaceRepository {
 
     @Transactional
     @Override
-    public void insert(final List<? extends Jore4TimingPlace> timingPlaces) {
-        if (!timingPlaces.isEmpty()) {
-            final BatchBindStep batch = db.batch(db.insertInto(
-                            TIMING_PLACE,
-                            TIMING_PLACE.TIMING_PLACE_ID,
-                            TIMING_PLACE.LABEL,
-                            TIMING_PLACE.DESCRIPTION
-                    )
-                    .values((UUID) null, null, null));
+    public void insert(final Iterable<? extends Jore4TimingPlace> timingPlaces) {
+        BatchBindStep batch = db.batch(db.insertInto(
+                TIMING_PLACE,
+                TIMING_PLACE.TIMING_PLACE_ID,
+                TIMING_PLACE.LABEL,
+                TIMING_PLACE.DESCRIPTION
+            )
+            .values((UUID) null, null, null));
 
-            timingPlaces.forEach(timingPlace -> batch.bind(
-                    timingPlace.timingPlaceId(),
-                    timingPlace.timingPlaceLabel(),
-                    jsonbConverter.asJson(timingPlace.timingPlaceName())
-            ));
+        for (final Jore4TimingPlace timingPlace : timingPlaces) {
+            batch = batch.bind(
+                timingPlace.timingPlaceId(),
+                timingPlace.timingPlaceLabel(),
+                jsonbConverter.asJson(timingPlace.timingPlaceName())
+            );
+        }
 
+        if (batch.size() > 0) {
             batch.execute();
         }
     }

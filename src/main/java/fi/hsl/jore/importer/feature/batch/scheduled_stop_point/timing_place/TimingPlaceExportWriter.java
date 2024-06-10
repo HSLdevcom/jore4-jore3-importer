@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point.timing_place;
 
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4TimingPlace;
 import fi.hsl.jore.importer.feature.jore4.repository.IJore4TimingPlaceRepository;
+import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ public class TimingPlaceExportWriter implements ItemWriter<Jore4TimingPlace> {
     }
 
     @Override
-    public void write(final List<? extends Jore4TimingPlace> items) throws Exception {
-        jore4Repository.insert(items);
+    public void write(final Chunk<? extends Jore4TimingPlace> items) throws Exception {
+        jore4Repository.insert(items.getItems());
     }
 }

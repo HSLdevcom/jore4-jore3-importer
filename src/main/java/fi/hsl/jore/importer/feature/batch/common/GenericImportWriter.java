@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.common;
 
+import com.google.common.collect.FluentIterable;
 import fi.hsl.jore.importer.feature.batch.util.PeriodicWriteStatisticsLogger;
 import fi.hsl.jore.importer.feature.common.dto.field.PK;
 import org.slf4j.Logger;
@@ -7,9 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.AfterStep;
+import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
-
-import java.util.List;
 
 
 public class GenericImportWriter<ENTITY, KEY extends PK> implements ItemWriter<ENTITY> {
@@ -27,16 +27,12 @@ public class GenericImportWriter<ENTITY, KEY extends PK> implements ItemWriter<E
     }
 
     @Override
-    public void write(final List<? extends ENTITY> items) {
-        if (counter == 0) {
-            statistics.reset();
-        }
+    public void write(final Chunk<? extends ENTITY> items) {
+        write(FluentIterable.from(items));
+    }
 
-        counter += items.size();
-
-        statistics.updateCounterAndLog(counter);
-
-        importRepository.submitToStaging(items);
+    public void write(final Iterable<? extends ENTITY> items) {
+        write(FluentIterable.from(items));
     }
 
     @SuppressWarnings("unused")
@@ -47,5 +43,17 @@ public class GenericImportWriter<ENTITY, KEY extends PK> implements ItemWriter<E
         counter = 0;
         statistics.reset();
         return stepExecution.getExitStatus();
+    }
+
+    private void write(final FluentIterable<? extends ENTITY> items) {
+        if (counter == 0) {
+            statistics.reset();
+        }
+
+        counter += items.size();
+
+        statistics.updateCounterAndLog(counter);
+
+        importRepository.submitToStaging(items);
     }
 }

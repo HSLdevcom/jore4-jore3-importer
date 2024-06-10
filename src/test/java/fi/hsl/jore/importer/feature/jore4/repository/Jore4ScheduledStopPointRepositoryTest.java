@@ -74,7 +74,7 @@ class Jore4ScheduledStopPointRepositoryTest {
                     "/sql/jore4/populate_infrastructure_links.sql",
                     "/sql/jore4/populate_timing_places.sql"
             },
-            config = @SqlConfig(dataSource = "jore4DataSource")
+            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
     )
     @ExtendWith(SoftAssertionsExtension.class)
     class InsertScheduledStopPointIntoDatabase {

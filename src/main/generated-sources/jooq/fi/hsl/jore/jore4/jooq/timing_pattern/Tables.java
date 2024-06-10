@@ -14,7 +14,10 @@ import fi.hsl.jore.jore4.jooq.timing_pattern.tables.TimingPlace;
 public class Tables {
 
     /**
-     * A set of SCHEDULED STOP POINTs against which the timing information necessary to build schedules may be recorded. In HSL context this is "Hastus paikka". Based on Transmodel entity TIMING POINT: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:2:709 
+     * A set of SCHEDULED STOP POINTs against which the timing information
+     * necessary to build schedules may be recorded. In HSL context this is
+     * "Hastus paikka". Based on Transmodel entity TIMING POINT:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:2:709 
      */
     public static final TimingPlace TIMING_PLACE = TimingPlace.TIMING_PLACE;
 }

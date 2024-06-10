@@ -9,19 +9,24 @@ import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsHistoryRecord;
 
+import java.util.Collection;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
-import org.jooq.Record;
-import org.jooq.Row9;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -35,7 +40,8 @@ public class NetworkRouteStopPointsHistory extends TableImpl<NetworkRouteStopPoi
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>network.network_route_stop_points_history</code>
+     * The reference instance of
+     * <code>network.network_route_stop_points_history</code>
      */
     public static final NetworkRouteStopPointsHistory NETWORK_ROUTE_STOP_POINTS_HISTORY = new NetworkRouteStopPointsHistory();
 
@@ -48,86 +54,94 @@ public class NetworkRouteStopPointsHistory extends TableImpl<NetworkRouteStopPoi
     }
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_point_id</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_point_id</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, UUID> NETWORK_ROUTE_POINT_ID = createField(DSL.name("network_route_point_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_ext_id</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_ext_id</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, String> NETWORK_ROUTE_STOP_POINT_EXT_ID = createField(DSL.name("network_route_stop_point_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_order</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_order</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, Integer> NETWORK_ROUTE_STOP_POINT_ORDER = createField(DSL.name("network_route_stop_point_order"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_hastus_point</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_hastus_point</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, Boolean> NETWORK_ROUTE_STOP_POINT_HASTUS_POINT = createField(DSL.name("network_route_stop_point_hastus_point"), SQLDataType.BOOLEAN.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_timetable_column</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_timetable_column</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, Integer> NETWORK_ROUTE_STOP_POINT_TIMETABLE_COLUMN = createField(DSL.name("network_route_stop_point_timetable_column"), SQLDataType.INTEGER, this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_sys_period</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_sys_period</code>.
      */
-    public final TableField<NetworkRouteStopPointsHistoryRecord, TimeRange> NETWORK_ROUTE_STOP_POINT_SYS_PERIOD = createField(DSL.name("network_route_stop_point_sys_period"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
+    public final TableField<NetworkRouteStopPointsHistoryRecord, TimeRange> NETWORK_ROUTE_STOP_POINT_SYS_PERIOD = createField(DSL.name("network_route_stop_point_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_via_point</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_via_point</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, Boolean> NETWORK_ROUTE_STOP_POINT_VIA_POINT = createField(DSL.name("network_route_stop_point_via_point"), SQLDataType.BOOLEAN.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_via_name</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_via_name</code>.
      */
     public final TableField<NetworkRouteStopPointsHistoryRecord, JSONB> NETWORK_ROUTE_STOP_POINT_VIA_NAME = createField(DSL.name("network_route_stop_point_via_name"), SQLDataType.JSONB, this, "");
 
     /**
-     * The column <code>network.network_route_stop_points_history.network_route_stop_point_regulated_timing_point_status</code>.
+     * The column
+     * <code>network.network_route_stop_points_history.network_route_stop_point_regulated_timing_point_status</code>.
      */
-    public final TableField<NetworkRouteStopPointsHistoryRecord, Integer> NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS = createField(DSL.name("network_route_stop_point_regulated_timing_point_status"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("'-9999'::integer", SQLDataType.INTEGER)), this, "");
+    public final TableField<NetworkRouteStopPointsHistoryRecord, Integer> NETWORK_ROUTE_STOP_POINT_REGULATED_TIMING_POINT_STATUS = createField(DSL.name("network_route_stop_point_regulated_timing_point_status"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field(DSL.raw("'-9999'::integer"), SQLDataType.INTEGER)), this, "");
 
     private NetworkRouteStopPointsHistory(Name alias, Table<NetworkRouteStopPointsHistoryRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private NetworkRouteStopPointsHistory(Name alias, Table<NetworkRouteStopPointsHistoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private NetworkRouteStopPointsHistory(Name alias, Table<NetworkRouteStopPointsHistoryRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>network.network_route_stop_points_history</code> table reference
+     * Create an aliased <code>network.network_route_stop_points_history</code>
+     * table reference
      */
     public NetworkRouteStopPointsHistory(String alias) {
         this(DSL.name(alias), NETWORK_ROUTE_STOP_POINTS_HISTORY);
     }
 
     /**
-     * Create an aliased <code>network.network_route_stop_points_history</code> table reference
+     * Create an aliased <code>network.network_route_stop_points_history</code>
+     * table reference
      */
     public NetworkRouteStopPointsHistory(Name alias) {
         this(alias, NETWORK_ROUTE_STOP_POINTS_HISTORY);
     }
 
     /**
-     * Create a <code>network.network_route_stop_points_history</code> table reference
+     * Create a <code>network.network_route_stop_points_history</code> table
+     * reference
      */
     public NetworkRouteStopPointsHistory() {
         this(DSL.name("network_route_stop_points_history"), null);
     }
 
-    public <O extends Record> NetworkRouteStopPointsHistory(Table<O> child, ForeignKey<O, NetworkRouteStopPointsHistoryRecord> key) {
-        super(child, key, NETWORK_ROUTE_STOP_POINTS_HISTORY);
-    }
-
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
@@ -138,6 +152,11 @@ public class NetworkRouteStopPointsHistory extends TableImpl<NetworkRouteStopPoi
     @Override
     public NetworkRouteStopPointsHistory as(Name alias) {
         return new NetworkRouteStopPointsHistory(alias, this);
+    }
+
+    @Override
+    public NetworkRouteStopPointsHistory as(Table<?> alias) {
+        return new NetworkRouteStopPointsHistory(alias.getQualifiedName(), this);
     }
 
     /**
@@ -156,12 +175,95 @@ public class NetworkRouteStopPointsHistory extends TableImpl<NetworkRouteStopPoi
         return new NetworkRouteStopPointsHistory(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row9 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row9<UUID, String, Integer, Boolean, Integer, TimeRange, Boolean, JSONB, Integer> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public NetworkRouteStopPointsHistory rename(Table<?> name) {
+        return new NetworkRouteStopPointsHistory(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteStopPointsHistory where(Condition condition) {
+        return new NetworkRouteStopPointsHistory(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteStopPointsHistory where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteStopPointsHistory where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteStopPointsHistory where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteStopPointsHistory where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteStopPointsHistory where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteStopPointsHistory where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRouteStopPointsHistory where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteStopPointsHistory whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRouteStopPointsHistory whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

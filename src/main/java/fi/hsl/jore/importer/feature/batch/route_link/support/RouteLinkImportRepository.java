@@ -60,7 +60,9 @@ public class RouteLinkImportRepository
                                       link.orderNumber()
                               ));
 
-        batch.execute();
+        if (batch.size() > 0) {
+            batch.execute();
+        }
     }
 
     protected Set<RouteLinkPK> delete() {

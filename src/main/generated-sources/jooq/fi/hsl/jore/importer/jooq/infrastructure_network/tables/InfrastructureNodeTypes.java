@@ -6,17 +6,25 @@ package fi.hsl.jore.importer.jooq.infrastructure_network.tables;
 
 import fi.hsl.jore.importer.jooq.infrastructure_network.InfrastructureNetwork;
 import fi.hsl.jore.importer.jooq.infrastructure_network.Keys;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes.InfrastructureNodesPath;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodesStaging.InfrastructureNodesStagingPath;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNodeTypesRecord;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.Row2;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -35,7 +43,8 @@ public class InfrastructureNodeTypes extends TableImpl<InfrastructureNodeTypesRe
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>infrastructure_network.infrastructure_node_types</code>
+     * The reference instance of
+     * <code>infrastructure_network.infrastructure_node_types</code>
      */
     public static final InfrastructureNodeTypes INFRASTRUCTURE_NODE_TYPES = new InfrastructureNodeTypes();
 
@@ -48,51 +57,87 @@ public class InfrastructureNodeTypes extends TableImpl<InfrastructureNodeTypesRe
     }
 
     /**
-     * The column <code>infrastructure_network.infrastructure_node_types.infrastructure_node_type_value</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_node_types.infrastructure_node_type_value</code>.
      */
     public final TableField<InfrastructureNodeTypesRecord, String> INFRASTRUCTURE_NODE_TYPE_VALUE = createField(DSL.name("infrastructure_node_type_value"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>infrastructure_network.infrastructure_node_types.infrastructure_node_type_comment</code>.
+     * The column
+     * <code>infrastructure_network.infrastructure_node_types.infrastructure_node_type_comment</code>.
      */
     public final TableField<InfrastructureNodeTypesRecord, String> INFRASTRUCTURE_NODE_TYPE_COMMENT = createField(DSL.name("infrastructure_node_type_comment"), SQLDataType.CLOB.nullable(false), this, "");
 
     private InfrastructureNodeTypes(Name alias, Table<InfrastructureNodeTypesRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private InfrastructureNodeTypes(Name alias, Table<InfrastructureNodeTypesRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private InfrastructureNodeTypes(Name alias, Table<InfrastructureNodeTypesRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_node_types</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_node_types</code> table
+     * reference
      */
     public InfrastructureNodeTypes(String alias) {
         this(DSL.name(alias), INFRASTRUCTURE_NODE_TYPES);
     }
 
     /**
-     * Create an aliased <code>infrastructure_network.infrastructure_node_types</code> table reference
+     * Create an aliased
+     * <code>infrastructure_network.infrastructure_node_types</code> table
+     * reference
      */
     public InfrastructureNodeTypes(Name alias) {
         this(alias, INFRASTRUCTURE_NODE_TYPES);
     }
 
     /**
-     * Create a <code>infrastructure_network.infrastructure_node_types</code> table reference
+     * Create a <code>infrastructure_network.infrastructure_node_types</code>
+     * table reference
      */
     public InfrastructureNodeTypes() {
         this(DSL.name("infrastructure_node_types"), null);
     }
 
-    public <O extends Record> InfrastructureNodeTypes(Table<O> child, ForeignKey<O, InfrastructureNodeTypesRecord> key) {
-        super(child, key, INFRASTRUCTURE_NODE_TYPES);
+    public <O extends Record> InfrastructureNodeTypes(Table<O> path, ForeignKey<O, InfrastructureNodeTypesRecord> childPath, InverseForeignKey<O, InfrastructureNodeTypesRecord> parentPath) {
+        super(path, childPath, parentPath, INFRASTRUCTURE_NODE_TYPES);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class InfrastructureNodeTypesPath extends InfrastructureNodeTypes implements Path<InfrastructureNodeTypesRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> InfrastructureNodeTypesPath(Table<O> path, ForeignKey<O, InfrastructureNodeTypesRecord> childPath, InverseForeignKey<O, InfrastructureNodeTypesRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private InfrastructureNodeTypesPath(Name alias, Table<InfrastructureNodeTypesRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public InfrastructureNodeTypesPath as(String alias) {
+            return new InfrastructureNodeTypesPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public InfrastructureNodeTypesPath as(Name alias) {
+            return new InfrastructureNodeTypesPath(alias, this);
+        }
+
+        @Override
+        public InfrastructureNodeTypesPath as(Table<?> alias) {
+            return new InfrastructureNodeTypesPath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
     public Schema getSchema() {
-        return InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
+        return aliased() ? null : InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
     }
 
     @Override
@@ -100,9 +145,30 @@ public class InfrastructureNodeTypes extends TableImpl<InfrastructureNodeTypesRe
         return Keys.INFRASTRUCTURE_NODE_TYPES_PKEY;
     }
 
-    @Override
-    public List<UniqueKey<InfrastructureNodeTypesRecord>> getKeys() {
-        return Arrays.<UniqueKey<InfrastructureNodeTypesRecord>>asList(Keys.INFRASTRUCTURE_NODE_TYPES_PKEY);
+    private transient InfrastructureNodesPath _infrastructureNodes;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>infrastructure_network.infrastructure_nodes</code> table
+     */
+    public InfrastructureNodesPath infrastructureNodes() {
+        if (_infrastructureNodes == null)
+            _infrastructureNodes = new InfrastructureNodesPath(this, null, Keys.INFRASTRUCTURE_NODES__INFRASTRUCTURE_NODES_INFRASTRUCTURE_NODE_TYPE_FKEY.getInverseKey());
+
+        return _infrastructureNodes;
+    }
+
+    private transient InfrastructureNodesStagingPath _infrastructureNodesStaging;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>infrastructure_network.infrastructure_nodes_staging</code> table
+     */
+    public InfrastructureNodesStagingPath infrastructureNodesStaging() {
+        if (_infrastructureNodesStaging == null)
+            _infrastructureNodesStaging = new InfrastructureNodesStagingPath(this, null, Keys.INFRASTRUCTURE_NODES_STAGING__INFRASTRUCTURE_NODES_STAGING_INFRASTRUCTURE_NODE_TYPE_FKEY.getInverseKey());
+
+        return _infrastructureNodesStaging;
     }
 
     @Override
@@ -113,6 +179,11 @@ public class InfrastructureNodeTypes extends TableImpl<InfrastructureNodeTypesRe
     @Override
     public InfrastructureNodeTypes as(Name alias) {
         return new InfrastructureNodeTypes(alias, this);
+    }
+
+    @Override
+    public InfrastructureNodeTypes as(Table<?> alias) {
+        return new InfrastructureNodeTypes(alias.getQualifiedName(), this);
     }
 
     /**
@@ -131,12 +202,95 @@ public class InfrastructureNodeTypes extends TableImpl<InfrastructureNodeTypesRe
         return new InfrastructureNodeTypes(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row2 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row2<String, String> fieldsRow() {
-        return (Row2) super.fieldsRow();
+    public InfrastructureNodeTypes rename(Table<?> name) {
+        return new InfrastructureNodeTypes(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodeTypes where(Condition condition) {
+        return new InfrastructureNodeTypes(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodeTypes where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodeTypes where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodeTypes where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodeTypes where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodeTypes where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodeTypes where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public InfrastructureNodeTypes where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodeTypes whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public InfrastructureNodeTypes whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

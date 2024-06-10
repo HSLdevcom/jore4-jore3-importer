@@ -53,7 +53,7 @@ class Jore4JourneyPatternStopRepositoryTest {
                     "/sql/jore4/populate_routes.sql",
                     "/sql/jore4/populate_journey_patterns.sql"
             },
-            config = @SqlConfig(dataSource = "jore4DataSource")
+            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
     )
     class InsertJourneyPatternStopIntoDatabase {
 
@@ -172,7 +172,7 @@ class Jore4JourneyPatternStopRepositoryTest {
 
             final String expectedJsonString = jsonbConverter.asJson(VIA_POINT_NAMES.get()).data();
 
-            var testJsonValueCondition = new Condition<PGobject>(fieldValue ->
+            final Condition<PGobject> testJsonValueCondition = new Condition<>(fieldValue ->
                     fieldValue.getValue().replace(" ", "").equals(expectedJsonString),
                     expectedJsonString);
 

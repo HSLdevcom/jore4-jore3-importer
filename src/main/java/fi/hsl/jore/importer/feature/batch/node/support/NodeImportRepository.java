@@ -54,7 +54,9 @@ public class NodeImportRepository
                                          node.location(),
                                          node.projectedLocation().orElse(null)));
 
-        batch.execute();
+        if (batch.size() > 0) {
+            batch.execute();
+        }
     }
 
     protected Set<NodePK> delete() {

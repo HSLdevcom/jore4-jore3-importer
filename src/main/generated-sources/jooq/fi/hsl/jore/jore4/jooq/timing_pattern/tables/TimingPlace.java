@@ -6,14 +6,20 @@ package fi.hsl.jore.jore4.jooq.timing_pattern.tables;
 
 import fi.hsl.jore.jore4.jooq.timing_pattern.TimingPattern;
 
+import java.util.Collection;
 import java.util.UUID;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -23,9 +29,10 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * A set of SCHEDULED STOP POINTs against which the timing information necessary 
- * to build schedules may be recorded. In HSL context this is "Hastus paikka". 
- * Based on Transmodel entity TIMING POINT: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:2:709 
+ * A set of SCHEDULED STOP POINTs against which the timing information necessary
+ * to build schedules may be recorded. In HSL context this is "Hastus paikka".
+ * Based on Transmodel entity TIMING POINT:
+ * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:2:709 
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TimingPlace extends TableImpl<Record> {
@@ -48,7 +55,7 @@ public class TimingPlace extends TableImpl<Record> {
     /**
      * The column <code>timing_pattern.timing_place.timing_place_id</code>.
      */
-    public final TableField<Record, UUID> TIMING_PLACE_ID = createField(DSL.name("timing_place_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "");
+    public final TableField<Record, UUID> TIMING_PLACE_ID = createField(DSL.name("timing_place_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "");
 
     /**
      * The column <code>timing_pattern.timing_place.label</code>.
@@ -61,22 +68,24 @@ public class TimingPlace extends TableImpl<Record> {
     public final TableField<Record, JSONB> DESCRIPTION = createField(DSL.name("description"), SQLDataType.JSONB, this, "");
 
     private TimingPlace(Name alias, Table<Record> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private TimingPlace(Name alias, Table<Record> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("A set of SCHEDULED STOP POINTs against which the timing information necessary to build schedules may be recorded. In HSL context this is \"Hastus paikka\". Based on Transmodel entity TIMING POINT: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:2:709 "), TableOptions.table());
+    private TimingPlace(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment("A set of SCHEDULED STOP POINTs against which the timing information necessary to build schedules may be recorded. In HSL context this is \"Hastus paikka\". Based on Transmodel entity TIMING POINT: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:2:709 "), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>timing_pattern.timing_place</code> table reference
+     * Create an aliased <code>timing_pattern.timing_place</code> table
+     * reference
      */
     public TimingPlace(String alias) {
         this(DSL.name(alias), TIMING_PLACE);
     }
 
     /**
-     * Create an aliased <code>timing_pattern.timing_place</code> table reference
+     * Create an aliased <code>timing_pattern.timing_place</code> table
+     * reference
      */
     public TimingPlace(Name alias) {
         this(alias, TIMING_PLACE);
@@ -89,13 +98,9 @@ public class TimingPlace extends TableImpl<Record> {
         this(DSL.name("timing_place"), null);
     }
 
-    public <O extends Record> TimingPlace(Table<O> child, ForeignKey<O, Record> key) {
-        super(child, key, TIMING_PLACE);
-    }
-
     @Override
     public Schema getSchema() {
-        return TimingPattern.TIMING_PATTERN;
+        return aliased() ? null : TimingPattern.TIMING_PATTERN;
     }
 
     @Override
@@ -106,6 +111,11 @@ public class TimingPlace extends TableImpl<Record> {
     @Override
     public TimingPlace as(Name alias) {
         return new TimingPlace(alias, this);
+    }
+
+    @Override
+    public TimingPlace as(Table<?> alias) {
+        return new TimingPlace(alias.getQualifiedName(), this);
     }
 
     /**
@@ -122,5 +132,97 @@ public class TimingPlace extends TableImpl<Record> {
     @Override
     public TimingPlace rename(Name name) {
         return new TimingPlace(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public TimingPlace rename(Table<?> name) {
+        return new TimingPlace(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public TimingPlace where(Condition condition) {
+        return new TimingPlace(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public TimingPlace where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public TimingPlace where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public TimingPlace where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public TimingPlace where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public TimingPlace where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public TimingPlace where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public TimingPlace where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public TimingPlace whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public TimingPlace whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

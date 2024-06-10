@@ -8,16 +8,18 @@ import fi.hsl.jore.importer.jooq.network.Keys;
 import fi.hsl.jore.importer.jooq.network.Network;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutesStagingRecord;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
-import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
+import org.jooq.SQL;
 import org.jooq.Schema;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -49,52 +51,60 @@ public class NetworkRoutesStaging extends TableImpl<NetworkRoutesStagingRecord> 
     }
 
     /**
-     * The column <code>network.network_routes_staging.network_route_ext_id</code>.
+     * The column
+     * <code>network.network_routes_staging.network_route_ext_id</code>.
      */
     public final TableField<NetworkRoutesStagingRecord, String> NETWORK_ROUTE_EXT_ID = createField(DSL.name("network_route_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_routes_staging.network_line_ext_id</code>.
+     * The column
+     * <code>network.network_routes_staging.network_line_ext_id</code>.
      */
     public final TableField<NetworkRoutesStagingRecord, String> NETWORK_LINE_EXT_ID = createField(DSL.name("network_line_ext_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_routes_staging.network_route_number</code>.
+     * The column
+     * <code>network.network_routes_staging.network_route_number</code>.
      */
     public final TableField<NetworkRoutesStagingRecord, String> NETWORK_ROUTE_NUMBER = createField(DSL.name("network_route_number"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_routes_staging.network_route_name</code>.
+     * The column
+     * <code>network.network_routes_staging.network_route_name</code>.
      */
     public final TableField<NetworkRoutesStagingRecord, JSONB> NETWORK_ROUTE_NAME = createField(DSL.name("network_route_name"), SQLDataType.JSONB.nullable(false), this, "");
 
     /**
-     * The column <code>network.network_routes_staging.network_route_hidden_variant</code>.
+     * The column
+     * <code>network.network_routes_staging.network_route_hidden_variant</code>.
      */
     public final TableField<NetworkRoutesStagingRecord, Short> NETWORK_ROUTE_HIDDEN_VARIANT = createField(DSL.name("network_route_hidden_variant"), SQLDataType.SMALLINT, this, "");
 
     /**
-     * The column <code>network.network_routes_staging.network_route_legacy_hsl_municipality_code</code>.
+     * The column
+     * <code>network.network_routes_staging.network_route_legacy_hsl_municipality_code</code>.
      */
     public final TableField<NetworkRoutesStagingRecord, String> NETWORK_ROUTE_LEGACY_HSL_MUNICIPALITY_CODE = createField(DSL.name("network_route_legacy_hsl_municipality_code"), SQLDataType.CLOB, this, "");
 
     private NetworkRoutesStaging(Name alias, Table<NetworkRoutesStagingRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private NetworkRoutesStaging(Name alias, Table<NetworkRoutesStagingRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private NetworkRoutesStaging(Name alias, Table<NetworkRoutesStagingRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
-     * Create an aliased <code>network.network_routes_staging</code> table reference
+     * Create an aliased <code>network.network_routes_staging</code> table
+     * reference
      */
     public NetworkRoutesStaging(String alias) {
         this(DSL.name(alias), NETWORK_ROUTES_STAGING);
     }
 
     /**
-     * Create an aliased <code>network.network_routes_staging</code> table reference
+     * Create an aliased <code>network.network_routes_staging</code> table
+     * reference
      */
     public NetworkRoutesStaging(Name alias) {
         this(alias, NETWORK_ROUTES_STAGING);
@@ -107,23 +117,14 @@ public class NetworkRoutesStaging extends TableImpl<NetworkRoutesStagingRecord> 
         this(DSL.name("network_routes_staging"), null);
     }
 
-    public <O extends Record> NetworkRoutesStaging(Table<O> child, ForeignKey<O, NetworkRoutesStagingRecord> key) {
-        super(child, key, NETWORK_ROUTES_STAGING);
-    }
-
     @Override
     public Schema getSchema() {
-        return Network.NETWORK;
+        return aliased() ? null : Network.NETWORK;
     }
 
     @Override
     public UniqueKey<NetworkRoutesStagingRecord> getPrimaryKey() {
         return Keys.NETWORK_ROUTES_STAGING_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<NetworkRoutesStagingRecord>> getKeys() {
-        return Arrays.<UniqueKey<NetworkRoutesStagingRecord>>asList(Keys.NETWORK_ROUTES_STAGING_PKEY);
     }
 
     @Override
@@ -134,6 +135,11 @@ public class NetworkRoutesStaging extends TableImpl<NetworkRoutesStagingRecord> 
     @Override
     public NetworkRoutesStaging as(Name alias) {
         return new NetworkRoutesStaging(alias, this);
+    }
+
+    @Override
+    public NetworkRoutesStaging as(Table<?> alias) {
+        return new NetworkRoutesStaging(alias.getQualifiedName(), this);
     }
 
     /**
@@ -152,12 +158,95 @@ public class NetworkRoutesStaging extends TableImpl<NetworkRoutesStagingRecord> 
         return new NetworkRoutesStaging(name, null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row6 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Rename this table
+     */
     @Override
-    public Row6<String, String, String, JSONB, Short, String> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public NetworkRoutesStaging rename(Table<?> name) {
+        return new NetworkRoutesStaging(name.getQualifiedName(), null);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRoutesStaging where(Condition condition) {
+        return new NetworkRoutesStaging(getQualifiedName(), aliased() ? this : null, null, condition);
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRoutesStaging where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRoutesStaging where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRoutesStaging where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRoutesStaging where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRoutesStaging where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRoutesStaging where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public NetworkRoutesStaging where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRoutesStaging whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public NetworkRoutesStaging whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

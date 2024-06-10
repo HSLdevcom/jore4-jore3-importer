@@ -52,7 +52,9 @@ public class LinkShapeImportRepository
         shapes.forEach(shape -> batch.bind(shape.linkExternalId().value(),
                                            shape.geometry()));
 
-        batch.execute();
+        if (batch.size() > 0) {
+            batch.execute();
+        }
     }
 
     protected Set<LinkShapePK> delete() {
