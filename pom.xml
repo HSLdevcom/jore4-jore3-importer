@@ -676,8 +676,42 @@
                     <java>
                         <!-- No need to specify files, inferred automatically -->
 
+                        <!-- Cleanthat enforces certain kind of coding styles -->
+                        <!-- The codebase mostly adheres to the listed ruleset. -->
+                        <!-- But a couple of offending mutators have been disabled. -->
+                        <cleanthat>
+                            <sourceJdk>${java.version}</sourceJdk>
+                            <mutators>
+                                <!-- See the commit message for full list of mutators enabled by these presets. -->
+                                <mutator>SafeAndConsensual</mutator>
+                                <mutator>SafeButNotConsensual</mutator>
+                                <mutator>SafeButControversial</mutator>
+                                <mutator>Guava</mutator>
+                                <mutator>SpotBugs</mutator>
+
+                                <!-- <mutator>Stream</mutator> -->
+                                <!-- Is broken, it has a copy-paste bug and is equal to Guava rule set. -->
+                                <!-- It should include rules: -->
+                                <mutator>ForEachIfBreakToStreamFindFirst</mutator>
+                                <mutator>ForEachIfBreakElseToStreamTakeWhile</mutator>
+                                <mutator>StreamFlatMapStreamToFlatMap</mutator>
+                                <mutator>StreamForEachNestingForLoopToFlatMap</mutator>
+                                <mutator>StreamMapIdentity</mutator>
+                                <mutator>StreamWrappedMethodRefToMap</mutator>
+                                <mutator>StreamWrappedVariableToMap</mutator>
+                            </mutators>
+                            <excludedMutators>
+                                <!-- Allow ternary clauses: return condition ? valA : valB -->
+                                <excludedMutator>AvoidInlineConditionals</excludedMutator>
+
+                                <!-- Allow writing 123456789 instead of requiring 123_456_789 -->
+                                <excludedMutator>UseUnderscoresInNumericLiterals</excludedMutator>
+                            </excludedMutators>
+                        </cleanthat>
+
                         <!-- Format the code according to Google AOSP code style, -->
-                        <!-- using Google's Java formatter tool. -->
+                        <!-- using Google's Java formatter tool. Needs to be applied after <cleanthat>, -->
+                        <!-- as it can generate alternative code. -->
                         <googleJavaFormat>
                             <style>AOSP</style>
                             <reflowLongStrings>true</reflowLongStrings>
