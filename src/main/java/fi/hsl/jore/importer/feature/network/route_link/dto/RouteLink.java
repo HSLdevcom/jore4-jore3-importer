@@ -1,6 +1,5 @@
 package fi.hsl.jore.importer.feature.network.route_link.dto;
 
-
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
@@ -13,29 +12,27 @@ import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteLinksWithHis
 import org.immutables.value.Value;
 
 @Value.Immutable
-public interface RouteLink
-        extends IHasPK<RouteLinkPK>,
-                IHasSystemTime,
-                CommonFields {
+public interface RouteLink extends IHasPK<RouteLinkPK>, IHasSystemTime, CommonFields {
 
     LinkPK link();
 
     RouteDirectionPK routeDirection();
 
-    static RouteLink of(final RouteLinkPK pk,
-                        final ExternalId externalId,
-                        final LinkPK link,
-                        final RouteDirectionPK routeDirection,
-                        final int orderNumber,
-                        final TimeRange systemTime) {
+    static RouteLink of(
+            final RouteLinkPK pk,
+            final ExternalId externalId,
+            final LinkPK link,
+            final RouteDirectionPK routeDirection,
+            final int orderNumber,
+            final TimeRange systemTime) {
         return ImmutableRouteLink.builder()
-                                 .pk(pk)
-                                 .link(link)
-                                 .routeDirection(routeDirection)
-                                 .externalId(externalId)
-                                 .orderNumber(orderNumber)
-                                 .systemTime(systemTime)
-                                 .build();
+                .pk(pk)
+                .link(link)
+                .routeDirection(routeDirection)
+                .externalId(externalId)
+                .orderNumber(orderNumber)
+                .systemTime(systemTime)
+                .build();
     }
 
     static RouteLink from(final NetworkRouteLinksRecord record) {
@@ -45,8 +42,7 @@ public interface RouteLink
                 LinkPK.of(record.getInfrastructureLinkId()),
                 RouteDirectionPK.of(record.getNetworkRouteDirectionId()),
                 record.getNetworkRouteLinkOrder(),
-                record.getNetworkRouteLinkSysPeriod()
-        );
+                record.getNetworkRouteLinkSysPeriod());
     }
 
     static RouteLink from(final NetworkRouteLinksWithHistoryRecord record) {
@@ -56,7 +52,6 @@ public interface RouteLink
                 LinkPK.of(record.getInfrastructureLinkId()),
                 RouteDirectionPK.of(record.getNetworkRouteDirectionId()),
                 record.getNetworkRouteLinkOrder(),
-                record.getNetworkRouteLinkSysPeriod()
-        );
+                record.getNetworkRouteLinkSysPeriod());
     }
 }

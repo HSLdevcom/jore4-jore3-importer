@@ -14,6 +14,8 @@ import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsWi
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
+import java.util.Optional;
+import java.util.UUID;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,23 +23,20 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Repository
-public class RouteStopPointRepository
-        implements IRouteStopPointTestRepository {
+public class RouteStopPointRepository implements IRouteStopPointTestRepository {
 
     private static final NetworkRouteStopPoints POINTS = NetworkRouteStopPoints.NETWORK_ROUTE_STOP_POINTS;
-    private static final NetworkRouteStopPointsWithHistory HISTORY_VIEW = NetworkRouteStopPointsWithHistory.NETWORK_ROUTE_STOP_POINTS_WITH_HISTORY;
+    private static final NetworkRouteStopPointsWithHistory HISTORY_VIEW =
+            NetworkRouteStopPointsWithHistory.NETWORK_ROUTE_STOP_POINTS_WITH_HISTORY;
     private static final TableField<NetworkRouteStopPointsRecord, UUID> PRIMARY_KEY = POINTS.NETWORK_ROUTE_POINT_ID;
 
     private final DSLContext db;
     private final IJsonbConverter jsonbConverter;
 
     @Autowired
-    public RouteStopPointRepository(@Qualifier("importerDsl") final DSLContext db,
-                                    final IJsonbConverter jsonbConverter) {
+    public RouteStopPointRepository(
+            @Qualifier("importerDsl") final DSLContext db, final IJsonbConverter jsonbConverter) {
         this.db = db;
         this.jsonbConverter = jsonbConverter;
     }
@@ -50,7 +49,8 @@ public class RouteStopPointRepository
         r.setNetworkRouteStopPointExtId(point.externalId().value());
         r.setNetworkRouteStopPointOrder(point.orderNumber());
         r.setNetworkRouteStopPointHastusPoint(point.hastusStopPoint());
-        r.setNetworkRouteStopPointRegulatedTimingPointStatus(point.regulatedTimingPointStatus().getValue());
+        r.setNetworkRouteStopPointRegulatedTimingPointStatus(
+                point.regulatedTimingPointStatus().getValue());
         r.setNetworkRouteStopPointTimetableColumn(point.timetableColumn().orElse(null));
 
         r.store();
@@ -73,16 +73,16 @@ public class RouteStopPointRepository
     @Override
     @Transactional
     public RouteStopPointPK update(final RouteStopPoint point) {
-        final NetworkRouteStopPointsRecord r =
-                Optional.ofNullable(db.selectFrom(POINTS)
-                                      .where(PRIMARY_KEY.eq(point.pk().value()))
-                                      .fetchAny())
-                        .orElseThrow();
+        final NetworkRouteStopPointsRecord r = Optional.ofNullable(db.selectFrom(POINTS)
+                        .where(PRIMARY_KEY.eq(point.pk().value()))
+                        .fetchAny())
+                .orElseThrow();
 
         r.setNetworkRouteStopPointExtId(point.externalId().value());
         r.setNetworkRouteStopPointOrder(point.orderNumber());
         r.setNetworkRouteStopPointHastusPoint(point.hastusStopPoint());
-        r.setNetworkRouteStopPointRegulatedTimingPointStatus(point.regulatedTimingPointStatus().getValue());
+        r.setNetworkRouteStopPointRegulatedTimingPointStatus(
+                point.regulatedTimingPointStatus().getValue());
         r.setNetworkRouteStopPointTimetableColumn(point.timetableColumn().orElse(null));
 
         r.store();
@@ -106,57 +106,53 @@ public class RouteStopPointRepository
     @Transactional(readOnly = true)
     public Optional<RouteStopPoint> findById(final RouteStopPointPK id) {
         return db.selectFrom(POINTS)
-                 .where(PRIMARY_KEY.eq(id.value()))
-                 .fetchStream()
-                 .map(r -> from(r, jsonbConverter))
-                 .findFirst();
+                .where(PRIMARY_KEY.eq(id.value()))
+                .fetchStream()
+                .map(r -> from(r, jsonbConverter))
+                .findFirst();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<RouteStopPoint> findByExternalId(final ExternalId externalId) {
         return db.selectFrom(POINTS)
-                 .where(POINTS.NETWORK_ROUTE_STOP_POINT_EXT_ID.eq(externalId.value()))
-                 .fetchStream()
-                 .map(r -> from(r, jsonbConverter))
-                 .findFirst();
+                .where(POINTS.NETWORK_ROUTE_STOP_POINT_EXT_ID.eq(externalId.value()))
+                .fetchStream()
+                .map(r -> from(r, jsonbConverter))
+                .findFirst();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<RouteStopPoint> findAll() {
         return db.selectFrom(POINTS)
-                 .fetchStream()
-                 .map(r -> from(r, jsonbConverter))
-                 .collect(List.collector());
+                .fetchStream()
+                .map(r -> from(r, jsonbConverter))
+                .collect(List.collector());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Set<RouteStopPointPK> findAllIds() {
         return db.select(PRIMARY_KEY)
-                 .from(POINTS)
-                 .fetchStream()
-                 .map(row -> RouteStopPointPK.of(row.value1()))
-                 .collect(HashSet.collector());
+                .from(POINTS)
+                .fetchStream()
+                .map(row -> RouteStopPointPK.of(row.value1()))
+                .collect(HashSet.collector());
     }
 
     @Override
     @Transactional(readOnly = true)
     public int count() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                 .from(POINTS)
-                 .fetchOne(0, int.class);
+        return db.selectCount().from(POINTS).fetchOne(0, int.class);
     }
 
     @Override
     @Transactional(readOnly = true)
     public int countHistory() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                 .from(HISTORY_VIEW)
-                 .fetchOne(0, int.class);
+        return db.selectCount().from(HISTORY_VIEW).fetchOne(0, int.class);
     }
 
     @Override
@@ -175,10 +171,10 @@ public class RouteStopPointRepository
     @Transactional(readOnly = true)
     public List<RouteStopPoint> findFromHistory() {
         return db.selectFrom(HISTORY_VIEW)
-                 .orderBy(HISTORY_VIEW.NETWORK_ROUTE_STOP_POINT_SYS_PERIOD.asc())
-                 .fetchStream()
-                 .map(r -> from(r, jsonbConverter))
-                 .collect(List.collector());
+                .orderBy(HISTORY_VIEW.NETWORK_ROUTE_STOP_POINT_SYS_PERIOD.asc())
+                .fetchStream()
+                .map(r -> from(r, jsonbConverter))
+                .collect(List.collector());
     }
 
     private static RouteStopPoint from(final NetworkRouteStopPointsRecord record, final IJsonbConverter converter) {
@@ -188,26 +184,29 @@ public class RouteStopPointRepository
                 record.getNetworkRouteStopPointOrder(),
                 record.getNetworkRouteStopPointHastusPoint(),
                 // should never throw exception because of a database check constraint
-                RegulatedTimingPointStatus.of(record.getNetworkRouteStopPointRegulatedTimingPointStatus()).orElseThrow(),
+                RegulatedTimingPointStatus.of(record.getNetworkRouteStopPointRegulatedTimingPointStatus())
+                        .orElseThrow(),
                 record.getNetworkRouteStopPointViaPoint(),
-                Optional.ofNullable(converter.fromJson(record.getNetworkRouteStopPointViaName(), MultilingualString.class)),
+                Optional.ofNullable(
+                        converter.fromJson(record.getNetworkRouteStopPointViaName(), MultilingualString.class)),
                 Optional.ofNullable(record.getNetworkRouteStopPointTimetableColumn()),
-                record.getNetworkRouteStopPointSysPeriod()
-        );
+                record.getNetworkRouteStopPointSysPeriod());
     }
 
-    private static RouteStopPoint from(final NetworkRouteStopPointsWithHistoryRecord record, final IJsonbConverter converter) {
+    private static RouteStopPoint from(
+            final NetworkRouteStopPointsWithHistoryRecord record, final IJsonbConverter converter) {
         return RouteStopPoint.of(
                 RouteStopPointPK.of(record.getNetworkRoutePointId()),
                 ExternalId.of(record.getNetworkRouteStopPointExtId()),
                 record.getNetworkRouteStopPointOrder(),
                 record.getNetworkRouteStopPointHastusPoint(),
                 // should never throw exception because of a database check constraint
-                RegulatedTimingPointStatus.of(record.getNetworkRouteStopPointRegulatedTimingPointStatus()).orElseThrow(),
+                RegulatedTimingPointStatus.of(record.getNetworkRouteStopPointRegulatedTimingPointStatus())
+                        .orElseThrow(),
                 record.getNetworkRouteStopPointViaPoint(),
-                Optional.ofNullable(converter.fromJson(record.getNetworkRouteStopPointViaName(), MultilingualString.class)),
+                Optional.ofNullable(
+                        converter.fromJson(record.getNetworkRouteStopPointViaName(), MultilingualString.class)),
                 Optional.ofNullable(record.getNetworkRouteStopPointTimetableColumn()),
-                record.getNetworkRouteStopPointSysPeriod()
-        );
+                record.getNetworkRouteStopPointSysPeriod());
     }
 }

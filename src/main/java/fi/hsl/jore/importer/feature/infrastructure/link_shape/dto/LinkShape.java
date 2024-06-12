@@ -1,6 +1,5 @@
 package fi.hsl.jore.importer.feature.infrastructure.link_shape.dto;
 
-
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
@@ -13,25 +12,23 @@ import org.immutables.value.Value;
 import org.locationtech.jts.geom.LineString;
 
 @Value.Immutable
-public interface LinkShape
-        extends IHasPK<LinkShapePK>,
-                IHasSystemTime,
-                CommonFields<LinkShape> {
+public interface LinkShape extends IHasPK<LinkShapePK>, IHasSystemTime, CommonFields<LinkShape> {
 
     LinkPK linkId();
 
-    static LinkShape of(final LinkShapePK pk,
-                        final LinkPK linkId,
-                        final ExternalId linkExternalId,
-                        final LineString geometry,
-                        final TimeRange systemTime) {
+    static LinkShape of(
+            final LinkShapePK pk,
+            final LinkPK linkId,
+            final ExternalId linkExternalId,
+            final LineString geometry,
+            final TimeRange systemTime) {
         return ImmutableLinkShape.builder()
-                                 .pk(pk)
-                                 .linkId(linkId)
-                                 .linkExternalId(linkExternalId)
-                                 .geometry(geometry)
-                                 .systemTime(systemTime)
-                                 .build();
+                .pk(pk)
+                .linkId(linkId)
+                .linkExternalId(linkExternalId)
+                .geometry(geometry)
+                .systemTime(systemTime)
+                .build();
     }
 
     static LinkShape from(final InfrastructureLinkShapesRecord record) {
@@ -40,8 +37,7 @@ public interface LinkShape
                 LinkPK.of(record.getInfrastructureLinkId()),
                 ExternalId.of(record.getInfrastructureLinkExtId()),
                 record.getInfrastructureLinkShape(),
-                record.getInfrastructureLinkShapeSysPeriod()
-        );
+                record.getInfrastructureLinkShapeSysPeriod());
     }
 
     static LinkShape from(final InfrastructureLinkShapesWithHistoryRecord record) {
@@ -50,7 +46,6 @@ public interface LinkShape
                 LinkPK.of(record.getInfrastructureLinkId()),
                 ExternalId.of(record.getInfrastructureLinkExtId()),
                 record.getInfrastructureLinkShape(),
-                record.getInfrastructureLinkShapeSysPeriod()
-        );
+                record.getInfrastructureLinkShapeSysPeriod());
     }
 }

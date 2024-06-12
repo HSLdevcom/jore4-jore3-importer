@@ -7,31 +7,28 @@ import fi.hsl.jore.importer.feature.common.dto.mixin.IHasSystemTime;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNodesRecord;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNodesWithHistoryRecord;
+import java.util.Optional;
 import org.immutables.value.Value;
 import org.locationtech.jts.geom.Point;
 
-import java.util.Optional;
-
 @Value.Immutable
-public interface Node
-        extends IHasPK<NodePK>,
-                IHasSystemTime,
-                CommonFields<Node> {
+public interface Node extends IHasPK<NodePK>, IHasSystemTime, CommonFields<Node> {
 
-    static Node of(final NodePK pk,
-                   final ExternalId externalId,
-                   final NodeType nodeType,
-                   final Point location,
-                   final Optional<Point> projectedLocation,
-                   final TimeRange systemTime) {
+    static Node of(
+            final NodePK pk,
+            final ExternalId externalId,
+            final NodeType nodeType,
+            final Point location,
+            final Optional<Point> projectedLocation,
+            final TimeRange systemTime) {
         return ImmutableNode.builder()
-                            .pk(pk)
-                            .externalId(externalId)
-                            .nodeType(nodeType)
-                            .location(location)
-                            .projectedLocation(projectedLocation)
-                            .systemTime(systemTime)
-                            .build();
+                .pk(pk)
+                .externalId(externalId)
+                .nodeType(nodeType)
+                .location(location)
+                .projectedLocation(projectedLocation)
+                .systemTime(systemTime)
+                .build();
     }
 
     static Node from(final InfrastructureNodesRecord record) {
@@ -41,8 +38,7 @@ public interface Node
                 NodeType.of(record.getInfrastructureNodeType()),
                 record.getInfrastructureNodeLocation(),
                 Optional.ofNullable(record.getInfrastructureNodeProjectedLocation()),
-                record.getInfrastructureNodeSysPeriod()
-        );
+                record.getInfrastructureNodeSysPeriod());
     }
 
     static Node from(final InfrastructureNodesWithHistoryRecord record) {
@@ -52,7 +48,6 @@ public interface Node
                 NodeType.of(record.getInfrastructureNodeType()),
                 record.getInfrastructureNodeLocation(),
                 Optional.ofNullable(record.getInfrastructureNodeProjectedLocation()),
-                record.getInfrastructureNodeSysPeriod()
-        );
+                record.getInfrastructureNodeSysPeriod());
     }
 }

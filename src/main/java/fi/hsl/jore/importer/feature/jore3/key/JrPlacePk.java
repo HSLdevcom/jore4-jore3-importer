@@ -8,8 +8,6 @@ import org.immutables.value.Value;
 public interface JrPlacePk extends IHasPlaceId {
 
     static JrPlacePk of(final PlaceId placeId) {
-        return ImmutableJrPlacePk.builder()
-                .placeId(placeId)
-                .build();
+        return ImmutableJrPlacePk.builder().placeId(placeId).build();
     }
 }

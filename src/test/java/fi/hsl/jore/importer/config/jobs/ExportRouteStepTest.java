@@ -1,11 +1,18 @@
 package fi.hsl.jore.importer.config.jobs;
 
+import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
+import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
+import static org.assertj.db.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.BatchIntegrationTest;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteDirection;
 import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.jore4.repository.Jore4ValidityPeriodTestRepository;
 import fi.hsl.jore.importer.feature.jore4.repository.ValidityPeriodTargetTable;
 import io.vavr.collection.List;
+import java.time.LocalDate;
+import java.util.UUID;
+import javax.sql.DataSource;
 import org.assertj.core.api.Assertions;
 import org.assertj.db.type.Table;
 import org.junit.jupiter.api.DisplayName;
@@ -16,37 +23,29 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
-import javax.sql.DataSource;
-import java.time.LocalDate;
-import java.util.UUID;
-
-import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
-import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
-import static org.assertj.db.api.Assertions.assertThat;
-
 @ContextConfiguration(classes = JobConfig.class)
-@Sql(scripts = {
-        "/sql/importer/drop_tables.sql",
-        "/sql/importer/populate_infrastructure_nodes.sql",
-        "/sql/importer/populate_lines.sql",
-        "/sql/importer/populate_line_headers_with_jore4_ids.sql",
-        "/sql/importer/populate_routes.sql",
-        "/sql/importer/populate_route_directions.sql",
-        "/sql/importer/populate_route_points_for_jore4_export.sql",
-        "/sql/importer/populate_route_stop_points_for_jore4_export.sql",
-        "/sql/importer/populate_places.sql",
-        "/sql/importer/populate_scheduled_stop_points_for_jore4_export.sql"
-})
 @Sql(
         scripts = {
-                "/sql/jore4/drop_tables.sql",
-                "/sql/jore4/populate_infrastructure_links.sql",
-                "/sql/jore4/populate_timing_places.sql",
-                "/sql/jore4/populate_scheduled_stop_points.sql",
-                "/sql/jore4/populate_lines.sql"
+            "/sql/importer/drop_tables.sql",
+            "/sql/importer/populate_infrastructure_nodes.sql",
+            "/sql/importer/populate_lines.sql",
+            "/sql/importer/populate_line_headers_with_jore4_ids.sql",
+            "/sql/importer/populate_routes.sql",
+            "/sql/importer/populate_route_directions.sql",
+            "/sql/importer/populate_route_points_for_jore4_export.sql",
+            "/sql/importer/populate_route_stop_points_for_jore4_export.sql",
+            "/sql/importer/populate_places.sql",
+            "/sql/importer/populate_scheduled_stop_points_for_jore4_export.sql"
+        })
+@Sql(
+        scripts = {
+            "/sql/jore4/drop_tables.sql",
+            "/sql/jore4/populate_infrastructure_links.sql",
+            "/sql/jore4/populate_timing_places.sql",
+            "/sql/jore4/populate_scheduled_stop_points.sql",
+            "/sql/jore4/populate_lines.sql"
         },
-        config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
-)
+        config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager"))
 public class ExportRouteStepTest extends BatchIntegrationTest {
 
     private static final List<String> STEPS = List.of("exportRoutesStep");
@@ -54,29 +53,33 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     private final String EXPECTED_DIRECTION = Jore4RouteDirection.INBOUND.getValue();
     private final UUID EXPECTED_JORE4_ID_OF_LINE = UUID.fromString("5aa7d9fc-2cf9-466d-8ac0-f442d60c261f");
     private static final String EXPECTED_LABEL = "1";
-    private static final String EXPECTED_DESCRIPTION = "{\"fi_FI\":\"Keskustori - Kaleva - Etelä-Hervanta vanha\",\"sv_SE\":\"Central torget - Kaleva - Södra Hervanta gamla\"}";
+    private static final String EXPECTED_DESCRIPTION =
+            "{\"fi_FI\":\"Keskustori - Kaleva - Etelä-Hervanta vanha\",\"sv_SE\":\"Central torget - Kaleva - Södra Hervanta gamla\"}";
     private static final int EXPECTED_PRIORITY = 10;
-    private static final LegacyHslMunicipalityCode EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.HELSINKI;
+    private static final LegacyHslMunicipalityCode EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE =
+            LegacyHslMunicipalityCode.HELSINKI;
 
     private static final LocalDate VALIDITY_PERIOD_START = LocalDate.of(2021, 1, 1);
     // validity period end is specified with an open upper boundary
-    private static final LocalDate VALIDITY_PERIOD_END = LocalDate.of(2022, 1, 1).minusDays(1);
+    private static final LocalDate VALIDITY_PERIOD_END =
+            LocalDate.of(2022, 1, 1).minusDays(1);
 
-    private static final fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections IMPORTER_ROUTE_DIRECTION = fi.hsl.jore.importer.jooq.network.Tables.NETWORK_ROUTE_DIRECTIONS;
-    private static final fi.hsl.jore.jore4.jooq.route.tables.Route JORE4_ROUTE = fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
+    private static final fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections IMPORTER_ROUTE_DIRECTION =
+            fi.hsl.jore.importer.jooq.network.Tables.NETWORK_ROUTE_DIRECTIONS;
+    private static final fi.hsl.jore.jore4.jooq.route.tables.Route JORE4_ROUTE =
+            fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
 
     private final Table importerTargetTable;
     private final Table jore4TargetTable;
     private final Jore4ValidityPeriodTestRepository testRepository;
 
     @Autowired
-    public ExportRouteStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
-                               final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
+    public ExportRouteStepTest(
+            final @Qualifier("importerDataSource") DataSource importerDataSource,
+            final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
         this.importerTargetTable = new Table(importerDataSource, "network.network_route_directions");
         this.jore4TargetTable = new Table(jore4DataSource, "route.route");
-        this.testRepository = new Jore4ValidityPeriodTestRepository(jore4DataSource,
-                ValidityPeriodTargetTable.ROUTE
-        );
+        this.testRepository = new Jore4ValidityPeriodTestRepository(jore4DataSource, ValidityPeriodTargetTable.ROUTE);
     }
 
     @Test
@@ -92,10 +95,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldGenerateNewIdForExportedLine() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable)
-                .row()
-                .value(JORE4_ROUTE.ROUTE_ID.getName())
-                .isNotNull();
+        assertThat(jore4TargetTable).row().value(JORE4_ROUTE.ROUTE_ID.getName()).isNotNull();
     }
 
     @Test
@@ -125,10 +125,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectLabel() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable)
-                .row()
-                .value(JORE4_ROUTE.LABEL.getName())
-                .isEqualTo(EXPECTED_LABEL);
+        assertThat(jore4TargetTable).row().value(JORE4_ROUTE.LABEL.getName()).isEqualTo(EXPECTED_LABEL);
     }
 
     @Test
@@ -147,10 +144,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectPriority() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable)
-                .row()
-                .value(JORE4_ROUTE.PRIORITY.getName())
-                .isEqualTo(EXPECTED_PRIORITY);
+        assertThat(jore4TargetTable).row().value(JORE4_ROUTE.PRIORITY.getName()).isEqualTo(EXPECTED_PRIORITY);
     }
 
     @Test
@@ -180,7 +174,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectLegacyHslMunicipalityCode() {
         runSteps(STEPS);
 
-         assertThat(jore4TargetTable)
+        assertThat(jore4TargetTable)
                 .row()
                 .value(JORE4_ROUTE.LEGACY_HSL_MUNICIPALITY_CODE.getName())
                 .isEqualTo(EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE.getJore4Value());

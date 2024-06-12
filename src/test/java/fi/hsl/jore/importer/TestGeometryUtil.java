@@ -3,13 +3,12 @@ package fi.hsl.jore.importer;
 import com.google.common.base.Preconditions;
 import fi.hsl.jore.importer.util.GeometryUtil;
 import io.vavr.collection.List;
+import java.util.Random;
+import java.util.stream.IntStream;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
-
-import java.util.Random;
-import java.util.stream.IntStream;
 
 public final class TestGeometryUtil {
 
@@ -17,8 +16,7 @@ public final class TestGeometryUtil {
 
     private static final double TOLERANCE = 0.000001;
 
-    private TestGeometryUtil() {
-    }
+    private TestGeometryUtil() {}
 
     private static double randomLatitude() {
         return R.nextDouble() * 60.0;
@@ -33,20 +31,14 @@ public final class TestGeometryUtil {
     }
 
     public static Point randomPoint() {
-        return GeometryUtil.toPoint(
-                GeometryUtil.SRID_WGS84,
-                randomCoordinate()
-        );
+        return GeometryUtil.toPoint(GeometryUtil.SRID_WGS84, randomCoordinate());
     }
 
     public static LineString randomLine(final int length) {
         Preconditions.checkArgument(length >= 2, "LineString length must be at least 2");
-        final List<Coordinate> coords = IntStream.range(0, length)
-                                                 .boxed()
-                                                 .map(i -> randomCoordinate())
-                                                 .collect(List.collector());
-        return GeometryUtil.toLineString(GeometryUtil.SRID_WGS84,
-                                         coords);
+        final List<Coordinate> coords =
+                IntStream.range(0, length).boxed().map(i -> randomCoordinate()).collect(List.collector());
+        return GeometryUtil.toLineString(GeometryUtil.SRID_WGS84, coords);
     }
 
     public static LineString randomLine() {
@@ -60,9 +52,7 @@ public final class TestGeometryUtil {
      * @param b The second geometry
      * @return True, if geometries match (wrt. a tolerance)
      */
-    public static boolean geometriesMatch(final Geometry a,
-                                          final Geometry b) {
-        return a.getSRID() == b.getSRID() &&
-               a.equalsExact(b, TOLERANCE);
+    public static boolean geometriesMatch(final Geometry a, final Geometry b) {
+        return a.getSRID() == b.getSRID() && a.equalsExact(b, TOLERANCE);
     }
 }

@@ -17,17 +17,14 @@ public interface LinkPoints {
 
     @Value.Check
     default void checkLinkPoints() {
-        Preconditions.checkState(!points().isEmpty(),
-                                 "LinkPoints should always contain at least one point!");
+        Preconditions.checkState(!points().isEmpty(), "LinkPoints should always contain at least one point!");
     }
 
-    static LinkPoints of(final JrLinkPk link,
-                         final LinkEndpoints endpoints,
-                         final List<JrPoint> points) {
+    static LinkPoints of(final JrLinkPk link, final LinkEndpoints endpoints, final List<JrPoint> points) {
         return ImmutableLinkPoints.builder()
-                                  .link(link)
-                                  .endpoints(endpoints)
-                                  .points(points)
-                                  .build();
+                .link(link)
+                .endpoints(endpoints)
+                .points(points)
+                .build();
     }
 }

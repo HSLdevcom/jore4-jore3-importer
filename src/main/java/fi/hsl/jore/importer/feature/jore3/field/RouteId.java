@@ -6,8 +6,6 @@ import org.immutables.value.Value;
 public abstract class RouteId extends EncodedIdentifier {
 
     public static RouteId from(final String id) {
-        return ImmutableRouteId.builder()
-                               .originalValue(id)
-                               .build();
+        return ImmutableRouteId.builder().originalValue(id).build();
     }
 }

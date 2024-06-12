@@ -1,14 +1,10 @@
 package fi.hsl.jore.importer.feature.digiroad.entity;
 
+import java.util.Optional;
 import org.immutables.value.Value;
 import org.locationtech.jts.geom.Point;
 
-import java.util.Optional;
-
-/**
- * Contains the information of a stop point which is read from
- * the data imported from Digiroad.
- */
+/** Contains the information of a stop point which is read from the data imported from Digiroad. */
 @Value.Immutable
 public interface DigiroadStop {
 
@@ -26,13 +22,14 @@ public interface DigiroadStop {
 
     Optional<String> nameSwedish();
 
-    static ImmutableDigiroadStop of (String digiroadStopId,
-                                     String digiroadLinkId,
-                                     DigiroadStopDirection directionOnInfralink,
-                                     long nationalId,
-                                     Point location,
-                                     Optional<String> nameFinnish,
-                                     Optional<String> nameSwedish) {
+    static ImmutableDigiroadStop of(
+            String digiroadStopId,
+            String digiroadLinkId,
+            DigiroadStopDirection directionOnInfralink,
+            long nationalId,
+            Point location,
+            Optional<String> nameFinnish,
+            Optional<String> nameSwedish) {
         return ImmutableDigiroadStop.builder()
                 .directionOnInfraLink(directionOnInfralink)
                 .digiroadStopId(digiroadStopId)

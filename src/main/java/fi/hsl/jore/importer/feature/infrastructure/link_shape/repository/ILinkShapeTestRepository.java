@@ -7,9 +7,8 @@ import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.PersistableLin
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.generated.LinkShapePK;
 
 /**
- * Only for testing, use {@link fi.hsl.jore.importer.feature.batch.link_shape.support.ILinkShapeImportRepository this} to
- * insert/update/delete link shapes.
+ * Only for testing, use {@link fi.hsl.jore.importer.feature.batch.link_shape.support.ILinkShapeImportRepository this}
+ * to insert/update/delete link shapes.
  */
-public interface ILinkShapeTestRepository extends IBasicCrudRepository<LinkShapePK, LinkShape, PersistableLinkShape>,
-                                                  IHistoryRepository<LinkShape> {
-}
+public interface ILinkShapeTestRepository
+        extends IBasicCrudRepository<LinkShapePK, LinkShape, PersistableLinkShape>, IHistoryRepository<LinkShape> {}

@@ -12,6 +12,5 @@ import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
  * insert/update/delete routes.
  */
 @VisibleForTesting
-public interface IRouteTestRepository extends IBasicCrudRepository<RoutePK, Route, PersistableRoute>,
-                                              IHistoryRepository<Route> {
-}
+public interface IRouteTestRepository
+        extends IBasicCrudRepository<RoutePK, Route, PersistableRoute>, IHistoryRepository<Route> {}

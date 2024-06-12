@@ -1,7 +1,10 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
+import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.AfterEach;
@@ -15,10 +18,6 @@ import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
-
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @IntTest
 public class RouteGeometryExportReaderTest {
@@ -55,19 +54,20 @@ public class RouteGeometryExportReaderTest {
 
     @Nested
     @DisplayName("When the source tables have one route")
-    @Sql(scripts = {
-            "/sql/importer/drop_tables.sql",
-            "/sql/importer/populate_infrastructure_nodes.sql",
-            "/sql/importer/populate_lines.sql",
-            "/sql/importer/populate_routes.sql",
-            "/sql/importer/populate_route_directions_with_jore4_ids.sql",
-            "/sql/importer/populate_route_points_for_jore4_export.sql",
-            "/sql/importer/populate_route_stop_points_for_jore4_export.sql",
-            "/sql/importer/populate_places.sql",
-            "/sql/importer/populate_scheduled_stop_points_for_jore4_export.sql",
-            "/sql/importer/populate_infrastructure_links.sql",
-            "/sql/importer/populate_route_links.sql"
-    })
+    @Sql(
+            scripts = {
+                "/sql/importer/drop_tables.sql",
+                "/sql/importer/populate_infrastructure_nodes.sql",
+                "/sql/importer/populate_lines.sql",
+                "/sql/importer/populate_routes.sql",
+                "/sql/importer/populate_route_directions_with_jore4_ids.sql",
+                "/sql/importer/populate_route_points_for_jore4_export.sql",
+                "/sql/importer/populate_route_stop_points_for_jore4_export.sql",
+                "/sql/importer/populate_places.sql",
+                "/sql/importer/populate_scheduled_stop_points_for_jore4_export.sql",
+                "/sql/importer/populate_infrastructure_links.sql",
+                "/sql/importer/populate_route_links.sql"
+            })
     @ExtendWith(SoftAssertionsExtension.class)
     class WhenSourceTablesHaveOneRoute {
 
@@ -83,51 +83,57 @@ public class RouteGeometryExportReaderTest {
 
         @Test
         @DisplayName("The first invocation of the read() method must return the found route geometry")
-        void firstInvocationOfReadMethodMustReturnFoundRouteGeometry(final SoftAssertions softAssertions) throws Exception {
+        void firstInvocationOfReadMethodMustReturnFoundRouteGeometry(final SoftAssertions softAssertions)
+                throws Exception {
             final ImporterRouteGeometry first = reader.read();
 
             final Coordinate[] routeGeometryCoordinates = first.geometry().getCoordinates();
-            softAssertions.assertThat(routeGeometryCoordinates)
+            softAssertions
+                    .assertThat(routeGeometryCoordinates)
                     .as("routeGeometryCoordinateSize")
                     .hasSize(2);
 
             final Coordinate firstRouteCoordinate = routeGeometryCoordinates[0];
-            softAssertions.assertThat(firstRouteCoordinate.getX())
+            softAssertions
+                    .assertThat(firstRouteCoordinate.getX())
                     .as("firstRouteCoordinateX")
                     .isEqualTo(EXPECTED_FIRST_ROUTE_COORDINATE_LNG);
-            softAssertions.assertThat(firstRouteCoordinate.getY())
+            softAssertions
+                    .assertThat(firstRouteCoordinate.getY())
                     .as("firstRouteCoordinateY")
                     .isEqualTo(EXPECTED_FIRST_ROUTE_COORDINATE_LAT);
 
             final Coordinate secondRouteCoordinate = routeGeometryCoordinates[1];
-            softAssertions.assertThat(secondRouteCoordinate.getX())
+            softAssertions
+                    .assertThat(secondRouteCoordinate.getX())
                     .as("secondRouteCoordinateX")
                     .isEqualTo(EXPECTED_SECOND_ROUTE_COORDINATE_LNG);
-            softAssertions.assertThat(secondRouteCoordinate.getY())
+            softAssertions
+                    .assertThat(secondRouteCoordinate.getY())
                     .as("secondRouteCoordinateY")
                     .isEqualTo(EXPECTED_SECOND_ROUTE_COORDINATE_LAT);
 
-            softAssertions.assertThat(first.routeDirectionId())
+            softAssertions
+                    .assertThat(first.routeDirectionId())
                     .as("routeDirectionId")
                     .isEqualTo(EXPECTED_ROUTE_DIRECTION_ID);
 
-            softAssertions.assertThat(first.routeDirectionExtId())
+            softAssertions
+                    .assertThat(first.routeDirectionExtId())
                     .as("routeDirectionExtId")
                     .isEqualTo(EXPECTED_ROUTE_DIRECTION_EXT_ID);
 
-            softAssertions.assertThat(first.routeJore4Id())
-                    .as("routeJore4Id")
-                    .isEqualTo(EXPECTED_ROUTE_JORE4_ID);
+            softAssertions.assertThat(first.routeJore4Id()).as("routeJore4Id").isEqualTo(EXPECTED_ROUTE_JORE4_ID);
         }
 
         @Test
         @DisplayName("The second invocation of the read() method must return null")
         void secondInvocationOfReadMethodMustReturnNull() throws Exception {
-            //The first invocation returns the route geometry found from the database.
+            // The first invocation returns the route geometry found from the database.
             final ImporterRouteGeometry first = reader.read();
             assertThat(first).isNotNull();
 
-            //Because there are no more route geometries, this invocation must return null.
+            // Because there are no more route geometries, this invocation must return null.
             final ImporterRouteGeometry second = reader.read();
             assertThat(second).isNull();
         }

@@ -120,47 +120,45 @@ public class JobConfig {
     private final PlatformTransactionManager transactionManager;
 
     public JobConfig(
-        final JobRepository jobRepository,
-        @BatchTransactionManager final PlatformTransactionManager transactionManager
-    ) {
+            final JobRepository jobRepository,
+            @BatchTransactionManager final PlatformTransactionManager transactionManager) {
         this.jobRepository = jobRepository;
         this.transactionManager = transactionManager;
     }
 
     /* Steps to import data from Jore 3 to importer staging DB. */
     @Bean
-    public Job importJob(final Flow importNodesFlow,
-                         final Flow importLinksFlow,
-                         final Flow importLinkPointsFlow,
-                         final Flow importLinesFlow,
-                         final Flow importLineHeadersFlow,
-                         final Flow importRoutesFlow,
-                         final Flow importRouteDirectionsFlow,
-                         final Flow importRouteLinksFlow,
-                         final Flow importPlacesFlow,
-                         final Flow importScheduledStopPointsFlow,
-                         // Export data from the importer staging DB to Jore 4 DB.
-                         final Flow jore4ExportFlow) {
-        return new JobBuilder(JOB_NAME,jobRepository)
-                   .start(importNodesFlow)
-                   .next(importLinksFlow)
-                   .next(importLinkPointsFlow)
-                   .next(importLinesFlow)
-                   .next(importLineHeadersFlow)
-                   .next(importRoutesFlow)
-                   .next(importRouteDirectionsFlow)
-                   .next(importRouteLinksFlow)
-                   .next(importPlacesFlow)
-                   .next(importScheduledStopPointsFlow)
-                   .next(jore4ExportFlow)
-                   .end()
-                   .build();
+    public Job importJob(
+            final Flow importNodesFlow,
+            final Flow importLinksFlow,
+            final Flow importLinkPointsFlow,
+            final Flow importLinesFlow,
+            final Flow importLineHeadersFlow,
+            final Flow importRoutesFlow,
+            final Flow importRouteDirectionsFlow,
+            final Flow importRouteLinksFlow,
+            final Flow importPlacesFlow,
+            final Flow importScheduledStopPointsFlow,
+            // Export data from the importer staging DB to Jore 4 DB.
+            final Flow jore4ExportFlow) {
+        return new JobBuilder(JOB_NAME, jobRepository)
+                .start(importNodesFlow)
+                .next(importLinksFlow)
+                .next(importLinkPointsFlow)
+                .next(importLinesFlow)
+                .next(importLineHeadersFlow)
+                .next(importRoutesFlow)
+                .next(importRouteDirectionsFlow)
+                .next(importRouteLinksFlow)
+                .next(importPlacesFlow)
+                .next(importScheduledStopPointsFlow)
+                .next(jore4ExportFlow)
+                .end()
+                .build();
     }
 
     @Bean
-    public Flow importNodesFlow(final Step prepareNodesStep,
-                                final Step importNodesStep,
-                                final Step commitNodesStep) {
+    public Flow importNodesFlow(final Step prepareNodesStep, final Step importNodesStep, final Step commitNodesStep) {
 
         return new FlowBuilder<SimpleFlow>("importNodesFlow")
                 .start(prepareNodesStep)
@@ -172,37 +170,34 @@ public class JobConfig {
     @Bean
     public Step prepareNodesStep(final INodeImportRepository nodeImportRepository) {
         return new StepBuilder("prepareNodesStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(nodeImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(nodeImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Step importNodesStep(final NodeReader nodeReader,
-                                final INodeImportRepository nodeImportRepository) {
+    public Step importNodesStep(final NodeReader nodeReader, final INodeImportRepository nodeImportRepository) {
         final int chunkSize = 1000;
 
         return new StepBuilder("importNodesStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<JrNode, Jore3Node>chunk(chunkSize, transactionManager)
-                    .reader(nodeReader.build())
-                    .processor(new NodeProcessor())
-                    .writer(new GenericImportWriter<>(nodeImportRepository))
-                    .build();
+                .allowStartIfComplete(true)
+                .<JrNode, Jore3Node>chunk(chunkSize, transactionManager)
+                .reader(nodeReader.build())
+                .processor(new NodeProcessor())
+                .writer(new GenericImportWriter<>(nodeImportRepository))
+                .build();
     }
 
     @Bean
     public Step commitNodesStep(final INodeImportRepository nodeImportRepository) {
         return new StepBuilder("commitNodesStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(nodeImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(nodeImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Flow importLinksFlow(final Step prepareLinksStep,
-                                final Step importLinksStep,
-                                final Step commitLinksStep) {
+    public Flow importLinksFlow(final Step prepareLinksStep, final Step importLinksStep, final Step commitLinksStep) {
 
         return new FlowBuilder<SimpleFlow>("importLinksFlow")
                 .start(prepareLinksStep)
@@ -214,36 +209,34 @@ public class JobConfig {
     @Bean
     public Step prepareLinksStep(final ILinkImportRepository linkImportRepository) {
         return new StepBuilder("prepareLinksStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(linkImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(linkImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Step importLinksStep(final LinkRowReader linkReader,
-                                final ILinkImportRepository linkImportRepository) {
+    public Step importLinksStep(final LinkRowReader linkReader, final ILinkImportRepository linkImportRepository) {
         final int chunkSize = 1000;
         return new StepBuilder("importLinksStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<LinkRow, Jore3Link>chunk(chunkSize, transactionManager)
-                    .reader(linkReader.build())
-                    .processor(new LinkRowProcessor())
-                    .writer(new GenericImportWriter<>(linkImportRepository))
-                    .build();
+                .allowStartIfComplete(true)
+                .<LinkRow, Jore3Link>chunk(chunkSize, transactionManager)
+                .reader(linkReader.build())
+                .processor(new LinkRowProcessor())
+                .writer(new GenericImportWriter<>(linkImportRepository))
+                .build();
     }
 
     @Bean
     public Step commitLinksStep(final ILinkImportRepository linkImportRepository) {
         return new StepBuilder("commitLinksStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(linkImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(linkImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Flow importLinkPointsFlow(final Step prepareLinkPointsStep,
-                                     final Step importLinkPointsStep,
-                                     final Step commitLinkPointsStep) {
+    public Flow importLinkPointsFlow(
+            final Step prepareLinkPointsStep, final Step importLinkPointsStep, final Step commitLinkPointsStep) {
 
         return new FlowBuilder<SimpleFlow>("importLinkPointsFlow")
                 .start(prepareLinkPointsStep)
@@ -255,36 +248,34 @@ public class JobConfig {
     @Bean
     public Step prepareLinkPointsStep(final ILinkShapeImportRepository linkPointImportRepository) {
         return new StepBuilder("prepareLinkPointsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(linkPointImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(linkPointImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Step importLinkPointsStep(final PointReader pointReader,
-                                     final ILinkShapeImportRepository linkPointImportRepository) {
+    public Step importLinkPointsStep(
+            final PointReader pointReader, final ILinkShapeImportRepository linkPointImportRepository) {
         final int chunkSize = 100;
         return new StepBuilder("importLinkPointsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<LinkPoints, Jore3LinkShape>chunk(chunkSize, transactionManager)
-                    .reader(new LinkPointReader(pointReader.build()))
-                    .processor(new LinkPointProcessor())
-                    .writer(new GenericImportWriter<>(linkPointImportRepository))
-                    .build();
+                .allowStartIfComplete(true)
+                .<LinkPoints, Jore3LinkShape>chunk(chunkSize, transactionManager)
+                .reader(new LinkPointReader(pointReader.build()))
+                .processor(new LinkPointProcessor())
+                .writer(new GenericImportWriter<>(linkPointImportRepository))
+                .build();
     }
 
     @Bean
     public Step commitLinkPointsStep(final ILinkShapeImportRepository linkPointImportRepository) {
         return new StepBuilder("commitLinkPointsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(linkPointImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(linkPointImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Flow importLinesFlow(final Step prepareLinesStep,
-                                final Step importLinesStep,
-                                final Step commitLinesStep) {
+    public Flow importLinesFlow(final Step prepareLinesStep, final Step importLinesStep, final Step commitLinesStep) {
 
         return new FlowBuilder<SimpleFlow>("importLinesFlow")
                 .start(prepareLinesStep)
@@ -296,36 +287,34 @@ public class JobConfig {
     @Bean
     public Step prepareLinesStep(final ILineImportRepository lineImportRepository) {
         return new StepBuilder("prepareLinesStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(lineImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(lineImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Step importLinesStep(final LineRowReader lineReader,
-                                final ILineImportRepository lineImportRepository) {
+    public Step importLinesStep(final LineRowReader lineReader, final ILineImportRepository lineImportRepository) {
         final int chunkSize = 1000;
         return new StepBuilder("importLinesStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<JrLine, PersistableLine>chunk(chunkSize, transactionManager)
-                    .reader(lineReader.build())
-                    .processor(new LineProcessor())
-                    .writer(new GenericImportWriter<>(lineImportRepository))
-                    .build();
+                .allowStartIfComplete(true)
+                .<JrLine, PersistableLine>chunk(chunkSize, transactionManager)
+                .reader(lineReader.build())
+                .processor(new LineProcessor())
+                .writer(new GenericImportWriter<>(lineImportRepository))
+                .build();
     }
 
     @Bean
     public Step commitLinesStep(final ILineImportRepository lineImportRepository) {
         return new StepBuilder("commitLinesStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(lineImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(lineImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Flow importLineHeadersFlow(final Step prepareLineHeadersStep,
-                                      final Step importLineHeadersStep,
-                                      final Step commitLineHeadersStep) {
+    public Flow importLineHeadersFlow(
+            final Step prepareLineHeadersStep, final Step importLineHeadersStep, final Step commitLineHeadersStep) {
 
         return new FlowBuilder<SimpleFlow>("importLineHeadersFlow")
                 .start(prepareLineHeadersStep)
@@ -337,38 +326,37 @@ public class JobConfig {
     @Bean
     public Step prepareLineHeadersStep(final ILineHeaderImportRepository lineHeaderImportRepository) {
         return new StepBuilder("prepareLineHeadersStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(lineHeaderImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(lineHeaderImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Step importLineHeadersStep(final LineHeaderReader lineHeaderReader,
-                                      final ILineHeaderImportRepository lineHeaderImportRepository) {
+    public Step importLineHeadersStep(
+            final LineHeaderReader lineHeaderReader, final ILineHeaderImportRepository lineHeaderImportRepository) {
         final int chunkSize = 1;
         return new StepBuilder("importLineHeadersStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<JrLineHeader, Jore3LineHeader>chunk(chunkSize, transactionManager)
-                    .reader(lineHeaderReader.build())
-                    .processor(new LineHeaderProcessor())
-                    .writer(new GenericImportWriter<>(lineHeaderImportRepository))
-                    .faultTolerant()
-                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                    .build();
+                .allowStartIfComplete(true)
+                .<JrLineHeader, Jore3LineHeader>chunk(chunkSize, transactionManager)
+                .reader(lineHeaderReader.build())
+                .processor(new LineHeaderProcessor())
+                .writer(new GenericImportWriter<>(lineHeaderImportRepository))
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .build();
     }
 
     @Bean
     public Step commitLineHeadersStep(final ILineHeaderImportRepository lineHeaderImportRepository) {
         return new StepBuilder("commitLineHeadersStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(lineHeaderImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(lineHeaderImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Flow importRoutesFlow(final Step prepareRoutesStep,
-                                 final Step importRoutesStep,
-                                 final Step commitRoutesStep) {
+    public Flow importRoutesFlow(
+            final Step prepareRoutesStep, final Step importRoutesStep, final Step commitRoutesStep) {
 
         return new FlowBuilder<SimpleFlow>("importRoutesFlow")
                 .start(prepareRoutesStep)
@@ -380,36 +368,36 @@ public class JobConfig {
     @Bean
     public Step prepareRoutesStep(final IRouteImportRepository routeImportRepository) {
         return new StepBuilder("prepareRoutesStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(routeImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(routeImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Step importRoutesStep(final RouteReader routeReader,
-                                 final IRouteImportRepository routeImportRepository) {
+    public Step importRoutesStep(final RouteReader routeReader, final IRouteImportRepository routeImportRepository) {
         final int chunkSize = 1000;
         return new StepBuilder("importRoutesStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<JrRoute, Jore3Route>chunk(chunkSize, transactionManager)
-                    .reader(routeReader.build())
-                    .processor(new RouteProcessor())
-                    .writer(new GenericImportWriter<>(routeImportRepository))
-                    .build();
+                .allowStartIfComplete(true)
+                .<JrRoute, Jore3Route>chunk(chunkSize, transactionManager)
+                .reader(routeReader.build())
+                .processor(new RouteProcessor())
+                .writer(new GenericImportWriter<>(routeImportRepository))
+                .build();
     }
 
     @Bean
     public Step commitRoutesStep(final IRouteImportRepository routeImportRepository) {
         return new StepBuilder("commitRoutesStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(routeImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(routeImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Flow importRouteDirectionsFlow(final Step prepareRouteDirectionsStep,
-                                          final Step importRouteDirectionsStep,
-                                          final Step commitRouteDirectionsStep) {
+    public Flow importRouteDirectionsFlow(
+            final Step prepareRouteDirectionsStep,
+            final Step importRouteDirectionsStep,
+            final Step commitRouteDirectionsStep) {
 
         return new FlowBuilder<SimpleFlow>("importRouteDirectionsFlow")
                 .start(prepareRouteDirectionsStep)
@@ -421,40 +409,42 @@ public class JobConfig {
     @Bean
     public Step prepareRouteDirectionsStep(final IRouteDirectionImportRepository routeDirectionImportRepository) {
         return new StepBuilder("prepareRouteDirectionsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(routeDirectionImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(routeDirectionImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Step importRouteDirectionsStep(final RouteDirectionReader routeDirectionReader,
-                                          final IRouteDirectionImportRepository routeDirectionImportRepository) {
+    public Step importRouteDirectionsStep(
+            final RouteDirectionReader routeDirectionReader,
+            final IRouteDirectionImportRepository routeDirectionImportRepository) {
         final int chunkSize = 1000;
         return new StepBuilder("importRouteDirectionsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<JrRouteDirection, Jore3RouteDirection>chunk(chunkSize, transactionManager)
-                    .reader(routeDirectionReader.build())
-                    .processor(new RouteDirectionProcessor())
-                    .writer(new GenericImportWriter<>(routeDirectionImportRepository))
-                    .build();
+                .allowStartIfComplete(true)
+                .<JrRouteDirection, Jore3RouteDirection>chunk(chunkSize, transactionManager)
+                .reader(routeDirectionReader.build())
+                .processor(new RouteDirectionProcessor())
+                .writer(new GenericImportWriter<>(routeDirectionImportRepository))
+                .build();
     }
 
     @Bean
     public Step commitRouteDirectionsStep(final IRouteDirectionImportRepository routeDirectionImportRepository) {
         return new StepBuilder("commitRouteDirectionsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(routeDirectionImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(routeDirectionImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Flow importRouteLinksFlow(final Step prepareRoutePointsStep,
-                                     final Step prepareRouteStopPointsStep,
-                                     final Step prepareRouteLinksStep,
-                                     final Step importRouteLinksStep,
-                                     final Step commitRoutePointsStep,
-                                     final Step commitRouteStopPointsStep,
-                                     final Step commitRouteLinksStep) {
+    public Flow importRouteLinksFlow(
+            final Step prepareRoutePointsStep,
+            final Step prepareRouteStopPointsStep,
+            final Step prepareRouteLinksStep,
+            final Step importRouteLinksStep,
+            final Step commitRoutePointsStep,
+            final Step commitRouteStopPointsStep,
+            final Step commitRouteLinksStep) {
 
         return new FlowBuilder<SimpleFlow>("importRouteLinksFlow")
                 .start(prepareRoutePointsStep)
@@ -470,73 +460,72 @@ public class JobConfig {
     @Bean
     public Step prepareRoutePointsStep(final IRoutePointImportRepository routePointImportRepository) {
         return new StepBuilder("prepareRoutePointsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(routePointImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(routePointImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
     public Step prepareRouteStopPointsStep(final IRouteStopPointImportRepository routeStopPointImportRepository) {
         return new StepBuilder("prepareRouteStopPointsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(routeStopPointImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(routeStopPointImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
     public Step prepareRouteLinksStep(final IRouteLinkImportRepository routeLinkImportRepository) {
         return new StepBuilder("prepareRouteLinksStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(routeLinkImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(routeLinkImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Step importRouteLinksStep(final RouteLinkReader routeLinkReader,
-                                     final IRoutePointImportRepository routePointImportRepository,
-                                     final IRouteStopPointImportRepository routeStopPointImportRepository,
-                                     final IRouteLinkImportRepository routeLinkImportRepository) {
+    public Step importRouteLinksStep(
+            final RouteLinkReader routeLinkReader,
+            final IRoutePointImportRepository routePointImportRepository,
+            final IRouteStopPointImportRepository routeStopPointImportRepository,
+            final IRouteLinkImportRepository routeLinkImportRepository) {
         final int chunkSize = 100;
         return new StepBuilder("importRouteLinksStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<RouteLinksAndAttributes, Jore3RoutePointsAndLinks>chunk(chunkSize, transactionManager)
-                    .reader(new RouteLinksReader(routeLinkReader.build()))
-                    .processor(new RouteLinksProcessor())
-                    // Note how we write the route points, stop points, and route links to three different repositories
-                    .writer(new RouteLinksWriter(routePointImportRepository,
-                                                 routeStopPointImportRepository,
-                                                 routeLinkImportRepository))
-                    .build();
+                .allowStartIfComplete(true)
+                .<RouteLinksAndAttributes, Jore3RoutePointsAndLinks>chunk(chunkSize, transactionManager)
+                .reader(new RouteLinksReader(routeLinkReader.build()))
+                .processor(new RouteLinksProcessor())
+                // Note how we write the route points, stop points, and route links to three different repositories
+                .writer(new RouteLinksWriter(
+                        routePointImportRepository, routeStopPointImportRepository, routeLinkImportRepository))
+                .build();
     }
 
     @Bean
     public Step commitRoutePointsStep(final IRoutePointImportRepository routePointImportRepository) {
         return new StepBuilder("commitRoutePointsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(routePointImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(routePointImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
     public Step commitRouteStopPointsStep(final IRouteStopPointImportRepository routeStopPointImportRepository) {
         return new StepBuilder("commitRouteStopPointsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(routeStopPointImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(routeStopPointImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
     public Step commitRouteLinksStep(final IRouteLinkImportRepository routeLinkImportRepository) {
         return new StepBuilder("commitRouteLinksStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(routeLinkImportRepository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(routeLinkImportRepository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Flow importPlacesFlow(final Step preparePlacesStep,
-                                 final Step importPlacesStep,
-                                 final Step commitPlacesStep) {
+    public Flow importPlacesFlow(
+            final Step preparePlacesStep, final Step importPlacesStep, final Step commitPlacesStep) {
 
         return new FlowBuilder<SimpleFlow>("importPlacesFlow")
                 .start(preparePlacesStep)
@@ -554,8 +543,8 @@ public class JobConfig {
     }
 
     @Bean
-    public Step importPlacesStep(final PlaceImportRowReader placeReader,
-                                 final IPlaceImportRepository placeImportRepository) {
+    public Step importPlacesStep(
+            final PlaceImportRowReader placeReader, final IPlaceImportRepository placeImportRepository) {
         final int chunkSize = 1000;
         return new StepBuilder("importPlacesStep", jobRepository)
                 .allowStartIfComplete(true)
@@ -575,9 +564,10 @@ public class JobConfig {
     }
 
     @Bean
-    public Flow importScheduledStopPointsFlow(final Step prepareScheduledStopPointsStep,
-                                              final Step importScheduledStopPointsStep,
-                                              final Step commitScheduledStopPointsStep) {
+    public Flow importScheduledStopPointsFlow(
+            final Step prepareScheduledStopPointsStep,
+            final Step importScheduledStopPointsStep,
+            final Step commitScheduledStopPointsStep) {
         return new FlowBuilder<SimpleFlow>("importScheduledStopPointsFlow")
                 .start(prepareScheduledStopPointsStep)
                 .next(importScheduledStopPointsStep)
@@ -588,40 +578,41 @@ public class JobConfig {
     @Bean
     public Step prepareScheduledStopPointsStep(final IScheduledStopPointImportRepository repository) {
         return new StepBuilder("prepareScheduledStopPointsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCleanupTasklet<>(repository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(repository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Step importScheduledStopPointsStep(final ScheduledStopPointImportReader reader,
-                                              final IScheduledStopPointImportRepository repository) {
+    public Step importScheduledStopPointsStep(
+            final ScheduledStopPointImportReader reader, final IScheduledStopPointImportRepository repository) {
         return new StepBuilder("importScheduledStopPointsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<JrScheduledStopPoint, Jore3ScheduledStopPoint>chunk(1000, transactionManager)
-                    .reader(reader.build())
-                    .processor(new ScheduledStopPointImportProcessor())
-                    .writer(new GenericImportWriter<>(repository))
-                    .build();
+                .allowStartIfComplete(true)
+                .<JrScheduledStopPoint, Jore3ScheduledStopPoint>chunk(1000, transactionManager)
+                .reader(reader.build())
+                .processor(new ScheduledStopPointImportProcessor())
+                .writer(new GenericImportWriter<>(repository))
+                .build();
     }
 
     @Bean
     public Step commitScheduledStopPointsStep(final IScheduledStopPointImportRepository repository) {
         return new StepBuilder("commitScheduledStopPointsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(new GenericCommitTasklet<>(repository), transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(repository), transactionManager)
+                .build();
     }
 
     @Bean
-    public Flow jore4ExportFlow(final Step prepareJore4ExportStep,
-                                final Step exportTimingPlacesStep,
-                                final Step exportScheduledStopPointsStep,
-                                final Step exportLinesStep,
-                                final Step exportRoutesStep,
-                                final Step exportRouteGeometriesStep,
-                                final Step exportJourneyPatternsStep,
-                                final Step exportJourneyPatternStopsStep) {
+    public Flow jore4ExportFlow(
+            final Step prepareJore4ExportStep,
+            final Step exportTimingPlacesStep,
+            final Step exportScheduledStopPointsStep,
+            final Step exportLinesStep,
+            final Step exportRoutesStep,
+            final Step exportRouteGeometriesStep,
+            final Step exportJourneyPatternsStep,
+            final Step exportJourneyPatternStopsStep) {
         return new FlowBuilder<SimpleFlow>("jore4ExportFlow")
                 .start(prepareJore4ExportStep)
                 .next(exportTimingPlacesStep)
@@ -637,119 +628,120 @@ public class JobConfig {
     @Bean
     public Step prepareJore4ExportStep(final Jore4SchemaCleanupTasklet cleanupTasklet) {
         return new StepBuilder("prepareJore4ExportStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .tasklet(cleanupTasklet, transactionManager)
-                    .build();
+                .allowStartIfComplete(true)
+                .tasklet(cleanupTasklet, transactionManager)
+                .build();
     }
 
     @Bean
-    public Step exportTimingPlacesStep(final TimingPlaceExportReader reader,
-                                       final TimingPlaceExportWriter writer) {
+    public Step exportTimingPlacesStep(final TimingPlaceExportReader reader, final TimingPlaceExportWriter writer) {
         return new StepBuilder("exportTimingPlacesStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<ImporterTimingPlace, Jore4TimingPlace>chunk(1, transactionManager)
-                    .reader(reader.build())
-                    .processor(new TimingPlaceExportProcessor())
-                    .writer(writer)
-                    .faultTolerant()
-                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                    .listener(new StatisticsLoggingStepExecutionListener())
-                    .build();
+                .allowStartIfComplete(true)
+                .<ImporterTimingPlace, Jore4TimingPlace>chunk(1, transactionManager)
+                .reader(reader.build())
+                .processor(new TimingPlaceExportProcessor())
+                .writer(writer)
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .listener(new StatisticsLoggingStepExecutionListener())
+                .build();
     }
 
     @Bean
-    public Step exportScheduledStopPointsStep(final ScheduledStopPointExportReader reader,
-                                              final ScheduledStopPointExportProcessor processor,
-                                              final ScheduledStopPointExportWriter writer) {
+    public Step exportScheduledStopPointsStep(
+            final ScheduledStopPointExportReader reader,
+            final ScheduledStopPointExportProcessor processor,
+            final ScheduledStopPointExportWriter writer) {
         return new StepBuilder("exportScheduledStopPointsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<ImporterScheduledStopPoint, Jore4ScheduledStopPoint>chunk(1, transactionManager)
-                    .reader(reader.build())
-                    .processor(processor)
-                    .writer(writer)
-                    .faultTolerant()
-                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                    .listener(new StatisticsLoggingStepExecutionListener())
-                    .build();
+                .allowStartIfComplete(true)
+                .<ImporterScheduledStopPoint, Jore4ScheduledStopPoint>chunk(1, transactionManager)
+                .reader(reader.build())
+                .processor(processor)
+                .writer(writer)
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .listener(new StatisticsLoggingStepExecutionListener())
+                .build();
     }
 
     @Bean
-    public Step exportLinesStep(final LineExportReader reader,
-                                final LineExportProcessor processor,
-                                final LineExportWriter writer) {
+    public Step exportLinesStep(
+            final LineExportReader reader, final LineExportProcessor processor, final LineExportWriter writer) {
         return new StepBuilder("exportLinesStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<ImporterLine, Jore4Line>chunk(1, transactionManager)
-                    .reader(reader.build())
-                    .processor(processor)
-                    .writer(writer)
-                    .faultTolerant()
-                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                    .listener(new StatisticsLoggingStepExecutionListener())
-                    .build();
+                .allowStartIfComplete(true)
+                .<ImporterLine, Jore4Line>chunk(1, transactionManager)
+                .reader(reader.build())
+                .processor(processor)
+                .writer(writer)
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .listener(new StatisticsLoggingStepExecutionListener())
+                .build();
     }
 
     @Bean
-    public Step exportRoutesStep(final RouteExportReader reader,
-                                 final RouteExportProcessor processor,
-                                 final RouteExportWriter writer) {
+    public Step exportRoutesStep(
+            final RouteExportReader reader, final RouteExportProcessor processor, final RouteExportWriter writer) {
         return new StepBuilder("exportRoutesStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<ImporterRoute, Jore4Route>chunk(1, transactionManager)
-                    .reader(reader.build())
-                    .processor(processor)
-                    .writer(writer)
-                    .faultTolerant()
-                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                    .listener(new StatisticsLoggingStepExecutionListener())
-                    .build();
+                .allowStartIfComplete(true)
+                .<ImporterRoute, Jore4Route>chunk(1, transactionManager)
+                .reader(reader.build())
+                .processor(processor)
+                .writer(writer)
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .listener(new StatisticsLoggingStepExecutionListener())
+                .build();
     }
 
     @Bean
-    public Step exportRouteGeometriesStep(final RouteGeometryExportReader reader,
-                                          final MapMatchingProcessor processor,
-                                          final RouteGeometryExportWriter writer) {
+    public Step exportRouteGeometriesStep(
+            final RouteGeometryExportReader reader,
+            final MapMatchingProcessor processor,
+            final RouteGeometryExportWriter writer) {
         return new StepBuilder("exportRouteGeometriesStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<ImporterRouteGeometry, Jore4RouteGeometry>chunk(1, transactionManager)
-                    .reader(reader.build())
-                    .processor(processor)
-                    .writer(writer)
-                    .faultTolerant()
-                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                    .listener(new StatisticsLoggingStepExecutionListener())
-                    .build();
+                .allowStartIfComplete(true)
+                .<ImporterRouteGeometry, Jore4RouteGeometry>chunk(1, transactionManager)
+                .reader(reader.build())
+                .processor(processor)
+                .writer(writer)
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .listener(new StatisticsLoggingStepExecutionListener())
+                .build();
     }
 
     @Bean
-    public Step exportJourneyPatternsStep(final JourneyPatternExportReader reader,
-                                          final JourneyPatternExportProcessor processor,
-                                          final JourneyPatternExportWriter writer) {
+    public Step exportJourneyPatternsStep(
+            final JourneyPatternExportReader reader,
+            final JourneyPatternExportProcessor processor,
+            final JourneyPatternExportWriter writer) {
         return new StepBuilder("exportJourneyPatternsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<ImporterJourneyPattern, Jore4JourneyPattern>chunk(1, transactionManager)
-                    .reader(reader.build())
-                    .processor(processor)
-                    .writer(writer)
-                    .faultTolerant()
-                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                    .listener(new StatisticsLoggingStepExecutionListener())
-                    .build();
+                .allowStartIfComplete(true)
+                .<ImporterJourneyPattern, Jore4JourneyPattern>chunk(1, transactionManager)
+                .reader(reader.build())
+                .processor(processor)
+                .writer(writer)
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .listener(new StatisticsLoggingStepExecutionListener())
+                .build();
     }
 
     @Bean
-    public Step exportJourneyPatternStopsStep(final JourneyPatternStopExportReader reader,
-                                              final JourneyPatternStopExportProcessor processor,
-                                              final JourneyPatternStopExportWriter writer) {
+    public Step exportJourneyPatternStopsStep(
+            final JourneyPatternStopExportReader reader,
+            final JourneyPatternStopExportProcessor processor,
+            final JourneyPatternStopExportWriter writer) {
         return new StepBuilder("exportJourneyPatternStopsStep", jobRepository)
-                    .allowStartIfComplete(true)
-                    .<ImporterJourneyPatternStop, Jore4JourneyPatternStop>chunk(1000, transactionManager)
-                    .reader(reader.build())
-                    .processor(processor)
-                    .writer(writer)
-                    .faultTolerant()
-                    .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                    .listener(new StatisticsLoggingStepExecutionListener())
-                    .build();
+                .allowStartIfComplete(true)
+                .<ImporterJourneyPatternStop, Jore4JourneyPatternStop>chunk(1000, transactionManager)
+                .reader(reader.build())
+                .processor(processor)
+                .writer(writer)
+                .faultTolerant()
+                .skipPolicy(new AlwaysSkipItemSkipPolicy())
+                .listener(new StatisticsLoggingStepExecutionListener())
+                .build();
     }
 }

@@ -1,20 +1,18 @@
 package fi.hsl.jore.importer.feature.digiroad.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStopDirection;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CsvDigiroadStopServiceTest {
-
 
     private CsvDigiroadStopService service;
 
@@ -51,27 +49,21 @@ class CsvDigiroadStopServiceTest {
             @DisplayName("Should return a stop which has the correct digiroad stop id")
             void shouldReturnStopWhichContainsHasDigiroadStopId() {
                 final DigiroadStop stop = service.findByNationalId(NATIONAL_ID).get();
-                assertThat(stop.digiroadStopId())
-                        .as("digiroadStopId")
-                        .isEqualTo(EXPECTED_DIGIROAD_STOP_ID);
+                assertThat(stop.digiroadStopId()).as("digiroadStopId").isEqualTo(EXPECTED_DIGIROAD_STOP_ID);
             }
 
             @Test
             @DisplayName("Should return a stop which has the correct digiroadLinkId")
             void shouldReturnStopWhichHasCorrectDigiroadLinkId() {
                 final DigiroadStop stop = service.findByNationalId(NATIONAL_ID).get();
-                assertThat(stop.digiroadLinkId())
-                        .as("digiroadLinkId")
-                        .isEqualTo(EXPECTED_DIGIROAD_LINK_ID);
+                assertThat(stop.digiroadLinkId()).as("digiroadLinkId").isEqualTo(EXPECTED_DIGIROAD_LINK_ID);
             }
 
             @Test
             @DisplayName("Should return a stop which has the correct nationalId")
             void shouldReturnStopWhichHasCorrectElyNumber() {
                 final DigiroadStop stop = service.findByNationalId(NATIONAL_ID).get();
-                assertThat(stop.nationalId())
-                        .as("nationalId")
-                        .isEqualTo(NATIONAL_ID);
+                assertThat(stop.nationalId()).as("nationalId").isEqualTo(NATIONAL_ID);
             }
 
             @Test
@@ -87,38 +79,28 @@ class CsvDigiroadStopServiceTest {
             @DisplayName("Should return a stop which has the correct X coordinate")
             void shouldReturnStopWhichHasCorrectXCoordinate() {
                 final DigiroadStop stop = service.findByNationalId(NATIONAL_ID).get();
-                assertThat(stop.location().getX())
-                        .as("X Coordinate")
-                        .isEqualTo(EXPECTED_X_COORDINATE);
+                assertThat(stop.location().getX()).as("X Coordinate").isEqualTo(EXPECTED_X_COORDINATE);
             }
 
             @Test
             @DisplayName("Should return a stop which has the correct Y coordinate")
             void shouldReturnStopWhichHasCorrectYCoordinate() {
                 final DigiroadStop stop = service.findByNationalId(NATIONAL_ID).get();
-                assertThat(stop.location().getY())
-                        .as("Y Coordinate")
-                        .isEqualTo(EXPECTED_Y_COORDINATE);
+                assertThat(stop.location().getY()).as("Y Coordinate").isEqualTo(EXPECTED_Y_COORDINATE);
             }
 
             @Test
             @DisplayName("Should return a stop which has the correct Finnish name")
             void shouldReturnStopWhichHasCorrectFinnishName() {
                 final DigiroadStop stop = service.findByNationalId(NATIONAL_ID).get();
-                assertThat(stop.nameFinnish())
-                        .as("nameFinnish")
-                        .isNotEmpty()
-                        .contains(EXPECTED_FINNISH_NAME);
+                assertThat(stop.nameFinnish()).as("nameFinnish").isNotEmpty().contains(EXPECTED_FINNISH_NAME);
             }
 
             @Test
             @DisplayName("Should return a stop which has the correct Swedish name")
             void shouldReturnStopWhichHasCorrectSwedishName() {
                 final DigiroadStop stop = service.findByNationalId(NATIONAL_ID).get();
-                assertThat(stop.nameSwedish())
-                        .as("nameSwedish")
-                        .isNotEmpty()
-                        .contains(EXPECTED_SWEDISH_NAME);
+                assertThat(stop.nameSwedish()).as("nameSwedish").isNotEmpty().contains(EXPECTED_SWEDISH_NAME);
             }
         }
 

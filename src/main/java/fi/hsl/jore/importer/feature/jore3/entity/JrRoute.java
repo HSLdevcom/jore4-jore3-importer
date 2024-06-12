@@ -10,18 +10,13 @@ import fi.hsl.jore.importer.feature.jore3.mixin.IHasLineId;
 import fi.hsl.jore.importer.feature.jore3.mixin.IHasPrimaryKey;
 import fi.hsl.jore.importer.feature.jore3.mixin.IHasRouteId;
 import fi.hsl.jore.importer.feature.jore3.style.JoreDtoStyle;
-import org.immutables.value.Value;
-
 import java.util.Optional;
-
+import org.immutables.value.Value;
 
 @Value.Immutable
 @JoreDtoStyle
 @JoreTable(name = JrRoute.TABLE)
-public interface JrRoute
-        extends IHasPrimaryKey<JrRoutePk>,
-                IHasRouteId,
-                IHasLineId {
+public interface JrRoute extends IHasPrimaryKey<JrRoutePk>, IHasRouteId, IHasLineId {
 
     String TABLE = "jr_reitti";
 
@@ -35,26 +30,24 @@ public interface JrRoute
         return JrLinePk.of(lineId());
     }
 
-    @JoreColumn(name = "reinimi",
-                example = "Olympiaterminaali - Kamppi (M) - Ooppera")
+    @JoreColumn(name = "reinimi", example = "Olympiaterminaali - Kamppi (M) - Ooppera")
     Optional<String> name();
 
-    @JoreColumn(name = "reinimir",
-                nullable = true,
-                example = "Olympiaterminalen - Kampen (M) - Operan")
+    @JoreColumn(name = "reinimir", nullable = true, example = "Olympiaterminalen - Kampen (M) - Operan")
     Optional<String> nameSwedish();
 
-    //reinimilyh and reinimilyhr are missing because they are deprecated.
+    // reinimilyh and reinimilyhr are missing because they are deprecated.
 
-    static JrRoute of(final RouteId routeId,
-                      final LineId lineId,
-                      final Optional<String> name,
-                      final Optional<String> nameSwedish) {
+    static JrRoute of(
+            final RouteId routeId,
+            final LineId lineId,
+            final Optional<String> name,
+            final Optional<String> nameSwedish) {
         return ImmutableJrRoute.builder()
-                               .routeId(routeId)
-                               .lineId(lineId)
-                               .name(name)
-                               .nameSwedish(nameSwedish)
-                               .build();
+                .routeId(routeId)
+                .lineId(lineId)
+                .name(name)
+                .nameSwedish(nameSwedish)
+                .build();
     }
 }

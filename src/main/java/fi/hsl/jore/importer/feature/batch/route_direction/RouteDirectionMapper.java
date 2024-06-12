@@ -1,19 +1,18 @@
 package fi.hsl.jore.importer.feature.batch.route_direction;
 
-import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
-import fi.hsl.jore.importer.feature.jore3.enumerated.Direction;
-import fi.hsl.jore.importer.feature.jore3.field.RouteId;
-import org.springframework.jdbc.core.RowMapper;
-
-import javax.annotation.Nullable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getIntOrThrow;
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getLocalDateTimeOrThrow;
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalInt;
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalString;
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
+
+import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
+import fi.hsl.jore.importer.feature.jore3.enumerated.Direction;
+import fi.hsl.jore.importer.feature.jore3.field.RouteId;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.annotation.Nullable;
+import org.springframework.jdbc.core.RowMapper;
 
 public class RouteDirectionMapper implements RowMapper<JrRouteDirection> {
 
@@ -21,12 +20,10 @@ public class RouteDirectionMapper implements RowMapper<JrRouteDirection> {
 
     @Override
     @Nullable
-    public JrRouteDirection mapRow(final ResultSet rs,
-                                   final int rowNum) throws SQLException {
+    public JrRouteDirection mapRow(final ResultSet rs, final int rowNum) throws SQLException {
         return JrRouteDirection.of(
                 RouteId.from(getStringOrThrow(rs, "reitunnus")),
-                Direction.of(getIntOrThrow(rs, "suusuunta"))
-                         .orElse(Direction.UNKNOWN),
+                Direction.of(getIntOrThrow(rs, "suusuunta")).orElse(Direction.UNKNOWN),
                 getOptionalInt(rs, "suupituus"),
                 getLocalDateTimeOrThrow(rs, "suuvoimast").toLocalDate(),
                 getLocalDateTimeOrThrow(rs, "suuvoimviimpvm").toLocalDate(),
@@ -37,7 +34,6 @@ public class RouteDirectionMapper implements RowMapper<JrRouteDirection> {
                 getOptionalString(rs, "suulahpaik"),
                 getOptionalString(rs, "suulahpaikr"),
                 getOptionalString(rs, "suupaapaik"),
-                getOptionalString(rs, "suupaapaikr")
-        );
+                getOptionalString(rs, "suupaapaikr"));
     }
 }

@@ -6,9 +6,8 @@ import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Jore3Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
-import org.springframework.batch.item.ItemProcessor;
-
 import javax.annotation.Nullable;
+import org.springframework.batch.item.ItemProcessor;
 
 public class NodeProcessor implements ItemProcessor<JrNode, Jore3Node> {
 
@@ -19,8 +18,6 @@ public class NodeProcessor implements ItemProcessor<JrNode, Jore3Node> {
         final NodeType type = NodeTypeMapper.resolveNodeType(item.nodeType());
         final Jore3Node node = Jore3Node.of(id, type, item.location());
 
-        return NodeType.STOP == type ?
-                node.withProjectedLocation(item.projectedLocation()) :
-                node;
+        return NodeType.STOP == type ? node.withProjectedLocation(item.projectedLocation()) : node;
     }
 }

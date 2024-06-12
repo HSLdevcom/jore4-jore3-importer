@@ -1,15 +1,13 @@
 package fi.hsl.jore.importer.feature.jore3.enumerated;
 
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreEnumeration;
+import java.util.Arrays;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Optional;
-
 @JoreEnumeration(name = "Ajantasauspysäkki")
 public enum RegulatedTimingPointStatus {
-
     NO(0, "Ei"),
     YES(1, "Kyllä"),
     YES_LOAD_TIME(2, "Kyllä, load time"),
@@ -21,8 +19,7 @@ public enum RegulatedTimingPointStatus {
     private final int value;
     private final String description;
 
-    RegulatedTimingPointStatus(final int value,
-                               final String description) {
+    RegulatedTimingPointStatus(final int value, final String description) {
         this.value = value;
         this.description = description;
     }
@@ -41,8 +38,8 @@ public enum RegulatedTimingPointStatus {
 
     public static Optional<RegulatedTimingPointStatus> of(final int i) {
         return Arrays.stream(values())
-                     .filter(transportType -> transportType.value == i)
-                     .findFirst();
+                .filter(transportType -> transportType.value == i)
+                .findFirst();
     }
 
     public static Optional<RegulatedTimingPointStatus> of(final String s) {

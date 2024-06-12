@@ -9,9 +9,6 @@ public class PlaceImportProcessor implements ItemProcessor<JrPlace, PersistableP
 
     @Override
     public PersistablePlace process(final JrPlace item) {
-        return PersistablePlace.of(
-                ExternalIdUtil.forPlace(item),
-                item.name()
-        );
+        return PersistablePlace.of(ExternalIdUtil.forPlace(item), item.name());
     }
 }

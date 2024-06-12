@@ -3,6 +3,7 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImporterScheduledStopPoint;
+import javax.sql.DataSource;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
-
 /**
- * Reads the imported scheduled stop points from the import
- * schemas which are found from the database of this Spring
+ * Reads the imported scheduled stop points from the import schemas which are found from the database of this Spring
  * Boot application.
  */
 @Component
@@ -28,9 +26,10 @@ public class ScheduledStopPointExportReader {
     private final String sql;
 
     @Autowired
-    public ScheduledStopPointExportReader(@Qualifier("importerDataSource") final DataSource dataSource,
-                                          final IJsonbConverter jsonConverter,
-                                          @Value(ScheduledStopPointExportMapper.SQL_PATH) final Resource sqlResource) {
+    public ScheduledStopPointExportReader(
+            @Qualifier("importerDataSource") final DataSource dataSource,
+            final IJsonbConverter jsonConverter,
+            @Value(ScheduledStopPointExportMapper.SQL_PATH) final Resource sqlResource) {
         this.dataSource = dataSource;
         this.jsonConverter = jsonConverter;
         this.sql = ResourceUtil.fromResource(sqlResource);

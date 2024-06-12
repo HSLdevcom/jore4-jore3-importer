@@ -7,13 +7,10 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 public class BlockMigrationsCondition implements Condition {
 
     @Override
-    public boolean matches(final ConditionContext context,
-                           final AnnotatedTypeMetadata metadata) {
+    public boolean matches(final ConditionContext context, final AnnotatedTypeMetadata metadata) {
         //noinspection BooleanVariableAlwaysNegated
-        final boolean shouldMigrate = context.getEnvironment()
-                .getProperty("jore.importer.migrate",
-                        Boolean.class,
-                        false);
+        final boolean shouldMigrate =
+                context.getEnvironment().getProperty("jore.importer.migrate", Boolean.class, false);
         return !shouldMigrate;
     }
 }

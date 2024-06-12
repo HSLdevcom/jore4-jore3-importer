@@ -7,11 +7,7 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
-/**
- * Inserts route geometries into the Jore 4 database.
- */
+/** Inserts route geometries into the Jore 4 database. */
 @Component
 public class RouteGeometryExportWriter implements ItemWriter<Jore4RouteGeometry> {
 

@@ -9,14 +9,12 @@ import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
 import io.vavr.collection.List;
 import io.vavr.collection.SortedMap;
 import io.vavr.collection.TreeMap;
+import java.util.Optional;
+import javax.annotation.Nullable;
 import org.immutables.value.Value;
 import org.springframework.batch.item.ItemStreamReader;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-
-public class LinkPointReader
-        extends DelegatingReader<LinkPoints, PointRow> {
+public class LinkPointReader extends DelegatingReader<LinkPoints, PointRow> {
 
     public LinkPointReader(final ItemStreamReader<PointRow> delegate) {
         super(delegate);
@@ -57,8 +55,7 @@ public class LinkPointReader
     }
 
     @Value.Immutable
-    public interface ReaderState
-            extends DelegatingReader.AbstractReaderState<LinkPoints, PointRow> {
+    public interface ReaderState extends DelegatingReader.AbstractReaderState<LinkPoints, PointRow> {
 
         Optional<JrLinkPk> link();
 
@@ -71,11 +68,12 @@ public class LinkPointReader
 
         @Value.Lazy
         default Optional<LinkPoints> pendingResult() {
-            return (link().isPresent() && endpoints().isPresent()) ?
-                    Optional.of(LinkPoints.of(link().orElseThrow(),
-                                              endpoints().orElseThrow(),
-                                              accumulator().asList())) :
-                    Optional.empty();
+            return (link().isPresent() && endpoints().isPresent())
+                    ? Optional.of(LinkPoints.of(
+                            link().orElseThrow(),
+                            endpoints().orElseThrow(),
+                            accumulator().asList()))
+                    : Optional.empty();
         }
 
         static ReaderState init() {
@@ -87,32 +85,30 @@ public class LinkPointReader
             if (ctx == null) {
                 // This is the last point in the database
                 // -> Reader is finished and there are no more points
-                return ImmutableReaderState.copyOf(this)
-                                           .withExhausted(true)
-                                           .withResult(pendingResult());
+                return ImmutableReaderState.copyOf(this).withExhausted(true).withResult(pendingResult());
             }
             final JrPoint point = ctx.point();
             final LinkEndpoints endpoints = ctx.endpoints();
             if (link().isEmpty()) {
                 // This is the first point in the database
                 return ImmutableReaderState.copyOf(this)
-                                           .withLink(point.fkLink())
-                                           .withEndpoints(endpoints)
-                                           .withAccumulator(Accumulator.ofOnly(point));
+                        .withLink(point.fkLink())
+                        .withEndpoints(endpoints)
+                        .withAccumulator(Accumulator.ofOnly(point));
             }
             final JrLinkPk previous = link().get();
             if (previous.equals(point.fkLink())) {
                 // This point belongs to the current link
                 return ImmutableReaderState.copyOf(this)
-                                           .withAccumulator(accumulator().insert(point))
-                                           .withResult(Optional.empty());
+                        .withAccumulator(accumulator().insert(point))
+                        .withResult(Optional.empty());
             }
             // This point belongs to a new link
             return ImmutableReaderState.copyOf(this)
-                                       .withLink(point.fkLink())
-                                       .withEndpoints(endpoints)
-                                       .withAccumulator(Accumulator.ofOnly(point))
-                                       .withResult(pendingResult());
+                    .withLink(point.fkLink())
+                    .withEndpoints(endpoints)
+                    .withAccumulator(Accumulator.ofOnly(point))
+                    .withResult(pendingResult());
         }
     }
 }
