@@ -176,9 +176,8 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
 
                             // Assert that conversion from PostgreSQL JSONB data type to a hash map
                             // yields correct result.
-                            return jsonbConverter
-                                    .fromJson(jsonbAsString, HashMap.class)
-                                    .equals(EXPECTED_SECOND_VIA_POINT_NAMES);
+                            return EXPECTED_SECOND_VIA_POINT_NAMES.equals(
+                                    jsonbConverter.fromJson(jsonbAsString, HashMap.class));
                         },
                         "via name conversion"));
         softAssertions.assertAll();
