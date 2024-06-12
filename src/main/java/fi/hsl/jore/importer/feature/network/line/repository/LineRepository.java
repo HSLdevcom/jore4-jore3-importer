@@ -1,6 +1,5 @@
 package fi.hsl.jore.importer.feature.network.line.repository;
 
-
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.network.line.dto.Line;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
@@ -11,6 +10,8 @@ import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesRecord;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
+import java.util.Optional;
+import java.util.UUID;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Repository
-public class LineRepository
-        implements ILineTestRepository {
+public class LineRepository implements ILineTestRepository {
 
     private static final NetworkLines LINE = NetworkLines.NETWORK_LINES;
-    private static final NetworkLinesWithHistory HISTORY_VIEW = NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY;
+    private static final NetworkLinesWithHistory HISTORY_VIEW =
+            NetworkLinesWithHistory.NETWORK_LINES_WITH_HISTORY;
     private static final TableField<NetworkLinesRecord, UUID> PRIMARY_KEY = LINE.NETWORK_LINE_ID;
 
     private final DSLContext db;
@@ -35,7 +33,6 @@ public class LineRepository
     public LineRepository(@Qualifier("importerDsl") final DSLContext db) {
         this.db = db;
     }
-
 
     @Override
     @Transactional
@@ -69,9 +66,10 @@ public class LineRepository
     @Transactional
     public LinePK update(final Line line) {
         final NetworkLinesRecord r =
-                Optional.ofNullable(db.selectFrom(LINE)
-                                      .where(PRIMARY_KEY.eq(line.pk().value()))
-                                      .fetchAny())
+                Optional.ofNullable(
+                                db.selectFrom(LINE)
+                                        .where(PRIMARY_KEY.eq(line.pk().value()))
+                                        .fetchAny())
                         .orElseThrow();
 
         r.setInfrastructureNetworkType(line.networkType().label());
@@ -97,57 +95,50 @@ public class LineRepository
     @Transactional(readOnly = true)
     public Optional<Line> findById(final LinePK id) {
         return db.selectFrom(LINE)
-                 .where(PRIMARY_KEY.eq(id.value()))
-                 .fetchStream()
-                 .map(Line::from)
-                 .findFirst();
+                .where(PRIMARY_KEY.eq(id.value()))
+                .fetchStream()
+                .map(Line::from)
+                .findFirst();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<Line> findByExternalId(final ExternalId externalId) {
         return db.selectFrom(LINE)
-                 .where(LINE.NETWORK_LINE_EXT_ID.eq(externalId.value()))
-                 .fetchStream()
-                 .map(Line::from)
-                 .findFirst();
+                .where(LINE.NETWORK_LINE_EXT_ID.eq(externalId.value()))
+                .fetchStream()
+                .map(Line::from)
+                .findFirst();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Line> findAll() {
-        return db.selectFrom(LINE)
-                 .fetchStream()
-                 .map(Line::from)
-                 .collect(List.collector());
+        return db.selectFrom(LINE).fetchStream().map(Line::from).collect(List.collector());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Set<LinePK> findAllIds() {
         return db.select(PRIMARY_KEY)
-                 .from(LINE)
-                 .fetchStream()
-                 .map(row -> LinePK.of(row.value1()))
-                 .collect(HashSet.collector());
+                .from(LINE)
+                .fetchStream()
+                .map(row -> LinePK.of(row.value1()))
+                .collect(HashSet.collector());
     }
 
     @Override
     @Transactional(readOnly = true)
     public int count() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                 .from(LINE)
-                 .fetchOne(0, int.class);
+        return db.selectCount().from(LINE).fetchOne(0, int.class);
     }
 
     @Override
     @Transactional(readOnly = true)
     public int countHistory() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                 .from(HISTORY_VIEW)
-                 .fetchOne(0, int.class);
+        return db.selectCount().from(HISTORY_VIEW).fetchOne(0, int.class);
     }
 
     @Override
@@ -166,9 +157,9 @@ public class LineRepository
     @Transactional(readOnly = true)
     public List<Line> findFromHistory() {
         return db.selectFrom(HISTORY_VIEW)
-                 .orderBy(HISTORY_VIEW.NETWORK_LINE_SYS_PERIOD.asc())
-                 .fetchStream()
-                 .map(Line::from)
-                 .collect(List.collector());
+                .orderBy(HISTORY_VIEW.NETWORK_LINE_SYS_PERIOD.asc())
+                .fetchStream()
+                .map(Line::from)
+                .collect(List.collector());
     }
 }

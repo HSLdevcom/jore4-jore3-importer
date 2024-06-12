@@ -23,8 +23,8 @@ public enum NetworkType {
 
     public static NetworkType of(final String val) {
         return Arrays.stream(values())
-                     .filter(type -> type.label.equalsIgnoreCase(val))
-                     .findFirst()
-                     .orElseThrow();
+                .filter(type -> type.label.equalsIgnoreCase(val))
+                .findFirst()
+                .orElseThrow();
     }
 }

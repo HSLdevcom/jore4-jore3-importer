@@ -6,8 +6,6 @@ import org.immutables.value.Value;
 public abstract class LineId extends EncodedIdentifier {
 
     public static LineId from(final String id) {
-        return ImmutableLineId.builder()
-                              .originalValue(id)
-                              .build();
+        return ImmutableLineId.builder().originalValue(id).build();
     }
 }

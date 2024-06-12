@@ -19,8 +19,7 @@ public enum LegacyPublicTransportDestination {
     private final Character value;
     private final String description;
 
-    LegacyPublicTransportDestination(final Character value,
-                                     final String description) {
+    LegacyPublicTransportDestination(final Character value, final String description) {
         this.value = value;
         this.description = description;
     }
@@ -35,7 +34,7 @@ public enum LegacyPublicTransportDestination {
 
     public static Optional<LegacyPublicTransportDestination> of(final Character i) {
         return Arrays.stream(values())
-                     .filter(destination -> destination.value.equals(i))
-                     .findFirst();
+                .filter(destination -> destination.value.equals(i))
+                .findFirst();
     }
 }

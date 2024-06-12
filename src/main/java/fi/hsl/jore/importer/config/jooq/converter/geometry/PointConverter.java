@@ -1,19 +1,15 @@
 package fi.hsl.jore.importer.config.jooq.converter.geometry;
 
-
+import javax.annotation.Nullable;
 import org.jooq.Converter;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 
-import javax.annotation.Nullable;
+/** Converts between Point geometries and Postgis EWKT/EWKB formats. */
+public class PointConverter implements Converter<Object, Point> {
 
-/**
- * Converts between Point geometries and Postgis EWKT/EWKB formats.
- */
-public class PointConverter
-        implements Converter<Object, Point> {
-
-    private static final GeometryConverter CONVERTER = new GeometryConverter(Geometry.TYPENAME_POINT);
+    private static final GeometryConverter CONVERTER =
+            new GeometryConverter(Geometry.TYPENAME_POINT);
 
     public static final PointConverter INSTANCE = new PointConverter();
 

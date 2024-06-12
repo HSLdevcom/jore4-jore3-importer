@@ -10,12 +10,7 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
-/**
- * Writes the exported scheduled stop points to the Jore 4
- * database.
- */
+/** Writes the exported scheduled stop points to the Jore 4 database. */
 @Component
 public class ScheduledStopPointExportWriter implements ItemWriter<Jore4ScheduledStopPoint> {
 
@@ -23,8 +18,9 @@ public class ScheduledStopPointExportWriter implements ItemWriter<Jore4Scheduled
     private final IJore4ScheduledStopPointRepository jore4Repository;
 
     @Autowired
-    public ScheduledStopPointExportWriter(final IScheduledStopPointImportRepository importerRepository,
-                                          final IJore4ScheduledStopPointRepository jore4Repository) {
+    public ScheduledStopPointExportWriter(
+            final IScheduledStopPointImportRepository importerRepository,
+            final IJore4ScheduledStopPointRepository jore4Repository) {
         this.importerRepository = importerRepository;
         this.jore4Repository = jore4Repository;
     }
@@ -34,10 +30,11 @@ public class ScheduledStopPointExportWriter implements ItemWriter<Jore4Scheduled
         jore4Repository.insert(items);
 
         importerRepository.setJore4Ids(
-            FluentIterable.from(items).transform(item -> PersistableScheduledStopPointIdMapping.of(
-                item.externalScheduledStopPointId(),
-                item.scheduledStopPointId()
-            ))
-        );
+                FluentIterable.from(items)
+                        .transform(
+                                item ->
+                                        PersistableScheduledStopPointIdMapping.of(
+                                                item.externalScheduledStopPointId(),
+                                                item.scheduledStopPointId())));
     }
 }

@@ -12,33 +12,28 @@ import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesWithHistoryRecord;
 import org.immutables.value.Value;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Value.Immutable
-public interface Line
-        extends IHasPK<LinePK>,
-                IHasSystemTime,
-                CommonFields<Line> {
+public interface Line extends IHasPK<LinePK>, IHasSystemTime, CommonFields<Line> {
 
     LegacyHslMunicipalityCode legacyHslMunicipalityCode();
 
-    static Line of(final LinePK pk,
-                   final ExternalId externalId,
-                   final NetworkType networkType,
-                   final String lineNumber,
-                   final TimeRange systemTime,
-                   final TypeOfLine typeOfLine,
-                   final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
+    static Line of(
+            final LinePK pk,
+            final ExternalId externalId,
+            final NetworkType networkType,
+            final String lineNumber,
+            final TimeRange systemTime,
+            final TypeOfLine typeOfLine,
+            final LegacyHslMunicipalityCode legacyHslMunicipalityCode) {
         return ImmutableLine.builder()
-                            .pk(pk)
-                            .externalId(externalId)
-                            .networkType(networkType)
-                            .lineNumber(lineNumber)
-                            .systemTime(systemTime)
-                            .typeOfLine(typeOfLine)
-                            .legacyHslMunicipalityCode(legacyHslMunicipalityCode)
-                            .build();
+                .pk(pk)
+                .externalId(externalId)
+                .networkType(networkType)
+                .lineNumber(lineNumber)
+                .systemTime(systemTime)
+                .typeOfLine(typeOfLine)
+                .legacyHslMunicipalityCode(legacyHslMunicipalityCode)
+                .build();
     }
 
     static Line from(final NetworkLinesRecord record) {
@@ -49,8 +44,8 @@ public interface Line
                 record.getNetworkLineNumber(),
                 record.getNetworkLineSysPeriod(),
                 TypeOfLine.of(record.getNetworkLineTypeOfLine()),
-                LegacyHslMunicipalityCode.valueOf(record.getNetworkLineLegacyHslMunicipalityCode())
-        );
+                LegacyHslMunicipalityCode.valueOf(
+                        record.getNetworkLineLegacyHslMunicipalityCode()));
     }
 
     static Line from(final NetworkLinesWithHistoryRecord record) {
@@ -61,7 +56,7 @@ public interface Line
                 record.getNetworkLineNumber(),
                 record.getNetworkLineSysPeriod(),
                 TypeOfLine.of(record.getNetworkLineTypeOfLine()),
-                LegacyHslMunicipalityCode.valueOf(record.getNetworkLineLegacyHslMunicipalityCode())
-        );
+                LegacyHslMunicipalityCode.valueOf(
+                        record.getNetworkLineLegacyHslMunicipalityCode()));
     }
 }

@@ -22,8 +22,8 @@ public class GenericCommitTasklet<ENTITY, KEY extends PK> implements Tasklet {
     }
 
     @Override
-    public RepeatStatus execute(final StepContribution contribution,
-                                final ChunkContext chunkContext) throws Exception {
+    public RepeatStatus execute(
+            final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
 
         final Map<RowStatus, Set<KEY>> result = importRepository.commitStagingToTarget();
 

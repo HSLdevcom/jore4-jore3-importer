@@ -1,5 +1,8 @@
 package fi.hsl.jore.importer;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import fi.hsl.jore.importer.config.DatasourceConfig;
 import fi.hsl.jore.importer.config.DigiroadServiceConfig;
 import fi.hsl.jore.importer.config.MapMatchingConfig;
@@ -22,29 +25,25 @@ import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 @SpringBatchTest
 @ComponentScan(basePackages = "fi.hsl.jore.importer.feature")
-@ContextConfiguration(classes = {
-        DatasourceConfig.class,
-        JOOQConfig.class,
-        VavrModuleConfig.class,
-        DigiroadServiceConfig.class,
-        MapMatchingConfig.class,
-        BatchConfig.class
-})
+@ContextConfiguration(
+        classes = {
+            DatasourceConfig.class,
+            JOOQConfig.class,
+            VavrModuleConfig.class,
+            DigiroadServiceConfig.class,
+            MapMatchingConfig.class,
+            BatchConfig.class
+        })
 @ActiveProfiles(Profiles.TEST_DATABASE)
 public class BatchIntegrationTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(BatchIntegrationTest.class);
 
-    @Autowired
-    protected JobLauncherTestUtils jobLauncherTestUtils;
+    @Autowired protected JobLauncherTestUtils jobLauncherTestUtils;
 
-    @Autowired
-    protected JobRepositoryTestUtils jobRepositoryTestUtils;
+    @Autowired protected JobRepositoryTestUtils jobRepositoryTestUtils;
 
     @BeforeEach
     public void overrideJobLauncher() {
@@ -66,8 +65,8 @@ public class BatchIntegrationTest {
 
     /**
      * The {@link org.springframework.batch.test.JobLauncherTestUtils} does not support starting
-     * {@link org.springframework.batch.core.job.flow.Flow flows}, so we must manually run all the steps
-     * ourselves.
+     * {@link org.springframework.batch.core.job.flow.Flow flows}, so we must manually run all the
+     * steps ourselves.
      *
      * @param steps Names of the steps to run
      */
@@ -76,11 +75,10 @@ public class BatchIntegrationTest {
                 stepName -> {
                     final JobExecution stepExecution = jobLauncherTestUtils.launchStep(stepName);
 
-                    assertThat(String.format("Step %s should complete successfully", stepName),
-                               stepExecution.getExitStatus().getExitCode(),
-                               is("COMPLETED"));
-
-                }
-        );
+                    assertThat(
+                            String.format("Step %s should complete successfully", stepName),
+                            stepExecution.getExitStatus().getExitCode(),
+                            is("COMPLETED"));
+                });
     }
 }

@@ -43,6 +43,7 @@
         <maven-properties.plugin.version>1.2.1</maven-properties.plugin.version>
         <maven-enforcer.plugin.version>3.5.0</maven-enforcer.plugin.version>
         <maven-build-helper.plugin.version>3.6.0</maven-build-helper.plugin.version>
+        <maven-spotless.plugin.version>2.43.0</maven-spotless.plugin.version>
 
         <!-- Packaging -->
         <build.profile.id>dev</build.profile.id>
@@ -666,7 +667,25 @@
                     <skipTests>${skip.integration.tests}</skipTests>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${maven-spotless.plugin.version}</version>
+                <configuration>
+                    <java>
+                        <!-- No need to specify files, inferred automatically -->
+
+                        <!-- Format the code according to Google AOSP code style, -->
+                        <!-- using Google's Java formatter tool. -->
+                        <googleJavaFormat>
+                            <style>AOSP</style>
+                            <reflowLongStrings>true</reflowLongStrings>
+                            <formatJavadoc>true</formatJavadoc>
+                        </googleJavaFormat>
+                    </java>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
 </project>

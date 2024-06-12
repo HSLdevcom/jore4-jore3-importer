@@ -11,6 +11,8 @@ import fi.hsl.jore.importer.jooq.network.tables.records.NetworkPlacesWithHistory
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
+import java.util.Optional;
+import java.util.UUID;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +20,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Repository
 public class PlaceRepository implements IPlaceTestRepository {
 
     private static final NetworkPlaces PLACE = NetworkPlaces.NETWORK_PLACES;
-    private static final NetworkPlacesWithHistory HISTORY_VIEW = NetworkPlacesWithHistory.NETWORK_PLACES_WITH_HISTORY;
+    private static final NetworkPlacesWithHistory HISTORY_VIEW =
+            NetworkPlacesWithHistory.NETWORK_PLACES_WITH_HISTORY;
     private static final TableField<NetworkPlacesRecord, UUID> PRIMARY_KEY = PLACE.NETWORK_PLACE_ID;
 
     private final DSLContext db;
@@ -64,9 +64,10 @@ public class PlaceRepository implements IPlaceTestRepository {
     @Transactional
     public PlacePK update(final Place place) {
         final NetworkPlacesRecord r =
-                Optional.ofNullable(db.selectFrom(PLACE)
-                                .where(PRIMARY_KEY.eq(place.pk().value()))
-                                .fetchAny())
+                Optional.ofNullable(
+                                db.selectFrom(PLACE)
+                                        .where(PRIMARY_KEY.eq(place.pk().value()))
+                                        .fetchAny())
                         .orElseThrow();
 
         r.setNetworkPlaceName(place.name());
@@ -131,18 +132,14 @@ public class PlaceRepository implements IPlaceTestRepository {
     @Transactional(readOnly = true)
     public int count() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                .from(PLACE)
-                .fetchOne(0, int.class);
+        return db.selectCount().from(PLACE).fetchOne(0, int.class);
     }
 
     @Override
     @Transactional(readOnly = true)
     public int countHistory() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                .from(HISTORY_VIEW)
-                .fetchOne(0, int.class);
+        return db.selectCount().from(HISTORY_VIEW).fetchOne(0, int.class);
     }
 
     @Override
@@ -172,8 +169,7 @@ public class PlaceRepository implements IPlaceTestRepository {
                 PlacePK.of(record.getNetworkPlaceId()),
                 ExternalId.of(record.getNetworkPlaceExtId()),
                 record.getNetworkPlaceName(),
-                record.getNetworkPlaceSysPeriod()
-        );
+                record.getNetworkPlaceSysPeriod());
     }
 
     private static Place from(final NetworkPlacesWithHistoryRecord record) {
@@ -181,7 +177,6 @@ public class PlaceRepository implements IPlaceTestRepository {
                 PlacePK.of(record.getNetworkPlaceId()),
                 ExternalId.of(record.getNetworkPlaceExtId()),
                 record.getNetworkPlaceName(),
-                record.getNetworkPlaceSysPeriod()
-        );
+                record.getNetworkPlaceSysPeriod());
     }
 }

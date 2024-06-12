@@ -2,9 +2,7 @@ package fi.hsl.jore.importer.feature.network.scheduled_stop_point.timing_place;
 
 import org.immutables.value.Value;
 
-/**
- * Source information for timing places to be exported to the Jore 4 database.
- */
+/** Source information for timing places to be exported to the Jore 4 database. */
 @Value.Immutable
 public interface ImporterTimingPlace {
 
@@ -12,8 +10,8 @@ public interface ImporterTimingPlace {
 
     String timingPlaceName();
 
-    static ImmutableImporterTimingPlace of(final String timingPlaceLabel,
-                                           final String timingPlaceName) {
+    static ImmutableImporterTimingPlace of(
+            final String timingPlaceLabel, final String timingPlaceName) {
 
         return ImmutableImporterTimingPlace.builder()
                 .timingPlaceLabel(timingPlaceLabel)

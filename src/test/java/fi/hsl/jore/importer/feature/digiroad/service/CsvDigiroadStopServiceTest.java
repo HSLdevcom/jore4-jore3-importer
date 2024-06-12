@@ -1,20 +1,18 @@
 package fi.hsl.jore.importer.feature.digiroad.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStopDirection;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CsvDigiroadStopServiceTest {
-
 
     private CsvDigiroadStopService service;
 
@@ -34,7 +32,8 @@ class CsvDigiroadStopServiceTest {
             private final String EXPECTED_DIGIROAD_STOP_ID = "111";
             private final String EXPECTED_DIGIROAD_LINK_ID = "133202";
             private final int NATIONAL_ID = 1234567890;
-            private final DigiroadStopDirection EXPECTED_DIRECTION_ON_INFRALINK = DigiroadStopDirection.BACKWARD;
+            private final DigiroadStopDirection EXPECTED_DIRECTION_ON_INFRALINK =
+                    DigiroadStopDirection.BACKWARD;
             private final double EXPECTED_X_COORDINATE = 24.696376131;
             private final double EXPECTED_Y_COORDINATE = 60.207149801;
             private final String EXPECTED_FINNISH_NAME = "Ullanmäki";
@@ -69,9 +68,7 @@ class CsvDigiroadStopServiceTest {
             @DisplayName("Should return a stop which has the correct nationalId")
             void shouldReturnStopWhichHasCorrectElyNumber() {
                 final DigiroadStop stop = service.findByNationalId(NATIONAL_ID).get();
-                assertThat(stop.nationalId())
-                        .as("nationalId")
-                        .isEqualTo(NATIONAL_ID);
+                assertThat(stop.nationalId()).as("nationalId").isEqualTo(NATIONAL_ID);
             }
 
             @Test
@@ -131,7 +128,8 @@ class CsvDigiroadStopServiceTest {
             @Test
             @DisplayName("Should return an empty optional")
             void shouldReturnEmptyOptional() {
-                final Optional<DigiroadStop> container = service.findByNationalId(UNKNOWN_NATIONAL_ID);
+                final Optional<DigiroadStop> container =
+                        service.findByNationalId(UNKNOWN_NATIONAL_ID);
                 assertThat(container).isEmpty();
             }
         }

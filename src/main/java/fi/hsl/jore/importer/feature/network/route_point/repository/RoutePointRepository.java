@@ -1,6 +1,5 @@
 package fi.hsl.jore.importer.feature.network.route_point.repository;
 
-
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.network.route_point.dto.PersistableRoutePoint;
 import fi.hsl.jore.importer.feature.network.route_point.dto.RoutePoint;
@@ -11,6 +10,8 @@ import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutePointsRecord
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
+import java.util.Optional;
+import java.util.UUID;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +19,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Repository
-public class RoutePointRepository
-        implements IRoutePointTestRepository {
+public class RoutePointRepository implements IRoutePointTestRepository {
 
     private static final NetworkRoutePoints POINTS = NetworkRoutePoints.NETWORK_ROUTE_POINTS;
-    private static final NetworkRoutePointsWithHistory HISTORY_VIEW = NetworkRoutePointsWithHistory.NETWORK_ROUTE_POINTS_WITH_HISTORY;
-    private static final TableField<NetworkRoutePointsRecord, UUID> PRIMARY_KEY = POINTS.NETWORK_ROUTE_POINT_ID;
+    private static final NetworkRoutePointsWithHistory HISTORY_VIEW =
+            NetworkRoutePointsWithHistory.NETWORK_ROUTE_POINTS_WITH_HISTORY;
+    private static final TableField<NetworkRoutePointsRecord, UUID> PRIMARY_KEY =
+            POINTS.NETWORK_ROUTE_POINT_ID;
 
     private final DSLContext db;
 
@@ -67,9 +66,10 @@ public class RoutePointRepository
     @Transactional
     public RoutePointPK update(final RoutePoint point) {
         final NetworkRoutePointsRecord r =
-                Optional.ofNullable(db.selectFrom(POINTS)
-                                      .where(PRIMARY_KEY.eq(point.pk().value()))
-                                      .fetchAny())
+                Optional.ofNullable(
+                                db.selectFrom(POINTS)
+                                        .where(PRIMARY_KEY.eq(point.pk().value()))
+                                        .fetchAny())
                         .orElseThrow();
 
         r.setNetworkRoutePointExtId(point.externalId().value());
@@ -98,57 +98,50 @@ public class RoutePointRepository
     @Transactional(readOnly = true)
     public Optional<RoutePoint> findById(final RoutePointPK id) {
         return db.selectFrom(POINTS)
-                 .where(PRIMARY_KEY.eq(id.value()))
-                 .fetchStream()
-                 .map(RoutePoint::from)
-                 .findFirst();
+                .where(PRIMARY_KEY.eq(id.value()))
+                .fetchStream()
+                .map(RoutePoint::from)
+                .findFirst();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<RoutePoint> findByExternalId(final ExternalId externalId) {
         return db.selectFrom(POINTS)
-                 .where(POINTS.NETWORK_ROUTE_POINT_EXT_ID.eq(externalId.value()))
-                 .fetchStream()
-                 .map(RoutePoint::from)
-                 .findFirst();
+                .where(POINTS.NETWORK_ROUTE_POINT_EXT_ID.eq(externalId.value()))
+                .fetchStream()
+                .map(RoutePoint::from)
+                .findFirst();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<RoutePoint> findAll() {
-        return db.selectFrom(POINTS)
-                 .fetchStream()
-                 .map(RoutePoint::from)
-                 .collect(List.collector());
+        return db.selectFrom(POINTS).fetchStream().map(RoutePoint::from).collect(List.collector());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Set<RoutePointPK> findAllIds() {
         return db.select(PRIMARY_KEY)
-                 .from(POINTS)
-                 .fetchStream()
-                 .map(row -> RoutePointPK.of(row.value1()))
-                 .collect(HashSet.collector());
+                .from(POINTS)
+                .fetchStream()
+                .map(row -> RoutePointPK.of(row.value1()))
+                .collect(HashSet.collector());
     }
 
     @Override
     @Transactional(readOnly = true)
     public int count() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                 .from(POINTS)
-                 .fetchOne(0, int.class);
+        return db.selectCount().from(POINTS).fetchOne(0, int.class);
     }
 
     @Override
     @Transactional(readOnly = true)
     public int countHistory() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                 .from(HISTORY_VIEW)
-                 .fetchOne(0, int.class);
+        return db.selectCount().from(HISTORY_VIEW).fetchOne(0, int.class);
     }
 
     @Override
@@ -167,9 +160,9 @@ public class RoutePointRepository
     @Transactional(readOnly = true)
     public List<RoutePoint> findFromHistory() {
         return db.selectFrom(HISTORY_VIEW)
-                 .orderBy(HISTORY_VIEW.NETWORK_ROUTE_POINT_SYS_PERIOD.asc())
-                 .fetchStream()
-                 .map(RoutePoint::from)
-                 .collect(List.collector());
+                .orderBy(HISTORY_VIEW.NETWORK_ROUTE_POINT_SYS_PERIOD.asc())
+                .fetchStream()
+                .map(RoutePoint::from)
+                .collect(List.collector());
     }
 }

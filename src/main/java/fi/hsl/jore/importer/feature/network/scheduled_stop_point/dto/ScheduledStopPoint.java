@@ -10,21 +10,14 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.generated.ScheduledStopPointPK;
 import fi.hsl.jore.importer.jooq.network.tables.records.ScheduledStopPointsRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.ScheduledStopPointsWithHistoryRecord;
-import org.immutables.value.Value;
-
 import java.util.Optional;
 import java.util.UUID;
+import org.immutables.value.Value;
 
-/**
- * Contains the information of a scheduled stop point which
- * is read from the target database.
- */
+/** Contains the information of a scheduled stop point which is read from the target database. */
 @Value.Immutable
 public interface ScheduledStopPoint
-        extends IHasPK<ScheduledStopPointPK>,
-        CommonFields<ScheduledStopPoint>,
-        IHasSystemTime
-{
+        extends IHasPK<ScheduledStopPointPK>, CommonFields<ScheduledStopPoint>, IHasSystemTime {
 
     NodePK node();
 
@@ -32,21 +25,20 @@ public interface ScheduledStopPoint
 
     Optional<UUID> jore4Id();
 
-    /**
-     * Number of times used in routes
-     */
+    /** Number of times used in routes */
     int usageInRoutes();
 
-    static ScheduledStopPoint of(final ScheduledStopPointPK pk,
-                                 final ExternalId stopPointExternalId,
-                                 final Optional<Long> elyNumber,
-                                 final NodePK node,
-                                 final MultilingualString name,
-                                 final Optional<String> shortId,
-                                 final Optional<UUID> placeId,
-                                 final Optional<UUID> jore4Id,
-                                 final int usageInRoutes,
-                                 final TimeRange systemTime) {
+    static ScheduledStopPoint of(
+            final ScheduledStopPointPK pk,
+            final ExternalId stopPointExternalId,
+            final Optional<Long> elyNumber,
+            final NodePK node,
+            final MultilingualString name,
+            final Optional<String> shortId,
+            final Optional<UUID> placeId,
+            final Optional<UUID> jore4Id,
+            final int usageInRoutes,
+            final TimeRange systemTime) {
         return ImmutableScheduledStopPoint.builder()
                 .pk(pk)
                 .externalId(stopPointExternalId)
@@ -61,7 +53,8 @@ public interface ScheduledStopPoint
                 .build();
     }
 
-    static ScheduledStopPoint from(final ScheduledStopPointsRecord record, final IJsonbConverter converter) {
+    static ScheduledStopPoint from(
+            final ScheduledStopPointsRecord record, final IJsonbConverter converter) {
         return ScheduledStopPoint.of(
                 ScheduledStopPointPK.of(record.getScheduledStopPointId()),
                 ExternalId.of(record.getScheduledStopPointExtId()),
@@ -72,11 +65,11 @@ public interface ScheduledStopPoint
                 Optional.ofNullable(record.getNetworkPlaceId()),
                 Optional.ofNullable(record.getScheduledStopPointJore4Id()),
                 record.getUsageInRoutes(),
-                record.getScheduledStopPointSysPeriod()
-        );
+                record.getScheduledStopPointSysPeriod());
     }
 
-    static ScheduledStopPoint from(final ScheduledStopPointsWithHistoryRecord record, final IJsonbConverter converter) {
+    static ScheduledStopPoint from(
+            final ScheduledStopPointsWithHistoryRecord record, final IJsonbConverter converter) {
         return ScheduledStopPoint.of(
                 ScheduledStopPointPK.of(record.getScheduledStopPointId()),
                 ExternalId.of(record.getScheduledStopPointExtId()),
@@ -87,7 +80,6 @@ public interface ScheduledStopPoint
                 Optional.ofNullable(record.getNetworkPlaceId()),
                 Optional.ofNullable(record.getScheduledStopPointJore4Id()),
                 record.getUsageInRoutes(),
-                record.getScheduledStopPointSysPeriod()
-        );
+                record.getScheduledStopPointSysPeriod());
     }
 }

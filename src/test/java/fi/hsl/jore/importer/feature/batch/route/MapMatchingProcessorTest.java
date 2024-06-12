@@ -1,5 +1,17 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.givenThat;
+import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static fi.hsl.jore.importer.feature.mapmatching.service.RouteGeometryTestFactory.createRouteGeometry;
+import static fi.hsl.jore.importer.feature.mapmatching.service.RouteGeometryTestFactory.createRoutePoints;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteGeometry;
@@ -21,18 +33,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.web.client.RestTemplate;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.givenThat;
-import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
-import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
-import static fi.hsl.jore.importer.feature.mapmatching.service.RouteGeometryTestFactory.createRouteGeometry;
-import static fi.hsl.jore.importer.feature.mapmatching.service.RouteGeometryTestFactory.createRoutePoints;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-
 class MapMatchingProcessorTest {
 
     private static final String MAP_MATCHING_API_BASE_URL_TEMPLATE = "http://localhost:%d";
@@ -48,17 +48,15 @@ class MapMatchingProcessorTest {
     void configureSystemUnderTest() {
         repository = mock(IRoutePointExportRepository.class);
 
-        wireMockServer = new WireMockServer(options()
-                .dynamicPort()
-        );
+        wireMockServer = new WireMockServer(options().dynamicPort());
         wireMockServer.start();
         configureFor(wireMockServer.port());
 
-        final IMapMatchingService mapMatchingService = new MapMatchingService(
-                String.format(MAP_MATCHING_API_BASE_URL_TEMPLATE, wireMockServer.port()),
-                new ObjectMapper(),
-                new RestTemplate()
-        );
+        final IMapMatchingService mapMatchingService =
+                new MapMatchingService(
+                        String.format(MAP_MATCHING_API_BASE_URL_TEMPLATE, wireMockServer.port()),
+                        new ObjectMapper(),
+                        new RestTemplate());
 
         processor = new MapMatchingProcessor(mapMatchingService, repository);
 
@@ -76,7 +74,9 @@ class MapMatchingProcessorTest {
 
         @BeforeEach
         void returnEmptyList() {
-            given(repository.findImporterRoutePointsByRouteDirectionId(RouteGeometryTestFactory.ROUTE_DIRECTION_ID))
+            given(
+                            repository.findImporterRoutePointsByRouteDirectionId(
+                                    RouteGeometryTestFactory.ROUTE_DIRECTION_ID))
                     .willReturn(List.empty());
         }
 
@@ -93,72 +93,75 @@ class MapMatchingProcessorTest {
     @ExtendWith(SoftAssertionsExtension.class)
     class WhenOneRoutePointIsFound {
 
-        private static final String MAP_MATCHING_RESPONSE = "{" +
-                "    \"code\": \"Ok\"," +
-                "    \"routes\": [{" +
-                "        \"geometry\": {" +
-                "            \"type\": \"LineString\"," +
-                "            \"coordinates\": [" +
-                "                [24.92746831478124, 60.16364653019382]," +
-                "                [24.92919590585085, 60.164250754589546]," +
-                "                [24.931694330826097, 60.16512656170321]" +
-                "            ]" +
-                "        }," +
-                "        \"weight\": 286.7201809450182," +
-                "        \"distance\": 286.7201809449182," +
-                "        \"paths\": [{" +
-                "            \"mapMatchingInfrastructureLinkId\": 209830," +
-                "            \"externalLinkRef\": {" +
-                "                \"infrastructureSource\": \"digiroad_r\"," +
-                "                \"externalLinkId\": \"445117\"" +
-                "            }," +
-                "            \"isTraversalForwards\": true," +
-                "            \"geometry\": {" +
-                "                \"type\": \"LineString\"," +
-                "                \"coordinates\": [" +
-                "                    [24.92743115932746, 60.16363353459729]," +
-                "                    [24.92919590585085, 60.164250754589546]" +
-                "                ]" +
-                "            }," +
-                "            \"weight\": 119.68001616364820," +
-                "            \"distance\": 119.68001616364803," +
-                "            \"infrastructureLinkName\": {" +
-                "                \"fi\": \"Kalevankatu 1\"," +
-                "                \"sv\": \"Kalevagatan 1\"" +
-                "            }" +
-                "        }, {" +
-                "            \"mapMatchingInfrastructureLinkId\": 232425," +
-                "            \"externalLinkRef\": {" +
-                "                \"infrastructureSource\": \"digiroad_r\"," +
-                "                \"externalLinkId\": \"442423\"" +
-                "            }," +
-                "            \"isTraversalForwards\": true," +
-                "            \"geometry\": {" +
-                "                \"type\": \"LineString\"," +
-                "                \"coordinates\": [" +
-                "                    [24.92919590585085, 60.164250754589546]," +
-                "                    [24.932010800782077, 60.16523749159016]" +
-                "                ]" +
-                "            }," +
-                "            \"weight\": 191.0508963733580," +
-                "            \"distance\": 191.0508963733563," +
-                "            \"infrastructureLinkName\": {" +
-                "                \"fi\": \"Kalevankatu 2\"," +
-                "                \"sv\": \"Kalevagatan 2\"" +
-                "            }" +
-                "        }]" +
-                "    }]" +
-                "}";
+        private static final String MAP_MATCHING_RESPONSE =
+                "{"
+                        + "    \"code\": \"Ok\","
+                        + "    \"routes\": [{"
+                        + "        \"geometry\": {"
+                        + "            \"type\": \"LineString\","
+                        + "            \"coordinates\": ["
+                        + "                [24.92746831478124, 60.16364653019382],"
+                        + "                [24.92919590585085, 60.164250754589546],"
+                        + "                [24.931694330826097, 60.16512656170321]"
+                        + "            ]"
+                        + "        },"
+                        + "        \"weight\": 286.7201809450182,"
+                        + "        \"distance\": 286.7201809449182,"
+                        + "        \"paths\": [{"
+                        + "            \"mapMatchingInfrastructureLinkId\": 209830,"
+                        + "            \"externalLinkRef\": {"
+                        + "                \"infrastructureSource\": \"digiroad_r\","
+                        + "                \"externalLinkId\": \"445117\""
+                        + "            },"
+                        + "            \"isTraversalForwards\": true,"
+                        + "            \"geometry\": {"
+                        + "                \"type\": \"LineString\","
+                        + "                \"coordinates\": ["
+                        + "                    [24.92743115932746, 60.16363353459729],"
+                        + "                    [24.92919590585085, 60.164250754589546]"
+                        + "                ]"
+                        + "            },"
+                        + "            \"weight\": 119.68001616364820,"
+                        + "            \"distance\": 119.68001616364803,"
+                        + "            \"infrastructureLinkName\": {"
+                        + "                \"fi\": \"Kalevankatu 1\","
+                        + "                \"sv\": \"Kalevagatan 1\""
+                        + "            }"
+                        + "        }, {"
+                        + "            \"mapMatchingInfrastructureLinkId\": 232425,"
+                        + "            \"externalLinkRef\": {"
+                        + "                \"infrastructureSource\": \"digiroad_r\","
+                        + "                \"externalLinkId\": \"442423\""
+                        + "            },"
+                        + "            \"isTraversalForwards\": true,"
+                        + "            \"geometry\": {"
+                        + "                \"type\": \"LineString\","
+                        + "                \"coordinates\": ["
+                        + "                    [24.92919590585085, 60.164250754589546],"
+                        + "                    [24.932010800782077, 60.16523749159016]"
+                        + "                ]"
+                        + "            },"
+                        + "            \"weight\": 191.0508963733580,"
+                        + "            \"distance\": 191.0508963733563,"
+                        + "            \"infrastructureLinkName\": {"
+                        + "                \"fi\": \"Kalevankatu 2\","
+                        + "                \"sv\": \"Kalevagatan 2\""
+                        + "            }"
+                        + "        }]"
+                        + "    }]"
+                        + "}";
 
         private static final String EXPECTED_FIRST_INFRASTRUCTURE_LINK_SOURCE = "digiroad_r";
         private static final String EXPECTED_FIRST_INFRASTRUCTURE_LINK_EXT_ID = "445117";
         private static final int EXPECTED_FIRST_INFRASTRUCTURE_LINK_SEQUENCE = 0;
-        private static final boolean EXPECTED_FIRST_INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS = true;
+        private static final boolean EXPECTED_FIRST_INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS =
+                true;
 
         private static final String EXPECTED_SECOND_INFRASTRUCTURE_LINK_SOURCE = "digiroad_r";
         private static final String EXPECTED_SECOND_INFRASTRUCTURE_LINK_EXT_ID = "442423";
         private static final int EXPECTED_SECOND_INFRASTRUCTURE_LINK_SEQUENCE = 1;
-        private static final boolean EXPECTED_SECOND_INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS = true;
+        private static final boolean EXPECTED_SECOND_INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS =
+                true;
 
         @BeforeEach
         void configureSystemUnderTest() {
@@ -168,14 +171,16 @@ class MapMatchingProcessorTest {
 
         void returnOneRoutePoint() {
             final io.vavr.collection.List<ImporterRoutePoint> routePoints = createRoutePoints();
-            given(repository.findImporterRoutePointsByRouteDirectionId(RouteGeometryTestFactory.ROUTE_DIRECTION_ID))
+            given(
+                            repository.findImporterRoutePointsByRouteDirectionId(
+                                    RouteGeometryTestFactory.ROUTE_DIRECTION_ID))
                     .willReturn(routePoints);
         }
 
         void returnMapMatchingResponse() {
-            givenThat(post(urlEqualTo("/api/match/public-transport-route/v1/bus.json"))
-                    .willReturn(okJson(MAP_MATCHING_RESPONSE))
-            );
+            givenThat(
+                    post(urlEqualTo("/api/match/public-transport-route/v1/bus.json"))
+                            .willReturn(okJson(MAP_MATCHING_RESPONSE)));
         }
 
         @Test
@@ -194,42 +199,50 @@ class MapMatchingProcessorTest {
 
         @Test
         @DisplayName("Should return route geometry with the correct first infrastructure link")
-        void shouldReturnRouteGeometryWithCorrectFirstInfrastructureLink(final SoftAssertions softAssertions) throws Exception {
-            final Jore4RouteInfrastructureLink infrastructureLink = processor.process(routeGeometryInput)
-                    .infrastructureLinks()
-                    .get(0);
+        void shouldReturnRouteGeometryWithCorrectFirstInfrastructureLink(
+                final SoftAssertions softAssertions) throws Exception {
+            final Jore4RouteInfrastructureLink infrastructureLink =
+                    processor.process(routeGeometryInput).infrastructureLinks().get(0);
 
-            softAssertions.assertThat(infrastructureLink.infrastructureLinkSource())
+            softAssertions
+                    .assertThat(infrastructureLink.infrastructureLinkSource())
                     .as("infrastructureLinkSource")
                     .isEqualTo(EXPECTED_FIRST_INFRASTRUCTURE_LINK_SOURCE);
-            softAssertions.assertThat(infrastructureLink.infrastructureLinkExtId())
+            softAssertions
+                    .assertThat(infrastructureLink.infrastructureLinkExtId())
                     .as("infrastructureLinkExtId")
                     .isEqualTo(EXPECTED_FIRST_INFRASTRUCTURE_LINK_EXT_ID);
-            softAssertions.assertThat(infrastructureLink.infrastructureLinkSequence())
+            softAssertions
+                    .assertThat(infrastructureLink.infrastructureLinkSequence())
                     .as("infrastructureLinkSequence")
                     .isEqualTo(EXPECTED_FIRST_INFRASTRUCTURE_LINK_SEQUENCE);
-            softAssertions.assertThat(infrastructureLink.isTraversalForwards())
+            softAssertions
+                    .assertThat(infrastructureLink.isTraversalForwards())
                     .as("isTraversalForwards")
                     .isEqualTo(EXPECTED_FIRST_INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS);
         }
 
         @Test
         @DisplayName("Should return route geometry with the correct second infrastructure link")
-        void shouldReturnRouteGeometryWithCorrectSecondInfrastructureLink(final SoftAssertions softAssertions) throws Exception {
-            final Jore4RouteInfrastructureLink infrastructureLink = processor.process(routeGeometryInput)
-                    .infrastructureLinks()
-                    .get(1);
+        void shouldReturnRouteGeometryWithCorrectSecondInfrastructureLink(
+                final SoftAssertions softAssertions) throws Exception {
+            final Jore4RouteInfrastructureLink infrastructureLink =
+                    processor.process(routeGeometryInput).infrastructureLinks().get(1);
 
-            softAssertions.assertThat(infrastructureLink.infrastructureLinkSource())
+            softAssertions
+                    .assertThat(infrastructureLink.infrastructureLinkSource())
                     .as("infrastructureLinkSource")
                     .isEqualTo(EXPECTED_SECOND_INFRASTRUCTURE_LINK_SOURCE);
-            softAssertions.assertThat(infrastructureLink.infrastructureLinkExtId())
+            softAssertions
+                    .assertThat(infrastructureLink.infrastructureLinkExtId())
                     .as("infrastructureLinkExtId")
                     .isEqualTo(EXPECTED_SECOND_INFRASTRUCTURE_LINK_EXT_ID);
-            softAssertions.assertThat(infrastructureLink.infrastructureLinkSequence())
+            softAssertions
+                    .assertThat(infrastructureLink.infrastructureLinkSequence())
                     .as("infrastructureLinkSequence")
                     .isEqualTo(EXPECTED_SECOND_INFRASTRUCTURE_LINK_SEQUENCE);
-            softAssertions.assertThat(infrastructureLink.isTraversalForwards())
+            softAssertions
+                    .assertThat(infrastructureLink.isTraversalForwards())
                     .as("isTraversalForwards")
                     .isEqualTo(EXPECTED_SECOND_INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS);
         }

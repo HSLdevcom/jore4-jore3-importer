@@ -10,9 +10,7 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * Writes the exported lines to the Jore 4 database.
- */
+/** Writes the exported lines to the Jore 4 database. */
 @Component
 public class LineExportWriter implements ItemWriter<Jore4Line> {
 
@@ -20,8 +18,9 @@ public class LineExportWriter implements ItemWriter<Jore4Line> {
     private final ILineHeaderImportRepository importerLineHeaderRepository;
 
     @Autowired
-    public LineExportWriter(final IJore4LineRepository jore4LineRepository,
-                            final ILineHeaderImportRepository importerLineHeaderRepository) {
+    public LineExportWriter(
+            final IJore4LineRepository jore4LineRepository,
+            final ILineHeaderImportRepository importerLineHeaderRepository) {
         this.jore4LineRepository = jore4LineRepository;
         this.importerLineHeaderRepository = importerLineHeaderRepository;
     }
@@ -31,12 +30,10 @@ public class LineExportWriter implements ItemWriter<Jore4Line> {
         jore4LineRepository.insert(items);
 
         importerLineHeaderRepository.setJore4Ids(
-            FluentIterable
-                .from(items)
-                .transform(item -> PersistableLineIdMapping.of(
-                    item.externalIdOfLineHeader(),
-                    item.lineId()
-                )
-        ));
+                FluentIterable.from(items)
+                        .transform(
+                                item ->
+                                        PersistableLineIdMapping.of(
+                                                item.externalIdOfLineHeader(), item.lineId())));
     }
 }

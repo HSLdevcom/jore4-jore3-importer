@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Cleans up the Jore 4 database so that new scheduled stop points,
- * lines, and routes can be inserted into the Jore 4 database.
+ * Cleans up the Jore 4 database so that new scheduled stop points, lines, and routes can be
+ * inserted into the Jore 4 database.
  */
 @Component
-public class Jore4SchemaCleanupTasklet implements Tasklet  {
+public class Jore4SchemaCleanupTasklet implements Tasklet {
 
     private final IJore4DataEraser jore4DataEraser;
 
@@ -25,7 +25,8 @@ public class Jore4SchemaCleanupTasklet implements Tasklet  {
 
     @Transactional
     @Override
-    public RepeatStatus execute(final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
+    public RepeatStatus execute(
+            final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
         jore4DataEraser.deleteJourneyPatterns();
         jore4DataEraser.deleteRoutesAndLines();
         jore4DataEraser.deleteScheduledStopPointsAndTimingPlaces();

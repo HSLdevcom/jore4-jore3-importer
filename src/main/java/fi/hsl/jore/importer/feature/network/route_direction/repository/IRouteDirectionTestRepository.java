@@ -8,10 +8,11 @@ import fi.hsl.jore.importer.feature.network.route_direction.dto.RouteDirection;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.generated.RouteDirectionPK;
 
 /**
- * Only for testing, use {@link fi.hsl.jore.importer.feature.batch.route_direction.support.IRouteDirectionImportRepository this} to
- * insert/update/delete routes.
+ * Only for testing, use {@link
+ * fi.hsl.jore.importer.feature.batch.route_direction.support.IRouteDirectionImportRepository this}
+ * to insert/update/delete routes.
  */
 @VisibleForTesting
-public interface IRouteDirectionTestRepository extends IBasicCrudRepository<RouteDirectionPK, RouteDirection, PersistableRouteDirection>,
-                                                       IHistoryRepository<RouteDirection> {
-}
+public interface IRouteDirectionTestRepository
+        extends IBasicCrudRepository<RouteDirectionPK, RouteDirection, PersistableRouteDirection>,
+                IHistoryRepository<RouteDirection> {}

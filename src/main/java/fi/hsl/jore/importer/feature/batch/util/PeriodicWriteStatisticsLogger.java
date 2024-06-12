@@ -1,10 +1,9 @@
 package fi.hsl.jore.importer.feature.batch.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.time.Duration;
 import java.time.Instant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PeriodicWriteStatisticsLogger {
 
@@ -19,9 +18,11 @@ public class PeriodicWriteStatisticsLogger {
     private Instant lastWrite = Instant.now();
 
     public PeriodicWriteStatisticsLogger(final Class<?> repositoryClazz) {
-        name = repositoryClazz.getSimpleName()
-                              .replace("$$EnhancerBySpringCGLIB", "")
-                              .replaceFirst("\\$\\$.*", "");
+        name =
+                repositoryClazz
+                        .getSimpleName()
+                        .replace("$$EnhancerBySpringCGLIB", "")
+                        .replaceFirst("\\$\\$.*", "");
     }
 
     public void reset() {
@@ -40,8 +41,11 @@ public class PeriodicWriteStatisticsLogger {
             final double timeDiffSeconds = (now.toEpochMilli() - lastWrite.toEpochMilli()) / 1000.0;
             final long itemsPerSecond = Math.round(counterDiff / timeDiffSeconds);
 
-            LOG.info("Written {} items in total, {} per second [{}]",
-                     counterNow, itemsPerSecond, name);
+            LOG.info(
+                    "Written {} items in total, {} per second [{}]",
+                    counterNow,
+                    itemsPerSecond,
+                    name);
 
             lastWrite = now;
         }

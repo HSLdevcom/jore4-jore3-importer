@@ -8,10 +8,10 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 
 /**
- * Only for testing, use {@link fi.hsl.jore.importer.feature.batch.node.support.INodeImportRepository this} to
+ * Only for testing, use {@link
+ * fi.hsl.jore.importer.feature.batch.node.support.INodeImportRepository this} to
  * insert/update/delete nodes.
  */
 @VisibleForTesting
-public interface INodeTestRepository extends IBasicCrudRepository<NodePK, Node, PersistableNode>,
-                                             IHistoryRepository<Node> {
-}
+public interface INodeTestRepository
+        extends IBasicCrudRepository<NodePK, Node, PersistableNode>, IHistoryRepository<Node> {}

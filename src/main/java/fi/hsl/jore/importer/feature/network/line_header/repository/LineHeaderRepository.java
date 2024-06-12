@@ -1,6 +1,5 @@
 package fi.hsl.jore.importer.feature.network.line_header.repository;
 
-
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.network.line_header.dto.LineHeader;
@@ -12,6 +11,8 @@ import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLineHeadersRecord
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
+import java.util.Optional;
+import java.util.UUID;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,23 +20,21 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Repository
-public class LineHeaderRepository
-        implements ILineHeaderTestRepository {
+public class LineHeaderRepository implements ILineHeaderTestRepository {
 
     private static final NetworkLineHeaders HEADER = NetworkLineHeaders.NETWORK_LINE_HEADERS;
-    private static final NetworkLineHeadersWithHistory HISTORY_VIEW = NetworkLineHeadersWithHistory.NETWORK_LINE_HEADERS_WITH_HISTORY;
-    private static final TableField<NetworkLineHeadersRecord, UUID> PRIMARY_KEY = HEADER.NETWORK_LINE_HEADER_ID;
+    private static final NetworkLineHeadersWithHistory HISTORY_VIEW =
+            NetworkLineHeadersWithHistory.NETWORK_LINE_HEADERS_WITH_HISTORY;
+    private static final TableField<NetworkLineHeadersRecord, UUID> PRIMARY_KEY =
+            HEADER.NETWORK_LINE_HEADER_ID;
 
     private final DSLContext db;
     private final IJsonbConverter jsonbConverter;
 
     @Autowired
-    public LineHeaderRepository(@Qualifier("importerDsl") final DSLContext db,
-                                final IJsonbConverter jsonbConverter) {
+    public LineHeaderRepository(
+            @Qualifier("importerDsl") final DSLContext db, final IJsonbConverter jsonbConverter) {
         this.db = db;
         this.jsonbConverter = jsonbConverter;
     }
@@ -74,9 +73,10 @@ public class LineHeaderRepository
     @Transactional
     public LineHeaderPK update(final LineHeader header) {
         final NetworkLineHeadersRecord r =
-                Optional.ofNullable(db.selectFrom(HEADER)
-                                      .where(PRIMARY_KEY.eq(header.pk().value()))
-                                      .fetchAny())
+                Optional.ofNullable(
+                                db.selectFrom(HEADER)
+                                        .where(PRIMARY_KEY.eq(header.pk().value()))
+                                        .fetchAny())
                         .orElseThrow();
 
         r.setNetworkLineHeaderName(jsonbConverter.asJson(header.name()));
@@ -106,57 +106,53 @@ public class LineHeaderRepository
     @Transactional(readOnly = true)
     public Optional<LineHeader> findById(final LineHeaderPK id) {
         return db.selectFrom(HEADER)
-                 .where(PRIMARY_KEY.eq(id.value()))
-                 .fetchStream()
-                 .map(record -> LineHeader.from(record, jsonbConverter))
-                 .findFirst();
+                .where(PRIMARY_KEY.eq(id.value()))
+                .fetchStream()
+                .map(record -> LineHeader.from(record, jsonbConverter))
+                .findFirst();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<LineHeader> findByExternalId(final ExternalId externalId) {
         return db.selectFrom(HEADER)
-                 .where(HEADER.NETWORK_LINE_HEADER_EXT_ID.eq(externalId.value()))
-                 .fetchStream()
-                 .map(record -> LineHeader.from(record, jsonbConverter))
-                 .findFirst();
+                .where(HEADER.NETWORK_LINE_HEADER_EXT_ID.eq(externalId.value()))
+                .fetchStream()
+                .map(record -> LineHeader.from(record, jsonbConverter))
+                .findFirst();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<LineHeader> findAll() {
         return db.selectFrom(HEADER)
-                 .fetchStream()
-                 .map(record -> LineHeader.from(record, jsonbConverter))
-                 .collect(List.collector());
+                .fetchStream()
+                .map(record -> LineHeader.from(record, jsonbConverter))
+                .collect(List.collector());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Set<LineHeaderPK> findAllIds() {
         return db.select(PRIMARY_KEY)
-                 .from(HEADER)
-                 .fetchStream()
-                 .map(row -> LineHeaderPK.of(row.value1()))
-                 .collect(HashSet.collector());
+                .from(HEADER)
+                .fetchStream()
+                .map(row -> LineHeaderPK.of(row.value1()))
+                .collect(HashSet.collector());
     }
 
     @Override
     @Transactional(readOnly = true)
     public int count() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                 .from(HEADER)
-                 .fetchOne(0, int.class);
+        return db.selectCount().from(HEADER).fetchOne(0, int.class);
     }
 
     @Override
     @Transactional(readOnly = true)
     public int countHistory() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                 .from(HISTORY_VIEW)
-                 .fetchOne(0, int.class);
+        return db.selectCount().from(HISTORY_VIEW).fetchOne(0, int.class);
     }
 
     @Override
@@ -175,9 +171,9 @@ public class LineHeaderRepository
     @Transactional(readOnly = true)
     public List<LineHeader> findFromHistory() {
         return db.selectFrom(HISTORY_VIEW)
-                 .orderBy(HISTORY_VIEW.NETWORK_LINE_HEADER_SYS_PERIOD.asc())
-                 .fetchStream()
-                 .map(record -> LineHeader.from(record, jsonbConverter))
-                 .collect(List.collector());
+                .orderBy(HISTORY_VIEW.NETWORK_LINE_HEADER_SYS_PERIOD.asc())
+                .fetchStream()
+                .map(record -> LineHeader.from(record, jsonbConverter))
+                .collect(List.collector());
     }
 }

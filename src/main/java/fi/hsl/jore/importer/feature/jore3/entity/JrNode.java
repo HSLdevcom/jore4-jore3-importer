@@ -1,6 +1,5 @@
 package fi.hsl.jore.importer.feature.jore3.entity;
 
-
 import fi.hsl.jore.importer.feature.jore3.enumerated.NodeType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import fi.hsl.jore.importer.feature.jore3.key.JrNodePk;
@@ -16,9 +15,7 @@ import org.locationtech.jts.geom.Point;
 @Value.Immutable
 @JoreDtoStyle
 @JoreTable(name = JrNode.TABLE)
-public interface JrNode
-        extends IHasPrimaryKey<JrNodePk>,
-                IHasNodeId {
+public interface JrNode extends IHasPrimaryKey<JrNodePk>, IHasNodeId {
 
     String TABLE = "jr_solmu";
 
@@ -30,20 +27,16 @@ public interface JrNode
     @JoreColumn(name = "soltunnus")
     NodeType nodeType();
 
-    @JoreColumn(name = "solomx",
-                srid = JoreGeometryUtil.JORE_SRID)
+    @JoreColumn(name = "solomx", srid = JoreGeometryUtil.JORE_SRID)
     double latitude();
 
-    @JoreColumn(name = "solomy",
-                srid = JoreGeometryUtil.JORE_SRID)
+    @JoreColumn(name = "solomy", srid = JoreGeometryUtil.JORE_SRID)
     double longitude();
 
-    @JoreColumn(name = "solstmx",
-                srid = JoreGeometryUtil.JORE_SRID)
+    @JoreColumn(name = "solstmx", srid = JoreGeometryUtil.JORE_SRID)
     double projectedLatitude();
 
-    @JoreColumn(name = "solstmy",
-                srid = JoreGeometryUtil.JORE_SRID)
+    @JoreColumn(name = "solstmy", srid = JoreGeometryUtil.JORE_SRID)
     double projectedLongitude();
 
     default Point location() {
@@ -54,19 +47,20 @@ public interface JrNode
         return JoreGeometryUtil.fromDbCoordinates(projectedLatitude(), projectedLongitude());
     }
 
-    static JrNode of(final NodeId nodeId,
-                     final NodeType nodeType,
-                     final double latitude,
-                     final double longitude,
-                     final double projectedLatitude,
-                     final double projectedLongitude) {
+    static JrNode of(
+            final NodeId nodeId,
+            final NodeType nodeType,
+            final double latitude,
+            final double longitude,
+            final double projectedLatitude,
+            final double projectedLongitude) {
         return ImmutableJrNode.builder()
-                              .nodeId(nodeId)
-                              .nodeType(nodeType)
-                              .latitude(latitude)
-                              .longitude(longitude)
-                              .projectedLatitude(projectedLatitude)
-                              .projectedLongitude(projectedLongitude)
-                              .build();
+                .nodeId(nodeId)
+                .nodeType(nodeType)
+                .latitude(latitude)
+                .longitude(longitude)
+                .projectedLatitude(projectedLatitude)
+                .projectedLongitude(projectedLongitude)
+                .build();
     }
 }

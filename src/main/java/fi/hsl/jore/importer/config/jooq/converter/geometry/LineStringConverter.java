@@ -1,19 +1,15 @@
 package fi.hsl.jore.importer.config.jooq.converter.geometry;
 
-
+import javax.annotation.Nullable;
 import org.jooq.Converter;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.LineString;
 
-import javax.annotation.Nullable;
+/** Converts between LineString geometries and Postgis EWKT/EWKB formats. */
+public class LineStringConverter implements Converter<Object, LineString> {
 
-/**
- * Converts between LineString geometries and Postgis EWKT/EWKB formats.
- */
-public class LineStringConverter
-        implements Converter<Object, LineString> {
-
-    private static final GeometryConverter CONVERTER = new GeometryConverter(Geometry.TYPENAME_LINESTRING);
+    private static final GeometryConverter CONVERTER =
+            new GeometryConverter(Geometry.TYPENAME_LINESTRING);
 
     public static final LineStringConverter INSTANCE = new LineStringConverter();
 

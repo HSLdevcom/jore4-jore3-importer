@@ -1,14 +1,13 @@
 package fi.hsl.jore.importer.feature.jore4.util;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.google.common.collect.Range;
+import java.time.LocalDate;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class ValidityPeriodUtilTest {
 
@@ -26,7 +25,9 @@ class ValidityPeriodUtilTest {
             @Test
             @DisplayName("Should return an empty optional")
             void shouldReturnEmptyOptional() {
-                final Optional<LocalDate> startDay = ValidityPeriodUtil.constructValidityPeriodStartDay(Range.atMost(LocalDate.EPOCH));
+                final Optional<LocalDate> startDay =
+                        ValidityPeriodUtil.constructValidityPeriodStartDay(
+                                Range.atMost(LocalDate.EPOCH));
                 assertThat(startDay).isEmpty();
             }
         }
@@ -44,14 +45,16 @@ class ValidityPeriodUtilTest {
                 @Test
                 @DisplayName("Should return an optional which contains the start day")
                 void shouldReturnOptionalWhichContainsStartDay() {
-                    final Optional<LocalDate> startDay = ValidityPeriodUtil.constructValidityPeriodStartDay(INPUT);
+                    final Optional<LocalDate> startDay =
+                            ValidityPeriodUtil.constructValidityPeriodStartDay(INPUT);
                     assertThat(startDay).isNotEmpty();
                 }
 
                 @Test
                 @DisplayName("Should return the correct start day")
                 void shouldReturnCorrectStartDay() {
-                    final Optional<LocalDate> startDay = ValidityPeriodUtil.constructValidityPeriodStartDay(INPUT);
+                    final Optional<LocalDate> startDay =
+                            ValidityPeriodUtil.constructValidityPeriodStartDay(INPUT);
                     assertThat(startDay).contains(START_DAY);
                 }
             }
@@ -65,14 +68,16 @@ class ValidityPeriodUtilTest {
                 @Test
                 @DisplayName("Should return an optional which contains the start day")
                 void shouldReturnOptionalWhichContainsStartDay() {
-                    final Optional<LocalDate> startDay = ValidityPeriodUtil.constructValidityPeriodStartDay(INPUT);
+                    final Optional<LocalDate> startDay =
+                            ValidityPeriodUtil.constructValidityPeriodStartDay(INPUT);
                     assertThat(startDay).isNotEmpty();
                 }
 
                 @Test
                 @DisplayName("Should return the correct start day")
                 void shouldReturnCorrectStartDay() {
-                    final Optional<LocalDate> startDay = ValidityPeriodUtil.constructValidityPeriodStartDay(INPUT);
+                    final Optional<LocalDate> startDay =
+                            ValidityPeriodUtil.constructValidityPeriodStartDay(INPUT);
                     assertThat(startDay).contains(START_DAY.plusDays(1));
                 }
             }
@@ -90,7 +95,9 @@ class ValidityPeriodUtilTest {
             @Test
             @DisplayName("Should return an empty optional")
             void shouldReturnEmptyOptional() {
-                final Optional<LocalDate> endDay = ValidityPeriodUtil.constructValidityPeriodEndDay(Range.atLeast(LocalDate.EPOCH));
+                final Optional<LocalDate> endDay =
+                        ValidityPeriodUtil.constructValidityPeriodEndDay(
+                                Range.atLeast(LocalDate.EPOCH));
                 assertThat(endDay).isEmpty();
             }
         }
@@ -108,14 +115,16 @@ class ValidityPeriodUtilTest {
                 @Test
                 @DisplayName("Should return an optional which contains the end day")
                 void shouldReturnOptionalWhichContainsEndDay() {
-                    final Optional<LocalDate> endDay = ValidityPeriodUtil.constructValidityPeriodEndDay(INPUT);
+                    final Optional<LocalDate> endDay =
+                            ValidityPeriodUtil.constructValidityPeriodEndDay(INPUT);
                     assertThat(endDay).isNotEmpty();
                 }
 
                 @Test
                 @DisplayName("Should return the correct end day")
                 void shouldReturnCorrectEndDay() {
-                    final Optional<LocalDate> endDay = ValidityPeriodUtil.constructValidityPeriodEndDay(INPUT);
+                    final Optional<LocalDate> endDay =
+                            ValidityPeriodUtil.constructValidityPeriodEndDay(INPUT);
                     assertThat(endDay).contains(END_DAY);
                 }
             }
@@ -129,14 +138,16 @@ class ValidityPeriodUtilTest {
                 @Test
                 @DisplayName("Should return an optional which contains the end day")
                 void shouldReturnOptionalWhichContainsEndDay() {
-                    final Optional<LocalDate> endDay = ValidityPeriodUtil.constructValidityPeriodEndDay(INPUT);
+                    final Optional<LocalDate> endDay =
+                            ValidityPeriodUtil.constructValidityPeriodEndDay(INPUT);
                     assertThat(endDay).isNotEmpty();
                 }
 
                 @Test
                 @DisplayName("Should return the correct end day")
                 void shouldReturnCorrectEndDay() {
-                    final Optional<LocalDate> endDay = ValidityPeriodUtil.constructValidityPeriodEndDay(INPUT);
+                    final Optional<LocalDate> endDay =
+                            ValidityPeriodUtil.constructValidityPeriodEndDay(INPUT);
                     assertThat(endDay).contains(END_DAY.minusDays(1));
                 }
             }

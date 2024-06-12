@@ -1,5 +1,9 @@
 package fi.hsl.jore.importer.config.jooq.converter.geometry;
 
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.sql.Types;
+import java.util.Objects;
 import org.jooq.Binding;
 import org.jooq.BindingGetResultSetContext;
 import org.jooq.BindingGetSQLInputContext;
@@ -12,11 +16,6 @@ import org.jooq.Converter;
 import org.jooq.impl.DSL;
 import org.locationtech.jts.geom.LineString;
 
-import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
-import java.sql.Types;
-import java.util.Objects;
-
 public class LineStringBinding implements Binding<Object, LineString> {
 
     @Override
@@ -26,8 +25,7 @@ public class LineStringBinding implements Binding<Object, LineString> {
 
     @Override
     public void sql(final BindingSQLContext<LineString> ctx) throws SQLException {
-        ctx.render()
-           .visit(DSL.sql("?::geometry"));
+        ctx.render().visit(DSL.sql("?::geometry"));
     }
 
     @Override
@@ -37,7 +35,8 @@ public class LineStringBinding implements Binding<Object, LineString> {
 
     @Override
     public void set(final BindingSetStatementContext<LineString> ctx) throws SQLException {
-        ctx.statement().setString(ctx.index(), Objects.toString(ctx.convert(converter()).value(), null));
+        ctx.statement()
+                .setString(ctx.index(), Objects.toString(ctx.convert(converter()).value(), null));
     }
 
     @Override
@@ -47,15 +46,13 @@ public class LineStringBinding implements Binding<Object, LineString> {
 
     @Override
     public void get(final BindingGetStatementContext<LineString> ctx) throws SQLException {
-        ctx.convert(converter())
-           .value(ctx.statement().getString(ctx.index()));
+        ctx.convert(converter()).value(ctx.statement().getString(ctx.index()));
     }
 
     @Override
     public void set(final BindingSetSQLOutputContext<LineString> ctx) throws SQLException {
         throw new SQLFeatureNotSupportedException();
     }
-
 
     @Override
     public void get(final BindingGetSQLInputContext<LineString> ctx) throws SQLException {

@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class NetworkTypeRepository
-        implements INetworkTypeRepository {
+public class NetworkTypeRepository implements INetworkTypeRepository {
 
-    private static final InfrastructureNetworkTypes TYPES = InfrastructureNetworkTypes.INFRASTRUCTURE_NETWORK_TYPES;
+    private static final InfrastructureNetworkTypes TYPES =
+            InfrastructureNetworkTypes.INFRASTRUCTURE_NETWORK_TYPES;
 
     private final DSLContext db;
 
@@ -24,9 +24,9 @@ public class NetworkTypeRepository
     @Transactional
     public void createIfMissing(final NetworkType type) {
         db.insertInto(TYPES)
-          .columns(TYPES.INFRASTRUCTURE_NETWORK_TYPE)
-          .values(type.label())
-          .onConflictDoNothing()
-          .execute();
+                .columns(TYPES.INFRASTRUCTURE_NETWORK_TYPE)
+                .values(type.label())
+                .onConflictDoNothing()
+                .execute();
     }
 }

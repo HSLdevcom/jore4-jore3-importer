@@ -1,5 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.scheduled_stop_point.timing_place;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4TimingPlace;
@@ -7,11 +9,10 @@ import fi.hsl.jore.importer.feature.network.scheduled_stop_point.timing_place.Im
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class TimingPlaceExportProcessorTest {
 
-    private static final ImporterTimingPlace INPUT = ImporterTimingPlace.of("1ELIEL", "Elielinaukio");
+    private static final ImporterTimingPlace INPUT =
+            ImporterTimingPlace.of("1ELIEL", "Elielinaukio");
 
     private static final TimingPlaceExportProcessor INSTANCE = new TimingPlaceExportProcessor();
 
@@ -38,8 +39,8 @@ public class TimingPlaceExportProcessorTest {
 
         assertThat(output).isNotNull();
         assertThat(output.timingPlaceName())
-                .isEqualTo(MultilingualString
-                        .empty()
-                        .with(JoreLocaleUtil.FINNISH, INPUT.timingPlaceName()));
+                .isEqualTo(
+                        MultilingualString.empty()
+                                .with(JoreLocaleUtil.FINNISH, INPUT.timingPlaceName()));
     }
 }

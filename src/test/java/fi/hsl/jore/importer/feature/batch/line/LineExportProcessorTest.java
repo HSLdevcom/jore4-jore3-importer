@@ -1,5 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.line;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.config.jooq.converter.date_range.DateRange;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
@@ -9,13 +11,10 @@ import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
+import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class LineExportProcessorTest {
 
@@ -30,24 +29,24 @@ class LineExportProcessorTest {
 
     private static final NetworkType NETWORK_TYPE_ROAD = NetworkType.ROAD;
     private static final TypeOfLine TYPE_OF_LINE = TypeOfLine.SPECIAL_NEEDS_BUS;
-    private static final LegacyHslMunicipalityCode LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.HELSINKI;
+    private static final LegacyHslMunicipalityCode LEGACY_HSL_MUNICIPALITY_CODE =
+            LegacyHslMunicipalityCode.HELSINKI;
     private static final VehicleMode EXPECTED_PRIMARY_VEHICLE_MODE = VehicleMode.BUS;
 
     private static final int EXPECTED_PRIORITY = 10;
 
-    private static final ImporterLine INPUT = ImporterLine.of(
-            ExternalId.of(EXTERNAL_ID_OF_LINE_HEADER),
-            LINE_NUMBER,
-            JoreLocaleUtil.createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
-            NETWORK_TYPE_ROAD,
-            JoreLocaleUtil.createMultilingualString(FINNISH_SHORT_NAME, SWEDISH_SHORT_NAME),
-            DateRange.between(VALID_DATE_RANGE_START, VALID_DATE_RANGE_END),
-            TYPE_OF_LINE,
-            LEGACY_HSL_MUNICIPALITY_CODE
-    );
+    private static final ImporterLine INPUT =
+            ImporterLine.of(
+                    ExternalId.of(EXTERNAL_ID_OF_LINE_HEADER),
+                    LINE_NUMBER,
+                    JoreLocaleUtil.createMultilingualString(FINNISH_NAME, SWEDISH_NAME),
+                    NETWORK_TYPE_ROAD,
+                    JoreLocaleUtil.createMultilingualString(FINNISH_SHORT_NAME, SWEDISH_SHORT_NAME),
+                    DateRange.between(VALID_DATE_RANGE_START, VALID_DATE_RANGE_END),
+                    TYPE_OF_LINE,
+                    LEGACY_HSL_MUNICIPALITY_CODE);
 
     private final LineExportProcessor processor = new LineExportProcessor();
-
 
     @Nested
     @DisplayName("Transform exported line into Jore 4 format")
@@ -78,7 +77,8 @@ class LineExportProcessorTest {
         @DisplayName("Should return a line with the correct Finnish name")
         void shouldReturnLineWithCorrectFinnishName() throws Exception {
             final Jore4Line line = processor.process(INPUT);
-            final String finnishName = JoreLocaleUtil.getI18nString(line.name(), JoreLocaleUtil.FINNISH);
+            final String finnishName =
+                    JoreLocaleUtil.getI18nString(line.name(), JoreLocaleUtil.FINNISH);
             assertThat(finnishName).isEqualTo(FINNISH_NAME);
         }
 
@@ -86,7 +86,8 @@ class LineExportProcessorTest {
         @DisplayName("Should return a line with the correct Swedish name")
         void shouldReturnLineWithCorrectSwedishName() throws Exception {
             final Jore4Line line = processor.process(INPUT);
-            final String swedishName = JoreLocaleUtil.getI18nString(line.name(), JoreLocaleUtil.SWEDISH);
+            final String swedishName =
+                    JoreLocaleUtil.getI18nString(line.name(), JoreLocaleUtil.SWEDISH);
             assertThat(swedishName).isEqualTo(SWEDISH_NAME);
         }
 
@@ -94,7 +95,8 @@ class LineExportProcessorTest {
         @DisplayName("Should return a line with the correct Finnish short name")
         void shouldReturnLineWithCorrectFinnishShortName() throws Exception {
             final Jore4Line line = processor.process(INPUT);
-            final String finnishName = JoreLocaleUtil.getI18nString(line.shortName(), JoreLocaleUtil.FINNISH);
+            final String finnishName =
+                    JoreLocaleUtil.getI18nString(line.shortName(), JoreLocaleUtil.FINNISH);
             assertThat(finnishName).isEqualTo(FINNISH_SHORT_NAME);
         }
 
@@ -102,7 +104,8 @@ class LineExportProcessorTest {
         @DisplayName("Should return a line with the correct Swedish short name")
         void shouldReturnLineWithCorrectSwedishShortName() throws Exception {
             final Jore4Line line = processor.process(INPUT);
-            final String swedishName = JoreLocaleUtil.getI18nString(line.shortName(), JoreLocaleUtil.SWEDISH);
+            final String swedishName =
+                    JoreLocaleUtil.getI18nString(line.shortName(), JoreLocaleUtil.SWEDISH);
             assertThat(swedishName).isEqualTo(SWEDISH_SHORT_NAME);
         }
 

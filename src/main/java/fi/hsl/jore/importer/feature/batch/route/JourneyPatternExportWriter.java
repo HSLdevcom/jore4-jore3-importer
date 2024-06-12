@@ -10,8 +10,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class JourneyPatternExportWriter implements ItemWriter<Jore4JourneyPattern> {
 
@@ -19,8 +17,9 @@ public class JourneyPatternExportWriter implements ItemWriter<Jore4JourneyPatter
     private final IJore4JourneyPatternRepository jore4Repository;
 
     @Autowired
-    JourneyPatternExportWriter(final IRouteDirectionImportRepository importerRepository,
-                               final IJore4JourneyPatternRepository jore4Repository) {
+    JourneyPatternExportWriter(
+            final IRouteDirectionImportRepository importerRepository,
+            final IJore4JourneyPatternRepository jore4Repository) {
         this.importerRepository = importerRepository;
         this.jore4Repository = jore4Repository;
     }
@@ -30,12 +29,11 @@ public class JourneyPatternExportWriter implements ItemWriter<Jore4JourneyPatter
         jore4Repository.insert(items);
 
         importerRepository.setJourneyPatternJore4Ids(
-            FluentIterable
-                .from(items)
-                .transform(item -> PersistableJourneyPatternIdMapping.of(
-                    item.routeDirectionExtId(),
-                    item.journeyPatternId()
-                ))
-        );
+                FluentIterable.from(items)
+                        .transform(
+                                item ->
+                                        PersistableJourneyPatternIdMapping.of(
+                                                item.routeDirectionExtId(),
+                                                item.journeyPatternId())));
     }
 }

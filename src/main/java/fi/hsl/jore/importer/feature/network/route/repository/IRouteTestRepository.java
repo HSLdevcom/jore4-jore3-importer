@@ -8,10 +8,10 @@ import fi.hsl.jore.importer.feature.network.route.dto.Route;
 import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
 
 /**
- * Only for testing, use {@link fi.hsl.jore.importer.feature.batch.route.support.IRouteImportRepository this} to
+ * Only for testing, use {@link
+ * fi.hsl.jore.importer.feature.batch.route.support.IRouteImportRepository this} to
  * insert/update/delete routes.
  */
 @VisibleForTesting
-public interface IRouteTestRepository extends IBasicCrudRepository<RoutePK, Route, PersistableRoute>,
-                                              IHistoryRepository<Route> {
-}
+public interface IRouteTestRepository
+        extends IBasicCrudRepository<RoutePK, Route, PersistableRoute>, IHistoryRepository<Route> {}

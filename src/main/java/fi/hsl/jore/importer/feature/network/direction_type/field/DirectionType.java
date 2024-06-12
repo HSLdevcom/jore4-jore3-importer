@@ -22,8 +22,8 @@ public enum DirectionType {
 
     public static DirectionType of(final String val) {
         return Arrays.stream(values())
-                     .filter(type -> type.label.equalsIgnoreCase(val))
-                     .findFirst()
-                     .orElseThrow();
+                .filter(type -> type.label.equalsIgnoreCase(val))
+                .findFirst()
+                .orElseThrow();
     }
 }

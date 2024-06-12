@@ -9,11 +9,10 @@ import fi.hsl.jore.importer.feature.jore3.key.JrRouteDirectionPk;
 import io.vavr.collection.SortedMap;
 import io.vavr.collection.TreeMap;
 import io.vavr.collection.Vector;
+import java.util.Optional;
+import javax.annotation.Nullable;
 import org.immutables.value.Value;
 import org.springframework.batch.item.ItemStreamReader;
-
-import javax.annotation.Nullable;
-import java.util.Optional;
 
 public class RouteLinksReader
         extends DelegatingReader<RouteLinksAndAttributes, SingleRouteLinkAndParent> {
@@ -23,7 +22,8 @@ public class RouteLinksReader
     }
 
     @Override
-    protected AbstractReaderState<RouteLinksAndAttributes, SingleRouteLinkAndParent> initialState() {
+    protected AbstractReaderState<RouteLinksAndAttributes, SingleRouteLinkAndParent>
+            initialState() {
         return ReaderState.init();
     }
 
@@ -71,16 +71,14 @@ public class RouteLinksReader
         @Value.Lazy
         default Optional<RouteLinksAndAttributes> pendingResult() {
             return attributesInParent()
-                    .map(attributes -> RouteLinksAndAttributes.of(
-                            accumulator().asVector(),
-                            attributes
-                    ));
+                    .map(
+                            attributes ->
+                                    RouteLinksAndAttributes.of(
+                                            accumulator().asVector(), attributes));
         }
 
         static ReaderState init() {
-            return ImmutableReaderState.builder()
-                                       .accumulator(Accumulator.empty())
-                                       .build();
+            return ImmutableReaderState.builder().accumulator(Accumulator.empty()).build();
         }
 
         @Override
@@ -89,8 +87,8 @@ public class RouteLinksReader
                 // This is the last route link in the database
                 // -> Reader is finished and there are no more route links
                 return ImmutableReaderState.copyOf(this)
-                                           .withExhausted(true)
-                                           .withResult(pendingResult());
+                        .withExhausted(true)
+                        .withResult(pendingResult());
             }
             final JrRouteLink routeLink = ctx.routeLink();
             final LastLinkAttributes attributes = ctx.attributes();
@@ -98,27 +96,29 @@ public class RouteLinksReader
             if (parent().isEmpty()) {
                 // This is the first route link in the database for this route direction
                 return ImmutableReaderState.copyOf(this)
-                                           .withParent(parent)
-                                           .withAttributesInParent(attributes)
-                                           .withAccumulator(Accumulator.ofOnly(routeLink));
+                        .withParent(parent)
+                        .withAttributesInParent(attributes)
+                        .withAccumulator(Accumulator.ofOnly(routeLink));
             }
             final JrRouteDirectionPk previous = parent().get();
             if (previous.equals(parent)) {
                 // This route link belongs to the current route direction
                 return ImmutableReaderState.copyOf(this)
-                                           // We _must_ update the attributes, because while some of the fields (joined from the
-                                           // route direction) are the same for all rows, the "node type of the last node" field
-                                           // is different for each row and we only care about the last!
-                                           .withAttributesInParent(attributes)
-                                           .withAccumulator(accumulator().insert(routeLink))
-                                           .withResult(Optional.empty());
+                        // We _must_ update the attributes, because while some of the fields (joined
+                        // from the
+                        // route direction) are the same for all rows, the "node type of the last
+                        // node" field
+                        // is different for each row and we only care about the last!
+                        .withAttributesInParent(attributes)
+                        .withAccumulator(accumulator().insert(routeLink))
+                        .withResult(Optional.empty());
             }
             // This route link belongs to a new route direction
             return ImmutableReaderState.copyOf(this)
-                                       .withParent(parent)
-                                       .withAttributesInParent(attributes)
-                                       .withAccumulator(Accumulator.ofOnly(routeLink))
-                                       .withResult(pendingResult());
+                    .withParent(parent)
+                    .withAttributesInParent(attributes)
+                    .withAccumulator(Accumulator.ofOnly(routeLink))
+                    .withResult(pendingResult());
         }
     }
 }

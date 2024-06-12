@@ -15,8 +15,8 @@ public class GenericCleanupTasklet<ENTITY, KEY extends PK> implements Tasklet {
     }
 
     @Override
-    public RepeatStatus execute(final StepContribution contribution,
-                                final ChunkContext chunkContext) throws Exception {
+    public RepeatStatus execute(
+            final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
         importRepository.clearStagingTable();
         return RepeatStatus.FINISHED;
     }

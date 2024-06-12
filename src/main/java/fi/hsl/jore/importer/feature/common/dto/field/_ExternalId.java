@@ -6,5 +6,4 @@ import org.immutables.value.Value;
 
 @Value.Immutable
 @Wrapped
-public abstract class _ExternalId extends Wrapper<String> {
-}
+public abstract class _ExternalId extends Wrapper<String> {}

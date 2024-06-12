@@ -11,6 +11,8 @@ import fi.hsl.jore.importer.jooq.network.tables.records.ScheduledStopPointsRecor
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
+import java.util.Optional;
+import java.util.UUID;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +20,22 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Repository
 public class ScheduledStopPointRepository implements IScheduledStopPointTestRepository {
 
-    private static final ScheduledStopPoints SCHEDULED_STOP_POINT = ScheduledStopPoints.SCHEDULED_STOP_POINTS;
-    private static final ScheduledStopPointsWithHistory HISTORY_VIEW = ScheduledStopPointsWithHistory.SCHEDULED_STOP_POINTS_WITH_HISTORY;
-    private static final TableField<ScheduledStopPointsRecord, UUID> PRIMARY_KEY = SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID;
+    private static final ScheduledStopPoints SCHEDULED_STOP_POINT =
+            ScheduledStopPoints.SCHEDULED_STOP_POINTS;
+    private static final ScheduledStopPointsWithHistory HISTORY_VIEW =
+            ScheduledStopPointsWithHistory.SCHEDULED_STOP_POINTS_WITH_HISTORY;
+    private static final TableField<ScheduledStopPointsRecord, UUID> PRIMARY_KEY =
+            SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID;
 
     private final DSLContext db;
     private final IJsonbConverter jsonbConverter;
 
     @Autowired
-    ScheduledStopPointRepository(@Qualifier("importerDsl") DSLContext db, IJsonbConverter jsonbConverter) {
+    ScheduledStopPointRepository(
+            @Qualifier("importerDsl") DSLContext db, IJsonbConverter jsonbConverter) {
         this.db = db;
         this.jsonbConverter = jsonbConverter;
     }
@@ -80,9 +83,7 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
     @Override
     public int count() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                .from(SCHEDULED_STOP_POINT)
-                .fetchOne(0, int.class);
+        return db.selectCount().from(SCHEDULED_STOP_POINT).fetchOne(0, int.class);
     }
 
     @Transactional(readOnly = true)
@@ -122,11 +123,12 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
     @Transactional
     @Override
     public ScheduledStopPointPK update(final ScheduledStopPoint scheduledStopPoint) {
-        final ScheduledStopPointsRecord record = Optional.ofNullable(
-                db.selectFrom(SCHEDULED_STOP_POINT)
-                        .where(PRIMARY_KEY.eq(scheduledStopPoint.pk().value()))
-                        .fetchAny()
-        ).orElseThrow();
+        final ScheduledStopPointsRecord record =
+                Optional.ofNullable(
+                                db.selectFrom(SCHEDULED_STOP_POINT)
+                                        .where(PRIMARY_KEY.eq(scheduledStopPoint.pk().value()))
+                                        .fetchAny())
+                        .orElseThrow();
 
         record.setScheduledStopPointElyNumber(scheduledStopPoint.elyNumber().orElse(null));
         record.setScheduledStopPointName(jsonbConverter.asJson(scheduledStopPoint.name()));
@@ -164,9 +166,7 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
     @Override
     public int countHistory() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                .from(HISTORY_VIEW)
-                .fetchOne(0, int.class);
+        return db.selectCount().from(HISTORY_VIEW).fetchOne(0, int.class);
     }
 
     @Transactional(readOnly = true)

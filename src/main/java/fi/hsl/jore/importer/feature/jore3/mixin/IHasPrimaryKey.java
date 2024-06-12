@@ -11,12 +11,13 @@ public interface IHasPrimaryKey<K> {
 
     static <K, E extends IHasPrimaryKey<K>> Map<K, E> groupByPk(final List<E> vals) {
         return vals.groupBy(IHasPrimaryKey::pk)
-                   .map((k, list) -> {
-                       if (list.size() > 1) {
-                           final Logger log = LoggerFactory.getLogger(IHasPrimaryKey.class);
-                           log.warn("Multiple entities for key {}", k);
-                       }
-                       return Tuple.of(k, list.get(0));
-                   });
+                .map(
+                        (k, list) -> {
+                            if (list.size() > 1) {
+                                final Logger log = LoggerFactory.getLogger(IHasPrimaryKey.class);
+                                log.warn("Multiple entities for key {}", k);
+                            }
+                            return Tuple.of(k, list.get(0));
+                        });
     }
 }

@@ -4,16 +4,15 @@ import fi.hsl.jore.importer.feature.jore4.entity.Jore4Line;
 import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import fi.hsl.jore.importer.feature.jore4.util.ValidityPeriodUtil;
 import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 /**
- * Transforms the information of an exported line into a format
- * that can be inserted into the Jore 4 database.
+ * Transforms the information of an exported line into a format that can be inserted into the Jore 4
+ * database.
  */
 @Component
 public class LineExportProcessor implements ItemProcessor<ImporterLine, Jore4Line> {
@@ -37,7 +36,6 @@ public class LineExportProcessor implements ItemProcessor<ImporterLine, Jore4Lin
                 DEFAULT_PRIORITY,
                 ValidityPeriodUtil.constructValidityPeriodStartDay(input.validDateRange().range()),
                 ValidityPeriodUtil.constructValidityPeriodEndDay(input.validDateRange().range()),
-                input.legacyHslMunicipalityCode()
-        );
+                input.legacyHslMunicipalityCode());
     }
 }

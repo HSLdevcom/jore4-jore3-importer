@@ -1,12 +1,5 @@
 package fi.hsl.jore.importer.feature.jore3.field;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import static fi.hsl.jore.importer.feature.jore3.field.LegacyPublicTransportDestination.ESPOO;
 import static fi.hsl.jore.importer.feature.jore3.field.LegacyPublicTransportDestination.HELSINKI;
 import static fi.hsl.jore.importer.feature.jore3.field.LegacyPublicTransportDestination.KIRKKONUMMI_SIUNTIO;
@@ -21,6 +14,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
 public class EncodedIdentifierTest {
 
     private static final boolean IS_PRIMARY = true;
@@ -30,8 +29,9 @@ public class EncodedIdentifierTest {
     private static final boolean IS_PRODUCTION = false;
 
     private static final Optional<Short> NO_HIDDEN_VARIANT = Optional.empty();
+
     private static final Optional<Short> hasHiddenVariant(final int value) {
-        return Optional.of((short)value);
+        return Optional.of((short) value);
     }
 
     private static Stream<Arguments> identifierAndPredicates() {
@@ -61,70 +61,123 @@ public class EncodedIdentifierTest {
                 // helsinki kerava (this is a legacy train line with no line letter)
                 arguments("3001", TRAIN_OR_METRO, "", IS_PRIMARY, IS_PRODUCTION, NO_HIDDEN_VARIANT),
                 // Helsinki-Riihimäki
-                arguments("3001D", TRAIN_OR_METRO, "D", IS_PRIMARY, IS_PRODUCTION, NO_HIDDEN_VARIANT),
+                arguments(
+                        "3001D", TRAIN_OR_METRO, "D", IS_PRIMARY, IS_PRODUCTION, NO_HIDDEN_VARIANT),
                 // (reitillä ei otsikkoa)
-                arguments("3001I1", TRAIN_OR_METRO, "I", IS_VARIANT, IS_PRODUCTION, hasHiddenVariant(1)),
+                arguments(
+                        "3001I1",
+                        TRAIN_OR_METRO,
+                        "I",
+                        IS_VARIANT,
+                        IS_PRODUCTION,
+                        hasHiddenVariant(1)),
                 // Helsinki-Leppävaara
-                arguments("3002A", TRAIN_OR_METRO, "A", IS_PRIMARY, IS_PRODUCTION, NO_HIDDEN_VARIANT),
+                arguments(
+                        "3002A", TRAIN_OR_METRO, "A", IS_PRIMARY, IS_PRODUCTION, NO_HIDDEN_VARIANT),
                 // A-juna
-                arguments("3002A3", TRAIN_OR_METRO, "A", IS_VARIANT, IS_PRODUCTION, hasHiddenVariant(3)),
+                arguments(
+                        "3002A3",
+                        TRAIN_OR_METRO,
+                        "A",
+                        IS_VARIANT,
+                        IS_PRODUCTION,
+                        hasHiddenVariant(3)),
                 // Tapiola - Mellunmäki
-                arguments("31M2", TRAIN_OR_METRO, "M2", IS_PRIMARY, IS_PRODUCTION, NO_HIDDEN_VARIANT),
+                arguments(
+                        "31M2", TRAIN_OR_METRO, "M2", IS_PRIMARY, IS_PRODUCTION, NO_HIDDEN_VARIANT),
                 // Tapiola - Mellunmäki
-                arguments("31M2 4", TRAIN_OR_METRO, "M2", IS_VARIANT, IS_PRODUCTION, hasHiddenVariant(4)),
+                arguments(
+                        "31M2 4",
+                        TRAIN_OR_METRO,
+                        "M2",
+                        IS_VARIANT,
+                        IS_PRODUCTION,
+                        hasHiddenVariant(4)),
                 // Tapiola - Mellunmäki
-                arguments("31M2B4", TRAIN_OR_METRO, "M2B", IS_VARIANT, IS_PRODUCTION, hasHiddenVariant(4)),
+                arguments(
+                        "31M2B4",
+                        TRAIN_OR_METRO,
+                        "M2B",
+                        IS_VARIANT,
+                        IS_PRODUCTION,
+                        hasHiddenVariant(4)),
                 // Myllykylän th. - Koivikko - Katriinan sairaala - Riipilä
                 arguments("4001KM", VANTAA, "1KM", IS_VARIANT, IS_PRODUCTION, NO_HIDDEN_VARIANT),
                 // Töölön kisahalli-Kivistö
                 arguments("4431 3", VANTAA, "431", IS_VARIANT, IS_PRODUCTION, hasHiddenVariant(3)),
                 // Jupperi-Lähderanta-Espoon keskus
-                arguments("5530 3", REGIONAL_VANTAA_ESPOO, "530", IS_VARIANT, IS_PRODUCTION, hasHiddenVariant(3)),
+                arguments(
+                        "5530 3",
+                        REGIONAL_VANTAA_ESPOO,
+                        "530",
+                        IS_VARIANT,
+                        IS_PRODUCTION,
+                        hasHiddenVariant(3)),
                 // Kirkkonummi-Jorvas-Hirsala
-                arguments("6021SV", KIRKKONUMMI_SIUNTIO, "21SV", IS_VARIANT, IS_PRODUCTION, NO_HIDDEN_VARIANT),
+                arguments(
+                        "6021SV",
+                        KIRKKONUMMI_SIUNTIO,
+                        "21SV",
+                        IS_VARIANT,
+                        IS_PRODUCTION,
+                        NO_HIDDEN_VARIANT),
                 // Kivenlahti-Masala-Kirkkonummi-Kantvik-Upinniemi
                 arguments("7177MB", U_BUS, "177MB", IS_VARIANT, IS_PRODUCTION, NO_HIDDEN_VARIANT),
                 // Testi
                 arguments("8888", TESTING, "888", IS_PRIMARY, IS_TEST, NO_HIDDEN_VARIANT),
                 // Kaskela-Kytömaa-Terveyskeskus
-                arguments("9008", TUUSULA_KERAVA_SIPOO, "8", IS_PRIMARY, IS_PRODUCTION, NO_HIDDEN_VARIANT),
+                arguments(
+                        "9008",
+                        TUUSULA_KERAVA_SIPOO,
+                        "8",
+                        IS_PRIMARY,
+                        IS_PRODUCTION,
+                        NO_HIDDEN_VARIANT),
                 // Kaskela - Keravan asema
-                arguments("9008TT", TUUSULA_KERAVA_SIPOO, "8TT", IS_VARIANT, IS_PRODUCTION, NO_HIDDEN_VARIANT),
+                arguments(
+                        "9008TT",
+                        TUUSULA_KERAVA_SIPOO,
+                        "8TT",
+                        IS_VARIANT,
+                        IS_PRODUCTION,
+                        NO_HIDDEN_VARIANT),
                 // Rautatientori - Jokivarsi - Nikkilä - Pornainen - Halkia
-                arguments("9787A4", TUUSULA_KERAVA_SIPOO, "787A", IS_VARIANT, IS_PRODUCTION, hasHiddenVariant(4)),
+                arguments(
+                        "9787A4",
+                        TUUSULA_KERAVA_SIPOO,
+                        "787A",
+                        IS_VARIANT,
+                        IS_PRODUCTION,
+                        hasHiddenVariant(4)),
                 // Rautatientori-Kuninkaanmäki-Nikkilä-Hinthaara-Porvoo
-                arguments("9788KV", TUUSULA_KERAVA_SIPOO, "788KV", IS_VARIANT, IS_PRODUCTION, NO_HIDDEN_VARIANT)
-        );
+                arguments(
+                        "9788KV",
+                        TUUSULA_KERAVA_SIPOO,
+                        "788KV",
+                        IS_VARIANT,
+                        IS_PRODUCTION,
+                        NO_HIDDEN_VARIANT));
     }
 
     @ParameterizedTest
     @MethodSource("identifierAndPredicates")
-    public void parseJoreIdentifiers(final String id,
-                                     final LegacyPublicTransportDestination destination,
-                                     final String displayId,
-                                     final boolean isPrimary,
-                                     final boolean isTest,
-                                     final Optional<Short> hiddenVariant) {
+    public void parseJoreIdentifiers(
+            final String id,
+            final LegacyPublicTransportDestination destination,
+            final String displayId,
+            final boolean isPrimary,
+            final boolean isTest,
+            final Optional<Short> hiddenVariant) {
         final LineId lineId = LineId.from(id);
 
-        assertThat("destination is correct",
-                   lineId.destination(),
-                   is(destination));
+        assertThat("destination is correct", lineId.destination(), is(destination));
 
-        assertThat("displayed identifier is correct",
-                   lineId.displayId(),
-                   is(displayId));
+        assertThat("displayed identifier is correct", lineId.displayId(), is(displayId));
 
-        assertThat("priority flag is correct",
-                   lineId.primary(),
-                   is(isPrimary));
+        assertThat("priority flag is correct", lineId.primary(), is(isPrimary));
 
-        assertThat("test flag is correct",
-                   lineId.test(),
-                   is(isTest));
+        assertThat("test flag is correct", lineId.test(), is(isTest));
 
-        assertThat("hidden variant is correct",
-                   lineId.hiddenVariantValue(),
-                   is(hiddenVariant));
+        assertThat("hidden variant is correct", lineId.hiddenVariantValue(), is(hiddenVariant));
     }
 }

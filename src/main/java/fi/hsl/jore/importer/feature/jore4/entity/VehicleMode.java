@@ -2,11 +2,8 @@ package fi.hsl.jore.importer.feature.jore4.entity;
 
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 
-/**
- * Contains the vehicle modes found from the Jore 4 database.
- */
+/** Contains the vehicle modes found from the Jore 4 database. */
 public enum VehicleMode {
-
     BUS("bus"),
     TRAM("tram"),
     TRAIN("train"),

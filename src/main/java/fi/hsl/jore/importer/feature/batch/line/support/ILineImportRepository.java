@@ -4,5 +4,4 @@ import fi.hsl.jore.importer.feature.batch.common.IImportRepository;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
 
-public interface ILineImportRepository extends IImportRepository<PersistableLine, LinePK> {
-}
+public interface ILineImportRepository extends IImportRepository<PersistableLine, LinePK> {}

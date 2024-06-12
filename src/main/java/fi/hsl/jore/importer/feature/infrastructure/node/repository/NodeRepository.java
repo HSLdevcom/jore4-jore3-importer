@@ -10,6 +10,8 @@ import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.Infrastru
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
+import java.util.Optional;
+import java.util.UUID;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +19,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Repository
-public class NodeRepository
-        implements INodeTestRepository {
+public class NodeRepository implements INodeTestRepository {
 
     private static final InfrastructureNodes NODE = InfrastructureNodes.INFRASTRUCTURE_NODES;
-    private static final InfrastructureNodesWithHistory HISTORY_VIEW = InfrastructureNodesWithHistory.INFRASTRUCTURE_NODES_WITH_HISTORY;
-    private static final TableField<InfrastructureNodesRecord, UUID> PRIMARY_KEY = NODE.INFRASTRUCTURE_NODE_ID;
+    private static final InfrastructureNodesWithHistory HISTORY_VIEW =
+            InfrastructureNodesWithHistory.INFRASTRUCTURE_NODES_WITH_HISTORY;
+    private static final TableField<InfrastructureNodesRecord, UUID> PRIMARY_KEY =
+            NODE.INFRASTRUCTURE_NODE_ID;
 
     private final DSLContext db;
 
@@ -66,9 +66,10 @@ public class NodeRepository
     @Transactional
     public NodePK update(final Node node) {
         final InfrastructureNodesRecord r =
-                Optional.ofNullable(db.selectFrom(NODE)
-                                      .where(PRIMARY_KEY.eq(node.pk().value()))
-                                      .fetchAny())
+                Optional.ofNullable(
+                                db.selectFrom(NODE)
+                                        .where(PRIMARY_KEY.eq(node.pk().value()))
+                                        .fetchAny())
                         .orElseThrow();
 
         r.setInfrastructureNodeLocation(node.location());
@@ -95,57 +96,50 @@ public class NodeRepository
     @Transactional(readOnly = true)
     public Optional<Node> findById(final NodePK id) {
         return db.selectFrom(NODE)
-                 .where(PRIMARY_KEY.eq(id.value()))
-                 .fetchStream()
-                 .map(Node::from)
-                 .findFirst();
+                .where(PRIMARY_KEY.eq(id.value()))
+                .fetchStream()
+                .map(Node::from)
+                .findFirst();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<Node> findByExternalId(final ExternalId externalId) {
         return db.selectFrom(NODE)
-                 .where(NODE.INFRASTRUCTURE_NODE_EXT_ID.eq(externalId.value()))
-                 .fetchStream()
-                 .map(Node::from)
-                 .findFirst();
+                .where(NODE.INFRASTRUCTURE_NODE_EXT_ID.eq(externalId.value()))
+                .fetchStream()
+                .map(Node::from)
+                .findFirst();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Node> findAll() {
-        return db.selectFrom(NODE)
-                 .fetchStream()
-                 .map(Node::from)
-                 .collect(List.collector());
+        return db.selectFrom(NODE).fetchStream().map(Node::from).collect(List.collector());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Set<NodePK> findAllIds() {
         return db.select(PRIMARY_KEY)
-                 .from(NODE)
-                 .fetchStream()
-                 .map(row -> NodePK.of(row.value1()))
-                 .collect(HashSet.collector());
+                .from(NODE)
+                .fetchStream()
+                .map(row -> NodePK.of(row.value1()))
+                .collect(HashSet.collector());
     }
 
     @Override
     @Transactional(readOnly = true)
     public int count() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                 .from(NODE)
-                 .fetchOne(0, int.class);
+        return db.selectCount().from(NODE).fetchOne(0, int.class);
     }
 
     @Override
     @Transactional(readOnly = true)
     public int countHistory() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                 .from(HISTORY_VIEW)
-                 .fetchOne(0, int.class);
+        return db.selectCount().from(HISTORY_VIEW).fetchOne(0, int.class);
     }
 
     @Override
@@ -164,9 +158,9 @@ public class NodeRepository
     @Transactional(readOnly = true)
     public List<Node> findFromHistory() {
         return db.selectFrom(HISTORY_VIEW)
-                 .orderBy(HISTORY_VIEW.INFRASTRUCTURE_NODE_SYS_PERIOD.asc())
-                 .fetchStream()
-                 .map(Node::from)
-                 .collect(List.collector());
+                .orderBy(HISTORY_VIEW.INFRASTRUCTURE_NODE_SYS_PERIOD.asc())
+                .fetchStream()
+                .map(Node::from)
+                .collect(List.collector());
     }
 }

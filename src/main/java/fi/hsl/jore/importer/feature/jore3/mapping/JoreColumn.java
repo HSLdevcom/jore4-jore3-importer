@@ -24,7 +24,8 @@ public @interface JoreColumn {
     String example() default "";
 
     /**
-     * @return If this value represents a geometry in a coordinate system, what is the SRID of the system
+     * @return If this value represents a geometry in a coordinate system, what is the SRID of the
+     *     system
      */
     int srid() default 0;
 }

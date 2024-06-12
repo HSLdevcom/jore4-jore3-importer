@@ -19,8 +19,6 @@ public enum RowStatus {
     }
 
     public static Optional<RowStatus> of(final String value) {
-        return Arrays.stream(values())
-                     .filter(status -> status.value.equals(value))
-                     .findFirst();
+        return Arrays.stream(values()).filter(status -> status.value.equals(value)).findFirst();
     }
 }

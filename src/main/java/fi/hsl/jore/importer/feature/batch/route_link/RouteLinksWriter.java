@@ -18,16 +18,16 @@ import org.springframework.batch.core.annotation.AfterStep;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 
-
 public class RouteLinksWriter implements ItemWriter<Jore3RoutePointsAndLinks> {
 
     private final GenericImportWriter<Jore3RoutePoint, RoutePointPK> pointWriter;
     private final GenericImportWriter<Jore3RouteStopPoint, RouteStopPointPK> stopPointWriter;
     private final GenericImportWriter<Jore3RouteLink, RouteLinkPK> linkWriter;
 
-    public RouteLinksWriter(final IRoutePointImportRepository routePointImportRepository,
-                            final IRouteStopPointImportRepository routeStopPointImportRepository,
-                            final IRouteLinkImportRepository routeLinkImportRepository) {
+    public RouteLinksWriter(
+            final IRoutePointImportRepository routePointImportRepository,
+            final IRouteStopPointImportRepository routeStopPointImportRepository,
+            final IRouteLinkImportRepository routeLinkImportRepository) {
         pointWriter = new GenericImportWriter<>(routePointImportRepository);
         stopPointWriter = new GenericImportWriter<>(routeStopPointImportRepository);
         linkWriter = new GenericImportWriter<>(routeLinkImportRepository);
@@ -35,22 +35,14 @@ public class RouteLinksWriter implements ItemWriter<Jore3RoutePointsAndLinks> {
 
     @Override
     public void write(final Chunk<? extends Jore3RoutePointsAndLinks> items) throws Exception {
-        final FluentIterable<? extends Jore3RoutePointsAndLinks> fluentItems = FluentIterable.from(items.getItems());
+        final FluentIterable<? extends Jore3RoutePointsAndLinks> fluentItems =
+                FluentIterable.from(items.getItems());
 
-        pointWriter.write(
-            fluentItems
-                .transformAndConcat(Jore3RoutePointsAndLinks::routePoints)
-        );
+        pointWriter.write(fluentItems.transformAndConcat(Jore3RoutePointsAndLinks::routePoints));
 
-        stopPointWriter.write(
-            fluentItems
-                .transformAndConcat(Jore3RoutePointsAndLinks::stopPoints)
-        );
+        stopPointWriter.write(fluentItems.transformAndConcat(Jore3RoutePointsAndLinks::stopPoints));
 
-        linkWriter.write(
-            fluentItems
-                .transformAndConcat(Jore3RoutePointsAndLinks::routeLinks)
-        );
+        linkWriter.write(fluentItems.transformAndConcat(Jore3RoutePointsAndLinks::routeLinks));
     }
 
     @SuppressWarnings("unused")

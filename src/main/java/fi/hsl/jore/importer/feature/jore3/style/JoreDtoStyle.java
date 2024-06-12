@@ -3,12 +3,11 @@ package fi.hsl.jore.importer.feature.jore3.style;
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreColumn;
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreForeignKey;
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreTable;
-import org.immutables.value.Value;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.immutables.value.Value;
 
 @Target({ElementType.PACKAGE, ElementType.TYPE})
 @Retention(RetentionPolicy.CLASS)
@@ -18,11 +17,5 @@ import java.lang.annotation.Target;
         // Minimize generated code by:
         // - we don't need from methods and we construct the DTOs in one go
         strictBuilder = true,
-        passAnnotations = {
-                JoreTable.class,
-                JoreColumn.class,
-                JoreForeignKey.class
-        }
-)
-public @interface JoreDtoStyle {
-}
+        passAnnotations = {JoreTable.class, JoreColumn.class, JoreForeignKey.class})
+public @interface JoreDtoStyle {}

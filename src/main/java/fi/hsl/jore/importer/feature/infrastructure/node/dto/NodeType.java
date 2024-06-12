@@ -19,8 +19,8 @@ public enum NodeType {
 
     public static NodeType of(final String val) {
         return Arrays.stream(values())
-                     .filter(type -> type.value.equalsIgnoreCase(val))
-                     .findFirst()
-                     .orElseThrow();
+                .filter(type -> type.value.equalsIgnoreCase(val))
+                .findFirst()
+                .orElseThrow();
     }
 }

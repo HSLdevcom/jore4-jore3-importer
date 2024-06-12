@@ -4,16 +4,15 @@ import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 
 public class CsvDigiroadStopService implements DigiroadStopService {
 
@@ -21,8 +20,8 @@ public class CsvDigiroadStopService implements DigiroadStopService {
 
     private final Resource csvResource;
 
-    //This cannot be final because the io.vavr.collection.HashMap is immutable
-    //and .put() method returns a new map which contains the added value.
+    // This cannot be final because the io.vavr.collection.HashMap is immutable
+    // and .put() method returns a new map which contains the added value.
     private Map<Long, DigiroadStop> digiroadStops;
 
     public CsvDigiroadStopService(final Resource csvResource) {
@@ -40,9 +39,9 @@ public class CsvDigiroadStopService implements DigiroadStopService {
     public void readStopsFromCsvFile() throws Exception {
         if (!csvResource.exists()) {
             LOGGER.error(
-                    "Cannot read Digiroad stops from the location: {} because the CSV file doesn't exist",
-                    csvResource.getFilename()
-            );
+                    "Cannot read Digiroad stops from the location: {} because the CSV file doesn't"
+                            + " exist",
+                    csvResource.getFilename());
             return;
         }
 
@@ -50,21 +49,23 @@ public class CsvDigiroadStopService implements DigiroadStopService {
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
-                    final Optional<DigiroadStop> stopContainer = DigiroadStopFactory.fromCsvLine(line);
+                    final Optional<DigiroadStop> stopContainer =
+                            DigiroadStopFactory.fromCsvLine(line);
 
                     if (stopContainer.isPresent()) {
                         final DigiroadStop stop = stopContainer.get();
                         digiroadStops = digiroadStops.put(stop.nationalId(), stop);
+                    } else {
+                        LOGGER.error(
+                                "Cannot parse the information of a Digiroad stop from the line: {}",
+                                line);
                     }
-                    else {
-                        LOGGER.error("Cannot parse the information of a Digiroad stop from the line: {}", line);
-                    }
-                }
-                catch (final Exception ex) {
-                    LOGGER.error("Cannot parse the information of a Digiroad stop from the line: {} because of an error: {}",
+                } catch (final Exception ex) {
+                    LOGGER.error(
+                            "Cannot parse the information of a Digiroad stop from the line: {}"
+                                    + " because of an error: {}",
                             line,
-                            ex.getMessage()
-                    );
+                            ex.getMessage());
                 }
             }
         }
@@ -73,8 +74,7 @@ public class CsvDigiroadStopService implements DigiroadStopService {
     private Reader getReader() throws IOException {
         if (csvResource.isFile()) {
             return new FileReader(csvResource.getFile());
-        }
-        else {
+        } else {
             return new InputStreamReader(csvResource.getURL().openStream());
         }
     }
