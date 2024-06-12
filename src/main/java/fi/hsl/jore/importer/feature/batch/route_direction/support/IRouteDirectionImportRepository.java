@@ -5,25 +5,20 @@ import fi.hsl.jore.importer.feature.network.route_direction.dto.Jore3RouteDirect
 import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableJourneyPatternIdMapping;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableRouteIdMapping;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.generated.RouteDirectionPK;
-import io.vavr.collection.List;
 
 public interface IRouteDirectionImportRepository extends IImportRepository<Jore3RouteDirection, RouteDirectionPK> {
 
     /**
-     * Sets the ids which identifies the journey patterns found from
-     * the Jore 4 database.
+     * Sets the ids which identifies the journey patterns found from the Jore 4 database.
      *
-     * @param idMappings    The information that's required to set the Jore 4 ids
-     *                      of journey patterns.
+     * @param idMappings The information that's required to set the Jore 4 ids of journey patterns.
      */
     void setJourneyPatternJore4Ids(Iterable<PersistableJourneyPatternIdMapping> idMappings);
 
     /**
-     * Sets the ids which identifies the routes found from
-     * the Jore 4 database.
+     * Sets the ids which identifies the routes found from the Jore 4 database.
      *
-     * @param   idMappings   The information that's required to set the Jore 4 ids
-     *                       of routes.
+     * @param idMappings The information that's required to set the Jore 4 ids of routes.
      */
     void setRouteJore4Ids(Iterable<PersistableRouteIdMapping> idMappings);
 }

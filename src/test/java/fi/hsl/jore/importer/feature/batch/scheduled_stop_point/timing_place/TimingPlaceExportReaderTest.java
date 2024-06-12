@@ -1,5 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.scheduled_stop_point.timing_place;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.timing_place.ImporterTimingPlace;
 import org.assertj.core.api.SoftAssertions;
@@ -14,8 +16,6 @@ import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @IntTest
 public class TimingPlaceExportReaderTest {
@@ -52,10 +52,7 @@ public class TimingPlaceExportReaderTest {
 
     @Nested
     @DisplayName("When network_places source table is not empty")
-    @Sql(scripts = {
-            "/sql/importer/drop_tables.sql",
-            "/sql/importer/populate_places.sql"
-    })
+    @Sql(scripts = {"/sql/importer/drop_tables.sql", "/sql/importer/populate_places.sql"})
     @ExtendWith(SoftAssertionsExtension.class)
     class WhenSourceTableIsNotEmpty {
 
@@ -63,20 +60,23 @@ public class TimingPlaceExportReaderTest {
         private static final String EXPECTED_TIMING_PLACE_LABEL_2 = "1KALA";
 
         @Test
-        @DisplayName("The first invocation of the read() method must return the first timing place label in alphabetical order")
+        @DisplayName(
+                "The first invocation of the read() method must return the first timing place label in alphabetical order")
         void firstInvocationOfReadMethodMustReturnFirstTimingPlaceLabelInAlphabeticalOrder(
                 final SoftAssertions softAssertions) throws Exception {
 
             final ImporterTimingPlace found = reader.read();
             assertThat(found).isNotNull();
 
-            softAssertions.assertThat(found.timingPlaceLabel())
+            softAssertions
+                    .assertThat(found.timingPlaceLabel())
                     .as("timingPlaceLabel")
                     .contains(EXPECTED_TIMING_PLACE_LABEL_1);
         }
 
         @Test
-        @DisplayName("The second invocation of the read() method must return the second timing place label in alphabetical order")
+        @DisplayName(
+                "The second invocation of the read() method must return the second timing place label in alphabetical order")
         void secondInvocationOfReadMethodMustReturnSecondTimingPlaceLabelInAlphabeticalOrder(
                 final SoftAssertions softAssertions) throws Exception {
 
@@ -86,7 +86,8 @@ public class TimingPlaceExportReaderTest {
             final ImporterTimingPlace second = reader.read();
             assertThat(second).isNotNull();
 
-            softAssertions.assertThat(second.timingPlaceLabel())
+            softAssertions
+                    .assertThat(second.timingPlaceLabel())
                     .as("timingPlaceLabel")
                     .contains(EXPECTED_TIMING_PLACE_LABEL_2);
         }

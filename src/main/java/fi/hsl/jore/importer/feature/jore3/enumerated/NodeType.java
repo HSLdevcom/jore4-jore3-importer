@@ -1,7 +1,6 @@
 package fi.hsl.jore.importer.feature.jore3.enumerated;
 
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreEnumeration;
-
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -21,8 +20,8 @@ public enum NodeType {
 
     public static Optional<NodeType> of(final char i) {
         return Arrays.stream(values())
-                     .filter(transitType -> transitType.jrValue == i)
-                     .findFirst();
+                .filter(transitType -> transitType.jrValue == i)
+                .findFirst();
     }
 
     public static Optional<NodeType> of(final String s) {

@@ -10,18 +10,14 @@ import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometr
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import fi.hsl.jore.importer.feature.network.route_point.repository.IRoutePointExportRepository;
 import io.vavr.collection.List;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
-/**
- *  Maps route geometry from Jore 4 topology network to Jore 4
- *  topology network.
- */
+/** Maps route geometry from Jore 4 topology network to Jore 4 topology network. */
 @Component
 public class MapMatchingProcessor implements ItemProcessor<ImporterRouteGeometry, Jore4RouteGeometry> {
 
@@ -31,56 +27,52 @@ public class MapMatchingProcessor implements ItemProcessor<ImporterRouteGeometry
     private final IRoutePointExportRepository routePointRepository;
 
     @Autowired
-    public MapMatchingProcessor(final IMapMatchingService mapMatchingService,
-                                final IRoutePointExportRepository routePointRepository) {
+    public MapMatchingProcessor(
+            final IMapMatchingService mapMatchingService, final IRoutePointExportRepository routePointRepository) {
         this.mapMatchingService = mapMatchingService;
         this.routePointRepository = routePointRepository;
     }
 
     @Override
     public Jore4RouteGeometry process(final ImporterRouteGeometry routeGeometryInput) throws Exception {
-        LOGGER.debug("Processing route geometry with routeDirectionId: {} and routeDirectionExtId: {}",
+        LOGGER.debug(
+                "Processing route geometry with routeDirectionId: {} and routeDirectionExtId: {}",
                 routeGeometryInput.routeDirectionId(),
-                routeGeometryInput.routeDirectionExtId()
-        );
+                routeGeometryInput.routeDirectionExtId());
 
-        final List<ImporterRoutePoint> routePointsInput = routePointRepository.findImporterRoutePointsByRouteDirectionId(routeGeometryInput.routeDirectionId());
+        final List<ImporterRoutePoint> routePointsInput =
+                routePointRepository.findImporterRoutePointsByRouteDirectionId(routeGeometryInput.routeDirectionId());
         if (routePointsInput.isEmpty()) {
             LOGGER.error(
                     "Cannot process route geometry because no route points were found for route with route direction id: {}",
-                    routeGeometryInput.routeDirectionId()
-            );
+                    routeGeometryInput.routeDirectionId());
             return null;
         }
 
-        final MapMatchingSuccessResponseDTO mapMatchingResponse = mapMatchingService.sendMapMatchingRequest(routeGeometryInput,
-                routePointsInput
-        );
+        final MapMatchingSuccessResponseDTO mapMatchingResponse =
+                mapMatchingService.sendMapMatchingRequest(routeGeometryInput, routePointsInput);
 
         return createRouteGeometry(routeGeometryInput.routeJore4Id(), mapMatchingResponse);
     }
 
-    private Jore4RouteGeometry createRouteGeometry(final UUID routeId,
-                                                   final MapMatchingSuccessResponseDTO mapMatchingResponse) {
-        final java.util.List<InfrastructureLinkDTO> matchedInfraLinks = mapMatchingResponse
-                .getRoutes().get(0)
-                .getPaths();
+    private Jore4RouteGeometry createRouteGeometry(
+            final UUID routeId, final MapMatchingSuccessResponseDTO mapMatchingResponse) {
+        final java.util.List<InfrastructureLinkDTO> matchedInfraLinks =
+                mapMatchingResponse.getRoutes().get(0).getPaths();
 
         List<Jore4RouteInfrastructureLink> jore4InfraLinks = List.empty();
         int infrastructureLinkSequence = 0;
 
-        for (final InfrastructureLinkDTO matchedInfraLink: matchedInfraLinks) {
+        for (final InfrastructureLinkDTO matchedInfraLink : matchedInfraLinks) {
             final ExternalLinkRefDTO externalLink = matchedInfraLink.getExternalLinkRef();
             jore4InfraLinks = jore4InfraLinks.append(Jore4RouteInfrastructureLink.of(
                     externalLink.getInfrastructureSource(),
                     externalLink.getExternalLinkId(),
                     infrastructureLinkSequence,
-                    matchedInfraLink.isTraversalForwards()
-            ));
+                    matchedInfraLink.isTraversalForwards()));
             infrastructureLinkSequence++;
         }
 
-
         return Jore4RouteGeometry.of(routeId, jore4InfraLinks);
     }
- }
+}

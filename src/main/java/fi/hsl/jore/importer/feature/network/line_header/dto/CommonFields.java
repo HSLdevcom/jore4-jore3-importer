@@ -4,8 +4,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasValidDates;
 
-public interface CommonFields<T> extends IHasValidDates,
-                                         IHasExternalId {
+public interface CommonFields<T> extends IHasValidDates, IHasExternalId {
 
     MultilingualString name();
 

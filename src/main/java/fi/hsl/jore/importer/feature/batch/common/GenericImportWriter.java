@@ -11,7 +11,6 @@ import org.springframework.batch.core.annotation.AfterStep;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 
-
 public class GenericImportWriter<ENTITY, KEY extends PK> implements ItemWriter<ENTITY> {
 
     private static final Logger LOG = LoggerFactory.getLogger(GenericImportWriter.class);

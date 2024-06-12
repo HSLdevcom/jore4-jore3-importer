@@ -23,15 +23,16 @@ public interface LinkEndpoints {
         return JoreGeometryUtil.fromDbCoordinates(linkEndLatitude(), linkEndLongitude());
     }
 
-    static LinkEndpoints of(final double linkStartLatitude,
-                            final double linkStartLongitude,
-                            final double linkEndLatitude,
-                            final double linkEndLongitude) {
+    static LinkEndpoints of(
+            final double linkStartLatitude,
+            final double linkStartLongitude,
+            final double linkEndLatitude,
+            final double linkEndLongitude) {
         return ImmutableLinkEndpoints.builder()
-                                     .linkStartLatitude(linkStartLatitude)
-                                     .linkStartLongitude(linkStartLongitude)
-                                     .linkEndLatitude(linkEndLatitude)
-                                     .linkEndLongitude(linkEndLongitude)
-                                     .build();
+                .linkStartLatitude(linkStartLatitude)
+                .linkStartLongitude(linkStartLongitude)
+                .linkEndLatitude(linkEndLatitude)
+                .linkEndLongitude(linkEndLongitude)
+                .build();
     }
 }

@@ -6,17 +6,14 @@ import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 
-/**
- * Writes step statistics to a log file after a step has been
- * finished.
- */
+/** Writes step statistics to a log file after a step has been finished. */
 public class StatisticsLoggingStepExecutionListener implements StepExecutionListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StatisticsLoggingStepExecutionListener.class);
 
     @Override
     public void beforeStep(final StepExecution stepExecution) {
-        //Left empty on purpose
+        // Left empty on purpose
     }
 
     @Override

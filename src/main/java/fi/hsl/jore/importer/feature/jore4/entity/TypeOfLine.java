@@ -2,11 +2,8 @@ package fi.hsl.jore.importer.feature.jore4.entity;
 
 import java.util.Arrays;
 
-/**
- * Contains the line types found from the Jore 4 database.
- */
+/** Contains the line types found from the Jore 4 database. */
 public enum TypeOfLine {
-
     REGIONAL_RAIL_SERVICE("regional_rail_service"),
     SUBURBAN_RAILWAY("suburban_railway"),
     METRO_SERVICE("metro_service"),
@@ -31,8 +28,8 @@ public enum TypeOfLine {
 
     public static TypeOfLine of(final String val) {
         return Arrays.stream(values())
-            .filter(type -> type.value.equalsIgnoreCase(val))
-            .findFirst()
-            .orElseThrow();
+                .filter(type -> type.value.equalsIgnoreCase(val))
+                .findFirst()
+                .orElseThrow();
     }
 }

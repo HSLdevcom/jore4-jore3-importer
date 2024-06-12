@@ -9,17 +9,11 @@ import fi.hsl.jore.importer.feature.network.place.dto.generated.PlacePK;
 import org.immutables.value.Value;
 
 @Value.Immutable
-public interface Place
-        extends IHasPK<PlacePK>,
-        IHasExternalId,
-        IHasSystemTime {
+public interface Place extends IHasPK<PlacePK>, IHasExternalId, IHasSystemTime {
 
     String name();
 
-    static Place of(final PlacePK pk,
-                    final ExternalId externalId,
-                    final String name,
-                    final TimeRange systemTime) {
+    static Place of(final PlacePK pk, final ExternalId externalId, final String name, final TimeRange systemTime) {
 
         return ImmutablePlace.builder()
                 .pk(pk)

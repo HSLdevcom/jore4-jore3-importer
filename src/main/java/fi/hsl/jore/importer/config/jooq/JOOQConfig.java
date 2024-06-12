@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.config.jooq;
 
+import javax.sql.DataSource;
 import org.jooq.DSLContext;
 import org.jooq.ExecutorProvider;
 import org.jooq.RecordListenerProvider;
@@ -25,9 +26,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.sql.DataSource;
-
-
 /**
  * Most of the configuration is handled in the autoconfiguration
  *
@@ -40,22 +38,23 @@ public class JOOQConfig {
 
     @Bean
     public Settings settings() {
-        return SettingsTools.defaultSettings()
-                            .withReturnAllOnUpdatableRecord(true);
+        return SettingsTools.defaultSettings().withReturnAllOnUpdatableRecord(true);
     }
 
     @Bean
-    public DSLContext importerDsl(final @Qualifier("importerDataSource") DataSource dataSource,
-                                  final ObjectProvider<ExecutorProvider> executorProvider,
-                                  final JooqProperties properties,
-                                  final ObjectProvider<RecordListenerProvider> recordListenerProviders,
-                                  final ObjectProvider<RecordMapperProvider> recordMapperProvider,
-                                  final ObjectProvider<RecordUnmapperProvider> recordUnmapperProvider,
-                                  final Settings settings,
-                                  final ObjectProvider<TransactionListenerProvider> transactionListenerProviders,
-                                  final PlatformTransactionManager txManager,
-                                  final ObjectProvider<VisitListenerProvider> visitListenerProviders) {
-        return buildAndConfigureDSLContext(dataSource,
+    public DSLContext importerDsl(
+            final @Qualifier("importerDataSource") DataSource dataSource,
+            final ObjectProvider<ExecutorProvider> executorProvider,
+            final JooqProperties properties,
+            final ObjectProvider<RecordListenerProvider> recordListenerProviders,
+            final ObjectProvider<RecordMapperProvider> recordMapperProvider,
+            final ObjectProvider<RecordUnmapperProvider> recordUnmapperProvider,
+            final Settings settings,
+            final ObjectProvider<TransactionListenerProvider> transactionListenerProviders,
+            final PlatformTransactionManager txManager,
+            final ObjectProvider<VisitListenerProvider> visitListenerProviders) {
+        return buildAndConfigureDSLContext(
+                dataSource,
                 executorProvider,
                 properties,
                 recordListenerProviders,
@@ -64,22 +63,23 @@ public class JOOQConfig {
                 settings,
                 transactionListenerProviders,
                 txManager,
-                visitListenerProviders
-        );
+                visitListenerProviders);
     }
 
     @Bean
-    public DSLContext jore4Dsl(final @Qualifier("jore4DataSource") DataSource dataSource,
-                               final ObjectProvider<ExecutorProvider> executorProvider,
-                               final JooqProperties properties,
-                               final ObjectProvider<RecordListenerProvider> recordListenerProviders,
-                               final ObjectProvider<RecordMapperProvider> recordMapperProvider,
-                               final ObjectProvider<RecordUnmapperProvider> recordUnmapperProvider,
-                               final Settings settings,
-                               final ObjectProvider<TransactionListenerProvider> transactionListenerProviders,
-                               final PlatformTransactionManager txManager,
-                               final ObjectProvider<VisitListenerProvider> visitListenerProviders) {
-        return buildAndConfigureDSLContext(dataSource,
+    public DSLContext jore4Dsl(
+            final @Qualifier("jore4DataSource") DataSource dataSource,
+            final ObjectProvider<ExecutorProvider> executorProvider,
+            final JooqProperties properties,
+            final ObjectProvider<RecordListenerProvider> recordListenerProviders,
+            final ObjectProvider<RecordMapperProvider> recordMapperProvider,
+            final ObjectProvider<RecordUnmapperProvider> recordUnmapperProvider,
+            final Settings settings,
+            final ObjectProvider<TransactionListenerProvider> transactionListenerProviders,
+            final PlatformTransactionManager txManager,
+            final ObjectProvider<VisitListenerProvider> visitListenerProviders) {
+        return buildAndConfigureDSLContext(
+                dataSource,
                 executorProvider,
                 properties,
                 recordListenerProviders,
@@ -88,20 +88,20 @@ public class JOOQConfig {
                 settings,
                 transactionListenerProviders,
                 txManager,
-                visitListenerProviders
-        );
+                visitListenerProviders);
     }
 
-    private DSLContext buildAndConfigureDSLContext(final DataSource dataSource,
-                                                   final ObjectProvider<ExecutorProvider> executorProvider,
-                                                   final JooqProperties properties,
-                                                   final ObjectProvider<RecordListenerProvider> recordListenerProviders,
-                                                   final ObjectProvider<RecordMapperProvider> recordMapperProvider,
-                                                   final ObjectProvider<RecordUnmapperProvider> recordUnmapperProvider,
-                                                   final Settings settings,
-                                                   final ObjectProvider<TransactionListenerProvider> transactionListenerProviders,
-                                                   final PlatformTransactionManager txManager,
-                                                   final ObjectProvider<VisitListenerProvider> visitListenerProviders) {
+    private DSLContext buildAndConfigureDSLContext(
+            final DataSource dataSource,
+            final ObjectProvider<ExecutorProvider> executorProvider,
+            final JooqProperties properties,
+            final ObjectProvider<RecordListenerProvider> recordListenerProviders,
+            final ObjectProvider<RecordMapperProvider> recordMapperProvider,
+            final ObjectProvider<RecordUnmapperProvider> recordUnmapperProvider,
+            final Settings settings,
+            final ObjectProvider<TransactionListenerProvider> transactionListenerProviders,
+            final PlatformTransactionManager txManager,
+            final ObjectProvider<VisitListenerProvider> visitListenerProviders) {
         final DefaultConfiguration config = new DefaultConfiguration();
 
         config.set(properties.determineSqlDialect(dataSource));
@@ -111,7 +111,8 @@ public class JOOQConfig {
         config.setSettings(settings);
 
         config.set(recordListenerProviders.orderedStream().toArray(RecordListenerProvider[]::new));
-        config.setTransactionListenerProvider(transactionListenerProviders.orderedStream().toArray(TransactionListenerProvider[]::new));
+        config.setTransactionListenerProvider(
+                transactionListenerProviders.orderedStream().toArray(TransactionListenerProvider[]::new));
         config.set(visitListenerProviders.orderedStream().toArray(VisitListenerProvider[]::new));
 
         executorProvider.ifAvailable(config::set);

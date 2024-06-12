@@ -8,10 +8,9 @@ import fi.hsl.jore.importer.feature.network.route_link.dto.RouteLink;
 import fi.hsl.jore.importer.feature.network.route_link.dto.generated.RouteLinkPK;
 
 /**
- * Only for testing, use {@link fi.hsl.jore.importer.feature.batch.route_link.support.IRouteLinkImportRepository this} to
- * insert/update/delete route links.
+ * Only for testing, use {@link fi.hsl.jore.importer.feature.batch.route_link.support.IRouteLinkImportRepository this}
+ * to insert/update/delete route links.
  */
 @VisibleForTesting
-public interface IRouteLinkTestRepository extends IBasicCrudRepository<RouteLinkPK, RouteLink, PersistableRouteLink>,
-                                                  IHistoryRepository<RouteLink> {
-}
+public interface IRouteLinkTestRepository
+        extends IBasicCrudRepository<RouteLinkPK, RouteLink, PersistableRouteLink>, IHistoryRepository<RouteLink> {}

@@ -2,15 +2,11 @@ package fi.hsl.jore.importer.feature.network.route.dto;
 
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
-import org.immutables.value.Value;
-
 import java.util.Optional;
 import java.util.UUID;
+import org.immutables.value.Value;
 
-/**
- * Contains the information of a journey pattern's scheduled stop point which is
- * exported to the Jore 4 database.
- */
+/** Contains the information of a journey pattern's scheduled stop point which is exported to the Jore 4 database. */
 @Value.Immutable
 public interface ImporterJourneyPatternStop {
 
@@ -32,17 +28,17 @@ public interface ImporterJourneyPatternStop {
 
     Optional<MultilingualString> viaPointNames();
 
-    static ImporterJourneyPatternStop of(final UUID journeyPatternJore4Id,
-                                         final String routeDirectionJore3Id,
-                                         final int orderNumber,
-                                         final String scheduledStopPointJore4Label,
-                                         final boolean isUsedAsTimingPoint,
-                                         final Optional<String> timingPlaceLabel,
-                                         final RegulatedTimingPointStatus regulatedTimingPointStatus,
-                                         final boolean isViaPoint,
-                                         final Optional<MultilingualString> viaPointNames) {
-        return ImmutableImporterJourneyPatternStop
-                .builder()
+    static ImporterJourneyPatternStop of(
+            final UUID journeyPatternJore4Id,
+            final String routeDirectionJore3Id,
+            final int orderNumber,
+            final String scheduledStopPointJore4Label,
+            final boolean isUsedAsTimingPoint,
+            final Optional<String> timingPlaceLabel,
+            final RegulatedTimingPointStatus regulatedTimingPointStatus,
+            final boolean isViaPoint,
+            final Optional<MultilingualString> viaPointNames) {
+        return ImmutableImporterJourneyPatternStop.builder()
                 .journeyPatternJore4Id(journeyPatternJore4Id)
                 .routeDirectionJore3Id(routeDirectionJore3Id)
                 .orderNumber(orderNumber)

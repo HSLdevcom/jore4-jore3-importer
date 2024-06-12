@@ -1,9 +1,16 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
+import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
+import static fi.hsl.jore.jore4.jooq.timing_pattern.Tables.TIMING_PLACE;
+import static org.assertj.db.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4TimingPlace;
+import java.util.List;
+import java.util.UUID;
+import javax.sql.DataSource;
 import org.assertj.db.type.Table;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,14 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-
-import javax.sql.DataSource;
-import java.util.List;
-import java.util.UUID;
-
-import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
-import static fi.hsl.jore.jore4.jooq.timing_pattern.Tables.TIMING_PLACE;
-import static org.assertj.db.api.Assertions.assertThat;
 
 @IntTest
 public class Jore4TimingPlaceRepositoryTest {
@@ -34,8 +33,9 @@ public class Jore4TimingPlaceRepositoryTest {
     private final Table targetTable;
 
     @Autowired
-    Jore4TimingPlaceRepositoryTest(final IJore4TimingPlaceRepository repository,
-                                   @Qualifier("jore4DataSource") final DataSource targetDataSource) {
+    Jore4TimingPlaceRepositoryTest(
+            final IJore4TimingPlaceRepository repository,
+            @Qualifier("jore4DataSource") final DataSource targetDataSource) {
 
         this.repository = repository;
         this.targetTable = new Table(targetDataSource, "timing_pattern.timing_place");
@@ -44,11 +44,8 @@ public class Jore4TimingPlaceRepositoryTest {
     @Nested
     @DisplayName("Insert line into the database")
     @Sql(
-            scripts = {
-                    "/sql/jore4/drop_tables.sql"
-            },
-            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
-    )
+            scripts = {"/sql/jore4/drop_tables.sql"},
+            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager"))
     class InsertLineIntoDatabase {
 
         private final Jore4TimingPlace INPUT = Jore4TimingPlace.of(
@@ -79,10 +76,7 @@ public class Jore4TimingPlaceRepositoryTest {
         void shouldInsertCorrectLabelIntoDatabase() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
-                    .row()
-                    .value(TIMING_PLACE.LABEL.getName())
-                    .isEqualTo(TIMING_PLACE_LABEL);
+            assertThat(targetTable).row().value(TIMING_PLACE.LABEL.getName()).isEqualTo(TIMING_PLACE_LABEL);
         }
 
         @Test

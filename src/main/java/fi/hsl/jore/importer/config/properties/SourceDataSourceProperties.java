@@ -28,8 +28,7 @@ public class SourceDataSourceProperties {
     private String password;
 
     public DataSourceConfigDto config() {
-        return ImmutableDataSourceConfigDto
-                .builder()
+        return ImmutableDataSourceConfigDto.builder()
                 .poolName("src-pool")
                 .driverClassName(driverClassName)
                 .jdbcUrl(jdbcUrl)

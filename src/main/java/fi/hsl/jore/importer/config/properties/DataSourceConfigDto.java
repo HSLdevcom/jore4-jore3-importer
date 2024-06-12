@@ -3,7 +3,6 @@ package fi.hsl.jore.importer.config.properties;
 import com.zaxxer.hikari.HikariConfig;
 import org.immutables.value.Value;
 
-
 @Value.Immutable
 public interface DataSourceConfigDto {
     String driverClassName();

@@ -9,109 +9,92 @@ import fi.hsl.jore.importer.feature.jore3.enumerated.NodeType;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.Jore3RouteStopPoint;
 import io.vavr.collection.Vector;
-import org.immutables.value.Value;
-
 import java.util.Optional;
 import java.util.function.Function;
+import org.immutables.value.Value;
 
 public final class RouteStopPointConstructor {
 
-    private RouteStopPointConstructor() {
-    }
+    private RouteStopPointConstructor() {}
 
-    private static Optional<Integer> timetableColumn(final boolean includeInTimetable,
-                                                     final Optional<Integer> timetableColumn) {
+    private static Optional<Integer> timetableColumn(
+            final boolean includeInTimetable, final Optional<Integer> timetableColumn) {
 
         return includeInTimetable ? timetableColumn : Optional.empty();
     }
 
-    private static Jore3RouteStopPoint fromLink(final JrRouteLink link,
-                                                final int index) {
-        return Jore3RouteStopPoint.of(ExternalIdUtil.forRouteLinkStartNode(link),
-                                      index,
-                                      link.hastusStopPoint(),
-                                      link.regulatedTimingPointStatus(),
-                                      link.viaPoint(),
-                                      buildViaName(link),
-                                      timetableColumn(link.includeInTimetable(),
-                                                      link.timetableColumn()));
+    private static Jore3RouteStopPoint fromLink(final JrRouteLink link, final int index) {
+        return Jore3RouteStopPoint.of(
+                ExternalIdUtil.forRouteLinkStartNode(link),
+                index,
+                link.hastusStopPoint(),
+                link.regulatedTimingPointStatus(),
+                link.viaPoint(),
+                buildViaName(link),
+                timetableColumn(link.includeInTimetable(), link.timetableColumn()));
     }
 
-    private static Jore3RouteStopPoint fromLastLink(final JrRouteLink link,
-                                                    final int index,
-                                                    final LastLinkAttributes attributes) {
+    private static Jore3RouteStopPoint fromLastLink(
+            final JrRouteLink link, final int index, final LastLinkAttributes attributes) {
         // Final point is always a Hastus point.
         final boolean hastusPoint = true;
 
-        return Jore3RouteStopPoint.of(ExternalIdUtil.forRouteLinkEndNode(link),
-                                      index,
-                                      hastusPoint,
-                                      link.regulatedTimingPointStatus(),
-                                      link.viaPoint(),
-                                      buildViaName(link),
-                                      timetableColumn(attributes.includeInTimetable(),
-                                                      attributes.timetableColumn()));
+        return Jore3RouteStopPoint.of(
+                ExternalIdUtil.forRouteLinkEndNode(link),
+                index,
+                hastusPoint,
+                link.regulatedTimingPointStatus(),
+                link.viaPoint(),
+                buildViaName(link),
+                timetableColumn(attributes.includeInTimetable(), attributes.timetableColumn()));
     }
 
     private static Optional<MultilingualString> buildViaName(final JrRouteLink link) {
         if (link.viaName().isPresent() || link.viaNameSwedish().isPresent()) {
-            return Optional.of(
-                    JoreLocaleUtil.createMultilingualString(
-                            link.viaName().orElse(""),
-                            link.viaNameSwedish().orElse("")
-                    )
-            );
+            return Optional.of(JoreLocaleUtil.createMultilingualString(
+                    link.viaName().orElse(""), link.viaNameSwedish().orElse("")));
         }
 
         return Optional.empty();
     }
 
-    private static final Function<StopPointContext, StopPointContext> ADD_STOP_POINTS_FROM_STARTING_NODES =
-            ctx -> {
-                final Vector<Jore3RouteStopPoint> points = ctx.linksAndAttributes()
-                                                              .routeLinks()
-                                                              .filter(link -> link.startNodeType() == NodeType.BUS_STOP)
-                                                              .zipWithIndex()
-                                                              .map(indexAndLink -> fromLink(indexAndLink._1, indexAndLink._2));
-                return ctx.withStopPoints(ctx.stopPoints()
-                                             .appendAll(points));
-            };
+    private static final Function<StopPointContext, StopPointContext> ADD_STOP_POINTS_FROM_STARTING_NODES = ctx -> {
+        final Vector<Jore3RouteStopPoint> points = ctx.linksAndAttributes()
+                .routeLinks()
+                .filter(link -> link.startNodeType() == NodeType.BUS_STOP)
+                .zipWithIndex()
+                .map(indexAndLink -> fromLink(indexAndLink._1, indexAndLink._2));
+        return ctx.withStopPoints(ctx.stopPoints().appendAll(points));
+    };
 
-    private static final Function<StopPointContext, StopPointContext> ADD_STOP_POINT_FROM_LAST_LINK =
-            ctx -> {
-                final LastLinkAttributes attributes = ctx.linksAndAttributes().lastLinkAttributes();
+    private static final Function<StopPointContext, StopPointContext> ADD_STOP_POINT_FROM_LAST_LINK = ctx -> {
+        final LastLinkAttributes attributes = ctx.linksAndAttributes().lastLinkAttributes();
 
-                if (attributes.nodeType() == NodeType.BUS_STOP) {
-                    final int lastIndex = ctx.stopPoints().size();
+        if (attributes.nodeType() == NodeType.BUS_STOP) {
+            final int lastIndex = ctx.stopPoints().size();
 
-                    return ctx
-                            .withStopPoints(ctx.stopPoints()
-                                               .append(fromLastLink(ctx.linksAndAttributes().routeLinks().last(),
-                                                                    lastIndex,
-                                                                    attributes)));
-                } else {
-                    // Special case: The last route point is not a stop point
-                    return ctx;
-                }
-            };
+            return ctx.withStopPoints(ctx.stopPoints()
+                    .append(fromLastLink(ctx.linksAndAttributes().routeLinks().last(), lastIndex, attributes)));
+        } else {
+            // Special case: The last route point is not a stop point
+            return ctx;
+        }
+    };
 
     private static final Function<StopPointContext, StopPointContext> MARK_FIRST_STOP_POINT_AS_HASTUS_POINT =
             ctx -> ctx.updateHead(sp -> sp.withHastusStopPoint(true));
 
-
     private static final Function<StopPointContext, StopPointContext> MARK_LAST_STOP_POINT_AS_HASTUS_POINT =
             ctx -> ctx.updateTail(sp -> sp.withHastusStopPoint(true));
 
-    private static final Function<StopPointContext, StopPointContext> PIPELINE =
-            ADD_STOP_POINTS_FROM_STARTING_NODES
-                    .andThen(ADD_STOP_POINT_FROM_LAST_LINK)
-                    .andThen(MARK_FIRST_STOP_POINT_AS_HASTUS_POINT)
-                    .andThen(MARK_LAST_STOP_POINT_AS_HASTUS_POINT);
+    private static final Function<StopPointContext, StopPointContext> PIPELINE = ADD_STOP_POINTS_FROM_STARTING_NODES
+            .andThen(ADD_STOP_POINT_FROM_LAST_LINK)
+            .andThen(MARK_FIRST_STOP_POINT_AS_HASTUS_POINT)
+            .andThen(MARK_LAST_STOP_POINT_AS_HASTUS_POINT);
 
     public static Vector<Jore3RouteStopPoint> extractStopPoints(final RouteLinksAndAttributes entity) {
         final StopPointContext ctx = StopPointContext.of(entity);
-        return PIPELINE.apply(ctx)
-                       .stopPoints();
+        return PIPELINE.apply(ctx).stopPoints();
     }
 
     @Value.Immutable
@@ -154,8 +137,8 @@ public final class RouteStopPointConstructor {
 
         static StopPointContext of(final RouteLinksAndAttributes linksAndAttributes) {
             return ImmutableStopPointContext.builder()
-                                            .linksAndAttributes(linksAndAttributes)
-                                            .build();
+                    .linksAndAttributes(linksAndAttributes)
+                    .build();
         }
     }
 }

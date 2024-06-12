@@ -1,9 +1,19 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
+import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
+import static fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil.createMultilingualString;
+import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
+import static org.assertj.db.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4Route;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteDirection;
 import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import javax.sql.DataSource;
 import org.assertj.core.api.Assertions;
 import org.assertj.db.type.Table;
 import org.junit.jupiter.api.DisplayName;
@@ -13,17 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-
-import javax.sql.DataSource;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
-import static fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil.createMultilingualString;
-import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
-import static org.assertj.db.api.Assertions.assertThat;
 
 @IntTest
 class Jore4RouteRepositoryTest {
@@ -37,42 +36,39 @@ class Jore4RouteRepositoryTest {
     private static final int PRIORITY = 10;
     private static final Jore4RouteDirection ROUTE_DIRECTION = Jore4RouteDirection.INBOUND;
     private static final UUID ROUTE_DIRECTION_ID = UUID.fromString("6f93fa6b-8a19-4b98-bd84-b8409e670c70");
-    private static final LegacyHslMunicipalityCode ROUTE_LEGACY_HSL_MUNICIPALITY_CODE = LegacyHslMunicipalityCode.HELSINKI;
+    private static final LegacyHslMunicipalityCode ROUTE_LEGACY_HSL_MUNICIPALITY_CODE =
+            LegacyHslMunicipalityCode.HELSINKI;
 
-    private static final LocalDate VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE =
-            LocalDate.of(2021, 1, 1);
-    private static final LocalDate VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE =
-            LocalDate.of(2022, 1, 1);
+    private static final LocalDate VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE = LocalDate.of(2021, 1, 1);
+    private static final LocalDate VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE = LocalDate.of(2022, 1, 1);
 
     private final Jore4RouteRepository repository;
     private final Table targetTable;
     private final Jore4ValidityPeriodTestRepository testRepository;
 
     @Autowired
-    Jore4RouteRepositoryTest(final Jore4RouteRepository repository,
-                             @Qualifier("jore4DataSource") final DataSource targetDataSource) {
+    Jore4RouteRepositoryTest(
+            final Jore4RouteRepository repository, @Qualifier("jore4DataSource") final DataSource targetDataSource) {
         this.repository = repository;
         this.targetTable = new Table(targetDataSource, "route.route");
-        this.testRepository = new Jore4ValidityPeriodTestRepository(targetDataSource,
-                ValidityPeriodTargetTable.ROUTE
-        );
+        this.testRepository = new Jore4ValidityPeriodTestRepository(targetDataSource, ValidityPeriodTargetTable.ROUTE);
     }
 
     @Nested
     @DisplayName("Insert routes into the database")
     @Sql(
             scripts = {
-                    "/sql/jore4/drop_tables.sql",
-                    "/sql/jore4/populate_infrastructure_links.sql",
-                    "/sql/jore4/populate_timing_places.sql",
-                    "/sql/jore4/populate_scheduled_stop_points.sql",
-                    "/sql/jore4/populate_lines.sql"
+                "/sql/jore4/drop_tables.sql",
+                "/sql/jore4/populate_infrastructure_links.sql",
+                "/sql/jore4/populate_timing_places.sql",
+                "/sql/jore4/populate_scheduled_stop_points.sql",
+                "/sql/jore4/populate_lines.sql"
             },
-            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
-    )
+            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager"))
     class InsertRoutesIntoDatabase {
 
-        private static final String EXPECTED_DESCRIPTION = "{\"fi_FI\":\"Keskustori - Etelä-Hervanta\",\"sv_SE\":\"Central torget - Södra Hervanta\"}";
+        private static final String EXPECTED_DESCRIPTION =
+                "{\"fi_FI\":\"Keskustori - Etelä-Hervanta\",\"sv_SE\":\"Central torget - Södra Hervanta\"}";
 
         private final Jore4Route INPUT = Jore4Route.of(
                 ROUTE_ID,
@@ -85,8 +81,7 @@ class Jore4RouteRepositoryTest {
                 PRIORITY,
                 Optional.of(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE),
                 Optional.of(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE),
-                ROUTE_LEGACY_HSL_MUNICIPALITY_CODE
-        );
+                ROUTE_LEGACY_HSL_MUNICIPALITY_CODE);
 
         @Test
         @DisplayName("Should insert one route into the database")
@@ -99,10 +94,7 @@ class Jore4RouteRepositoryTest {
         @DisplayName("Should save a new route with correct id")
         void shouldSaveNewRouteWithCorrectId() {
             repository.insert(List.of(INPUT));
-            assertThat(targetTable)
-                    .row()
-                    .value(ROUTE_.ROUTE_ID.getName())
-                    .isEqualTo(ROUTE_ID);
+            assertThat(targetTable).row().value(ROUTE_.ROUTE_ID.getName()).isEqualTo(ROUTE_ID);
         }
 
         @Test
@@ -119,50 +111,35 @@ class Jore4RouteRepositoryTest {
         @DisplayName("Should save a new route with the correct direction")
         void shouldSaveNewRouteWithCorrectDirection() {
             repository.insert(List.of(INPUT));
-            assertThat(targetTable)
-                    .row()
-                    .value(ROUTE_.DIRECTION.getName())
-                    .isEqualTo(ROUTE_DIRECTION.getValue());
+            assertThat(targetTable).row().value(ROUTE_.DIRECTION.getName()).isEqualTo(ROUTE_DIRECTION.getValue());
         }
 
         @Test
         @DisplayName("Should save a new route with the correct label")
         void shouldSaveNewRouteWithCorrectLabel() {
             repository.insert(List.of(INPUT));
-            assertThat(targetTable)
-                    .row()
-                    .value(ROUTE_.LABEL.getName())
-                    .isEqualTo(LABEL);
+            assertThat(targetTable).row().value(ROUTE_.LABEL.getName()).isEqualTo(LABEL);
         }
 
         @Test
         @DisplayName("Should save a new route with the correct hidden variant")
         void shouldSaveNewRouteWithCorrectHiddenVariant() {
             repository.insert(List.of(INPUT));
-            assertThat(targetTable)
-                    .row()
-                    .value(ROUTE_.VARIANT.getName())
-                    .isEqualTo(HIDDEN_VARIANT);
+            assertThat(targetTable).row().value(ROUTE_.VARIANT.getName()).isEqualTo(HIDDEN_VARIANT);
         }
 
         @Test
         @DisplayName("Should save a new route with the correct line id")
         void shouldSaveNewRouteWithCorrectLineId() {
             repository.insert(List.of(INPUT));
-            assertThat(targetTable)
-                    .row()
-                    .value(ROUTE_.ON_LINE_ID.getName())
-                    .isEqualTo(LINE_ID);
+            assertThat(targetTable).row().value(ROUTE_.ON_LINE_ID.getName()).isEqualTo(LINE_ID);
         }
 
         @Test
         @DisplayName("Should save a new route with the correct priority")
         void shouldSaveNewRouteWithCorrectPriority() {
             repository.insert(List.of(INPUT));
-            assertThat(targetTable)
-                    .row()
-                    .value(ROUTE_.PRIORITY.getName())
-                    .isEqualTo(PRIORITY);
+            assertThat(targetTable).row().value(ROUTE_.PRIORITY.getName()).isEqualTo(PRIORITY);
         }
 
         @Test

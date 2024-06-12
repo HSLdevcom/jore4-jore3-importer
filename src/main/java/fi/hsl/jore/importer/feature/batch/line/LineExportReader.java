@@ -3,6 +3,7 @@ package fi.hsl.jore.importer.feature.batch.line;
 import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
+import javax.sql.DataSource;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
-
 /**
- * Reads the lines which are imported to Jore 4 from the import
- * schemas which are found from the database of this Spring Boot
- * application.
+ * Reads the lines which are imported to Jore 4 from the import schemas which are found from the database of this Spring
+ * Boot application.
  */
 @Component
 public class LineExportReader {
@@ -28,9 +26,10 @@ public class LineExportReader {
     private final String sql;
 
     @Autowired
-    public LineExportReader(@Qualifier("importerDataSource") final DataSource dataSource,
-                            final IJsonbConverter jsonConverter,
-                            @Value(LineExportMapper.SQL_PATH) final Resource sqlResource) {
+    public LineExportReader(
+            @Qualifier("importerDataSource") final DataSource dataSource,
+            final IJsonbConverter jsonConverter,
+            @Value(LineExportMapper.SQL_PATH) final Resource sqlResource) {
         this.dataSource = dataSource;
         this.jsonConverter = jsonConverter;
         this.sql = ResourceUtil.fromResource(sqlResource);

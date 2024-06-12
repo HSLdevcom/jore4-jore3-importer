@@ -1,11 +1,20 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
+import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
+import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
+import static org.assertj.db.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4Line;
 import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import javax.sql.DataSource;
 import org.assertj.core.api.Assertions;
 import org.assertj.db.type.Table;
 import org.junit.jupiter.api.DisplayName;
@@ -16,16 +25,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
-import javax.sql.DataSource;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
-import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
-import static org.assertj.db.api.Assertions.assertThat;
-
 @IntTest
 class Jore4LineRepositoryTest {
 
@@ -33,8 +32,10 @@ class Jore4LineRepositoryTest {
     private static final String EXTERNAL_LINE_ID = "9009";
     private static final String LABEL = "1";
 
-    private static final String EXPECTED_JORE4_NAME = "{\"fi_FI\":\"Vantaanportti-Lentoasema-Kerava\",\"sv_SE\":\"Vandaporten-Flygstationen-Kervo\"}";
-    private static final String EXPECTED_JORE4_SHORT_NAME = "{\"fi_FI\":\"Vantaanp-Kerava\",\"sv_SE\":\"Vandap-Kervo\"}";
+    private static final String EXPECTED_JORE4_NAME =
+            "{\"fi_FI\":\"Vantaanportti-Lentoasema-Kerava\",\"sv_SE\":\"Vandaporten-Flygstationen-Kervo\"}";
+    private static final String EXPECTED_JORE4_SHORT_NAME =
+            "{\"fi_FI\":\"Vantaanp-Kerava\",\"sv_SE\":\"Vandap-Kervo\"}";
 
     private static final String FINNISH_NAME = "Vantaanportti-Lentoasema-Kerava";
     private static final String FINNISH_SHORT_NAME = "Vantaanp-Kerava";
@@ -55,23 +56,18 @@ class Jore4LineRepositoryTest {
     private final Jore4ValidityPeriodTestRepository testRepository;
 
     @Autowired
-    Jore4LineRepositoryTest(final Jore4LineRepository repository,
-                            @Qualifier("jore4DataSource") final DataSource targetDataSource) {
+    Jore4LineRepositoryTest(
+            final Jore4LineRepository repository, @Qualifier("jore4DataSource") final DataSource targetDataSource) {
         this.repository = repository;
         this.targetTable = new Table(targetDataSource, "route.line");
-        this.testRepository = new Jore4ValidityPeriodTestRepository(targetDataSource,
-                ValidityPeriodTargetTable.LINE
-        );
+        this.testRepository = new Jore4ValidityPeriodTestRepository(targetDataSource, ValidityPeriodTargetTable.LINE);
     }
 
     @Nested
     @DisplayName("Insert line into the database")
     @Sql(
-            scripts = {
-                    "/sql/jore4/drop_tables.sql"
-            },
-            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
-    )
+            scripts = {"/sql/jore4/drop_tables.sql"},
+            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager"))
     class InsertLineIntoDatabase {
 
         private final Jore4Line INPUT = Jore4Line.of(
@@ -85,8 +81,7 @@ class Jore4LineRepositoryTest {
                 PRIORITY,
                 Optional.of(VALIDITY_PERIOD_START),
                 Optional.of(VALIDITY_PERIOD_END),
-                LEGACY_HSL_MUNICIPALITY_CODE
-        );
+                LEGACY_HSL_MUNICIPALITY_CODE);
 
         @Test
         @DisplayName("Should insert one line into the database")
@@ -99,30 +94,21 @@ class Jore4LineRepositoryTest {
         @DisplayName("Should insert the correct id into the database")
         void shouldInsertCorrectIdIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(targetTable)
-                    .row()
-                    .value(LINE.LINE_ID.getName())
-                    .isEqualTo(LINE_ID);
+            assertThat(targetTable).row().value(LINE.LINE_ID.getName()).isEqualTo(LINE_ID);
         }
 
         @Test
         @DisplayName("Should insert the correct label into the database")
         void shouldInsertCorrectLabelIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(targetTable)
-                    .row()
-                    .value(LINE.LABEL.getName())
-                    .isEqualTo(LABEL);
+            assertThat(targetTable).row().value(LINE.LABEL.getName()).isEqualTo(LABEL);
         }
 
         @Test
         @DisplayName("Should insert the correct name into the database")
         void shouldInsertCorrectNameIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(targetTable)
-                    .row()
-                    .value(LINE.NAME_I18N.getName())
-                    .is(equalJson(EXPECTED_JORE4_NAME));
+            assertThat(targetTable).row().value(LINE.NAME_I18N.getName()).is(equalJson(EXPECTED_JORE4_NAME));
         }
 
         @Test
@@ -149,10 +135,7 @@ class Jore4LineRepositoryTest {
         @DisplayName("Should insert the correct priority into the database")
         void shouldInsertCorrectPriorityIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(targetTable)
-                    .row()
-                    .value(LINE.PRIORITY.getName())
-                    .isEqualTo(PRIORITY);
+            assertThat(targetTable).row().value(LINE.PRIORITY.getName()).isEqualTo(PRIORITY);
         }
 
         @Test
@@ -172,9 +155,7 @@ class Jore4LineRepositoryTest {
             repository.insert(List.of(INPUT));
 
             final LocalDate validityEnd = testRepository.findValidityPeriodEndDate();
-            Assertions.assertThat(validityEnd)
-                    .as(LINE.VALIDITY_END.getName())
-                    .isEqualTo(VALIDITY_PERIOD_END);
+            Assertions.assertThat(validityEnd).as(LINE.VALIDITY_END.getName()).isEqualTo(VALIDITY_PERIOD_END);
         }
 
         @Test

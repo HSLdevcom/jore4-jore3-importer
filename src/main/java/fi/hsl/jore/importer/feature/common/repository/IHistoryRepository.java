@@ -6,8 +6,7 @@ import io.vavr.collection.List;
 public interface IHistoryRepository<ENTITY extends IHasSystemTime> {
 
     /**
-     * Returns a list of entities, including old revisions.
-     * Oldest entities first.
+     * Returns a list of entities, including old revisions. Oldest entities first.
      *
      * @return List of entities
      */

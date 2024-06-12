@@ -28,8 +28,7 @@ public class TestJore4DataSourceProperties {
     private String password;
 
     public DataSourceConfigDto config() {
-        return ImmutableDataSourceConfigDto
-                .builder()
+        return ImmutableDataSourceConfigDto.builder()
                 .poolName("test-jore4-pool")
                 .driverClassName(driverClassName)
                 .jdbcUrl(jdbcUrl)

@@ -10,8 +10,7 @@ public interface ILineHeaderImportRepository extends IImportRepository<Jore3Line
     /**
      * Sets the Jore 4 ids which identifies the line in the Jore 4 database.
      *
-     * @param idMappings  The information that's required to set the Jore 4 ids
-     *                    of lines.
+     * @param idMappings The information that's required to set the Jore 4 ids of lines.
      */
     void setJore4Ids(Iterable<PersistableLineIdMapping> idMappings);
 }

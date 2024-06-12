@@ -7,22 +7,22 @@ import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import org.immutables.value.Value;
 
 @Value.Immutable
-public interface PersistableLine
-        extends CommonFields<PersistableLine> {
+public interface PersistableLine extends CommonFields<PersistableLine> {
 
     LegacyHslMunicipalityCode lineLegacyHslMunicipalityCode();
 
-    static PersistableLine of(final ExternalId externalId,
-                              final String lineNumber,
-                              final NetworkType networkType,
-                              final TypeOfLine typeOfLine,
-                              final LegacyHslMunicipalityCode lineLegacyHslMunicipalityCode) {
+    static PersistableLine of(
+            final ExternalId externalId,
+            final String lineNumber,
+            final NetworkType networkType,
+            final TypeOfLine typeOfLine,
+            final LegacyHslMunicipalityCode lineLegacyHslMunicipalityCode) {
         return ImmutablePersistableLine.builder()
-                                       .externalId(externalId)
-                                       .lineNumber(lineNumber)
-                                       .networkType(networkType)
-                                       .typeOfLine(typeOfLine)
-                                       .lineLegacyHslMunicipalityCode(lineLegacyHslMunicipalityCode)
-                                       .build();
+                .externalId(externalId)
+                .lineNumber(lineNumber)
+                .networkType(networkType)
+                .typeOfLine(typeOfLine)
+                .lineLegacyHslMunicipalityCode(lineLegacyHslMunicipalityCode)
+                .build();
     }
 }

@@ -1,5 +1,17 @@
 package fi.hsl.jore.importer.feature.api;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.hsl.jore.importer.feature.api.dto.ImmutableJobStatus;
 import fi.hsl.jore.importer.feature.api.dto.JobStatus;
@@ -19,18 +31,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @WebMvcTest(controllers = JobController.class)
 public class JobControllerTest {
 
@@ -46,22 +46,18 @@ public class JobControllerTest {
     @MockBean
     private JobRepository jobRepository;
 
-    public JobControllerTest(@Autowired final MockMvc mockMvc,
-                             @Autowired final ObjectMapper objectMapper) {
+    public JobControllerTest(@Autowired final MockMvc mockMvc, @Autowired final ObjectMapper objectMapper) {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
     }
 
     @Test
     public void whenNoJobRun_thenReturnNoContent() throws Exception {
-        mockMvc.perform(get("/job/import/status"))
-               .andExpect(status().isNoContent());
+        mockMvc.perform(get("/job/import/status")).andExpect(status().isNoContent());
 
-        verify(jobRepository, times(1))
-                .getLastJobExecution(anyString(), any());
+        verify(jobRepository, times(1)).getLastJobExecution(anyString(), any());
 
-        verify(jobLauncher, never())
-                .run(any(), any());
+        verify(jobLauncher, never()).run(any(), any());
     }
 
     @Test
@@ -76,35 +72,31 @@ public class JobControllerTest {
         execution.setStartTime(startTime);
         execution.setEndTime(endTime);
 
-        when(jobRepository.getLastJobExecution(anyString(), any()))
-                .thenReturn(execution);
+        when(jobRepository.getLastJobExecution(anyString(), any())).thenReturn(execution);
 
-        final MvcResult result =
-                mockMvc.perform(get("/job/import/status"))
-                       .andExpect(status().isOk())
-                       .andReturn();
+        final MvcResult result = mockMvc.perform(get("/job/import/status"))
+                .andExpect(status().isOk())
+                .andReturn();
 
-        verify(jobRepository, times(1))
-                .getLastJobExecution(anyString(), any());
+        verify(jobRepository, times(1)).getLastJobExecution(anyString(), any());
 
-        verify(jobLauncher, never())
-                .run(any(), any());
+        verify(jobLauncher, never()).run(any(), any());
 
-        assertThat(result.getResponse().getContentType(),
-                   is(MediaType.APPLICATION_JSON_VALUE));
+        assertThat(result.getResponse().getContentType(), is(MediaType.APPLICATION_JSON_VALUE));
 
         final String body = result.getResponse().getContentAsString();
 
         final JobStatus status = objectMapper.readValue(body, JobStatus.class);
 
-        assertThat(status,
-                   is(ImmutableJobStatus.builder()
-                                        .id(id)
-                                        .batchStatus(BatchStatus.COMPLETED)
-                                        .exitCode("COMPLETED")
-                                        .startTime(startTime)
-                                        .endTime(endTime)
-                                        .build()));
+        assertThat(
+                status,
+                is(ImmutableJobStatus.builder()
+                        .id(id)
+                        .batchStatus(BatchStatus.COMPLETED)
+                        .exitCode("COMPLETED")
+                        .startTime(startTime)
+                        .endTime(endTime)
+                        .build()));
     }
 
     @Test
@@ -117,41 +109,36 @@ public class JobControllerTest {
         final Throwable error = new RuntimeException("Guru mediation error!");
 
         execution.setStatus(BatchStatus.FAILED);
-        execution.setExitStatus(ExitStatus.FAILED
-                                        .addExitDescription(error));
+        execution.setExitStatus(ExitStatus.FAILED.addExitDescription(error));
         execution.setStartTime(startTime);
         execution.setEndTime(endTime);
 
-        when(jobRepository.getLastJobExecution(anyString(), any()))
-                .thenReturn(execution);
+        when(jobRepository.getLastJobExecution(anyString(), any())).thenReturn(execution);
 
-        final MvcResult result =
-                mockMvc.perform(get("/job/import/status"))
-                       .andExpect(status().isOk())
-                       .andReturn();
+        final MvcResult result = mockMvc.perform(get("/job/import/status"))
+                .andExpect(status().isOk())
+                .andReturn();
 
-        verify(jobRepository, times(1))
-                .getLastJobExecution(anyString(), any());
+        verify(jobRepository, times(1)).getLastJobExecution(anyString(), any());
 
-        verify(jobLauncher, never())
-                .run(any(), any());
+        verify(jobLauncher, never()).run(any(), any());
 
-        assertThat(result.getResponse().getContentType(),
-                   is(MediaType.APPLICATION_JSON_VALUE));
+        assertThat(result.getResponse().getContentType(), is(MediaType.APPLICATION_JSON_VALUE));
 
         final String body = result.getResponse().getContentAsString();
 
         final JobStatus status = objectMapper.readValue(body, JobStatus.class);
 
-        assertThat(status,
-                   is(ImmutableJobStatus.builder()
-                                        .id(id)
-                                        .batchStatus(BatchStatus.FAILED)
-                                        .exitCode("FAILED")
-                                        .startTime(startTime)
-                                        .endTime(endTime)
-                                        .exitDescription("java.lang.RuntimeException: Guru mediation error!")
-                                        .build()));
+        assertThat(
+                status,
+                is(ImmutableJobStatus.builder()
+                        .id(id)
+                        .batchStatus(BatchStatus.FAILED)
+                        .exitCode("FAILED")
+                        .startTime(startTime)
+                        .endTime(endTime)
+                        .exitDescription("java.lang.RuntimeException: Guru mediation error!")
+                        .build()));
     }
 
     @Test
@@ -162,33 +149,29 @@ public class JobControllerTest {
         execution.setStatus(BatchStatus.STARTING);
         execution.setExitStatus(ExitStatus.UNKNOWN);
 
-        when(jobLauncher.run(any(), any()))
-                .thenReturn(execution);
+        when(jobLauncher.run(any(), any())).thenReturn(execution);
 
-        final MvcResult result =
-                mockMvc.perform(post("/job/import/start"))
-                       .andExpect(status().isOk())
-                       .andReturn();
+        final MvcResult result = mockMvc.perform(post("/job/import/start"))
+                .andExpect(status().isOk())
+                .andReturn();
 
-        verify(jobRepository, never())
-                .getLastJobExecution(anyString(), any());
+        verify(jobRepository, never()).getLastJobExecution(anyString(), any());
 
-        verify(jobLauncher, times(1))
-                .run(any(), any());
+        verify(jobLauncher, times(1)).run(any(), any());
 
-        assertThat(result.getResponse().getContentType(),
-                   is(MediaType.APPLICATION_JSON_VALUE));
+        assertThat(result.getResponse().getContentType(), is(MediaType.APPLICATION_JSON_VALUE));
 
         final String body = result.getResponse().getContentAsString();
 
         final JobStatus status = objectMapper.readValue(body, JobStatus.class);
 
-        assertThat(status,
-                   is(ImmutableJobStatus.builder()
-                                        .id(id)
-                                        .batchStatus(BatchStatus.STARTING)
-                                        .exitCode("UNKNOWN")
-                                        .build()));
+        assertThat(
+                status,
+                is(ImmutableJobStatus.builder()
+                        .id(id)
+                        .batchStatus(BatchStatus.STARTING)
+                        .exitCode("UNKNOWN")
+                        .build()));
     }
 
     @Test
@@ -204,33 +187,29 @@ public class JobControllerTest {
         when(jobLauncher.run(any(), any()))
                 .thenThrow(new JobExecutionAlreadyRunningException("It's already running.."));
 
-        when(jobRepository.getLastJobExecution(anyString(), any()))
-                .thenReturn(execution);
+        when(jobRepository.getLastJobExecution(anyString(), any())).thenReturn(execution);
 
-        final MvcResult result =
-                mockMvc.perform(post("/job/import/start"))
-                       .andExpect(status().isOk())
-                       .andReturn();
+        final MvcResult result = mockMvc.perform(post("/job/import/start"))
+                .andExpect(status().isOk())
+                .andReturn();
 
-        verify(jobRepository, times(1))
-                .getLastJobExecution(anyString(), any());
+        verify(jobRepository, times(1)).getLastJobExecution(anyString(), any());
 
-        verify(jobLauncher, times(1))
-                .run(any(), any());
+        verify(jobLauncher, times(1)).run(any(), any());
 
-        assertThat(result.getResponse().getContentType(),
-                   is(MediaType.APPLICATION_JSON_VALUE));
+        assertThat(result.getResponse().getContentType(), is(MediaType.APPLICATION_JSON_VALUE));
 
         final String body = result.getResponse().getContentAsString();
 
         final JobStatus status = objectMapper.readValue(body, JobStatus.class);
 
-        assertThat(status,
-                   is(ImmutableJobStatus.builder()
-                                        .id(id)
-                                        .batchStatus(BatchStatus.STARTED)
-                                        .exitCode("UNKNOWN")
-                                        .startTime(startTime)
-                                        .build()));
+        assertThat(
+                status,
+                is(ImmutableJobStatus.builder()
+                        .id(id)
+                        .batchStatus(BatchStatus.STARTED)
+                        .exitCode("UNKNOWN")
+                        .startTime(startTime)
+                        .build()));
     }
 }

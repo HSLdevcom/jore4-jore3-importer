@@ -12,9 +12,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 @JoreDtoStyle
 @JoreTable(name = JrPlace.TABLE)
-public interface JrPlace
-        extends IHasPrimaryKey<JrPlacePk>,
-        IHasPlaceId {
+public interface JrPlace extends IHasPrimaryKey<JrPlacePk>, IHasPlaceId {
 
     String TABLE = "jr_paikka";
 
@@ -27,9 +25,6 @@ public interface JrPlace
     String name();
 
     static JrPlace of(final PlaceId placeId, final String name) {
-        return ImmutableJrPlace.builder()
-                .placeId(placeId)
-                .name(name)
-                .build();
+        return ImmutableJrPlace.builder().placeId(placeId).name(name).build();
     }
 }

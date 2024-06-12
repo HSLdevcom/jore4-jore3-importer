@@ -1,7 +1,13 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
+import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.JOURNEY_PATTERN_;
+import static org.assertj.db.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPattern;
+import java.util.List;
+import java.util.UUID;
+import javax.sql.DataSource;
 import org.assertj.db.type.Table;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,13 +17,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
-import javax.sql.DataSource;
-import java.util.List;
-import java.util.UUID;
-
-import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.JOURNEY_PATTERN_;
-import static org.assertj.db.api.Assertions.assertThat;
-
 @IntTest
 class Jore4JourneyPatternRepositoryTest {
 
@@ -25,8 +24,9 @@ class Jore4JourneyPatternRepositoryTest {
     private final Table targetTable;
 
     @Autowired
-    public Jore4JourneyPatternRepositoryTest(@Qualifier("jore4DataSource") final DataSource targetDataSource,
-                                             final Jore4JourneyPatternRepository repository) {
+    public Jore4JourneyPatternRepositoryTest(
+            @Qualifier("jore4DataSource") final DataSource targetDataSource,
+            final Jore4JourneyPatternRepository repository) {
         this.repository = repository;
         this.targetTable = new Table(targetDataSource, "journey_pattern.journey_pattern");
     }
@@ -35,26 +35,22 @@ class Jore4JourneyPatternRepositoryTest {
     @DisplayName("Insert journey pattern into the database")
     @Sql(
             scripts = {
-                    "/sql/jore4/drop_tables.sql",
-                    "/sql/jore4/populate_infrastructure_links.sql",
-                    "/sql/jore4/populate_timing_places.sql",
-                    "/sql/jore4/populate_scheduled_stop_points.sql",
-                    "/sql/jore4/populate_lines.sql",
-                    "/sql/jore4/populate_routes.sql"
+                "/sql/jore4/drop_tables.sql",
+                "/sql/jore4/populate_infrastructure_links.sql",
+                "/sql/jore4/populate_timing_places.sql",
+                "/sql/jore4/populate_scheduled_stop_points.sql",
+                "/sql/jore4/populate_lines.sql",
+                "/sql/jore4/populate_routes.sql"
             },
-            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
-    )
+            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager"))
     class InsertJourneyPatternIntoDatabase {
 
         private final UUID JOURNEY_PATTERN_ID = UUID.fromString("c5d767fa-400c-45db-bc01-9efd18bad212");
         private final UUID ROUTE_DIRECTION_EXT_ID = UUID.fromString("4aaa41fa-e3ff-4591-a3f5-958f832405af");
         private final UUID ROUTE_ID = UUID.fromString("5bfa9a65-c80f-4af8-be95-8370cb12df50");
 
-        private final Jore4JourneyPattern INPUT = Jore4JourneyPattern.of(
-                JOURNEY_PATTERN_ID,
-                ROUTE_DIRECTION_EXT_ID,
-                ROUTE_ID
-        );
+        private final Jore4JourneyPattern INPUT =
+                Jore4JourneyPattern.of(JOURNEY_PATTERN_ID, ROUTE_DIRECTION_EXT_ID, ROUTE_ID);
 
         @Test
         @DisplayName("Should insert one journey pattern into the database")

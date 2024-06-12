@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point.timing_place;
 
 import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.timing_place.ImporterTimingPlace;
+import javax.sql.DataSource;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
-
 /**
- * Reads timing place labels from scheduled stop points from the import schemas
- * which are found from the database of this Spring Boot application.
+ * Reads timing place labels from scheduled stop points from the import schemas which are found from the database of
+ * this Spring Boot application.
  */
 @Component
 public class TimingPlaceExportReader {
@@ -25,8 +24,9 @@ public class TimingPlaceExportReader {
     private final String sql;
 
     @Autowired
-    public TimingPlaceExportReader(@Qualifier("importerDataSource") final DataSource dataSource,
-                                   @Value(TimingPlaceExportMapper.SQL_PATH) final Resource sqlResource) {
+    public TimingPlaceExportReader(
+            @Qualifier("importerDataSource") final DataSource dataSource,
+            @Value(TimingPlaceExportMapper.SQL_PATH) final Resource sqlResource) {
         this.dataSource = dataSource;
         this.sql = ResourceUtil.fromResource(sqlResource);
     }

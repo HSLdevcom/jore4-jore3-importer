@@ -1,7 +1,6 @@
 package fi.hsl.jore.importer.feature.jore3.enumerated;
 
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreEnumeration;
-
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -31,7 +30,7 @@ public enum Direction {
 
     public static Optional<Direction> of(final int value) {
         return Arrays.stream(values())
-                     .filter(direction -> direction.value == value)
-                     .findFirst();
+                .filter(direction -> direction.value == value)
+                .findFirst();
     }
 }

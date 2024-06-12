@@ -15,13 +15,14 @@ public interface Jore3RoutePointsAndLinks {
 
     Vector<Jore3RouteLink> routeLinks();
 
-    static Jore3RoutePointsAndLinks of(final Vector<Jore3RoutePoint> routePoints,
-                                       final Vector<Jore3RouteStopPoint> stopPoints,
-                                       final Vector<Jore3RouteLink> routeLinks) {
+    static Jore3RoutePointsAndLinks of(
+            final Vector<Jore3RoutePoint> routePoints,
+            final Vector<Jore3RouteStopPoint> stopPoints,
+            final Vector<Jore3RouteLink> routeLinks) {
         return ImmutableJore3RoutePointsAndLinks.builder()
-                                                     .routePoints(routePoints)
-                                                     .stopPoints(stopPoints)
-                                                     .routeLinks(routeLinks)
-                                                     .build();
+                .routePoints(routePoints)
+                .stopPoints(stopPoints)
+                .routeLinks(routeLinks)
+                .build();
     }
 }
