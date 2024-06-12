@@ -1,5 +1,8 @@
 package fi.hsl.jore.importer.feature.batch.route_link;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import fi.hsl.jore.importer.feature.batch.route_link.dto.Jore3RoutePointsAndLinks;
 import fi.hsl.jore.importer.feature.batch.route_link.dto.LastLinkAttributes;
 import fi.hsl.jore.importer.feature.batch.route_link.dto.RouteLinksAndAttributes;
@@ -19,13 +22,9 @@ import fi.hsl.jore.importer.feature.network.route_point.dto.Jore3RoutePoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.ImmutableJore3RouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.Jore3RouteStopPoint;
 import io.vavr.collection.Vector;
-import org.junit.jupiter.api.Test;
-
 import java.time.LocalDate;
 import java.util.Optional;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import org.junit.jupiter.api.Test;
 
 public class RouteLinksProcessorTest {
 
@@ -59,19 +58,16 @@ public class RouteLinksProcessorTest {
                 true, // via point,
                 Optional.of(VIA_NAME),
                 Optional.of(VIA_NAME_SWEDISH),
-                Optional.of(1)
-        );
-        final RouteLinksAndAttributes linksAndAttributes =
-                RouteLinksAndAttributes.of(Vector.of(link),
-                        LastLinkAttributes.of(NodeType.BUS_STOP,
-                                true,
-                                Optional.of(7)));
+                Optional.of(1));
+        final RouteLinksAndAttributes linksAndAttributes = RouteLinksAndAttributes.of(
+                Vector.of(link), LastLinkAttributes.of(NodeType.BUS_STOP, true, Optional.of(7)));
 
         final Jore3RoutePointsAndLinks result = PROCESSOR.process(linksAndAttributes);
 
         final Vector<Jore3RoutePoint> routePoints = result.routePoints();
 
-        assertThat(routePoints,
+        assertThat(
+                routePoints,
                 is(Vector.of(
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
@@ -88,7 +84,8 @@ public class RouteLinksProcessorTest {
 
         final Vector<Jore3RouteStopPoint> stopPoints = result.stopPoints();
 
-        assertThat(stopPoints,
+        assertThat(
+                stopPoints,
                 is(Vector.of(
                         ImmutableJore3RouteStopPoint.builder()
                                 .orderNumber(0)
@@ -96,10 +93,7 @@ public class RouteLinksProcessorTest {
                                 .hastusStopPoint(true)
                                 .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                                 .viaPoint(true)
-                                .viaName(JoreLocaleUtil.createMultilingualString(
-                                        VIA_NAME,
-                                        VIA_NAME_SWEDISH
-                                ))
+                                .viaName(JoreLocaleUtil.createMultilingualString(VIA_NAME, VIA_NAME_SWEDISH))
                                 .timetableColumn(1)
                                 .build(),
                         ImmutableJore3RouteStopPoint.builder()
@@ -108,10 +102,7 @@ public class RouteLinksProcessorTest {
                                 .hastusStopPoint(true)
                                 .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                                 .viaPoint(true)
-                                .viaName(JoreLocaleUtil.createMultilingualString(
-                                        VIA_NAME,
-                                        VIA_NAME_SWEDISH
-                                ))
+                                .viaName(JoreLocaleUtil.createMultilingualString(VIA_NAME, VIA_NAME_SWEDISH))
                                 .timetableColumn(7)
                                 .build())));
     }
@@ -136,19 +127,16 @@ public class RouteLinksProcessorTest {
                 true, // via point
                 Optional.of(VIA_NAME),
                 Optional.of(VIA_NAME_SWEDISH),
-                Optional.of(1)
-        );
-        final RouteLinksAndAttributes linksAndAttributes =
-                RouteLinksAndAttributes.of(Vector.of(link),
-                        LastLinkAttributes.of(NodeType.CROSSROADS,
-                                false,
-                                Optional.empty()));
+                Optional.of(1));
+        final RouteLinksAndAttributes linksAndAttributes = RouteLinksAndAttributes.of(
+                Vector.of(link), LastLinkAttributes.of(NodeType.CROSSROADS, false, Optional.empty()));
 
         final Jore3RoutePointsAndLinks result = PROCESSOR.process(linksAndAttributes);
 
         final Vector<Jore3RoutePoint> routePoints = result.routePoints();
 
-        assertThat(routePoints,
+        assertThat(
+                routePoints,
                 is(Vector.of(
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
@@ -165,17 +153,15 @@ public class RouteLinksProcessorTest {
 
         final Vector<Jore3RouteStopPoint> stopPoints = result.stopPoints();
 
-        assertThat(stopPoints,
+        assertThat(
+                stopPoints,
                 is(Vector.of(ImmutableJore3RouteStopPoint.builder()
                         .orderNumber(0)
                         .externalId(ExternalId.of("1234-a"))
                         .hastusStopPoint(true)
                         .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                         .viaPoint(true)
-                        .viaName(JoreLocaleUtil.createMultilingualString(
-                                VIA_NAME,
-                                VIA_NAME_SWEDISH
-                        ))
+                        .viaName(JoreLocaleUtil.createMultilingualString(VIA_NAME, VIA_NAME_SWEDISH))
                         .timetableColumn(1)
                         .build())));
     }
@@ -200,19 +186,16 @@ public class RouteLinksProcessorTest {
                 true, // via point
                 Optional.of(VIA_NAME),
                 Optional.of(VIA_NAME_SWEDISH),
-                Optional.empty()
-        );
-        final RouteLinksAndAttributes linksAndAttributes =
-                RouteLinksAndAttributes.of(Vector.of(link),
-                        LastLinkAttributes.of(NodeType.CROSSROADS,
-                                false,
-                                Optional.empty()));
+                Optional.empty());
+        final RouteLinksAndAttributes linksAndAttributes = RouteLinksAndAttributes.of(
+                Vector.of(link), LastLinkAttributes.of(NodeType.CROSSROADS, false, Optional.empty()));
 
         final Jore3RoutePointsAndLinks result = PROCESSOR.process(linksAndAttributes);
 
         final Vector<Jore3RoutePoint> routePoints = result.routePoints();
 
-        assertThat(routePoints,
+        assertThat(
+                routePoints,
                 is(Vector.of(
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
@@ -229,9 +212,7 @@ public class RouteLinksProcessorTest {
 
         final Vector<Jore3RouteStopPoint> stopPoints = result.stopPoints();
 
-        assertThat("There are no bus stops in this route => no stop points",
-                stopPoints.isEmpty(),
-                is(true));
+        assertThat("There are no bus stops in this route => no stop points", stopPoints.isEmpty(), is(true));
     }
 
     @Test
@@ -270,8 +251,7 @@ public class RouteLinksProcessorTest {
                         true, // via point
                         Optional.of(VIA_NAME),
                         Optional.of(VIA_NAME_SWEDISH),
-                        Optional.of(1)
-                ), //The column number of the timetable column
+                        Optional.of(1)), // The column number of the timetable column
                 // B->C
                 JrRouteLink.of(
                         RouteLinkId.of(10001),
@@ -290,8 +270,7 @@ public class RouteLinksProcessorTest {
                         true, // via point
                         Optional.of(VIA_NAME),
                         Optional.of(VIA_NAME_SWEDISH),
-                        Optional.empty()
-                ), // The column number isn't given because link isn't included in timetable
+                        Optional.empty()), // The column number isn't given because link isn't included in timetable
                 // C->D
                 JrRouteLink.of(
                         RouteLinkId.of(10002),
@@ -310,8 +289,7 @@ public class RouteLinksProcessorTest {
                         true, // via point
                         Optional.of(VIA_NAME),
                         Optional.of(VIA_NAME_SWEDISH),
-                        Optional.empty()
-                ), // The column number isn't given because link isn't included in timetable
+                        Optional.empty()), // The column number isn't given because link isn't included in timetable
                 // D->E
                 JrRouteLink.of(
                         RouteLinkId.of(10003),
@@ -330,8 +308,7 @@ public class RouteLinksProcessorTest {
                         true, // via point
                         Optional.of(VIA_NAME),
                         Optional.of(VIA_NAME_SWEDISH),
-                        Optional.empty()
-                ), // The column number isn't given because link isn't included in timetable
+                        Optional.empty()), // The column number isn't given because link isn't included in timetable
                 // E->F
                 JrRouteLink.of(
                         RouteLinkId.of(10004),
@@ -350,8 +327,7 @@ public class RouteLinksProcessorTest {
                         false, // via point
                         Optional.empty(),
                         Optional.empty(),
-                        Optional.empty()
-                ), // The column number isn't given because link isn't included in timetable
+                        Optional.empty()), // The column number isn't given because link isn't included in timetable
                 // F->G
                 JrRouteLink.of(
                         RouteLinkId.of(10005),
@@ -370,22 +346,19 @@ public class RouteLinksProcessorTest {
                         false, // via point,
                         Optional.empty(),
                         Optional.empty(),
-                        Optional.empty()
-                ) // The column number isn't given because link isn't included in timetable
-        );
+                        Optional.empty()) // The column number isn't given because link isn't included in timetable
+                );
 
-        final LastLinkAttributes attributes = LastLinkAttributes.of(NodeType.BUS_STOP,
-                true,
-                Optional.of(7));
+        final LastLinkAttributes attributes = LastLinkAttributes.of(NodeType.BUS_STOP, true, Optional.of(7));
 
-        final RouteLinksAndAttributes linksAndAttributes = RouteLinksAndAttributes.of(links,
-                attributes);
+        final RouteLinksAndAttributes linksAndAttributes = RouteLinksAndAttributes.of(links, attributes);
 
         final Jore3RoutePointsAndLinks result = PROCESSOR.process(linksAndAttributes);
 
         final Vector<Jore3RoutePoint> routePoints = result.routePoints();
 
-        assertThat(routePoints,
+        assertThat(
+                routePoints,
                 is(Vector.of(
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
@@ -429,12 +402,12 @@ public class RouteLinksProcessorTest {
                                 .externalId(ExternalId.of("10005-g"))
                                 .node(ExternalId.of("g"))
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
-                                .build()
-                )));
+                                .build())));
 
         final Vector<Jore3RouteStopPoint> stopPoints = result.stopPoints();
 
-        assertThat(stopPoints,
+        assertThat(
+                stopPoints,
                 is(Vector.of(
                         ImmutableJore3RouteStopPoint.builder()
                                 .orderNumber(0)
@@ -442,10 +415,7 @@ public class RouteLinksProcessorTest {
                                 .hastusStopPoint(true)
                                 .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                                 .viaPoint(true)
-                                .viaName(JoreLocaleUtil.createMultilingualString(
-                                        VIA_NAME,
-                                        VIA_NAME_SWEDISH
-                                ))
+                                .viaName(JoreLocaleUtil.createMultilingualString(VIA_NAME, VIA_NAME_SWEDISH))
                                 .timetableColumn(1)
                                 .build(),
                         // Note how node D is absent, as it's a BUS_STOP_NOT_IN_USE
@@ -463,7 +433,6 @@ public class RouteLinksProcessorTest {
                                 .regulatedTimingPointStatus(RegulatedTimingPointStatus.NO)
                                 .viaPoint(false)
                                 .timetableColumn(7)
-                                .build()
-                )));
+                                .build())));
     }
 }

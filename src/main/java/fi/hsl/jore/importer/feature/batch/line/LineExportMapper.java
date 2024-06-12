@@ -8,14 +8,11 @@ import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
-import org.springframework.jdbc.core.RowMapper;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.springframework.jdbc.core.RowMapper;
 
-/**
- * Maps a result set row into an {@link ImporterLine} object.
- */
+/** Maps a result set row into an {@link ImporterLine} object. */
 public class LineExportMapper implements RowMapper<ImporterLine> {
 
     public static final String SQL_PATH = "classpath:jore4-export/export_lines.sql";
@@ -37,7 +34,6 @@ public class LineExportMapper implements RowMapper<ImporterLine> {
                 jsonConverter.fromJson(resultSet.getString("line_header_short_name"), MultilingualString.class),
                 DATE_RANGE_CONVERTER.from(resultSet.getString("line_header_cluster_date_range")),
                 TypeOfLine.of(resultSet.getString("type_of_line")),
-                LegacyHslMunicipalityCode.valueOf(resultSet.getString("legacy_hsl_municipality_code"))
-        );
+                LegacyHslMunicipalityCode.valueOf(resultSet.getString("legacy_hsl_municipality_code")));
     }
 }

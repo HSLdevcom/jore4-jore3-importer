@@ -1,10 +1,8 @@
 package fi.hsl.jore.importer.config.jooq.converter.time_range;
 
 import com.google.common.collect.Range;
-import org.immutables.value.Value;
-
 import java.time.Instant;
-
+import org.immutables.value.Value;
 
 @Value.Immutable
 public abstract class TimeRange {
@@ -17,19 +15,15 @@ public abstract class TimeRange {
 
     public static TimeRange empty() {
         return ImmutableTimeRange.builder()
-                                 .range(Range.closedOpen(Instant.EPOCH, Instant.EPOCH))
-                                 .build();
+                .range(Range.closedOpen(Instant.EPOCH, Instant.EPOCH))
+                .build();
     }
 
     public static TimeRange unbounded() {
-        return ImmutableTimeRange.builder()
-                                 .range(Range.all())
-                                 .build();
+        return ImmutableTimeRange.builder().range(Range.all()).build();
     }
 
     public static TimeRange of(final Range<Instant> range) {
-        return ImmutableTimeRange.builder()
-                                 .range(range)
-                                 .build();
+        return ImmutableTimeRange.builder().range(range).build();
     }
 }

@@ -1,9 +1,17 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
+import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN;
+import static org.assertj.db.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.common.converter.JsonbConverter;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPatternStop;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import javax.sql.DataSource;
 import org.assertj.core.api.Condition;
 import org.assertj.db.type.Table;
 import org.junit.jupiter.api.DisplayName;
@@ -15,15 +23,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
-import javax.sql.DataSource;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-
-import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN;
-import static org.assertj.db.api.Assertions.assertThat;
-
 @IntTest
 class Jore4JourneyPatternStopRepositoryTest {
 
@@ -33,9 +32,10 @@ class Jore4JourneyPatternStopRepositoryTest {
     private final JsonbConverter jsonbConverter;
 
     @Autowired
-    Jore4JourneyPatternStopRepositoryTest(@Qualifier("jore4DataSource") final DataSource targetDataSource,
-                                          final Jore4JourneyPatternStopRepository repository,
-                                          final JsonbConverter jsonbConverter) {
+    Jore4JourneyPatternStopRepositoryTest(
+            @Qualifier("jore4DataSource") final DataSource targetDataSource,
+            final Jore4JourneyPatternStopRepository repository,
+            final JsonbConverter jsonbConverter) {
         this.repository = repository;
         this.targetTable = new Table(targetDataSource, "journey_pattern.scheduled_stop_point_in_journey_pattern");
         this.jsonbConverter = jsonbConverter;
@@ -45,29 +45,27 @@ class Jore4JourneyPatternStopRepositoryTest {
     @DisplayName("Insert a journey pattern stop into the database")
     @Sql(
             scripts = {
-                    "/sql/jore4/drop_tables.sql",
-                    "/sql/jore4/populate_infrastructure_links.sql",
-                    "/sql/jore4/populate_timing_places.sql",
-                    "/sql/jore4/populate_scheduled_stop_points.sql",
-                    "/sql/jore4/populate_lines.sql",
-                    "/sql/jore4/populate_routes.sql",
-                    "/sql/jore4/populate_journey_patterns.sql"
+                "/sql/jore4/drop_tables.sql",
+                "/sql/jore4/populate_infrastructure_links.sql",
+                "/sql/jore4/populate_timing_places.sql",
+                "/sql/jore4/populate_scheduled_stop_points.sql",
+                "/sql/jore4/populate_lines.sql",
+                "/sql/jore4/populate_routes.sql",
+                "/sql/jore4/populate_journey_patterns.sql"
             },
-            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
-    )
+            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager"))
     class InsertJourneyPatternStopIntoDatabase {
 
         private final UUID JOURNEY_PATTERN_ID = UUID.fromString("ec564137-f30c-4689-9322-4ef650768af3");
         private static final int SCHEDULED_STOP_POINT_SEQUENCE = 1;
-        private final String SCHEDULED_STOP_POINT_LABEL  = "H1234";
+        private final String SCHEDULED_STOP_POINT_LABEL = "H1234";
         private static final boolean IS_USED_AS_TIMING_POINT = true;
         private static final boolean IS_REGULATED_TIMING_POINT = true;
         private static final boolean IS_LOADING_TIME_ALLOWED = true;
         private static final boolean IS_VIA_POINT = true;
         private final Optional<MultilingualString> VIA_POINT_NAMES = Optional.of(MultilingualString.of(Map.of(
                 "fi-FI", "Helsinki",
-                "sv-FI", "Helsingfors"
-        )));
+                "sv-FI", "Helsingfors")));
 
         private final Jore4JourneyPatternStop INPUT = Jore4JourneyPatternStop.of(
                 JOURNEY_PATTERN_ID,
@@ -77,8 +75,7 @@ class Jore4JourneyPatternStopRepositoryTest {
                 IS_REGULATED_TIMING_POINT,
                 IS_LOADING_TIME_ALLOWED,
                 IS_VIA_POINT,
-                VIA_POINT_NAMES
-        );
+                VIA_POINT_NAMES);
 
         @Test
         @DisplayName("Should insert a new journey pattern stop into the database")
@@ -170,10 +167,11 @@ class Jore4JourneyPatternStopRepositoryTest {
         void shouldSaveNewJourneyPatternWithCorrectViaPointNames() {
             repository.insert(List.of(INPUT));
 
-            final String expectedJsonString = jsonbConverter.asJson(VIA_POINT_NAMES.get()).data();
+            final String expectedJsonString =
+                    jsonbConverter.asJson(VIA_POINT_NAMES.get()).data();
 
-            final Condition<PGobject> testJsonValueCondition = new Condition<>(fieldValue ->
-                    fieldValue.getValue().replace(" ", "").equals(expectedJsonString),
+            final Condition<PGobject> testJsonValueCondition = new Condition<>(
+                    fieldValue -> fieldValue.getValue().replace(" ", "").equals(expectedJsonString),
                     expectedJsonString);
 
             assertThat(targetTable)

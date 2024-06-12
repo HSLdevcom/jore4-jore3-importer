@@ -9,9 +9,8 @@ import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import io.vavr.collection.List;
 
 /**
- * This implementation returns the same map matching response
- * every time when the {@link IMapMatchingService#sendMapMatchingRequest(ImporterRouteGeometry, List)}
- * method is invoked. 
+ * This implementation returns the same map matching response every time when the
+ * {@link IMapMatchingService#sendMapMatchingRequest(ImporterRouteGeometry, List)} method is invoked.
  */
 public class MockMapMatchingService implements IMapMatchingService {
 
@@ -22,8 +21,8 @@ public class MockMapMatchingService implements IMapMatchingService {
     private static final String MAP_MATCHING_OK_RESPONSE_CODE = "Ok";
 
     @Override
-    public MapMatchingSuccessResponseDTO sendMapMatchingRequest(final ImporterRouteGeometry routeGeometry,
-                                                                final List<ImporterRoutePoint> routePoints) {
+    public MapMatchingSuccessResponseDTO sendMapMatchingRequest(
+            final ImporterRouteGeometry routeGeometry, final List<ImporterRoutePoint> routePoints) {
         final MapMatchingSuccessResponseDTO mapMatchingResponse = new MapMatchingSuccessResponseDTO();
         mapMatchingResponse.setCode(MAP_MATCHING_OK_RESPONSE_CODE);
 

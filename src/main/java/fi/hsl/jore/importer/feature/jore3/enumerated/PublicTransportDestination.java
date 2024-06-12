@@ -1,11 +1,10 @@
 package fi.hsl.jore.importer.feature.jore3.enumerated;
 
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreEnumeration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Arrays;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @JoreEnumeration(name = "Joukkoliikennelaji")
 public enum PublicTransportDestination {
@@ -39,8 +38,7 @@ public enum PublicTransportDestination {
     private final int value;
     private final String description;
 
-    PublicTransportDestination(final int value,
-                               final String description) {
+    PublicTransportDestination(final int value, final String description) {
         this.value = value;
         this.description = description;
     }
@@ -55,8 +53,8 @@ public enum PublicTransportDestination {
 
     public static Optional<PublicTransportDestination> of(final int i) {
         return Arrays.stream(values())
-                     .filter(destination -> destination.value == i)
-                     .findFirst();
+                .filter(destination -> destination.value == i)
+                .findFirst();
     }
 
     public static Optional<PublicTransportDestination> of(final String s) {

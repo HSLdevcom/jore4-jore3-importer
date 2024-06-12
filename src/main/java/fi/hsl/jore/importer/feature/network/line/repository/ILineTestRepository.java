@@ -12,6 +12,5 @@ import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
  * insert/update/delete lines.
  */
 @VisibleForTesting
-public interface ILineTestRepository extends IBasicCrudRepository<LinePK, Line, PersistableLine>,
-                                             IHistoryRepository<Line> {
-}
+public interface ILineTestRepository
+        extends IBasicCrudRepository<LinePK, Line, PersistableLine>, IHistoryRepository<Line> {}

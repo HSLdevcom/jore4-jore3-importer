@@ -1,28 +1,5 @@
 package fi.hsl.jore.importer.feature.mapmatching.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import fi.hsl.jore.importer.feature.mapmatching.dto.response.InfrastructureLinkDTO;
-import fi.hsl.jore.importer.feature.mapmatching.dto.response.MapMatchingSuccessResponseDTO;
-import fi.hsl.jore.importer.feature.mapmatching.dto.response.RouteDTO;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
-import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
-import org.assertj.core.api.SoftAssertions;
-import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
-import org.geojson.LineString;
-import org.geojson.LngLatAlt;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
-import java.util.Map;
-
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
@@ -39,6 +16,28 @@ import static fi.hsl.jore.importer.feature.mapmatching.service.RouteGeometryTest
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import fi.hsl.jore.importer.feature.mapmatching.dto.response.InfrastructureLinkDTO;
+import fi.hsl.jore.importer.feature.mapmatching.dto.response.MapMatchingSuccessResponseDTO;
+import fi.hsl.jore.importer.feature.mapmatching.dto.response.RouteDTO;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
+import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
+import java.util.List;
+import java.util.Map;
+import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
+import org.geojson.LineString;
+import org.geojson.LngLatAlt;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.RestTemplate;
+
 class MapMatchingServiceTest {
 
     private static final String EXPECTED_MAP_MATCHING_API_PATH = "/api/match/public-transport-route/v1/bus.json";
@@ -52,17 +51,14 @@ class MapMatchingServiceTest {
 
     @BeforeEach
     void configureSystemUnderTest() {
-        wireMockServer = new WireMockServer(options()
-                .dynamicPort()
-        );
+        wireMockServer = new WireMockServer(options().dynamicPort());
         wireMockServer.start();
         configureFor(wireMockServer.port());
 
         mapMatchingService = new MapMatchingService(
                 String.format(MAP_MATCHING_API_BASE_URL_TEMPLATE, wireMockServer.port()),
                 new ObjectMapper(),
-                new RestTemplate()
-        );
+                new RestTemplate());
 
         routeGeometryInput = createRouteGeometry();
         routePointsInput = createRoutePoints();
@@ -80,8 +76,7 @@ class MapMatchingServiceTest {
         @BeforeEach
         void returnHttpStatusCodeBadRequest() {
             givenThat(post(urlEqualTo(EXPECTED_MAP_MATCHING_API_PATH))
-                    .willReturn(aResponse().withStatus(HttpStatus.BAD_REQUEST.value()))
-            );
+                    .willReturn(aResponse().withStatus(HttpStatus.BAD_REQUEST.value())));
         }
 
         @Test
@@ -95,39 +90,41 @@ class MapMatchingServiceTest {
     @Nested
     @DisplayName("When the map matching API returns the HTTP status code ok (200)")
     class WhenMapMatchingApiReturnsHttpStatusCodeOk {
-
-        private static final String EXPECTED_MAP_MATCHING_REQUEST_BODY = "{" +
-                "  \"routeId\": \"1001-2-20211004\"," +
-                "  \"routeGeometry\": {" +
-                "    \"type\": \"LineString\"," +
-                "    \"coordinates\": [" +
-                "      [5.0, 6.0]," +
-                "      [10.0, 11.0]" +
-                "    ]" +
-                "  }," +
-                "  \"routePoints\": [" +
-                "    {" +
-                "      \"location\": {" +
-                "        \"type\": \"Point\"," +
-                "        \"coordinates\": [4.5533, 10.3343]" +
-                "      }," +
-                "      \"nationalId\": 123567," +
-                "      \"passengerId\": \"H1234\"," +
-                "      \"projectedLocation\": {" +
-                "        \"type\": \"Point\"," +
-                "        \"coordinates\": [5.604, 12.053]" +
-                "      }," +
-                "      \"type\": \"PUBLIC_TRANSPORT_STOP\"" +
-                "    }," +
-                "    {" +
-                "      \"location\": {" +
-                "        \"type\": \"Point\"," +
-                "        \"coordinates\": [3.212, 1.2334]" +
-                "      }," +
-                "      \"type\": \"ROAD_JUNCTION\"" +
-                "    }" +
-                "  ]" +
-                "}";
+        private static final String EXPECTED_MAP_MATCHING_REQUEST_BODY =
+                """
+                {
+                  "routeId": "1001-2-20211004",
+                  "routeGeometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                      [5.0, 6.0],
+                      [10.0, 11.0]
+                    ]
+                  },
+                  "routePoints": [
+                    {
+                      "location": {
+                        "type": "Point",
+                        "coordinates": [4.5533, 10.3343]
+                      },
+                      "nationalId": 123567,
+                      "passengerId": "H1234",
+                      "projectedLocation": {
+                        "type": "Point",
+                        "coordinates": [5.604, 12.053]
+                      },
+                      "type": "PUBLIC_TRANSPORT_STOP"
+                    },
+                    {
+                      "location": {
+                        "type": "Point",
+                        "coordinates": [3.212, 1.2334]
+                      },
+                      "type": "ROAD_JUNCTION"
+                    }
+                  ]
+                }
+                """;
 
         private static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
         private static final String HTTP_HEADER_CONTENT_TYPE = "Content-Type";
@@ -136,9 +133,7 @@ class MapMatchingServiceTest {
 
         @BeforeEach
         void returnMapMatchingResponse() {
-            givenThat(post(urlEqualTo(EXPECTED_MAP_MATCHING_API_PATH))
-                    .willReturn(okJson(MAP_MATCHING_RESPONSE))
-            );
+            givenThat(post(urlEqualTo(EXPECTED_MAP_MATCHING_API_PATH)).willReturn(okJson(MAP_MATCHING_RESPONSE)));
         }
 
         @Test
@@ -147,8 +142,7 @@ class MapMatchingServiceTest {
             mapMatchingService.sendMapMatchingRequest(routeGeometryInput, routePointsInput);
 
             verify(postRequestedFor(urlEqualTo(EXPECTED_MAP_MATCHING_API_PATH))
-                    .withHeader(HTTP_HEADER_CONTENT_TYPE, equalTo(CONTENT_TYPE_APPLICATION_JSON))
-            );
+                    .withHeader(HTTP_HEADER_CONTENT_TYPE, equalTo(CONTENT_TYPE_APPLICATION_JSON)));
         }
 
         @Test
@@ -157,8 +151,7 @@ class MapMatchingServiceTest {
             mapMatchingService.sendMapMatchingRequest(routeGeometryInput, routePointsInput);
 
             verify(postRequestedFor(urlEqualTo(EXPECTED_MAP_MATCHING_API_PATH))
-                    .withRequestBody(equalToJson(EXPECTED_MAP_MATCHING_REQUEST_BODY))
-            );
+                    .withRequestBody(equalToJson(EXPECTED_MAP_MATCHING_REQUEST_BODY)));
         }
 
         @Nested
@@ -169,15 +162,14 @@ class MapMatchingServiceTest {
 
             @BeforeEach
             void returnErrorResponse() {
-                givenThat(post(urlEqualTo(EXPECTED_MAP_MATCHING_API_PATH))
-                        .willReturn(okJson(ERROR_RESPONSE))
-                );
+                givenThat(post(urlEqualTo(EXPECTED_MAP_MATCHING_API_PATH)).willReturn(okJson(ERROR_RESPONSE)));
             }
 
             @Test
             @DisplayName("Should throw an exception")
             void shouldThrowException() {
-                assertThatThrownBy(() -> mapMatchingService.sendMapMatchingRequest(routeGeometryInput, routePointsInput))
+                assertThatThrownBy(
+                                () -> mapMatchingService.sendMapMatchingRequest(routeGeometryInput, routePointsInput))
                         .isExactlyInstanceOf(MapMatchingException.class);
             }
         }
@@ -190,22 +182,19 @@ class MapMatchingServiceTest {
             @DisplayName("When the map matching request failed")
             class WhenMapMatchingRequestFailed {
 
-                private static final String MAP_MATCHING_RESPONSE = "{" +
-                        "    \"code\": \"Ok\"," +
-                        "    \"message\": \"Error\"" +
-                        "}";
+                private static final String MAP_MATCHING_RESPONSE = "{ \"code\": \"Ok\", \"message\": \"Error\" }";
 
                 @BeforeEach
                 void returnMapMatchingResponse() {
-                    givenThat(post(urlEqualTo(EXPECTED_MAP_MATCHING_API_PATH))
-                            .willReturn(okJson(MAP_MATCHING_RESPONSE))
-                    );
+                    givenThat(
+                            post(urlEqualTo(EXPECTED_MAP_MATCHING_API_PATH)).willReturn(okJson(MAP_MATCHING_RESPONSE)));
                 }
 
                 @Test
                 @DisplayName("Should throw an exception")
                 void shouldThrowException() {
-                    assertThatThrownBy(() -> mapMatchingService.sendMapMatchingRequest(routeGeometryInput, routePointsInput))
+                    assertThatThrownBy(() ->
+                                    mapMatchingService.sendMapMatchingRequest(routeGeometryInput, routePointsInput))
                             .isExactlyInstanceOf(MapMatchingException.class);
                 }
             }
@@ -214,63 +203,70 @@ class MapMatchingServiceTest {
             @DisplayName("When a match was found")
             @ExtendWith(SoftAssertionsExtension.class)
             class WhenMatchWasFound {
-
-                private static final String MAP_MATCHING_RESPONSE = "{" +
-                        "    \"code\": \"Ok\"," +
-                        "    \"routes\": [{" +
-                        "        \"geometry\": {" +
-                        "            \"type\": \"LineString\"," +
-                        "            \"coordinates\": [" +
-                        "                [24.92746831478124, 60.16364653019382]," +
-                        "                [24.92919590585085, 60.164250754589546]," +
-                        "                [24.931694330826097, 60.16512656170321]" +
-                        "            ]" +
-                        "        }," +
-                        "        \"weight\": 286.7201809450182," +
-                        "        \"distance\": 286.7201809449182," +
-                        "        \"paths\": [{" +
-                        "            \"mapMatchingInfrastructureLinkId\": 209830," +
-                        "            \"externalLinkRef\": {" +
-                        "                \"infrastructureSource\": \"digiroad_r\"," +
-                        "                \"externalLinkId\": \"445117\"" +
-                        "            }," +
-                        "            \"isTraversalForwards\": true," +
-                        "            \"geometry\": {" +
-                        "                \"type\": \"LineString\"," +
-                        "                \"coordinates\": [" +
-                        "                    [24.92743115932746, 60.16363353459729]," +
-                        "                    [24.92919590585085, 60.164250754589546]" +
-                        "                ]" +
-                        "            }," +
-                        "            \"weight\": 119.68001616364820," +
-                        "            \"distance\": 119.68001616364803," +
-                        "            \"infrastructureLinkName\": {" +
-                        "                \"fi\": \"Kalevankatu 1\"," +
-                        "                \"sv\": \"Kalevagatan 1\"" +
-                        "            }" +
-                        "        }, {" +
-                        "            \"mapMatchingInfrastructureLinkId\": 232425," +
-                        "            \"externalLinkRef\": {" +
-                        "                \"infrastructureSource\": \"digiroad_r\"," +
-                        "                \"externalLinkId\": \"442423\"" +
-                        "            }," +
-                        "            \"isTraversalForwards\": true," +
-                        "            \"geometry\": {" +
-                        "                \"type\": \"LineString\"," +
-                        "                \"coordinates\": [" +
-                        "                    [24.92919590585085, 60.164250754589546]," +
-                        "                    [24.932010800782077, 60.16523749159016]" +
-                        "                ]" +
-                        "            }," +
-                        "            \"weight\": 191.0508963733580," +
-                        "            \"distance\": 191.0508963733563," +
-                        "            \"infrastructureLinkName\": {" +
-                        "                \"fi\": \"Kalevankatu 2\"," +
-                        "                \"sv\": \"Kalevagatan 2\"" +
-                        "            }" +
-                        "        }]" +
-                        "    }]" +
-                        "}";
+                private static final String MAP_MATCHING_RESPONSE =
+                        """
+                        {
+                          "code": "Ok",
+                          "routes": [
+                            {
+                              "geometry": {
+                                "type": "LineString",
+                                "coordinates": [
+                                  [24.92746831478124, 60.16364653019382],\s
+                                  [24.92919590585085, 60.164250754589546],
+                                  [24.931694330826097, 60.16512656170321]
+                                ]
+                              },
+                              "weight": 286.7201809450182,
+                              "distance": 286.7201809449182,
+                              "paths": [
+                                {
+                                  "mapMatchingInfrastructureLinkId": 209830,
+                                  "externalLinkRef": {
+                                    "infrastructureSource": "digiroad_r",
+                                    "externalLinkId": "445117"
+                                  },
+                                  "isTraversalForwards": true,
+                                  "geometry": {
+                                    "type": "LineString",
+                                    "coordinates": [
+                                      [24.92743115932746, 60.16363353459729],
+                                      [24.92919590585085, 60.164250754589546]
+                                    ]
+                                  },
+                                  "weight": 119.68001616364820,
+                                  "distance": 119.68001616364803,
+                                  "infrastructureLinkName": {
+                                    "fi": "Kalevankatu 1",
+                                    "sv": "Kalevagatan 1"
+                                  }
+                                },
+                                {
+                                  "mapMatchingInfrastructureLinkId": 232425,
+                                  "externalLinkRef": {
+                                    "infrastructureSource": "digiroad_r",
+                                    "externalLinkId": "442423"
+                                  },
+                                  "isTraversalForwards": true,
+                                  "geometry": {
+                                    "type": "LineString",
+                                    "coordinates": [
+                                      [24.92919590585085, 60.164250754589546],
+                                      [24.932010800782077, 60.16523749159016]
+                                    ]
+                                  },
+                                  "weight": 191.0508963733580,
+                                  "distance": 191.0508963733563,
+                                  "infrastructureLinkName": {
+                                    "fi": "Kalevankatu 2",
+                                    "sv": "Kalevagatan 2"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                        """;
 
                 private static final String LANGUAGE_CODE_FINNISH = "fi";
                 private static final String LANGUAGE_CODE_SWEDISH = "sv";
@@ -315,68 +311,65 @@ class MapMatchingServiceTest {
 
                 @BeforeEach
                 void returnMapMatchingResponse() {
-                    givenThat(post(urlEqualTo(EXPECTED_MAP_MATCHING_API_PATH))
-                            .willReturn(okJson(MAP_MATCHING_RESPONSE))
-                    );
+                    givenThat(
+                            post(urlEqualTo(EXPECTED_MAP_MATCHING_API_PATH)).willReturn(okJson(MAP_MATCHING_RESPONSE)));
                 }
 
                 @Test
                 @DisplayName("Should return a map matching response with the correct code")
                 void shouldReturnMapMatchingResponseWithCorrectCode() {
-                    final MapMatchingSuccessResponseDTO response = mapMatchingService.sendMapMatchingRequest(
-                            routeGeometryInput,
-                            routePointsInput
-                    );
+                    final MapMatchingSuccessResponseDTO response =
+                            mapMatchingService.sendMapMatchingRequest(routeGeometryInput, routePointsInput);
                     assertThat(response.getCode()).isEqualTo(EXPECTED_MAP_MATCHING_RESPONSE_CODE);
                 }
 
                 @Test
                 @DisplayName("Should return a map matching response with one route")
                 void shouldReturnMapMatchingResponseWithOneRoute() {
-                    final MapMatchingSuccessResponseDTO response = mapMatchingService.sendMapMatchingRequest(
-                            routeGeometryInput,
-                            routePointsInput
-                    );
+                    final MapMatchingSuccessResponseDTO response =
+                            mapMatchingService.sendMapMatchingRequest(routeGeometryInput, routePointsInput);
                     assertThat(response.getRoutes()).hasSize(1);
                 }
 
                 @Test
                 @DisplayName("Should return a route with correct route geometry")
                 void shouldReturnRouteWithCorrectRouteGeometry(final SoftAssertions softAssertions) {
-                    final LineString routeGeometry = mapMatchingService.sendMapMatchingRequest(
-                                    routeGeometryInput,
-                                    routePointsInput
-                            )
+                    final LineString routeGeometry = mapMatchingService
+                            .sendMapMatchingRequest(routeGeometryInput, routePointsInput)
                             .getRoutes()
                             .get(0)
                             .getGeometry();
 
                     final List<LngLatAlt> coordinates = routeGeometry.getCoordinates();
-                    assertThat(coordinates)
-                            .as("coordinateCount")
-                            .hasSize(3);
+                    assertThat(coordinates).as("coordinateCount").hasSize(3);
 
                     final LngLatAlt coordinateOne = coordinates.get(0);
-                    softAssertions.assertThat(coordinateOne.getLongitude())
+                    softAssertions
+                            .assertThat(coordinateOne.getLongitude())
                             .as("coordinateOneLongitude")
                             .isEqualTo(EXPECTED_ROUTE_GEOMETRY_COORDINATE_ONE_LNG);
-                    softAssertions.assertThat(coordinateOne.getLatitude())
+                    softAssertions
+                            .assertThat(coordinateOne.getLatitude())
                             .as("coordinateOneLatitude")
                             .isEqualTo(EXPECTED_ROUTE_GEOMETRY_COORDINATE_ONE_LAT);
 
                     final LngLatAlt coordinateTwo = coordinates.get(1);
-                    softAssertions.assertThat(coordinateTwo.getLongitude())
+                    softAssertions
+                            .assertThat(coordinateTwo.getLongitude())
                             .as("coordinateTwoLongitude")
                             .isEqualTo(EXPECTED_ROUTE_GEOMETRY_COORDINATE_TWO_LNG);
-                    softAssertions.assertThat(coordinateTwo.getLatitude())
+                    softAssertions
+                            .assertThat(coordinateTwo.getLatitude())
                             .as("coordinateTwoLatitude")
                             .isEqualTo(EXPECTED_ROUTE_GEOMETRY_COORDINATE_TWO_LAT);
 
                     final LngLatAlt coordinateThree = coordinates.get(2);
-                    softAssertions.assertThat(coordinateThree.getLongitude())
+                    softAssertions
+                            .assertThat(coordinateThree.getLongitude())
                             .as("coordinateThreeLongitude")
                             .isEqualTo(EXPECTED_ROUTE_GEOMETRY_COORDINATE_THREE_LNG);
-                    softAssertions.assertThat(coordinateThree.getLatitude())
+                    softAssertions
+                            .assertThat(coordinateThree.getLatitude())
                             .as("coordinateThreeLatitude")
                             .isEqualTo(EXPECTED_ROUTE_GEOMETRY_COORDINATE_THREE_LAT);
                 }
@@ -384,10 +377,8 @@ class MapMatchingServiceTest {
                 @Test
                 @DisplayName("Should return a route with the correct distance")
                 void shouldReturnRouteWithCorrectDistance() {
-                    final RouteDTO route = mapMatchingService.sendMapMatchingRequest(
-                                    routeGeometryInput,
-                                    routePointsInput
-                            )
+                    final RouteDTO route = mapMatchingService
+                            .sendMapMatchingRequest(routeGeometryInput, routePointsInput)
                             .getRoutes()
                             .get(0);
                     assertThat(route.getDistance()).isEqualTo(EXPECTED_ROUTE_DISTANCE);
@@ -396,10 +387,8 @@ class MapMatchingServiceTest {
                 @Test
                 @DisplayName("Should return a route with the correct weight")
                 void shouldReturnRouteWithCorrectWeight() {
-                    final RouteDTO route = mapMatchingService.sendMapMatchingRequest(
-                                    routeGeometryInput,
-                                    routePointsInput
-                            )
+                    final RouteDTO route = mapMatchingService
+                            .sendMapMatchingRequest(routeGeometryInput, routePointsInput)
                             .getRoutes()
                             .get(0);
                     assertThat(route.getWeight()).isEqualTo(EXPECTED_ROUTE_WEIGHT);
@@ -408,10 +397,8 @@ class MapMatchingServiceTest {
                 @Test
                 @DisplayName("Should return a route that has two infrastructure links")
                 void shouldReturnRouteWithTwoInfrastructureLinks() {
-                    final List<InfrastructureLinkDTO> infrastructureLinks = mapMatchingService.sendMapMatchingRequest(
-                                    routeGeometryInput,
-                                    routePointsInput
-                            )
+                    final List<InfrastructureLinkDTO> infrastructureLinks = mapMatchingService
+                            .sendMapMatchingRequest(routeGeometryInput, routePointsInput)
                             .getRoutes()
                             .get(0)
                             .getPaths();
@@ -421,55 +408,61 @@ class MapMatchingServiceTest {
                 @Test
                 @DisplayName("Should return a route that has correct infrastructure link one")
                 void shouldReturnRouteThatHasCorrectInfrastructureLinkOne(final SoftAssertions softAssertions) {
-                    final InfrastructureLinkDTO infrastructureLink = mapMatchingService.sendMapMatchingRequest(
-                                    routeGeometryInput,
-                                    routePointsInput
-                            )
+                    final InfrastructureLinkDTO infrastructureLink = mapMatchingService
+                            .sendMapMatchingRequest(routeGeometryInput, routePointsInput)
                             .getRoutes()
                             .get(0)
                             .getPaths()
                             .get(0);
 
-                    softAssertions.assertThat(infrastructureLink.getMapMatchingInfrastructureLinkId())
+                    softAssertions
+                            .assertThat(infrastructureLink.getMapMatchingInfrastructureLinkId())
                             .as("id")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ONE_ID);
-                    softAssertions.assertThat(infrastructureLink.getExternalLinkRef().getInfrastructureSource())
+                    softAssertions
+                            .assertThat(infrastructureLink.getExternalLinkRef().getInfrastructureSource())
                             .as("source")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ONE_SOURCE);
-                    softAssertions.assertThat(infrastructureLink.getExternalLinkRef().getExternalLinkId())
+                    softAssertions
+                            .assertThat(infrastructureLink.getExternalLinkRef().getExternalLinkId())
                             .as("externalId")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ONE_EXT_ID);
-                    softAssertions.assertThat(infrastructureLink.isTraversalForwards())
+                    softAssertions
+                            .assertThat(infrastructureLink.isTraversalForwards())
                             .as("traversalForwards")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ONE_TRAVERSAL_FORWARDS);
 
                     final LineString geometry = infrastructureLink.getGeometry();
 
                     final List<LngLatAlt> coordinates = geometry.getCoordinates();
-                    softAssertions.assertThat(coordinates)
-                            .as("coordinateCount")
-                            .hasSize(2);
+                    softAssertions.assertThat(coordinates).as("coordinateCount").hasSize(2);
 
                     final LngLatAlt coordinateOne = coordinates.get(0);
-                    softAssertions.assertThat(coordinateOne.getLongitude())
+                    softAssertions
+                            .assertThat(coordinateOne.getLongitude())
                             .as("coordinateOneLongitude")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ONE_COORDINATE_ONE_LNG);
-                    softAssertions.assertThat(coordinateOne.getLatitude())
+                    softAssertions
+                            .assertThat(coordinateOne.getLatitude())
                             .as("coordinateOneLatitude")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ONE_COORDINATE_ONE_LAT);
 
                     final LngLatAlt coordinateTwo = coordinates.get(1);
-                    softAssertions.assertThat(coordinateTwo.getLongitude())
+                    softAssertions
+                            .assertThat(coordinateTwo.getLongitude())
                             .as("coordinateTwoLongitude")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ONE_COORDINATE_TWO_LNG);
-                    softAssertions.assertThat(coordinateTwo.getLatitude())
+                    softAssertions
+                            .assertThat(coordinateTwo.getLatitude())
                             .as("coordinateTwoLatitude")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ONE_COORDINATE_TWO_LAT);
 
-                    softAssertions.assertThat(infrastructureLink.getDistance())
+                    softAssertions
+                            .assertThat(infrastructureLink.getDistance())
                             .as("distance")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ONE_DISTANCE);
-                    softAssertions.assertThat(infrastructureLink.getWeight())
+                    softAssertions
+                            .assertThat(infrastructureLink.getWeight())
                             .as("weight")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ONE_WEIGHT);
 
@@ -485,55 +478,61 @@ class MapMatchingServiceTest {
                 @Test
                 @DisplayName("Should return a route that has correct infrastructure link two")
                 void shouldReturnRouteThatHasCorrectInfrastructureLinkTwo(final SoftAssertions softAssertions) {
-                    final InfrastructureLinkDTO infrastructureLink = mapMatchingService.sendMapMatchingRequest(
-                                    routeGeometryInput,
-                                    routePointsInput
-                            )
+                    final InfrastructureLinkDTO infrastructureLink = mapMatchingService
+                            .sendMapMatchingRequest(routeGeometryInput, routePointsInput)
                             .getRoutes()
                             .get(0)
                             .getPaths()
                             .get(1);
 
-                    softAssertions.assertThat(infrastructureLink.getMapMatchingInfrastructureLinkId())
+                    softAssertions
+                            .assertThat(infrastructureLink.getMapMatchingInfrastructureLinkId())
                             .as("id")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_TWO_ID);
-                    softAssertions.assertThat(infrastructureLink.getExternalLinkRef().getInfrastructureSource())
+                    softAssertions
+                            .assertThat(infrastructureLink.getExternalLinkRef().getInfrastructureSource())
                             .as("source")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_TWO_SOURCE);
-                    softAssertions.assertThat(infrastructureLink.getExternalLinkRef().getExternalLinkId())
+                    softAssertions
+                            .assertThat(infrastructureLink.getExternalLinkRef().getExternalLinkId())
                             .as("externalId")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_TWO_EXT_ID);
-                    softAssertions.assertThat(infrastructureLink.isTraversalForwards())
+                    softAssertions
+                            .assertThat(infrastructureLink.isTraversalForwards())
                             .as("traversalForwards")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_TWO_TRAVERSAL_FORWARDS);
 
                     final LineString geometry = infrastructureLink.getGeometry();
 
                     final List<LngLatAlt> coordinates = geometry.getCoordinates();
-                    softAssertions.assertThat(coordinates)
-                            .as("coordinateCount")
-                            .hasSize(2);
+                    softAssertions.assertThat(coordinates).as("coordinateCount").hasSize(2);
 
                     final LngLatAlt coordinateOne = coordinates.get(0);
-                    softAssertions.assertThat(coordinateOne.getLongitude())
+                    softAssertions
+                            .assertThat(coordinateOne.getLongitude())
                             .as("coordinateOneLongitude")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_TWO_COORDINATE_ONE_LNG);
-                    softAssertions.assertThat(coordinateOne.getLatitude())
+                    softAssertions
+                            .assertThat(coordinateOne.getLatitude())
                             .as("coordinateOneLatitude")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_TWO_COORDINATE_ONE_LAT);
 
                     final LngLatAlt coordinateTwo = coordinates.get(1);
-                    softAssertions.assertThat(coordinateTwo.getLongitude())
+                    softAssertions
+                            .assertThat(coordinateTwo.getLongitude())
                             .as("coordinateTwoLongitude")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_TWO_COORDINATE_TWO_LNG);
-                    softAssertions.assertThat(coordinateTwo.getLatitude())
+                    softAssertions
+                            .assertThat(coordinateTwo.getLatitude())
                             .as("coordinateTwoLatitude")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_TWO_COORDINATE_TWO_LAT);
 
-                    softAssertions.assertThat(infrastructureLink.getDistance())
+                    softAssertions
+                            .assertThat(infrastructureLink.getDistance())
                             .as("distance")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_TWO_DISTANCE);
-                    softAssertions.assertThat(infrastructureLink.getWeight())
+                    softAssertions
+                            .assertThat(infrastructureLink.getWeight())
                             .as("weight")
                             .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_TWO_WEIGHT);
 

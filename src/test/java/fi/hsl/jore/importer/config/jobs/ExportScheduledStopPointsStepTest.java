@@ -1,5 +1,9 @@
 package fi.hsl.jore.importer.config.jobs;
 
+import static fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPointDirection.BACKWARD;
+import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT;
+import static org.assertj.db.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.BatchIntegrationTest;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPointDirection;
 import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
@@ -7,6 +11,8 @@ import fi.hsl.jore.importer.feature.jore4.repository.Jore4ValidityPeriodTestRepo
 import fi.hsl.jore.importer.feature.jore4.repository.ScheduledStopPointTestLocation;
 import fi.hsl.jore.importer.feature.jore4.repository.ValidityPeriodTargetTable;
 import io.vavr.collection.List;
+import java.time.LocalDate;
+import javax.sql.DataSource;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -21,27 +27,17 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
-import javax.sql.DataSource;
-import java.time.LocalDate;
-
-import static fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPointDirection.BACKWARD;
-import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT;
-import static org.assertj.db.api.Assertions.assertThat;
-
 @ContextConfiguration(classes = JobConfig.class)
-@Sql(scripts = {
-        "/sql/importer/drop_tables.sql",
-        "/sql/importer/populate_infrastructure_nodes.sql",
-        "/sql/importer/populate_places.sql",
-        "/sql/importer/populate_scheduled_stop_points.sql"
-})
 @Sql(
         scripts = {
-                "/sql/jore4/drop_tables.sql",
-                "/sql/jore4/populate_infrastructure_links.sql"
-        },
-        config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
-)
+            "/sql/importer/drop_tables.sql",
+            "/sql/importer/populate_infrastructure_nodes.sql",
+            "/sql/importer/populate_places.sql",
+            "/sql/importer/populate_scheduled_stop_points.sql"
+        })
+@Sql(
+        scripts = {"/sql/jore4/drop_tables.sql", "/sql/jore4/populate_infrastructure_links.sql"},
+        config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager"))
 @ExtendWith(SoftAssertionsExtension.class)
 class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
 
@@ -59,9 +55,10 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
 
     private static final List<String> STEPS = List.of("exportScheduledStopPointsStep");
 
-    private static final fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints IMPORTER_SCHEDULED_STOP_POINT = fi.hsl.jore.importer.jooq.network.Tables.SCHEDULED_STOP_POINTS;
-    private static final fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPoint JORE4_SCHEDULED_STOP_POINT = fi.hsl.jore.jore4.jooq.service_pattern.Tables.SCHEDULED_STOP_POINT;
-
+    private static final fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints IMPORTER_SCHEDULED_STOP_POINT =
+            fi.hsl.jore.importer.jooq.network.Tables.SCHEDULED_STOP_POINTS;
+    private static final fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPoint JORE4_SCHEDULED_STOP_POINT =
+            fi.hsl.jore.jore4.jooq.service_pattern.Tables.SCHEDULED_STOP_POINT;
 
     private final JdbcTemplate jdbcTemplate;
     private final Table importerTargetTable;
@@ -70,15 +67,16 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     private final Jore4ValidityPeriodTestRepository testRepository;
 
     @Autowired
-    ExportScheduledStopPointsStepTest(final @Qualifier("importerDataSource") DataSource importerDataSource,
-                                      final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
+    ExportScheduledStopPointsStepTest(
+            final @Qualifier("importerDataSource") DataSource importerDataSource,
+            final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
         this.jdbcTemplate = new JdbcTemplate(jore4DataSource);
         this.importerTargetTable = new Table(importerDataSource, "network.scheduled_stop_points");
         this.jore4ScheduledStopPointTargetTable = new Table(jore4DataSource, "service_pattern.scheduled_stop_point");
-        this.jore4VehicleModeTargetTable = new Table(jore4DataSource, "service_pattern.vehicle_mode_on_scheduled_stop_point");
-        this.testRepository = new Jore4ValidityPeriodTestRepository(jore4DataSource,
-                ValidityPeriodTargetTable.SCHEDULED_STOP_POINT
-        );
+        this.jore4VehicleModeTargetTable =
+                new Table(jore4DataSource, "service_pattern.vehicle_mode_on_scheduled_stop_point");
+        this.testRepository =
+                new Jore4ValidityPeriodTestRepository(jore4DataSource, ValidityPeriodTargetTable.SCHEDULED_STOP_POINT);
     }
 
     @Test
@@ -138,22 +136,18 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldSaveNewScheduledStopPointWithCorrectMeasuredLocation(SoftAssertions softAssertions) {
         runSteps(STEPS);
 
-        //I used JDCBTemplate because there was no easy way to write
-        //assertions for custom data types (such as geography) with AssertJ-DB.
-        final ScheduledStopPointTestLocation measuredLocation = jdbcTemplate.query(
-                ScheduledStopPointTestLocation.SQL_QUERY_GET_MEASURED_LOCATION,
-                (resultSet, i) -> new ScheduledStopPointTestLocation(
-                        resultSet.getDouble(ScheduledStopPointTestLocation.SQL_ALIAS_X_COORDINATE),
-                        resultSet.getDouble(ScheduledStopPointTestLocation.SQL_ALIAS_Y_COORDINATE)
-                )
-        ).get(0);
+        // I used JDCBTemplate because there was no easy way to write
+        // assertions for custom data types (such as geography) with AssertJ-DB.
+        final ScheduledStopPointTestLocation measuredLocation = jdbcTemplate
+                .query(
+                        ScheduledStopPointTestLocation.SQL_QUERY_GET_MEASURED_LOCATION,
+                        (resultSet, i) -> new ScheduledStopPointTestLocation(
+                                resultSet.getDouble(ScheduledStopPointTestLocation.SQL_ALIAS_X_COORDINATE),
+                                resultSet.getDouble(ScheduledStopPointTestLocation.SQL_ALIAS_Y_COORDINATE)))
+                .get(0);
 
-        softAssertions.assertThat(measuredLocation.getX())
-                .as("x")
-                .isEqualTo(X_COORDINATE);
-        softAssertions.assertThat(measuredLocation.getY())
-                .as("y")
-                .isEqualTo(Y_COORDINATE);
+        softAssertions.assertThat(measuredLocation.getX()).as("x").isEqualTo(X_COORDINATE);
+        softAssertions.assertThat(measuredLocation.getY()).as("y").isEqualTo(Y_COORDINATE);
     }
 
     @Test
@@ -209,7 +203,8 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should save the exported scheduled stop point vehicle mode with the generated scheduled stop point id")
+    @DisplayName(
+            "Should save the exported scheduled stop point vehicle mode with the generated scheduled stop point id")
     void shouldSaveExportedScheduledStopPointVehicleModeWithGeneratedScheduledStopPointId() {
         runSteps(STEPS);
 

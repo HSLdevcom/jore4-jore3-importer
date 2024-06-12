@@ -7,11 +7,7 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
-/**
- * Writes the timing place objects to the Jore 4 database.
- */
+/** Writes the timing place objects to the Jore 4 database. */
 @Component
 public class TimingPlaceExportWriter implements ItemWriter<Jore4TimingPlace> {
 

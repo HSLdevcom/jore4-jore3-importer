@@ -10,5 +10,4 @@ import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.generated.S
 @VisibleForTesting
 public interface IScheduledStopPointTestRepository
         extends IBasicCrudRepository<ScheduledStopPointPK, ScheduledStopPoint, PersistableScheduledStopPoint>,
-                IHistoryRepository<ScheduledStopPoint> {
-}
+                IHistoryRepository<ScheduledStopPoint> {}

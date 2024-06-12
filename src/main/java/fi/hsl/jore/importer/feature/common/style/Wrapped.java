@@ -13,7 +13,5 @@ import org.immutables.value.Value;
         // Make generated public, leave underscored as package private
         visibility = Value.Style.ImplementationVisibility.PUBLIC,
         // Seems unnecessary to have builder or superfluous copy method
-        defaults = @Value.Immutable(builder = false,
-                                    copy = false))
-public @interface Wrapped {
-}
+        defaults = @Value.Immutable(builder = false, copy = false))
+public @interface Wrapped {}

@@ -5,14 +5,12 @@ import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.jore3.entity.JrScheduledStopPoint;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.Jore3ScheduledStopPoint;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.item.ItemProcessor;
 
-import java.util.Optional;
-
 /**
- * Transforms the input data read from the source database into
- * a format which can be inserted into the target database.
+ * Transforms the input data read from the source database into a format which can be inserted into the target database.
  */
 public class ScheduledStopPointImportProcessor implements ItemProcessor<JrScheduledStopPoint, Jore3ScheduledStopPoint> {
 
@@ -27,8 +25,7 @@ public class ScheduledStopPointImportProcessor implements ItemProcessor<JrSchedu
                 constructShortId(input),
                 // trim whitespace entries to empty (null)
                 input.placeExternalId().filter(StringUtils::isNotBlank).map(ExternalId::of),
-                input.usageInRoutes()
-        );
+                input.usageInRoutes());
     }
 
     private Optional<String> constructShortId(final JrScheduledStopPoint input) {

@@ -1,12 +1,9 @@
 package fi.hsl.jore.importer.feature.jore4.entity;
 
 import fi.hsl.jore.importer.feature.jore3.field.LegacyPublicTransportDestination;
-
 import java.util.Arrays;
 
-/**
- * Contains the HSL municipality code values used in Routes and Lines in the Jore 4 database.
- */
+/** Contains the HSL municipality code values used in Routes and Lines in the Jore 4 database. */
 public enum LegacyHslMunicipalityCode {
     LEGACY_NOT_USED('0', "legacy_not_used"),
     HELSINKI('1', "helsinki"),
@@ -38,17 +35,16 @@ public enum LegacyHslMunicipalityCode {
     /**
      * Create a HslMunicipalityCode from LegacyPublicTransportDestination.
      *
-     * @throws Error If no equivalent value is found.
-     *         Notably, if called with LegacyPublicTransportDestination.UNKNOWN.
+     * @throws Error If no equivalent value is found. Notably, if called with LegacyPublicTransportDestination.UNKNOWN.
      */
     public static LegacyHslMunicipalityCode of(final LegacyPublicTransportDestination val) {
         return LegacyHslMunicipalityCode.of(val.getValue());
     }
 
     public static LegacyHslMunicipalityCode of(final Character val) {
-         return Arrays.stream(values())
-            .filter(type -> type.value.equals(val))
-            .findFirst()
-            .orElseThrow();
+        return Arrays.stream(values())
+                .filter(type -> type.value.equals(val))
+                .findFirst()
+                .orElseThrow();
     }
 }

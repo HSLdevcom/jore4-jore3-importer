@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.batch.route;
 
 import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
 import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPattern;
+import javax.sql.DataSource;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-
-import javax.sql.DataSource;
 
 @Component
 public class JourneyPatternExportReader {
@@ -21,8 +20,9 @@ public class JourneyPatternExportReader {
     private final String sql;
 
     @Autowired
-    public JourneyPatternExportReader(@Qualifier("importerDataSource") final DataSource dataSource,
-                                      @Value(JourneyPatternExportMapper.SQL_PATH) final Resource sqlResource) {
+    public JourneyPatternExportReader(
+            @Qualifier("importerDataSource") final DataSource dataSource,
+            @Value(JourneyPatternExportMapper.SQL_PATH) final Resource sqlResource) {
         this.dataSource = dataSource;
         this.sql = ResourceUtil.fromResource(sqlResource);
     }

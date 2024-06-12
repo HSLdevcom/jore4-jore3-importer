@@ -10,8 +10,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Inherited
 public @interface JoreTable {
-    /**
-     * @return Name of the table
-     */
+    /** @return Name of the table */
     String name() default "";
 }

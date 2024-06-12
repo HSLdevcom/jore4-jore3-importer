@@ -6,5 +6,4 @@ import org.immutables.value.Value;
 
 @Value.Immutable
 @Wrapped
-public abstract class _RouteDirectionPK extends PK {
-}
+public abstract class _RouteDirectionPK extends PK {}

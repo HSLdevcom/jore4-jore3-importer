@@ -1,11 +1,7 @@
 package fi.hsl.jore.importer.feature.jore4.entity;
 
-/**
- * Specifies the direction of the scheduled stop point
- * on an infrastructure link.
- */
+/** Specifies the direction of the scheduled stop point on an infrastructure link. */
 public enum Jore4ScheduledStopPointDirection {
-
     BACKWARD("backward"),
     FORWARD("forward");
 
@@ -15,9 +11,7 @@ public enum Jore4ScheduledStopPointDirection {
         this.value = value;
     }
 
-    /**
-     * @return The value which is inserted into the Jore 4 database.
-     */
+    /** @return The value which is inserted into the Jore 4 database. */
     public String getValue() {
         return value;
     }

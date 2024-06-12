@@ -1,6 +1,5 @@
 package fi.hsl.jore.importer.feature.network.route_link.repository;
 
-
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.network.route_link.dto.PersistableRouteLink;
 import fi.hsl.jore.importer.feature.network.route_link.dto.RouteLink;
@@ -11,6 +10,8 @@ import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteLinksRecord;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
+import java.util.Optional;
+import java.util.UUID;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Repository
-public class RouteLinkRepository
-        implements IRouteLinkTestRepository {
+public class RouteLinkRepository implements IRouteLinkTestRepository {
 
     private static final NetworkRouteLinks LINKS = NetworkRouteLinks.NETWORK_ROUTE_LINKS;
-    private static final NetworkRouteLinksWithHistory HISTORY_VIEW = NetworkRouteLinksWithHistory.NETWORK_ROUTE_LINKS_WITH_HISTORY;
+    private static final NetworkRouteLinksWithHistory HISTORY_VIEW =
+            NetworkRouteLinksWithHistory.NETWORK_ROUTE_LINKS_WITH_HISTORY;
     private static final TableField<NetworkRouteLinksRecord, UUID> PRIMARY_KEY = LINKS.NETWORK_ROUTE_LINK_ID;
 
     private final DSLContext db;
@@ -66,11 +64,10 @@ public class RouteLinkRepository
     @Override
     @Transactional
     public RouteLinkPK update(final RouteLink link) {
-        final NetworkRouteLinksRecord r =
-                Optional.ofNullable(db.selectFrom(LINKS)
-                                      .where(PRIMARY_KEY.eq(link.pk().value()))
-                                      .fetchAny())
-                        .orElseThrow();
+        final NetworkRouteLinksRecord r = Optional.ofNullable(db.selectFrom(LINKS)
+                        .where(PRIMARY_KEY.eq(link.pk().value()))
+                        .fetchAny())
+                .orElseThrow();
 
         r.setNetworkRouteLinkExtId(link.externalId().value());
         r.setInfrastructureLinkId(link.link().value());
@@ -98,57 +95,50 @@ public class RouteLinkRepository
     @Transactional(readOnly = true)
     public Optional<RouteLink> findById(final RouteLinkPK id) {
         return db.selectFrom(LINKS)
-                 .where(PRIMARY_KEY.eq(id.value()))
-                 .fetchStream()
-                 .map(RouteLink::from)
-                 .findFirst();
+                .where(PRIMARY_KEY.eq(id.value()))
+                .fetchStream()
+                .map(RouteLink::from)
+                .findFirst();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<RouteLink> findByExternalId(final ExternalId externalId) {
         return db.selectFrom(LINKS)
-                 .where(LINKS.NETWORK_ROUTE_LINK_EXT_ID.eq(externalId.value()))
-                 .fetchStream()
-                 .map(RouteLink::from)
-                 .findFirst();
+                .where(LINKS.NETWORK_ROUTE_LINK_EXT_ID.eq(externalId.value()))
+                .fetchStream()
+                .map(RouteLink::from)
+                .findFirst();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<RouteLink> findAll() {
-        return db.selectFrom(LINKS)
-                 .fetchStream()
-                 .map(RouteLink::from)
-                 .collect(List.collector());
+        return db.selectFrom(LINKS).fetchStream().map(RouteLink::from).collect(List.collector());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Set<RouteLinkPK> findAllIds() {
         return db.select(PRIMARY_KEY)
-                 .from(LINKS)
-                 .fetchStream()
-                 .map(row -> RouteLinkPK.of(row.value1()))
-                 .collect(HashSet.collector());
+                .from(LINKS)
+                .fetchStream()
+                .map(row -> RouteLinkPK.of(row.value1()))
+                .collect(HashSet.collector());
     }
 
     @Override
     @Transactional(readOnly = true)
     public int count() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                 .from(LINKS)
-                 .fetchOne(0, int.class);
+        return db.selectCount().from(LINKS).fetchOne(0, int.class);
     }
 
     @Override
     @Transactional(readOnly = true)
     public int countHistory() {
         //noinspection ConstantConditions
-        return db.selectCount()
-                 .from(HISTORY_VIEW)
-                 .fetchOne(0, int.class);
+        return db.selectCount().from(HISTORY_VIEW).fetchOne(0, int.class);
     }
 
     @Override
@@ -167,9 +157,9 @@ public class RouteLinkRepository
     @Transactional(readOnly = true)
     public List<RouteLink> findFromHistory() {
         return db.selectFrom(HISTORY_VIEW)
-                 .orderBy(HISTORY_VIEW.NETWORK_ROUTE_LINK_SYS_PERIOD.asc())
-                 .fetchStream()
-                 .map(RouteLink::from)
-                 .collect(List.collector());
+                .orderBy(HISTORY_VIEW.NETWORK_ROUTE_LINK_SYS_PERIOD.asc())
+                .fetchStream()
+                .map(RouteLink::from)
+                .collect(List.collector());
     }
 }

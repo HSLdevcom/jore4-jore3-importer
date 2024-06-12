@@ -11,11 +11,7 @@ import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.Infrastru
 import org.immutables.value.Value;
 
 @Value.Immutable
-public interface Link
-        extends IHasPK<LinkPK>,
-                IHasLinkExternalId,
-                IHasSystemTime,
-                CommonFields {
+public interface Link extends IHasPK<LinkPK>, IHasLinkExternalId, IHasSystemTime, CommonFields {
 
     NodePK startNode();
 
@@ -23,25 +19,25 @@ public interface Link
 
     static Link of(final InfrastructureLinksRecord record) {
         return ImmutableLink.builder()
-                            .pk(LinkPK.of(record.getInfrastructureLinkId()))
-                            .externalId(ExternalId.of(record.getInfrastructureLinkExtId()))
-                            .networkType(NetworkType.of(record.getInfrastructureNetworkType()))
-                            .startNode(NodePK.of(record.getInfrastructureLinkStartNode()))
-                            .endNode(NodePK.of(record.getInfrastructureLinkEndNode()))
-                            .geometry(record.getInfrastructureLinkGeog())
-                            .systemTime(record.getInfrastructureLinkSysPeriod())
-                            .build();
+                .pk(LinkPK.of(record.getInfrastructureLinkId()))
+                .externalId(ExternalId.of(record.getInfrastructureLinkExtId()))
+                .networkType(NetworkType.of(record.getInfrastructureNetworkType()))
+                .startNode(NodePK.of(record.getInfrastructureLinkStartNode()))
+                .endNode(NodePK.of(record.getInfrastructureLinkEndNode()))
+                .geometry(record.getInfrastructureLinkGeog())
+                .systemTime(record.getInfrastructureLinkSysPeriod())
+                .build();
     }
 
     static Link of(final InfrastructureLinksWithHistoryRecord record) {
         return ImmutableLink.builder()
-                            .pk(LinkPK.of(record.getInfrastructureLinkId()))
-                            .externalId(ExternalId.of(record.getInfrastructureLinkExtId()))
-                            .networkType(NetworkType.of(record.getInfrastructureNetworkType()))
-                            .startNode(NodePK.of(record.getInfrastructureLinkStartNode()))
-                            .endNode(NodePK.of(record.getInfrastructureLinkEndNode()))
-                            .geometry(record.getInfrastructureLinkGeog())
-                            .systemTime(record.getInfrastructureLinkSysPeriod())
-                            .build();
+                .pk(LinkPK.of(record.getInfrastructureLinkId()))
+                .externalId(ExternalId.of(record.getInfrastructureLinkExtId()))
+                .networkType(NetworkType.of(record.getInfrastructureNetworkType()))
+                .startNode(NodePK.of(record.getInfrastructureLinkStartNode()))
+                .endNode(NodePK.of(record.getInfrastructureLinkEndNode()))
+                .geometry(record.getInfrastructureLinkGeog())
+                .systemTime(record.getInfrastructureLinkSysPeriod())
+                .build();
     }
 }

@@ -24,9 +24,10 @@ public class MapMatchingConfig {
         }
 
         @Bean
-        public IMapMatchingService mapMatchingService(@Value("#{environment['map.matching.api.baseUrl']}") final String mapMatchingApiUrl,
-                                                      final ObjectMapper objectMapper,
-                                                      final RestTemplate restTemplate) {
+        public IMapMatchingService mapMatchingService(
+                @Value("#{environment['map.matching.api.baseUrl']}") final String mapMatchingApiUrl,
+                final ObjectMapper objectMapper,
+                final RestTemplate restTemplate) {
             return new MapMatchingService(mapMatchingApiUrl, objectMapper, restTemplate);
         }
     }
@@ -41,4 +42,3 @@ public class MapMatchingConfig {
         }
     }
 }
-

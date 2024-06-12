@@ -1,9 +1,12 @@
 package fi.hsl.jore.importer.feature.network.route_point.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import io.vavr.collection.List;
+import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.DisplayName;
@@ -13,10 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
-
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @IntTest
 class RoutePointExportRepositoryTest {
@@ -42,24 +41,26 @@ class RoutePointExportRepositoryTest {
             @Test
             @DisplayName("Should return an empty list")
             void shouldReturnEmptyList() {
-                final List<ImporterRoutePoint> routePoints = repository.findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID);
+                final List<ImporterRoutePoint> routePoints =
+                        repository.findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID);
                 assertThat(routePoints).isEmpty();
             }
         }
 
         @Nested
         @DisplayName("When the source tables have one route with three route points")
-        @Sql(scripts = {
-                "/sql/importer/drop_tables.sql",
-                "/sql/importer/populate_infrastructure_nodes.sql",
-                "/sql/importer/populate_lines.sql",
-                "/sql/importer/populate_routes.sql",
-                "/sql/importer/populate_route_directions_with_journey_pattern_jore4_ids.sql",
-                "/sql/importer/populate_route_points_for_jore4_export.sql",
-                "/sql/importer/populate_route_stop_points_for_jore4_export.sql",
-                "/sql/importer/populate_places.sql",
-                "/sql/importer/populate_scheduled_stop_points_for_jore4_export.sql"
-        })
+        @Sql(
+                scripts = {
+                    "/sql/importer/drop_tables.sql",
+                    "/sql/importer/populate_infrastructure_nodes.sql",
+                    "/sql/importer/populate_lines.sql",
+                    "/sql/importer/populate_routes.sql",
+                    "/sql/importer/populate_route_directions_with_journey_pattern_jore4_ids.sql",
+                    "/sql/importer/populate_route_points_for_jore4_export.sql",
+                    "/sql/importer/populate_route_stop_points_for_jore4_export.sql",
+                    "/sql/importer/populate_places.sql",
+                    "/sql/importer/populate_scheduled_stop_points_for_jore4_export.sql"
+                })
         @ExtendWith(SoftAssertionsExtension.class)
         class WhenSourceTablesHaveOneRouteWithThreeRoutePoints {
 
@@ -89,118 +90,138 @@ class RoutePointExportRepositoryTest {
             @Test
             @DisplayName("Should return a list that has three importer route points")
             void shouldReturnListThatHasThreeImporterRoutePoints() {
-                final List<ImporterRoutePoint> routePoints = repository.findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID);
+                final List<ImporterRoutePoint> routePoints =
+                        repository.findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID);
                 assertThat(routePoints).hasSize(4);
             }
 
             @Test
             @DisplayName("Should return the correct information of the first route point")
             void shouldReturnCorrectInformationOfFirstRoutePoint(final SoftAssertions softAssertions) {
-                final ImporterRoutePoint firstRoutePoint = repository.findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID)
+                final ImporterRoutePoint firstRoutePoint = repository
+                        .findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID)
                         .get(0);
 
-                softAssertions.assertThat(firstRoutePoint.location().getX())
+                softAssertions
+                        .assertThat(firstRoutePoint.location().getX())
                         .as("locationX")
                         .isEqualTo(FIRST_ROUTE_POINT_LOCATION_X);
-                softAssertions.assertThat(firstRoutePoint.location().getY())
+                softAssertions
+                        .assertThat(firstRoutePoint.location().getY())
                         .as("locationY")
                         .isEqualTo(FIRST_ROUTE_POINT_LOCATION_Y);
 
-                softAssertions.assertThat(firstRoutePoint.orderNumber())
+                softAssertions
+                        .assertThat(firstRoutePoint.orderNumber())
                         .as("orderNumber")
                         .isEqualTo(FIRST_ROUTE_POINT_ORDER_NUMBER);
 
-                final Point projectedLocation = firstRoutePoint.projectedLocation().get();
-                softAssertions.assertThat(projectedLocation.getX())
+                final Point projectedLocation =
+                        firstRoutePoint.projectedLocation().get();
+                softAssertions
+                        .assertThat(projectedLocation.getX())
                         .as("projectedLocationX")
                         .isEqualTo(FIRST_ROUTE_POINT_PROJECTED_LOCATION_X);
-                softAssertions.assertThat(projectedLocation.getY())
+                softAssertions
+                        .assertThat(projectedLocation.getY())
                         .as("projectedLocationY")
                         .isEqualTo(FIRST_ROUTE_POINT_PROJECTED_LOCATION_Y);
 
-                softAssertions.assertThat(firstRoutePoint.stopPointElyNumber())
+                softAssertions
+                        .assertThat(firstRoutePoint.stopPointElyNumber())
                         .as("stopPointElyNumber")
                         .contains(FIRST_ROUTE_POINT_STOP_POINT_ELY_NUMBER);
 
-                softAssertions.assertThat(firstRoutePoint.stopPointShortId())
+                softAssertions
+                        .assertThat(firstRoutePoint.stopPointShortId())
                         .as("stopPointShortId")
                         .contains(FIRST_ROUTE_POINT_STOP_POINT_SHORT_ID);
 
-                softAssertions.assertThat(firstRoutePoint.type())
-                        .as("type")
-                        .isEqualTo(FIRST_ROUTE_POINT_TYPE);
+                softAssertions.assertThat(firstRoutePoint.type()).as("type").isEqualTo(FIRST_ROUTE_POINT_TYPE);
             }
 
             @Test
             @DisplayName("Should return the correct information of the second route point")
             void shouldReturnCorrectInformationOfSecondRoutePoint(final SoftAssertions softAssertions) {
-                final ImporterRoutePoint secondRoutePoint = repository.findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID)
+                final ImporterRoutePoint secondRoutePoint = repository
+                        .findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID)
                         .get(1);
 
-                softAssertions.assertThat(secondRoutePoint.location().getX())
+                softAssertions
+                        .assertThat(secondRoutePoint.location().getX())
                         .as("locationX")
                         .isEqualTo(SECOND_ROUTE_POINT_LOCATION_X);
-                softAssertions.assertThat(secondRoutePoint.location().getY())
+                softAssertions
+                        .assertThat(secondRoutePoint.location().getY())
                         .as("locationY")
                         .isEqualTo(SECOND_ROUTE_POINT_LOCATION_Y);
 
-                softAssertions.assertThat(secondRoutePoint.orderNumber())
+                softAssertions
+                        .assertThat(secondRoutePoint.orderNumber())
                         .as("orderNumber")
                         .isEqualTo(SECOND_ROUTE_POINT_ORDER_NUMBER);
 
-                softAssertions.assertThat(secondRoutePoint.projectedLocation())
+                softAssertions
+                        .assertThat(secondRoutePoint.projectedLocation())
                         .as("projectedLocation")
                         .isEmpty();
 
-                softAssertions.assertThat(secondRoutePoint.stopPointElyNumber())
+                softAssertions
+                        .assertThat(secondRoutePoint.stopPointElyNumber())
                         .as("stopPointElyNumber")
                         .isEmpty();
 
-                softAssertions.assertThat(secondRoutePoint.stopPointShortId())
+                softAssertions
+                        .assertThat(secondRoutePoint.stopPointShortId())
                         .as("stopPointShortId")
                         .isEmpty();
 
-                softAssertions.assertThat(secondRoutePoint.type())
-                        .as("type")
-                        .isEqualTo(SECOND_ROUTE_POINT_TYPE);
+                softAssertions.assertThat(secondRoutePoint.type()).as("type").isEqualTo(SECOND_ROUTE_POINT_TYPE);
             }
 
             @Test
             @DisplayName("Should return the correct information of the third route point")
             void shouldReturnCorrectInformationOfThirdRoutePoint(final SoftAssertions softAssertions) {
-                final ImporterRoutePoint thirdRoutePoint = repository.findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID)
+                final ImporterRoutePoint thirdRoutePoint = repository
+                        .findImporterRoutePointsByRouteDirectionId(ROUTE_DIRECTION_ID)
                         .get(2);
 
-                softAssertions.assertThat(thirdRoutePoint.location().getX())
+                softAssertions
+                        .assertThat(thirdRoutePoint.location().getX())
                         .as("locationX")
                         .isEqualTo(THIRD_ROUTE_POINT_LOCATION_X);
-                softAssertions.assertThat(thirdRoutePoint.location().getY())
+                softAssertions
+                        .assertThat(thirdRoutePoint.location().getY())
                         .as("locationY")
                         .isEqualTo(THIRD_ROUTE_POINT_LOCATION_Y);
 
-                softAssertions.assertThat(thirdRoutePoint.orderNumber())
+                softAssertions
+                        .assertThat(thirdRoutePoint.orderNumber())
                         .as("orderNumber")
                         .isEqualTo(THIRD_ROUTE_POINT_ORDER_NUMBER);
 
-                final Point projectedLocation = thirdRoutePoint.projectedLocation().get();
-                softAssertions.assertThat(projectedLocation.getX())
+                final Point projectedLocation =
+                        thirdRoutePoint.projectedLocation().get();
+                softAssertions
+                        .assertThat(projectedLocation.getX())
                         .as("projectedLocationX")
                         .isEqualTo(THIRD_ROUTE_POINT_PROJECTED_LOCATION_X);
-                softAssertions.assertThat(projectedLocation.getY())
+                softAssertions
+                        .assertThat(projectedLocation.getY())
                         .as("projectedLocationY")
                         .isEqualTo(THIRD_ROUTE_POINT_PROJECTED_LOCATION_Y);
 
-                softAssertions.assertThat(thirdRoutePoint.stopPointElyNumber())
+                softAssertions
+                        .assertThat(thirdRoutePoint.stopPointElyNumber())
                         .as("stopPointElyNumber")
                         .contains(THIRD_ROUTE_POINT_STOP_POINT_ELY_NUMBER);
 
-                softAssertions.assertThat(thirdRoutePoint.stopPointShortId())
+                softAssertions
+                        .assertThat(thirdRoutePoint.stopPointShortId())
                         .as("stopPointShortId")
                         .contains(THIRD_ROUTE_POINT_STOP_POINT_SHORT_ID);
 
-                softAssertions.assertThat(thirdRoutePoint.type())
-                        .as("type")
-                        .isEqualTo(THIRD_ROUTE_POINT_TYPE);
+                softAssertions.assertThat(thirdRoutePoint.type()).as("type").isEqualTo(THIRD_ROUTE_POINT_TYPE);
             }
         }
     }

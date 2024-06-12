@@ -1,10 +1,6 @@
 package fi.hsl.jore.importer.feature.mapmatching.dto.response;
 
-/**
- * Contains the information that's returned by the
- * map matching API when the map matching request
- * failed.
- */
+/** Contains the information that's returned by the map matching API when the map matching request failed. */
 public class MapMatchingErrorResponseDTO {
 
     private String code;

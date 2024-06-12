@@ -1,12 +1,5 @@
 package fi.hsl.jore.importer.feature.jore3.field;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import static fi.hsl.jore.importer.feature.jore3.field.LegacyPublicTransportDestination.ESPOO;
 import static fi.hsl.jore.importer.feature.jore3.field.LegacyPublicTransportDestination.HELSINKI;
 import static fi.hsl.jore.importer.feature.jore3.field.LegacyPublicTransportDestination.KIRKKONUMMI_SIUNTIO;
@@ -21,6 +14,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
 public class EncodedIdentifierTest {
 
     private static final boolean IS_PRIMARY = true;
@@ -30,8 +29,9 @@ public class EncodedIdentifierTest {
     private static final boolean IS_PRODUCTION = false;
 
     private static final Optional<Short> NO_HIDDEN_VARIANT = Optional.empty();
+
     private static final Optional<Short> hasHiddenVariant(final int value) {
-        return Optional.of((short)value);
+        return Optional.of((short) value);
     }
 
     private static Stream<Arguments> identifierAndPredicates() {
@@ -93,38 +93,28 @@ public class EncodedIdentifierTest {
                 // Rautatientori - Jokivarsi - Nikkilä - Pornainen - Halkia
                 arguments("9787A4", TUUSULA_KERAVA_SIPOO, "787A", IS_VARIANT, IS_PRODUCTION, hasHiddenVariant(4)),
                 // Rautatientori-Kuninkaanmäki-Nikkilä-Hinthaara-Porvoo
-                arguments("9788KV", TUUSULA_KERAVA_SIPOO, "788KV", IS_VARIANT, IS_PRODUCTION, NO_HIDDEN_VARIANT)
-        );
+                arguments("9788KV", TUUSULA_KERAVA_SIPOO, "788KV", IS_VARIANT, IS_PRODUCTION, NO_HIDDEN_VARIANT));
     }
 
     @ParameterizedTest
     @MethodSource("identifierAndPredicates")
-    public void parseJoreIdentifiers(final String id,
-                                     final LegacyPublicTransportDestination destination,
-                                     final String displayId,
-                                     final boolean isPrimary,
-                                     final boolean isTest,
-                                     final Optional<Short> hiddenVariant) {
+    public void parseJoreIdentifiers(
+            final String id,
+            final LegacyPublicTransportDestination destination,
+            final String displayId,
+            final boolean isPrimary,
+            final boolean isTest,
+            final Optional<Short> hiddenVariant) {
         final LineId lineId = LineId.from(id);
 
-        assertThat("destination is correct",
-                   lineId.destination(),
-                   is(destination));
+        assertThat("destination is correct", lineId.destination(), is(destination));
 
-        assertThat("displayed identifier is correct",
-                   lineId.displayId(),
-                   is(displayId));
+        assertThat("displayed identifier is correct", lineId.displayId(), is(displayId));
 
-        assertThat("priority flag is correct",
-                   lineId.primary(),
-                   is(isPrimary));
+        assertThat("priority flag is correct", lineId.primary(), is(isPrimary));
 
-        assertThat("test flag is correct",
-                   lineId.test(),
-                   is(isTest));
+        assertThat("test flag is correct", lineId.test(), is(isTest));
 
-        assertThat("hidden variant is correct",
-                   lineId.hiddenVariantValue(),
-                   is(hiddenVariant));
+        assertThat("hidden variant is correct", lineId.hiddenVariantValue(), is(hiddenVariant));
     }
 }

@@ -10,11 +10,10 @@ public interface SingleRouteLinkAndParent {
 
     LastLinkAttributes attributes();
 
-    static SingleRouteLinkAndParent of(final JrRouteLink routeLink,
-                                       final LastLinkAttributes attributes) {
+    static SingleRouteLinkAndParent of(final JrRouteLink routeLink, final LastLinkAttributes attributes) {
         return ImmutableSingleRouteLinkAndParent.builder()
-                                                .routeLink(routeLink)
-                                                .attributes(attributes)
-                                                .build();
+                .routeLink(routeLink)
+                .attributes(attributes)
+                .build();
     }
 }
