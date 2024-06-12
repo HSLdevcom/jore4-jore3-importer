@@ -46,7 +46,7 @@ public class MapMatchingService implements IMapMatchingService {
 
             final MapMatchingSuccessResponseDTO mapMatchingResponse = getSuccessResponse(httpResponse);
             final String mapMatchingResponseCode = mapMatchingResponse.getCode();
-            if (!mapMatchingResponseCode.equals(RESPONSE_CODE_OK)) {
+            if (!RESPONSE_CODE_OK.equals(mapMatchingResponseCode)) {
                 final String errorMessage = String.format(
                         "The map matching response status: %s was returned for the route direction: %s",
                         mapMatchingResponseCode, routeGeometry.routeDirectionId());
