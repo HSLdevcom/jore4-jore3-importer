@@ -21,10 +21,9 @@ import fi.hsl.jore.importer.feature.jore3.mixin.IHasRouteId;
 import fi.hsl.jore.importer.feature.jore3.mixin.IHasRouteLinkId;
 import fi.hsl.jore.importer.feature.jore3.mixin.IHasTransitType;
 import fi.hsl.jore.importer.feature.jore3.style.JoreDtoStyle;
-import org.immutables.value.Value;
-
 import java.time.LocalDate;
 import java.util.Optional;
+import org.immutables.value.Value;
 
 @Value.Immutable
 @JoreDtoStyle
@@ -43,8 +42,7 @@ public interface JrRouteLink
     @JoreColumn(name = "suuvoimast")
     LocalDate validFrom();
 
-    @JoreColumn(name = "relpysakki",
-                example = "E")
+    @JoreColumn(name = "relpysakki", example = "E")
     NodeType startNodeType();
 
     // TODO: rl_relvpistaikpys
@@ -80,35 +78,32 @@ public interface JrRouteLink
 
     @Value.Derived
     default JrRouteDirectionPk fkRouteDirection() {
-        return JrRouteDirectionPk.of(routeId(),
-                                     direction(),
-                                     validFrom());
+        return JrRouteDirectionPk.of(routeId(), direction(), validFrom());
     }
 
     @Value.Derived
     default JrLinkPk fkLink() {
-        return JrLinkPk.of(transitType(),
-                           startNode(),
-                           endNode());
+        return JrLinkPk.of(transitType(), startNode(), endNode());
     }
 
-    static JrRouteLink of(final RouteLinkId routeLinkId,
-                          final int orderNumber,
-                          final RouteId routeId,
-                          final Direction direction,
-                          final LocalDate validFrom,
-                          final TransitType transitType,
-                          final NodeId startNode,
-                          final NodeId endNode,
-                          final NodeType startNodeType,
-                          final RegulatedTimingPointStatus regulatedTimingPointStatus,
-                          final StopPointPurpose stopPointPurpose,
-                          final boolean hastusStopPoint,
-                          final boolean includeInTimetable,
-                          final boolean viaPoint,
-                          final Optional<String> viaName,
-                          final Optional<String> viaNameSwedish,
-                          final Optional<Integer> timetableColumn) {
+    static JrRouteLink of(
+            final RouteLinkId routeLinkId,
+            final int orderNumber,
+            final RouteId routeId,
+            final Direction direction,
+            final LocalDate validFrom,
+            final TransitType transitType,
+            final NodeId startNode,
+            final NodeId endNode,
+            final NodeType startNodeType,
+            final RegulatedTimingPointStatus regulatedTimingPointStatus,
+            final StopPointPurpose stopPointPurpose,
+            final boolean hastusStopPoint,
+            final boolean includeInTimetable,
+            final boolean viaPoint,
+            final Optional<String> viaName,
+            final Optional<String> viaNameSwedish,
+            final Optional<Integer> timetableColumn) {
         return ImmutableJrRouteLink.builder()
                 // Fields of this route link
                 .routeLinkId(routeLinkId)

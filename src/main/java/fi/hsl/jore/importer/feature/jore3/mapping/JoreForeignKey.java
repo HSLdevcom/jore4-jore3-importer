@@ -10,8 +10,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Inherited
 public @interface JoreForeignKey {
-    /**
-     * @return Name of the referred table
-     */
+    /** @return Name of the referred table */
     String targetTable() default "";
 }

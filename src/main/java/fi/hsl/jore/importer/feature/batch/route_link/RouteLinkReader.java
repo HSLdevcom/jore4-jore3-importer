@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.batch.route_link;
 
 import fi.hsl.jore.importer.feature.batch.route_link.dto.SingleRouteLinkAndParent;
 import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
+import javax.sql.DataSource;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-
-import javax.sql.DataSource;
 
 @Component
 public class RouteLinkReader {
@@ -21,8 +20,9 @@ public class RouteLinkReader {
     private final String sql;
 
     @Autowired
-    public RouteLinkReader(@Qualifier("sourceDataSource") final DataSource sourceDataSource,
-                           @Value(RouteLinkRowMapper.SQL_PATH) final Resource sqlResource) {
+    public RouteLinkReader(
+            @Qualifier("sourceDataSource") final DataSource sourceDataSource,
+            @Value(RouteLinkRowMapper.SQL_PATH) final Resource sqlResource) {
         this.sourceDataSource = sourceDataSource;
         sql = ResourceUtil.fromResource(sqlResource);
     }

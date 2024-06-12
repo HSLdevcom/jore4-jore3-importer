@@ -1,13 +1,9 @@
 package fi.hsl.jore.importer.feature.mapmatching.dto.response;
 
+import java.util.Map;
 import org.geojson.LineString;
 
-import java.util.Map;
-
-/**
- * Contains the information of a route path item which is returned
- * by the map matching API.
- */
+/** Contains the information of a route path item which is returned by the map matching API. */
 public class InfrastructureLinkDTO {
 
     private ExternalLinkRefDTO externalLinkRef;

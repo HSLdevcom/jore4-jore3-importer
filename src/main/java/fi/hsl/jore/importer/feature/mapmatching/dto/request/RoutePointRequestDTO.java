@@ -3,9 +3,7 @@ package fi.hsl.jore.importer.feature.mapmatching.dto.request;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.geojson.Point;
 
-/**
- * Contains the information of a route point.
- */
+/** Contains the information of a route point. */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RoutePointRequestDTO {
 

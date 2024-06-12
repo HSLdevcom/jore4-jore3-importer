@@ -1,8 +1,14 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
+import static fi.hsl.jore.jore4.jooq.route.Tables.INFRASTRUCTURE_LINK_ALONG_ROUTE;
+import static org.assertj.db.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteGeometry;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteInfrastructureLink;
+import java.util.List;
+import java.util.UUID;
+import javax.sql.DataSource;
 import org.assertj.db.type.Table;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,13 +19,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
-import javax.sql.DataSource;
-import java.util.List;
-import java.util.UUID;
-
-import static fi.hsl.jore.jore4.jooq.route.Tables.INFRASTRUCTURE_LINK_ALONG_ROUTE;
-import static org.assertj.db.api.Assertions.assertThat;
-
 @IntTest
 class Jore4RouteGeometryRepositoryTest {
 
@@ -27,8 +26,9 @@ class Jore4RouteGeometryRepositoryTest {
     private final Table targetTable;
 
     @Autowired
-    Jore4RouteGeometryRepositoryTest(@Qualifier("jore4DataSource") final DataSource targetDataSource,
-                                     final Jore4RouteGeometryRepository repository) {
+    Jore4RouteGeometryRepositoryTest(
+            @Qualifier("jore4DataSource") final DataSource targetDataSource,
+            final Jore4RouteGeometryRepository repository) {
         this.repository = repository;
         this.targetTable = new Table(targetDataSource, "route.infrastructure_link_along_route");
     }
@@ -37,15 +37,14 @@ class Jore4RouteGeometryRepositoryTest {
     @DisplayName("insert route geometries into the database")
     @Sql(
             scripts = {
-                    "/sql/jore4/drop_tables.sql",
-                    "/sql/jore4/populate_infrastructure_links.sql",
-                    "/sql/jore4/populate_timing_places.sql",
-                    "/sql/jore4/populate_scheduled_stop_points.sql",
-                    "/sql/jore4/populate_lines.sql",
-                    "/sql/jore4/populate_routes_without_infrastructure_links.sql"
+                "/sql/jore4/drop_tables.sql",
+                "/sql/jore4/populate_infrastructure_links.sql",
+                "/sql/jore4/populate_timing_places.sql",
+                "/sql/jore4/populate_scheduled_stop_points.sql",
+                "/sql/jore4/populate_lines.sql",
+                "/sql/jore4/populate_routes_without_infrastructure_links.sql"
             },
-            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager")
-    )
+            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager"))
     class Insert {
 
         @Nested
@@ -75,18 +74,13 @@ class Jore4RouteGeometryRepositoryTest {
 
             @BeforeEach
             void createInput() {
-                final io.vavr.collection.List<Jore4RouteInfrastructureLink> infrastructureLinks = io.vavr.collection.List.of(
-                        Jore4RouteInfrastructureLink.of(
+                final io.vavr.collection.List<Jore4RouteInfrastructureLink> infrastructureLinks =
+                        io.vavr.collection.List.of(Jore4RouteInfrastructureLink.of(
                                 INFRASTRUCTURE_LINK_SOURCE,
                                 INFRASTRUCTURE_LINK_EXT_ID,
                                 INFRASTRUCTURE_LINK_SEQUENCE,
-                                INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS
-                        )
-                );
-                input = Jore4RouteGeometry.of(
-                        ROUTE_ID,
-                        infrastructureLinks
-                );
+                                INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS));
+                input = Jore4RouteGeometry.of(ROUTE_ID, infrastructureLinks);
             }
 
             @Test

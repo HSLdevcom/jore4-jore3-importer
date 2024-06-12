@@ -1,5 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.digiroad.service.DigiroadStopService;
 import fi.hsl.jore.importer.feature.digiroad.service.TestCsvDigiroadStopServiceFactory;
@@ -9,16 +11,13 @@ import fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPoint;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPointDirection;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImporterScheduledStopPoint;
 import io.vavr.collection.List;
+import java.time.LocalDate;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ScheduledStopPointExportProcessorTest {
@@ -40,7 +39,8 @@ class ScheduledStopPointExportProcessorTest {
     private static final LocalDate VALIDITY_PERIOD_START = LocalDate.of(1990, 1, 1);
     private static final LocalDate VALIDITY_PERIOD_END = LocalDate.of(2051, 1, 1);
 
-    private final Jore4ScheduledStopPointDirection JORE4_STOP_POINT_DIRECTION_ON_INFRA_LINK = Jore4ScheduledStopPointDirection.BACKWARD;
+    private final Jore4ScheduledStopPointDirection JORE4_STOP_POINT_DIRECTION_ON_INFRA_LINK =
+            Jore4ScheduledStopPointDirection.BACKWARD;
 
     private ScheduledStopPointExportProcessor processor;
 
@@ -64,8 +64,7 @@ class ScheduledStopPointExportProcessorTest {
                     JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
                     JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
                     Optional.of(IMPORTER_SHORT_ID),
-                    Optional.of(JORE_3_STOP_PLACE_EXT_ID)
-            );
+                    Optional.of(JORE_3_STOP_PLACE_EXT_ID));
 
             @Test
             @DisplayName("Should return null")
@@ -85,8 +84,7 @@ class ScheduledStopPointExportProcessorTest {
                     JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
                     JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
                     Optional.of(IMPORTER_SHORT_ID),
-                    Optional.of(JORE_3_STOP_PLACE_EXT_ID)
-            );
+                    Optional.of(JORE_3_STOP_PLACE_EXT_ID));
 
             @Test
             @DisplayName("Should return a scheduled stop point with a generated id")
@@ -183,8 +181,7 @@ class ScheduledStopPointExportProcessorTest {
                     JoreGeometryUtil.fromDbCoordinates(JORE_3_STOP_Y_COORDINATE, JORE_3_STOP_X_COORDINATE),
                     JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
                     Optional.of(IMPORTER_SHORT_ID),
-                    Optional.of(JORE_3_STOP_PLACE_EXT_ID)
-            );
+                    Optional.of(JORE_3_STOP_PLACE_EXT_ID));
 
             @Test
             @DisplayName("Should return a scheduled stop point with a generated id")

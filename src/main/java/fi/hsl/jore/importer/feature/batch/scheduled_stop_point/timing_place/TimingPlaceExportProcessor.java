@@ -4,11 +4,10 @@ import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4TimingPlace;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.timing_place.ImporterTimingPlace;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
-
-import java.util.UUID;
 
 public class TimingPlaceExportProcessor implements ItemProcessor<ImporterTimingPlace, Jore4TimingPlace> {
 
@@ -22,9 +21,7 @@ public class TimingPlaceExportProcessor implements ItemProcessor<ImporterTimingP
                 UUID.randomUUID(),
                 timingPlace.timingPlaceLabel(),
                 // Jore3 does not have localised timing place names.
-                MultilingualString
-                        .empty()
-                        .with(JoreLocaleUtil.FINNISH, timingPlace.timingPlaceName()));
+                MultilingualString.empty().with(JoreLocaleUtil.FINNISH, timingPlace.timingPlaceName()));
 
         LOGGER.debug("Created timing place output: {}", jore4TimingPlace);
 

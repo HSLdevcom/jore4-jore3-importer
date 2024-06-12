@@ -1,11 +1,10 @@
 package fi.hsl.jore.importer.feature.jore3.enumerated;
 
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreEnumeration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Arrays;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @JoreEnumeration(name = "Verkko")
 public enum TransitType {
@@ -38,8 +37,8 @@ public enum TransitType {
 
     public static Optional<TransitType> of(final int i) {
         return Arrays.stream(values())
-                     .filter(transitType -> transitType.value == i)
-                     .findFirst();
+                .filter(transitType -> transitType.value == i)
+                .findFirst();
     }
 
     public static Optional<TransitType> of(final String s) {

@@ -20,7 +20,7 @@ public enum RowStatus {
 
     public static Optional<RowStatus> of(final String value) {
         return Arrays.stream(values())
-                     .filter(status -> status.value.equals(value))
-                     .findFirst();
+                .filter(status -> status.value.equals(value))
+                .findFirst();
     }
 }

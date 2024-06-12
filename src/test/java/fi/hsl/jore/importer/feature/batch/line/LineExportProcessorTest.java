@@ -1,5 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.line;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.config.jooq.converter.date_range.DateRange;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
@@ -9,13 +11,10 @@ import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
 import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
+import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class LineExportProcessorTest {
 
@@ -43,11 +42,9 @@ class LineExportProcessorTest {
             JoreLocaleUtil.createMultilingualString(FINNISH_SHORT_NAME, SWEDISH_SHORT_NAME),
             DateRange.between(VALID_DATE_RANGE_START, VALID_DATE_RANGE_END),
             TYPE_OF_LINE,
-            LEGACY_HSL_MUNICIPALITY_CODE
-    );
+            LEGACY_HSL_MUNICIPALITY_CODE);
 
     private final LineExportProcessor processor = new LineExportProcessor();
-
 
     @Nested
     @DisplayName("Transform exported line into Jore 4 format")

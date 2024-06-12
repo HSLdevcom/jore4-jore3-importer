@@ -1,7 +1,6 @@
 package fi.hsl.jore.importer.feature.jore3.enumerated;
 
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreEnumeration;
-
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -20,8 +19,7 @@ public enum ClientOrganization {
     private final String abbreviation;
     private final String description;
 
-    ClientOrganization(final String abbreviation,
-                       final String description) {
+    ClientOrganization(final String abbreviation, final String description) {
         this.abbreviation = abbreviation;
         this.description = description;
     }
@@ -36,7 +34,7 @@ public enum ClientOrganization {
 
     public static Optional<ClientOrganization> of(final String abbreviation) {
         return Arrays.stream(values())
-                     .filter(organization -> organization.abbreviation.equals(abbreviation))
-                     .findFirst();
+                .filter(organization -> organization.abbreviation.equals(abbreviation))
+                .findFirst();
     }
 }

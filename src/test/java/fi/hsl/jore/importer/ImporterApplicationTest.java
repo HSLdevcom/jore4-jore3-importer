@@ -5,7 +5,5 @@ import org.junit.jupiter.api.Test;
 public class ImporterApplicationTest extends IntegrationTest {
 
     @Test
-    void contextLoads() {
-    }
-
+    void contextLoads() {}
 }

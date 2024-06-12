@@ -1,6 +1,9 @@
 package fi.hsl.jore.importer.feature.mapmatching.dto.request;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -8,10 +11,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class RoutePointTypeTest {
 
@@ -36,8 +35,7 @@ class RoutePointTypeTest {
                     Arguments.of(NodeType.BORDER, RoutePointType.OTHER),
                     Arguments.of(NodeType.CROSSROADS, RoutePointType.ROAD_JUNCTION),
                     Arguments.of(NodeType.STOP, RoutePointType.PUBLIC_TRANSPORT_STOP),
-                    Arguments.of(NodeType.UNKNOWN, RoutePointType.OTHER)
-            );
+                    Arguments.of(NodeType.UNKNOWN, RoutePointType.OTHER));
         }
     }
 }

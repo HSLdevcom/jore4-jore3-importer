@@ -15,11 +15,9 @@ public final class JoreGeometryUtil {
     // TODO: With proper KKJ2 conversion we might be able to calculate the Z value
     private static final double DEFAULT_Z = 0;
 
-    private JoreGeometryUtil() {
-    }
+    private JoreGeometryUtil() {}
 
-    public static Point fromDbCoordinates(final double latitude,
-                                          final double longitude) {
+    public static Point fromDbCoordinates(final double latitude, final double longitude) {
         return FACTORY.createPoint(new Coordinate(longitude, latitude, DEFAULT_Z));
     }
 }

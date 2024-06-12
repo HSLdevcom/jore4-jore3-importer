@@ -1,20 +1,19 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.jore3.enumerated.RegulatedTimingPointStatus;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPatternStop;
 import fi.hsl.jore.importer.feature.network.route.dto.ImporterJourneyPatternStop;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 class JourneyPatternStopExportProcessorTest {
 
@@ -24,13 +23,14 @@ class JourneyPatternStopExportProcessorTest {
     private static final String SCHEDULED_STOP_POINT_LABEL = "stop1";
     private static final boolean IS_USED_AS_TIMING_POINT = true;
     private static final String TIMING_PLACE_LABEL = "1ELIEL";
-    private static final RegulatedTimingPointStatus REGULATED_TIMING_POINT_STATUS = RegulatedTimingPointStatus.YES_LOAD_TIME;
+    private static final RegulatedTimingPointStatus REGULATED_TIMING_POINT_STATUS =
+            RegulatedTimingPointStatus.YES_LOAD_TIME;
     private static final boolean IS_VIA_POINT = true;
     private static final Map<Locale, String> VIA_POINT_NAME_MAP = Map.of(
             JoreLocaleUtil.FINNISH, "ViaSuomi",
-            JoreLocaleUtil.SWEDISH, "ViaSverige"
-    );
-    private static final Optional<MultilingualString> VIA_POINT_NAMES = Optional.of(MultilingualString.ofLocaleMap(VIA_POINT_NAME_MAP));
+            JoreLocaleUtil.SWEDISH, "ViaSverige");
+    private static final Optional<MultilingualString> VIA_POINT_NAMES =
+            Optional.of(MultilingualString.ofLocaleMap(VIA_POINT_NAME_MAP));
 
     private static final ImporterJourneyPatternStop DEFAULT_INPUT = ImporterJourneyPatternStop.of(
             JOURNEY_PATTERN_JORE4_ID,
@@ -41,8 +41,7 @@ class JourneyPatternStopExportProcessorTest {
             Optional.of(TIMING_PLACE_LABEL),
             REGULATED_TIMING_POINT_STATUS,
             IS_VIA_POINT,
-            VIA_POINT_NAMES
-    );
+            VIA_POINT_NAMES);
 
     private final JourneyPatternStopExportProcessor processor = new JourneyPatternStopExportProcessor();
 
@@ -100,9 +99,11 @@ class JourneyPatternStopExportProcessorTest {
     void shouldReturnJourneyPatternStopWithCorrectViaPointNames() throws Exception {
         final Jore4JourneyPatternStop output = processor.process(DEFAULT_INPUT);
         assertThat(output.viaPointNames().isPresent()).isTrue();
-        final String finnishName = JoreLocaleUtil.getI18nString(output.viaPointNames().get(), JoreLocaleUtil.FINNISH);
+        final String finnishName =
+                JoreLocaleUtil.getI18nString(output.viaPointNames().get(), JoreLocaleUtil.FINNISH);
         assertThat(finnishName).isEqualTo(VIA_POINT_NAME_MAP.get(JoreLocaleUtil.FINNISH));
-        final String swedishName = JoreLocaleUtil.getI18nString(output.viaPointNames().get(), JoreLocaleUtil.SWEDISH);
+        final String swedishName =
+                JoreLocaleUtil.getI18nString(output.viaPointNames().get(), JoreLocaleUtil.SWEDISH);
         assertThat(swedishName).isEqualTo(VIA_POINT_NAME_MAP.get(JoreLocaleUtil.SWEDISH));
     }
 
@@ -119,8 +120,7 @@ class JourneyPatternStopExportProcessorTest {
                 Optional.empty(), // timing place ID absent
                 RegulatedTimingPointStatus.YES_LOAD_TIME,
                 false,
-                Optional.empty()
-        );
+                Optional.empty());
 
         @Test
         @DisplayName("is-used-as-timing-point should not be set")
@@ -157,8 +157,7 @@ class JourneyPatternStopExportProcessorTest {
                 Optional.of(TIMING_PLACE_LABEL), // timing place label is present
                 RegulatedTimingPointStatus.YES_LOAD_TIME,
                 false,
-                Optional.empty()
-        );
+                Optional.empty());
 
         @Test
         @DisplayName("is-regulated-timing-point should not be set")

@@ -28,8 +28,7 @@ public class TestSourceDataSourceProperties {
     private String password;
 
     public DataSourceConfigDto config() {
-        return ImmutableDataSourceConfigDto
-                .builder()
+        return ImmutableDataSourceConfigDto.builder()
                 .poolName("test-src-pool")
                 .driverClassName(driverClassName)
                 .jdbcUrl(jdbcUrl)

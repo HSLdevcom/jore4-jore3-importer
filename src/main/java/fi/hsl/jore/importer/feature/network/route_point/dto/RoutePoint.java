@@ -1,6 +1,5 @@
 package fi.hsl.jore.importer.feature.network.route_point.dto;
 
-
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
@@ -13,29 +12,27 @@ import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutePointsWithHi
 import org.immutables.value.Value;
 
 @Value.Immutable
-public interface RoutePoint
-        extends IHasPK<RoutePointPK>,
-                IHasSystemTime,
-                CommonFields {
+public interface RoutePoint extends IHasPK<RoutePointPK>, IHasSystemTime, CommonFields {
 
     NodePK node();
 
     RouteDirectionPK routeDirection();
 
-    static RoutePoint of(final RoutePointPK pk,
-                         final NodePK nodeId,
-                         final RouteDirectionPK routeDirectionId,
-                         final ExternalId externalId,
-                         final int orderNumber,
-                         final TimeRange systemTime) {
+    static RoutePoint of(
+            final RoutePointPK pk,
+            final NodePK nodeId,
+            final RouteDirectionPK routeDirectionId,
+            final ExternalId externalId,
+            final int orderNumber,
+            final TimeRange systemTime) {
         return ImmutableRoutePoint.builder()
-                                  .pk(pk)
-                                  .externalId(externalId)
-                                  .node(nodeId)
-                                  .routeDirection(routeDirectionId)
-                                  .orderNumber(orderNumber)
-                                  .systemTime(systemTime)
-                                  .build();
+                .pk(pk)
+                .externalId(externalId)
+                .node(nodeId)
+                .routeDirection(routeDirectionId)
+                .orderNumber(orderNumber)
+                .systemTime(systemTime)
+                .build();
     }
 
     static RoutePoint from(final NetworkRoutePointsRecord record) {
@@ -45,8 +42,7 @@ public interface RoutePoint
                 RouteDirectionPK.of(record.getNetworkRouteDirectionId()),
                 ExternalId.of(record.getNetworkRoutePointExtId()),
                 record.getNetworkRoutePointOrder(),
-                record.getNetworkRoutePointSysPeriod()
-        );
+                record.getNetworkRoutePointSysPeriod());
     }
 
     static RoutePoint from(final NetworkRoutePointsWithHistoryRecord record) {
@@ -56,7 +52,6 @@ public interface RoutePoint
                 RouteDirectionPK.of(record.getNetworkRouteDirectionId()),
                 ExternalId.of(record.getNetworkRoutePointExtId()),
                 record.getNetworkRoutePointOrder(),
-                record.getNetworkRoutePointSysPeriod()
-        );
+                record.getNetworkRoutePointSysPeriod());
     }
 }

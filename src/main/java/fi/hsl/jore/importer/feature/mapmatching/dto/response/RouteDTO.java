@@ -1,13 +1,9 @@
 package fi.hsl.jore.importer.feature.mapmatching.dto.response;
 
+import java.util.List;
 import org.geojson.LineString;
 
-import java.util.List;
-
-/**
- * Contains the information of a map matching response
- * which is returned by the map matching API.
- */
+/** Contains the information of a map matching response which is returned by the map matching API. */
 public class RouteDTO {
 
     private LineString geometry;

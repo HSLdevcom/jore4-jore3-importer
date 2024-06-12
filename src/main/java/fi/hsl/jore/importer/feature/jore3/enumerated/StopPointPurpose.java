@@ -1,11 +1,10 @@
 package fi.hsl.jore.importer.feature.jore3.enumerated;
 
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreEnumeration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Arrays;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @JoreEnumeration(name = "Pysäkin käyttö")
 public enum StopPointPurpose {
@@ -22,8 +21,7 @@ public enum StopPointPurpose {
     private final int value;
     private final String description;
 
-    StopPointPurpose(final int value,
-                     final String description) {
+    StopPointPurpose(final int value, final String description) {
         this.value = value;
         this.description = description;
     }
@@ -38,8 +36,8 @@ public enum StopPointPurpose {
 
     public static Optional<StopPointPurpose> of(final int i) {
         return Arrays.stream(values())
-                     .filter(transportType -> transportType.value == i)
-                     .findFirst();
+                .filter(transportType -> transportType.value == i)
+                .findFirst();
     }
 
     public static Optional<StopPointPurpose> of(final String s) {

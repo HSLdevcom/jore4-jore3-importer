@@ -12,6 +12,5 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
  * insert/update/delete nodes.
  */
 @VisibleForTesting
-public interface INodeTestRepository extends IBasicCrudRepository<NodePK, Node, PersistableNode>,
-                                             IHistoryRepository<Node> {
-}
+public interface INodeTestRepository
+        extends IBasicCrudRepository<NodePK, Node, PersistableNode>, IHistoryRepository<Node> {}

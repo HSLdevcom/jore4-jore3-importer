@@ -28,8 +28,7 @@ public class ImporterDataSourceProperties {
     private String password;
 
     public DataSourceConfigDto config() {
-        return ImmutableDataSourceConfigDto
-                .builder()
+        return ImmutableDataSourceConfigDto.builder()
                 .poolName("imp-pool")
                 .driverClassName(driverClassName)
                 .jdbcUrl(jdbcUrl)

@@ -8,10 +8,9 @@ import fi.hsl.jore.importer.feature.network.line_header.dto.PersistableLineHeade
 import fi.hsl.jore.importer.feature.network.line_header.dto.generated.LineHeaderPK;
 
 /**
- * Only for testing, use {@link fi.hsl.jore.importer.feature.batch.line_header.support.ILineHeaderImportRepository this} to
- * insert/update/delete lines.
+ * Only for testing, use {@link fi.hsl.jore.importer.feature.batch.line_header.support.ILineHeaderImportRepository this}
+ * to insert/update/delete lines.
  */
 @VisibleForTesting
-public interface ILineHeaderTestRepository extends IBasicCrudRepository<LineHeaderPK, LineHeader, PersistableLineHeader>,
-                                                   IHistoryRepository<LineHeader> {
-}
+public interface ILineHeaderTestRepository
+        extends IBasicCrudRepository<LineHeaderPK, LineHeader, PersistableLineHeader>, IHistoryRepository<LineHeader> {}

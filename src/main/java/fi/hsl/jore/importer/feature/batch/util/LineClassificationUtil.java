@@ -14,13 +14,13 @@ public final class LineClassificationUtil {
     public static final Set<String> LIGHT_RAIL_TRAM_LINE_NUMBERS =
             HashSet.of("550"); // RaideJokeri / Pikaraitiotie 550 (under construction)
 
-    private LineClassificationUtil() {
-    }
+    private LineClassificationUtil() {}
 
-    public static TypeOfLine resolveTypeOfLine(final TransitType transitType,
-                                               final boolean isTrunkLine,
-                                               final PublicTransportType publicTransportType,
-                                               final String lineNumber) {
+    public static TypeOfLine resolveTypeOfLine(
+            final TransitType transitType,
+            final boolean isTrunkLine,
+            final PublicTransportType publicTransportType,
+            final String lineNumber) {
 
         switch (transitType) {
             case BUS:
@@ -37,8 +37,9 @@ public final class LineClassificationUtil {
                 return TypeOfLine.STOPPING_BUS_SERVICE;
 
             case TRAIN:
-                return REGIONAL_TRAFFIC_TRAIN_LINE_NUMBERS.contains(lineNumber.trim()) ?
-                    TypeOfLine.SUBURBAN_RAILWAY : TypeOfLine.REGIONAL_RAIL_SERVICE;
+                return REGIONAL_TRAFFIC_TRAIN_LINE_NUMBERS.contains(lineNumber.trim())
+                        ? TypeOfLine.SUBURBAN_RAILWAY
+                        : TypeOfLine.REGIONAL_RAIL_SERVICE;
 
             case FERRY:
                 return TypeOfLine.FERRY_SERVICE;
@@ -47,13 +48,14 @@ public final class LineClassificationUtil {
                 return TypeOfLine.METRO_SERVICE;
 
             case TRAM:
-                return LIGHT_RAIL_TRAM_LINE_NUMBERS.contains(lineNumber.trim()) ?
-                    TypeOfLine.REGIONAL_TRAM_SERVICE : TypeOfLine.CITY_TRAM_SERVICE;
+                return LIGHT_RAIL_TRAM_LINE_NUMBERS.contains(lineNumber.trim())
+                        ? TypeOfLine.REGIONAL_TRAM_SERVICE
+                        : TypeOfLine.CITY_TRAM_SERVICE;
 
             default:
                 return TypeOfLine.STOPPING_BUS_SERVICE;
                 // TODO: Find a way for determining the line type for this case.
-                //throw new IllegalArgumentException("Cannot determine type of line: " + lineNumber);
+                // throw new IllegalArgumentException("Cannot determine type of line: " + lineNumber);
         }
     }
 }

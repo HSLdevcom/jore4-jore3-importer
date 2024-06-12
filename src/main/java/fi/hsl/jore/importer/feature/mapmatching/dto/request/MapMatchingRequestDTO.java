@@ -1,13 +1,9 @@
 package fi.hsl.jore.importer.feature.mapmatching.dto.request;
 
+import java.util.List;
 import org.geojson.LineString;
 
-import java.util.List;
-
-/**
- * Contains the information that's is send to the
- * Map Matching API.
- */
+/** Contains the information that's is send to the Map Matching API. */
 public class MapMatchingRequestDTO {
 
     private String routeId;

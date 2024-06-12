@@ -10,6 +10,5 @@ import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
  * Only for testing, use {@link fi.hsl.jore.importer.feature.batch.link.support.ILinkImportRepository this} to
  * insert/update/delete links.
  */
-public interface ILinkTestRepository extends IBasicCrudRepository<LinkPK, Link, PersistableLink>,
-                                             IHistoryRepository<Link> {
-}
+public interface ILinkTestRepository
+        extends IBasicCrudRepository<LinkPK, Link, PersistableLink>, IHistoryRepository<Link> {}

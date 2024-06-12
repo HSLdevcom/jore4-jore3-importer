@@ -1,6 +1,11 @@
 package fi.hsl.jore.importer.feature.jore4.entity;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import fi.hsl.jore.importer.feature.network.direction_type.field.DirectionType;
+import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -9,12 +14,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-
-import java.util.NoSuchElementException;
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class Jore4RouteDirectionTest {
 
@@ -56,8 +55,7 @@ class Jore4RouteDirectionTest {
                     Arguments.of(DirectionType.ANTICLOCKWISE, Jore4RouteDirection.ANTICLOCKWISE),
                     Arguments.of(DirectionType.CLOCKWISE, Jore4RouteDirection.CLOCKWISE),
                     Arguments.of(DirectionType.INBOUND, Jore4RouteDirection.INBOUND),
-                    Arguments.of(DirectionType.OUTBOUND, Jore4RouteDirection.OUTBOUND)
-            );
+                    Arguments.of(DirectionType.OUTBOUND, Jore4RouteDirection.OUTBOUND));
         }
     }
 }
