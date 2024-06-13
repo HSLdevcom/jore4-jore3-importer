@@ -10,8 +10,8 @@ import fi.hsl.jore.importer.feature.network.line_header.dto.generated.LineHeader
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.Set;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +85,7 @@ public class LineHeaderImportRepository extends AbstractImportRepository<Jore3Li
                 .fetch()
                 .stream()
                 .map(row -> LineHeaderPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     protected Set<LineHeaderPK> update() {
@@ -115,7 +115,7 @@ public class LineHeaderImportRepository extends AbstractImportRepository<Jore3Li
                 .fetch()
                 .stream()
                 .map(row -> LineHeaderPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     protected Set<LineHeaderPK> insert() {
@@ -148,7 +148,7 @@ public class LineHeaderImportRepository extends AbstractImportRepository<Jore3Li
                 .fetch()
                 .stream()
                 .map(row -> LineHeaderPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     @Transactional

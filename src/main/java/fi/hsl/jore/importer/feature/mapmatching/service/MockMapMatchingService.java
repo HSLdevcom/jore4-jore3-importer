@@ -6,7 +6,7 @@ import fi.hsl.jore.importer.feature.mapmatching.dto.response.MapMatchingSuccessR
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.RouteDTO;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
-import io.vavr.collection.List;
+import java.util.List;
 
 /**
  * This implementation returns the same map matching response every time when the
@@ -36,8 +36,8 @@ public class MockMapMatchingService implements IMapMatchingService {
         infrastructureLink.setExternalLinkRef(infrastructureLinkSource);
         infrastructureLink.setIsTraversalForwards(INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS);
 
-        route.setPaths(List.of(infrastructureLink).asJava());
-        mapMatchingResponse.setRoutes(List.of(route).asJava());
+        route.setPaths(List.of(infrastructureLink));
+        mapMatchingResponse.setRoutes(List.of(route));
 
         return mapMatchingResponse;
     }

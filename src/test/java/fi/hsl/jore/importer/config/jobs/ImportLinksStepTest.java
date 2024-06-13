@@ -10,9 +10,7 @@ import fi.hsl.jore.importer.feature.infrastructure.link.dto.Link;
 import fi.hsl.jore.importer.feature.infrastructure.link.repository.ILinkTestRepository;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.util.GeometryUtil;
-import io.vavr.Tuple;
-import io.vavr.Tuple3;
-import io.vavr.collection.List;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
@@ -50,16 +48,19 @@ public class ImportLinksStepTest extends BatchIntegrationTest {
     // External ID of the link,
     // The line geometry
     // and the link network type
-    private static final List<Tuple3<ExternalId, LineString, NetworkType>> LINKS = List.of(
-            Tuple.of(
+    private record TestLink(ExternalId externalId, LineString lineString, NetworkType networkType) {}
+    ;
+
+    private static final List<TestLink> LINKS = List.of(
+            new TestLink(
                     ExternalId.of("1-c-d"),
                     GeometryUtil.toLineString(GeometryUtil.SRID_WGS84, List.of(NODE_C, NODE_D)),
                     NetworkType.ROAD),
-            Tuple.of(
+            new TestLink(
                     ExternalId.of("1-d-e"),
                     GeometryUtil.toLineString(GeometryUtil.SRID_WGS84, List.of(NODE_D, NODE_E)),
                     NetworkType.ROAD),
-            Tuple.of(
+            new TestLink(
                     ExternalId.of("1-e-f"),
                     GeometryUtil.toLineString(GeometryUtil.SRID_WGS84, List.of(NODE_E, NODE_F)),
                     NetworkType.ROAD));
@@ -77,17 +78,17 @@ public class ImportLinksStepTest extends BatchIntegrationTest {
         assertThat(linkRepository.count(), is(LINKS.size()));
 
         LINKS.forEach(expectedLinkParams -> {
-            final ExternalId externalId = expectedLinkParams._1;
+            final ExternalId externalId = expectedLinkParams.externalId;
             final Link link = linkRepository.findByExternalId(externalId).orElseThrow();
 
             assertThat(
                     String.format("link %s should have correct geometry", externalId),
-                    geometriesMatch(link.geometry(), expectedLinkParams._2),
+                    geometriesMatch(link.geometry(), expectedLinkParams.lineString),
                     is(true));
             assertThat(
                     String.format("link %s should have correct network type", externalId),
                     link.networkType(),
-                    is(expectedLinkParams._3));
+                    is(expectedLinkParams.networkType));
         });
     }
 }

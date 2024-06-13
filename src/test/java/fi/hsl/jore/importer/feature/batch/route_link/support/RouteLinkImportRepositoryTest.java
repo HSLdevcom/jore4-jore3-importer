@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.route_link.support;
 
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.getFirst;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.IntTest;
@@ -7,8 +8,8 @@ import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.network.route_link.dto.RouteLink;
 import fi.hsl.jore.importer.feature.network.route_link.dto.generated.RouteLinkPK;
 import fi.hsl.jore.importer.feature.network.route_link.repository.IRouteLinkTestRepository;
-import io.vavr.collection.Map;
-import io.vavr.collection.Set;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -95,8 +96,7 @@ class RouteLinkImportRepositoryTest {
                                     "Expected that only delete query was invoked but found: %s", result.keySet())
                             .containsOnly(RowStatus.DELETED);
 
-                    final Set<RouteLinkPK> idsOfDeletedRows =
-                            result.get(RowStatus.DELETED).get();
+                    final Set<RouteLinkPK> idsOfDeletedRows = result.get(RowStatus.DELETED);
 
                     softAssertions
                             .assertThat(idsOfDeletedRows)
@@ -158,8 +158,7 @@ class RouteLinkImportRepositoryTest {
                                     "Expected that only insert query was invoked but found: %s", result.keySet())
                             .containsOnly(RowStatus.INSERTED);
 
-                    final Set<RouteLinkPK> insertedIds =
-                            result.get(RowStatus.INSERTED).get();
+                    final Set<RouteLinkPK> insertedIds = result.get(RowStatus.INSERTED);
 
                     softAssertions
                             .assertThat(insertedIds)
@@ -173,7 +172,7 @@ class RouteLinkImportRepositoryTest {
                 void shouldReturnIdOfInsertedRouteLink() {
                     final Map<RowStatus, Set<RouteLinkPK>> result = importRepository.commitStagingToTarget();
 
-                    final RouteLinkPK id = result.get(RowStatus.INSERTED).get().get();
+                    final RouteLinkPK id = getFirst(result.get(RowStatus.INSERTED));
                     final Set<RouteLinkPK> dbIds = targetRepository.findAllIds();
                     assertThat(dbIds)
                             .overridingErrorMessage(
@@ -185,7 +184,7 @@ class RouteLinkImportRepositoryTest {
                 @DisplayName("Should insert a new route link into the target table")
                 void shouldInsertNewRouteLinkIntoTargetTable(SoftAssertions softAssertions) {
                     final Map<RowStatus, Set<RouteLinkPK>> result = importRepository.commitStagingToTarget();
-                    final RouteLinkPK id = result.get(RowStatus.INSERTED).get().get();
+                    final RouteLinkPK id = getFirst(result.get(RowStatus.INSERTED));
 
                     RouteLink inserted = targetRepository.findById(id).get();
 
@@ -249,8 +248,7 @@ class RouteLinkImportRepositoryTest {
                                     "Expected that only update query was invoked but found: %s", result.keySet())
                             .containsOnly(RowStatus.UPDATED);
 
-                    final Set<RouteLinkPK> idsOfUpdatedRows =
-                            result.get(RowStatus.UPDATED).get();
+                    final Set<RouteLinkPK> idsOfUpdatedRows = result.get(RowStatus.UPDATED);
 
                     softAssertions
                             .assertThat(idsOfUpdatedRows)

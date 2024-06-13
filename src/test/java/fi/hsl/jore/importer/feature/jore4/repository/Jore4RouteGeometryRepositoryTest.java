@@ -74,12 +74,11 @@ class Jore4RouteGeometryRepositoryTest {
 
             @BeforeEach
             void createInput() {
-                final io.vavr.collection.List<Jore4RouteInfrastructureLink> infrastructureLinks =
-                        io.vavr.collection.List.of(Jore4RouteInfrastructureLink.of(
-                                INFRASTRUCTURE_LINK_SOURCE,
-                                INFRASTRUCTURE_LINK_EXT_ID,
-                                INFRASTRUCTURE_LINK_SEQUENCE,
-                                INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS));
+                final List<Jore4RouteInfrastructureLink> infrastructureLinks = List.of(Jore4RouteInfrastructureLink.of(
+                        INFRASTRUCTURE_LINK_SOURCE,
+                        INFRASTRUCTURE_LINK_EXT_ID,
+                        INFRASTRUCTURE_LINK_SEQUENCE,
+                        INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS));
                 input = Jore4RouteGeometry.of(ROUTE_ID, infrastructureLinks);
             }
 

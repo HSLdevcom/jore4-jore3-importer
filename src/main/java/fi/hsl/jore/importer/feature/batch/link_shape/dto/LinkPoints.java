@@ -3,7 +3,7 @@ package fi.hsl.jore.importer.feature.batch.link_shape.dto;
 import com.google.common.base.Preconditions;
 import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
-import io.vavr.collection.List;
+import java.util.List;
 import org.immutables.value.Value;
 
 @Value.Immutable

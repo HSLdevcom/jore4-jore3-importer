@@ -8,11 +8,11 @@ import fi.hsl.jore.importer.feature.network.line_header.dto.generated.LineHeader
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeadersWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLineHeadersRecord;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class LineHeaderRepository implements ILineHeaderTestRepository {
     @Override
     @Transactional
     public List<LineHeaderPK> insert(final List<PersistableLineHeader> entities) {
-        return entities.map(this::insert);
+        return entities.stream().map(this::insert).toList();
     }
 
     @Override
@@ -89,7 +89,7 @@ public class LineHeaderRepository implements ILineHeaderTestRepository {
     @Override
     @Transactional
     public List<LineHeaderPK> update(final List<LineHeader> entities) {
-        return entities.map(this::update);
+        return entities.stream().map(this::update).toList();
     }
 
     @Override
@@ -124,7 +124,7 @@ public class LineHeaderRepository implements ILineHeaderTestRepository {
         return db.selectFrom(HEADER)
                 .fetchStream()
                 .map(record -> LineHeader.from(record, jsonbConverter))
-                .collect(List.collector());
+                .toList();
     }
 
     @Override
@@ -134,7 +134,7 @@ public class LineHeaderRepository implements ILineHeaderTestRepository {
                 .from(HEADER)
                 .fetchStream()
                 .map(row -> LineHeaderPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     @Override
@@ -170,6 +170,6 @@ public class LineHeaderRepository implements ILineHeaderTestRepository {
                 .orderBy(HISTORY_VIEW.NETWORK_LINE_HEADER_SYS_PERIOD.asc())
                 .fetchStream()
                 .map(record -> LineHeader.from(record, jsonbConverter))
-                .collect(List.collector());
+                .toList();
     }
 }

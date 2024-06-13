@@ -11,8 +11,8 @@ import fi.hsl.jore.importer.feature.network.route_direction.dto.generated.RouteD
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsStaging;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.Set;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +89,7 @@ public class RouteDirectionImportRepository extends AbstractImportRepository<Jor
                 .fetch()
                 .stream()
                 .map(row -> RouteDirectionPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     protected Set<RouteDirectionPK> update() {
@@ -124,7 +124,7 @@ public class RouteDirectionImportRepository extends AbstractImportRepository<Jor
                 .fetch()
                 .stream()
                 .map(row -> RouteDirectionPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     protected Set<RouteDirectionPK> insert() {
@@ -161,7 +161,7 @@ public class RouteDirectionImportRepository extends AbstractImportRepository<Jor
                 .fetch()
                 .stream()
                 .map(row -> RouteDirectionPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     @Transactional

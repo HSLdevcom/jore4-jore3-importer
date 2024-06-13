@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support;
 
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.getFirst;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.IntTest;
@@ -10,9 +11,9 @@ import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.Persistable
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.generated.ScheduledStopPointPK;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.repository.IScheduledStopPointTestRepository;
-import io.vavr.collection.List;
-import io.vavr.collection.Map;
-import io.vavr.collection.Set;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -106,8 +107,7 @@ public class ScheduledStopPointImportRepositoryTest {
                                     "Expected that only delete query was invoked but found: %s", result.keySet())
                             .containsOnly(RowStatus.DELETED);
 
-                    final Set<ScheduledStopPointPK> idsOfDeletedRows =
-                            result.get(RowStatus.DELETED).get();
+                    final Set<ScheduledStopPointPK> idsOfDeletedRows = result.get(RowStatus.DELETED);
 
                     softAssertions
                             .assertThat(idsOfDeletedRows)
@@ -157,8 +157,7 @@ public class ScheduledStopPointImportRepositoryTest {
                                     "Expected that only insert query was invoked but found: %s", result.keySet())
                             .containsOnly(RowStatus.INSERTED);
 
-                    final Set<ScheduledStopPointPK> insertedIds =
-                            result.get(RowStatus.INSERTED).get();
+                    final Set<ScheduledStopPointPK> insertedIds = result.get(RowStatus.INSERTED);
 
                     softAssertions
                             .assertThat(insertedIds)
@@ -172,8 +171,7 @@ public class ScheduledStopPointImportRepositoryTest {
                 void shouldReturnIdOfInsertedScheduledStop() {
                     final Map<RowStatus, Set<ScheduledStopPointPK>> result = importRepository.commitStagingToTarget();
 
-                    final ScheduledStopPointPK id =
-                            result.get(RowStatus.INSERTED).get().get();
+                    final ScheduledStopPointPK id = getFirst(result.get(RowStatus.INSERTED));
                     final Set<ScheduledStopPointPK> dbIds = targetRepository.findAllIds();
                     assertThat(dbIds)
                             .overridingErrorMessage(
@@ -185,8 +183,7 @@ public class ScheduledStopPointImportRepositoryTest {
                 @DisplayName("Should insert a new scheduled stop point into the target table")
                 void shouldInsertNewScheduledStopPointIntoTargetTable(final SoftAssertions softAssertions) {
                     final Map<RowStatus, Set<ScheduledStopPointPK>> result = importRepository.commitStagingToTarget();
-                    final ScheduledStopPointPK id =
-                            result.get(RowStatus.INSERTED).get().get();
+                    final ScheduledStopPointPK id = getFirst(result.get(RowStatus.INSERTED));
 
                     final ScheduledStopPoint inserted =
                             targetRepository.findById(id).get();
@@ -242,8 +239,7 @@ public class ScheduledStopPointImportRepositoryTest {
                                     "Expected that only update query was invoked but found: %s", result.keySet())
                             .containsOnly(RowStatus.UPDATED);
 
-                    final Set<ScheduledStopPointPK> idsOfUpdatedRows =
-                            result.get(RowStatus.UPDATED).get();
+                    final Set<ScheduledStopPointPK> idsOfUpdatedRows = result.get(RowStatus.UPDATED);
 
                     softAssertions
                             .assertThat(idsOfUpdatedRows)

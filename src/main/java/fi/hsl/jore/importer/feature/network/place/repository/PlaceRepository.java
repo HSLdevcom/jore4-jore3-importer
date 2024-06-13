@@ -8,11 +8,11 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkPlaces;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkPlacesWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkPlacesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkPlacesWithHistoryRecord;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class PlaceRepository implements IPlaceTestRepository {
     @Override
     @Transactional
     public List<PlacePK> insert(final List<PersistablePlace> entities) {
-        return entities.map(this::insert);
+        return entities.stream().map(this::insert).toList();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class PlaceRepository implements IPlaceTestRepository {
     @Override
     @Transactional
     public List<PlacePK> update(final List<Place> entities) {
-        return entities.map(this::update);
+        return entities.stream().map(this::update).toList();
     }
 
     @Override
@@ -109,7 +109,7 @@ public class PlaceRepository implements IPlaceTestRepository {
     @Override
     @Transactional(readOnly = true)
     public List<Place> findAll() {
-        return db.selectFrom(PLACE).fetchStream().map(PlaceRepository::from).collect(List.collector());
+        return db.selectFrom(PLACE).fetchStream().map(PlaceRepository::from).toList();
     }
 
     @Override
@@ -119,7 +119,7 @@ public class PlaceRepository implements IPlaceTestRepository {
                 .from(PLACE)
                 .fetchStream()
                 .map(row -> PlacePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     @Override
@@ -155,7 +155,7 @@ public class PlaceRepository implements IPlaceTestRepository {
                 .orderBy(HISTORY_VIEW.NETWORK_PLACE_SYS_PERIOD.asc())
                 .fetchStream()
                 .map(PlaceRepository::from)
-                .collect(List.collector());
+                .toList();
     }
 
     private static Place from(final NetworkPlacesRecord record) {

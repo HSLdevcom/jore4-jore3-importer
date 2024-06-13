@@ -8,8 +8,8 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.Jore3Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodesStaging;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.Set;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +70,7 @@ public class NodeImportRepository extends AbstractImportRepository<Jore3Node, No
                 .fetch()
                 .stream()
                 .map(row -> NodePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     protected Set<NodePK> update() {
@@ -114,7 +114,7 @@ public class NodeImportRepository extends AbstractImportRepository<Jore3Node, No
                 .fetch()
                 .stream()
                 .map(row -> NodePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     protected Set<NodePK> insert() {
@@ -139,6 +139,6 @@ public class NodeImportRepository extends AbstractImportRepository<Jore3Node, No
                 .fetch()
                 .stream()
                 .map(row -> NodePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 }

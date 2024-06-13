@@ -8,11 +8,11 @@ import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.generated.S
 import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints;
 import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPointsWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.records.ScheduledStopPointsRecord;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
         return db.selectFrom(SCHEDULED_STOP_POINT)
                 .fetchStream()
                 .map(record -> ScheduledStopPoint.from(record, jsonbConverter))
-                .collect(List.collector());
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -54,7 +54,7 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
                 .from(SCHEDULED_STOP_POINT)
                 .fetchStream()
                 .map(record -> ScheduledStopPointPK.of(record.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     @Transactional(readOnly = true)
@@ -109,7 +109,7 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
     @Transactional
     @Override
     public List<ScheduledStopPointPK> insert(final List<PersistableScheduledStopPoint> entities) {
-        return entities.map(this::insert);
+        return entities.stream().map(this::insert).toList();
     }
 
     @Transactional
@@ -139,7 +139,7 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
     @Transactional
     @Override
     public List<ScheduledStopPointPK> update(final List<ScheduledStopPoint> scheduledStopPoints) {
-        return scheduledStopPoints.map(this::update);
+        return scheduledStopPoints.stream().map(this::update).toList();
     }
 
     @Transactional
@@ -155,7 +155,7 @@ public class ScheduledStopPointRepository implements IScheduledStopPointTestRepo
                 .orderBy(HISTORY_VIEW.SCHEDULED_STOP_POINT_SYS_PERIOD.asc())
                 .fetchStream()
                 .map(record -> ScheduledStopPoint.from(record, jsonbConverter))
-                .collect(List.collector());
+                .toList();
     }
 
     @Transactional(readOnly = true)

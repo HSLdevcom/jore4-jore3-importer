@@ -1,5 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.route;
 
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.mapWithIndex;
+
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteGeometry;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteInfrastructureLink;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.ExternalLinkRefDTO;
@@ -9,7 +11,7 @@ import fi.hsl.jore.importer.feature.mapmatching.service.IMapMatchingService;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import fi.hsl.jore.importer.feature.network.route_point.repository.IRoutePointExportRepository;
-import io.vavr.collection.List;
+import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,21 +59,19 @@ public class MapMatchingProcessor implements ItemProcessor<ImporterRouteGeometry
 
     private Jore4RouteGeometry createRouteGeometry(
             final UUID routeId, final MapMatchingSuccessResponseDTO mapMatchingResponse) {
-        final java.util.List<InfrastructureLinkDTO> matchedInfraLinks =
+        final List<InfrastructureLinkDTO> matchedInfraLinks =
                 mapMatchingResponse.getRoutes().get(0).getPaths();
 
-        List<Jore4RouteInfrastructureLink> jore4InfraLinks = List.empty();
-        int infrastructureLinkSequence = 0;
-
-        for (final InfrastructureLinkDTO matchedInfraLink : matchedInfraLinks) {
-            final ExternalLinkRefDTO externalLink = matchedInfraLink.getExternalLinkRef();
-            jore4InfraLinks = jore4InfraLinks.append(Jore4RouteInfrastructureLink.of(
-                    externalLink.getInfrastructureSource(),
-                    externalLink.getExternalLinkId(),
-                    infrastructureLinkSequence,
-                    matchedInfraLink.isTraversalForwards()));
-            infrastructureLinkSequence++;
-        }
+        List<Jore4RouteInfrastructureLink> jore4InfraLinks = mapWithIndex(
+                        matchedInfraLinks, (index, matchedInfraLink) -> {
+                            final ExternalLinkRefDTO externalLink = matchedInfraLink.getExternalLinkRef();
+                            return Jore4RouteInfrastructureLink.of(
+                                    externalLink.getInfrastructureSource(),
+                                    externalLink.getExternalLinkId(),
+                                    index,
+                                    matchedInfraLink.isTraversalForwards());
+                        })
+                .toList();
 
         return Jore4RouteGeometry.of(routeId, jore4InfraLinks);
     }

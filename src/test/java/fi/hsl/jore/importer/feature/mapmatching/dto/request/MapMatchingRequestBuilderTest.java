@@ -6,7 +6,8 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import fi.hsl.jore.importer.util.GeometryUtil;
-import io.vavr.collection.List;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;
@@ -61,7 +62,7 @@ public class MapMatchingRequestBuilderTest {
         @DisplayName("Should return a map matching request with the correct route id")
         void shouldReturnMapMatchingRequestWithCorrectRouteId() {
             final MapMatchingRequestDTO request =
-                    MapMatchingRequestBuilder.createMapMatchingRequest(routeGeometryInput, List.empty());
+                    MapMatchingRequestBuilder.createMapMatchingRequest(routeGeometryInput, Collections.emptyList());
 
             assertThat(request.getRouteId()).isEqualTo(ROUTE_DIRECTION_EXT_ID);
         }
@@ -70,7 +71,7 @@ public class MapMatchingRequestBuilderTest {
         @DisplayName("Should return a map matching request with the correct route geometry")
         void shouldReturnMapMatchingRequestWithCorrectRouteGeometry(final SoftAssertions softAssertions) {
             final MapMatchingRequestDTO request =
-                    MapMatchingRequestBuilder.createMapMatchingRequest(routeGeometryInput, List.empty());
+                    MapMatchingRequestBuilder.createMapMatchingRequest(routeGeometryInput, Collections.emptyList());
             final org.geojson.LineString routeGeometry = request.getRouteGeometry();
 
             softAssertions.assertThat(routeGeometry.getCoordinates()).hasSize(2);

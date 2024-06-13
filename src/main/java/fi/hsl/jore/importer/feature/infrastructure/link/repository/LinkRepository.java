@@ -7,11 +7,11 @@ import fi.hsl.jore.importer.feature.infrastructure.link.dto.generated.LinkPK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinks;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinksWithHistory;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureLinksRecord;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class LinkRepository implements ILinkTestRepository {
     @Override
     @Transactional
     public List<LinkPK> insert(final List<PersistableLink> entities) {
-        return entities.map(this::insert);
+        return entities.stream().map(this::insert).toList();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class LinkRepository implements ILinkTestRepository {
     @Override
     @Transactional
     public List<LinkPK> update(final List<Link> entities) {
-        return entities.map(this::update);
+        return entities.stream().map(this::update).toList();
     }
 
     @Override
@@ -114,7 +114,7 @@ public class LinkRepository implements ILinkTestRepository {
     @Override
     @Transactional(readOnly = true)
     public List<Link> findAll() {
-        return db.selectFrom(LINKS).fetchStream().map(Link::of).collect(List.collector());
+        return db.selectFrom(LINKS).fetchStream().map(Link::of).toList();
     }
 
     @Override
@@ -124,7 +124,7 @@ public class LinkRepository implements ILinkTestRepository {
                 .from(LINKS)
                 .fetchStream()
                 .map(row -> LinkPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     @Override
@@ -160,6 +160,6 @@ public class LinkRepository implements ILinkTestRepository {
                 .orderBy(HISTORY_VIEW.INFRASTRUCTURE_LINK_SYS_PERIOD.asc())
                 .fetchStream()
                 .map(Link::of)
-                .collect(List.collector());
+                .toList();
     }
 }

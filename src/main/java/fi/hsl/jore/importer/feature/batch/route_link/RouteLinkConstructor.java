@@ -1,10 +1,12 @@
 package fi.hsl.jore.importer.feature.batch.route_link;
 
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.mapWithIndex;
+
 import fi.hsl.jore.importer.feature.batch.route_link.dto.RouteLinksAndAttributes;
 import fi.hsl.jore.importer.feature.batch.util.ExternalIdUtil;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteLink;
 import fi.hsl.jore.importer.feature.network.route_link.dto.Jore3RouteLink;
-import io.vavr.collection.Vector;
+import java.util.List;
 
 public final class RouteLinkConstructor {
 
@@ -18,11 +20,10 @@ public final class RouteLinkConstructor {
                 index);
     }
 
-    public static Vector<Jore3RouteLink> extractLinks(final RouteLinksAndAttributes entity) {
-        return entity.routeLinks()
-                // The order number property is NOT guaranteed to be strictly incremental by 1,
-                // instead they can go 1, 2, 5, 10, 14.. => reindex them from [0, 1, 2...]
-                .zipWithIndex()
-                .map(linkAndIndex -> fromLink(linkAndIndex._1, linkAndIndex._2));
+    public static List<Jore3RouteLink> extractLinks(final RouteLinksAndAttributes entity) {
+        // The order number property is NOT guaranteed to be strictly incremental by 1,
+        // instead they can go 1, 2, 5, 10, 14, ... => reindex them from [0, 1, 2,...]
+        return mapWithIndex(entity.routeLinks(), (index, link) -> fromLink(link, index))
+                .toList();
     }
 }

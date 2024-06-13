@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.is;
 import fi.hsl.jore.importer.config.DatasourceConfig;
 import fi.hsl.jore.importer.config.DigiroadServiceConfig;
 import fi.hsl.jore.importer.config.MapMatchingConfig;
-import fi.hsl.jore.importer.config.jackson.VavrModuleConfig;
 import fi.hsl.jore.importer.config.jobs.BatchConfig;
 import fi.hsl.jore.importer.config.jooq.JOOQConfig;
 import fi.hsl.jore.importer.config.profile.Profiles;
@@ -31,7 +30,6 @@ import org.springframework.test.context.ContextConfiguration;
         classes = {
             DatasourceConfig.class,
             JOOQConfig.class,
-            VavrModuleConfig.class,
             DigiroadServiceConfig.class,
             MapMatchingConfig.class,
             BatchConfig.class

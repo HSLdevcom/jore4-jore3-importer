@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
-import io.vavr.collection.List;
+import java.util.List;
 import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;

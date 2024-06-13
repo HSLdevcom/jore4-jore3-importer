@@ -1,16 +1,15 @@
 package fi.hsl.jore.importer.feature.mapmatching.dto.request;
 
-import static fi.hsl.jore.importer.util.Utils.streamIterable;
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.streamIterable;
 
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.geojson.LineString;
 import org.geojson.LngLatAlt;
 import org.geojson.Point;
-import org.locationtech.jts.geom.Coordinate;
 
 public class MapMatchingRequestBuilder {
 
@@ -35,15 +34,11 @@ public class MapMatchingRequestBuilder {
     }
 
     private static LineString createRequestGeometry(final ImporterRouteGeometry inputGeometry) {
-        final List<LngLatAlt> coordinates = new ArrayList<>();
+        final LngLatAlt[] coordinates = Arrays.stream(inputGeometry.geometry().getCoordinates())
+                .map(inputCoordinate -> new LngLatAlt(inputCoordinate.getX(), inputCoordinate.getY()))
+                .toArray(LngLatAlt[]::new);
 
-        final Coordinate[] inputCoordinates = inputGeometry.geometry().getCoordinates();
-        for (final Coordinate inputCoordinate : inputCoordinates) {
-            coordinates.add(new LngLatAlt(inputCoordinate.getX(), inputCoordinate.getY()));
-        }
-
-        final LngLatAlt[] resultArray = new LngLatAlt[coordinates.size()];
-        return new LineString(coordinates.toArray(resultArray));
+        return new LineString(coordinates);
     }
 
     private static List<RoutePointRequestDTO> createRequestRoutePoints(
