@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.place.support;
 
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.getFirst;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -12,12 +13,11 @@ import fi.hsl.jore.importer.feature.network.place.dto.PersistablePlace;
 import fi.hsl.jore.importer.feature.network.place.dto.Place;
 import fi.hsl.jore.importer.feature.network.place.dto.generated.PlacePK;
 import fi.hsl.jore.importer.feature.network.place.repository.IPlaceTestRepository;
-import io.vavr.collection.HashMap;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Map;
-import io.vavr.collection.Set;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -56,7 +56,7 @@ public class PlaceImportRepositoryTest {
 
         @Test
         public void whenNoStagedRowsAndCommit_thenReturnEmptyResult() {
-            assertThat(importRepository.commitStagingToTarget(), is(HashMap.empty()));
+            assertThat(importRepository.commitStagingToTarget(), is(Collections.emptyMap()));
         }
 
         @Test
@@ -65,13 +65,13 @@ public class PlaceImportRepositoryTest {
 
             final Map<RowStatus, Set<PlacePK>> result = importRepository.commitStagingToTarget();
 
-            assertThat("Only INSERTs should occur", result.keySet(), is(HashSet.of(RowStatus.INSERTED)));
+            assertThat("Only INSERTs should occur", result.keySet(), is(Set.of(RowStatus.INSERTED)));
 
-            final Set<PlacePK> ids = result.get(RowStatus.INSERTED).get();
+            final Set<PlacePK> ids = result.get(RowStatus.INSERTED);
 
             assertThat("Only a single row is inserted", ids.size(), is(1));
 
-            final PlacePK id = ids.get();
+            final PlacePK id = getFirst(ids);
 
             assertThat("Target repository should contain a single row", targetRepository.count(), is(1));
 
@@ -90,11 +90,11 @@ public class PlaceImportRepositoryTest {
 
             final Map<RowStatus, Set<PlacePK>> result = importRepository.commitStagingToTarget();
 
-            assertThat("Only DELETEs should occur", result.keySet(), is(HashSet.of(RowStatus.DELETED)));
+            assertThat("Only DELETEs should occur", result.keySet(), is(Set.of(RowStatus.DELETED)));
 
-            final Set<PlacePK> ids = result.get(RowStatus.DELETED).get();
+            final Set<PlacePK> ids = result.get(RowStatus.DELETED);
 
-            assertThat("Only a single row is deleted", ids, is(HashSet.of(existingId)));
+            assertThat("Only a single row is deleted", ids, is(Set.of(existingId)));
 
             assertThat("Target repository should be empty after import", targetRepository.empty(), is(true));
 
@@ -112,13 +112,13 @@ public class PlaceImportRepositoryTest {
 
             final Map<RowStatus, Set<PlacePK>> result = importRepository.commitStagingToTarget();
 
-            assertThat("Only UPDATEs should occur", result.keySet(), is(HashSet.of(RowStatus.UPDATED)));
+            assertThat("Only UPDATEs should occur", result.keySet(), is(Set.of(RowStatus.UPDATED)));
 
-            final Set<PlacePK> ids = result.get(RowStatus.UPDATED).get();
+            final Set<PlacePK> ids = result.get(RowStatus.UPDATED);
 
             assertThat("Only a single row is updated", ids.size(), is(1));
 
-            final PlacePK id = ids.get();
+            final PlacePK id = getFirst(ids);
 
             assertThat("Target repository should contain a single row", targetRepository.count(), is(1));
 

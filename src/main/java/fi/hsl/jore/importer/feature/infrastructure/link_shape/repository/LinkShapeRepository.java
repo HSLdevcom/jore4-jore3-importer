@@ -7,11 +7,11 @@ import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.generated.Link
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinkShapes;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinkShapesWithHistory;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureLinkShapesRecord;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class LinkShapeRepository implements ILinkShapeTestRepository {
     @Override
     @Transactional
     public List<LinkShapePK> insert(final List<PersistableLinkShape> entities) {
-        return entities.map(this::insert);
+        return entities.stream().map(this::insert).toList();
     }
 
     @Override
@@ -79,7 +79,7 @@ public class LinkShapeRepository implements ILinkShapeTestRepository {
     @Override
     @Transactional
     public List<LinkShapePK> update(final List<LinkShape> entities) {
-        return entities.map(this::update);
+        return entities.stream().map(this::update).toList();
     }
 
     @Override
@@ -118,7 +118,7 @@ public class LinkShapeRepository implements ILinkShapeTestRepository {
     @Override
     @Transactional(readOnly = true)
     public List<LinkShape> findAll() {
-        return db.selectFrom(SHAPES).fetchStream().map(LinkShape::from).collect(List.collector());
+        return db.selectFrom(SHAPES).fetchStream().map(LinkShape::from).toList();
     }
 
     @Override
@@ -128,7 +128,7 @@ public class LinkShapeRepository implements ILinkShapeTestRepository {
                 .from(SHAPES)
                 .fetchStream()
                 .map(row -> LinkShapePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -164,6 +164,6 @@ public class LinkShapeRepository implements ILinkShapeTestRepository {
                 .orderBy(HISTORY_VIEW.INFRASTRUCTURE_LINK_SHAPE_SYS_PERIOD.asc())
                 .fetchStream()
                 .map(LinkShape::from)
-                .collect(List.collector());
+                .toList();
     }
 }

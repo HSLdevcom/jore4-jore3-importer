@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.line_header.support;
 
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.getFirst;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -23,14 +24,13 @@ import fi.hsl.jore.importer.feature.network.line_header.dto.LineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.PersistableLineHeader;
 import fi.hsl.jore.importer.feature.network.line_header.dto.generated.LineHeaderPK;
 import fi.hsl.jore.importer.feature.network.line_header.repository.ILineHeaderTestRepository;
-import io.vavr.collection.HashMap;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Map;
-import io.vavr.collection.Set;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -94,7 +94,7 @@ public class LineHeaderImportRepositoryTest {
 
         @Test
         public void whenNoStagedRowsAndCommit_thenReturnEmptyResult() {
-            assertThat(importRepository.commitStagingToTarget(), is(HashMap.empty()));
+            assertThat(importRepository.commitStagingToTarget(), is(Collections.emptyMap()));
         }
 
         @Test
@@ -108,13 +108,13 @@ public class LineHeaderImportRepositoryTest {
 
             final Map<RowStatus, Set<LineHeaderPK>> result = importRepository.commitStagingToTarget();
 
-            assertThat("Only INSERTs should occur", result.keySet(), is(HashSet.of(RowStatus.INSERTED)));
+            assertThat("Only INSERTs should occur", result.keySet(), is(Set.of(RowStatus.INSERTED)));
 
-            final Set<LineHeaderPK> ids = result.get(RowStatus.INSERTED).get();
+            final Set<LineHeaderPK> ids = result.get(RowStatus.INSERTED);
 
             assertThat("Only a single row is inserted", ids.size(), is(1));
 
-            final LineHeaderPK id = ids.get();
+            final LineHeaderPK id = getFirst(ids);
 
             assertThat("Target repository should contain a single row", targetRepository.count(), is(1));
 
@@ -145,11 +145,11 @@ public class LineHeaderImportRepositoryTest {
 
             final Map<RowStatus, Set<LineHeaderPK>> result = importRepository.commitStagingToTarget();
 
-            assertThat("Only UPDATEs should occur", result.keySet(), is(HashSet.of(RowStatus.UPDATED)));
+            assertThat("Only UPDATEs should occur", result.keySet(), is(Set.of(RowStatus.UPDATED)));
 
-            final Set<LineHeaderPK> ids = result.get(RowStatus.UPDATED).get();
+            final Set<LineHeaderPK> ids = result.get(RowStatus.UPDATED);
 
-            assertThat("Only a single row is updated", ids, is(HashSet.of(existingId)));
+            assertThat("Only a single row is updated", ids, is(Set.of(existingId)));
 
             assertThat("Target repository should still contain a single row", targetRepository.count(), is(1));
 
@@ -193,11 +193,11 @@ public class LineHeaderImportRepositoryTest {
             assertThat(
                     "Only INSERTs and DELETEs should occur",
                     result.keySet(),
-                    is(HashSet.of(RowStatus.INSERTED, RowStatus.DELETED)));
+                    is(Set.of(RowStatus.INSERTED, RowStatus.DELETED)));
 
-            final Set<LineHeaderPK> deletedIds = result.get(RowStatus.DELETED).get();
+            final Set<LineHeaderPK> deletedIds = result.get(RowStatus.DELETED);
 
-            assertThat("Only a single row is deleted", deletedIds, is(HashSet.of(existingId)));
+            assertThat("Only a single row is deleted", deletedIds, is(Set.of(existingId)));
 
             assertThat("Target repository should still contain a single row", targetRepository.count(), is(1));
 
@@ -239,7 +239,7 @@ public class LineHeaderImportRepositoryTest {
 
             final Map<RowStatus, Set<LineHeaderPK>> result = importRepository.commitStagingToTarget();
 
-            assertThat("No operations should occur", result.keySet(), is(HashSet.empty()));
+            assertThat("No operations should occur", result.keySet(), is(Collections.emptySet()));
 
             assertThat("Target repository should still contain a single row", targetRepository.count(), is(1));
 
@@ -260,11 +260,11 @@ public class LineHeaderImportRepositoryTest {
 
             final Map<RowStatus, Set<LineHeaderPK>> result = importRepository.commitStagingToTarget();
 
-            assertThat("Only DELETEs should occur", result.keySet(), is(HashSet.of(RowStatus.DELETED)));
+            assertThat("Only DELETEs should occur", result.keySet(), is(Set.of(RowStatus.DELETED)));
 
-            final Set<LineHeaderPK> ids = result.get(RowStatus.DELETED).get();
+            final Set<LineHeaderPK> ids = result.get(RowStatus.DELETED);
 
-            assertThat("Only a single row is deleted", ids, is(HashSet.of(existingId)));
+            assertThat("Only a single row is deleted", ids, is(Set.of(existingId)));
 
             assertThat("Target repository should be empty after import", targetRepository.empty(), is(true));
 

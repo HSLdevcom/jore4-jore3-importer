@@ -11,7 +11,7 @@ import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
-import io.vavr.collection.List;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class ReaderStateTest {

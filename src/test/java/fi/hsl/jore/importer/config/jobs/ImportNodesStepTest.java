@@ -9,9 +9,7 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.Node;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
 import fi.hsl.jore.importer.util.GeometryUtil;
-import io.vavr.Tuple;
-import io.vavr.Tuple4;
-import io.vavr.collection.List;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,23 +33,26 @@ public class ImportNodesStepTest extends BatchIntegrationTest {
     // The node location
     // The node projected location,
     // and the node type
-    private static final List<Tuple4<ExternalId, Point, Optional<Point>, NodeType>> NODES = List.of(
-            Tuple.of(
+    private record TestNode(
+            ExternalId externalId, Point location, Optional<Point> projectedLocation, NodeType nodeType) {}
+
+    private static final List<TestNode> NODES = List.of(
+            new TestNode(
                     ExternalId.of("c"),
                     GeometryUtil.toPoint(GeometryUtil.SRID_WGS84, new Coordinate(6, 5)),
                     Optional.of(GeometryUtil.toPoint(GeometryUtil.SRID_WGS84, new Coordinate(13, 12))),
                     NodeType.STOP),
-            Tuple.of(
+            new TestNode(
                     ExternalId.of("d"),
                     GeometryUtil.toPoint(GeometryUtil.SRID_WGS84, new Coordinate(17, 16)),
                     Optional.empty(),
                     NodeType.CROSSROADS),
-            Tuple.of(
+            new TestNode(
                     ExternalId.of("e"),
                     GeometryUtil.toPoint(GeometryUtil.SRID_WGS84, new Coordinate(19, 18)),
                     Optional.empty(),
                     NodeType.CROSSROADS),
-            Tuple.of(
+            new TestNode(
                     ExternalId.of("f"),
                     GeometryUtil.toPoint(GeometryUtil.SRID_WGS84, new Coordinate(8, 7)),
                     Optional.of(GeometryUtil.toPoint(GeometryUtil.SRID_WGS84, new Coordinate(21, 20))),
@@ -73,13 +74,13 @@ public class ImportNodesStepTest extends BatchIntegrationTest {
         assertThat(nodeRepository.count(), is(NODES.size()));
 
         NODES.forEach(expectedNodeParams -> {
-            final ExternalId externalId = expectedNodeParams._1;
+            final ExternalId externalId = expectedNodeParams.externalId;
             final Node node = nodeRepository.findByExternalId(externalId).orElseThrow();
 
             assertThat(
                     String.format("node %s should have correct location", externalId),
                     node.location(),
-                    is(expectedNodeParams._2));
+                    is(expectedNodeParams.location));
             // This asserts that:
             // 1. A node of type NodeType.CROSSROADS doesn't have a projected location.
             // 2. A node of type NodeType.STOP must have a projected location
@@ -87,11 +88,11 @@ public class ImportNodesStepTest extends BatchIntegrationTest {
             assertThat(
                     String.format("node %s should have correct projected location", externalId),
                     node.projectedLocation(),
-                    is(expectedNodeParams._3));
+                    is(expectedNodeParams.projectedLocation));
             assertThat(
                     String.format("node %s should have correct node type", externalId),
                     node.nodeType(),
-                    is(expectedNodeParams._4));
+                    is(expectedNodeParams.nodeType));
         });
     }
 }

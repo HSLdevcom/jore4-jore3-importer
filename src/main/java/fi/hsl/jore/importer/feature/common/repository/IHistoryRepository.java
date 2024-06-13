@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.common.repository;
 
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasSystemTime;
-import io.vavr.collection.List;
+import java.util.List;
 
 public interface IHistoryRepository<ENTITY extends IHasSystemTime> {
 

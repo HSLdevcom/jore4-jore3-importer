@@ -74,8 +74,8 @@ class Jore4RouteGeometryRepositoryTest {
 
             @BeforeEach
             void createInput() {
-                final io.vavr.collection.List<Jore4RouteInfrastructureLink> infrastructureLinks =
-                        io.vavr.collection.List.of(Jore4RouteInfrastructureLink.of(
+                final java.util.List<Jore4RouteInfrastructureLink> infrastructureLinks =
+                        java.util.List.of(Jore4RouteInfrastructureLink.of(
                                 INFRASTRUCTURE_LINK_SOURCE,
                                 INFRASTRUCTURE_LINK_EXT_ID,
                                 INFRASTRUCTURE_LINK_SEQUENCE,

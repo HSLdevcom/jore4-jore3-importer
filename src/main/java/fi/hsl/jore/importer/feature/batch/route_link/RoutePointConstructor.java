@@ -1,10 +1,13 @@
 package fi.hsl.jore.importer.feature.batch.route_link;
 
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.concatToList;
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.mapWithIndex;
+
 import fi.hsl.jore.importer.feature.batch.route_link.dto.RouteLinksAndAttributes;
 import fi.hsl.jore.importer.feature.batch.util.ExternalIdUtil;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteLink;
 import fi.hsl.jore.importer.feature.network.route_point.dto.Jore3RoutePoint;
-import io.vavr.collection.Vector;
+import java.util.List;
 
 public final class RoutePointConstructor {
 
@@ -26,13 +29,11 @@ public final class RoutePointConstructor {
                 index);
     }
 
-    public static Vector<Jore3RoutePoint> extractPoints(final RouteLinksAndAttributes entity) {
-        final Vector<Jore3RoutePoint> points = entity.routeLinks()
-                // The order number property is NOT guaranteed to be strictly incremental by 1,
-                // instead they can go 1, 2, 5, 10, 14.. => reindex them from [0, 1, 2...]
-                .zipWithIndex()
-                .map(linkAndIndex -> fromLink(linkAndIndex._1, linkAndIndex._2));
+    public static List<Jore3RoutePoint> extractPoints(final RouteLinksAndAttributes entity) {
+        final List<JrRouteLink> links = entity.routeLinks();
+        final List<Jore3RoutePoint> points =
+                mapWithIndex(links, (index, link) -> fromLink(link, index)).toList();
         final int lastIndex = points.size();
-        return points.append(fromLastLink(entity.routeLinks().last(), lastIndex));
+        return concatToList(points, List.of(fromLastLink(links.get(links.size() - 1), lastIndex)));
     }
 }

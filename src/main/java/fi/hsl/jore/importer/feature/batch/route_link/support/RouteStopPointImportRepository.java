@@ -9,8 +9,8 @@ import fi.hsl.jore.importer.feature.network.route_stop_point.dto.generated.Route
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePoints;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPoints;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPointsStaging;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.Set;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +86,7 @@ public class RouteStopPointImportRepository extends AbstractImportRepository<Jor
                 .fetch()
                 .stream()
                 .map(row -> RouteStopPointPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     protected Set<RouteStopPointPK> update() {
@@ -126,7 +126,7 @@ public class RouteStopPointImportRepository extends AbstractImportRepository<Jor
                 .fetch()
                 .stream()
                 .map(row -> RouteStopPointPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     protected Set<RouteStopPointPK> insert() {
@@ -163,6 +163,6 @@ public class RouteStopPointImportRepository extends AbstractImportRepository<Jor
                 .fetch()
                 .stream()
                 .map(row -> RouteStopPointPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 }

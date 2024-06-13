@@ -8,11 +8,11 @@ import fi.hsl.jore.importer.feature.network.route_direction.dto.generated.RouteD
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirectionsWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteDirectionsRecord;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class RouteDirectionRepository implements IRouteDirectionTestRepository {
     @Override
     @Transactional
     public List<RouteDirectionPK> insert(final List<PersistableRouteDirection> entities) {
-        return entities.map(this::insert);
+        return entities.stream().map(this::insert).toList();
     }
 
     @Override
@@ -92,7 +92,7 @@ public class RouteDirectionRepository implements IRouteDirectionTestRepository {
     @Override
     @Transactional
     public List<RouteDirectionPK> update(final List<RouteDirection> entities) {
-        return entities.map(this::update);
+        return entities.stream().map(this::update).toList();
     }
 
     @Override
@@ -127,7 +127,7 @@ public class RouteDirectionRepository implements IRouteDirectionTestRepository {
         return db.selectFrom(DIRECTION)
                 .fetchStream()
                 .map(record -> RouteDirection.from(record, jsonbConverter))
-                .collect(List.collector());
+                .toList();
     }
 
     @Override
@@ -137,7 +137,7 @@ public class RouteDirectionRepository implements IRouteDirectionTestRepository {
                 .from(DIRECTION)
                 .fetchStream()
                 .map(row -> RouteDirectionPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -173,6 +173,6 @@ public class RouteDirectionRepository implements IRouteDirectionTestRepository {
                 .orderBy(HISTORY_VIEW.NETWORK_ROUTE_DIRECTION_SYS_PERIOD.asc())
                 .fetchStream()
                 .map(record -> RouteDirection.from(record, jsonbConverter))
-                .collect(List.collector());
+                .toList();
     }
 }

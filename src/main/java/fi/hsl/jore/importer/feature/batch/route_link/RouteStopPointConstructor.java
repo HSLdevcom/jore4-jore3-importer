@@ -1,5 +1,9 @@
 package fi.hsl.jore.importer.feature.batch.route_link;
 
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.concatToList;
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.mapWithIndex;
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.updateList;
+
 import fi.hsl.jore.importer.feature.batch.route_link.dto.LastLinkAttributes;
 import fi.hsl.jore.importer.feature.batch.route_link.dto.RouteLinksAndAttributes;
 import fi.hsl.jore.importer.feature.batch.util.ExternalIdUtil;
@@ -8,7 +12,8 @@ import fi.hsl.jore.importer.feature.jore3.entity.JrRouteLink;
 import fi.hsl.jore.importer.feature.jore3.enumerated.NodeType;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.Jore3RouteStopPoint;
-import io.vavr.collection.Vector;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import org.immutables.value.Value;
@@ -59,22 +64,24 @@ public final class RouteStopPointConstructor {
     }
 
     private static final Function<StopPointContext, StopPointContext> ADD_STOP_POINTS_FROM_STARTING_NODES = ctx -> {
-        final Vector<Jore3RouteStopPoint> points = ctx.linksAndAttributes()
-                .routeLinks()
+        final List<JrRouteLink> routeLinks = ctx.linksAndAttributes().routeLinks().stream()
                 .filter(link -> link.startNodeType() == NodeType.BUS_STOP)
-                .zipWithIndex()
-                .map(indexAndLink -> fromLink(indexAndLink._1, indexAndLink._2));
-        return ctx.withStopPoints(ctx.stopPoints().appendAll(points));
+                .toList();
+        final List<Jore3RouteStopPoint> points =
+                mapWithIndex(routeLinks, (index, link) -> fromLink(link, index)).toList();
+        return ctx.withStopPoints(concatToList(ctx.stopPoints(), points));
     };
 
     private static final Function<StopPointContext, StopPointContext> ADD_STOP_POINT_FROM_LAST_LINK = ctx -> {
         final LastLinkAttributes attributes = ctx.linksAndAttributes().lastLinkAttributes();
 
         if (attributes.nodeType() == NodeType.BUS_STOP) {
+            final List<JrRouteLink> links = ctx.linksAndAttributes().routeLinks();
             final int lastIndex = ctx.stopPoints().size();
 
-            return ctx.withStopPoints(ctx.stopPoints()
-                    .append(fromLastLink(ctx.linksAndAttributes().routeLinks().last(), lastIndex, attributes)));
+            final List<Jore3RouteStopPoint> newPoints = concatToList(
+                    ctx.stopPoints(), List.of(fromLastLink(links.get(links.size() - 1), lastIndex, attributes)));
+            return ctx.withStopPoints(newPoints);
         } else {
             // Special case: The last route point is not a stop point
             return ctx;
@@ -92,7 +99,7 @@ public final class RouteStopPointConstructor {
             .andThen(MARK_FIRST_STOP_POINT_AS_HASTUS_POINT)
             .andThen(MARK_LAST_STOP_POINT_AS_HASTUS_POINT);
 
-    public static Vector<Jore3RouteStopPoint> extractStopPoints(final RouteLinksAndAttributes entity) {
+    public static List<Jore3RouteStopPoint> extractStopPoints(final RouteLinksAndAttributes entity) {
         final StopPointContext ctx = StopPointContext.of(entity);
         return PIPELINE.apply(ctx).stopPoints();
     }
@@ -102,38 +109,44 @@ public final class RouteStopPointConstructor {
         RouteLinksAndAttributes linksAndAttributes();
 
         @Value.Default
-        default Vector<Jore3RouteStopPoint> stopPoints() {
-            return Vector.empty();
+        default List<Jore3RouteStopPoint> stopPoints() {
+            return Collections.emptyList();
         }
 
         /**
-         * A helper method for updating the head of the stop point vector
+         * A helper method for updating the head of the stop point list
          *
          * @param f The function to apply to the head
          * @return A new instance of the context
          */
         default StopPointContext updateHead(final Function<Jore3RouteStopPoint, Jore3RouteStopPoint> f) {
+            final List<Jore3RouteStopPoint> stopPoints = stopPoints();
+
             if (stopPoints().isEmpty()) {
                 return this;
             }
-            return withStopPoints(stopPoints().update(0, f));
+
+            return withStopPoints(updateList(stopPoints, 0, f.apply(stopPoints.get(0))));
         }
 
         /**
-         * A helper method for updating the tail of the stop point vector
+         * A helper method for updating the tail of the stop point list
          *
          * @param f The function to apply to the tail
          * @return A new instance of the context
          */
         default StopPointContext updateTail(final Function<Jore3RouteStopPoint, Jore3RouteStopPoint> f) {
+            final List<Jore3RouteStopPoint> stopPoints = stopPoints();
+
             if (stopPoints().isEmpty()) {
                 return this;
             }
-            final int idx = stopPoints().size() - 1;
-            return withStopPoints(stopPoints().update(idx, f));
+
+            final int idx = stopPoints.size() - 1;
+            return withStopPoints(updateList(stopPoints, idx, f.apply(stopPoints.get(idx))));
         }
 
-        StopPointContext withStopPoints(Vector<Jore3RouteStopPoint> stopPoints);
+        StopPointContext withStopPoints(Iterable<? extends Jore3RouteStopPoint> stopPoints);
 
         static StopPointContext of(final RouteLinksAndAttributes linksAndAttributes) {
             return ImmutableStopPointContext.builder()

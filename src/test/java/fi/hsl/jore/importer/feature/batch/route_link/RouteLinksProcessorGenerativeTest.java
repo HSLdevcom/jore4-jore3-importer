@@ -21,9 +21,14 @@ import fi.hsl.jore.importer.feature.jore3.mixin.IHasOrderNumber;
 import fi.hsl.jore.importer.feature.network.route_link.dto.Jore3RouteLink;
 import fi.hsl.jore.importer.feature.network.route_point.dto.Jore3RoutePoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.Jore3RouteStopPoint;
-import io.vavr.collection.Vector;
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 import org.quicktheories.core.Gen;
 
@@ -64,11 +69,19 @@ public class RouteLinksProcessorGenerativeTest extends GenerativeTest {
                                 .build());
     }
 
-    public Gen<Vector<JrRouteLink>> routeLinkListGen() {
-        return lists().of(routeLinkGen()).ofSizeBetween(1, 100).map(listOfLinks -> Vector.ofAll(listOfLinks)
+    public Gen<List<JrRouteLink>> routeLinkListGen() {
+        return lists().of(routeLinkGen()).ofSizeBetween(1, 100).map(listOfLinks -> listOfLinks.stream()
                 // raw list of route links is in random order and might contain duplicate order numbers
-                .sortBy(IHasOrderNumber::orderNumber)
-                .distinctBy(IHasOrderNumber::orderNumber));
+                .sorted(Comparator.comparing(IHasOrderNumber::orderNumber))
+                .filter(new Predicate<>() {
+                    private final Set<Integer> orderNumbers = new HashSet<>();
+
+                    @Override
+                    public boolean test(final JrRouteLink jrRouteLink) {
+                        return orderNumbers.add(jrRouteLink.orderNumber());
+                    }
+                })
+                .toList());
     }
 
     public Gen<LastLinkAttributes> lastLinkAttributesGen() {
@@ -86,13 +99,13 @@ public class RouteLinksProcessorGenerativeTest extends GenerativeTest {
     @Test
     public void testProcessorGeneratively() {
         qt().withExamples(1000).forAll(routeLinksAndAttributesGen()).checkAssert(linksAndAttributes -> {
-            final Vector<JrRouteLink> inputRouteLinks = linksAndAttributes.routeLinks();
+            final List<JrRouteLink> inputRouteLinks = linksAndAttributes.routeLinks();
 
             final Jore3RoutePointsAndLinks results = PROCESSOR.process(linksAndAttributes);
 
-            final Vector<Jore3RoutePoint> routePoints = results.routePoints();
-            final Vector<Jore3RouteStopPoint> stopPoints = results.stopPoints();
-            final Vector<Jore3RouteLink> routeLinks = results.routeLinks();
+            final List<Jore3RoutePoint> routePoints = results.routePoints();
+            final List<Jore3RouteStopPoint> stopPoints = results.stopPoints();
+            final List<Jore3RouteLink> routeLinks = results.routeLinks();
 
             assertThat(
                     "given N jore3 route links we get N jore4 route links",
@@ -101,8 +114,8 @@ public class RouteLinksProcessorGenerativeTest extends GenerativeTest {
 
             assertThat(
                     "order numbers for N route links increment from 0 to N-1",
-                    routeLinks.map(rl -> rl.orderNumber()),
-                    is(Vector.range(0, routeLinks.size())));
+                    routeLinks.stream().map(rl -> rl.orderNumber()).toList(),
+                    is(IntStream.range(0, routeLinks.size()).boxed().toList()));
 
             assertThat(
                     "given N jore3 route links we get N+1 route points",
@@ -111,8 +124,8 @@ public class RouteLinksProcessorGenerativeTest extends GenerativeTest {
 
             assertThat(
                     "order numbers for N route points increment from 0 to N-1",
-                    routePoints.map(rp -> rp.orderNumber()),
-                    is(Vector.range(0, routePoints.size())));
+                    routePoints.stream().map(rp -> rp.orderNumber()).toList(),
+                    is(IntStream.range(0, routePoints.size()).boxed().toList()));
 
             assertThat(
                     "for N route points we get at most N stop points",
@@ -121,18 +134,18 @@ public class RouteLinksProcessorGenerativeTest extends GenerativeTest {
 
             assertThat(
                     "order numbers for N stop points increment from 0 to N-1",
-                    stopPoints.map(sp -> sp.orderNumber()),
-                    is(Vector.range(0, stopPoints.size())));
+                    stopPoints.stream().map(sp -> sp.orderNumber()).toList(),
+                    is(IntStream.range(0, stopPoints.size()).boxed().toList()));
 
             // A pathological route might contain no bus stops
             if (!stopPoints.isEmpty()) {
                 assertThat(
                         "first stop point is always a hastus point",
-                        stopPoints.head().hastusStopPoint(),
+                        stopPoints.get(0).hastusStopPoint(),
                         is(true));
                 assertThat(
                         "last stop point is always a hastus point",
-                        stopPoints.last().hastusStopPoint(),
+                        stopPoints.get(stopPoints.size() - 1).hastusStopPoint(),
                         is(true));
             }
         });

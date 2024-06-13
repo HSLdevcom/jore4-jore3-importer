@@ -47,7 +47,7 @@ class MapMatchingServiceTest {
     private WireMockServer wireMockServer;
 
     private ImporterRouteGeometry routeGeometryInput;
-    private io.vavr.collection.List<ImporterRoutePoint> routePointsInput;
+    private java.util.List<ImporterRoutePoint> routePointsInput;
 
     @BeforeEach
     void configureSystemUnderTest() {
