@@ -8,7 +8,12 @@ on:
   workflow_dispatch:
 
 jobs:
+  run_spotless_check:
+    name: Check code is formatted with Spotless
+    uses: ./.github/workflows/spotless.yml
+
   run_java_tests:
+    needs: run_spotless_check
     name: Run Java tests
     uses: ./.github/workflows/java-tests.yml
 
@@ -64,6 +69,7 @@ jobs:
 
   run_e2e_tests:
     needs:
+      - run_spotless_check
       - run_java_tests
       - push_to_registry
     name: Run E2E tests
