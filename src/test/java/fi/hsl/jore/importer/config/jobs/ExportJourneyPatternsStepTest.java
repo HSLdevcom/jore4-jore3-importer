@@ -3,7 +3,7 @@ package fi.hsl.jore.importer.config.jobs;
 import static org.assertj.db.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
-import io.vavr.collection.List;
+import java.util.List;
 import java.util.UUID;
 import javax.sql.DataSource;
 import org.assertj.db.type.Table;

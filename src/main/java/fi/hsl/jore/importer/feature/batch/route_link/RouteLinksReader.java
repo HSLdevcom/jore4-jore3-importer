@@ -6,10 +6,11 @@ import fi.hsl.jore.importer.feature.batch.route_link.dto.RouteLinksAndAttributes
 import fi.hsl.jore.importer.feature.batch.route_link.dto.SingleRouteLinkAndParent;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteLink;
 import fi.hsl.jore.importer.feature.jore3.key.JrRouteDirectionPk;
-import io.vavr.collection.SortedMap;
-import io.vavr.collection.TreeMap;
-import io.vavr.collection.Vector;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
 import org.springframework.batch.item.ItemStreamReader;
@@ -31,7 +32,7 @@ public class RouteLinksReader extends DelegatingReader<RouteLinksAndAttributes, 
         // Store route links in a map ordered by the link order
         @Value.Default
         default SortedMap<Integer, JrRouteLink> contents() {
-            return TreeMap.empty();
+            return Collections.emptySortedMap();
         }
 
         // Mutator
@@ -42,15 +43,18 @@ public class RouteLinksReader extends DelegatingReader<RouteLinksAndAttributes, 
         }
 
         default Accumulator insert(final JrRouteLink routeLink) {
-            return withContents(contents().put(routeLink.orderNumber(), routeLink));
+            final TreeMap<Integer, JrRouteLink> newContents = new TreeMap<>(contents());
+            newContents.put(routeLink.orderNumber(), routeLink);
+
+            return withContents(Collections.unmodifiableSortedMap(newContents));
         }
 
         static Accumulator ofOnly(final JrRouteLink routeLink) {
             return empty().insert(routeLink);
         }
 
-        default Vector<JrRouteLink> asVector() {
-            return contents().values().toVector();
+        default List<JrRouteLink> asList() {
+            return List.copyOf(contents().values());
         }
     }
 
@@ -68,7 +72,7 @@ public class RouteLinksReader extends DelegatingReader<RouteLinksAndAttributes, 
         @Value.Lazy
         default Optional<RouteLinksAndAttributes> pendingResult() {
             return attributesInParent()
-                    .map(attributes -> RouteLinksAndAttributes.of(accumulator().asVector(), attributes));
+                    .map(attributes -> RouteLinksAndAttributes.of(accumulator().asList(), attributes));
         }
 
         static ReaderState init() {

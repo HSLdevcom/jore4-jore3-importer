@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.node.support;
 
 import static fi.hsl.jore.importer.TestGeometryUtil.geometriesMatch;
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.getFirst;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -14,12 +15,11 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
-import io.vavr.collection.HashMap;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Map;
-import io.vavr.collection.Set;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Point;
@@ -47,7 +47,7 @@ public class NodeImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenNoStagedRowsAndCommit_thenReturnEmptyResult() {
-        assertThat(importRepository.commitStagingToTarget(), is(HashMap.empty()));
+        assertThat(importRepository.commitStagingToTarget(), is(Collections.emptyMap()));
     }
 
     @Test
@@ -56,13 +56,13 @@ public class NodeImportRepositoryTest extends IntegrationTest {
 
         final Map<RowStatus, Set<NodePK>> result = importRepository.commitStagingToTarget();
 
-        assertThat("Only INSERTs should occur", result.keySet(), is(HashSet.of(RowStatus.INSERTED)));
+        assertThat("Only INSERTs should occur", result.keySet(), is(Set.of(RowStatus.INSERTED)));
 
-        final Set<NodePK> ids = result.get(RowStatus.INSERTED).get();
+        final Set<NodePK> ids = result.get(RowStatus.INSERTED);
 
         assertThat("Only a single row is inserted", ids.size(), is(1));
 
-        final NodePK id = ids.get();
+        final NodePK id = getFirst(ids);
 
         assertThat("Target repository should contain a single row", targetRepository.findAllIds(), is(ids));
 
@@ -78,17 +78,17 @@ public class NodeImportRepositoryTest extends IntegrationTest {
         assertThat(
                 "Target repository should now contain a single row",
                 targetRepository.findAllIds(),
-                is(HashSet.of(existingId)));
+                is(Set.of(existingId)));
 
         importRepository.submitToStaging(List.of(Jore3Node.of(ExternalId.of("a"), NodeType.CROSSROADS, POINT_2)));
 
         final Map<RowStatus, Set<NodePK>> result = importRepository.commitStagingToTarget();
 
-        assertThat("Only UPDATEs should occur", result.keySet(), is(HashSet.of(RowStatus.UPDATED)));
+        assertThat("Only UPDATEs should occur", result.keySet(), is(Set.of(RowStatus.UPDATED)));
 
-        final Set<NodePK> ids = result.get(RowStatus.UPDATED).get();
+        final Set<NodePK> ids = result.get(RowStatus.UPDATED);
 
-        assertThat("Only a single row is updated", ids, is(HashSet.of(existingId)));
+        assertThat("Only a single row is updated", ids, is(Set.of(existingId)));
 
         assertThat("Target repository should still contain a single row", targetRepository.findAllIds(), is(ids));
 
@@ -106,7 +106,7 @@ public class NodeImportRepositoryTest extends IntegrationTest {
         assertThat(
                 "Target repository should now contain a single row",
                 targetRepository.findAllIds(),
-                is(HashSet.of(existingId)));
+                is(Set.of(existingId)));
 
         // We submit the same node
         importRepository.submitToStaging(
@@ -114,12 +114,12 @@ public class NodeImportRepositoryTest extends IntegrationTest {
 
         final Map<RowStatus, Set<NodePK>> result = importRepository.commitStagingToTarget();
 
-        assertThat("No operations should occur", result.keySet(), is(HashSet.empty()));
+        assertThat("No operations should occur", result.keySet(), is(Collections.emptySet()));
 
         assertThat(
                 "Target repository should still contain a single row",
                 targetRepository.findAllIds(),
-                is(HashSet.of(existingId)));
+                is(Set.of(existingId)));
 
         final Node node = targetRepository.findById(existingId).orElseThrow();
         assertThat("The target row was not changed", geometriesMatch(node.location(), POINT_1), is(true));
@@ -140,15 +140,15 @@ public class NodeImportRepositoryTest extends IntegrationTest {
 
         final Map<RowStatus, Set<NodePK>> result = importRepository.commitStagingToTarget();
 
-        assertThat("Only DELETEs should occur", result.keySet(), is(HashSet.of(RowStatus.DELETED)));
+        assertThat("Only DELETEs should occur", result.keySet(), is(Set.of(RowStatus.DELETED)));
 
-        final Set<NodePK> ids = result.get(RowStatus.DELETED).get();
+        final Set<NodePK> ids = result.get(RowStatus.DELETED);
 
-        assertThat("Only a single row is deleted", ids, is(HashSet.of(firstId)));
+        assertThat("Only a single row is deleted", ids, is(Set.of(firstId)));
 
         assertThat(
                 "Target repository should contain the second node",
                 targetRepository.findAllIds(),
-                is(HashSet.of(secondId)));
+                is(Set.of(secondId)));
     }
 }

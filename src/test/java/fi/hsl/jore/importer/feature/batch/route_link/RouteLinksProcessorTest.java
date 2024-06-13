@@ -21,8 +21,8 @@ import fi.hsl.jore.importer.feature.network.route_point.dto.ImmutableJore3RouteP
 import fi.hsl.jore.importer.feature.network.route_point.dto.Jore3RoutePoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.ImmutableJore3RouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.Jore3RouteStopPoint;
-import io.vavr.collection.Vector;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -60,15 +60,15 @@ public class RouteLinksProcessorTest {
                 Optional.of(VIA_NAME_SWEDISH),
                 Optional.of(1));
         final RouteLinksAndAttributes linksAndAttributes = RouteLinksAndAttributes.of(
-                Vector.of(link), LastLinkAttributes.of(NodeType.BUS_STOP, true, Optional.of(7)));
+                List.of(link), LastLinkAttributes.of(NodeType.BUS_STOP, true, Optional.of(7)));
 
         final Jore3RoutePointsAndLinks result = PROCESSOR.process(linksAndAttributes);
 
-        final Vector<Jore3RoutePoint> routePoints = result.routePoints();
+        final List<Jore3RoutePoint> routePoints = result.routePoints();
 
         assertThat(
                 routePoints,
-                is(Vector.of(
+                is(List.of(
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
                                 .externalId(ExternalId.of("1234-a"))
@@ -82,11 +82,11 @@ public class RouteLinksProcessorTest {
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build())));
 
-        final Vector<Jore3RouteStopPoint> stopPoints = result.stopPoints();
+        final List<Jore3RouteStopPoint> stopPoints = result.stopPoints();
 
         assertThat(
                 stopPoints,
-                is(Vector.of(
+                is(List.of(
                         ImmutableJore3RouteStopPoint.builder()
                                 .orderNumber(0)
                                 .externalId(ExternalId.of("1234-a"))
@@ -129,15 +129,15 @@ public class RouteLinksProcessorTest {
                 Optional.of(VIA_NAME_SWEDISH),
                 Optional.of(1));
         final RouteLinksAndAttributes linksAndAttributes = RouteLinksAndAttributes.of(
-                Vector.of(link), LastLinkAttributes.of(NodeType.CROSSROADS, false, Optional.empty()));
+                List.of(link), LastLinkAttributes.of(NodeType.CROSSROADS, false, Optional.empty()));
 
         final Jore3RoutePointsAndLinks result = PROCESSOR.process(linksAndAttributes);
 
-        final Vector<Jore3RoutePoint> routePoints = result.routePoints();
+        final List<Jore3RoutePoint> routePoints = result.routePoints();
 
         assertThat(
                 routePoints,
-                is(Vector.of(
+                is(List.of(
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
                                 .externalId(ExternalId.of("1234-a"))
@@ -151,11 +151,11 @@ public class RouteLinksProcessorTest {
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build())));
 
-        final Vector<Jore3RouteStopPoint> stopPoints = result.stopPoints();
+        final List<Jore3RouteStopPoint> stopPoints = result.stopPoints();
 
         assertThat(
                 stopPoints,
-                is(Vector.of(ImmutableJore3RouteStopPoint.builder()
+                is(List.of(ImmutableJore3RouteStopPoint.builder()
                         .orderNumber(0)
                         .externalId(ExternalId.of("1234-a"))
                         .hastusStopPoint(true)
@@ -188,15 +188,15 @@ public class RouteLinksProcessorTest {
                 Optional.of(VIA_NAME_SWEDISH),
                 Optional.empty());
         final RouteLinksAndAttributes linksAndAttributes = RouteLinksAndAttributes.of(
-                Vector.of(link), LastLinkAttributes.of(NodeType.CROSSROADS, false, Optional.empty()));
+                List.of(link), LastLinkAttributes.of(NodeType.CROSSROADS, false, Optional.empty()));
 
         final Jore3RoutePointsAndLinks result = PROCESSOR.process(linksAndAttributes);
 
-        final Vector<Jore3RoutePoint> routePoints = result.routePoints();
+        final List<Jore3RoutePoint> routePoints = result.routePoints();
 
         assertThat(
                 routePoints,
-                is(Vector.of(
+                is(List.of(
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
                                 .externalId(ExternalId.of("1234-a"))
@@ -210,7 +210,7 @@ public class RouteLinksProcessorTest {
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build())));
 
-        final Vector<Jore3RouteStopPoint> stopPoints = result.stopPoints();
+        final List<Jore3RouteStopPoint> stopPoints = result.stopPoints();
 
         assertThat("There are no bus stops in this route => no stop points", stopPoints.isEmpty(), is(true));
     }
@@ -232,7 +232,7 @@ public class RouteLinksProcessorTest {
         // Node G is a bus stop
         final NodeId nodeG = NodeId.of("g");
 
-        final Vector<JrRouteLink> links = Vector.of(
+        final List<JrRouteLink> links = List.of(
                 // A->B
                 JrRouteLink.of(
                         RouteLinkId.of(10000),
@@ -355,11 +355,11 @@ public class RouteLinksProcessorTest {
 
         final Jore3RoutePointsAndLinks result = PROCESSOR.process(linksAndAttributes);
 
-        final Vector<Jore3RoutePoint> routePoints = result.routePoints();
+        final List<Jore3RoutePoint> routePoints = result.routePoints();
 
         assertThat(
                 routePoints,
-                is(Vector.of(
+                is(List.of(
                         ImmutableJore3RoutePoint.builder()
                                 .orderNumber(0)
                                 .externalId(ExternalId.of("10000-a"))
@@ -404,11 +404,11 @@ public class RouteLinksProcessorTest {
                                 .routeDirection(ExternalId.of("1001-1-20200101"))
                                 .build())));
 
-        final Vector<Jore3RouteStopPoint> stopPoints = result.stopPoints();
+        final List<Jore3RouteStopPoint> stopPoints = result.stopPoints();
 
         assertThat(
                 stopPoints,
-                is(Vector.of(
+                is(List.of(
                         ImmutableJore3RouteStopPoint.builder()
                                 .orderNumber(0)
                                 .externalId(ExternalId.of("10000-a"))

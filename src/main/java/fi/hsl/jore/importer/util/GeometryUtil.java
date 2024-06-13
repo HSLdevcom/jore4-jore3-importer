@@ -3,8 +3,8 @@ package fi.hsl.jore.importer.util;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import io.vavr.collection.List;
 import java.util.Arrays;
+import java.util.List;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
@@ -32,7 +32,7 @@ public final class GeometryUtil {
     }
 
     public static LineString toLineString(final int srid, final List<Coordinate> coordinates) {
-        return factoryForSrid(srid).createLineString(coordinates.toJavaArray(Coordinate[]::new));
+        return factoryForSrid(srid).createLineString(coordinates.toArray(Coordinate[]::new));
     }
 
     public static LineString toLineString(final int srid, final Coordinate... coordinates) {

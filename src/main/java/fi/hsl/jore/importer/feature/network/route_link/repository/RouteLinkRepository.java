@@ -7,11 +7,11 @@ import fi.hsl.jore.importer.feature.network.route_link.dto.generated.RouteLinkPK
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteLinks;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteLinksWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteLinksRecord;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class RouteLinkRepository implements IRouteLinkTestRepository {
     @Override
     @Transactional
     public List<RouteLinkPK> insert(final List<PersistableRouteLink> entities) {
-        return entities.map(this::insert);
+        return entities.stream().map(this::insert).toList();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class RouteLinkRepository implements IRouteLinkTestRepository {
     @Override
     @Transactional
     public List<RouteLinkPK> update(final List<RouteLink> entities) {
-        return entities.map(this::update);
+        return entities.stream().map(this::update).toList();
     }
 
     @Override
@@ -114,7 +114,7 @@ public class RouteLinkRepository implements IRouteLinkTestRepository {
     @Override
     @Transactional(readOnly = true)
     public List<RouteLink> findAll() {
-        return db.selectFrom(LINKS).fetchStream().map(RouteLink::from).collect(List.collector());
+        return db.selectFrom(LINKS).fetchStream().map(RouteLink::from).toList();
     }
 
     @Override
@@ -124,7 +124,7 @@ public class RouteLinkRepository implements IRouteLinkTestRepository {
                 .from(LINKS)
                 .fetchStream()
                 .map(row -> RouteLinkPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -160,6 +160,6 @@ public class RouteLinkRepository implements IRouteLinkTestRepository {
                 .orderBy(HISTORY_VIEW.NETWORK_ROUTE_LINK_SYS_PERIOD.asc())
                 .fetchStream()
                 .map(RouteLink::from)
-                .collect(List.collector());
+                .toList();
     }
 }

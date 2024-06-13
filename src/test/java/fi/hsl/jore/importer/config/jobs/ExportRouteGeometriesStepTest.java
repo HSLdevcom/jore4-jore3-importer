@@ -4,7 +4,7 @@ import static fi.hsl.jore.jore4.jooq.route.Tables.INFRASTRUCTURE_LINK_ALONG_ROUT
 import static org.assertj.db.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
-import io.vavr.collection.List;
+import java.util.List;
 import java.util.UUID;
 import javax.sql.DataSource;
 import org.assertj.db.type.Table;

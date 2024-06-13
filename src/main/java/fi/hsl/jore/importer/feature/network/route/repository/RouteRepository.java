@@ -8,11 +8,11 @@ import fi.hsl.jore.importer.feature.network.route.dto.generated.RoutePK;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutes;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutesWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutesRecord;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class RouteRepository implements IRouteTestRepository {
     @Override
     @Transactional
     public List<RoutePK> insert(final List<PersistableRoute> entities) {
-        return entities.map(this::insert);
+        return entities.stream().map(this::insert).toList();
     }
 
     @Override
@@ -84,7 +84,7 @@ public class RouteRepository implements IRouteTestRepository {
     @Override
     @Transactional
     public List<RoutePK> update(final List<Route> entities) {
-        return entities.map(this::update);
+        return entities.stream().map(this::update).toList();
     }
 
     @Override
@@ -119,7 +119,7 @@ public class RouteRepository implements IRouteTestRepository {
         return db.selectFrom(ROUTE)
                 .fetchStream()
                 .map(record -> Route.from(record, jsonbConverter))
-                .collect(List.collector());
+                .toList();
     }
 
     @Override
@@ -129,7 +129,7 @@ public class RouteRepository implements IRouteTestRepository {
                 .from(ROUTE)
                 .fetchStream()
                 .map(row -> RoutePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -165,6 +165,6 @@ public class RouteRepository implements IRouteTestRepository {
                 .orderBy(HISTORY_VIEW.NETWORK_ROUTE_SYS_PERIOD.asc())
                 .fetchStream()
                 .map(record -> Route.from(record, jsonbConverter))
-                .collect(List.collector());
+                .toList();
     }
 }

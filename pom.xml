@@ -21,8 +21,6 @@
 
         <!-- Library versions -->
         <guava.version>33.1.0-jre</guava.version>
-        <vavr.version>0.10.4</vavr.version>
-        <vavr-jackson.version>0.10.3</vavr-jackson.version>
         <immutables.version>2.10.1</immutables.version>
         <geotools.version>31.1</geotools.version>
         <geojson-jackson.version>1.14</geojson-jackson.version>
@@ -155,18 +153,6 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.vavr</groupId>
-            <artifactId>vavr</artifactId>
-            <version>${vavr.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.vavr</groupId>
-            <artifactId>vavr-jackson</artifactId>
-            <version>${vavr-jackson.version}</version>
         </dependency>
 
         <dependency>

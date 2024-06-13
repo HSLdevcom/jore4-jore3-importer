@@ -11,11 +11,11 @@ import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPoints;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteStopPointsWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsRecord;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRouteStopPointsWithHistoryRecord;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class RouteStopPointRepository implements IRouteStopPointTestRepository {
     @Override
     @Transactional
     public List<RouteStopPointPK> insert(final List<PersistableRouteStopPoint> entities) {
-        return entities.map(this::insert);
+        return entities.stream().map(this::insert).toList();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class RouteStopPointRepository implements IRouteStopPointTestRepository {
     @Override
     @Transactional
     public List<RouteStopPointPK> update(final List<RouteStopPoint> entities) {
-        return entities.map(this::update);
+        return entities.stream().map(this::update).toList();
     }
 
     @Override
@@ -128,7 +128,7 @@ public class RouteStopPointRepository implements IRouteStopPointTestRepository {
         return db.selectFrom(POINTS)
                 .fetchStream()
                 .map(r -> from(r, jsonbConverter))
-                .collect(List.collector());
+                .toList();
     }
 
     @Override
@@ -138,7 +138,7 @@ public class RouteStopPointRepository implements IRouteStopPointTestRepository {
                 .from(POINTS)
                 .fetchStream()
                 .map(row -> RouteStopPointPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -174,7 +174,7 @@ public class RouteStopPointRepository implements IRouteStopPointTestRepository {
                 .orderBy(HISTORY_VIEW.NETWORK_ROUTE_STOP_POINT_SYS_PERIOD.asc())
                 .fetchStream()
                 .map(r -> from(r, jsonbConverter))
-                .collect(List.collector());
+                .toList();
     }
 
     private static RouteStopPoint from(final NetworkRouteStopPointsRecord record, final IJsonbConverter converter) {

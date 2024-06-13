@@ -1,14 +1,13 @@
 package fi.hsl.jore.importer.feature.digiroad.service;
 
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
-import io.vavr.collection.HashMap;
-import io.vavr.collection.Map;
 import jakarta.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.HashMap;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,18 +19,15 @@ public class CsvDigiroadStopService implements DigiroadStopService {
 
     private final Resource csvResource;
 
-    // This cannot be final because the io.vavr.collection.HashMap is immutable
-    // and .put() method returns a new map which contains the added value.
-    private Map<Long, DigiroadStop> digiroadStops;
+    private final HashMap<Long, DigiroadStop> digiroadStops = new HashMap<>();
 
     public CsvDigiroadStopService(final Resource csvResource) {
         this.csvResource = csvResource;
-        this.digiroadStops = HashMap.empty();
     }
 
     @Override
     public Optional<DigiroadStop> findByNationalId(final long nationalId) {
-        final DigiroadStop stop = digiroadStops.get(nationalId).getOrNull();
+        final DigiroadStop stop = digiroadStops.get(nationalId);
         return Optional.ofNullable(stop);
     }
 
@@ -52,7 +48,7 @@ public class CsvDigiroadStopService implements DigiroadStopService {
 
                     if (stopContainer.isPresent()) {
                         final DigiroadStop stop = stopContainer.get();
-                        digiroadStops = digiroadStops.put(stop.nationalId(), stop);
+                        digiroadStops.put(stop.nationalId(), stop);
                     } else {
                         LOGGER.error("Cannot parse the information of a Digiroad stop from the line: {}", line);
                     }

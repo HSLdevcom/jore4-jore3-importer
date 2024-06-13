@@ -7,8 +7,9 @@ import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.Set;
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,13 +72,13 @@ public class LineImportRepository extends AbstractImportRepository<PersistableLi
                 .fetch()
                 .stream()
                 .map(row -> LinePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     protected Set<LinePK> update() {
         // TODO: At the moment we don't have any updatable fields in the NETWORK_LINES tables,
         //       but this may change when we decide how to handle e.g. PublicTransportDestination fields
-        return HashSet.empty();
+        return Collections.emptySet();
     }
 
     protected Set<LinePK> insert() {
@@ -103,6 +104,6 @@ public class LineImportRepository extends AbstractImportRepository<PersistableLi
                 .fetch()
                 .stream()
                 .map(row -> LinePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 }

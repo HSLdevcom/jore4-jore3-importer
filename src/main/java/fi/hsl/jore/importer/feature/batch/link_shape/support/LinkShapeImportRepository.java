@@ -9,8 +9,8 @@ import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.generated.Link
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinkShapes;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinkShapesStaging;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLinks;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.Set;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +67,7 @@ public class LinkShapeImportRepository extends AbstractImportRepository<Jore3Lin
                 .fetch()
                 .stream()
                 .map(row -> LinkShapePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     protected Set<LinkShapePK> update() {
@@ -84,7 +84,7 @@ public class LinkShapeImportRepository extends AbstractImportRepository<Jore3Lin
                 .fetch()
                 .stream()
                 .map(row -> LinkShapePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     protected Set<LinkShapePK> insert() {
@@ -109,6 +109,6 @@ public class LinkShapeImportRepository extends AbstractImportRepository<Jore3Lin
                 .fetch()
                 .stream()
                 .map(row -> LinkShapePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 }

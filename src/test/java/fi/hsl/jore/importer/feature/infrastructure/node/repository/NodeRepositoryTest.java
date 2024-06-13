@@ -15,9 +15,9 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.util.GeometryUtil;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Point;
@@ -51,7 +51,7 @@ public class NodeRepositoryTest extends IntegrationTest {
         assertThat(geometriesMatch(nodesFromDb.get(1).location(), GEOM2), is(true));
         assertThat(GEOM.getSRID(), is(GeometryUtil.SRID_WGS84));
         assertThat(GEOM.getSRID(), is(nodesFromDb.get(0).location().getSRID()));
-        assertThat(nodesFromDb.map(IHasPK::pk).toSet(), is(keys.toSet()));
+        assertThat(nodesFromDb.stream().map(IHasPK::pk).collect(Collectors.toSet()), is(Set.copyOf(keys)));
     }
 
     @Test
@@ -70,11 +70,11 @@ public class NodeRepositoryTest extends IntegrationTest {
         assertThat("Node should have the initial geometry", geometriesMatch(GEOM, originalNode.location()), is(true));
         assertThat(
                 "Insert and find() should return the same keys",
-                nodesFromDb.map(IHasPK::pk).toSet(),
-                is(HashSet.of(id)));
+                nodesFromDb.stream().map(IHasPK::pk).collect(Collectors.toSet()),
+                is(Set.of(id)));
 
-        final Set<NodePK> keys2 = HashSet.of(
-                nodeRepository.update(ImmutableNode.copyOf(insertedNode).withLocation(GEOM2)));
+        final Set<NodePK> keys2 =
+                Set.of(nodeRepository.update(ImmutableNode.copyOf(insertedNode).withLocation(GEOM2)));
 
         final List<Node> nodesFromDb2 = nodeRepository.findAll();
 
@@ -88,9 +88,9 @@ public class NodeRepositoryTest extends IntegrationTest {
                 is(true));
         assertThat(
                 "Update and find() should return the same keys",
-                nodesFromDb2.map(IHasPK::pk).toSet(),
+                nodesFromDb2.stream().map(IHasPK::pk).collect(Collectors.toSet()),
                 is(keys2));
-        assertThat("Node id should not change", HashSet.of(id), is(keys2));
+        assertThat("Node id should not change", Set.of(id), is(keys2));
         // Updated node should be identical to the original node..
         assertThat(updatedNode.pk(), is(originalNode.pk()));
         assertThat(updatedNode.externalId(), is(originalNode.externalId()));
@@ -116,10 +116,10 @@ public class NodeRepositoryTest extends IntegrationTest {
         assertThat("Node should have the initial geometry", geometriesMatch(GEOM, originalNode.location()), is(true));
         assertThat(
                 "Insert and find() should return the same keys",
-                nodesFromDb.map(IHasPK::pk).toSet(),
-                is(HashSet.of(id)));
+                nodesFromDb.stream().map(IHasPK::pk).collect(Collectors.toSet()),
+                is(Set.of(id)));
 
-        final Set<NodePK> keys2 = HashSet.of(nodeRepository.update(insertedNode));
+        final Set<NodePK> keys2 = Set.of(nodeRepository.update(insertedNode));
 
         final List<Node> nodesFromDb2 = nodeRepository.findAll();
 
@@ -129,9 +129,9 @@ public class NodeRepositoryTest extends IntegrationTest {
 
         assertThat(
                 "Update and find() should return the same keys",
-                nodesFromDb2.map(IHasPK::pk).toSet(),
+                nodesFromDb2.stream().map(IHasPK::pk).collect(Collectors.toSet()),
                 is(keys2));
-        assertThat("Node id should not change", HashSet.of(id), is(keys2));
+        assertThat("Node id should not change", Set.of(id), is(keys2));
         assertThat("Updated node should be identical to the original node", updatedNode, is(originalNode));
     }
 }
