@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.feature.jore4.entity;
 
-import io.vavr.collection.List;
+import java.util.List;
 import java.util.UUID;
 import org.immutables.value.Value;
 

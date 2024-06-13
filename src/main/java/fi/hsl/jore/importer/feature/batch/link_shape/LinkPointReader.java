@@ -6,10 +6,11 @@ import fi.hsl.jore.importer.feature.batch.link_shape.dto.LinkPoints;
 import fi.hsl.jore.importer.feature.batch.link_shape.dto.PointRow;
 import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
-import io.vavr.collection.List;
-import io.vavr.collection.SortedMap;
-import io.vavr.collection.TreeMap;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
 import org.springframework.batch.item.ItemStreamReader;
@@ -31,7 +32,7 @@ public class LinkPointReader extends DelegatingReader<LinkPoints, PointRow> {
         // Store points in a map ordered by the point order
         @Value.Default
         default SortedMap<Integer, JrPoint> contents() {
-            return TreeMap.empty();
+            return Collections.emptySortedMap();
         }
 
         // Mutator
@@ -42,7 +43,10 @@ public class LinkPointReader extends DelegatingReader<LinkPoints, PointRow> {
         }
 
         default Accumulator insert(final JrPoint point) {
-            return withContents(contents().put(point.orderNumber(), point));
+            final TreeMap<Integer, JrPoint> newContents = new TreeMap<>(contents());
+            newContents.put(point.orderNumber(), point);
+
+            return withContents(Collections.unmodifiableSortedMap(newContents));
         }
 
         static Accumulator ofOnly(final JrPoint point) {
@@ -50,7 +54,7 @@ public class LinkPointReader extends DelegatingReader<LinkPoints, PointRow> {
         }
 
         default List<JrPoint> asList() {
-            return contents().values().toList();
+            return List.copyOf(contents().values());
         }
     }
 

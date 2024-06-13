@@ -7,10 +7,11 @@ import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImporterScheduledStopPoint;
-import io.vavr.collection.List;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -43,20 +44,20 @@ public class ScheduledStopPointExportMapper implements RowMapper<ImporterSchedul
 
     private static List<ExternalId> csvToExternalIds(final String csvString) {
         if (StringUtils.isBlank(csvString)) {
-            return List.empty();
+            return Collections.emptyList();
         }
 
         final String[] inputValues = csvString.split(",");
-        return Arrays.stream(inputValues).map(i -> ExternalId.of(i.trim())).collect(List.collector());
+        return Arrays.stream(inputValues).map(i -> ExternalId.of(i.trim())).toList();
     }
 
     private static List<Long> csvToElyNumbers(final String csvString) {
         if (StringUtils.isBlank(csvString)) {
-            return List.empty();
+            return Collections.emptyList();
         }
 
         final String[] inputValues = csvString.split(",");
-        return Arrays.stream(inputValues).map(i -> Long.parseLong(i.trim())).collect(List.collector());
+        return Arrays.stream(inputValues).map(i -> Long.parseLong(i.trim())).toList();
     }
 
     private Point pointFromDatabaseObject(@Nullable final Object databaseObject) throws SQLException {

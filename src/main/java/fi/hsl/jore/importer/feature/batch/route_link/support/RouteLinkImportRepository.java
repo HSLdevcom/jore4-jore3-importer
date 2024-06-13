@@ -9,8 +9,8 @@ import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLin
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteLinks;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteLinksStaging;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.Set;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +74,7 @@ public class RouteLinkImportRepository extends AbstractImportRepository<Jore3Rou
                 .fetch()
                 .stream()
                 .map(row -> RouteLinkPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     protected Set<RouteLinkPK> update() {
@@ -91,7 +91,7 @@ public class RouteLinkImportRepository extends AbstractImportRepository<Jore3Rou
                 .fetch()
                 .stream()
                 .map(row -> RouteLinkPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     protected Set<RouteLinkPK> insert() {
@@ -121,6 +121,6 @@ public class RouteLinkImportRepository extends AbstractImportRepository<Jore3Rou
                 .fetch()
                 .stream()
                 .map(row -> RouteLinkPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 }

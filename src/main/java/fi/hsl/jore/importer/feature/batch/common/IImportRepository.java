@@ -2,9 +2,10 @@ package fi.hsl.jore.importer.feature.batch.common;
 
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.PK;
-import io.vavr.collection.Map;
-import io.vavr.collection.Set;
-import io.vavr.collection.Traversable;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A repository for importing items in a 2-step process using a temporary staging table:
@@ -48,6 +49,7 @@ public interface IImportRepository<ENTITY, KEY extends PK> {
      * @return A map describing how many rows were inserted/updated/deleted/..
      */
     static <KEY extends PK> Map<RowStatus, Integer> commitCounts(final Map<RowStatus, Set<KEY>> commitStatus) {
-        return commitStatus.mapValues(Traversable::size);
+        return commitStatus.entrySet().stream().collect(Collectors.toUnmodifiableMap(Entry::getKey, it -> it.getValue()
+                .size()));
     }
 }

@@ -110,7 +110,6 @@ The package structure of this application is described in the following:
 
 * The `fi.hsl.jore.importer.config` package contains the configuration classes which configure the Spring context
   which is started when this application is run. It has the following sub packages:
-    * The `fi.hsl.jore.importer.config.jackson` package configures the [Jackson datatype module for Vavr](https://github.com/vavr-io/vavr-jackson).
     * The `fi.hsl.jore.importer.config.jobs` package configures the Spring Batch jobs which import data from the Jore 3 database
       to the Jore 4 database.
     * The `fi.hsl.jore.importer.config.jooq` package configures the jOOQ integration of Spring Boot.
@@ -336,8 +335,12 @@ for this project. These coding conventions are described in the following:
 * Every package must include the `package-info.java` file which declares that every field, method parameter, or
   return value is non-null by default (see the code example 1 for more details).
 * Use only immutable DTO's by introducing interfaces annotated with `org.immutables` annotations.
-* You must use Vavr collections instead of `java.util` collections when possible.
-* You must use the `java.util.Optional` instead of the `io.vavr.control.Option`.
+* You must, by default, not mutate any Collections, unless you have created it yourself and perform the mutations within
+  a single function/scope. Stream's map & filter functions should handle most cases and more utils can be found from
+  `JoreCollectionUtils` file, as well as from Guava. One should also prefer Collection constructors that return
+  unmodifiable collections such as: List.of(), Set.of(), Map.of(), Stream::toList(), …; If you need to construct a
+  collection with mutable version, you can make it unmodifiable with `Collections.unmodifiable[List,Set,Map]` methods.
+  Guavas ImmutableList/ImmutableSet/… Collections are also valid.
 
 **Code example 1: package-info.java**
 

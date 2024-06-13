@@ -2,8 +2,8 @@ package fi.hsl.jore.importer.feature.batch.common;
 
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
 import fi.hsl.jore.importer.feature.common.dto.field.PK;
-import io.vavr.collection.Map;
-import io.vavr.collection.Set;
+import java.util.Map;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepContribution;

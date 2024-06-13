@@ -20,10 +20,7 @@ import fi.hsl.jore.importer.feature.network.route_point.dto.RoutePoint;
 import fi.hsl.jore.importer.feature.network.route_point.repository.IRoutePointTestRepository;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.RouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.repository.IRouteStopPointTestRepository;
-import io.vavr.Tuple;
-import io.vavr.Tuple4;
-import io.vavr.Tuple8;
-import io.vavr.collection.List;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -76,12 +73,18 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
     // The order number of the route point
     // The external id of the node
     // and the external id of the route direction
-    private static final List<Tuple4<ExternalId, Integer, ExternalId, ExternalId>> ROUTE_POINTS = List.of(
-            Tuple.of(ExternalId.of("1337-c"), 0, ExternalId.of("c"), ExternalId.of("1001-1-20200603")),
-            Tuple.of(ExternalId.of("1338-d"), 1, ExternalId.of("d"), ExternalId.of("1001-1-20200603")),
-            Tuple.of(ExternalId.of("1339-e"), 2, ExternalId.of("e"), ExternalId.of("1001-1-20200603")),
+    private record TestRoutePoint(
+            ExternalId externalId,
+            Integer orderNumber,
+            ExternalId nodeExternalId,
+            ExternalId routeDirectionExternalId) {}
+
+    private static final List<TestRoutePoint> ROUTE_POINTS = List.of(
+            new TestRoutePoint(ExternalId.of("1337-c"), 0, ExternalId.of("c"), ExternalId.of("1001-1-20200603")),
+            new TestRoutePoint(ExternalId.of("1338-d"), 1, ExternalId.of("d"), ExternalId.of("1001-1-20200603")),
+            new TestRoutePoint(ExternalId.of("1339-e"), 2, ExternalId.of("e"), ExternalId.of("1001-1-20200603")),
             // Note how the last route point borrows the jore3 route link id!
-            Tuple.of(ExternalId.of("1339-f"), 3, ExternalId.of("f"), ExternalId.of("1001-1-20200603")));
+            new TestRoutePoint(ExternalId.of("1339-f"), 3, ExternalId.of("f"), ExternalId.of("1001-1-20200603")));
 
     // The external id of the route stop point
     // The order number of the route stop point
@@ -89,44 +92,50 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
     // The regulated timing point status
     // The via point flag
     // and the timetable column (if any)
-    private static final List<
-                    Tuple8<
-                            ExternalId,
-                            Integer,
-                            Boolean,
-                            RegulatedTimingPointStatus,
-                            Boolean,
-                            String,
-                            String,
-                            Optional<Integer>>>
-            ROUTE_STOP_POINTS = List.of(
-                    Tuple.of(
-                            ExternalId.of("1337-c"),
-                            0,
-                            true,
-                            RegulatedTimingPointStatus.YES,
-                            true,
-                            "Määränpää 2",
-                            "Mål 2",
-                            Optional.of(5)),
-                    Tuple.of(
-                            ExternalId.of("1339-f"),
-                            1,
-                            true,
-                            RegulatedTimingPointStatus.UNKNOWN,
-                            false,
-                            null,
-                            null,
-                            Optional.of(7)));
+    private record TestRouteStopPoint(
+            ExternalId externalId,
+            Integer routeStopPointOrderNumber,
+            Boolean hastusPoint,
+            RegulatedTimingPointStatus regulatedTimingPointStatus,
+            Boolean viaPoint,
+            String timetableColumnFi,
+            String timetableColumnSv,
+            Optional<Integer> timetableColumnIndex) {}
+
+    private static final List<TestRouteStopPoint> ROUTE_STOP_POINTS = List.of(
+            new TestRouteStopPoint(
+                    ExternalId.of("1337-c"),
+                    0,
+                    true,
+                    RegulatedTimingPointStatus.YES,
+                    true,
+                    "Määränpää 2",
+                    "Mål 2",
+                    Optional.of(5)),
+            new TestRouteStopPoint(
+                    ExternalId.of("1339-f"),
+                    1,
+                    true,
+                    RegulatedTimingPointStatus.UNKNOWN,
+                    false,
+                    null,
+                    null,
+                    Optional.of(7)));
 
     // The external id of the route link
     // The order number of the route link
     // The external id of the infrastructure link
     // and the external id of the route direction
-    private static final List<Tuple4<ExternalId, Integer, ExternalId, ExternalId>> ROUTE_LINKS = List.of(
-            Tuple.of(ExternalId.of("1337"), 0, ExternalId.of("1-c-d"), ExternalId.of("1001-1-20200603")),
-            Tuple.of(ExternalId.of("1338"), 1, ExternalId.of("1-d-e"), ExternalId.of("1001-1-20200603")),
-            Tuple.of(ExternalId.of("1339"), 2, ExternalId.of("1-e-f"), ExternalId.of("1001-1-20200603")));
+    private record TestRouteLink(
+            ExternalId externalId,
+            Integer orderNumber,
+            ExternalId infrastructureLinkExternalId,
+            ExternalId routeDirectionExternalId) {}
+
+    private static final List<TestRouteLink> ROUTE_LINKS = List.of(
+            new TestRouteLink(ExternalId.of("1337"), 0, ExternalId.of("1-c-d"), ExternalId.of("1001-1-20200603")),
+            new TestRouteLink(ExternalId.of("1338"), 1, ExternalId.of("1-d-e"), ExternalId.of("1001-1-20200603")),
+            new TestRouteLink(ExternalId.of("1339"), 2, ExternalId.of("1-e-f"), ExternalId.of("1001-1-20200603")));
 
     @Autowired
     private IRoutePointTestRepository routePointRepository;
@@ -172,18 +181,18 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
 
     private void assertRoutePoints() {
         ROUTE_POINTS.forEach(expectedRoutePointParams -> {
-            final ExternalId externalId = expectedRoutePointParams._1;
+            final ExternalId externalId = expectedRoutePointParams.externalId;
             final RoutePoint routePoint =
                     routePointRepository.findByExternalId(externalId).orElseThrow();
 
             assertThat(
                     String.format("route point %s should have correct order number", externalId),
                     routePoint.orderNumber(),
-                    is(expectedRoutePointParams._2));
+                    is(expectedRoutePointParams.orderNumber));
 
             final Node node = nodeRepository.findById(routePoint.node()).orElseThrow();
 
-            final ExternalId nodeExternalId = expectedRoutePointParams._3;
+            final ExternalId nodeExternalId = expectedRoutePointParams.nodeExternalId;
             assertThat(
                     String.format("route point %s should refer to node %s", externalId, nodeExternalId),
                     node.externalId(),
@@ -193,7 +202,7 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
                     .findById(routePoint.routeDirection())
                     .orElseThrow();
 
-            final ExternalId routeDirectionExternalId = expectedRoutePointParams._4;
+            final ExternalId routeDirectionExternalId = expectedRoutePointParams.routeDirectionExternalId;
             assertThat(
                     String.format(
                             "route point %s should refer to route direction %s", externalId, routeDirectionExternalId),
@@ -204,41 +213,41 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
 
     private void assertRouteStopPoints() {
         ROUTE_STOP_POINTS.forEach(expectedStopPointParams -> {
-            final ExternalId externalId = expectedStopPointParams._1;
+            final ExternalId externalId = expectedStopPointParams.externalId;
             final RouteStopPoint stopPoint =
                     routeStopPointTestRepository.findByExternalId(externalId).orElseThrow();
 
             assertThat(
                     String.format("stop point %s should have correct order number", externalId),
                     stopPoint.orderNumber(),
-                    is(expectedStopPointParams._2));
+                    is(expectedStopPointParams.routeStopPointOrderNumber));
 
             assertThat(
                     String.format("stop point %s should have correct Hastus point flag", externalId),
                     stopPoint.hastusStopPoint(),
-                    is(expectedStopPointParams._3));
+                    is(expectedStopPointParams.hastusPoint));
 
             assertThat(
                     String.format("stop point %s should have correct regulated timing point status", externalId),
                     stopPoint.regulatedTimingPointStatus(),
-                    is(expectedStopPointParams._4));
+                    is(expectedStopPointParams.regulatedTimingPointStatus));
 
             assertThat(
                     String.format("stop point %s should have correct via point flag", externalId),
                     stopPoint.viaPoint(),
-                    is(expectedStopPointParams._5));
+                    is(expectedStopPointParams.viaPoint));
 
-            if (expectedStopPointParams._6 != null) {
+            if (expectedStopPointParams.timetableColumnFi != null) {
                 final MultilingualString viaName = stopPoint.viaName().get();
                 assertThat(
                         String.format("stop point %s should have correct Finnish via name", externalId),
                         JoreLocaleUtil.getI18nString(viaName, JoreLocaleUtil.FINNISH),
-                        is(expectedStopPointParams._6));
+                        is(expectedStopPointParams.timetableColumnFi));
 
                 assertThat(
                         String.format("stop point %s should have correct Swedish via name", externalId),
                         JoreLocaleUtil.getI18nString(viaName, JoreLocaleUtil.SWEDISH),
-                        is(expectedStopPointParams._7));
+                        is(expectedStopPointParams.timetableColumnSv));
             } else {
                 assertThat(
                         "Stop point should not have via name",
@@ -249,24 +258,24 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
             assertThat(
                     String.format("stop point %s should have correct timetable column", externalId),
                     stopPoint.timetableColumn(),
-                    is(expectedStopPointParams._8));
+                    is(expectedStopPointParams.timetableColumnIndex));
         });
     }
 
     private void assertRouteLinks() {
         ROUTE_LINKS.forEach(expectedLinksParams -> {
-            final ExternalId externalId = expectedLinksParams._1;
+            final ExternalId externalId = expectedLinksParams.externalId;
             final RouteLink routeLink =
                     routeLinkImportRepository.findByExternalId(externalId).orElseThrow();
 
             assertThat(
                     String.format("route link %s should have correct order number", externalId),
                     routeLink.orderNumber(),
-                    is(expectedLinksParams._2));
+                    is(expectedLinksParams.orderNumber));
 
             final Link link = linkRepository.findById(routeLink.link()).orElseThrow();
 
-            final ExternalId linkExternalId = expectedLinksParams._3;
+            final ExternalId linkExternalId = expectedLinksParams.infrastructureLinkExternalId;
             assertThat(
                     String.format("route link %s should refer to link %s", externalId, linkExternalId),
                     link.externalId(),
@@ -276,7 +285,7 @@ public class ImportRouteLinksStepTest extends BatchIntegrationTest {
                     .findById(routeLink.routeDirection())
                     .orElseThrow();
 
-            final ExternalId routeDirectionExternalId = expectedLinksParams._4;
+            final ExternalId routeDirectionExternalId = expectedLinksParams.routeDirectionExternalId;
             assertThat(
                     String.format(
                             "route link %s should refer to route direction %s", externalId, routeDirectionExternalId),

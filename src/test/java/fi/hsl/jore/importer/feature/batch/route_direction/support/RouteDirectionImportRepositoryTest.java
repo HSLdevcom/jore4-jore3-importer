@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.route_direction.support;
 
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.getFirst;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.IntTest;
@@ -12,10 +13,10 @@ import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableRoute
 import fi.hsl.jore.importer.feature.network.route_direction.dto.RouteDirection;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.generated.RouteDirectionPK;
 import fi.hsl.jore.importer.feature.network.route_direction.repository.IRouteDirectionTestRepository;
-import io.vavr.collection.List;
-import io.vavr.collection.Map;
-import io.vavr.collection.Set;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -119,8 +120,7 @@ class RouteDirectionImportRepositoryTest {
                                     "Expected that only delete query was invoked but found: %s", result.keySet())
                             .containsOnly(RowStatus.DELETED);
 
-                    final Set<RouteDirectionPK> idsOfDeletedRows =
-                            result.get(RowStatus.DELETED).get();
+                    final Set<RouteDirectionPK> idsOfDeletedRows = result.get(RowStatus.DELETED);
 
                     softAssertions
                             .assertThat(idsOfDeletedRows)
@@ -170,8 +170,7 @@ class RouteDirectionImportRepositoryTest {
                                     "Expected that only insert query was invoked but found: %s", result.keySet())
                             .containsOnly(RowStatus.INSERTED);
 
-                    final Set<RouteDirectionPK> insertedIds =
-                            result.get(RowStatus.INSERTED).get();
+                    final Set<RouteDirectionPK> insertedIds = result.get(RowStatus.INSERTED);
 
                     softAssertions
                             .assertThat(insertedIds)
@@ -185,8 +184,7 @@ class RouteDirectionImportRepositoryTest {
                 void shouldReturnIdOfInsertedRouteDirection() {
                     final Map<RowStatus, Set<RouteDirectionPK>> result = importRepository.commitStagingToTarget();
 
-                    final RouteDirectionPK id =
-                            result.get(RowStatus.INSERTED).get().get();
+                    final RouteDirectionPK id = getFirst(result.get(RowStatus.INSERTED));
                     final Set<RouteDirectionPK> dbIds = targetRepository.findAllIds();
                     assertThat(dbIds)
                             .overridingErrorMessage(
@@ -198,8 +196,7 @@ class RouteDirectionImportRepositoryTest {
                 @DisplayName("Should insert a new route direction to the target table")
                 void shouldInsertNewRouteDirectionToTargetTable(SoftAssertions softAssertions) {
                     final Map<RowStatus, Set<RouteDirectionPK>> result = importRepository.commitStagingToTarget();
-                    final RouteDirectionPK id =
-                            result.get(RowStatus.INSERTED).get().get();
+                    final RouteDirectionPK id = getFirst(result.get(RowStatus.INSERTED));
 
                     final RouteDirection inserted =
                             targetRepository.findById(id).get();
@@ -340,8 +337,7 @@ class RouteDirectionImportRepositoryTest {
                                     "Expected that only update query was invoked but found: %s", result.keySet())
                             .containsOnly(RowStatus.UPDATED);
 
-                    final Set<RouteDirectionPK> idsOfUpdatedRows =
-                            result.get(RowStatus.UPDATED).get();
+                    final Set<RouteDirectionPK> idsOfUpdatedRows = result.get(RowStatus.UPDATED);
 
                     softAssertions
                             .assertThat(idsOfUpdatedRows)

@@ -11,8 +11,8 @@ import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.Persistable
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.generated.ScheduledStopPointPK;
 import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints;
 import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPointsStaging;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.Set;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -54,7 +54,7 @@ public class ScheduledStopPointImportRepository
                 .fetch()
                 .stream()
                 .map(row -> ScheduledStopPointPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     @Transactional
@@ -98,7 +98,7 @@ public class ScheduledStopPointImportRepository
                 .fetch()
                 .stream()
                 .map(row -> ScheduledStopPointPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     @Transactional
@@ -140,7 +140,7 @@ public class ScheduledStopPointImportRepository
                 .fetch()
                 .stream()
                 .map(row -> ScheduledStopPointPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     @Transactional

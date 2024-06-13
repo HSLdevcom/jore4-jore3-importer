@@ -2,7 +2,7 @@ package fi.hsl.jore.importer;
 
 import com.google.common.base.Preconditions;
 import fi.hsl.jore.importer.util.GeometryUtil;
-import io.vavr.collection.List;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 import org.locationtech.jts.geom.Coordinate;
@@ -37,7 +37,7 @@ public final class TestGeometryUtil {
     public static LineString randomLine(final int length) {
         Preconditions.checkArgument(length >= 2, "LineString length must be at least 2");
         final List<Coordinate> coords =
-                IntStream.range(0, length).boxed().map(i -> randomCoordinate()).collect(List.collector());
+                IntStream.range(0, length).boxed().map(i -> randomCoordinate()).toList();
         return GeometryUtil.toLineString(GeometryUtil.SRID_WGS84, coords);
     }
 
