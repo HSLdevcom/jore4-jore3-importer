@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.link_shape.support;
 
 import static fi.hsl.jore.importer.TestGeometryUtil.geometriesMatch;
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.getFirst;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -22,11 +23,10 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
-import io.vavr.collection.HashMap;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Map;
-import io.vavr.collection.Set;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.LineString;
@@ -67,7 +67,7 @@ public class LinkShapeImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenNoStagedRowsAndCommit_thenReturnEmptyResult() {
-        assertThat(importRepository.commitStagingToTarget(), is(HashMap.empty()));
+        assertThat(importRepository.commitStagingToTarget(), is(Collections.emptyMap()));
     }
 
     @Test
@@ -89,13 +89,13 @@ public class LinkShapeImportRepositoryTest extends IntegrationTest {
 
         final Map<RowStatus, Set<LinkShapePK>> result = importRepository.commitStagingToTarget();
 
-        assertThat("Only INSERTs should occur", result.keySet(), is(HashSet.of(RowStatus.INSERTED)));
+        assertThat("Only INSERTs should occur", result.keySet(), is(Set.of(RowStatus.INSERTED)));
 
-        final Set<LinkShapePK> ids = result.get(RowStatus.INSERTED).get();
+        final Set<LinkShapePK> ids = result.get(RowStatus.INSERTED);
 
         assertThat("Only a single shape is inserted", ids.size(), is(1));
 
-        final LinkShape shape = targetRepository.findById(ids.get()).orElseThrow();
+        final LinkShape shape = targetRepository.findById(getFirst(ids)).orElseThrow();
 
         assertThat(
                 "Target link should have the original geometry",
@@ -127,13 +127,13 @@ public class LinkShapeImportRepositoryTest extends IntegrationTest {
 
         final Map<RowStatus, Set<LinkShapePK>> result = importRepository.commitStagingToTarget();
 
-        assertThat("Only UPDATEs should occur", result.keySet(), is(HashSet.of(RowStatus.UPDATED)));
+        assertThat("Only UPDATEs should occur", result.keySet(), is(Set.of(RowStatus.UPDATED)));
 
-        final Set<LinkShapePK> ids = result.get(RowStatus.UPDATED).get();
+        final Set<LinkShapePK> ids = result.get(RowStatus.UPDATED);
 
         assertThat("Only a single shape is updated", ids.size(), is(1));
 
-        final LinkShapePK shapeId = ids.get();
+        final LinkShapePK shapeId = getFirst(ids);
         final LinkShape updatedShape = targetRepository.findById(shapeId).orElseThrow();
 
         assertThat(

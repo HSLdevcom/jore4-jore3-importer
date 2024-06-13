@@ -4,7 +4,7 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.NodeType;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import fi.hsl.jore.importer.util.GeometryUtil;
-import io.vavr.collection.List;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.locationtech.jts.geom.Coordinate;

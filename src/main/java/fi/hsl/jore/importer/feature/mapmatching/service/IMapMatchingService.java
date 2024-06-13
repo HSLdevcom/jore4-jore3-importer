@@ -3,7 +3,7 @@ package fi.hsl.jore.importer.feature.mapmatching.service;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.MapMatchingSuccessResponseDTO;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
-import io.vavr.collection.List;
+import java.util.List;
 
 public interface IMapMatchingService {
 

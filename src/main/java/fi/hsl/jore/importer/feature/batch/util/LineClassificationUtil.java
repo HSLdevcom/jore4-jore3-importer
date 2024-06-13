@@ -3,16 +3,15 @@ package fi.hsl.jore.importer.feature.batch.util;
 import fi.hsl.jore.importer.feature.jore3.enumerated.PublicTransportType;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore4.entity.TypeOfLine;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.Set;
+import java.util.Set;
 
 public final class LineClassificationUtil {
 
     public static final Set<String> REGIONAL_TRAFFIC_TRAIN_LINE_NUMBERS =
-            HashSet.of("Y", "X", "U", "L", "E", "A", "P", "I", "K");
+            Set.of("Y", "X", "U", "L", "E", "A", "P", "I", "K");
 
     public static final Set<String> LIGHT_RAIL_TRAM_LINE_NUMBERS =
-            HashSet.of("550"); // RaideJokeri / Pikaraitiotie 550 (under construction)
+            Set.of("550"); // RaideJokeri / Pikaraitiotie 550 (under construction)
 
     private LineClassificationUtil() {}
 

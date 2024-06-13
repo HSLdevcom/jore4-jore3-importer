@@ -17,7 +17,9 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.PersistableNode;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
 import fi.hsl.jore.importer.util.GeometryUtil;
-import io.vavr.collection.List;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.LineString;
@@ -83,7 +85,7 @@ public class LinkRepositoryTest extends IntegrationTest {
 
         final List<Link> linksFromDb = linkRepository.findAll();
 
-        assertThat(linksFromDb.map(IHasPK::pk).toSet(), is(keys.toSet()));
+        assertThat(linksFromDb.stream().map(IHasPK::pk).collect(Collectors.toSet()), is(Set.copyOf(keys)));
 
         for (final Link link : linksFromDb) {
             assertThat(link.geometry().getSRID(), is(GeometryUtil.SRID_WGS84));

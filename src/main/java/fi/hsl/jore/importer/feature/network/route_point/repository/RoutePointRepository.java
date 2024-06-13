@@ -7,11 +7,11 @@ import fi.hsl.jore.importer.feature.network.route_point.dto.generated.RoutePoint
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePoints;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePointsWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkRoutePointsRecord;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class RoutePointRepository implements IRoutePointTestRepository {
     @Override
     @Transactional
     public List<RoutePointPK> insert(final List<PersistableRoutePoint> entities) {
-        return entities.map(this::insert);
+        return entities.stream().map(this::insert).toList();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class RoutePointRepository implements IRoutePointTestRepository {
     @Override
     @Transactional
     public List<RoutePointPK> update(final List<RoutePoint> entities) {
-        return entities.map(this::update);
+        return entities.stream().map(this::update).toList();
     }
 
     @Override
@@ -114,7 +114,7 @@ public class RoutePointRepository implements IRoutePointTestRepository {
     @Override
     @Transactional(readOnly = true)
     public List<RoutePoint> findAll() {
-        return db.selectFrom(POINTS).fetchStream().map(RoutePoint::from).collect(List.collector());
+        return db.selectFrom(POINTS).fetchStream().map(RoutePoint::from).toList();
     }
 
     @Override
@@ -124,7 +124,7 @@ public class RoutePointRepository implements IRoutePointTestRepository {
                 .from(POINTS)
                 .fetchStream()
                 .map(row -> RoutePointPK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -160,6 +160,6 @@ public class RoutePointRepository implements IRoutePointTestRepository {
                 .orderBy(HISTORY_VIEW.NETWORK_ROUTE_POINT_SYS_PERIOD.asc())
                 .fetchStream()
                 .map(RoutePoint::from)
-                .collect(List.collector());
+                .toList();
     }
 }

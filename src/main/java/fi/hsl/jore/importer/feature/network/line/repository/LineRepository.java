@@ -7,11 +7,11 @@ import fi.hsl.jore.importer.feature.network.line.dto.generated.LinePK;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesWithHistory;
 import fi.hsl.jore.importer.jooq.network.tables.records.NetworkLinesRecord;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class LineRepository implements ILineTestRepository {
     @Override
     @Transactional
     public List<LinePK> insert(final List<PersistableLine> entities) {
-        return entities.map(this::insert);
+        return entities.stream().map(this::insert).toList();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class LineRepository implements ILineTestRepository {
     @Override
     @Transactional
     public List<LinePK> update(final List<Line> entities) {
-        return entities.map(this::update);
+        return entities.stream().map(this::update).toList();
     }
 
     @Override
@@ -112,7 +112,7 @@ public class LineRepository implements ILineTestRepository {
     @Override
     @Transactional(readOnly = true)
     public List<Line> findAll() {
-        return db.selectFrom(LINE).fetchStream().map(Line::from).collect(List.collector());
+        return db.selectFrom(LINE).fetchStream().map(Line::from).toList();
     }
 
     @Override
@@ -122,7 +122,7 @@ public class LineRepository implements ILineTestRepository {
                 .from(LINE)
                 .fetchStream()
                 .map(row -> LinePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -158,6 +158,6 @@ public class LineRepository implements ILineTestRepository {
                 .orderBy(HISTORY_VIEW.NETWORK_LINE_SYS_PERIOD.asc())
                 .fetchStream()
                 .map(Line::from)
-                .collect(List.collector());
+                .toList();
     }
 }

@@ -9,7 +9,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.LinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.repository.ILinkShapeTestRepository;
 import fi.hsl.jore.importer.util.GeometryUtil;
-import io.vavr.collection.List;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;

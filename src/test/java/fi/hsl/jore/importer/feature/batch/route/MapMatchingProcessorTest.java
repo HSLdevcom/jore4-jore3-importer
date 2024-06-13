@@ -22,7 +22,7 @@ import fi.hsl.jore.importer.feature.mapmatching.service.RouteGeometryTestFactory
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometry;
 import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRoutePoint;
 import fi.hsl.jore.importer.feature.network.route_point.repository.IRoutePointExportRepository;
-import io.vavr.collection.List;
+import java.util.Collections;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.AfterEach;
@@ -74,7 +74,7 @@ class MapMatchingProcessorTest {
         @BeforeEach
         void returnEmptyList() {
             given(repository.findImporterRoutePointsByRouteDirectionId(RouteGeometryTestFactory.ROUTE_DIRECTION_ID))
-                    .willReturn(List.empty());
+                    .willReturn(Collections.emptyList());
         }
 
         @Test
@@ -171,7 +171,7 @@ class MapMatchingProcessorTest {
         }
 
         void returnOneRoutePoint() {
-            final io.vavr.collection.List<ImporterRoutePoint> routePoints = createRoutePoints();
+            final java.util.List<ImporterRoutePoint> routePoints = createRoutePoints();
             given(repository.findImporterRoutePointsByRouteDirectionId(RouteGeometryTestFactory.ROUTE_DIRECTION_ID))
                     .willReturn(routePoints);
         }

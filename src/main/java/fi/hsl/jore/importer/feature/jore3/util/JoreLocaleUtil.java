@@ -31,6 +31,6 @@ public final class JoreLocaleUtil {
      * @return The found translation. If no translation is found, this method returns an empty string.
      */
     public static String getI18nString(final MultilingualString multilingualString, final Locale locale) {
-        return multilingualString.values().getOrElse(locale.toString(), "");
+        return multilingualString.values().getOrDefault(locale.toString(), "");
     }
 }

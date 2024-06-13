@@ -13,9 +13,9 @@ import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNod
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkRoutePoints;
 import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPoints;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
@@ -40,9 +40,8 @@ public class RoutePointExportRepository implements IRoutePointExportRepository {
 
     @Transactional(readOnly = true)
     @Override
-    public io.vavr.collection.List<ImporterRoutePoint> findImporterRoutePointsByRouteDirectionId(
-            final UUID routeDirectionId) {
-        final Stream<ImporterRoutePoint> pointStream = db.select(
+    public List<ImporterRoutePoint> findImporterRoutePointsByRouteDirectionId(final UUID routeDirectionId) {
+        return db.select(
                         NRD.NETWORK_ROUTE_JORE4_ID,
                         SSP.SCHEDULED_STOP_POINT_ELY_NUMBER,
                         SSP.SCHEDULED_STOP_POINT_SHORT_ID,
@@ -62,9 +61,8 @@ public class RoutePointExportRepository implements IRoutePointExportRepository {
                 .where(getFindImporterRoutePointsByRouteDirectionIdWhereConditions(routeDirectionId))
                 .orderBy(NRP.NETWORK_ROUTE_POINT_ORDER)
                 .fetchStream()
-                .map(RoutePointExportRepository::mapRecordToImporterRoutePoint);
-
-        return io.vavr.collection.List.ofAll(pointStream);
+                .map(RoutePointExportRepository::mapRecordToImporterRoutePoint)
+                .toList();
     }
 
     private Condition getFindImporterRoutePointsByRouteDirectionIdWhereConditions(final UUID routeDirectionId) {

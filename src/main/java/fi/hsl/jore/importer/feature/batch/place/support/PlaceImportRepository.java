@@ -7,8 +7,8 @@ import fi.hsl.jore.importer.feature.network.place.dto.PersistablePlace;
 import fi.hsl.jore.importer.feature.network.place.dto.generated.PlacePK;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkPlaces;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkPlacesStaging;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.Set;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class PlaceImportRepository extends AbstractImportRepository<PersistableP
                 .fetch()
                 .stream()
                 .map(row -> PlacePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     protected Set<PlacePK> update() {
@@ -79,7 +79,7 @@ public class PlaceImportRepository extends AbstractImportRepository<PersistableP
                 .fetch()
                 .stream()
                 .map(row -> PlacePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     protected Set<PlacePK> delete() {
@@ -93,6 +93,6 @@ public class PlaceImportRepository extends AbstractImportRepository<PersistableP
                 .fetch()
                 .stream()
                 .map(row -> PlacePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 }

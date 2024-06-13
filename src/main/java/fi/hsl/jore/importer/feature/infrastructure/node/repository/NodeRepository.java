@@ -7,11 +7,11 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodes;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNodesWithHistory;
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNodesRecord;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class NodeRepository implements INodeTestRepository {
     @Override
     @Transactional
     public List<NodePK> insert(final List<PersistableNode> entities) {
-        return entities.map(this::insert);
+        return entities.stream().map(this::insert).toList();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class NodeRepository implements INodeTestRepository {
     @Override
     @Transactional
     public List<NodePK> update(final List<Node> entities) {
-        return entities.map(this::update);
+        return entities.stream().map(this::update).toList();
     }
 
     @Override
@@ -112,7 +112,7 @@ public class NodeRepository implements INodeTestRepository {
     @Override
     @Transactional(readOnly = true)
     public List<Node> findAll() {
-        return db.selectFrom(NODE).fetchStream().map(Node::from).collect(List.collector());
+        return db.selectFrom(NODE).fetchStream().map(Node::from).toList();
     }
 
     @Override
@@ -122,7 +122,7 @@ public class NodeRepository implements INodeTestRepository {
                 .from(NODE)
                 .fetchStream()
                 .map(row -> NodePK.of(row.value1()))
-                .collect(HashSet.collector());
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -158,6 +158,6 @@ public class NodeRepository implements INodeTestRepository {
                 .orderBy(HISTORY_VIEW.INFRASTRUCTURE_NODE_SYS_PERIOD.asc())
                 .fetchStream()
                 .map(Node::from)
-                .collect(List.collector());
+                .toList();
     }
 }

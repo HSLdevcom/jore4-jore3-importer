@@ -2,12 +2,11 @@ package fi.hsl.jore.importer.feature.batch.util;
 
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
-import io.vavr.collection.HashMap;
-import io.vavr.collection.Map;
+import java.util.Map;
 
 public final class TransitTypeToNetworkTypeMapper {
 
-    public static final Map<TransitType, NetworkType> TO_NETWORK_TYPE = HashMap.of(
+    public static final Map<TransitType, NetworkType> TO_NETWORK_TYPE = Map.of(
             TransitType.BUS, NetworkType.ROAD,
             TransitType.SUBWAY, NetworkType.METRO_TRACK,
             TransitType.TRAM, NetworkType.TRAM_TRACK,
@@ -18,6 +17,6 @@ public final class TransitTypeToNetworkTypeMapper {
     private TransitTypeToNetworkTypeMapper() {}
 
     public static NetworkType resolveNetworkType(final TransitType transitType) {
-        return TO_NETWORK_TYPE.getOrElse(transitType, NetworkType.UNKNOWN);
+        return TO_NETWORK_TYPE.getOrDefault(transitType, NetworkType.UNKNOWN);
     }
 }

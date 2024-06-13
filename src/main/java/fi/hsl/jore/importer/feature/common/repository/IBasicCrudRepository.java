@@ -3,9 +3,9 @@ package fi.hsl.jore.importer.feature.common.repository;
 import fi.hsl.jore.importer.feature.common.dto.field.PK;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface IBasicCrudRepository<ID extends PK, ENTITY extends IHasPK<ID>, PERSISTABLE> {
     List<ENTITY> findAll();

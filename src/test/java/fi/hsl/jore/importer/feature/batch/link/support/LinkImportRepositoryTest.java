@@ -1,6 +1,7 @@
 package fi.hsl.jore.importer.feature.batch.link.support;
 
 import static fi.hsl.jore.importer.TestGeometryUtil.geometriesMatch;
+import static fi.hsl.jore.importer.util.JoreCollectionUtils.getFirst;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -21,12 +22,11 @@ import fi.hsl.jore.importer.feature.infrastructure.node.dto.generated.NodePK;
 import fi.hsl.jore.importer.feature.infrastructure.node.repository.INodeTestRepository;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
-import io.vavr.collection.HashMap;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Map;
-import io.vavr.collection.Set;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.LineString;
@@ -62,7 +62,7 @@ public class LinkImportRepositoryTest extends IntegrationTest {
 
     @Test
     public void whenNoStagedRowsAndCommit_thenReturnEmptyResult() {
-        assertThat(importRepository.commitStagingToTarget(), is(HashMap.empty()));
+        assertThat(importRepository.commitStagingToTarget(), is(Collections.emptyMap()));
     }
 
     @Test
@@ -83,15 +83,15 @@ public class LinkImportRepositoryTest extends IntegrationTest {
 
         final Map<RowStatus, Set<LinkPK>> result = importRepository.commitStagingToTarget();
 
-        assertThat("Only INSERTs should occur", result.keySet(), is(HashSet.of(RowStatus.INSERTED)));
+        assertThat("Only INSERTs should occur", result.keySet(), is(Set.of(RowStatus.INSERTED)));
 
-        final Set<LinkPK> ids = result.get(RowStatus.INSERTED).get();
+        final Set<LinkPK> ids = result.get(RowStatus.INSERTED);
 
         assertThat("Only a single row is inserted", ids.size(), is(1));
 
         assertThat("Target repository should contain only the inserted row", targetRepository.findAllIds(), is(ids));
 
-        final LinkPK id = ids.get();
+        final LinkPK id = getFirst(ids);
 
         final Link link = targetRepository.findById(id).orElseThrow();
 
@@ -119,18 +119,18 @@ public class LinkImportRepositoryTest extends IntegrationTest {
         assertThat(
                 "Target repository should now contain a single row",
                 targetRepository.findAllIds(),
-                is(HashSet.of(existingId)));
+                is(Set.of(existingId)));
 
         importRepository.submitToStaging(
                 List.of(Jore3Link.of(externalId, networkType, LINE_2, startNodeExtId, endNodeExtId)));
 
         final Map<RowStatus, Set<LinkPK>> result = importRepository.commitStagingToTarget();
 
-        assertThat("Only UPDATEs should occur", result.keySet(), is(HashSet.of(RowStatus.UPDATED)));
+        assertThat("Only UPDATEs should occur", result.keySet(), is(Set.of(RowStatus.UPDATED)));
 
-        final Set<LinkPK> ids = result.get(RowStatus.UPDATED).get();
+        final Set<LinkPK> ids = result.get(RowStatus.UPDATED);
 
-        assertThat("Only a single row is updated", ids, is(HashSet.of(existingId)));
+        assertThat("Only a single row is updated", ids, is(Set.of(existingId)));
 
         assertThat("Target repository should still contain a single row", targetRepository.findAllIds(), is(ids));
 
@@ -161,7 +161,7 @@ public class LinkImportRepositoryTest extends IntegrationTest {
         assertThat(
                 "Target repository should now contain a single row",
                 targetRepository.findAllIds(),
-                is(HashSet.of(existingId)));
+                is(Set.of(existingId)));
 
         // We submit the same link
         importRepository.submitToStaging(List.of(Jore3Link.of(
@@ -173,12 +173,12 @@ public class LinkImportRepositoryTest extends IntegrationTest {
 
         final Map<RowStatus, Set<LinkPK>> result = importRepository.commitStagingToTarget();
 
-        assertThat("No operations should occur", result.keySet(), is(HashSet.empty()));
+        assertThat("No operations should occur", result.keySet(), is(Collections.emptySet()));
 
         assertThat(
                 "Target repository should still contain a single row",
                 targetRepository.findAllIds(),
-                is(HashSet.of(existingId)));
+                is(Set.of(existingId)));
 
         final Link link = targetRepository.findById(existingId).orElseThrow();
 
@@ -207,7 +207,7 @@ public class LinkImportRepositoryTest extends IntegrationTest {
         assertThat(
                 "Target repository should now contain a single row",
                 targetRepository.findAllIds(),
-                is(HashSet.of(existingId)));
+                is(Set.of(existingId)));
 
         // We submit the same link, but with new jore transit type (and hence new external id)
         final TransitType newTransitType = TransitType.TRAIN;
@@ -221,9 +221,9 @@ public class LinkImportRepositoryTest extends IntegrationTest {
         assertThat(
                 "Only INSERT and DELETE operations should occur",
                 result.keySet(),
-                is(HashSet.of(RowStatus.INSERTED, RowStatus.DELETED)));
+                is(Set.of(RowStatus.INSERTED, RowStatus.DELETED)));
 
-        assertThat("The original link is deleted", result.get(RowStatus.DELETED).get(), is(HashSet.of(existingId)));
+        assertThat("The original link is deleted", result.get(RowStatus.DELETED), is(Set.of(existingId)));
 
         final Optional<Link> oldLink = targetRepository.findById(existingId);
 
@@ -279,15 +279,15 @@ public class LinkImportRepositoryTest extends IntegrationTest {
 
         final Map<RowStatus, Set<LinkPK>> result = importRepository.commitStagingToTarget();
 
-        assertThat("Only DELETEs should occur", result.keySet(), is(HashSet.of(RowStatus.DELETED)));
+        assertThat("Only DELETEs should occur", result.keySet(), is(Set.of(RowStatus.DELETED)));
 
-        final Set<LinkPK> ids = result.get(RowStatus.DELETED).get();
+        final Set<LinkPK> ids = result.get(RowStatus.DELETED);
 
-        assertThat("Only a single row is deleted", ids, is(HashSet.of(firstId)));
+        assertThat("Only a single row is deleted", ids, is(Set.of(firstId)));
 
         assertThat(
                 "Target repository should contain the second link",
                 targetRepository.findAllIds(),
-                is(HashSet.of(secondId)));
+                is(Set.of(secondId)));
     }
 }
