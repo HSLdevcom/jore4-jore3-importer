@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Start e2e env
-        uses: HSLdevcom/jore4-tools/github-actions/setup-e2e-environment@setup-e2e-environment-v1
+        uses: HSLdevcom/jore4-tools/github-actions/setup-e2e-environment@setup-e2e-environment-v6
         with:
           custom_docker_compose: ./docker/docker-compose.custom.yml
 
@@ -58,8 +58,7 @@ jobs:
       - name: Verify that Hasura migrations have been run
         uses: HSLdevcom/jore4-tools/github-actions/healthcheck@healthcheck-v1
         with:
-          command:
-            "curl --fail http://localhost:3201/healthz --output /dev/null
+          command: "curl --fail http://localhost:3201/healthz --output /dev/null
             --silent"
           # It may take a while before migrations are run
           retries: 100
