@@ -10,12 +10,12 @@ COMMAND=${1:-}
 # the docker environment of this project from others
 export COMPOSE_PROJECT_NAME=jore3-importer
 
-DOCKER_COMPOSE_CMD="docker-compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.testdb-volume.yml -f ./docker/docker-compose.custom.yml"
+DOCKER_COMPOSE_CMD="docker compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.testdb-volume.yml -f ./docker/docker-compose.custom.yml"
 
 # if the --no-volume parameter is set, the testdb volume will not be mounted
 for i in "$@" ; do
     if [[ $i == "--no-volume" ]] ; then
-        DOCKER_COMPOSE_CMD="docker-compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.custom.yml"
+        DOCKER_COMPOSE_CMD="docker compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.custom.yml"
         break
     fi
 done
@@ -107,8 +107,8 @@ if [[ ${COMMAND} == "remove" ]]; then
 fi
 
 if [[ ${COMMAND} == "recreate" ]]; then
-  docker-compose stop
-  docker-compose rm -f
+  docker compose stop
+  docker compose rm -f
   $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb
   exit 0
 fi
