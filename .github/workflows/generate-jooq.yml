@@ -8,6 +8,9 @@ on:
 jobs:
   generate-jooq:
     name: Verifies whether generated jooq classes have been updated
+    # These must run on ubuntu 22.04 or older.
+    # The MS SQL server used by jore4-jore3-importer,
+    # does not run on Linux kernels newer than 6.6.x.
     runs-on: ubuntu-22.04
 
     steps:
@@ -26,13 +29,7 @@ jobs:
           java-package: jdk
           architecture: x64
           distribution: temurin
-
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+          cache: maven
 
       - name: Run jooq class generation
         run: ./development.sh generate:jooq --no-volume
