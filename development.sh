@@ -109,17 +109,17 @@ case $COMMAND in
     ;;
 
   stop)
-    $DOCKER_COMPOSE_CMD down
+    docker compose stop
     ;;
 
   remove)
-    $DOCKER_COMPOSE_CMD rm -f
+    docker compose rm -f
     ;;
 
   recreate)
     docker compose stop
     docker compose rm -f
-    $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb
+    start_deps
     ;;
 
   list)
