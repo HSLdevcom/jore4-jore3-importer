@@ -21,15 +21,23 @@ for i in "$@" ; do
 done
 
 instruct_and_exit() {
-  echo "Usage: ${0} <command>"
-  echo ""
-  echo "Available commands:"
-  echo "start               Start the dependencies and the dockerized application"
-  echo "start:deps          Start the dependencies only"
-  echo "generate:jooq       Start the dependencies and generate JOOQ classes"
-  echo "stop                Stop the dependencies and the dockerized application"
-  echo "recreate            Remove and recreate the dependencies, removing all data"
-  echo "list                List running dependencies"
+  echo "
+  Usage: ${0} <command>
+
+  Available commands:
+
+  start               Start the dependencies and the dockerized application
+
+  start:deps          Start the dependencies only
+
+  generate:jooq       Start the dependencies and generate JOOQ classes
+
+  stop                Stop the dependencies and the dockerized application
+
+  recreate            Remove and recreate the dependencies, removing all data
+
+  list                List running dependencies
+  "
   exit 1
 }
 
@@ -120,6 +128,6 @@ fi
 
 ### Unknown argument was passed.
 
-echo "Unknown command '${COMMAND}' !"
 echo ""
+echo "Unknown command: '${COMMAND}'"
 instruct_and_exit
