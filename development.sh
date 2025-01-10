@@ -22,7 +22,7 @@ done
 
 instruct_and_exit() {
   echo "
-  Usage: ${0} <command>
+  Usage: $(basename "$0") <command>
 
   Available commands:
 
@@ -30,11 +30,13 @@ instruct_and_exit() {
 
   start:deps          Start the dependencies only
 
-  generate:jooq       Start the dependencies and generate JOOQ classes
+  generate:jooq       Generate JOOQ classes
 
   stop                Stop the dependencies and the dockerized application
 
-  recreate            Remove and recreate the dependencies, removing all data
+  remove              Remove the dependencies and the dockerized application
+
+  recreate            Stop, remove and recreate the dependencies, removing all data
 
   list                List running dependencies
   "
