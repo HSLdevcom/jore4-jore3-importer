@@ -18,7 +18,7 @@ for i in "$@" ; do
     fi
 done
 
-instruct_and_exit() {
+print_usage() {
   echo "
   Usage: $(basename "$0") <command>
 
@@ -38,7 +38,6 @@ instruct_and_exit() {
 
   list                List running dependencies
   "
-  exit 1
 }
 
 download_docker_bundle() {
@@ -49,12 +48,10 @@ download_docker_bundle() {
 }
 
 start_all() {
-  download_docker_bundle
   $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-jore3importer jore4-mapmatchingdb jore4-mapmatching
 }
 
 start_deps() {
-  download_docker_bundle
   # Runs the following services:
   # importer-jooq-database - The database which contains the information imported and transformed from Jore 3
   # importer-test-destination-database - The test database which contains the information imported and transformed from Jore 3
@@ -91,15 +88,18 @@ generate_jooq() {
 COMMAND=${1:-}
 
 if [[ -z $COMMAND ]]; then
-  instruct_and_exit
+  print_usage
+  exit 1
 fi
 
 case $COMMAND in
   start)
+    download_docker_bundle
     start_all
     ;;
 
   start:deps)
+    download_docker_bundle
     start_deps
     ;;
 
@@ -129,6 +129,7 @@ case $COMMAND in
   *)
     echo ""
     echo "Unknown command: '${COMMAND}'"
-    instruct_and_exit
+    print_usage
+    exit 1
     ;;
 esac
