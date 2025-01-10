@@ -64,6 +64,24 @@ start_deps() {
   $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-mapmatchingdb jore4-mapmatching
 }
 
+wait_for_test_databases_to_be_ready() {
+  while ! pg_isready -h localhost -p 17000
+  do
+    echo "waiting for importer db to spin up"
+    sleep 2;
+  done
+  while ! pg_isready -h localhost -p 6432
+  do
+    echo "waiting for Jore 4 db to spin up"
+    sleep 2;
+  done
+  while ! curl --fail http://localhost:3201/healthz --output /dev/null --silent
+  do
+    echo "waiting for hasura db migrations to execute"
+    sleep 2;
+  done
+}
+
 generate_jooq() {
   mvn clean generate-sources -Pci
 }
@@ -86,21 +104,7 @@ case $COMMAND in
     ;;
 
   generate:jooq)
-    while ! pg_isready -h localhost -p 17000
-    do
-      echo "waiting for importer db to spin up"
-      sleep 2;
-    done
-    while ! pg_isready -h localhost -p 6432
-    do
-      echo "waiting for Jore 4 db to spin up"
-      sleep 2;
-    done
-    while ! curl --fail http://localhost:3201/healthz --output /dev/null --silent
-    do
-      echo "waiting for hasura db migrations to execute"
-      sleep 2;
-    done
+    wait_for_test_databases_to_be_ready
     generate_jooq
     ;;
 
