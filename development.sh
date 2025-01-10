@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
 cd "$(dirname "$0")" # Setting the working directory as the script directory
-
-COMMAND=${1:-}
 
 # Define a Docker Compose project name to distinguish
 # the docker environment of this project from others
@@ -72,64 +70,61 @@ generate_jooq() {
 
 ### Control flow
 
-if [[ -z ${COMMAND} ]]; then
+COMMAND=${1:-}
+
+if [[ -z $COMMAND ]]; then
   instruct_and_exit
 fi
 
-if [[ ${COMMAND} == "start" ]]; then
-  start_all
-  exit 0
-fi
+case $COMMAND in
+  start)
+    start_all
+    ;;
 
-if [[ ${COMMAND} == "start:deps" ]]; then
-  start_deps
-  exit 0
-fi
+  start:deps)
+    start_deps
+    ;;
 
-if [[ ${COMMAND} == "generate:jooq" ]]; then
-  while ! pg_isready -h localhost -p 17000
-  do
-    echo "waiting for importer db to spin up"
-    sleep 2;
-  done
-  while ! pg_isready -h localhost -p 6432
-  do
-    echo "waiting for Jore 4 db to spin up"
-    sleep 2;
-  done
-  while ! curl --fail http://localhost:3201/healthz --output /dev/null --silent
-  do
-    echo "waiting for hasura db migrations to execute"
-    sleep 2;
-  done
-  generate_jooq
-  exit 0
-fi
+  generate:jooq)
+    while ! pg_isready -h localhost -p 17000
+    do
+      echo "waiting for importer db to spin up"
+      sleep 2;
+    done
+    while ! pg_isready -h localhost -p 6432
+    do
+      echo "waiting for Jore 4 db to spin up"
+      sleep 2;
+    done
+    while ! curl --fail http://localhost:3201/healthz --output /dev/null --silent
+    do
+      echo "waiting for hasura db migrations to execute"
+      sleep 2;
+    done
+    generate_jooq
+    ;;
 
-if [[ ${COMMAND} == "stop" ]]; then
-  $DOCKER_COMPOSE_CMD down
-  exit 0
-fi
+  stop)
+    $DOCKER_COMPOSE_CMD down
+    ;;
 
-if [[ ${COMMAND} == "remove" ]]; then
-  $DOCKER_COMPOSE_CMD rm -f
-  exit 0
-fi
+  remove)
+    $DOCKER_COMPOSE_CMD rm -f
+    ;;
 
-if [[ ${COMMAND} == "recreate" ]]; then
-  docker compose stop
-  docker compose rm -f
-  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb
-  exit 0
-fi
+  recreate)
+    docker compose stop
+    docker compose rm -f
+    $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb
+    ;;
 
-if [[ ${COMMAND} == "list" ]]; then
-  $DOCKER_COMPOSE_CMD config --services
-  exit 0
-fi
+  list)
+    $DOCKER_COMPOSE_CMD config --services
+    ;;
 
-### Unknown argument was passed.
-
-echo ""
-echo "Unknown command: '${COMMAND}'"
-instruct_and_exit
+  *)
+    echo ""
+    echo "Unknown command: '${COMMAND}'"
+    instruct_and_exit
+    ;;
+esac
