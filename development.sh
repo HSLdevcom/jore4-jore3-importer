@@ -24,11 +24,21 @@ print_usage() {
 
   Available commands:
 
-  start
+  start [<commit_ref>]
     Start the dependencies and the dockerized application.
 
-  start:deps
+    Optionally, you can pass a commit reference as an argument (like commit SHA
+    or its initial substring) to point to a commit (of the
+    jore4-docker-compose-bundle repository), which determines the Docker Compose
+    bundle version to download. By default, the tip of the main branch is used.
+
+  start:deps [<commit_ref>]
     Start the dependencies only.
+
+    Optionally, you can pass a commit reference as an argument (like commit SHA
+    or its initial substring) to point to a commit (of the
+    jore4-docker-compose-bundle repository), which determines the Docker Compose
+    bundle version to download. By default, the tip of the main branch is used.
 
   generate:jooq
     Generate JOOQ classes.
