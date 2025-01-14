@@ -24,19 +24,26 @@ print_usage() {
 
   Available commands:
 
-  start               Start the dependencies and the dockerized application
+  start
+    Start the dependencies and the dockerized application.
 
-  start:deps          Start the dependencies only
+  start:deps
+    Start the dependencies only.
 
-  generate:jooq       Generate JOOQ classes
+  generate:jooq
+    Generate JOOQ classes.
 
-  stop                Stop the dependencies and the dockerized application
+  stop
+    Stop the dependencies and the dockerized application.
 
-  remove              Remove the dependencies and the dockerized application
+  remove
+    Remove the dependencies and the dockerized application.
 
-  recreate            Stop, remove and recreate the dependencies, removing all data
+  recreate
+    Stop, remove and recreate the dependencies, removing all data.
 
-  list                List running dependencies
+  list
+    List running dependencies.
   "
 }
 
