@@ -12,10 +12,10 @@ DOCKER_COMPOSE_CMD="docker compose -f ./docker/docker-compose.yml -f ./docker/do
 
 # if the --no-volume parameter is set, the testdb volume will not be mounted
 for i in "$@" ; do
-    if [[ $i == "--no-volume" ]] ; then
-        DOCKER_COMPOSE_CMD="docker compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.custom.yml"
-        break
-    fi
+  if [[ $i == "--no-volume" ]] ; then
+    DOCKER_COMPOSE_CMD="docker compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.custom.yml"
+    break
+  fi
 done
 
 print_usage() {
