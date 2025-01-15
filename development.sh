@@ -55,7 +55,7 @@ print_usage() {
     Stop the dependencies and the dockerized application.
 
   remove
-    Remove the dependencies and the dockerized application.
+    Stop and remove the dependencies and the dockerized application.
 
   recreate
     Stop, remove and recreate the dependencies, removing all data.
@@ -148,6 +148,14 @@ start_deps() {
   $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-mapmatchingdb jore4-mapmatching
 }
 
+stop() {
+  docker compose --project-name "$COMPOSE_PROJECT_NAME" stop
+}
+
+remove() {
+  docker compose --project-name "$COMPOSE_PROJECT_NAME" down
+}
+
 wait_for_test_databases_to_be_ready() {
   while ! pg_isready -h localhost -p 17000
   do
@@ -196,16 +204,15 @@ case $COMMAND in
     ;;
 
   stop)
-    docker compose stop
+    stop
     ;;
 
   remove)
-    docker compose rm -f
+    remove
     ;;
 
   recreate)
-    docker compose stop
-    docker compose rm -f
+    remove
     start_deps
     ;;
 
