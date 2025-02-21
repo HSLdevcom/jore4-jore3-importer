@@ -52,7 +52,7 @@ public class JourneyPattern extends TableImpl<Record> {
      * <code>journey_pattern.journey_pattern.journey_pattern_id</code>. The ID
      * of the journey pattern.
      */
-    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "The ID of the journey pattern.");
+    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("public.gen_random_uuid()"), SQLDataType.UUID)), this, "The ID of the journey pattern.");
 
     /**
      * The column <code>journey_pattern.journey_pattern.on_route_id</code>. The

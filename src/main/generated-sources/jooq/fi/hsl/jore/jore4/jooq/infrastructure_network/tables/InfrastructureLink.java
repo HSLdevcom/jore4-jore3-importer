@@ -57,7 +57,7 @@ public class InfrastructureLink extends TableImpl<Record> {
      * <code>infrastructure_network.infrastructure_link.infrastructure_link_id</code>.
      * The ID of the infrastructure link.
      */
-    public final TableField<Record, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "The ID of the infrastructure link.");
+    public final TableField<Record, UUID> INFRASTRUCTURE_LINK_ID = createField(DSL.name("infrastructure_link_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("public.gen_random_uuid()"), SQLDataType.UUID)), this, "The ID of the infrastructure link.");
 
     /**
      * The column

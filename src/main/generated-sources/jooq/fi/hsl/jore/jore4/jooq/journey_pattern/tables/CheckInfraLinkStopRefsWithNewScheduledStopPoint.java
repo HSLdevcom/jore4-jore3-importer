@@ -49,7 +49,7 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
      * The column
      * <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point.journey_pattern_id</code>.
      */
-    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "");
+    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("public.gen_random_uuid()"), SQLDataType.UUID)), this, "");
 
     /**
      * The column

@@ -52,7 +52,7 @@ public class Route extends TableImpl<Record> {
     /**
      * The column <code>route.route.route_id</code>. The ID of the route.
      */
-    public final TableField<Record, UUID> ROUTE_ID = createField(DSL.name("route_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "The ID of the route.");
+    public final TableField<Record, UUID> ROUTE_ID = createField(DSL.name("route_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("public.gen_random_uuid()"), SQLDataType.UUID)), this, "The ID of the route.");
 
     /**
      * The column <code>route.route.description_i18n</code>. The description of

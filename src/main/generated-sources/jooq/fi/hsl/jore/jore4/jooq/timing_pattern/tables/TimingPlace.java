@@ -55,7 +55,7 @@ public class TimingPlace extends TableImpl<Record> {
     /**
      * The column <code>timing_pattern.timing_place.timing_place_id</code>.
      */
-    public final TableField<Record, UUID> TIMING_PLACE_ID = createField(DSL.name("timing_place_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "");
+    public final TableField<Record, UUID> TIMING_PLACE_ID = createField(DSL.name("timing_place_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("public.gen_random_uuid()"), SQLDataType.UUID)), this, "");
 
     /**
      * The column <code>timing_pattern.timing_place.label</code>.
