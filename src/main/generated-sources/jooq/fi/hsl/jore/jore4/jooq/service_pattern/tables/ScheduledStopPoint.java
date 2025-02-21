@@ -59,7 +59,7 @@ public class ScheduledStopPoint extends TableImpl<Record> {
      * <code>service_pattern.scheduled_stop_point.scheduled_stop_point_id</code>.
      * The ID of the scheduled stop point.
      */
-    public final TableField<Record, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "The ID of the scheduled stop point.");
+    public final TableField<Record, UUID> SCHEDULED_STOP_POINT_ID = createField(DSL.name("scheduled_stop_point_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("public.gen_random_uuid()"), SQLDataType.UUID)), this, "The ID of the scheduled stop point.");
 
     /**
      * The column

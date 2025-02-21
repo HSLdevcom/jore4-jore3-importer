@@ -49,7 +49,7 @@ public class GetBrokenRouteJourneyPatterns extends TableImpl<Record> {
      * The column
      * <code>journey_pattern.get_broken_route_journey_patterns.journey_pattern_id</code>.
      */
-    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "");
+    public final TableField<Record, UUID> JOURNEY_PATTERN_ID = createField(DSL.name("journey_pattern_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("public.gen_random_uuid()"), SQLDataType.UUID)), this, "");
 
     /**
      * The column

@@ -54,7 +54,7 @@ public class Line extends TableImpl<Record> {
     /**
      * The column <code>route.line.line_id</code>. The ID of the line.
      */
-    public final TableField<Record, UUID> LINE_ID = createField(DSL.name("line_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("gen_random_uuid()"), SQLDataType.UUID)), this, "The ID of the line.");
+    public final TableField<Record, UUID> LINE_ID = createField(DSL.name("line_id"), SQLDataType.UUID.nullable(false).defaultValue(DSL.field(DSL.raw("public.gen_random_uuid()"), SQLDataType.UUID)), this, "The ID of the line.");
 
     /**
      * The column <code>route.line.name_i18n</code>. The name of the line.
