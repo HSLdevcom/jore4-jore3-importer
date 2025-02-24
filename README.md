@@ -26,7 +26,7 @@ value will reflect the status of the currently running job.
 The following example demonstrates how you can start the import job by using curl:
 
 ```shell
-$ curl -X POST http://localhost:8080/job/import/start/
+$ curl -X POST http://localhost:8080/job/import/start
 {"id":0,"batchStatus":"STARTING","exitCode":"UNKNOWN","exitDescription":null,"startTime":null,"endTime":null}
 ```
 
@@ -44,14 +44,14 @@ The following examples demonstrates how you can query the status of the latest i
 **Example 1: import is running:**
 
 ```shell
-$ curl http://localhost:8080/job/import/status/
+$ curl http://localhost:8080/job/import/status
 {"id":5,"batchStatus":"STARTED","exitCode":"UNKNOWN","exitDescription":null,"startTime":"2021-04-09T08:35:51.560Z","endTime":null}
 ```
 
 **Example 2: import was completed successfully:**
 
 ```shell
-$ curl http://localhost:8080/job/import/status/
+$ curl http://localhost:8080/job/import/status
 {"id":5,"batchStatus":"COMPLETED","exitCode":"COMPLETED","exitDescription":null,"startTime":"2021-04-09T08:35:51.560Z","endTime":"2021-04-09T08:36:11.308Z"}
 ```
 
