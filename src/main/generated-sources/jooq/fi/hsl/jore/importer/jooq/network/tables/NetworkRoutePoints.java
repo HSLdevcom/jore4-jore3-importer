@@ -173,20 +173,7 @@ public class NetworkRoutePoints extends TableImpl<NetworkRoutePointsRecord> {
 
     @Override
     public List<ForeignKey<NetworkRoutePointsRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.NETWORK_ROUTE_POINTS__NETWORK_ROUTE_POINTS_NETWORK_ROUTE_DIRECTION_ID_FKEY, Keys.NETWORK_ROUTE_POINTS__NETWORK_ROUTE_POINTS_INFRASTRUCTURE_NODE_FKEY);
-    }
-
-    private transient NetworkRouteDirectionsPath _networkRouteDirections;
-
-    /**
-     * Get the implicit join path to the
-     * <code>network.network_route_directions</code> table.
-     */
-    public NetworkRouteDirectionsPath networkRouteDirections() {
-        if (_networkRouteDirections == null)
-            _networkRouteDirections = new NetworkRouteDirectionsPath(this, Keys.NETWORK_ROUTE_POINTS__NETWORK_ROUTE_POINTS_NETWORK_ROUTE_DIRECTION_ID_FKEY, null);
-
-        return _networkRouteDirections;
+        return Arrays.asList(Keys.NETWORK_ROUTE_POINTS__NETWORK_ROUTE_POINTS_INFRASTRUCTURE_NODE_FKEY, Keys.NETWORK_ROUTE_POINTS__NETWORK_ROUTE_POINTS_NETWORK_ROUTE_DIRECTION_ID_FKEY);
     }
 
     private transient InfrastructureNodesPath _infrastructureNodes;
@@ -200,6 +187,19 @@ public class NetworkRoutePoints extends TableImpl<NetworkRoutePointsRecord> {
             _infrastructureNodes = new InfrastructureNodesPath(this, Keys.NETWORK_ROUTE_POINTS__NETWORK_ROUTE_POINTS_INFRASTRUCTURE_NODE_FKEY, null);
 
         return _infrastructureNodes;
+    }
+
+    private transient NetworkRouteDirectionsPath _networkRouteDirections;
+
+    /**
+     * Get the implicit join path to the
+     * <code>network.network_route_directions</code> table.
+     */
+    public NetworkRouteDirectionsPath networkRouteDirections() {
+        if (_networkRouteDirections == null)
+            _networkRouteDirections = new NetworkRouteDirectionsPath(this, Keys.NETWORK_ROUTE_POINTS__NETWORK_ROUTE_POINTS_NETWORK_ROUTE_DIRECTION_ID_FKEY, null);
+
+        return _networkRouteDirections;
     }
 
     private transient NetworkRouteStopPointsPath _networkRouteStopPoints;
