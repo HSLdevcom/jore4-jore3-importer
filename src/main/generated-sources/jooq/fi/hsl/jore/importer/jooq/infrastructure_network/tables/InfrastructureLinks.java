@@ -185,20 +185,21 @@ public class InfrastructureLinks extends TableImpl<InfrastructureLinksRecord> {
 
     @Override
     public List<ForeignKey<InfrastructureLinksRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_NETWORK_TYPE_FKEY, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_START_NODE_FKEY, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_END_NODE_FKEY);
+        return Arrays.asList(Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_END_NODE_FKEY, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_START_NODE_FKEY, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_NETWORK_TYPE_FKEY);
     }
 
-    private transient InfrastructureNetworkTypesPath _infrastructureNetworkTypes;
+    private transient InfrastructureNodesPath _infrastructureLinksInfrastructureLinkEndNodeFkey;
 
     /**
      * Get the implicit join path to the
-     * <code>infrastructure_network.infrastructure_network_types</code> table.
+     * <code>infrastructure_network.infrastructure_nodes</code> table, via the
+     * <code>infrastructure_links_infrastructure_link_end_node_fkey</code> key.
      */
-    public InfrastructureNetworkTypesPath infrastructureNetworkTypes() {
-        if (_infrastructureNetworkTypes == null)
-            _infrastructureNetworkTypes = new InfrastructureNetworkTypesPath(this, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_NETWORK_TYPE_FKEY, null);
+    public InfrastructureNodesPath infrastructureLinksInfrastructureLinkEndNodeFkey() {
+        if (_infrastructureLinksInfrastructureLinkEndNodeFkey == null)
+            _infrastructureLinksInfrastructureLinkEndNodeFkey = new InfrastructureNodesPath(this, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_END_NODE_FKEY, null);
 
-        return _infrastructureNetworkTypes;
+        return _infrastructureLinksInfrastructureLinkEndNodeFkey;
     }
 
     private transient InfrastructureNodesPath _infrastructureLinksInfrastructureLinkStartNodeFkey;
@@ -216,18 +217,17 @@ public class InfrastructureLinks extends TableImpl<InfrastructureLinksRecord> {
         return _infrastructureLinksInfrastructureLinkStartNodeFkey;
     }
 
-    private transient InfrastructureNodesPath _infrastructureLinksInfrastructureLinkEndNodeFkey;
+    private transient InfrastructureNetworkTypesPath _infrastructureNetworkTypes;
 
     /**
      * Get the implicit join path to the
-     * <code>infrastructure_network.infrastructure_nodes</code> table, via the
-     * <code>infrastructure_links_infrastructure_link_end_node_fkey</code> key.
+     * <code>infrastructure_network.infrastructure_network_types</code> table.
      */
-    public InfrastructureNodesPath infrastructureLinksInfrastructureLinkEndNodeFkey() {
-        if (_infrastructureLinksInfrastructureLinkEndNodeFkey == null)
-            _infrastructureLinksInfrastructureLinkEndNodeFkey = new InfrastructureNodesPath(this, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_LINK_END_NODE_FKEY, null);
+    public InfrastructureNetworkTypesPath infrastructureNetworkTypes() {
+        if (_infrastructureNetworkTypes == null)
+            _infrastructureNetworkTypes = new InfrastructureNetworkTypesPath(this, Keys.INFRASTRUCTURE_LINKS__INFRASTRUCTURE_LINKS_INFRASTRUCTURE_NETWORK_TYPE_FKEY, null);
 
-        return _infrastructureLinksInfrastructureLinkEndNodeFkey;
+        return _infrastructureNetworkTypes;
     }
 
     private transient InfrastructureLinkShapesPath _infrastructureLinkShapes;

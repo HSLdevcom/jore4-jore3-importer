@@ -173,20 +173,7 @@ public class NetworkRouteLinks extends TableImpl<NetworkRouteLinksRecord> {
 
     @Override
     public List<ForeignKey<NetworkRouteLinksRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_NETWORK_ROUTE_DIRECTION_ID_FKEY, Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_INFRASTRUCTURE_LINK_ID_FKEY);
-    }
-
-    private transient NetworkRouteDirectionsPath _networkRouteDirections;
-
-    /**
-     * Get the implicit join path to the
-     * <code>network.network_route_directions</code> table.
-     */
-    public NetworkRouteDirectionsPath networkRouteDirections() {
-        if (_networkRouteDirections == null)
-            _networkRouteDirections = new NetworkRouteDirectionsPath(this, Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_NETWORK_ROUTE_DIRECTION_ID_FKEY, null);
-
-        return _networkRouteDirections;
+        return Arrays.asList(Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_INFRASTRUCTURE_LINK_ID_FKEY, Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_NETWORK_ROUTE_DIRECTION_ID_FKEY);
     }
 
     private transient InfrastructureLinksPath _infrastructureLinks;
@@ -200,6 +187,19 @@ public class NetworkRouteLinks extends TableImpl<NetworkRouteLinksRecord> {
             _infrastructureLinks = new InfrastructureLinksPath(this, Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_INFRASTRUCTURE_LINK_ID_FKEY, null);
 
         return _infrastructureLinks;
+    }
+
+    private transient NetworkRouteDirectionsPath _networkRouteDirections;
+
+    /**
+     * Get the implicit join path to the
+     * <code>network.network_route_directions</code> table.
+     */
+    public NetworkRouteDirectionsPath networkRouteDirections() {
+        if (_networkRouteDirections == null)
+            _networkRouteDirections = new NetworkRouteDirectionsPath(this, Keys.NETWORK_ROUTE_LINKS__NETWORK_ROUTE_LINKS_NETWORK_ROUTE_DIRECTION_ID_FKEY, null);
+
+        return _networkRouteDirections;
     }
 
     @Override
