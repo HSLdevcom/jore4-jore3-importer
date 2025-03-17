@@ -531,3 +531,33 @@ If a test case fails because the `com.microsoft.sqlserver.jdbc.SQLServerExceptio
 the error message says that it cannot find a database object, the problem is that the script which
 creates the source MSSQL database (_docker/mssql_init/populate.sql_) was changed. You can solve this problem by running the command:
 `./development.sh recreate` at command prompt.
+
+---
+
+## Jore3 stop import script
+
+### How to use
+
+By default the script runs from the local jore3 test database and uses the base local Jore4 Hasura instance as the target.
+You can change the source database and target Hasura instance by creating a `.env` file in the same directory as the script.
+
+Set the values for variables you want to set:
+
+```
+GRAPHQL_URL=
+GRAPHQL_SECRET=
+JORE3_USERNAME=
+JORE3_PASSWORD=
+JORE3_DATABASE_URL=
+JORE3_DATABASE_NAME=
+```
+
+### Requirements
+
+You need to run the `import.py` script using Python 3 and it requires the following libraries:
+
+- pymssql
+- requests
+- simplejson
+
+They can be installed by running `pip install -r requirements.txt`
