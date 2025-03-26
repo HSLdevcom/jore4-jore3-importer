@@ -15,7 +15,7 @@ env = environ.Env(
     JORE3_DATABASE_NAME=(str,'jore3testdb')
 )
 
-environ.Env.read_env(os.path.dirname(os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')))
+environ.Env.read_env('.env')
 
 graphql = env('GRAPHQL_URL')
 secret = env('GRAPHQL_SECRET')
