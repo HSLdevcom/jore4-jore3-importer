@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
+import datetime
 import pymssql
 import requests
 import simplejson as json
 import environ
-import os
 
 env = environ.Env(
     GRAPHQL_URL=(str,'http://localhost:3201/v1/graphql'),
@@ -25,38 +25,45 @@ jore3Password = env('JORE3_PASSWORD')
 jore3DatabaseUrl = env('JORE3_DATABASE_URL')
 jore3DatabaseName = env('JORE3_DATABASE_NAME')
 
-# Replace these to use different target
+def get_jore3_stops():
 
-def get_jore3_stops_for_area(pysakki_alue):
+    stopPlaces = []
     with pymssql.connect(jore3DatabaseUrl, jore3Username, jore3Password, jore3DatabaseName) as conn:
 
         with conn.cursor(as_dict=True) as cursor:
 
-            cursor.execute(f"""select * from jr_pysakki p
-            inner join jr_solmu s on (p.soltunnus = s.soltunnus)
-            inner join jr_lij_pysakkialue pa on (p.pysalueid = pa.pysalueid)
-            inner join jr_esteettomyys e on (p.soltunnus = e.tunnus)
-            inner join jr_varustelutiedot_uusi vt on (p.soltunnus = vt.tunnus)
-            where p.pysalueid = %s
-            order by p.pysviimpvm asc;""", params=pysakki_alue)
+            cursor.execute(f"""SELECT * FROM jr_pysakki p
+            INNER JOIN jr_solmu s ON (p.soltunnus = s.soltunnus)
+            INNER JOIN jr_lij_pysakkialue pa ON (p.pysalueid = pa.pysalueid)
+            INNER JOIN jr_varustelutiedot_uusi vt ON (p.soltunnus = vt.tunnus)
+            LEFT JOIN jr_esteettomyys e ON (p.soltunnus = e.tunnus)
+            ORDER BY p.pysviimpvm ASC;""")
             
-            for row in cursor:
-                yield row
+            stopPlaces = cursor.fetchall()
+
+    print(f"Found {len(stopPlaces)} stop places")
+
+    stopPlacesByArea = {}
+
+    for x in stopPlaces:
+        stopPlacesByArea.setdefault(x['pysalueid'], []).append(x)
+
+    return stopPlacesByArea
 
 def get_jore3_stop_areas():
     with pymssql.connect(jore3DatabaseUrl, jore3Username, jore3Password, jore3DatabaseName) as conn:
         
         with conn.cursor(as_dict=True) as cursor:
 
-            cursor.execute("""select pa.nimi, pa.pysalueid, s.sollistunnus, s.solkirjain from jr_pysakki p
-            inner join jr_solmu s on (s.soltunnus = p.soltunnus)
-            inner join jr_lij_pysakkialue pa on (p.pysalueid = pa.pysalueid)
-            where p.pysalueid in (
-            select jp.pysalueid from jr_pysakki jp
-            inner join jr_lij_pysakkialue jlp on (jp.pysalueid = jlp.pysalueid)
-            where jlp.verkko = 1
-            group by jp.pysalueid
-            having count(*) > 1);
+            cursor.execute("""SELECT pa.nimi, pa.pysalueid, s.sollistunnus, s.solkirjain FROM jr_pysakki p
+            INNER JOIN jr_solmu s ON (s.soltunnus = p.soltunnus)
+            INNER JOIN jr_lij_pysakkialue pa ON (p.pysalueid = pa.pysalueid)
+            WHERE p.pysalueid IN (
+            SELECT jp.pysalueid FROM jr_pysakki jp
+            INNER JOIN jr_lij_pysakkialue jlp ON (jp.pysalueid = jlp.pysalueid)
+            WHERE jlp.verkko = 1
+            GROUP BY jp.pysalueid
+            HAVING COUNT(*) > 1);
             """)
             
             for row in cursor:
@@ -76,7 +83,6 @@ def get_stop_points():
     headers = {'content-type': 'application/json; charset=UTF-8',
              'x-hasura-admin-secret': secret}
     response = requests.post(graphql, headers=headers, json={"query": query})
-    print(response)
     json_data = response.json()
     if not json_data['data']:
         return {}
@@ -112,8 +118,11 @@ def update_stop_point(label, netexid):
     headers = {'content-type': 'application/json; charset=UTF-8',
              'x-hasura-admin-secret': secret}
     response = requests.post(graphql, headers=headers, json={"query": mutation, "variables": variables})
-    print(response.content)
-  
+    formatted = response.json()
+    if formatted['data']:
+        print(f"Scheduled stop point {label} reference updated")
+    else:
+        print(f"Scheduled stop point {label} reference update failed")
 
 def mapStopModel(jore3model):
     match jore3model:
@@ -337,58 +346,77 @@ def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInp
                 'x-hasura-admin-secret': secret}
   response = requests.post(graphql, headers=headers, json={"query": stopMutation2, "variables": variables2})
 
-  print(response)
-  print(response.content)
+  formatted = response.json()
 
-  if (json.loads(response.content)['data']):
-    return json.loads(response.content)['data']['stop_registry']['mutateStopPlace'][0]['quays']
+  if formatted['data']:
+    return formatted['data']['stop_registry']['mutateStopPlace'][0]['quays']
+  if formatted['errors']:
+    if formatted['errors'][0]['message']:
+        print(formatted['errors'][0]['message'])
+    else:
+        print(f"Stop place {jore3result['pysalueid']} update failed!")
 
   return {}
+
+startTime = datetime.datetime.now()
 
 stopPoints = get_stop_points()
 print(f"Found {len(stopPoints)} stop points")
 added = 0
 
+stopPlaces = get_jore3_stops()
+index = 0
+
 for stopArea in get_jore3_stop_areas():
+    index += 1
+    print(f"Handling stop area {index}")
     quayInput = []
     latCoords = []
     lonCoords = []
     validityStarts = []
     validityEnds = []
     lastStop = None
-    for stop in get_jore3_stops_for_area(stopArea['pysalueid']):
-        try:
-            stopLabel = stop['solkirjain'] + stop['sollistunnus']
-            if not stopLabel in stopPoints:
-                continue
-            stopPoint = stopPoints[stopLabel][0]
-            lat = stopPoint['lat']
-            lon = stopPoint['lon']
-            validityStart = stopPoint['validity_start']
-            validityEnd = stopPoint['validity_end']
-            quayInput.append(quayInputForJore3Stop(stop, stopPoint['label'], validityStart, validityEnd , lon, lat))
-            latCoords.append(lat)
-            lonCoords.append(lon)
-            validityStarts.append(validityStart)
-            validityEnds.append(validityEnd)
-            lastStop = stop
-        except:
-            print(f"Failed to handle stop {stop}")
-    if (len(lonCoords) > 0 and len(latCoords) > 0 and len(validityStarts) > 0 and len(validityEnds) > 0):
+    try:
+        for stop in stopPlaces[stopArea['pysalueid']]:
+            try:
+                stopLabel = stop['solkirjain'] + stop['sollistunnus']
+                if not stopLabel in stopPoints:
+                    continue
+                stopPoint = stopPoints[stopLabel][0]
+                lat = stopPoint['lat']
+                lon = stopPoint['lon']
+                validityStart = stopPoint['validity_start']
+                validityEnd = stopPoint['validity_end']
+                quayInput.append(quayInputForJore3Stop(stop, stopPoint['label'], validityStart, validityEnd , lon, lat))
+                latCoords.append(lat)
+                lonCoords.append(lon)
+                validityStarts.append(validityStart)
+                validityEnds.append(validityEnd)
+                lastStop = stop
+            except:
+                print(f"Failed to handle stop {stop['soltunnus']}: {stop['pysnimi']}")
+        if (len(lonCoords) > 0 and len(latCoords) > 0 and len(validityStarts) > 0 and len(validityEnds) > 0):
 
-        # Average coordinates of quays for the stop place
-        stopPlaceLon = sum(lonCoords) / len(lonCoords)
-        stopPlaceLat = sum(latCoords) / len(latCoords)
+            # Average coordinates of quays for the stop place
+            stopPlaceLon = sum(lonCoords) / len(lonCoords)
+            stopPlaceLat = sum(latCoords) / len(latCoords)
 
-        # Use min / max validity period of the stop points for the stop place
-        stopPlaceValidityStart = min(validityStarts)
-        stopPlaceValidityEnd = max(validityEnds)
+            # Use min / max validity period of the stop points for the stop place
+            stopPlaceValidityStart = min(validityStarts)
+            stopPlaceValidityEnd = max(validityEnds)
 
-        netexIds = update_stop_place(stopPlaceLat, stopPlaceLon, stopPlaceValidityStart, stopPlaceValidityEnd, lastStop, quayInput)
-        if (netexIds):
-            added += 1 
-            for netexAssociation in netexIds:
-                update_stop_point(netexAssociation['publicCode'], netexAssociation['id'])
+            netexIds = update_stop_place(stopPlaceLat, stopPlaceLon, stopPlaceValidityStart, stopPlaceValidityEnd, lastStop, quayInput)
+            if (netexIds):
+                added += 1 
+                for netexAssociation in netexIds:
+                    update_stop_point(netexAssociation['publicCode'], netexAssociation['id'])
 
-    
+    except Exception as e:
+        print(f"Failed to handle stop area {stopArea['pysalueid']}")
+        print(e)
+
+endTime = datetime.datetime.now()
+duration = endTime - startTime
 print(f"Added {added} stop places")
+minutes = duration.seconds // 60
+print(f"Import took {minutes} minutes {duration.seconds - (minutes * 60)} seconds")
