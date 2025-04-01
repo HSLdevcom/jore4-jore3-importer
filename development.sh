@@ -178,6 +178,12 @@ generate_jooq() {
   mvn clean generate-sources -Pci
 }
 
+upload_zones() {
+  echo "Uploading municipality and fare zones to Tiamat"
+
+  curl --silent --output /dev/null --show-error --fail -X POST -H"Content-Type: application/xml" -d @netex/hsl-zones-netex.xml localhost:3010/services/stop_places/netex
+}
+
 ### Control flow
 
 COMMAND=${1:-}
@@ -191,11 +197,13 @@ case $COMMAND in
   start)
     download_docker_compose_bundle
     start_all
+    upload_zones
     ;;
 
   start:deps)
     download_docker_compose_bundle
     start_deps
+    upload_zones
     ;;
 
   generate:jooq)
@@ -214,6 +222,7 @@ case $COMMAND in
   recreate)
     remove
     start_deps
+    upload_zones
     ;;
 
   list)
