@@ -531,3 +531,35 @@ If a test case fails because the `com.microsoft.sqlserver.jdbc.SQLServerExceptio
 the error message says that it cannot find a database object, the problem is that the script which
 creates the source MSSQL database (_docker/mssql_init/populate.sql_) was changed. You can solve this problem by running the command:
 `./development.sh recreate` at command prompt.
+
+---
+
+## Jore 3 stop import script
+
+### Requirements
+
+You need to have Docker installed on your system to run the script
+
+### How to use
+
+To run the stop registry importer script you need to have a Jore 3 database, a populated Jore 4 routes database and the `jore4-hasura` and `jore4-tiamat` microservices running.
+
+By default the script runs from the local Jore 3 `mssqltestdb` database and uses the base local `jore4-hasura` service as the target.
+You can change the source database and target Hasura instance by creating a `.env` file in the same directory as the script.
+
+Set the values for variables you want to set:
+
+```
+GRAPHQL_URL=
+GRAPHQL_SECRET=
+JORE3_USERNAME=
+JORE3_PASSWORD=
+JORE3_DATABASE_URL=
+JORE3_DATABASE_NAME=
+```
+
+You should have run the base Jore 3 importer first which ensures the Jore 4 database has the required scheduled stop points. Then run the stop registry import script which will match scheduled stop points in the Jore 4 routes database with stops in the Jore 3 database and generate GraphQL mutations to Hasura/Tiamat according to the data. The script will also link the generated stop registry stops with the scheduled stop points by their NeTEx ID using Hasura for the mutation.
+
+Running the script will produce multiple errors as there are many stops in the Jore 3 database with overlapping validity. These can be ingored as only the most recent one is the one which ends up being imported.
+
+To run the script simply run `run-stop-registry-importer.sh` in the stop-registry-importer directory, this will create and run a Docker container with the environment set up.
