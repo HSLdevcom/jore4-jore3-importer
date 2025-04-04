@@ -9,3 +9,4 @@ SELECT l.lintunnus,
                                                 AND lv.kookoodi COLLATE DATABASE_DEFAULT = '2' COLLATE DATABASE_DEFAULT
        ), 1, 0) AS linrunkolinja
 FROM jr_linja l
+ORDER BY l.lintunnus ASC
