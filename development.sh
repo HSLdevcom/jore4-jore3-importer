@@ -115,8 +115,9 @@ download_docker_compose_bundle() {
   # Extract ZIP file contents to a temporary directory.
   unzip -q "$zip_file" -d /tmp
 
-  # Clean untracked files from `docker` directory even if they are git-ignored.
-  git clean -fx ./docker
+  # Clean untracked files from the `docker` directory even if they are
+  # git-ignored. Exclude the `testdb` directory, which we want to keep.
+  git clean -fx -e testdb ./docker
 
   echo "Copying JORE4 Docker Compose bundle files to ./docker directory..."
 
