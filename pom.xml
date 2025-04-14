@@ -20,28 +20,28 @@
         <maven-enforcer.plugin.mvn-min-version>3.6.3</maven-enforcer.plugin.mvn-min-version>
 
         <!-- Library versions -->
-        <guava.version>33.1.0-jre</guava.version>
+        <guava.version>33.4.8-jre</guava.version>
         <immutables.version>2.10.1</immutables.version>
-        <geotools.version>31.1</geotools.version>
+        <geotools.version>33.0</geotools.version>
         <geojson-jackson.version>1.14</geojson-jackson.version>
         <!-- Sticking to old 9.X version to avoid having to configure trusted certificates
              or just blindly trust any SQL server certificate. -->
         <mssql-jdbc.version>9.5.0.jre17-preview</mssql-jdbc.version>
         <!-- Used as the DB for Spring Batch -->
-        <hsqldb.version>2.7.3</hsqldb.version>
+        <hsqldb.version>2.7.4</hsqldb.version>
 
         <!-- Test library version -->
         <quicktheories.version>0.26</quicktheories.version>
-        <wiremock.version>3.6.0</wiremock.version>
-        <assertj-db.version>2.0.2</assertj-db.version>
-        <jsonassert.version>1.5.1</jsonassert.version>
+        <wiremock.version>3.12.1</wiremock.version>
+        <assertj-db.version>3.0.0</assertj-db.version>
+        <jsonassert.version>1.5.3</jsonassert.version>
 
         <!-- Maven plugins -->
-        <maven-compiler.plugin.version>3.13.0</maven-compiler.plugin.version>
+        <maven-compiler.plugin.version>3.14.0</maven-compiler.plugin.version>
         <maven-properties.plugin.version>1.2.1</maven-properties.plugin.version>
         <maven-enforcer.plugin.version>3.5.0</maven-enforcer.plugin.version>
         <maven-build-helper.plugin.version>3.6.0</maven-build-helper.plugin.version>
-        <maven-spotless.plugin.version>2.43.0</maven-spotless.plugin.version>
+        <maven-spotless.plugin.version>2.44.4</maven-spotless.plugin.version>
 
         <!-- Packaging -->
         <build.profile.id>dev</build.profile.id>
