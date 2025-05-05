@@ -31,35 +31,11 @@ jobs:
           distribution: temurin
           cache: maven
 
-      - name: Verify whether test mssql db is up
-        uses: HSLdevcom/jore4-tools/github-actions/healthcheck@healthcheck-v1
-        env:
-          SA_PASSWORD: "P@ssw0rd"
-        with:
-          command:
-            'sqlcmd -S 127.0.0.1 -U sa -P "$SA_PASSWORD" -d master -Q "SELECT
-            ''OK'';"'
-          # it may take a while for the database to start
-          retries: 50
-
       - name: Verify whether test postgresql db is up
         uses: HSLdevcom/jore4-tools/github-actions/healthcheck@healthcheck-v1
         with:
           # testing whether tcp port 17000 responds
           command: "pg_isready -h localhost -p 17000"
-
-      - name: Verify whether jore4 db is up
-        uses: HSLdevcom/jore4-tools/github-actions/healthcheck@healthcheck-v1
-        with:
-          # testing whether tcp port 6432 responds
-          command: "pg_isready -h localhost -p 6432"
-      - name: Verify that Hasura migrations have been run
-        uses: HSLdevcom/jore4-tools/github-actions/healthcheck@healthcheck-v1
-        with:
-          command: "curl --fail http://localhost:3201/healthz --output /dev/null
-            --silent"
-          # It may take a while before migrations are run
-          retries: 100
 
       - name: Run tests and try building a package
         run: mvn --batch-mode clean verify -Pci
