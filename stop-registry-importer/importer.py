@@ -38,7 +38,7 @@ def get_jore3_stops():
             INNER JOIN jr_varustelutiedot_uusi vt ON (p.soltunnus = vt.tunnus)
             LEFT JOIN jr_esteettomyys e ON (p.soltunnus = e.tunnus)
             ORDER BY p.pysviimpvm ASC;""")
-            
+
             stopPlaces = cursor.fetchall()
 
     print(f"Found {len(stopPlaces)} stop places")
@@ -52,7 +52,7 @@ def get_jore3_stops():
 
 def get_jore3_stop_areas():
     with pymssql.connect(jore3DatabaseUrl, jore3Username, jore3Password, jore3DatabaseName) as conn:
-        
+
         with conn.cursor(as_dict=True) as cursor:
 
             cursor.execute("""SELECT pa.nimi, pa.pysalueid, s.sollistunnus, s.solkirjain FROM jr_pysakki p
@@ -65,7 +65,7 @@ def get_jore3_stop_areas():
             GROUP BY jp.pysalueid
             HAVING COUNT(*) > 1);
             """)
-            
+
             for row in cursor:
                 yield row
 
@@ -86,10 +86,10 @@ def get_stop_points():
     json_data = response.json()
     if not json_data['data']:
         return {}
-    
+
     stop_points = json.loads(response.content)['data']['service_pattern_scheduled_stop_point']
     result_dict = {}
-    
+
     for x in stop_points:
         result_dict.setdefault(x['label'], []).append({
             'label': x['label'],
@@ -150,8 +150,8 @@ def mapStopType(jore3type):
         case '07':
             return 'wooden'
         case _:
-            return 'virtual'    
-        
+            return 'virtual'
+
 def mapStopElectricity(jore3elec):
     match jore3elec:
         case '01':
@@ -186,7 +186,7 @@ def toFloat(value):
 def quayInputForJore3Stop(jore3row, label, validityStart, validityEnd, lon, lat):
     return {
       "publicCode": label,
-      "privateCode": { 
+      "privateCode": {
         "value": jore3row['soltunnus'],
         "type": 'HSL'
       },
@@ -194,7 +194,7 @@ def quayInputForJore3Stop(jore3row, label, validityStart, validityEnd, lon, lat)
         "lang": "fin",
         "value": jore3row['pyspaikannimi']
       },
-      "geometry": { 
+      "geometry": {
           "type": "Point",
           "coordinates": [lon, lat]
       },
@@ -208,39 +208,39 @@ def quayInputForJore3Stop(jore3row, label, validityStart, validityEnd, lon, lat)
         }
       ],
       "keyValues": [
-        { 
+        {
             "key": "stopState",
             "values": "InOperation"
         },
-        { 
+        {
             "key": "mainLine",
             "values": "false"
         },
-        { 
+        {
             "key": "virtual",
             "values": "false"
         },
-        { 
+        {
             "key": "postalCode",
             "values": [jore3row['postinro']]
         },
-        { 
+        {
             "key": "functionalArea",
             "values": [str(jore3row['pyssade'])]
         },
-        { 
+        {
             "key": "streetAddress",
             "values": [jore3row['pysosoite']]
         },
-        { 
+        {
             "key": "priority",
             "values": ['10']
         },
-        { 
+        {
             "key": "validityStart",
             "values": [validityStart]
         },
-        { 
+        {
             "key": "validityEnd",
             "values": [validityEnd]
         }
@@ -256,7 +256,7 @@ def quayInputForJore3Stop(jore3row, label, validityStart, validityEnd, lon, lat)
           "stopElevationFromSidewalk": toFloat(jore3row['korotus_kaytavaan']),
           "stopType": mapStopModel(jore3row['pysakin_malli'])
         },
-        "limitations": { 
+        "limitations": {
           "audibleSignalsAvailable": "FALSE",
           "escalatorFreeAccess": "FALSE",
           "liftFreeAccess": "FALSE",
@@ -407,7 +407,7 @@ for stopArea in get_jore3_stop_areas():
 
             netexIds = update_stop_place(stopPlaceLat, stopPlaceLon, stopPlaceValidityStart, stopPlaceValidityEnd, lastStop, quayInput)
             if (netexIds):
-                added += 1 
+                added += 1
                 for netexAssociation in netexIds:
                     update_stop_point(netexAssociation['publicCode'], netexAssociation['id'])
 
