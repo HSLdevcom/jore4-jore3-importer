@@ -11,7 +11,7 @@ import fi.hsl.jore.jore4.jooq.reusable_components.tables.VehicleSubmode;
 /**
  * Convenience access to all tables in reusable_components.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Tables {
 
     /**

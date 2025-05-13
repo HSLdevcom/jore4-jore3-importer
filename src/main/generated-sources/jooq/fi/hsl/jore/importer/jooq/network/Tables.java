@@ -46,7 +46,7 @@ import fi.hsl.jore.importer.jooq.network.tables.ScheduledStopPointsWithHistory;
 /**
  * Convenience access to all tables in network.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Tables {
 
     /**
