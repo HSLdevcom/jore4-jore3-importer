@@ -33,7 +33,7 @@ services:
 
   jore4-mssqltestdb:
     # pin compatible version of mssql schema
-    image: "hsldevcom/jore4-mssql-testdb:schema-only-jr_paikka--20230731-1234b7bff68adcfbf774c9fc59e0a80185412c43"
+    image: "hsldevcom/jore4-mssql-testdb:schema-only-main--20250508-348cac964ff6a08b3776f003ddd036e4505cda18"
     # volume to easily use jore3 database dump
     volumes:
       - ../jore3dump:/mnt/jore3dump
