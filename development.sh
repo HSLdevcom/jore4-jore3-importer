@@ -136,7 +136,7 @@ download_docker_compose_bundle() {
 }
 
 start_all() {
-  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-jore3importer jore4-mapmatchingdb jore4-mapmatching
+  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-jore3importer jore4-mapmatchingdb jore4-mapmatching jore4-tiamat
 }
 
 start_deps() {
@@ -146,7 +146,7 @@ start_deps() {
   # jore4-mssqltestdb - The Jore 3 MSSQL database which contains the source data which is read by the importer
   # jore4-hasura - Hasura. We have to start Hasura because it ensures that db migrations are run to the Jore 4 database.
   # jore4-testdb - Jore 4 database. This is the destination database of the import process.
-  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-mapmatchingdb jore4-mapmatching
+  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-mapmatchingdb jore4-mapmatching jore4-tiamat
 }
 
 stop() {
@@ -179,6 +179,12 @@ generate_jooq() {
   mvn clean generate-sources -Pci
 }
 
+upload_zones() {
+  echo "Uploading municipality and fare zones to Tiamat"
+
+  curl --silent --output /dev/null --show-error --fail -X POST -H"Content-Type: application/xml" -d @netex/hsl-zones-netex.xml localhost:3010/services/stop_places/netex
+}
+
 ### Control flow
 
 COMMAND=${1:-}
@@ -192,11 +198,13 @@ case $COMMAND in
   start)
     download_docker_compose_bundle
     start_all
+    upload_zones
     ;;
 
   start:deps)
     download_docker_compose_bundle
     start_deps
+    upload_zones
     ;;
 
   generate:jooq)
@@ -215,6 +223,7 @@ case $COMMAND in
   recreate)
     remove
     start_deps
+    upload_zones
     ;;
 
   list)
