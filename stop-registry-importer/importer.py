@@ -188,7 +188,7 @@ def quayInputForJore3Stop(jore3row, label, validityStart, validityEnd, lon, lat)
       "publicCode": label,
       "privateCode": {
         "value": jore3row['soltunnus'],
-        "type": 'HSL/JORE-3'
+        "type": 'HSL'
       },
       "description": {
         "lang": "fin",
@@ -312,7 +312,7 @@ def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInp
                 { name: {lang: "swe", value: $stopNameSwe}, nameType: translation }
             ],
             name: {lang: "fin", value: $stopName},
-            privateCode: {value: $privateCode, type: "HSL"},
+            privateCode: {value: $privateCode, type: "HSL/JORE-3"},
             keyValues: [
               { key: "validityStart", values: [$validityStart] },
               { key: "validityEnd", values: [$validityEnd] }
