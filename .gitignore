@@ -46,3 +46,6 @@ digiroad_stops*.csv
 #possible jore3 backup file
 jore3dump/*
 !jore3dump/put-bak-file-here.txt
+
+#stop place import script environment file
+.env
