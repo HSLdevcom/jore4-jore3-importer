@@ -188,7 +188,7 @@ def quayInputForJore3Stop(jore3row, label, validityStart, validityEnd, lon, lat)
       "publicCode": label,
       "privateCode": {
         "value": jore3row['soltunnus'],
-        "type": 'HSL'
+        "type": 'HSL/JORE-3'
       },
       "description": {
         "lang": "fin",
