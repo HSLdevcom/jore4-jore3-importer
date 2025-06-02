@@ -1,8 +1,7 @@
 # Jore 3 => Jore 4 Importer
 
 This application imports scheduled stop points, lines, routes, and journey patterns from the Jore 3 database to the
-Jore 4 database. At the moment this application doesn't filter the imported information in any way. In other words, all
-valid rows found from the Jore 3 database are imported to the Jore 4 database.
+Jore 4 database.
 
 The import process has two steps:
 
@@ -39,7 +38,7 @@ The API endpoint returns the status of an ongoing import job or the status of th
 there is no job currently running. If no import job has been run, the API endpoint returns
 the HTTP status code 204.
 
-The following examples demonstrates how you can query the status of the latest import by using curl:
+The following examples demonstrate how you can query the status of the latest import by using curl:
 
 **Example 1: import is running:**
 
@@ -67,10 +66,11 @@ $ curl http://localhost:8080/job/import/status/
 This project uses [the standard directory layout of Maven](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html).
 However, the root directory of this repository contains four additional directories which are described in the following:
 
-* The _docker_ directory contains the custom Docker Compose file which allow you to override the configuration specified
-  in the [jore4-tools repository](https://github.com/HSLdevcom/jore4-tools).
+* The _docker_ directory contains the `docker-compose.custom.yml` file which allows you to override the configuration
+  defined in the Docker Compose bundle ([jore4-docker-compose-bundle](https://github.com/HSLdevcom/jore4-docker-compose-bundle)
+  repository).
 * The _images_ directory contains diagrams displayed on this README.
-* The _profiles_ directory contains the profile specific configuration files which are used to configure this application.
+* The _profiles_ directory contains the Maven profile specific configuration files which are used to configure this application.
 * The _testing_ directory contains testing tools (essentially Python scripts) which ensure that the import job is working
   as expected.
 
@@ -415,33 +415,32 @@ More properties can be found from `/profiles/prod/config.properties`
 
 ### Setting Up the Local Development Environment
 
-Before you can run the application on your local development environment, you have to set up your development
-environment by following these steps:
+Before you can run the application in your local development environment, you have to set it up by following these steps:
 
-1. Install software that is required to compile and run the importer application and its dependencies.
+1. Install software required to compile and run the importer application and its dependencies.
    Before you can run this application, you must install these tools:
     - Docker Desktop
     - OpenJDK 17
     - Maven
-2. Make a copy of the maven `dev`-profile for your user:
-    ```
+2. Make a copy of the `.properties` file under the Maven `dev` profile for your user account:
+    ```shell
     cp profiles/dev/config.properties profiles/dev/config.<my-username>.properties
     ```
-   Look up the jore3 database credentials from the Azure vault (e.g. `hsl-jore3-db-username` and `hsl-jore3-db-password`
-   in the `hsl-jore4-dev-vault`) and insert them into your maven profile's `source.db.XXX` definitions.
-3. Adjust the `source.db.*` properties in `profiles/dev/config.<my-username>.properties` to your needs.
+   Look up the Jore 3 database credentials from Azure Key Vault (`hsl-jore3-db-username` and `hsl-jore3-db-password`
+   in `kv-jore4-dev-001` under the `rg-jore4-dev-001` resource group) and apply them to the `source.db.XXX` properties
+   in your personal `.properties` file.
+3. Adjust the other `source.db.*` properties in `profiles/dev/config.<my-username>.properties` to your needs.
    Other configuration for destination database and test database may also be found from here.
-4. If you wish to connect to the original Jore 3 database,
-   follow the instructions [here](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#creating-an-ssh-configuration-entry)
-   on how to create a tunnel and connect to the database.
-   After the tunnel is created, the Jore 3 database will be available on localhost:56239. Ask for the username and password from the project team.
-   During the importer run, the shell on the bastion host needs to be "touched" in regular intervals to keep it from timing out.
-  (The `TMOUT` environment variable on the bastion host cannot be modified.) "Touching" can be done manually by issuing key presses into the shell every few minutes. 
-  Alternatively, you can start a new subshell with the timeout disabled to keep the session open:
-   ```
-   env TMOUT=0 bash
-   ```
-5. Set up the Digiroad infrastructure link and stop point data to use:
+4. If you wish to connect to the original Jore 3 database, follow the general Jore4 Azure instructions in Azure wiki
+   (non-public) on how to create an SSH tunnel and connect to the database. After the tunnel is created, the Jore 3
+   database will be available on localhost:56239. During the importer run, the shell on the bastion host needs to be
+   "touched" in regular intervals to keep it from timing out. (The `TMOUT` environment variable on the bastion host
+   cannot be modified.) "Touching" can be done manually by issuing key presses into the shell every few minutes. 
+   Alternatively, you can start a new subshell with the timeout disabled to keep the session open:
+    ```shell
+    env TMOUT=0 bash
+    ```
+5. Set up infrastructure links and stop points data:
    1. Import data from Digiroad:
       1. Clone the [jore4-digiroad-import](https://github.com/HSLdevcom/jore4-digiroad-import) repository.
       2. Run the Digiroad import (`import_digiroad_shapefiles.sh`).
@@ -453,12 +452,12 @@ environment by following these steps:
       4. Stop points are fetched from a remote URL during the import process.
          If needed, run the scheduled stop point CSV export (`export_stops_csv.sh`)
          and upload the result CSV file eg. to `jore4storage` in Azure.
-   2. In the profile specific configuration file, set `digiroad.stop.csv.file.url` to the Digiroad stops CSV to use
+   2. In the profile-specific configuration file, set `digiroad.stop.csv.file.url` to the Digiroad stops CSV to use
       (eg. from `hsl-jore4-common / jore4storage / jore4-digiroad / digiroad_stops_XXX.csv`)
 
 ### Running the Tests
 
-When you want to run the test, you have follow these steps:
+When you want to run the test, you have to follow these steps:
 
 1. Run the dependencies of this application by using the command: `./development.sh start:deps`.
 2. Run the tests by running the command: `mvn --batch-mode clean verify`.
@@ -482,7 +481,7 @@ If you want to use this option, you have to follow these steps:
 
 If you want to create a package that can be used for deployment, you have run the command: `mvn clean package spring-boot:repackage -P prod`
 
-### Restoring a Jore 3 Database Dump to the testing Database
+### Restoring a Jore 3 Database Dump to the Testing Database
 
 If you want to restore a database dump from Jore 3 to the testing database, there is a script provided for it.
 Put the jore3 .bak file to the `jore3dump` directory and run `./apply-jore3-database-backup.sh jore3dump.bak`,
@@ -490,7 +489,7 @@ where `jore3dump.bak` should be replaced with the name of the .bak file you want
 
 Some dump files can be found in [Google Drive](https://drive.google.com/drive/folders/1oTfv8vgM7nqg9Hkg5DkSoLTsc8MUAf-s).
 
-### Taking a Database Dump From the Jore 4 Database
+### Taking a Database Dump from the Jore 4 Database
 
 When you want to take a database dump from the Jore 4 database, you can use one of these two options:
 
@@ -501,27 +500,24 @@ that pgAdmin uses the default settings when it takes the database dump.
 
     pg_dump --file [file path]  --host [host] --port [port] --username [username] --format=c --blobs [database name]
 
-### Restoring a Jore 4 Database Dump to the Database
+### Restoring a Jore 4 Database Dump
 
-#### Local Development environment
+#### Local Development Environment
 
-If you want to restore a database dump on your local development environment,
-you should follow [these instructions](https://github.com/HSLdevcom/jore4-ui#loading-dump-into-development-database).
+If you want to restore a database dump into your local development database, you can run the following command:
 
-#### Azure Dev Database
+```shell
+docker exec -i testdb bash -c "
+  set -eux
+  dropdb --username=dbadmin --force jore4e2e
+  pg_restore --username=dbadmin --dbname=postgres --format=custom --create
+" < jore4e2e.pgdump
+```
 
-If you want to restore a database dump to the Azure dev database, you should follow these steps:
+In the above example, we are recreating the `jore4e2e` database with a full custom-format database dump.
 
-1. Ensure that [you can connect to Azure environment via Bastian host](https://github.com/HSLdevcom/jore4/blob/main/wiki/onboarding.md#connecting-to-the-azure-environment-via-bastion-host).
-2. Open an SSH tunnel to the development database by using the command: `ssh -o -L 6432:hsl-jore4-dev-db.postgres.database.azure.com:5432 -i ~/.ssh/jore4_key_ed25519 hsl-jore4-dev-bastion`.
-3. Restore the database by running the command: `pg_restore -h localhost -p 6432 -c -O -U [database user] -d [database] [dump file]`.
-
----
-
-You can get the database, database user, and password from the Azure console (Check the secrets of the `hsl-jore4-dev-vault`
-key vault).
-
----
+Typically, dumps are created either manually using the command in the [previous section](#taking-a-database-dump-from-the-jore-4-database),
+or you can fetch one from Azure Blob storage.
 
 ## Known Problems
 
