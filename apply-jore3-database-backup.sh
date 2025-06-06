@@ -8,4 +8,4 @@ if [[ -z ${1} ]]; then
   exit 1
 fi
 
-docker exec -it mssqltestdb /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -Q "RESTORE DATABASE [jore3testdb] FROM DISK = N'/mnt/jore3dump/${1}' WITH FILE = 1, NOUNLOAD, REPLACE, RECOVERY, STATS = 5"
+docker exec -it mssqltestdb /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U SA -Q "RESTORE DATABASE [jore3testdb] FROM DISK = N'/mnt/jore3dump/${1}' WITH FILE = 1, NOUNLOAD, REPLACE, RECOVERY, STATS = 5"
