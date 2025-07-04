@@ -6,6 +6,7 @@ package fi.hsl.jore.importer.jooq;
 
 import fi.hsl.jore.importer.jooq.infrastructure_network.InfrastructureNetwork;
 import fi.hsl.jore.importer.jooq.network.Network;
+import fi.hsl.jore.importer.jooq.stops.Stops;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +40,11 @@ public class DefaultCatalog extends CatalogImpl {
     public final Network NETWORK = Network.NETWORK;
 
     /**
+     * The schema <code>stops</code>.
+     */
+    public final Stops STOPS = Stops.STOPS;
+
+    /**
      * No further instances allowed
      */
     private DefaultCatalog() {
@@ -49,7 +55,8 @@ public class DefaultCatalog extends CatalogImpl {
     public final List<Schema> getSchemas() {
         return Arrays.asList(
             InfrastructureNetwork.INFRASTRUCTURE_NETWORK,
-            Network.NETWORK
+            Network.NETWORK,
+            Stops.STOPS
         );
     }
 
