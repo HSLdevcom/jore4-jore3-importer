@@ -64,6 +64,9 @@ import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.support.ISchedule
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.timing_place.TimingPlaceExportProcessor;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.timing_place.TimingPlaceExportReader;
 import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.timing_place.TimingPlaceExportWriter;
+import fi.hsl.jore.importer.feature.batch.stop_place.StopPlaceImportProcessor;
+import fi.hsl.jore.importer.feature.batch.stop_place.StopPlaceImportReader;
+import fi.hsl.jore.importer.feature.batch.stop_place.support.IStopPlaceImportRepository;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Jore3Link;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.Jore3LinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Jore3Node;
@@ -74,6 +77,7 @@ import fi.hsl.jore.importer.feature.jore3.entity.JrPlace;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
 import fi.hsl.jore.importer.feature.jore3.entity.JrScheduledStopPoint;
+import fi.hsl.jore.importer.feature.jore3.entity.JrStopPlace;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPattern;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPatternStop;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4Line;
@@ -94,6 +98,7 @@ import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometr
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImporterScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.Jore3ScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.timing_place.ImporterTimingPlace;
+import fi.hsl.jore.importer.feature.stops.stop_place.dto.Jore3StopPlace;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.FlowBuilder;
@@ -139,6 +144,7 @@ public class JobConfig {
             final Flow importRouteLinksFlow,
             final Flow importPlacesFlow,
             final Flow importScheduledStopPointsFlow,
+            final Flow importStopPlacesFlow,
             // Export data from the importer staging DB to Jore 4 DB.
             final Flow jore4ExportFlow) {
         return new JobBuilder(JOB_NAME, jobRepository)
@@ -152,6 +158,7 @@ public class JobConfig {
                 .next(importRouteLinksFlow)
                 .next(importPlacesFlow)
                 .next(importScheduledStopPointsFlow)
+                .next(importStopPlacesFlow)
                 .next(jore4ExportFlow)
                 .end()
                 .build();
@@ -598,6 +605,47 @@ public class JobConfig {
     @Bean
     public Step commitScheduledStopPointsStep(final IScheduledStopPointImportRepository repository) {
         return new StepBuilder("commitScheduledStopPointsStep", jobRepository)
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCommitTasklet<>(repository), transactionManager)
+                .build();
+    }
+
+    @Bean
+    public Flow importStopPlacesFlow(
+            final Step prepareStopPlacesStep,
+            final Step importStopPlacesStep,
+            final Step commitStopPlacesStep) {
+        return new FlowBuilder<SimpleFlow>("importStopPlacesFlow")
+                .start(prepareStopPlacesStep)
+                .next(importStopPlacesStep)
+                .next(commitStopPlacesStep)
+                .build();
+    }
+
+    @Bean
+    public Step prepareStopPlacesStep(final IStopPlaceImportRepository repository) {
+        return new StepBuilder("prepareStopPlacesStep", jobRepository)
+                .allowStartIfComplete(true)
+                .tasklet(new GenericCleanupTasklet<>(repository), transactionManager)
+                .build();
+    }
+
+    @Bean
+    public Step importStopPlacesStep(
+            final StopPlaceImportReader reader,
+            final IStopPlaceImportRepository repository) {
+        return new StepBuilder("importStopPlacesStep", jobRepository)
+                .allowStartIfComplete(true)
+                .<JrStopPlace, Jore3StopPlace>chunk(1000, transactionManager)
+                .reader(reader.build())
+                .processor(new StopPlaceImportProcessor())
+                .writer(new GenericImportWriter<>(repository))
+                .build();
+    }
+
+    @Bean
+    public Step commitStopPlacesStep(final IStopPlaceImportRepository repository) {
+        return new StepBuilder("commitStopPlacesStep", jobRepository)
                 .allowStartIfComplete(true)
                 .tasklet(new GenericCommitTasklet<>(repository), transactionManager)
                 .build();
