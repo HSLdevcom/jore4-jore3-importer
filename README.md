@@ -22,6 +22,7 @@ If you want to start the import job, you have to send a POST request to the path
 will start the job and return its status. If an import job is already running, a new job isn't started and the return
 value will reflect the status of the currently running job.
 
+There is a Bruno request for starting the job in testing/bruno-collection.
 The following example demonstrates how you can start the import job by using curl:
 
 ```shell
@@ -38,6 +39,7 @@ The API endpoint returns the status of an ongoing import job or the status of th
 there is no job currently running. If no import job has been run, the API endpoint returns
 the HTTP status code 204.
 
+You can use Bruno to send the request.
 The following examples demonstrate how you can query the status of the latest import by using curl:
 
 **Example 1: import is running:**
@@ -71,7 +73,7 @@ However, the root directory of this repository contains four additional director
   repository).
 * The _images_ directory contains diagrams displayed on this README.
 * The _profiles_ directory contains the Maven profile specific configuration files which are used to configure this application.
-* The _testing_ directory contains testing tools (essentially Python scripts) which ensure that the import job is working
+* The _testing_ directory contains a Bruno collection for convenience, and testing tools (essentially Python scripts) which ensure that the import job is working
   as expected.
 
 The _src/main/resources_ directory contains the resources of our application. To be more specific, it contains
