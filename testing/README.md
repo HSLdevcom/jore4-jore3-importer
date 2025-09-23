@@ -1,5 +1,7 @@
 # Testing Tools
 
+The folder `bruno-collection` contains a [Bruno](https://www.usebruno.com/) (a Postman alternative) collection of HTTP helper methods for this project.
+
 This directory contains a bunch of Python scripts which help you to ensure that the 
 import job is working as expected. The testing process has four steps:
 
