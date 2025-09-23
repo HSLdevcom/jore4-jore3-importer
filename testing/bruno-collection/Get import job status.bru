@@ -1,0 +1,15 @@
+meta {
+  name: Get import job status
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://{{hostname}}:{{port}}/job/import/status
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

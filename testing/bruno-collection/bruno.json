@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "jore4-jore3-importer-bruno-collection",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
