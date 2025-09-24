@@ -74,6 +74,7 @@ However, the root directory of this repository contains four additional director
   repository).
 * The _images_ directory contains diagrams displayed on this README.
 * The _profiles_ directory contains the Maven profile specific configuration files which are used to configure this application.
+* The _scripts_ directory contains helper scripts to e.g. create database dumps.
 * The _testing_ directory contains a Bruno collection for convenience, and testing tools (essentially Python scripts) which ensure that the import job is working
   as expected.
 
