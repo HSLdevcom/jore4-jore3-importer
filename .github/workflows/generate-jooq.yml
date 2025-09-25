@@ -3,7 +3,7 @@ name: Generate jooq
 on:
   push:
   pull_request:
-    branches: [main]
+    branches: [main, releases/**]
 
 jobs:
   generate-jooq:
