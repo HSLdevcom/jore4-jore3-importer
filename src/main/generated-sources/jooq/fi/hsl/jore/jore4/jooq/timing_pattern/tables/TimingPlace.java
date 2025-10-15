@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
  * Based on Transmodel entity TIMING POINT:
  * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:2:709 
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TimingPlace extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;

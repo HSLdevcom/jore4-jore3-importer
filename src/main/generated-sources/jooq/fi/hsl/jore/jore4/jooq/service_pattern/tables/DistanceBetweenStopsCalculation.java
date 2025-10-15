@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
  * intervals from the given journey patterns. The table exists due to the
  * limitations of Hasura and there is no intention to insert anything to it.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class DistanceBetweenStopsCalculation extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;

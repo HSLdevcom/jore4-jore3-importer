@@ -23,7 +23,7 @@ import org.jooq.impl.Internal;
  * <deprecationOnUnknownTypes/>} in your code generator configuration.
  */
 @Deprecated
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class RouteShape extends AbstractRoutine<Object> {
 
     private static final long serialVersionUID = 1L;
