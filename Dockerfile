@@ -1,5 +1,5 @@
 # builder docker image
-FROM maven:3-eclipse-temurin-17 AS builder
+FROM maven:3-eclipse-temurin-25 AS builder
 
 # set up workdir
 WORKDIR /build
@@ -14,7 +14,9 @@ COPY ./profiles/prod /build/profiles/prod
 RUN mvn clean package spring-boot:repackage -Pprod
 
 # distributed docker image
-FROM eclipse-temurin:17.0.8_7-jre
+FROM eclipse-temurin:25_36-jre
+
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
@@ -31,7 +33,8 @@ COPY ./build-jdbc-urls.sh /tmp/
 COPY --from=builder /build/target/*.jar /usr/src/jore4-jore3-importer/importer.jar
 
 # read docker secrets into environment variables, fetch digiroad data and run application
-CMD /bin/bash -c "source /tmp/read-secrets.sh && source /tmp/build-jdbc-urls.sh && java -jar /usr/src/jore4-jore3-importer/importer.jar"
+CMD ["/bin/bash", "-c", \
+     "source /tmp/read-secrets.sh && source /tmp/build-jdbc-urls.sh && java -jar /usr/src/jore4-jore3-importer/importer.jar"]
 
 HEALTHCHECK --interval=1m --timeout=5s \
   CMD curl --fail http://localhost:8080/actuator/health

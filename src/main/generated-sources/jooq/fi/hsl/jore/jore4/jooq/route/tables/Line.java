@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
  * The line from Transmodel:
  * http://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:487
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Line extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
