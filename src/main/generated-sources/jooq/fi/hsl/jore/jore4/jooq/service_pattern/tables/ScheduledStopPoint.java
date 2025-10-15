@@ -35,7 +35,7 @@ import org.locationtech.jts.geom.Point;
  * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:845 . Colloquially
  * known as stops from the perspective of timetable planning.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class ScheduledStopPoint extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
@@ -120,6 +120,13 @@ public class ScheduledStopPoint extends TableImpl<Record> {
      * is not used for timing.
      */
     public final TableField<Record, UUID> TIMING_PLACE_ID = createField(DSL.name("timing_place_id"), SQLDataType.UUID, this, "Optional reference to a TIMING PLACE. If NULL, the SCHEDULED STOP POINT is not used for timing.");
+
+    /**
+     * The column
+     * <code>service_pattern.scheduled_stop_point.stop_place_ref</code>. The id
+     * of the related stop place in stop registry database.
+     */
+    public final TableField<Record, String> STOP_PLACE_REF = createField(DSL.name("stop_place_ref"), SQLDataType.CLOB, this, "The id of the related stop place in stop registry database.");
 
     private ScheduledStopPoint(Name alias, Table<Record> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

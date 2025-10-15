@@ -29,7 +29,7 @@ import org.jooq.impl.TableImpl;
  * The journey patterns, i.e. the ordered lists of stops and timing points along
  * routes: https://www.transmodel-cen.eu/model/index.htm?goto=2:3:1:813
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class JourneyPattern extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
