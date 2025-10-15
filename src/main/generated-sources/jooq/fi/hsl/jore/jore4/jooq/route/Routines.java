@@ -14,7 +14,7 @@ import org.jooq.Record;
 /**
  * Convenience access to all stored procedures and functions in route.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Routines {
 
     /**

@@ -30,7 +30,7 @@ import org.jooq.impl.TableImpl;
  * Type of line.
  * https://www.transmodel-cen.eu/model/EARoot/EA2/EA1/EA3/EA491.htm
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TypeOfLine extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
