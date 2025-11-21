@@ -10,7 +10,7 @@ import fi.hsl.jore.jore4.jooq.timing_pattern.tables.TimingPlace;
 /**
  * Convenience access to all tables in timing_pattern.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Tables {
 
     /**

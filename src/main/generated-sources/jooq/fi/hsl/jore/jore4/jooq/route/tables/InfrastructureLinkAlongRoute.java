@@ -30,7 +30,7 @@ import org.jooq.impl.TableImpl;
 /**
  * The infrastructure links along which the routes are defined.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class InfrastructureLinkAlongRoute extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;

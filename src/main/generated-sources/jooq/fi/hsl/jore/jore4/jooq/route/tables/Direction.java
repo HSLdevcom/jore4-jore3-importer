@@ -30,7 +30,7 @@ import org.jooq.impl.TableImpl;
  * The route directions from Transmodel:
  * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:480
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Direction extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;

@@ -29,7 +29,7 @@ import org.jooq.impl.TableImpl;
 /**
  * An external source from which infrastructure network parts are imported
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class ExternalSource extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;

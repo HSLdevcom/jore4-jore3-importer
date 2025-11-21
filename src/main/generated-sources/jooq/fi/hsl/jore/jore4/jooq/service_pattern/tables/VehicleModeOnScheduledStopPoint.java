@@ -30,7 +30,7 @@ import org.jooq.impl.TableImpl;
 /**
  * Which scheduled stop points are serviced by which vehicle modes?
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class VehicleModeOnScheduledStopPoint extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;

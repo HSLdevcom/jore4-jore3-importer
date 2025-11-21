@@ -30,7 +30,7 @@ public class EncodedIdentifierTest {
 
     private static final Optional<Short> NO_HIDDEN_VARIANT = Optional.empty();
 
-    private static final Optional<Short> hasHiddenVariant(final int value) {
+    private static Optional<Short> hasHiddenVariant(final int value) {
         return Optional.of((short) value);
     }
 
