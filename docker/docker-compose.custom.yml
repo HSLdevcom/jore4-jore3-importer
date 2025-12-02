@@ -38,8 +38,17 @@ services:
     volumes:
       - ../jore3dump:/mnt/jore3dump
 
+  jore4-tiamat:
+    # Pin tiamat to a compatible version.
+    image: "hsldevcom/jore4-tiamat:main--20250317-1136ff34a5b6030b0e9c85b0373f5ddc02946267"
+
   jore4-hasura:
     # pin compatible version of jore4 data model
-    image: "hsldevcom/jore4-hasura:hsl-main--20231218-8a28ef5f4b22b6351312788be4e674144f2bb0a2"
+    image: "hsldevcom/jore4-hasura:hsl-main--20250317-60eaf1217447890591ca3bbe262c96f2cc68ba57"
+    depends_on:
+      jore4-testdb:
+        condition: service_healthy
+      jore4-tiamat:
+        condition: service_healthy
 networks:
-    jore4:
+  jore4:
