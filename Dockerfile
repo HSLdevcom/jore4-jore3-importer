@@ -16,6 +16,8 @@ RUN mvn clean package spring-boot:repackage -Pprod
 # distributed docker image
 FROM eclipse-temurin:17.0.8_7-jre
 
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 # expose server port
 EXPOSE 8080
 
