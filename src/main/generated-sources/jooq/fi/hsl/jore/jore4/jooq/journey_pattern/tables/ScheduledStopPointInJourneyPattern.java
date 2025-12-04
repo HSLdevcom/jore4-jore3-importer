@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
  * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:1:813 . For HSL, all
  * timing points are stops, hence journey pattern instead of service pattern.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class ScheduledStopPointInJourneyPattern extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;

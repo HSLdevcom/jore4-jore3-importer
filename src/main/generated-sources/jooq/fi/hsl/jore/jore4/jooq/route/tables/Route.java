@@ -31,7 +31,7 @@ import org.jooq.impl.TableImpl;
  * The routes from Transmodel:
  * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Route extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;

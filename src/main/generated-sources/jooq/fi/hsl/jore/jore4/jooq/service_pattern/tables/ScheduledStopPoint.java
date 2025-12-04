@@ -35,7 +35,7 @@ import org.locationtech.jts.geom.Point;
  * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:845 . Colloquially
  * known as stops from the perspective of timetable planning.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class ScheduledStopPoint extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;

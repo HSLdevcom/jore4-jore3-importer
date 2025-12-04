@@ -16,7 +16,7 @@ import org.jooq.impl.DefaultDSLContext;
 import org.jooq.impl.DefaultExecuteListenerProvider;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.jooq.JooqExceptionTranslator;
+import org.springframework.boot.autoconfigure.jooq.ExceptionTranslatorExecuteListener;
 import org.springframework.boot.autoconfigure.jooq.JooqProperties;
 import org.springframework.boot.autoconfigure.jooq.SpringTransactionProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -107,7 +107,7 @@ public class JOOQConfig {
         config.set(properties.determineSqlDialect(dataSource));
         config.set(new DataSourceConnectionProvider(new TransactionAwareDataSourceProxy(dataSource)));
         config.set(new SpringTransactionProvider(txManager));
-        config.set(new DefaultExecuteListenerProvider(new JooqExceptionTranslator()));
+        config.set(new DefaultExecuteListenerProvider(ExceptionTranslatorExecuteListener.DEFAULT));
         config.setSettings(settings);
 
         config.set(recordListenerProviders.orderedStream().toArray(RecordListenerProvider[]::new));

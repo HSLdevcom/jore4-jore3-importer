@@ -29,7 +29,7 @@ import org.jooq.impl.TableImpl;
 /**
  * The direction in which an e.g. infrastructure link can be traversed
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Direction extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;

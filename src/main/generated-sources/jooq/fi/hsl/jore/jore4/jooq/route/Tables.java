@@ -14,7 +14,7 @@ import fi.hsl.jore.jore4.jooq.route.tables.TypeOfLine;
 /**
  * Convenience access to all tables in route.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Tables {
 
     /**

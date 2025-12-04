@@ -13,7 +13,7 @@ import fi.hsl.jore.jore4.jooq.infrastructure_network.tables.VehicleSubmodeOnInfr
 /**
  * Convenience access to all tables in infrastructure_network.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Tables {
 
     /**

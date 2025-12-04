@@ -30,7 +30,7 @@ import org.jooq.impl.TableImpl;
  * The vehicle submode, which may have implications on which infrastructure
  * links the vehicle can traverse
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class VehicleSubmode extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
