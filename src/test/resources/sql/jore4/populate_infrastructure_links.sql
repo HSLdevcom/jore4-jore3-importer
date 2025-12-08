@@ -14,7 +14,7 @@ VALUES (
     ST_MakeLine(ST_SetSRID(ST_MakePoint(24.457948, 60.088725, 0), 4326), ST_SetSRID(ST_MakePoint(24.468175, 60.15286, 0), 4326)),
     1000,
     '133202',
-    'digiroad_r'
+    'digiroad_r_mml'
 );
 
 INSERT INTO infrastructure_network.vehicle_submode_on_infrastructure_link (

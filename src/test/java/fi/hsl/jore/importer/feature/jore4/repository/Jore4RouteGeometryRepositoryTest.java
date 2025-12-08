@@ -68,7 +68,7 @@ class Jore4RouteGeometryRepositoryTest {
             private static final String INFRASTRUCTURE_LINK_EXT_ID = "133202";
             private static final boolean INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS = true;
             private static final int INFRASTRUCTURE_LINK_SEQUENCE = 0;
-            private static final String INFRASTRUCTURE_LINK_SOURCE = "digiroad_r";
+            private static final String INFRASTRUCTURE_LINK_SOURCE = "digiroad_r_mml";
 
             private Jore4RouteGeometry input;
 

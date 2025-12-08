@@ -223,7 +223,7 @@ class MapMatchingServiceTest {
                                 {
                                   "mapMatchingInfrastructureLinkId": 209830,
                                   "externalLinkRef": {
-                                    "infrastructureSource": "digiroad_r",
+                                    "infrastructureSource": "digiroad_r_mml",
                                     "externalLinkId": "445117"
                                   },
                                   "isTraversalForwards": true,
@@ -244,7 +244,7 @@ class MapMatchingServiceTest {
                                 {
                                   "mapMatchingInfrastructureLinkId": 232425,
                                   "externalLinkRef": {
-                                    "infrastructureSource": "digiroad_r",
+                                    "infrastructureSource": "digiroad_r_mml",
                                     "externalLinkId": "442423"
                                   },
                                   "isTraversalForwards": true,
@@ -284,7 +284,7 @@ class MapMatchingServiceTest {
                 private static final double EXPECTED_ROUTE_WEIGHT = 286.7201809450182;
 
                 private static final long EXPECTED_INFRASTRUCTURE_LINK_ONE_ID = 209830;
-                private static final String EXPECTED_INFRASTRUCTURE_LINK_ONE_SOURCE = "digiroad_r";
+                private static final String EXPECTED_INFRASTRUCTURE_LINK_ONE_SOURCE = "digiroad_r_mml";
                 private static final String EXPECTED_INFRASTRUCTURE_LINK_ONE_EXT_ID = "445117";
                 private static final boolean EXPECTED_INFRASTRUCTURE_LINK_ONE_TRAVERSAL_FORWARDS = true;
                 private static final double EXPECTED_INFRASTRUCTURE_LINK_ONE_COORDINATE_ONE_LNG = 24.92743115932746;
@@ -297,7 +297,7 @@ class MapMatchingServiceTest {
                 private static final String EXPECTED_INFRASTRUCTURE_LINK_ONE_SWEDISH_NAME = "Kalevagatan 1";
 
                 private static final long EXPECTED_INFRASTRUCTURE_LINK_TWO_ID = 232425;
-                private static final String EXPECTED_INFRASTRUCTURE_LINK_TWO_SOURCE = "digiroad_r";
+                private static final String EXPECTED_INFRASTRUCTURE_LINK_TWO_SOURCE = "digiroad_r_mml";
                 private static final String EXPECTED_INFRASTRUCTURE_LINK_TWO_EXT_ID = "442423";
                 private static final boolean EXPECTED_INFRASTRUCTURE_LINK_TWO_TRAVERSAL_FORWARDS = true;
                 private static final double EXPECTED_INFRASTRUCTURE_LINK_TWO_COORDINATE_ONE_LNG = 24.92919590585085;
