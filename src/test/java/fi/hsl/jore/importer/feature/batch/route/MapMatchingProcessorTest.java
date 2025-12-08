@@ -110,7 +110,7 @@ class MapMatchingProcessorTest {
                         {
                           "mapMatchingInfrastructureLinkId": 209830,
                           "externalLinkRef": {
-                            "infrastructureSource": "digiroad_r",
+                            "infrastructureSource": "digiroad_r_mml",
                             "externalLinkId": "445117"
                           },
                           "isTraversalForwards": true,
@@ -131,7 +131,7 @@ class MapMatchingProcessorTest {
                         {
                           "mapMatchingInfrastructureLinkId": 232425,
                           "externalLinkRef": {
-                            "infrastructureSource": "digiroad_r",
+                            "infrastructureSource": "digiroad_r_mml",
                             "externalLinkId": "442423"
                           },
                           "isTraversalForwards": true,
@@ -155,12 +155,12 @@ class MapMatchingProcessorTest {
                 }
                 """;
 
-        private static final String EXPECTED_FIRST_INFRASTRUCTURE_LINK_SOURCE = "digiroad_r";
+        private static final String EXPECTED_FIRST_INFRASTRUCTURE_LINK_SOURCE = "digiroad_r_mml";
         private static final String EXPECTED_FIRST_INFRASTRUCTURE_LINK_EXT_ID = "445117";
         private static final int EXPECTED_FIRST_INFRASTRUCTURE_LINK_SEQUENCE = 0;
         private static final boolean EXPECTED_FIRST_INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS = true;
 
-        private static final String EXPECTED_SECOND_INFRASTRUCTURE_LINK_SOURCE = "digiroad_r";
+        private static final String EXPECTED_SECOND_INFRASTRUCTURE_LINK_SOURCE = "digiroad_r_mml";
         private static final String EXPECTED_SECOND_INFRASTRUCTURE_LINK_EXT_ID = "442423";
         private static final int EXPECTED_SECOND_INFRASTRUCTURE_LINK_SEQUENCE = 1;
         private static final boolean EXPECTED_SECOND_INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS = true;

@@ -48,7 +48,7 @@ public class DigiroadStopFactoryTest {
         class WhenDigiroadStopIdIsEmpty {
 
             private static final String CSV_LINE =
-                    ";133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r";
+                    ";133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r_mml";
 
             @Test
             @DisplayName("Should throw an exception")
@@ -63,7 +63,7 @@ public class DigiroadStopFactoryTest {
         class WhenDigiroadLinkIdIsEmpty {
 
             private static final String CSV_LINE =
-                    "111;;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r";
+                    "111;;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r_mml";
 
             @Test
             @DisplayName("Should throw an exception")
@@ -78,7 +78,7 @@ public class DigiroadStopFactoryTest {
         class WhenNationalIdIsEmpty {
 
             private static final String CSV_LINE =
-                    "111;133202;;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r";
+                    "111;133202;;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r_mml";
 
             @Test
             @DisplayName("Should throw an exception")
@@ -93,7 +93,7 @@ public class DigiroadStopFactoryTest {
         class WhenNationalIdIsContainsNonNumericalCharacters {
 
             private static final String CSV_LINE =
-                    "111;133202;12d3;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r";
+                    "111;133202;12d3;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r_mml";
 
             @Test
             @DisplayName("Should throw an exception")
@@ -108,7 +108,7 @@ public class DigiroadStopFactoryTest {
         class WhenStopDirectionIsInvalid {
 
             private static final String CSV_LINE =
-                    "111;133202;168626;invalid;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r";
+                    "111;133202;168626;invalid;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r_mml";
 
             @Test
             @DisplayName("Should throw an exception")
@@ -123,7 +123,7 @@ public class DigiroadStopFactoryTest {
         class WhenStopLocationIsInvalid {
 
             private static final String CSV_LINE =
-                    "111;133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801])\";Ullanmäki;Ullasbacken;digiroad_r";
+                    "111;133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801])\";Ullanmäki;Ullasbacken;digiroad_r_mml";
 
             @Test
             @DisplayName("Should throw an exception")
@@ -152,7 +152,7 @@ public class DigiroadStopFactoryTest {
         class WhenAllValuesAreGiven {
 
             private static final String CSV_LINE =
-                    "111;133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r";
+                    "111;133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r_mml";
 
             @Test
             @DisplayName("Should return an optional which contains the parsed stop")
@@ -233,7 +233,7 @@ public class DigiroadStopFactoryTest {
         class WhenNamesAreEmptyStrings {
 
             private static final String CSV_LINE =
-                    "111;133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";;;digiroad_r";
+                    "111;133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";;;digiroad_r_mml";
 
             @Test
             @DisplayName("Should return an optional which contains the parsed stop")

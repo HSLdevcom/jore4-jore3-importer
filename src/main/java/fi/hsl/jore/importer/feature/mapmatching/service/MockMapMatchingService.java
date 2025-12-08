@@ -16,7 +16,7 @@ public class MockMapMatchingService implements IMapMatchingService {
 
     public static final String INFRASTRUCTURE_LINK_EXT_ID = "133202";
     public static final boolean INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS = true;
-    public static final String INFRASTRUCTURE_LINK_SOURCE = "digiroad_r";
+    public static final String INFRASTRUCTURE_LINK_SOURCE = "digiroad_r_mml";
 
     private static final String MAP_MATCHING_OK_RESPONSE_CODE = "Ok";
 
