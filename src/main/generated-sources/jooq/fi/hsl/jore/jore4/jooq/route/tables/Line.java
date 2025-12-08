@@ -118,6 +118,12 @@ public class Line extends TableImpl<Record> {
      */
     public final TableField<Record, String> LEGACY_HSL_MUNICIPALITY_CODE = createField(DSL.name("legacy_hsl_municipality_code"), SQLDataType.CLOB, this, "Defines the legacy municipality that is mainly used for data exports.");
 
+    /**
+     * The column <code>route.line.description</code>. The line text description
+     * of the line.
+     */
+    public final TableField<Record, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.CLOB, this, "The line text description of the line.");
+
     private Line(Name alias, Table<Record> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
