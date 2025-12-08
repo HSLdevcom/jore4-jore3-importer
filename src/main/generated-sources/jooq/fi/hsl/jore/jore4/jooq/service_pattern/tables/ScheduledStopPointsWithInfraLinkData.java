@@ -33,7 +33,7 @@ import org.locationtech.jts.geom.Point;
 /**
  * Contains scheduled_stop_points enriched with some infra link data.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class ScheduledStopPointsWithInfraLinkData extends TableImpl<Record> {
 
     private static final long serialVersionUID = 1L;
