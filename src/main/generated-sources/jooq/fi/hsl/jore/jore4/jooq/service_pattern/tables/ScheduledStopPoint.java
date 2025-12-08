@@ -121,6 +121,13 @@ public class ScheduledStopPoint extends TableImpl<Record> {
      */
     public final TableField<Record, UUID> TIMING_PLACE_ID = createField(DSL.name("timing_place_id"), SQLDataType.UUID, this, "Optional reference to a TIMING PLACE. If NULL, the SCHEDULED STOP POINT is not used for timing.");
 
+    /**
+     * The column
+     * <code>service_pattern.scheduled_stop_point.stop_place_ref</code>. The id
+     * of the related stop place in stop registry database.
+     */
+    public final TableField<Record, String> STOP_PLACE_REF = createField(DSL.name("stop_place_ref"), SQLDataType.CLOB, this, "The id of the related stop place in stop registry database.");
+
     private ScheduledStopPoint(Name alias, Table<Record> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
