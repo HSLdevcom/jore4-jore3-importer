@@ -90,8 +90,7 @@ class MapMatchingServiceTest {
     @Nested
     @DisplayName("When the map matching API returns the HTTP status code ok (200)")
     class WhenMapMatchingApiReturnsHttpStatusCodeOk {
-        private static final String EXPECTED_MAP_MATCHING_REQUEST_BODY =
-                """
+        private static final String EXPECTED_MAP_MATCHING_REQUEST_BODY = """
                 {
                   "routeId": "1001-2-20211004",
                   "routeGeometry": {
@@ -203,8 +202,7 @@ class MapMatchingServiceTest {
             @DisplayName("When a match was found")
             @ExtendWith(SoftAssertionsExtension.class)
             class WhenMatchWasFound {
-                private static final String MAP_MATCHING_RESPONSE =
-                        """
+                private static final String MAP_MATCHING_RESPONSE = """
                         {
                           "code": "Ok",
                           "routes": [

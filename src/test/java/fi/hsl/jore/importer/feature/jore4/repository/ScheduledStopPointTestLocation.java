@@ -8,8 +8,7 @@ public class ScheduledStopPointTestLocation {
 
     public static final String SQL_ALIAS_X_COORDINATE = "x";
     public static final String SQL_ALIAS_Y_COORDINATE = "y";
-    public static final String SQL_QUERY_GET_MEASURED_LOCATION =
-            """
+    public static final String SQL_QUERY_GET_MEASURED_LOCATION = """
             SELECT ST_X(measured_location::geometry) AS x,
                    ST_Y(measured_location::geometry) AS y
             FROM service_pattern.scheduled_stop_point
