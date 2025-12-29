@@ -90,8 +90,7 @@ class MapMatchingProcessorTest {
     @DisplayName("When one route point is found")
     @ExtendWith(SoftAssertionsExtension.class)
     class WhenOneRoutePointIsFound {
-        private static final String MAP_MATCHING_RESPONSE =
-                """
+        private static final String MAP_MATCHING_RESPONSE = """
                 {
                   "code": "Ok",
                   "routes": [
