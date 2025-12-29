@@ -52,9 +52,9 @@ public final class LineClassificationUtil {
                         : TypeOfLine.CITY_TRAM_SERVICE;
 
             default:
-                return TypeOfLine.STOPPING_BUS_SERVICE;
                 // TODO: Find a way for determining the line type for this case.
                 // throw new IllegalArgumentException("Cannot determine type of line: " + lineNumber);
+                return TypeOfLine.STOPPING_BUS_SERVICE;
         }
     }
 }
