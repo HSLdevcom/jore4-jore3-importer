@@ -6,7 +6,7 @@ set -eu
 
 # if SOURCE_DB_URL was not set, build it from parts
 if [ -z "${SOURCE_DB_URL+x}" ]; then
-  export SOURCE_DB_URL="jdbc:sqlserver://${SOURCE_DB_HOSTNAME}:${SOURCE_DB_PORT};database=${SOURCE_DB_DATABASE};applicationIntent=ReadOnly"
+  export SOURCE_DB_URL="jdbc:sqlserver://${SOURCE_DB_HOSTNAME}:${SOURCE_DB_PORT};database=${SOURCE_DB_DATABASE};applicationIntent=ReadOnly;encrypt=false"
 fi
 
 # if IMPORTER_DB_URL was not set, build it from parts
