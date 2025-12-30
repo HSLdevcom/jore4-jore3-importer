@@ -6,9 +6,9 @@ import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
 import fi.hsl.jore.importer.feature.jore3.field.LineId;
 import fi.hsl.jore.importer.feature.jore3.field.RouteId;
+import jakarta.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.annotation.Nullable;
 import org.springframework.jdbc.core.RowMapper;
 
 public class RouteMapper implements RowMapper<JrRoute> {

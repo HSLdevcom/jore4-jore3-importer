@@ -6,12 +6,12 @@ import fi.hsl.jore.importer.feature.batch.link_shape.dto.LinkPoints;
 import fi.hsl.jore.importer.feature.batch.link_shape.dto.PointRow;
 import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
 import fi.hsl.jore.importer.feature.jore3.key.JrLinkPk;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import javax.annotation.Nullable;
 import org.immutables.value.Value;
 import org.springframework.batch.item.ItemStreamReader;
 

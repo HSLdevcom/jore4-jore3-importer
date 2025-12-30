@@ -7,7 +7,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.Jore3RouteDirection;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import org.springframework.batch.item.ItemProcessor;
 
 public class RouteDirectionProcessor implements ItemProcessor<JrRouteDirection, Jore3RouteDirection> {

@@ -18,9 +18,9 @@ import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.RouteId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import fi.hsl.jore.importer.feature.jore3.field.generated.RouteLinkId;
+import jakarta.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.annotation.Nullable;
 import org.springframework.jdbc.core.RowMapper;
 
 public class RouteLinkRowMapper implements RowMapper<SingleRouteLinkAndParent> {

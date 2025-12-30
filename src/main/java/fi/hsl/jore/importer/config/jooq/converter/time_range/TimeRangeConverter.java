@@ -4,6 +4,7 @@ import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_TIME;
 
 import fi.hsl.jore.importer.config.jooq.converter.util.RangeUtil;
+import jakarta.annotation.Nullable;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -12,7 +13,6 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.Nullable;
 import org.jooq.Converter;
 
 /**

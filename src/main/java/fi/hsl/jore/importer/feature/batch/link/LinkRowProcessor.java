@@ -6,7 +6,7 @@ import fi.hsl.jore.importer.feature.batch.util.TransitTypeToNetworkTypeMapper;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Jore3Link;
 import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import org.springframework.batch.item.ItemProcessor;
 
 public class LinkRowProcessor implements ItemProcessor<LinkRow, Jore3Link> {

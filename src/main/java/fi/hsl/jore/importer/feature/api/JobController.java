@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.api;
 
 import fi.hsl.jore.importer.config.jobs.JobConfig;
 import fi.hsl.jore.importer.feature.api.dto.JobStatus;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;

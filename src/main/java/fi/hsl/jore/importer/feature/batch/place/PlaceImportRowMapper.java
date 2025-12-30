@@ -4,9 +4,9 @@ import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
 
 import fi.hsl.jore.importer.feature.jore3.entity.JrPlace;
 import fi.hsl.jore.importer.feature.jore3.field.generated.PlaceId;
+import jakarta.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.annotation.Nullable;
 import org.springframework.jdbc.core.RowMapper;
 
 public class PlaceImportRowMapper implements RowMapper<JrPlace> {

@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.config.jooq.converter.geometry;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import org.jooq.Converter;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.LineString;

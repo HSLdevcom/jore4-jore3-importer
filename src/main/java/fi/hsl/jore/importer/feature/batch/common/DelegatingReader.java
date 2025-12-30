@@ -1,8 +1,8 @@
 package fi.hsl.jore.importer.feature.batch.common;
 
+import jakarta.annotation.Nullable;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import javax.annotation.Nullable;
 import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

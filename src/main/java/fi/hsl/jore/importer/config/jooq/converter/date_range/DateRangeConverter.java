@@ -3,12 +3,12 @@ package fi.hsl.jore.importer.config.jooq.converter.date_range;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
 import fi.hsl.jore.importer.config.jooq.converter.util.RangeUtil;
+import jakarta.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.Nullable;
 import org.jooq.Converter;
 
 public class DateRangeConverter implements Converter<Object, DateRange> {

@@ -20,7 +20,7 @@
         <maven-enforcer.plugin.mvn-min-version>3.6.3</maven-enforcer.plugin.mvn-min-version>
 
         <!-- Library versions -->
-        <guava.version>33.1.0-jre</guava.version>
+        <guava.version>33.5.0-jre</guava.version>
         <!-- Upgrading geojson-jackson to 3.0 would change LngLatAlt serialization from arrays to objects which breaks
              existing code -->
         <geojson-jackson.version>1.14</geojson-jackson.version>
@@ -85,6 +85,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
 
         <dependency>
