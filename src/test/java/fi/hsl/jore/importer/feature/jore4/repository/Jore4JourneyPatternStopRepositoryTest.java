@@ -13,7 +13,8 @@ import java.util.Optional;
 import java.util.UUID;
 import javax.sql.DataSource;
 import org.assertj.core.api.Condition;
-import org.assertj.db.type.Table;
+import org.assertj.db.type.AssertDbConnection;
+import org.assertj.db.type.AssertDbConnectionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ import org.springframework.test.context.jdbc.SqlConfig;
 class Jore4JourneyPatternStopRepositoryTest {
 
     private final Jore4JourneyPatternStopRepository repository;
-    private final Table targetTable;
+    private final AssertDbConnection connection;
 
     private final JsonbConverter jsonbConverter;
 
@@ -37,7 +38,7 @@ class Jore4JourneyPatternStopRepositoryTest {
             final Jore4JourneyPatternStopRepository repository,
             final JsonbConverter jsonbConverter) {
         this.repository = repository;
-        this.targetTable = new Table(targetDataSource, "journey_pattern.scheduled_stop_point_in_journey_pattern");
+        this.connection = AssertDbConnectionFactory.of(targetDataSource).create();
         this.jsonbConverter = jsonbConverter;
     }
 
@@ -82,7 +83,10 @@ class Jore4JourneyPatternStopRepositoryTest {
         void shouldInsertNewJourneyPatternStopIntoDatabase() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable).hasNumberOfRows(1);
+            assertThat(connection
+                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .build())
+                    .hasNumberOfRows(1);
         }
 
         @Test
@@ -90,7 +94,9 @@ class Jore4JourneyPatternStopRepositoryTest {
         void shouldSaveNewJourneyPatternStopWithCorrectJourneyPatternId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(connection
+                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.JOURNEY_PATTERN_ID.getName())
                     .isEqualTo(JOURNEY_PATTERN_ID);
@@ -101,7 +107,9 @@ class Jore4JourneyPatternStopRepositoryTest {
         void shouldSaveNewJourneyPatternWithCorrectScheduledStopPointSequence() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(connection
+                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_SEQUENCE.getName())
                     .isEqualTo(SCHEDULED_STOP_POINT_SEQUENCE);
@@ -112,7 +120,9 @@ class Jore4JourneyPatternStopRepositoryTest {
         void shouldSaveNewJourneyPatternStopWithCorrectScheduledStopPointId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(connection
+                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_LABEL.getName())
                     .isEqualTo(SCHEDULED_STOP_POINT_LABEL);
@@ -123,7 +133,9 @@ class Jore4JourneyPatternStopRepositoryTest {
         void shouldSaveNewJourneyPatternWithCorrectIsUsedAsTimingPointInformation() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(connection
+                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_USED_AS_TIMING_POINT.getName())
                     .isEqualTo(IS_USED_AS_TIMING_POINT);
@@ -134,7 +146,9 @@ class Jore4JourneyPatternStopRepositoryTest {
         void shouldSaveNewJourneyPatternWithCorrectIsRegulatedTimingPointInformation() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(connection
+                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_REGULATED_TIMING_POINT.getName())
                     .isEqualTo(IS_REGULATED_TIMING_POINT);
@@ -145,7 +159,9 @@ class Jore4JourneyPatternStopRepositoryTest {
         void shouldSaveNewJourneyPatternWithCorrectIsLoadingTimeAllowedInformation() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(connection
+                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_LOADING_TIME_ALLOWED.getName())
                     .isEqualTo(IS_LOADING_TIME_ALLOWED);
@@ -156,7 +172,9 @@ class Jore4JourneyPatternStopRepositoryTest {
         void shouldSaveNewJourneyPatternWithCorrectIsViaPointInformation() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(connection
+                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_VIA_POINT.getName())
                     .isEqualTo(IS_VIA_POINT);
@@ -174,12 +192,16 @@ class Jore4JourneyPatternStopRepositoryTest {
                     fieldValue -> fieldValue.getValue().replace(" ", "").equals(expectedJsonString),
                     expectedJsonString);
 
-            assertThat(targetTable)
+            assertThat(connection
+                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.VIA_POINT_NAME_I18N.getName())
                     .is(testJsonValueCondition);
 
-            assertThat(targetTable)
+            assertThat(connection
+                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.VIA_POINT_SHORT_NAME_I18N.getName())
                     .is(testJsonValueCondition);

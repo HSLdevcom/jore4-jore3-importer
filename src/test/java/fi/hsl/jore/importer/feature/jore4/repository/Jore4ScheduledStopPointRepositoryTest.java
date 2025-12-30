@@ -17,7 +17,8 @@ import javax.sql.DataSource;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
-import org.assertj.db.type.Table;
+import org.assertj.db.type.AssertDbConnection;
+import org.assertj.db.type.AssertDbConnectionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -51,9 +52,8 @@ class Jore4ScheduledStopPointRepositoryTest {
 
     private final JdbcTemplate jdbcTemplate;
     private final Jore4ScheduledStopPointRepository repository;
-    private final Table scheduledStopPointTargetTable;
+    private final AssertDbConnection connection;
     private final Jore4ValidityPeriodTestRepository testRepository;
-    private final Table vehicleModeTargetTable;
 
     @Autowired
     Jore4ScheduledStopPointRepositoryTest(
@@ -61,11 +61,9 @@ class Jore4ScheduledStopPointRepositoryTest {
             @Qualifier("jore4DataSource") final DataSource targetDataSource) {
         this.jdbcTemplate = new JdbcTemplate(targetDataSource);
         this.repository = repository;
-        this.scheduledStopPointTargetTable = new Table(targetDataSource, "service_pattern.scheduled_stop_point");
+        this.connection = AssertDbConnectionFactory.of(targetDataSource).create();
         this.testRepository =
                 new Jore4ValidityPeriodTestRepository(targetDataSource, ValidityPeriodTargetTable.SCHEDULED_STOP_POINT);
-        this.vehicleModeTargetTable =
-                new Table(targetDataSource, "service_pattern.vehicle_mode_on_scheduled_stop_point");
     }
 
     @Nested
@@ -97,7 +95,8 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldInsertNewScheduledStopPointIntoDatabase() {
             repository.insert(List.of(INPUT));
 
-            assertThat(scheduledStopPointTargetTable).hasNumberOfRows(1);
+            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
+                    .hasNumberOfRows(1);
         }
 
         @Test
@@ -105,7 +104,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(scheduledStopPointTargetTable)
+            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
                     .row()
                     .value(SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID.getName())
                     .isEqualTo(SCHEDULED_STOP_POINT_ID);
@@ -116,7 +115,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectDirection() {
             repository.insert(List.of(INPUT));
 
-            assertThat(scheduledStopPointTargetTable)
+            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
                     .row()
                     .value(SCHEDULED_STOP_POINT.DIRECTION.getName())
                     .isEqualTo(DIRECTION_ON_INFRALINK.getValue());
@@ -127,7 +126,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectInfrastructureLinkId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(scheduledStopPointTargetTable)
+            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
                     .row()
                     .value(SCHEDULED_STOP_POINT.LOCATED_ON_INFRASTRUCTURE_LINK_ID.getName())
                     .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ID);
@@ -138,7 +137,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectLabel() {
             repository.insert(List.of(INPUT));
 
-            assertThat(scheduledStopPointTargetTable)
+            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
                     .row()
                     .value(SCHEDULED_STOP_POINT.LABEL.getName())
                     .isEqualTo(LABEL);
@@ -168,7 +167,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectTimingPlaceId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(scheduledStopPointTargetTable)
+            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
                     .row()
                     .value(SCHEDULED_STOP_POINT.TIMING_PLACE_ID.getName())
                     .isEqualTo(EXPECTED_TIMING_PLACE_ID);
@@ -179,7 +178,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectPriority() {
             repository.insert(List.of(INPUT));
 
-            assertThat(scheduledStopPointTargetTable)
+            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
                     .row()
                     .value(SCHEDULED_STOP_POINT.PRIORITY.getName())
                     .isEqualTo(PRIORITY);
@@ -212,7 +211,10 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldInsertNewScheduledStopPointVehicleModeIntoDatabase() {
             repository.insert(List.of(INPUT));
 
-            assertThat(vehicleModeTargetTable).hasNumberOfRows(1);
+            assertThat(connection
+                            .table("service_pattern.vehicle_mode_on_scheduled_stop_point")
+                            .build())
+                    .hasNumberOfRows(1);
         }
 
         @Test
@@ -220,7 +222,9 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointVehicleModeWithCorrectScheduledStopPointId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(vehicleModeTargetTable)
+            assertThat(connection
+                            .table("service_pattern.vehicle_mode_on_scheduled_stop_point")
+                            .build())
                     .row()
                     .value(VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID.getName())
                     .isEqualTo(SCHEDULED_STOP_POINT_ID);
@@ -231,7 +235,9 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointVehicleModeWithCorrectVehicleMode() {
             repository.insert(List.of(INPUT));
 
-            assertThat(vehicleModeTargetTable)
+            assertThat(connection
+                            .table("service_pattern.vehicle_mode_on_scheduled_stop_point")
+                            .build())
                     .row()
                     .value(VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.VEHICLE_MODE.getName())
                     .isEqualTo(SCHEDULED_STOP_POINT_VEHICLE_MODE);

@@ -34,7 +34,7 @@
 
         <!-- Test library version -->
         <quicktheories.version>0.26</quicktheories.version>
-        <assertj-db.version>2.0.2</assertj-db.version>
+        <assertj-db.version>3.0.1</assertj-db.version>
         <wiremock.version>3.13.2</wiremock.version>
         <jsonassert.version>1.5.3</jsonassert.version>
 
