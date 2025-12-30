@@ -26,9 +26,7 @@
         <geojson-jackson.version>1.14</geojson-jackson.version>
         <immutables.version>2.12.0</immutables.version>
         <geotools.version>34.1</geotools.version>
-        <!-- Sticking to old 9.X version to avoid having to configure trusted certificates
-             or just blindly trust any SQL server certificate. -->
-        <mssql-jdbc.version>9.5.0.jre17-preview</mssql-jdbc.version>
+        <mssql-jdbc.version>13.2.1.jre11</mssql-jdbc.version>
         <!-- Used as the DB for Spring Batch -->
         <hsqldb.version>2.7.4</hsqldb.version>
 
