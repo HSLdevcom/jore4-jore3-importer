@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.UUID;
 import javax.sql.DataSource;
 import org.assertj.core.api.Assertions;
-import org.assertj.db.type.Table;
+import org.assertj.db.type.AssertDbConnection;
+import org.assertj.db.type.AssertDbConnectionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,16 +70,17 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     private static final fi.hsl.jore.jore4.jooq.route.tables.Route JORE4_ROUTE =
             fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
 
-    private final Table importerTargetTable;
-    private final Table jore4TargetTable;
+    private final AssertDbConnection importerConnection;
+    private final AssertDbConnection jore4Connection;
     private final Jore4ValidityPeriodTestRepository testRepository;
 
     @Autowired
     public ExportRouteStepTest(
             final @Qualifier("importerDataSource") DataSource importerDataSource,
             final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
-        this.importerTargetTable = new Table(importerDataSource, "network.network_route_directions");
-        this.jore4TargetTable = new Table(jore4DataSource, "route.route");
+        this.importerConnection =
+                AssertDbConnectionFactory.of(importerDataSource).create();
+        this.jore4Connection = AssertDbConnectionFactory.of(jore4DataSource).create();
         this.testRepository = new Jore4ValidityPeriodTestRepository(jore4DataSource, ValidityPeriodTargetTable.ROUTE);
     }
 
@@ -87,7 +89,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldInsertOneLineIntoJoreDatabase() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable).hasNumberOfRows(1);
+        assertThat(jore4Connection.table("route.route").build()).hasNumberOfRows(1);
     }
 
     @Test
@@ -95,7 +97,10 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldGenerateNewIdForExportedLine() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable).row().value(JORE4_ROUTE.ROUTE_ID.getName()).isNotNull();
+        assertThat(jore4Connection.table("route.route").build())
+                .row()
+                .value(JORE4_ROUTE.ROUTE_ID.getName())
+                .isNotNull();
     }
 
     @Test
@@ -103,7 +108,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportLineWithCorrectDescription() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable)
+        assertThat(jore4Connection.table("route.route").build())
                 .row()
                 .value(JORE4_ROUTE.DESCRIPTION_I18N.getName())
                 .is(equalJson(EXPECTED_DESCRIPTION));
@@ -114,7 +119,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectDirection() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable)
+        assertThat(jore4Connection.table("route.route").build())
                 .row()
                 .value(JORE4_ROUTE.DIRECTION.getName())
                 .isEqualTo(EXPECTED_DIRECTION);
@@ -125,7 +130,10 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectLabel() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable).row().value(JORE4_ROUTE.LABEL.getName()).isEqualTo(EXPECTED_LABEL);
+        assertThat(jore4Connection.table("route.route").build())
+                .row()
+                .value(JORE4_ROUTE.LABEL.getName())
+                .isEqualTo(EXPECTED_LABEL);
     }
 
     @Test
@@ -133,7 +141,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectLineId() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable)
+        assertThat(jore4Connection.table("route.route").build())
                 .row()
                 .value(JORE4_ROUTE.ON_LINE_ID.getName())
                 .isEqualTo(EXPECTED_JORE4_ID_OF_LINE);
@@ -144,7 +152,10 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectPriority() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable).row().value(JORE4_ROUTE.PRIORITY.getName()).isEqualTo(EXPECTED_PRIORITY);
+        assertThat(jore4Connection.table("route.route").build())
+                .row()
+                .value(JORE4_ROUTE.PRIORITY.getName())
+                .isEqualTo(EXPECTED_PRIORITY);
     }
 
     @Test
@@ -174,7 +185,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectLegacyHslMunicipalityCode() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable)
+        assertThat(jore4Connection.table("route.route").build())
                 .row()
                 .value(JORE4_ROUTE.LEGACY_HSL_MUNICIPALITY_CODE.getName())
                 .isEqualTo(EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE.getJore4Value());
@@ -185,7 +196,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldUpdateJore4IdOfRouteDirectionFoundFromImportersDatabase() {
         runSteps(STEPS);
 
-        assertThat(importerTargetTable)
+        assertThat(importerConnection.table("network.network_route_directions").build())
                 .row()
                 .value(IMPORTER_ROUTE_DIRECTION.NETWORK_ROUTE_JORE4_ID.getName())
                 .isNotNull();

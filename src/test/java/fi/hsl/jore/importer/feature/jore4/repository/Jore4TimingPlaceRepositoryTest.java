@@ -11,7 +11,8 @@ import fi.hsl.jore.importer.feature.jore4.entity.Jore4TimingPlace;
 import java.util.List;
 import java.util.UUID;
 import javax.sql.DataSource;
-import org.assertj.db.type.Table;
+import org.assertj.db.type.AssertDbConnection;
+import org.assertj.db.type.AssertDbConnectionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ public class Jore4TimingPlaceRepositoryTest {
     private static final String EXPECTED_RESULTING_TIMING_PLACE_NAME = "{\"fi_FI\":\"" + TIMING_PLACE_NAME + "\"}";
 
     private final IJore4TimingPlaceRepository repository;
-    private final Table targetTable;
+    private final AssertDbConnection connection;
 
     @Autowired
     Jore4TimingPlaceRepositoryTest(
@@ -38,7 +39,7 @@ public class Jore4TimingPlaceRepositoryTest {
             @Qualifier("jore4DataSource") final DataSource targetDataSource) {
 
         this.repository = repository;
-        this.targetTable = new Table(targetDataSource, "timing_pattern.timing_place");
+        this.connection = AssertDbConnectionFactory.of(targetDataSource).create();
     }
 
     @Nested
@@ -57,7 +58,7 @@ public class Jore4TimingPlaceRepositoryTest {
         @DisplayName("Should insert one timing place into the database")
         void shouldInsertOneLineIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(targetTable).hasNumberOfRows(1);
+            assertThat(connection.table("timing_pattern.timing_place").build()).hasNumberOfRows(1);
         }
 
         @Test
@@ -65,7 +66,7 @@ public class Jore4TimingPlaceRepositoryTest {
         void shouldInsertCorrectIdIntoDatabase() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(connection.table("timing_pattern.timing_place").build())
                     .row()
                     .value(TIMING_PLACE.TIMING_PLACE_ID.getName())
                     .isEqualTo(TIMING_PLACE_ID);
@@ -76,7 +77,10 @@ public class Jore4TimingPlaceRepositoryTest {
         void shouldInsertCorrectLabelIntoDatabase() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable).row().value(TIMING_PLACE.LABEL.getName()).isEqualTo(TIMING_PLACE_LABEL);
+            assertThat(connection.table("timing_pattern.timing_place").build())
+                    .row()
+                    .value(TIMING_PLACE.LABEL.getName())
+                    .isEqualTo(TIMING_PLACE_LABEL);
         }
 
         @Test
@@ -84,7 +88,7 @@ public class Jore4TimingPlaceRepositoryTest {
         void shouldInsertCorrectNameIntoDatabase() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(connection.table("timing_pattern.timing_place").build())
                     .row()
                     .value(TIMING_PLACE.DESCRIPTION.getName())
                     .is(equalJson(EXPECTED_RESULTING_TIMING_PLACE_NAME));

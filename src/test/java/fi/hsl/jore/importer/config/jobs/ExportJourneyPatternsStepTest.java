@@ -6,7 +6,8 @@ import fi.hsl.jore.importer.BatchIntegrationTest;
 import java.util.List;
 import java.util.UUID;
 import javax.sql.DataSource;
-import org.assertj.db.type.Table;
+import org.assertj.db.type.AssertDbConnection;
+import org.assertj.db.type.AssertDbConnectionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,15 +45,16 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
     private static final fi.hsl.jore.jore4.jooq.journey_pattern.tables.JourneyPattern JORE4_JOURNEY_PATTERN =
             fi.hsl.jore.jore4.jooq.journey_pattern.Tables.JOURNEY_PATTERN_;
 
-    private final Table importerTargetTable;
-    private final Table jore4TargetTable;
+    private final AssertDbConnection importerConnection;
+    private final AssertDbConnection jore4Connection;
 
     @Autowired
     public ExportJourneyPatternsStepTest(
             final @Qualifier("importerDataSource") DataSource importerDataSource,
             final @Qualifier("jore4DataSource") DataSource jore4DataSource) {
-        this.importerTargetTable = new Table(importerDataSource, "network.network_route_directions");
-        this.jore4TargetTable = new Table(jore4DataSource, "journey_pattern.journey_pattern");
+        this.importerConnection =
+                AssertDbConnectionFactory.of(importerDataSource).create();
+        this.jore4Connection = AssertDbConnectionFactory.of(jore4DataSource).create();
     }
 
     @Test
@@ -60,7 +62,8 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
     void shouldInsertOneJourneyPatternIntoJoreDatabase() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable).hasNumberOfRows(1);
+        assertThat(jore4Connection.table("journey_pattern.journey_pattern").build())
+                .hasNumberOfRows(1);
     }
 
     @Test
@@ -68,7 +71,7 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
     void shouldGenerateNewIdForExportedJourneyPattern() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable)
+        assertThat(jore4Connection.table("journey_pattern.journey_pattern").build())
                 .row()
                 .value(JORE4_JOURNEY_PATTERN.JOURNEY_PATTERN_ID.getName())
                 .isNotNull();
@@ -79,7 +82,7 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedJourneyPatternWithCorrectRouteId() {
         runSteps(STEPS);
 
-        assertThat(jore4TargetTable)
+        assertThat(jore4Connection.table("journey_pattern.journey_pattern").build())
                 .row()
                 .value(JORE4_JOURNEY_PATTERN.ON_ROUTE_ID.getName())
                 .isEqualTo(EXPECTED_ROUTE_ID);
@@ -90,7 +93,7 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
     void shouldUpdateJourneyPatternJore4IdOfRouteFoundFromImporterDatabase() {
         runSteps(STEPS);
 
-        assertThat(importerTargetTable)
+        assertThat(importerConnection.table("network.network_route_directions").build())
                 .row()
                 .value(IMPORTER_ROUTE_DIRECTIONS.JOURNEY_PATTERN_JORE4_ID.getName())
                 .isNotNull();

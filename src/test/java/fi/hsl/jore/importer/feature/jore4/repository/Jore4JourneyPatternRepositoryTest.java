@@ -8,7 +8,8 @@ import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPattern;
 import java.util.List;
 import java.util.UUID;
 import javax.sql.DataSource;
-import org.assertj.db.type.Table;
+import org.assertj.db.type.AssertDbConnection;
+import org.assertj.db.type.AssertDbConnectionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,14 +22,14 @@ import org.springframework.test.context.jdbc.SqlConfig;
 class Jore4JourneyPatternRepositoryTest {
 
     private final Jore4JourneyPatternRepository repository;
-    private final Table targetTable;
+    private final AssertDbConnection connection;
 
     @Autowired
     public Jore4JourneyPatternRepositoryTest(
             @Qualifier("jore4DataSource") final DataSource targetDataSource,
             final Jore4JourneyPatternRepository repository) {
         this.repository = repository;
-        this.targetTable = new Table(targetDataSource, "journey_pattern.journey_pattern");
+        this.connection = AssertDbConnectionFactory.of(targetDataSource).create();
     }
 
     @Nested
@@ -57,7 +58,8 @@ class Jore4JourneyPatternRepositoryTest {
         void shouldInsertOneJourneyPatternIntoDatabase() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable).hasNumberOfRows(1);
+            assertThat(connection.table("journey_pattern.journey_pattern").build())
+                    .hasNumberOfRows(1);
         }
 
         @Test
@@ -65,7 +67,7 @@ class Jore4JourneyPatternRepositoryTest {
         void shouldSaveNewJourneyPatternWithCorrectId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(connection.table("journey_pattern.journey_pattern").build())
                     .row()
                     .value(JOURNEY_PATTERN_.JOURNEY_PATTERN_ID.getName())
                     .isEqualTo(JOURNEY_PATTERN_ID);
@@ -76,7 +78,7 @@ class Jore4JourneyPatternRepositoryTest {
         void shouldSaveNewJourneyPatternWithCorrectRouteId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(targetTable)
+            assertThat(connection.table("journey_pattern.journey_pattern").build())
                     .row()
                     .value(JOURNEY_PATTERN_.ON_ROUTE_ID.getName())
                     .isEqualTo(ROUTE_ID);
