@@ -9,9 +9,9 @@ import fi.hsl.jore.importer.feature.batch.link_shape.dto.PointRow;
 import fi.hsl.jore.importer.feature.jore3.entity.JrPoint;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
+import jakarta.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.annotation.Nullable;
 import org.springframework.jdbc.core.RowMapper;
 
 public class PointRowMapper implements RowMapper<PointRow> {

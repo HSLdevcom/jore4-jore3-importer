@@ -6,12 +6,12 @@ import fi.hsl.jore.importer.feature.batch.route_link.dto.RouteLinksAndAttributes
 import fi.hsl.jore.importer.feature.batch.route_link.dto.SingleRouteLinkAndParent;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteLink;
 import fi.hsl.jore.importer.feature.jore3.key.JrRouteDirectionPk;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import javax.annotation.Nullable;
 import org.immutables.value.Value;
 import org.springframework.batch.item.ItemStreamReader;
 

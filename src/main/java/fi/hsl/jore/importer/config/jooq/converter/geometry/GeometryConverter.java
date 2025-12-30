@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.config.jooq.converter.geometry;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import org.geotools.geometry.jts.WKBReader;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;

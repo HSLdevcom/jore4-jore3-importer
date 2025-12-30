@@ -6,7 +6,7 @@ import fi.hsl.jore.importer.feature.jore3.entity.JrRoute;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.network.route.dto.Jore3Route;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import org.springframework.batch.item.ItemProcessor;
 
 public class RouteProcessor implements ItemProcessor<JrRoute, Jore3Route> {

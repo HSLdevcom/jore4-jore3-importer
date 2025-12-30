@@ -11,9 +11,9 @@ import fi.hsl.jore.importer.feature.jore3.entity.JrNode;
 import fi.hsl.jore.importer.feature.jore3.enumerated.NodeType;
 import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
+import jakarta.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.annotation.Nullable;
 import org.springframework.jdbc.core.RowMapper;
 
 public class LinkRowMapper implements RowMapper<LinkRow> {
