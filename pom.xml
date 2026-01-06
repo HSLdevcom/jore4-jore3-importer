@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.9</version>
+        <version>4.0.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fi.hsl.jore</groupId>
@@ -23,8 +23,8 @@
         <guava.version>33.5.0-jre</guava.version>
         <!-- Upgrading geojson-jackson to 3.0 would change LngLatAlt serialization from arrays to objects which breaks
              existing code -->
-        <geojson-jackson.version>1.14</geojson-jackson.version>
-        <immutables.version>2.12.0</immutables.version>
+        <geojson-jackson.version>3.0</geojson-jackson.version>
+        <immutables.version>2.12.1</immutables.version>
         <geotools.version>34.1</geotools.version>
         <mssql-jdbc.version>13.2.1.jre11</mssql-jdbc.version>
         <!-- Used as the DB for Spring Batch -->
