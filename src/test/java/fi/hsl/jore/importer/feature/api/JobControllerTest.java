@@ -13,42 +13,51 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import fi.hsl.jore.importer.feature.api.dto.ImmutableJobStatus;
 import fi.hsl.jore.importer.feature.api.dto.JobStatus;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.JobExecution;
+import org.springframework.batch.core.job.JobInstance;
+import org.springframework.batch.core.job.parameters.JobParameters;
+import org.springframework.batch.core.launch.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@WebMvcTest(controllers = JobController.class)
+@ExtendWith(MockitoExtension.class)
 public class JobControllerTest {
 
-    private final MockMvc mockMvc;
-    private final ObjectMapper objectMapper;
-
-    @MockBean
+    @Mock
     private Job job;
 
-    @MockBean
+    @Mock
     private JobLauncher jobLauncher;
 
-    @MockBean
+    @Mock
     private JobRepository jobRepository;
 
-    public JobControllerTest(@Autowired final MockMvc mockMvc, @Autowired final ObjectMapper objectMapper) {
-        this.mockMvc = mockMvc;
-        this.objectMapper = objectMapper;
+    private MockMvc mockMvc;
+    private final ObjectMapper objectMapper =
+            new ObjectMapper().registerModule(new Jdk8Module()).registerModule(new JavaTimeModule());
+    private JobController jobController;
+
+    @BeforeEach
+    public void setup() {
+        jobController = new JobController(job, jobLauncher, jobRepository);
+        mockMvc = MockMvcBuilders.standaloneSetup(jobController).build();
     }
 
     @Test
@@ -65,7 +74,8 @@ public class JobControllerTest {
         final long id = 1L;
         final LocalDateTime startTime = LocalDateTime.of(2021, 4, 6, 14, 33, 0);
         final LocalDateTime endTime = LocalDateTime.of(2021, 4, 6, 14, 33, 12);
-        final JobExecution execution = new JobExecution(id);
+        final JobInstance jobInstance = new JobInstance(id, "testJob");
+        final JobExecution execution = new JobExecution(id, jobInstance, new JobParameters());
 
         execution.setStatus(BatchStatus.COMPLETED);
         execution.setExitStatus(ExitStatus.COMPLETED);
@@ -104,7 +114,8 @@ public class JobControllerTest {
         final long id = 2L;
         final LocalDateTime startTime = LocalDateTime.of(2021, 4, 6, 14, 33);
         final LocalDateTime endTime = LocalDateTime.of(2021, 4, 6, 14, 33, 12);
-        final JobExecution execution = new JobExecution(id);
+        final JobInstance jobInstance = new JobInstance(id, "testJob");
+        final JobExecution execution = new JobExecution(id, jobInstance, new JobParameters());
 
         final Throwable error = new RuntimeException("Guru mediation error!");
 
@@ -144,7 +155,8 @@ public class JobControllerTest {
     @Test
     public void whenStartingJob_thenReturnInitialStatus() throws Exception {
         final long id = 3L;
-        final JobExecution execution = new JobExecution(id);
+        final JobInstance jobInstance = new JobInstance(id, "testJob");
+        final JobExecution execution = new JobExecution(id, jobInstance, new JobParameters());
 
         execution.setStatus(BatchStatus.STARTING);
         execution.setExitStatus(ExitStatus.UNKNOWN);
@@ -178,7 +190,8 @@ public class JobControllerTest {
     public void whenStartingJobWhileRunning_thenReturnCurrentStatus() throws Exception {
         final long id = 4L;
         final LocalDateTime startTime = LocalDateTime.of(2021, 4, 6, 14, 33);
-        final JobExecution execution = new JobExecution(id);
+        final JobInstance jobInstance = new JobInstance(id, "testJob");
+        final JobExecution execution = new JobExecution(id, jobInstance, new JobParameters());
 
         execution.setStatus(BatchStatus.STARTED);
         execution.setExitStatus(ExitStatus.UNKNOWN);

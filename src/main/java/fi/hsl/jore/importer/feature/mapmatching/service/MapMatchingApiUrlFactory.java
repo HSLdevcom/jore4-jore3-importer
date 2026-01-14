@@ -14,7 +14,7 @@ class MapMatchingApiUrlFactory {
      * @param baseUrl The base url of the map matching API.
      */
     static String buildMapMatchingApiUrl(final String baseUrl) {
-        return UriComponentsBuilder.fromHttpUrl(baseUrl)
+        return UriComponentsBuilder.fromUriString(baseUrl)
                 .path("/api/match/public-transport-route/v1/bus.json")
                 .toUriString();
     }

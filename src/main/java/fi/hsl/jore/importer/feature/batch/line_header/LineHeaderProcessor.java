@@ -7,7 +7,7 @@ import fi.hsl.jore.importer.feature.jore3.entity.JrLineHeader;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.line_header.dto.Jore3LineHeader;
 import jakarta.annotation.Nullable;
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 
 public class LineHeaderProcessor implements ItemProcessor<JrLineHeader, Jore3LineHeader> {
 

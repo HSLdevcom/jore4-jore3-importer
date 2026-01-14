@@ -7,7 +7,7 @@ import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.Jore3ScheduledStopPoint;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 
 /**
  * Transforms the input data read from the source database into a format which can be inserted into the target database.

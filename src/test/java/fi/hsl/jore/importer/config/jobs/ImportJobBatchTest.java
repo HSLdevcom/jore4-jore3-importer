@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.job.JobExecution;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;

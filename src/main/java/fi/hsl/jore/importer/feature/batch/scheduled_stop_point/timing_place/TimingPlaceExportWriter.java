@@ -2,8 +2,8 @@ package fi.hsl.jore.importer.feature.batch.scheduled_stop_point.timing_place;
 
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4TimingPlace;
 import fi.hsl.jore.importer.feature.jore4.repository.IJore4TimingPlaceRepository;
-import org.springframework.batch.item.Chunk;
-import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.infrastructure.item.Chunk;
+import org.springframework.batch.infrastructure.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
