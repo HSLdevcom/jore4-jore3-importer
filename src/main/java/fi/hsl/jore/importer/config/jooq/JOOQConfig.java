@@ -16,10 +16,10 @@ import org.jooq.impl.DefaultDSLContext;
 import org.jooq.impl.DefaultExecuteListenerProvider;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.jooq.ExceptionTranslatorExecuteListener;
-import org.springframework.boot.autoconfigure.jooq.JooqProperties;
-import org.springframework.boot.autoconfigure.jooq.SpringTransactionProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.jooq.autoconfigure.ExceptionTranslatorExecuteListener;
+import org.springframework.boot.jooq.autoconfigure.JooqProperties;
+import org.springframework.boot.jooq.autoconfigure.SpringTransactionProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -29,7 +29,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 /**
  * Most of the configuration is handled in the autoconfiguration
  *
- * @see org.springframework.boot.autoconfigure.jooq.JooqAutoConfiguration
+ * @see org.springframework.boot.jooq.autoconfigure.JooqAutoConfiguration
  */
 @Configuration
 @EnableConfigurationProperties({JooqProperties.class})

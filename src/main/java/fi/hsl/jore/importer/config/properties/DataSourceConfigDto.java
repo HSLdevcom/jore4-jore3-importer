@@ -34,6 +34,12 @@ public interface DataSourceConfigDto {
         // cannot be obtained."
         hikariConfig.setInitializationFailTimeout(0);
 
+        // Set connection test query for MSSQL Server
+        // HikariCP in Spring Boot 4 may require explicit connection test query for MSSQL
+        if (driverClassName().contains("sqlserver")) {
+            hikariConfig.setConnectionTestQuery("SELECT 1");
+        }
+
         return hikariConfig;
     }
 }

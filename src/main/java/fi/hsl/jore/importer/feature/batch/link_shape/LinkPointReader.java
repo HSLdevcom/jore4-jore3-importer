@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import org.immutables.value.Value;
-import org.springframework.batch.item.ItemStreamReader;
+import org.springframework.batch.infrastructure.item.ItemStreamReader;
 
 public class LinkPointReader extends DelegatingReader<LinkPoints, PointRow> {
 

@@ -8,7 +8,7 @@ import fi.hsl.jore.importer.feature.jore3.field.LegacyPublicTransportDestination
 import fi.hsl.jore.importer.feature.jore4.entity.LegacyHslMunicipalityCode;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLine;
 import jakarta.annotation.Nullable;
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 
 public class LineProcessor implements ItemProcessor<JrLine, PersistableLine> {
 

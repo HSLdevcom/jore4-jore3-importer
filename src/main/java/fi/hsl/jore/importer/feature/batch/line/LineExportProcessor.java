@@ -7,7 +7,7 @@ import fi.hsl.jore.importer.feature.network.line.dto.ImporterLine;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 /** Transforms the information of an exported line into a format that can be inserted into the Jore 4 database. */

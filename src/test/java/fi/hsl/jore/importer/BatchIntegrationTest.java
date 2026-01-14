@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import fi.hsl.jore.importer.config.DatasourceConfig;
 import fi.hsl.jore.importer.config.DigiroadServiceConfig;
+import fi.hsl.jore.importer.config.JacksonConfig;
 import fi.hsl.jore.importer.config.MapMatchingConfig;
 import fi.hsl.jore.importer.config.jobs.BatchConfig;
 import fi.hsl.jore.importer.config.jooq.JOOQConfig;
@@ -12,7 +13,7 @@ import fi.hsl.jore.importer.config.profile.Profiles;
 import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.job.JobExecution;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.TaskExecutorJobLauncher;
 import org.springframework.batch.test.JobLauncherTestUtils;
@@ -32,7 +33,8 @@ import org.springframework.test.context.ContextConfiguration;
             JOOQConfig.class,
             DigiroadServiceConfig.class,
             MapMatchingConfig.class,
-            BatchConfig.class
+            BatchConfig.class,
+            JacksonConfig.class
         })
 @ActiveProfiles(Profiles.TEST_DATABASE)
 public class BatchIntegrationTest {

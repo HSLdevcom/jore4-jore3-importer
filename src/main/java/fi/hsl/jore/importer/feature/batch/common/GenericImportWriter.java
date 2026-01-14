@@ -6,10 +6,10 @@ import fi.hsl.jore.importer.feature.common.dto.field.PK;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.AfterStep;
-import org.springframework.batch.item.Chunk;
-import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.core.step.StepExecution;
+import org.springframework.batch.infrastructure.item.Chunk;
+import org.springframework.batch.infrastructure.item.ItemWriter;
 
 public class GenericImportWriter<ENTITY, KEY extends PK> implements ItemWriter<ENTITY> {
 

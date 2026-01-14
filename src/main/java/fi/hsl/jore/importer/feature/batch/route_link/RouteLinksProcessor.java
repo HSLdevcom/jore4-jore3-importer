@@ -6,8 +6,8 @@ import fi.hsl.jore.importer.feature.jore3.entity.JrRouteDirection;
 import fi.hsl.jore.importer.feature.jore3.entity.JrRouteLink;
 import fi.hsl.jore.importer.feature.network.route_point.dto.Jore3RoutePoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.Jore3RouteStopPoint;
-import io.micrometer.core.lang.NonNull;
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
+import org.springframework.lang.NonNull;
 
 /**
  * Given a list of Jore {@link JrRouteLink links} for a particular {@link JrRouteDirection route direction} (embedded
