@@ -24,7 +24,7 @@
         <!-- Upgrading geojson-jackson to 3.0 would change LngLatAlt serialization from arrays to objects which breaks
              existing code -->
         <geojson-jackson.version>1.14</geojson-jackson.version>
-        <immutables.version>2.12.0</immutables.version>
+        <immutables.version>2.12.1</immutables.version>
         <geotools.version>34.1</geotools.version>
         <mssql-jdbc.version>13.2.1.jre11</mssql-jdbc.version>
         <!-- Used as the DB for Spring Batch -->
