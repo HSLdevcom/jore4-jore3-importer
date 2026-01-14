@@ -7,11 +7,11 @@ import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.AfterStep;
 import org.springframework.batch.core.annotation.BeforeStep;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemStreamReader;
+import org.springframework.batch.core.step.StepExecution;
+import org.springframework.batch.infrastructure.item.ItemReader;
+import org.springframework.batch.infrastructure.item.ItemStreamReader;
 
 /**
  * Spring Batch doesn't directly support grouping items, but we can achieve that by wrapping a reader within another

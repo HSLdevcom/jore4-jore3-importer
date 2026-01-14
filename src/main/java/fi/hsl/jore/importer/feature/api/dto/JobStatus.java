@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import org.immutables.value.Value;
 import org.springframework.batch.core.BatchStatus;
-import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.job.JobExecution;
 
 @Value.Immutable
 @JsonSerialize(as = ImmutableJobStatus.class)

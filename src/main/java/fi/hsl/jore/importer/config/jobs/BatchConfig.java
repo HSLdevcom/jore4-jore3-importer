@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.config.jobs;
 
 import javax.sql.DataSource;
 import org.springframework.batch.core.configuration.support.DefaultBatchConfiguration;
-import org.springframework.boot.autoconfigure.batch.BatchTransactionManager;
+import org.springframework.boot.batch.autoconfigure.BatchTransactionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,6 @@ public class BatchConfig extends DefaultBatchConfiguration {
     private DataSource batchDataSource;
     private DataSourceTransactionManager batchTransactionManager;
 
-    @Override
     protected DataSource getDataSource() {
         if (batchDataSource == null) {
             batchDataSource = new EmbeddedDatabaseBuilder()

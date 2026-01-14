@@ -3,8 +3,8 @@ package fi.hsl.jore.importer.feature.batch.route;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPatternStop;
 import fi.hsl.jore.importer.feature.jore4.repository.IJore4JourneyPatternStopRepository;
 import fi.hsl.jore.importer.feature.jore4.repository.Jore4JourneyPatternStopRepository;
-import org.springframework.batch.item.Chunk;
-import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.infrastructure.item.Chunk;
+import org.springframework.batch.infrastructure.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

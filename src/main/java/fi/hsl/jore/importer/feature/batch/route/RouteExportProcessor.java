@@ -7,7 +7,7 @@ import fi.hsl.jore.importer.feature.network.route.dto.ImporterRoute;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 /** Transforms the information of a route into a format that can be inserted into the Jore 4 database. */

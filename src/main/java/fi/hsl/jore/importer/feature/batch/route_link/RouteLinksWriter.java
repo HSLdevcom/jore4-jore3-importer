@@ -13,10 +13,10 @@ import fi.hsl.jore.importer.feature.network.route_point.dto.generated.RoutePoint
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.Jore3RouteStopPoint;
 import fi.hsl.jore.importer.feature.network.route_stop_point.dto.generated.RouteStopPointPK;
 import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.AfterStep;
-import org.springframework.batch.item.Chunk;
-import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.core.step.StepExecution;
+import org.springframework.batch.infrastructure.item.Chunk;
+import org.springframework.batch.infrastructure.item.ItemWriter;
 
 public class RouteLinksWriter implements ItemWriter<Jore3RoutePointsAndLinks> {
 

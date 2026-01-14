@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 
 public class LinkPointProcessor implements ItemProcessor<LinkPoints, Jore3LinkShape> {
 

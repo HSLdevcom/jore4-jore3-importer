@@ -5,8 +5,8 @@ import fi.hsl.jore.importer.feature.batch.line_header.support.ILineHeaderImportR
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4Line;
 import fi.hsl.jore.importer.feature.jore4.repository.IJore4LineRepository;
 import fi.hsl.jore.importer.feature.network.line.dto.PersistableLineIdMapping;
-import org.springframework.batch.item.Chunk;
-import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.infrastructure.item.Chunk;
+import org.springframework.batch.infrastructure.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
