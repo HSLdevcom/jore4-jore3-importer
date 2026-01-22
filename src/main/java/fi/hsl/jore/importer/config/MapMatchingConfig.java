@@ -1,6 +1,5 @@
 package fi.hsl.jore.importer.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.hsl.jore.importer.config.profile.StandardDatabase;
 import fi.hsl.jore.importer.config.profile.TestDatabase;
 import fi.hsl.jore.importer.feature.mapmatching.service.IMapMatchingService;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 public class MapMatchingConfig {

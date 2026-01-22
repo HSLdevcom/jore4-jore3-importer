@@ -1,7 +1,5 @@
 package fi.hsl.jore.importer.feature.mapmatching.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.hsl.jore.importer.feature.mapmatching.dto.request.MapMatchingRequestBuilder;
 import fi.hsl.jore.importer.feature.mapmatching.dto.request.MapMatchingRequestDTO;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.MapMatchingErrorResponseDTO;
@@ -13,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 /** This implementation queries the map matching response from the map matching API. */
 public class MapMatchingService implements IMapMatchingService {
@@ -67,7 +67,7 @@ public class MapMatchingService implements IMapMatchingService {
     }
 
     private MapMatchingSuccessResponseDTO getSuccessResponse(final ResponseEntity<String> httpResponse)
-            throws JsonProcessingException {
+            throws JacksonException {
         final String responseBody = httpResponse.getBody();
         if (responseBody == null || responseBody.contains(ERROR_RESPONSE_PROPERTY)) {
             final MapMatchingErrorResponseDTO errorResponse =

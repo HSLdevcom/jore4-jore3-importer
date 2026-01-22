@@ -12,9 +12,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import fi.hsl.jore.importer.feature.api.dto.ImmutableJobStatus;
 import fi.hsl.jore.importer.feature.api.dto.JobStatus;
 import java.time.LocalDateTime;
@@ -36,6 +33,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import tools.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
 public class JobControllerTest {
@@ -50,8 +48,7 @@ public class JobControllerTest {
     private JobRepository jobRepository;
 
     private MockMvc mockMvc;
-    private final ObjectMapper objectMapper =
-            new ObjectMapper().registerModule(new Jdk8Module()).registerModule(new JavaTimeModule());
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private JobController jobController;
 
     @BeforeEach

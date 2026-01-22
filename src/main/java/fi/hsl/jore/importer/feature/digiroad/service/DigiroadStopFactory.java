@@ -1,7 +1,5 @@
 package fi.hsl.jore.importer.feature.digiroad.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStopDirection;
 import fi.hsl.jore.importer.feature.jore3.util.JoreGeometryUtil;
@@ -10,6 +8,8 @@ import java.util.Optional;
 import org.geojson.GeoJsonObject;
 import org.geojson.LngLatAlt;
 import org.locationtech.jts.geom.Point;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 /** An object mother class which creates new {@link DigiroadStop} objects. */
 class DigiroadStopFactory {
@@ -83,7 +83,7 @@ class DigiroadStopFactory {
                     OBJECT_MAPPER.readValue(removeExtraQuotationMarks(value.trim()), GeoJsonObject.class);
             final LngLatAlt coordinates = point.getCoordinates();
             return JoreGeometryUtil.fromDbCoordinates(coordinates.getLatitude(), coordinates.getLongitude());
-        } catch (final JsonProcessingException ex) {
+        } catch (final JacksonException ex) {
             throw new RuntimeException(String.format("Couldn't parse location from value: %s", value), ex);
         }
     }

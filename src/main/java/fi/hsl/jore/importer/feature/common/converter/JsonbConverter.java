@@ -1,10 +1,9 @@
 package fi.hsl.jore.importer.feature.common.converter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jooq.JSONB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 public class JsonbConverter implements IJsonbConverter {
@@ -21,11 +20,7 @@ public class JsonbConverter implements IJsonbConverter {
             return null;
         }
 
-        try {
-            return JSONB.jsonb(objectMapper.writeValueAsString(obj));
-        } catch (final JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return JSONB.jsonb(objectMapper.writeValueAsString(obj));
     }
 
     @Override
@@ -35,10 +30,6 @@ public class JsonbConverter implements IJsonbConverter {
 
     @Override
     public <T> T fromJson(final String json, final Class<T> clazz) {
-        try {
-            return objectMapper.readValue(json, clazz);
-        } catch (final JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return objectMapper.readValue(json, clazz);
     }
 }

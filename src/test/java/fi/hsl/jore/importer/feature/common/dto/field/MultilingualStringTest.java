@@ -4,8 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.hsl.jore.importer.IntegrationTest;
 import java.util.Locale;
 import java.util.stream.Stream;
@@ -14,6 +12,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 public class MultilingualStringTest extends IntegrationTest {
 
@@ -36,7 +36,7 @@ public class MultilingualStringTest extends IntegrationTest {
 
     @ParameterizedTest
     @MethodSource("strings")
-    public void roundtripTest(final MultilingualString s) throws JsonProcessingException {
+    public void roundtripTest(final MultilingualString s) throws JacksonException {
         final String asJsonString = objectMapper.writeValueAsString(s);
         final MultilingualString o = objectMapper.readValue(asJsonString, MultilingualString.class);
 
@@ -44,14 +44,14 @@ public class MultilingualStringTest extends IntegrationTest {
     }
 
     @Test
-    public void whenGivenNoTranslations_thenReturnEmptyMap() throws JsonProcessingException {
+    public void whenGivenNoTranslations_thenReturnEmptyMap() throws JacksonException {
         final MultilingualString s = MultilingualString.empty();
         final String asJsonString = objectMapper.writeValueAsString(s);
         assertThat(asJsonString, is("{}"));
     }
 
     @Test
-    public void whenGivenTranslations_thenReturnMap() throws JsonProcessingException {
+    public void whenGivenTranslations_thenReturnMap() throws JacksonException {
         final MultilingualString s =
                 MultilingualString.empty().with(FINNISH, "Hei").with(SWEDISH, "Hej");
         final String asJsonString = objectMapper.writeValueAsString(s);

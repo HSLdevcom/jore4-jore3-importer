@@ -21,9 +21,7 @@
 
         <!-- Library versions -->
         <guava.version>33.5.0-jre</guava.version>
-        <!-- Upgrading geojson-jackson to 3.0 would change LngLatAlt serialization from arrays to objects which breaks
-             existing code -->
-        <geojson-jackson.version>1.14</geojson-jackson.version>
+        <geojson-jackson.version>3.0</geojson-jackson.version>
         <immutables.version>2.12.1</immutables.version>
         <geotools.version>34.2</geotools.version>
         <mssql-jdbc.version>13.2.1.jre11</mssql-jdbc.version>
@@ -95,56 +93,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <!-- Exclude Jackson 3.x starter to use Jackson 2.x instead -->
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-jackson</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-            <exclusions>
-                <!-- Exclude Jackson 3.x starter to use Jackson 2.x instead -->
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-jackson</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- Add Jackson 2.x dependencies explicitly -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jdk8</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-parameter-names</artifactId>
         </dependency>
 
         <dependency>
