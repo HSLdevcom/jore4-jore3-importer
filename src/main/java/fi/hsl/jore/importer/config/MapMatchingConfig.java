@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import fi.hsl.jore.importer.config.profile.StandardDatabase;
 import fi.hsl.jore.importer.config.profile.TestDatabase;
 import fi.hsl.jore.importer.feature.mapmatching.service.IMapMatchingService;

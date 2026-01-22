@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteGeometry;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteInfrastructureLink;

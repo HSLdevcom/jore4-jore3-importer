@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.mapmatching.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import fi.hsl.jore.importer.feature.mapmatching.dto.request.MapMatchingRequestBuilder;
 import fi.hsl.jore.importer.feature.mapmatching.dto.request.MapMatchingRequestDTO;
 import fi.hsl.jore.importer.feature.mapmatching.dto.response.MapMatchingErrorResponseDTO;
@@ -67,7 +67,7 @@ public class MapMatchingService implements IMapMatchingService {
     }
 
     private MapMatchingSuccessResponseDTO getSuccessResponse(final ResponseEntity<String> httpResponse)
-            throws JsonProcessingException {
+            throws JacksonException {
         final String responseBody = httpResponse.getBody();
         if (responseBody == null || responseBody.contains(ERROR_RESPONSE_PROPERTY)) {
             final MapMatchingErrorResponseDTO errorResponse =

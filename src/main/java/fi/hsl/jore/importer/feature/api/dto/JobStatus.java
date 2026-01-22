@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.api.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.immutables.value.Value;
