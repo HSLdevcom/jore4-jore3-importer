@@ -349,12 +349,10 @@ for this project. These coding conventions are described in the following:
 **Code example 1: package-info.java**
 
 ```
-@NonNullApi
-@NonNullFields
+@NullMarked
 fi.hsl.jore.foo.bar
 
-import org.springframework.lang.NonNullApi;
-import org.springframework.lang.NonNullFields;
+import org.jspecify.annotations.NullMarked;
 ```
 
 ### Naming Conventions

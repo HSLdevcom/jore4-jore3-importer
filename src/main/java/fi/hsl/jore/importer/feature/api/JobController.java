@@ -11,7 +11,7 @@ import org.springframework.batch.core.job.parameters.InvalidJobParametersExcepti
 import org.springframework.batch.core.job.parameters.JobParameters;
 import org.springframework.batch.core.launch.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.launch.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.JobRestartException;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.http.HttpStatus;
@@ -28,12 +28,12 @@ public class JobController {
     private static final JobParameters PARAMS = new JobParameters();
 
     private final Job job;
-    private final JobLauncher jobLauncher;
+    private final JobOperator jobOperator;
     private final JobRepository jobRepository;
 
-    public JobController(final Job job, final JobLauncher jobLauncher, final JobRepository jobRepository) {
+    public JobController(final Job job, final JobOperator jobOperator, final JobRepository jobRepository) {
         this.job = job;
-        this.jobLauncher = jobLauncher;
+        this.jobOperator = jobOperator;
         this.jobRepository = jobRepository;
     }
 
@@ -53,7 +53,7 @@ public class JobController {
     @PostMapping("/job/import/start")
     public ResponseEntity<JobStatus> startJob() {
         try {
-            final JobExecution execution = jobLauncher.run(job, PARAMS);
+            final JobExecution execution = jobOperator.start(job, PARAMS);
             LOG.info("Starting a new import job.");
             return ResponseEntity.ok(JobStatus.from(execution));
         } catch (final JobExecutionAlreadyRunningException e) {

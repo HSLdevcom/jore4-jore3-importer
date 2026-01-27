@@ -27,7 +27,7 @@ import org.springframework.batch.core.job.JobExecution;
 import org.springframework.batch.core.job.JobInstance;
 import org.springframework.batch.core.job.parameters.JobParameters;
 import org.springframework.batch.core.launch.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -42,7 +42,7 @@ public class JobControllerTest {
     private Job job;
 
     @Mock
-    private JobLauncher jobLauncher;
+    private JobOperator jobOperator;
 
     @Mock
     private JobRepository jobRepository;
@@ -53,7 +53,7 @@ public class JobControllerTest {
 
     @BeforeEach
     public void setup() {
-        jobController = new JobController(job, jobLauncher, jobRepository);
+        jobController = new JobController(job, jobOperator, jobRepository);
         mockMvc = MockMvcBuilders.standaloneSetup(jobController).build();
     }
 
@@ -63,7 +63,7 @@ public class JobControllerTest {
 
         verify(jobRepository, times(1)).getLastJobExecution(anyString(), any());
 
-        verify(jobLauncher, never()).run(any(), any());
+        verify(jobOperator, never()).start(any(Job.class), any());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class JobControllerTest {
 
         verify(jobRepository, times(1)).getLastJobExecution(anyString(), any());
 
-        verify(jobLauncher, never()).run(any(), any());
+        verify(jobOperator, never()).start(any(Job.class), any());
 
         assertThat(result.getResponse().getContentType(), is(MediaType.APPLICATION_JSON_VALUE));
 
@@ -129,7 +129,7 @@ public class JobControllerTest {
 
         verify(jobRepository, times(1)).getLastJobExecution(anyString(), any());
 
-        verify(jobLauncher, never()).run(any(), any());
+        verify(jobOperator, never()).start(any(Job.class), any());
 
         assertThat(result.getResponse().getContentType(), is(MediaType.APPLICATION_JSON_VALUE));
 
@@ -158,7 +158,7 @@ public class JobControllerTest {
         execution.setStatus(BatchStatus.STARTING);
         execution.setExitStatus(ExitStatus.UNKNOWN);
 
-        when(jobLauncher.run(any(), any())).thenReturn(execution);
+        when(jobOperator.start(any(Job.class), any())).thenReturn(execution);
 
         final MvcResult result = mockMvc.perform(post("/job/import/start"))
                 .andExpect(status().isOk())
@@ -166,7 +166,7 @@ public class JobControllerTest {
 
         verify(jobRepository, never()).getLastJobExecution(anyString(), any());
 
-        verify(jobLauncher, times(1)).run(any(), any());
+        verify(jobOperator, times(1)).start(any(Job.class), any());
 
         assertThat(result.getResponse().getContentType(), is(MediaType.APPLICATION_JSON_VALUE));
 
@@ -194,7 +194,7 @@ public class JobControllerTest {
         execution.setExitStatus(ExitStatus.UNKNOWN);
         execution.setStartTime(startTime);
 
-        when(jobLauncher.run(any(), any()))
+        when(jobOperator.start(any(Job.class), any()))
                 .thenThrow(new JobExecutionAlreadyRunningException("It's already running.."));
 
         when(jobRepository.getLastJobExecution(anyString(), any())).thenReturn(execution);
@@ -205,7 +205,7 @@ public class JobControllerTest {
 
         verify(jobRepository, times(1)).getLastJobExecution(anyString(), any());
 
-        verify(jobLauncher, times(1)).run(any(), any());
+        verify(jobOperator, times(1)).start(any(Job.class), any());
 
         assertThat(result.getResponse().getContentType(), is(MediaType.APPLICATION_JSON_VALUE));
 

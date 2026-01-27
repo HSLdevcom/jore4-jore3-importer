@@ -1,6 +1,4 @@
-@NonNullApi
-@NonNullFields
+@NullMarked
 package fi.hsl.jore.importer.config.jobs;
 
-import org.springframework.lang.NonNullApi;
-import org.springframework.lang.NonNullFields;
+import org.jspecify.annotations.NullMarked;

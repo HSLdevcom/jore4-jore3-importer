@@ -12,10 +12,11 @@ import fi.hsl.jore.importer.config.profile.Profiles;
 import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.configuration.support.MapJobRegistry;
 import org.springframework.batch.core.job.JobExecution;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.support.TaskExecutorJobLauncher;
-import org.springframework.batch.test.JobLauncherTestUtils;
+import org.springframework.batch.core.launch.JobOperator;
+import org.springframework.batch.core.launch.support.TaskExecutorJobOperator;
+import org.springframework.batch.test.JobOperatorTestUtils;
 import org.springframework.batch.test.JobRepositoryTestUtils;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,38 +41,43 @@ public class BatchIntegrationTest {
     private static final Logger LOG = LoggerFactory.getLogger(BatchIntegrationTest.class);
 
     @Autowired
-    protected JobLauncherTestUtils jobLauncherTestUtils;
+    protected JobOperatorTestUtils jobOperatorTestUtils;
 
     @Autowired
     protected JobRepositoryTestUtils jobRepositoryTestUtils;
 
+    @Autowired
+    protected MapJobRegistry mapJobRegistry;
+
     @BeforeEach
     public void overrideJobLauncher() {
-        jobLauncherTestUtils.setJobLauncher(createBlockingJobLauncher());
+        jobOperatorTestUtils.setJobOperator(createBlockingJobOperator());
     }
 
-    private JobLauncher createBlockingJobLauncher() {
-        // Override the default async JobLauncher with a blocking one for tests
-        final TaskExecutorJobLauncher launcher = new TaskExecutorJobLauncher();
-        launcher.setJobRepository(jobLauncherTestUtils.getJobRepository());
-        launcher.setTaskExecutor(new SyncTaskExecutor());
+    private JobOperator createBlockingJobOperator() {
+        // Override the default async JobOperator with a blocking one for tests
+        final TaskExecutorJobOperator operator = new TaskExecutorJobOperator();
+        operator.setJobRepository(jobOperatorTestUtils.getJobRepository());
+        operator.setJobRegistry(mapJobRegistry);
+        operator.setTaskExecutor(new SyncTaskExecutor());
+
         try {
-            launcher.afterPropertiesSet();
+            operator.afterPropertiesSet();
         } catch (final Exception e) {
-            LOG.error("Failed to construct JobLauncher for tests", e);
+            LOG.error("Failed to construct JobOperator for tests", e);
         }
-        return launcher;
+        return operator;
     }
 
     /**
-     * The {@link org.springframework.batch.test.JobLauncherTestUtils} does not support starting
+     * The {@link org.springframework.batch.test.JobOperatorTestUtils} does not support starting
      * {@link org.springframework.batch.core.job.flow.Flow flows}, so we must manually run all the steps ourselves.
      *
      * @param steps Names of the steps to run
      */
     protected void runSteps(final Iterable<String> steps) {
         steps.forEach(stepName -> {
-            final JobExecution stepExecution = jobLauncherTestUtils.launchStep(stepName);
+            final JobExecution stepExecution = jobOperatorTestUtils.startStep(stepName);
 
             assertThat(
                     String.format("Step %s should complete successfully", stepName),

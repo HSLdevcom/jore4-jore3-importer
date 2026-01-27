@@ -14,6 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 
 class Jore4RouteDirectionTest {
 
@@ -48,9 +49,9 @@ class Jore4RouteDirectionTest {
     }
 
     private static class DirectionTypeArgumentsProvider implements ArgumentsProvider {
-
         @Override
-        public Stream<? extends Arguments> provideArguments(final ExtensionContext extensionContext) throws Exception {
+        public Stream<? extends Arguments> provideArguments(ParameterDeclarations parameters, ExtensionContext context)
+                throws Exception {
             return Stream.of(
                     Arguments.of(DirectionType.ANTICLOCKWISE, Jore4RouteDirection.ANTICLOCKWISE),
                     Arguments.of(DirectionType.CLOCKWISE, Jore4RouteDirection.CLOCKWISE),

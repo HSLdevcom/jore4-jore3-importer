@@ -35,7 +35,7 @@ public class ImportJobBatchTest extends BatchIntegrationTest {
 
     @Test
     public void testCompleteJob() throws Exception {
-        final JobExecution jobExecution = jobLauncherTestUtils.launchJob();
+        final JobExecution jobExecution = jobOperatorTestUtils.startJob();
 
         assertThat(jobExecution.getExitStatus().getExitCode(), is("COMPLETED"));
     }

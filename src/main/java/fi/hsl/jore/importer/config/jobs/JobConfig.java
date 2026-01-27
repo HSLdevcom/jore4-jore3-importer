@@ -94,6 +94,8 @@ import fi.hsl.jore.importer.feature.network.route_point.dto.ImporterRouteGeometr
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImporterScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.Jore3ScheduledStopPoint;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.timing_place.ImporterTimingPlace;
+import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.configuration.support.MapJobRegistry;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.FlowBuilder;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -181,7 +183,8 @@ public class JobConfig {
 
         return new StepBuilder("importNodesStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<JrNode, Jore3Node>chunk(chunkSize, transactionManager)
+                .<JrNode, Jore3Node>chunk(chunkSize)
+                .transactionManager(transactionManager)
                 .reader(nodeReader.build())
                 .processor(new NodeProcessor())
                 .writer(new GenericImportWriter<>(nodeImportRepository))
@@ -219,7 +222,8 @@ public class JobConfig {
         final int chunkSize = 1000;
         return new StepBuilder("importLinksStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<LinkRow, Jore3Link>chunk(chunkSize, transactionManager)
+                .<LinkRow, Jore3Link>chunk(chunkSize)
+                .transactionManager(transactionManager)
                 .reader(linkReader.build())
                 .processor(new LinkRowProcessor())
                 .writer(new GenericImportWriter<>(linkImportRepository))
@@ -259,7 +263,8 @@ public class JobConfig {
         final int chunkSize = 100;
         return new StepBuilder("importLinkPointsStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<LinkPoints, Jore3LinkShape>chunk(chunkSize, transactionManager)
+                .<LinkPoints, Jore3LinkShape>chunk(chunkSize)
+                .transactionManager(transactionManager)
                 .reader(new LinkPointReader(pointReader.build()))
                 .processor(new LinkPointProcessor())
                 .writer(new GenericImportWriter<>(linkPointImportRepository))
@@ -297,7 +302,8 @@ public class JobConfig {
         final int chunkSize = 1000;
         return new StepBuilder("importLinesStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<JrLine, PersistableLine>chunk(chunkSize, transactionManager)
+                .<JrLine, PersistableLine>chunk(chunkSize)
+                .transactionManager(transactionManager)
                 .reader(lineReader.build())
                 .processor(new LineProcessor())
                 .writer(new GenericImportWriter<>(lineImportRepository))
@@ -337,7 +343,8 @@ public class JobConfig {
         final int chunkSize = 1;
         return new StepBuilder("importLineHeadersStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<JrLineHeader, Jore3LineHeader>chunk(chunkSize, transactionManager)
+                .<JrLineHeader, Jore3LineHeader>chunk(chunkSize)
+                .transactionManager(transactionManager)
                 .reader(lineHeaderReader.build())
                 .processor(new LineHeaderProcessor())
                 .writer(new GenericImportWriter<>(lineHeaderImportRepository))
@@ -378,7 +385,8 @@ public class JobConfig {
         final int chunkSize = 1000;
         return new StepBuilder("importRoutesStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<JrRoute, Jore3Route>chunk(chunkSize, transactionManager)
+                .<JrRoute, Jore3Route>chunk(chunkSize)
+                .transactionManager(transactionManager)
                 .reader(routeReader.build())
                 .processor(new RouteProcessor())
                 .writer(new GenericImportWriter<>(routeImportRepository))
@@ -421,7 +429,8 @@ public class JobConfig {
         final int chunkSize = 1000;
         return new StepBuilder("importRouteDirectionsStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<JrRouteDirection, Jore3RouteDirection>chunk(chunkSize, transactionManager)
+                .<JrRouteDirection, Jore3RouteDirection>chunk(chunkSize)
+                .transactionManager(transactionManager)
                 .reader(routeDirectionReader.build())
                 .processor(new RouteDirectionProcessor())
                 .writer(new GenericImportWriter<>(routeDirectionImportRepository))
@@ -490,7 +499,8 @@ public class JobConfig {
         final int chunkSize = 100;
         return new StepBuilder("importRouteLinksStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<RouteLinksAndAttributes, Jore3RoutePointsAndLinks>chunk(chunkSize, transactionManager)
+                .<RouteLinksAndAttributes, Jore3RoutePointsAndLinks>chunk(chunkSize)
+                .transactionManager(transactionManager)
                 .reader(new RouteLinksReader(routeLinkReader.build()))
                 .processor(new RouteLinksProcessor())
                 // Note how we write the route points, stop points, and route links to three different repositories
@@ -548,7 +558,8 @@ public class JobConfig {
         final int chunkSize = 1000;
         return new StepBuilder("importPlacesStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<JrPlace, PersistablePlace>chunk(chunkSize, transactionManager)
+                .<JrPlace, PersistablePlace>chunk(chunkSize)
+                .transactionManager(transactionManager)
                 .reader(placeReader.build())
                 .processor(new PlaceImportProcessor())
                 .writer(new GenericImportWriter<>(placeImportRepository))
@@ -588,7 +599,8 @@ public class JobConfig {
             final ScheduledStopPointImportReader reader, final IScheduledStopPointImportRepository repository) {
         return new StepBuilder("importScheduledStopPointsStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<JrScheduledStopPoint, Jore3ScheduledStopPoint>chunk(1000, transactionManager)
+                .<JrScheduledStopPoint, Jore3ScheduledStopPoint>chunk(1000)
+                .transactionManager(transactionManager)
                 .reader(reader.build())
                 .processor(new ScheduledStopPointImportProcessor())
                 .writer(new GenericImportWriter<>(repository))
@@ -637,7 +649,8 @@ public class JobConfig {
     public Step exportTimingPlacesStep(final TimingPlaceExportReader reader, final TimingPlaceExportWriter writer) {
         return new StepBuilder("exportTimingPlacesStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<ImporterTimingPlace, Jore4TimingPlace>chunk(1, transactionManager)
+                .<ImporterTimingPlace, Jore4TimingPlace>chunk(1)
+                .transactionManager(transactionManager)
                 .reader(reader.build())
                 .processor(new TimingPlaceExportProcessor())
                 .writer(writer)
@@ -654,7 +667,8 @@ public class JobConfig {
             final ScheduledStopPointExportWriter writer) {
         return new StepBuilder("exportScheduledStopPointsStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<ImporterScheduledStopPoint, Jore4ScheduledStopPoint>chunk(1, transactionManager)
+                .<ImporterScheduledStopPoint, Jore4ScheduledStopPoint>chunk(1)
+                .transactionManager(transactionManager)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
@@ -669,7 +683,8 @@ public class JobConfig {
             final LineExportReader reader, final LineExportProcessor processor, final LineExportWriter writer) {
         return new StepBuilder("exportLinesStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<ImporterLine, Jore4Line>chunk(1, transactionManager)
+                .<ImporterLine, Jore4Line>chunk(1)
+                .transactionManager(transactionManager)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
@@ -684,7 +699,8 @@ public class JobConfig {
             final RouteExportReader reader, final RouteExportProcessor processor, final RouteExportWriter writer) {
         return new StepBuilder("exportRoutesStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<ImporterRoute, Jore4Route>chunk(1, transactionManager)
+                .<ImporterRoute, Jore4Route>chunk(1)
+                .transactionManager(transactionManager)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
@@ -701,7 +717,8 @@ public class JobConfig {
             final RouteGeometryExportWriter writer) {
         return new StepBuilder("exportRouteGeometriesStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<ImporterRouteGeometry, Jore4RouteGeometry>chunk(1, transactionManager)
+                .<ImporterRouteGeometry, Jore4RouteGeometry>chunk(1)
+                .transactionManager(transactionManager)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
@@ -718,7 +735,8 @@ public class JobConfig {
             final JourneyPatternExportWriter writer) {
         return new StepBuilder("exportJourneyPatternsStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<ImporterJourneyPattern, Jore4JourneyPattern>chunk(1, transactionManager)
+                .<ImporterJourneyPattern, Jore4JourneyPattern>chunk(1)
+                .transactionManager(transactionManager)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
@@ -735,7 +753,8 @@ public class JobConfig {
             final JourneyPatternStopExportWriter writer) {
         return new StepBuilder("exportJourneyPatternStopsStep", jobRepository)
                 .allowStartIfComplete(true)
-                .<ImporterJourneyPatternStop, Jore4JourneyPatternStop>chunk(1000, transactionManager)
+                .<ImporterJourneyPatternStop, Jore4JourneyPatternStop>chunk(1000)
+                .transactionManager(transactionManager)
                 .reader(reader.build())
                 .processor(processor)
                 .writer(writer)
@@ -743,5 +762,10 @@ public class JobConfig {
                 .skipPolicy(new AlwaysSkipItemSkipPolicy())
                 .listener(new StatisticsLoggingStepExecutionListener())
                 .build();
+    }
+
+    @Bean
+    JobRegistry jobRegistry() {
+        return new MapJobRegistry();
     }
 }
