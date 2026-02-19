@@ -32,14 +32,8 @@ services:
       - jore4
 
   jore4-mssqltestdb:
-    # pin compatible version of mssql schema
-    image: "hsldevcom/jore4-mssql-testdb:schema-only-main--20250508-348cac964ff6a08b3776f003ddd036e4505cda18"
     # volume to easily use jore3 database dump
     volumes:
       - ../jore3dump:/mnt/jore3dump
-
-  jore4-hasura:
-    # pin compatible version of jore4 data model
-    image: "crjore4prod001.azurecr.io/jore4-hsl-hasura:main-2025-12-08-40a4f283c88076a5865ec1eab5713917f09bb3c5"
 networks:
     jore4:
