@@ -14,7 +14,7 @@ COPY ./profiles/prod /build/profiles/prod
 RUN mvn clean package spring-boot:repackage -Pprod
 
 # distributed docker image
-FROM eclipse-temurin:25.0.1_8-jre
+FROM eclipse-temurin:25.0.2_10-jre
 
 # Application Insights version
 ARG APPINSIGHTS_VERSION=3.7.7
@@ -22,16 +22,19 @@ ARG APPINSIGHTS_VERSION=3.7.7
 # expose server port
 EXPOSE 8080
 
-# download script for reading docker secrets
-ADD --chmod=755 https://raw.githubusercontent.com/HSLdevcom/jore4-tools/main/docker/read-secrets.sh /tmp/read-secrets.sh
+# download script for reading Docker secrets
+ADD --chmod=555 https://raw.githubusercontent.com/HSLdevcom/jore4-tools/main/docker/read-secrets.sh /tmp/read-secrets.sh
+
+# Downaload a Java applet to perform HEALTHCHECK with
+ADD --chmod=444 https://raw.githubusercontent.com/HSLdevcom/jore4-tools/main/docker/HealthCheck.jar /app/scripts/HealthCheck.jar
 
 # Connection string is provided as env in Kubernetes by secrets manager
 # it should not be provided for other environments (local etc)
-ADD --chmod=755 https://github.com/microsoft/ApplicationInsights-Java/releases/download/${APPINSIGHTS_VERSION}/applicationinsights-agent-${APPINSIGHTS_VERSION}.jar /usr/src/jore4-jore3-importer/applicationinsights-agent.jar
-COPY --chmod=755 ./applicationinsights.json /usr/src/jore4-jore3-importer/applicationinsights.json
+ADD --chmod=444 https://github.com/microsoft/ApplicationInsights-Java/releases/download/${APPINSIGHTS_VERSION}/applicationinsights-agent-${APPINSIGHTS_VERSION}.jar /usr/src/jore4-jore3-importer/applicationinsights-agent.jar
+COPY --chmod=444 ./applicationinsights.json /usr/src/jore4-jore3-importer/applicationinsights.json
 
-# copy over helper scripts
-COPY ./build-jdbc-urls.sh /tmp/
+# add helper script for constructing JDBC URL
+COPY --chmod=555 ./build-jdbc-urls.sh /tmp/
 
 # copy over compiled jar
 COPY --from=builder /build/target/*.jar /usr/src/jore4-jore3-importer/importer.jar
@@ -41,4 +44,4 @@ CMD ["/bin/bash", "-c", \
      "source /tmp/read-secrets.sh && source /tmp/build-jdbc-urls.sh && java -javaagent:/usr/src/jore4-jore3-importer/applicationinsights-agent.jar -jar /usr/src/jore4-jore3-importer/importer.jar"]
 
 HEALTHCHECK --interval=1m --timeout=5s \
-  CMD curl --fail http://localhost:8080/actuator/health
+  CMD ["java", "-jar", "/app/scripts/HealthCheck.jar"]
