@@ -144,6 +144,12 @@ public class Route extends TableImpl<Record> {
      */
     public final TableField<Record, String> LEGACY_HSL_MUNICIPALITY_CODE = createField(DSL.name("legacy_hsl_municipality_code"), SQLDataType.CLOB, this, "Defines the legacy municipality that is mainly used for data exports.");
 
+    /**
+     * The column <code>route.route.version_comment</code>. An extra comment
+     * describing the latest change to the Route's details.
+     */
+    public final TableField<Record, String> VERSION_COMMENT = createField(DSL.name("version_comment"), SQLDataType.CLOB, this, "An extra comment describing the latest change to the Route's details.");
+
     private Route(Name alias, Table<Record> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

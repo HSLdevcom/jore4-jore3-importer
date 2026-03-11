@@ -124,6 +124,12 @@ public class Line extends TableImpl<Record> {
      */
     public final TableField<Record, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.CLOB, this, "The line text description of the line.");
 
+    /**
+     * The column <code>route.line.version_comment</code>. An extra comment
+     * describing the latest change to the Line's details.
+     */
+    public final TableField<Record, String> VERSION_COMMENT = createField(DSL.name("version_comment"), SQLDataType.CLOB, this, "An extra comment describing the latest change to the Line's details.");
+
     private Line(Name alias, Table<Record> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
