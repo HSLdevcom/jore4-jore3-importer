@@ -8,6 +8,7 @@ import fi.hsl.jore.jore4.jooq.DefaultCatalog;
 import fi.hsl.jore.jore4.jooq.route.tables.Direction;
 import fi.hsl.jore.jore4.jooq.route.tables.InfrastructureLinkAlongRoute;
 import fi.hsl.jore.jore4.jooq.route.tables.Line;
+import fi.hsl.jore.jore4.jooq.route.tables.LineChangeHistory;
 import fi.hsl.jore.jore4.jooq.route.tables.TypeOfLine;
 
 import java.util.Arrays;
@@ -49,6 +50,11 @@ public class Route extends SchemaImpl {
     public final Line LINE = Line.LINE;
 
     /**
+     * Collects and represents the historical states of an HSL Lines.
+     */
+    public final LineChangeHistory LINE_CHANGE_HISTORY = LineChangeHistory.LINE_CHANGE_HISTORY;
+
+    /**
      * The routes from Transmodel:
      * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:483
      */
@@ -79,6 +85,7 @@ public class Route extends SchemaImpl {
             Direction.DIRECTION,
             InfrastructureLinkAlongRoute.INFRASTRUCTURE_LINK_ALONG_ROUTE,
             Line.LINE,
+            LineChangeHistory.LINE_CHANGE_HISTORY,
             fi.hsl.jore.jore4.jooq.route.tables.Route.ROUTE_,
             TypeOfLine.TYPE_OF_LINE
         );

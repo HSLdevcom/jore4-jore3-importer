@@ -7,6 +7,7 @@ package fi.hsl.jore.jore4.jooq.route;
 import fi.hsl.jore.jore4.jooq.route.tables.Direction;
 import fi.hsl.jore.jore4.jooq.route.tables.InfrastructureLinkAlongRoute;
 import fi.hsl.jore.jore4.jooq.route.tables.Line;
+import fi.hsl.jore.jore4.jooq.route.tables.LineChangeHistory;
 import fi.hsl.jore.jore4.jooq.route.tables.Route;
 import fi.hsl.jore.jore4.jooq.route.tables.TypeOfLine;
 
@@ -33,6 +34,11 @@ public class Tables {
      * http://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:487
      */
     public static final Line LINE = Line.LINE;
+
+    /**
+     * Collects and represents the historical states of an HSL Lines.
+     */
+    public static final LineChangeHistory LINE_CHANGE_HISTORY = LineChangeHistory.LINE_CHANGE_HISTORY;
 
     /**
      * The routes from Transmodel:

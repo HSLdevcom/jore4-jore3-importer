@@ -5,7 +5,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.jore3.entity.JrStopPlace;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.stops.stop_place.dto.Jore3StopPlace;
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 
 public class StopPlaceImportProcessor implements ItemProcessor<JrStopPlace, Jore3StopPlace> {
 
