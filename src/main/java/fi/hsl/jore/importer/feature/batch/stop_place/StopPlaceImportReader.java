@@ -23,7 +23,7 @@ public class StopPlaceImportReader {
     @Autowired
     public StopPlaceImportReader(
             @Qualifier("sourceDataSource") final DataSource dataSource,
-            @Value("") final Resource sqlResource
+            @Value(StopPlaceImportMapper.SQL_PATH) final Resource sqlResource
     ) {
         this.sourceDataSource = dataSource;
         this.sql = ResourceUtil.fromResource(sqlResource);
