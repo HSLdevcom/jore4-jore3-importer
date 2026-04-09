@@ -13,7 +13,7 @@ import fi.hsl.jore.importer.jooq.stops.tables.StopPlacesWithHistory;
 /**
  * Convenience access to all tables in stops.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Tables {
 
     /**
