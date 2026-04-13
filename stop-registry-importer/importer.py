@@ -1,5 +1,144 @@
 #!/usr/bin/env python3
 
+"""
+Stop Registry Importer — Jore3 → Jore4
+
+Imports stop place data from a Jore3 MSSQL database into the Jore4 stop registry via a Hasura GraphQL API.
+
+Configuration:
+    Reads environment variables (or .env file) for the GraphQL endpoint, Hasura admin secret, and Jore3 DB credentials.
+
+Data Retrieval:
+    - get_jore3_stops()      — Queries the Jore3 MSSQL database, joining stop, node, stop area, equipment, and
+                               accessibility tables. Returns stops grouped by stop area ID.
+    - get_jore3_stop_areas() — Queries Jore3 for stop areas that belong to network 1 and have more than one stop (i.e.
+                               multi-quay areas). Yields rows as a generator.
+    - get_stop_points()      — Fetches existing scheduled stop points from Jore4 via GraphQL. Returns them as a dict
+                               keyed by label.
+
+Data Mapping:
+    - quayInputForJore3Stop() — Transforms a single Jore3 stop row into the GraphQL QuayInput format, mapping fields
+      like shelter type, electricity, condition, accessibility properties, and equipment using helper functions
+      (mapStopModel, mapStopType, mapStopElectricity, mapStopCondition, mapBoolean, toFloat).
+
+Import Loop (main logic):
+    For each Jore3 stop area:
+      1. Iterates over all stops in that area.
+      2. Matches each stop to an existing Jore4 stop point by label (letter + number).
+      3. Builds a list of quay inputs and collects coordinates / validity periods.
+      4. update_stop_place() — Sends a GraphQL mutation to create/update the stop place with averaged coordinates,
+         merged validity periods, and all quays attached.
+      5. update_stop_point() — For each quay returned by the mutation, links the Jore4 scheduled stop point back to the
+         new NeTEx ID via another GraphQL mutation.
+
+Summary:
+    Jore3 MSSQL → Python mapping → Jore4 Hasura GraphQL: migrates stop places (with quays, accessibility, equipment,
+    and shelter data) from the legacy system into the new one, and cross-references the created stop places back to the
+    existing scheduled stop points.
+
+Jore3 Source Tables (MSSQL):
+    The main query (get_jore3_stops) joins five tables:
+
+        jr_pysakki (p)               — Stop properties (name, shelter, postal code, etc.)
+        jr_solmu (s)                 — Node coordinates and label parts (solkirjain, sollistunnus)
+        jr_lij_pysakkialue (pa)      — Stop area grouping (pysalueid)
+        jr_varustelutiedot_uusi (vt) — Equipment details (shelter type, electricity, signs)
+        jr_esteettomyys (e)          — Accessibility properties (slopes, curb distances) [LEFT JOIN]
+
+    The stop area query (get_jore3_stop_areas) selects areas from network 1 with > 1 stop.
+
+Jore4 Target (Hasura GraphQL — stop_registry.mutateStopPlace):
+
+    Stop Place level mapping:
+        Jore3 column         → GraphQL field                  Notes
+        ─────────────────────────────────────────────────────────────────────
+        pysalueid            → privateCode.value              Stop area ID (type: HSL/JORE-3)
+        pysnimi              → name (lang: fin)               Stop name Finnish
+        pysnimipitka         → alternativeNames[fin, alias]   Long name Finnish
+        pysnimipitkar        → alternativeNames[swe, alias]   Long name Swedish
+        pysnimir             → alternativeNames[swe, transl.] Stop name Swedish
+        avg(quay coords)     → geometry.coordinates           Centroid of all quays
+        min(validity_start)  → keyValues["validityStart"]     Earliest stop point start
+        max(validity_end)    → keyValues["validityEnd"]       Latest stop point end
+        (hardcoded)          → transportMode                  Always "bus"
+
+    Quay level mapping (one quay per stop in the area):
+        Jore3 column         → GraphQL field                  Notes
+        ─────────────────────────────────────────────────────────────────────
+        solkirjain +
+          sollistunnus       → publicCode                     Stop label (e.g. "H1234")
+        soltunnus            → privateCode.value              Node ID (type: HSL/JORE-3)
+        pyspaikannimi        → description (lang: fin)        Place description Finnish
+        pyspaikannimir       → alternativeNames[swe]          Place description Swedish
+        postinro             → keyValues["postalCode"]        Postal code
+        pyssade              → keyValues["functionalArea"]    Functional area radius
+        pysosoite            → keyValues["streetAddress"]     Street address
+        (from Jore4 SP)      → geometry.coordinates           Coordinates from stop point
+        (from Jore4 SP)      → keyValues["validityStart"]     From existing scheduled stop point
+        (from Jore4 SP)      → keyValues["validityEnd"]       From existing scheduled stop point
+        (hardcoded)          → keyValues["stopState"]         Always "InOperation"
+        (hardcoded)          → keyValues["mainLine"]          Always "false"
+        (hardcoded)          → keyValues["virtual"]           Always "false"
+        (hardcoded)          → keyValues["priority"]          Always "10"
+
+    Accessibility assessment (per quay, from jr_esteettomyys):
+        Jore3 column         → GraphQL field                   Conversion
+        ─────────────────────────────────────────────────────────────────────
+        korotus_ajorataan    → curbBackOfRailDistance          toFloat
+        alapiena_korkeus     → lowerCleatHeight                toFloat
+        varoitusalue         → platformEdgeWarningArea         mapBoolean (1→True, else→False)
+        pituuskaltevuus      → stopAreaLengthwiseSlope         toFloat
+        sivukaltevuus        → stopAreaSideSlope               toFloat
+        esteeton_kulku       → stopAreaSurroundingsAccessible  mapBoolean
+        korotus_kaytavaan    → stopElevationFromSidewalk       toFloat
+        pysakin_malli        → stopType                        mapStopModel (see below)
+
+    Limitations (all hardcoded to FALSE):
+        audibleSignalsAvailable, escalatorFreeAccess, liftFreeAccess,
+        stepFreeAccess, wheelchairAccess
+
+    Shelter equipment (per quay, from jr_varustelutiedot_uusi):
+        Jore3 column         → GraphQL field                   Conversion
+        ─────────────────────────────────────────────────────────────────────
+        pysakkityyppi        → shelterType                     mapStopType (see below)
+        pysakkityyppi        → enclosed                        True if "01" or "02"
+        sahko                → shelterElectricity              mapStopElectricity (see below)
+        katos_kunto          → shelterCondition                mapStopCondition (see below)
+        kpl_pysakkityyppi    → (shelter list multiplier)       Number of shelter copies
+        lisavarusteet +
+          kpl_lisavarusteet  → timetableCabinets               Count if lisavarusteet == "01", else 0
+        roska_astia          → trashCan                        mapBoolean
+        nayttolaitteet       → shelterHasDisplay               mapBoolean
+        lisavarusteet        → bicycleParking                  True if "03" or "04"
+        kpl_kilvet           → generalSign.numberOfFrames      toFloat
+        (hardcoded)          → shelterLighting                 Always True
+        (hardcoded)          → leaningRail                     Always False
+        (hardcoded)          → outsideBench                    Always False
+        (hardcoded)          → shelterFasciaBoardTaping        Always False
+
+Value Mappings:
+
+    mapStopModel (pysakin_malli → stopType):
+        "1" → "pullOut"    "2" → "busBulb"    "4" → "inLane"    else → "other"
+
+    mapStopType (pysakkityyppi → shelterType):
+        "01" → "glass"   "02" → "steel"   "04" → "post"      "05" → "urban"
+        "06" → "concrete" "07" → "wooden"  else → "virtual"
+
+    mapStopElectricity (sahko → shelterElectricity):
+        "01" → "none"     "02" → "continuous"    else → "light"
+
+    mapStopCondition (katos_kunto → shelterCondition):
+        "01" → "good"     "02" → "mediocre"      else → "bad"
+
+Post-import Linking:
+    After creating each stop place, the returned quay NeTEx IDs are written back to the Jore4 scheduled stop points via:
+
+        UPDATE service_pattern_scheduled_stop_point
+        SET stop_place_ref = <quay NeTEx ID>
+        WHERE label = <quay publicCode>
+"""
+
 import datetime
 import pymssql
 import requests
