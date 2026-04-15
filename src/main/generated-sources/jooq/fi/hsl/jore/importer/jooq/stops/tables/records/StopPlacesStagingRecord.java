@@ -80,6 +80,22 @@ public class StopPlacesStagingRecord extends TableRecordImpl<StopPlacesStagingRe
         return (JSONB) get(3);
     }
 
+    /**
+     * Setter for
+     * <code>stops.stop_places_staging.stops_stop_place_transport_mode</code>.
+     */
+    public void setStopsStopPlaceTransportMode(String value) {
+        set(4, value);
+    }
+
+    /**
+     * Getter for
+     * <code>stops.stop_places_staging.stops_stop_place_transport_mode</code>.
+     */
+    public String getStopsStopPlaceTransportMode() {
+        return (String) get(4);
+    }
+
     // -------------------------------------------------------------------------
     // Constructors
     // -------------------------------------------------------------------------
@@ -94,13 +110,14 @@ public class StopPlacesStagingRecord extends TableRecordImpl<StopPlacesStagingRe
     /**
      * Create a detached, initialised StopPlacesStagingRecord
      */
-    public StopPlacesStagingRecord(String stopsStopPlaceExtId, JSONB stopsStopPlaceName, JSONB stopsStopPlaceLongName, JSONB stopsStopPlaceLocation) {
+    public StopPlacesStagingRecord(String stopsStopPlaceExtId, JSONB stopsStopPlaceName, JSONB stopsStopPlaceLongName, JSONB stopsStopPlaceLocation, String stopsStopPlaceTransportMode) {
         super(StopPlacesStaging.STOP_PLACES_STAGING);
 
         setStopsStopPlaceExtId(stopsStopPlaceExtId);
         setStopsStopPlaceName(stopsStopPlaceName);
         setStopsStopPlaceLongName(stopsStopPlaceLongName);
         setStopsStopPlaceLocation(stopsStopPlaceLocation);
+        setStopsStopPlaceTransportMode(stopsStopPlaceTransportMode);
         resetChangedOnNotNull();
     }
 }

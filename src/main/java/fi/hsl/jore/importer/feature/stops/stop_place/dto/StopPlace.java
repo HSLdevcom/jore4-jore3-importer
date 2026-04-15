@@ -5,6 +5,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasPK;
 import fi.hsl.jore.importer.feature.common.dto.mixin.IHasSystemTime;
+import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import fi.hsl.jore.importer.feature.stops.stop_place.dto.generated.StopPlacePK;
 import org.immutables.value.Value;
 
@@ -21,6 +22,7 @@ public interface StopPlace extends IHasPK<StopPlacePK>, CommonFields<StopPlace>,
             final MultilingualString name,
             final MultilingualString longName,
             final MultilingualString location,
+            final NetworkType networkType,
             final TimeRange systemTime
             ) {
         return ImmutableStopPlace.builder()
@@ -29,6 +31,7 @@ public interface StopPlace extends IHasPK<StopPlacePK>, CommonFields<StopPlace>,
                 .name(name)
                 .longName(longName)
                 .location(location)
+                .networkType(networkType)
                 .systemTime(systemTime)
                 .build();
     }
