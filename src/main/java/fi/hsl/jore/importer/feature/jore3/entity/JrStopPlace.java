@@ -1,14 +1,14 @@
 package fi.hsl.jore.importer.feature.jore3.entity;
 
+import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.StopPlaceId;
 import fi.hsl.jore.importer.feature.jore3.key.JrStopPlacePK;
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreColumn;
 import fi.hsl.jore.importer.feature.jore3.mapping.JoreTable;
 import fi.hsl.jore.importer.feature.jore3.mixin.IHasPrimaryKey;
 import fi.hsl.jore.importer.feature.jore3.style.JoreDtoStyle;
-import org.immutables.value.Value;
-
 import java.util.Optional;
+import org.immutables.value.Value;
 
 @Value.Immutable
 @JoreDtoStyle
@@ -16,6 +16,9 @@ import java.util.Optional;
 public interface JrStopPlace extends IHasPrimaryKey<JrStopPlacePK> {
 
     String TABLE = "jr_lij_pysakkialue";
+
+    @JoreColumn(name = "verkko", example = "1")
+    TransitType transitType();
 
     @JoreColumn(name = "nimi", example = "Ritarihuone")
     Optional<String> nameFinnish();
@@ -37,15 +40,16 @@ public interface JrStopPlace extends IHasPrimaryKey<JrStopPlacePK> {
 
     static JrStopPlace of(
             final StopPlaceId stopPlaceId,
+            final TransitType transitType,
             final Optional<String> nameFinnish,
             final Optional<String> nameSwedish,
             final Optional<String> nameLongFinnish,
             final Optional<String> nameLongSwedish,
             final Optional<String> locationFinnish,
-            final Optional<String> locationSwedish
-    ) {
+            final Optional<String> locationSwedish) {
         return ImmutableJrStopPlace.builder()
                 .pk(JrStopPlacePK.of(stopPlaceId))
+                .transitType(transitType)
                 .nameFinnish(nameFinnish)
                 .nameSwedish(nameSwedish)
                 .nameLongFinnish(nameLongFinnish)

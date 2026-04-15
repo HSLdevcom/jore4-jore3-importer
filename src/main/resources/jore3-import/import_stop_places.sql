@@ -2,6 +2,7 @@ SELECT
 	   pa.pysalueid AS pysalueid,
 	   pa.nimi AS nimi,
 	   pa.nimir AS nimir,
+	   pa.verkko AS verkko,
 	   p.pysnimipitka AS nimipitka,
 	   p.pysnimipitkar AS nimipitkar,
 	   p.pyspaikannimi AS paikannimi,
