@@ -6,19 +6,26 @@ package fi.hsl.jore.importer.jooq.stops.tables;
 
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRange;
 import fi.hsl.jore.importer.config.jooq.converter.time_range.TimeRangeBinding;
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNetworkTypes.InfrastructureNetworkTypesPath;
 import fi.hsl.jore.importer.jooq.stops.Keys;
 import fi.hsl.jore.importer.jooq.stops.Stops;
 import fi.hsl.jore.importer.jooq.stops.tables.records.StopPlacesRecord;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.ForeignKey;
+import org.jooq.InverseForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
+import org.jooq.Path;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
+import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
 import org.jooq.Select;
@@ -84,6 +91,12 @@ public class StopPlaces extends TableImpl<StopPlacesRecord> {
      */
     public final TableField<StopPlacesRecord, TimeRange> STOPS_STOP_PLACE_SYS_PERIOD = createField(DSL.name("stops_stop_place_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false).defaultValue(DSL.field(DSL.raw("tstzrange(CURRENT_TIMESTAMP, NULL::timestamp with time zone)"), org.jooq.impl.SQLDataType.OTHER)), this, "", new TimeRangeBinding());
 
+    /**
+     * The column
+     * <code>stops.stop_places.stops_stop_place_transport_mode</code>.
+     */
+    public final TableField<StopPlacesRecord, String> STOPS_STOP_PLACE_TRANSPORT_MODE = createField(DSL.name("stops_stop_place_transport_mode"), SQLDataType.CLOB.nullable(false), this, "");
+
     private StopPlaces(Name alias, Table<StopPlacesRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
@@ -113,6 +126,39 @@ public class StopPlaces extends TableImpl<StopPlacesRecord> {
         this(DSL.name("stop_places"), null);
     }
 
+    public <O extends Record> StopPlaces(Table<O> path, ForeignKey<O, StopPlacesRecord> childPath, InverseForeignKey<O, StopPlacesRecord> parentPath) {
+        super(path, childPath, parentPath, STOP_PLACES);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class StopPlacesPath extends StopPlaces implements Path<StopPlacesRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> StopPlacesPath(Table<O> path, ForeignKey<O, StopPlacesRecord> childPath, InverseForeignKey<O, StopPlacesRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private StopPlacesPath(Name alias, Table<StopPlacesRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public StopPlacesPath as(String alias) {
+            return new StopPlacesPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public StopPlacesPath as(Name alias) {
+            return new StopPlacesPath(alias, this);
+        }
+
+        @Override
+        public StopPlacesPath as(Table<?> alias) {
+            return new StopPlacesPath(alias.getQualifiedName(), this);
+        }
+    }
+
     @Override
     public Schema getSchema() {
         return aliased() ? null : Stops.STOPS;
@@ -121,6 +167,24 @@ public class StopPlaces extends TableImpl<StopPlacesRecord> {
     @Override
     public UniqueKey<StopPlacesRecord> getPrimaryKey() {
         return Keys.STOP_PLACES_PKEY;
+    }
+
+    @Override
+    public List<ForeignKey<StopPlacesRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.STOP_PLACES__STOP_PLACES_STOPS_STOP_PLACE_TRANSPORT_MODE_FKEY);
+    }
+
+    private transient InfrastructureNetworkTypesPath _infrastructureNetworkTypes;
+
+    /**
+     * Get the implicit join path to the
+     * <code>infrastructure_network.infrastructure_network_types</code> table.
+     */
+    public InfrastructureNetworkTypesPath infrastructureNetworkTypes() {
+        if (_infrastructureNetworkTypes == null)
+            _infrastructureNetworkTypes = new InfrastructureNetworkTypesPath(this, Keys.STOP_PLACES__STOP_PLACES_STOPS_STOP_PLACE_TRANSPORT_MODE_FKEY, null);
+
+        return _infrastructureNetworkTypes;
     }
 
     @Override

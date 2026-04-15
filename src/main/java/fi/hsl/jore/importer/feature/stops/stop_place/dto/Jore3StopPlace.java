@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.stops.stop_place.dto;
 
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
+import fi.hsl.jore.importer.feature.infrastructure.network_type.dto.NetworkType;
 import org.immutables.value.Value;
 
 @Value.Immutable
@@ -11,13 +12,14 @@ public interface Jore3StopPlace extends CommonFields<Jore3StopPlace> {
             final ExternalId stopPlaceExternalId,
             final MultilingualString name,
             final MultilingualString longName,
-            final MultilingualString location
-            ) {
+            final MultilingualString location,
+            final NetworkType networkType) {
         return ImmutableJore3StopPlace.builder()
                 .externalId(stopPlaceExternalId)
                 .name(name)
                 .longName(longName)
                 .location(location)
+                .networkType(networkType)
                 .build();
     }
 }
