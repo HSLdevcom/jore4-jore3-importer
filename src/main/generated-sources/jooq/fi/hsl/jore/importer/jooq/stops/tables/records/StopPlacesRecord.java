@@ -106,6 +106,22 @@ public class StopPlacesRecord extends UpdatableRecordImpl<StopPlacesRecord> {
         return (TimeRange) get(5);
     }
 
+    /**
+     * Setter for
+     * <code>stops.stop_places.stops_stop_place_transport_mode</code>.
+     */
+    public void setStopsStopPlaceTransportMode(String value) {
+        set(6, value);
+    }
+
+    /**
+     * Getter for
+     * <code>stops.stop_places.stops_stop_place_transport_mode</code>.
+     */
+    public String getStopsStopPlaceTransportMode() {
+        return (String) get(6);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -129,7 +145,7 @@ public class StopPlacesRecord extends UpdatableRecordImpl<StopPlacesRecord> {
     /**
      * Create a detached, initialised StopPlacesRecord
      */
-    public StopPlacesRecord(UUID stopsStopPlaceId, String stopsStopPlaceExtId, JSONB stopsStopPlaceName, JSONB stopsStopPlaceLongName, JSONB stopsStopPlaceLocation, TimeRange stopsStopPlaceSysPeriod) {
+    public StopPlacesRecord(UUID stopsStopPlaceId, String stopsStopPlaceExtId, JSONB stopsStopPlaceName, JSONB stopsStopPlaceLongName, JSONB stopsStopPlaceLocation, TimeRange stopsStopPlaceSysPeriod, String stopsStopPlaceTransportMode) {
         super(StopPlaces.STOP_PLACES);
 
         setStopsStopPlaceId(stopsStopPlaceId);
@@ -138,6 +154,7 @@ public class StopPlacesRecord extends UpdatableRecordImpl<StopPlacesRecord> {
         setStopsStopPlaceLongName(stopsStopPlaceLongName);
         setStopsStopPlaceLocation(stopsStopPlaceLocation);
         setStopsStopPlaceSysPeriod(stopsStopPlaceSysPeriod);
+        setStopsStopPlaceTransportMode(stopsStopPlaceTransportMode);
         resetChangedOnNotNull();
     }
 }

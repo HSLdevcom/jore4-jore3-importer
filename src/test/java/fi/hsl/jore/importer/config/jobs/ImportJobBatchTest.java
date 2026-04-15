@@ -24,6 +24,7 @@ import org.springframework.test.context.jdbc.SqlConfig;
             "/sql/jore3/populate_route_links.sql",
             "/sql/jore3/populate_via_names.sql",
             "/sql/jore3/populate_places.sql",
+            "/sql/jore3/populate_stop_places.sql",
             "/sql/jore3/populate_scheduled_stop_points.sql"
         },
         config = @SqlConfig(dataSource = "sourceDataSource", transactionManager = "sourceTransactionManager"))

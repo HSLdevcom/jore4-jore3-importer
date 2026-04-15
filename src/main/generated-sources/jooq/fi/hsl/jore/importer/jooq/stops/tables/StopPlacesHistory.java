@@ -86,6 +86,12 @@ public class StopPlacesHistory extends TableImpl<StopPlacesHistoryRecord> {
      */
     public final TableField<StopPlacesHistoryRecord, TimeRange> STOPS_STOP_PLACE_SYS_PERIOD = createField(DSL.name("stops_stop_place_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\"").nullable(false), this, "", new TimeRangeBinding());
 
+    /**
+     * The column
+     * <code>stops.stop_places_history.stops_stop_place_transport_mode</code>.
+     */
+    public final TableField<StopPlacesHistoryRecord, String> STOPS_STOP_PLACE_TRANSPORT_MODE = createField(DSL.name("stops_stop_place_transport_mode"), SQLDataType.CLOB.nullable(false), this, "");
+
     private StopPlacesHistory(Name alias, Table<StopPlacesHistoryRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

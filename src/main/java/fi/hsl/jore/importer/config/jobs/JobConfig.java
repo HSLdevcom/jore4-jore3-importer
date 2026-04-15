@@ -624,9 +624,7 @@ public class JobConfig {
 
     @Bean
     public Flow importStopPlacesFlow(
-            final Step prepareStopPlacesStep,
-            final Step importStopPlacesStep,
-            final Step commitStopPlacesStep) {
+            final Step prepareStopPlacesStep, final Step importStopPlacesStep, final Step commitStopPlacesStep) {
         return new FlowBuilder<SimpleFlow>("importStopPlacesFlow")
                 .start(prepareStopPlacesStep)
                 .next(importStopPlacesStep)
@@ -643,9 +641,7 @@ public class JobConfig {
     }
 
     @Bean
-    public Step importStopPlacesStep(
-            final StopPlaceImportReader reader,
-            final IStopPlaceImportRepository repository) {
+    public Step importStopPlacesStep(final StopPlaceImportReader reader, final IStopPlaceImportRepository repository) {
         return new StepBuilder("importStopPlacesStep", jobRepository)
                 .allowStartIfComplete(true)
                 .<JrStopPlace, Jore3StopPlace>chunk(1000, transactionManager)

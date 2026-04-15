@@ -113,6 +113,22 @@ public class StopPlacesHistoryRecord extends TableRecordImpl<StopPlacesHistoryRe
         return (TimeRange) get(5);
     }
 
+    /**
+     * Setter for
+     * <code>stops.stop_places_history.stops_stop_place_transport_mode</code>.
+     */
+    public void setStopsStopPlaceTransportMode(String value) {
+        set(6, value);
+    }
+
+    /**
+     * Getter for
+     * <code>stops.stop_places_history.stops_stop_place_transport_mode</code>.
+     */
+    public String getStopsStopPlaceTransportMode() {
+        return (String) get(6);
+    }
+
     // -------------------------------------------------------------------------
     // Constructors
     // -------------------------------------------------------------------------
@@ -127,7 +143,7 @@ public class StopPlacesHistoryRecord extends TableRecordImpl<StopPlacesHistoryRe
     /**
      * Create a detached, initialised StopPlacesHistoryRecord
      */
-    public StopPlacesHistoryRecord(UUID stopsStopPlaceId, String stopsStopPlaceExtId, JSONB stopsStopPlaceName, JSONB stopsStopPlaceLongName, JSONB stopsStopPlaceLocation, TimeRange stopsStopPlaceSysPeriod) {
+    public StopPlacesHistoryRecord(UUID stopsStopPlaceId, String stopsStopPlaceExtId, JSONB stopsStopPlaceName, JSONB stopsStopPlaceLongName, JSONB stopsStopPlaceLocation, TimeRange stopsStopPlaceSysPeriod, String stopsStopPlaceTransportMode) {
         super(StopPlacesHistory.STOP_PLACES_HISTORY);
 
         setStopsStopPlaceId(stopsStopPlaceId);
@@ -136,6 +152,7 @@ public class StopPlacesHistoryRecord extends TableRecordImpl<StopPlacesHistoryRe
         setStopsStopPlaceLongName(stopsStopPlaceLongName);
         setStopsStopPlaceLocation(stopsStopPlaceLocation);
         setStopsStopPlaceSysPeriod(stopsStopPlaceSysPeriod);
+        setStopsStopPlaceTransportMode(stopsStopPlaceTransportMode);
         resetChangedOnNotNull();
     }
 }
