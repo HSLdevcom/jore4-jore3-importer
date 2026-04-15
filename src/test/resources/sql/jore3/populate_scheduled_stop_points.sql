@@ -1,5 +1,5 @@
 INSERT INTO jr_pysakki
-(soltunnus,elynumero,pyskunta,pysnimi,pysnimir,pysosoite,pysosoiter,paitunnus,pysviimpvm,pyskatos,pyssade,tariffi,vyohyke)
+(soltunnus,elynumero,pyskunta,pysnimi,pysnimir,pysosoite,pysosoiter,paitunnus,pysviimpvm,pyskatos,pyssade,tariffi,vyohyke,pysalueid,pysnimipitka,pysnimipitkar,pyspaikannimi,pyspaikannimir)
 VALUES (
     'c',
     '1234567890',
@@ -13,5 +13,10 @@ VALUES (
     '00',
     '01',
     '999',
-    '123456'
+    '123456',
+    '1ELIEL',
+    'Yliopiston pitkä nimi',
+    'Universitetets långt namn',
+    'Kamppi',
+    'Kampen'
 );

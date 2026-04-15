@@ -9,7 +9,9 @@ CREATE TABLE stops.stop_places
     stops_stop_place_name       JSONB                                                NOT NULL,
     stops_stop_place_long_name  JSONB                                                NOT NULL,
     stops_stop_place_location   JSONB                                                NOT NULL,
-    stops_stop_place_sys_period tstzrange DEFAULT tstzrange(current_timestamp, null) NOT NULL
+    stops_stop_place_sys_period tstzrange DEFAULT tstzrange(current_timestamp, null) NOT NULL,
+    stops_stop_place_transport_mode TEXT NOT NULL
+        REFERENCES infrastructure_network.infrastructure_network_types (infrastructure_network_type)
 );
 
 CREATE UNIQUE INDEX stops_stop_place_ext_id_idx
@@ -22,7 +24,9 @@ CREATE TABLE stops.stop_places_staging
     stops_stop_place_ext_id     TEXT                                                 NOT NULL,
     stops_stop_place_name       JSONB                                                NOT NULL,
     stops_stop_place_long_name  JSONB                                                NOT NULL,
-    stops_stop_place_location   JSONB                                                NOT NULL
+    stops_stop_place_location   JSONB                                                NOT NULL,
+    stops_stop_place_transport_mode TEXT NOT NULL
+        REFERENCES infrastructure_network.infrastructure_network_types (infrastructure_network_type)
 );
 
 -- VERSIONED STOP PLACES

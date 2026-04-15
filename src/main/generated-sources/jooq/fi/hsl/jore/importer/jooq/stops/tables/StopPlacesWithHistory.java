@@ -88,6 +88,12 @@ public class StopPlacesWithHistory extends TableImpl<StopPlacesWithHistoryRecord
      */
     public final TableField<StopPlacesWithHistoryRecord, TimeRange> STOPS_STOP_PLACE_SYS_PERIOD = createField(DSL.name("stops_stop_place_sys_period"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tstzrange\""), this, "", new TimeRangeBinding());
 
+    /**
+     * The column
+     * <code>stops.stop_places_with_history.stops_stop_place_transport_mode</code>.
+     */
+    public final TableField<StopPlacesWithHistoryRecord, String> STOPS_STOP_PLACE_TRANSPORT_MODE = createField(DSL.name("stops_stop_place_transport_mode"), SQLDataType.CLOB, this, "");
+
     private StopPlacesWithHistory(Name alias, Table<StopPlacesWithHistoryRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
@@ -99,7 +105,8 @@ public class StopPlacesWithHistory extends TableImpl<StopPlacesWithHistoryRecord
             stop_places.stops_stop_place_name,
             stop_places.stops_stop_place_long_name,
             stop_places.stops_stop_place_location,
-            stop_places.stops_stop_place_sys_period
+            stop_places.stops_stop_place_sys_period,
+            stop_places.stops_stop_place_transport_mode
            FROM stops.stop_places
         UNION ALL
          SELECT stop_places_history.stops_stop_place_id,
@@ -107,7 +114,8 @@ public class StopPlacesWithHistory extends TableImpl<StopPlacesWithHistoryRecord
             stop_places_history.stops_stop_place_name,
             stop_places_history.stops_stop_place_long_name,
             stop_places_history.stops_stop_place_location,
-            stop_places_history.stops_stop_place_sys_period
+            stop_places_history.stops_stop_place_sys_period,
+            stop_places_history.stops_stop_place_transport_mode
            FROM stops.stop_places_history;
         """), where);
     }

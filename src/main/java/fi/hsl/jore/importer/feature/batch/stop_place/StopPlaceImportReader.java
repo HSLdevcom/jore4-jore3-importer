@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.batch.stop_place;
 
 import fi.hsl.jore.importer.feature.batch.util.ResourceUtil;
 import fi.hsl.jore.importer.feature.jore3.entity.JrStopPlace;
+import javax.sql.DataSource;
 import org.springframework.batch.infrastructure.item.database.JdbcCursorItemReader;
 import org.springframework.batch.infrastructure.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-
-import javax.sql.DataSource;
 
 @Component
 public class StopPlaceImportReader {
@@ -23,8 +22,7 @@ public class StopPlaceImportReader {
     @Autowired
     public StopPlaceImportReader(
             @Qualifier("sourceDataSource") final DataSource dataSource,
-            @Value(StopPlaceImportMapper.SQL_PATH) final Resource sqlResource
-    ) {
+            @Value(StopPlaceImportMapper.SQL_PATH) final Resource sqlResource) {
         this.sourceDataSource = dataSource;
         this.sql = ResourceUtil.fromResource(sqlResource);
     }
