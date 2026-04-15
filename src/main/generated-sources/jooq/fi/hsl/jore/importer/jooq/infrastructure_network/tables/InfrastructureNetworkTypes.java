@@ -11,6 +11,8 @@ import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureLin
 import fi.hsl.jore.importer.jooq.infrastructure_network.tables.records.InfrastructureNetworkTypesRecord;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLines.NetworkLinesPath;
 import fi.hsl.jore.importer.jooq.network.tables.NetworkLinesStaging.NetworkLinesStagingPath;
+import fi.hsl.jore.importer.jooq.stops.tables.StopPlaces.StopPlacesPath;
+import fi.hsl.jore.importer.jooq.stops.tables.StopPlacesStaging.StopPlacesStagingPath;
 
 import java.util.Collection;
 
@@ -191,6 +193,32 @@ public class InfrastructureNetworkTypes extends TableImpl<InfrastructureNetworkT
             _networkLinesStaging = new NetworkLinesStagingPath(this, null, fi.hsl.jore.importer.jooq.network.Keys.NETWORK_LINES_STAGING__NETWORK_LINES_STAGING_INFRASTRUCTURE_NETWORK_TYPE_FKEY.getInverseKey());
 
         return _networkLinesStaging;
+    }
+
+    private transient StopPlacesStagingPath _stopPlacesStaging;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>stops.stop_places_staging</code> table
+     */
+    public StopPlacesStagingPath stopPlacesStaging() {
+        if (_stopPlacesStaging == null)
+            _stopPlacesStaging = new StopPlacesStagingPath(this, null, fi.hsl.jore.importer.jooq.stops.Keys.STOP_PLACES_STAGING__STOP_PLACES_STAGING_STOPS_STOP_PLACE_TRANSPORT_MODE_FKEY.getInverseKey());
+
+        return _stopPlacesStaging;
+    }
+
+    private transient StopPlacesPath _stopPlaces;
+
+    /**
+     * Get the implicit to-many join path to the <code>stops.stop_places</code>
+     * table
+     */
+    public StopPlacesPath stopPlaces() {
+        if (_stopPlaces == null)
+            _stopPlaces = new StopPlacesPath(this, null, fi.hsl.jore.importer.jooq.stops.Keys.STOP_PLACES__STOP_PLACES_STOPS_STOP_PLACE_TRANSPORT_MODE_FKEY.getInverseKey());
+
+        return _stopPlaces;
     }
 
     @Override

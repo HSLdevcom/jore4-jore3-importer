@@ -4,6 +4,7 @@ import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getOptionalString
 import static fi.hsl.jore.importer.feature.batch.util.JdbcUtil.getStringOrThrow;
 
 import fi.hsl.jore.importer.feature.jore3.entity.JrStopPlace;
+import fi.hsl.jore.importer.feature.jore3.enumerated.TransitType;
 import fi.hsl.jore.importer.feature.jore3.field.generated.StopPlaceId;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,6 +18,7 @@ public class StopPlaceImportMapper implements RowMapper<JrStopPlace> {
     public JrStopPlace mapRow(final ResultSet rs, final int rowNumber) throws SQLException {
         return JrStopPlace.of(
                 StopPlaceId.of(getStringOrThrow(rs, "pysalueid")),
+                TransitType.of(getStringOrThrow(rs, "verkko")).orElse(TransitType.UNKNOWN),
                 getOptionalString(rs, "nimi"),
                 getOptionalString(rs, "nimir"),
                 getOptionalString(rs, "nimipitka"),

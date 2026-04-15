@@ -4,17 +4,25 @@
 package fi.hsl.jore.importer.jooq.stops.tables;
 
 
+import fi.hsl.jore.importer.jooq.infrastructure_network.tables.InfrastructureNetworkTypes.InfrastructureNetworkTypesPath;
+import fi.hsl.jore.importer.jooq.stops.Keys;
 import fi.hsl.jore.importer.jooq.stops.Stops;
 import fi.hsl.jore.importer.jooq.stops.tables.records.StopPlacesStagingRecord;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.ForeignKey;
+import org.jooq.InverseForeignKey;
 import org.jooq.JSONB;
 import org.jooq.Name;
+import org.jooq.Path;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
+import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
 import org.jooq.Select;
@@ -71,6 +79,12 @@ public class StopPlacesStaging extends TableImpl<StopPlacesStagingRecord> {
      */
     public final TableField<StopPlacesStagingRecord, JSONB> STOPS_STOP_PLACE_LOCATION = createField(DSL.name("stops_stop_place_location"), SQLDataType.JSONB.nullable(false), this, "");
 
+    /**
+     * The column
+     * <code>stops.stop_places_staging.stops_stop_place_transport_mode</code>.
+     */
+    public final TableField<StopPlacesStagingRecord, String> STOPS_STOP_PLACE_TRANSPORT_MODE = createField(DSL.name("stops_stop_place_transport_mode"), SQLDataType.CLOB.nullable(false), this, "");
+
     private StopPlacesStaging(Name alias, Table<StopPlacesStagingRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
@@ -100,9 +114,60 @@ public class StopPlacesStaging extends TableImpl<StopPlacesStagingRecord> {
         this(DSL.name("stop_places_staging"), null);
     }
 
+    public <O extends Record> StopPlacesStaging(Table<O> path, ForeignKey<O, StopPlacesStagingRecord> childPath, InverseForeignKey<O, StopPlacesStagingRecord> parentPath) {
+        super(path, childPath, parentPath, STOP_PLACES_STAGING);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class StopPlacesStagingPath extends StopPlacesStaging implements Path<StopPlacesStagingRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> StopPlacesStagingPath(Table<O> path, ForeignKey<O, StopPlacesStagingRecord> childPath, InverseForeignKey<O, StopPlacesStagingRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private StopPlacesStagingPath(Name alias, Table<StopPlacesStagingRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public StopPlacesStagingPath as(String alias) {
+            return new StopPlacesStagingPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public StopPlacesStagingPath as(Name alias) {
+            return new StopPlacesStagingPath(alias, this);
+        }
+
+        @Override
+        public StopPlacesStagingPath as(Table<?> alias) {
+            return new StopPlacesStagingPath(alias.getQualifiedName(), this);
+        }
+    }
+
     @Override
     public Schema getSchema() {
         return aliased() ? null : Stops.STOPS;
+    }
+
+    @Override
+    public List<ForeignKey<StopPlacesStagingRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.STOP_PLACES_STAGING__STOP_PLACES_STAGING_STOPS_STOP_PLACE_TRANSPORT_MODE_FKEY);
+    }
+
+    private transient InfrastructureNetworkTypesPath _infrastructureNetworkTypes;
+
+    /**
+     * Get the implicit join path to the
+     * <code>infrastructure_network.infrastructure_network_types</code> table.
+     */
+    public InfrastructureNetworkTypesPath infrastructureNetworkTypes() {
+        if (_infrastructureNetworkTypes == null)
+            _infrastructureNetworkTypes = new InfrastructureNetworkTypesPath(this, Keys.STOP_PLACES_STAGING__STOP_PLACES_STAGING_STOPS_STOP_PLACE_TRANSPORT_MODE_FKEY, null);
+
+        return _infrastructureNetworkTypes;
     }
 
     @Override
