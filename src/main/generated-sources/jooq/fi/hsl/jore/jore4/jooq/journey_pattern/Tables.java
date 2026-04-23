@@ -27,8 +27,10 @@ import org.jooq.Result;
 public class Tables {
 
     /**
-     * The table
-     * <code>journey_pattern.check_infra_link_stop_refs_with_new_scheduled_stop_point</code>.
+     * replace_scheduled_stop_point_id uuid,
+     * new_located_on_infrastructure_link_id uuid, new_measured_location
+     * geography, new_direction text, new_label text, new_validity_start date,
+     * new_validity_end date, new_priority integer
      */
     public static final CheckInfraLinkStopRefsWithNewScheduledStopPoint CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT = CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT;
 
@@ -127,7 +129,7 @@ public class Tables {
     }
 
     /**
-     * The table <code>journey_pattern.get_broken_route_check_filters</code>.
+     * filter_route_ids uuid[]
      */
     public static final GetBrokenRouteCheckFilters GET_BROKEN_ROUTE_CHECK_FILTERS = GetBrokenRouteCheckFilters.GET_BROKEN_ROUTE_CHECK_FILTERS;
 
@@ -168,7 +170,12 @@ public class Tables {
     }
 
     /**
-     * The table <code>journey_pattern.get_broken_route_journey_patterns</code>.
+     * filter_route_ids uuid[], replace_scheduled_stop_point_id uuid DEFAULT
+     * NULL::uuid, new_located_on_infrastructure_link_id uuid DEFAULT
+     * NULL::uuid, new_measured_location geography DEFAULT NULL::geography,
+     * new_direction text DEFAULT NULL::text, new_label text DEFAULT NULL::text,
+     * new_validity_start date DEFAULT NULL::date, new_validity_end date DEFAULT
+     * NULL::date, new_priority integer DEFAULT NULL::integer
      */
     public static final GetBrokenRouteJourneyPatterns GET_BROKEN_ROUTE_JOURNEY_PATTERNS = GetBrokenRouteJourneyPatterns.GET_BROKEN_ROUTE_JOURNEY_PATTERNS;
 
@@ -280,7 +287,16 @@ public class Tables {
     public static final JourneyPattern JOURNEY_PATTERN_ = JourneyPattern.JOURNEY_PATTERN_;
 
     /**
-     * The table <code>journey_pattern.maximum_priority_validity_spans</code>.
+     * entity_type text, filter_route_labels text[], filter_validity_start date
+     * DEFAULT NULL::date, filter_validity_end date DEFAULT NULL::date,
+     * upper_priority_limit integer DEFAULT NULL::integer,
+     * replace_scheduled_stop_point_id uuid DEFAULT NULL::uuid,
+     * new_scheduled_stop_point_id uuid DEFAULT NULL::uuid,
+     * new_located_on_infrastructure_link_id uuid DEFAULT NULL::uuid,
+     * new_measured_location geography DEFAULT NULL::geography, new_direction
+     * text DEFAULT NULL::text, new_label text DEFAULT NULL::text,
+     * new_validity_start date DEFAULT NULL::date, new_validity_end date DEFAULT
+     * NULL::date, new_priority integer DEFAULT NULL::integer
      */
     public static final MaximumPriorityValiditySpans MAXIMUM_PRIORITY_VALIDITY_SPANS = MaximumPriorityValiditySpans.MAXIMUM_PRIORITY_VALIDITY_SPANS;
 

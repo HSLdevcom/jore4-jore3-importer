@@ -39,8 +39,8 @@ public class Tables {
     public static final DistanceBetweenStopsCalculation DISTANCE_BETWEEN_STOPS_CALCULATION = DistanceBetweenStopsCalculation.DISTANCE_BETWEEN_STOPS_CALCULATION;
 
     /**
-     * The table
-     * <code>service_pattern.find_effective_scheduled_stop_points_in_journey_pattern</code>.
+     * filter_journey_pattern_id uuid, observation_date date,
+     * include_draft_stops boolean
      */
     public static final FindEffectiveScheduledStopPointsInJourneyPattern FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN = FindEffectiveScheduledStopPointsInJourneyPattern.FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN;
 
@@ -96,8 +96,8 @@ public class Tables {
     }
 
     /**
-     * The table
-     * <code>service_pattern.find_scheduled_stop_point_locations_in_journey_pattern</code>.
+     * filter_journey_pattern_id uuid, observation_date date,
+     * include_draft_stops boolean
      */
     public static final FindScheduledStopPointLocationsInJourneyPattern FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN = FindScheduledStopPointLocationsInJourneyPattern.FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN;
 
@@ -153,8 +153,7 @@ public class Tables {
     }
 
     /**
-     * The table
-     * <code>service_pattern.get_distances_between_stop_points_by_routes</code>.
+     * route_ids uuid[], observation_date date
      */
     public static final GetDistancesBetweenStopPointsByRoutes GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES = GetDistancesBetweenStopPointsByRoutes.GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES;
 
@@ -204,8 +203,8 @@ public class Tables {
     }
 
     /**
-     * The table
-     * <code>service_pattern.get_distances_between_stop_points_in_journey_pattern</code>.
+     * journey_pattern_id uuid, observation_date date, include_draft_stops
+     * boolean
      */
     public static final GetDistancesBetweenStopPointsInJourneyPattern GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN = GetDistancesBetweenStopPointsInJourneyPattern.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN;
 
@@ -261,8 +260,8 @@ public class Tables {
     }
 
     /**
-     * The table
-     * <code>service_pattern.get_distances_between_stop_points_in_journey_patterns</code>.
+     * journey_pattern_ids uuid[], observation_date date, include_draft_stops
+     * boolean
      */
     public static final GetDistancesBetweenStopPointsInJourneyPatterns GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS = GetDistancesBetweenStopPointsInJourneyPatterns.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS;
 
@@ -318,8 +317,12 @@ public class Tables {
     }
 
     /**
-     * The table
-     * <code>service_pattern.new_scheduled_stop_point_if_id_given</code>.
+     * new_scheduled_stop_point_id uuid DEFAULT NULL::uuid,
+     * new_located_on_infrastructure_link_id uuid DEFAULT NULL::uuid,
+     * new_measured_location geography DEFAULT NULL::geography, new_direction
+     * text DEFAULT NULL::text, new_label text DEFAULT NULL::text,
+     * new_validity_start date DEFAULT NULL::date, new_validity_end date DEFAULT
+     * NULL::date, new_priority integer DEFAULT NULL::integer
      */
     public static final NewScheduledStopPointIfIdGiven NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN = NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN;
 
