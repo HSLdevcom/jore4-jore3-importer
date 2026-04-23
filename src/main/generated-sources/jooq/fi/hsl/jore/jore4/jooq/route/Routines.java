@@ -4,10 +4,17 @@
 package fi.hsl.jore.jore4.jooq.route;
 
 
+import fi.hsl.jore.jore4.jooq.route.routines.CollectLineInfoForHistory;
+import fi.hsl.jore.jore4.jooq.route.routines.GetHigherPriorityOperation;
+import fi.hsl.jore.jore4.jooq.route.routines.RecordHistoryForChangedLine;
+import fi.hsl.jore.jore4.jooq.route.routines.RecordHistoryForChangedRoute;
 import fi.hsl.jore.jore4.jooq.route.routines.RouteShape;
+
+import java.util.UUID;
 
 import org.jooq.Configuration;
 import org.jooq.Field;
+import org.jooq.JSONB;
 import org.jooq.Record;
 
 
@@ -16,6 +23,118 @@ import org.jooq.Record;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Routines {
+
+    /**
+     * Call <code>route.collect_line_info_for_history</code>
+     */
+    public static JSONB collectLineInfoForHistory(
+          Configuration configuration
+        , UUID lineid
+    ) {
+        CollectLineInfoForHistory f = new CollectLineInfoForHistory();
+        f.setLineid(lineid);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>route.collect_line_info_for_history</code> as a field.
+     */
+    public static Field<JSONB> collectLineInfoForHistory(
+          UUID lineid
+    ) {
+        CollectLineInfoForHistory f = new CollectLineInfoForHistory();
+        f.setLineid(lineid);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>route.collect_line_info_for_history</code> as a field.
+     */
+    public static Field<JSONB> collectLineInfoForHistory(
+          Field<UUID> lineid
+    ) {
+        CollectLineInfoForHistory f = new CollectLineInfoForHistory();
+        f.setLineid(lineid);
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>route.get_higher_priority_operation</code>
+     */
+    public static String getHigherPriorityOperation(
+          Configuration configuration
+        , String previousoperation
+        , String nextoperation
+    ) {
+        GetHigherPriorityOperation f = new GetHigherPriorityOperation();
+        f.setPreviousoperation(previousoperation);
+        f.setNextoperation(nextoperation);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>route.get_higher_priority_operation</code> as a field.
+     */
+    public static Field<String> getHigherPriorityOperation(
+          String previousoperation
+        , String nextoperation
+    ) {
+        GetHigherPriorityOperation f = new GetHigherPriorityOperation();
+        f.setPreviousoperation(previousoperation);
+        f.setNextoperation(nextoperation);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>route.get_higher_priority_operation</code> as a field.
+     */
+    public static Field<String> getHigherPriorityOperation(
+          Field<String> previousoperation
+        , Field<String> nextoperation
+    ) {
+        GetHigherPriorityOperation f = new GetHigherPriorityOperation();
+        f.setPreviousoperation(previousoperation);
+        f.setNextoperation(nextoperation);
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>route.record_history_for_changed_line</code>
+     */
+    public static void recordHistoryForChangedLine(
+          Configuration configuration
+        , String tgoperation
+        , UUID lineid
+    ) {
+        RecordHistoryForChangedLine p = new RecordHistoryForChangedLine();
+        p.setTgoperation(tgoperation);
+        p.setLineid(lineid);
+
+        p.execute(configuration);
+    }
+
+    /**
+     * Call <code>route.record_history_for_changed_route</code>
+     */
+    public static void recordHistoryForChangedRoute(
+          Configuration configuration
+        , String tgoperation
+        , UUID routeid
+    ) {
+        RecordHistoryForChangedRoute p = new RecordHistoryForChangedRoute();
+        p.setTgoperation(tgoperation);
+        p.setRouteid(routeid);
+
+        p.execute(configuration);
+    }
 
     /**
      * @deprecated Unknown data type. If this is a qualified, user-defined type,
