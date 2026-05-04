@@ -9,12 +9,12 @@ Configuration:
     Reads environment variables (or .env file) for the GraphQL endpoint, Hasura admin secret, and Jore3 DB credentials.
 
 Data Retrieval:
-    - get_jore3_stops()      — Queries the Jore3 MSSQL database, joining stop, node, stop area, equipment, and
-                               accessibility tables. Returns stops grouped by stop area ID.
-    - get_jore3_stop_areas() — Queries Jore3 for stop areas that belong to network 1 and have more than one stop (i.e.
-                               multi-quay areas). Yields rows as a generator.
-    - get_stop_points()      — Fetches existing scheduled stop points from Jore4 via GraphQL. Returns them as a dict
-                               keyed by label.
+    - get_jore3_stops()       — Queries the Jore3 MSSQL database, joining stop, node, stop area, equipment, and
+                                accessibility tables. Returns stops grouped by stop area ID.
+    - get_jore3_stop_areas()  — Queries Jore3 for stop areas that belong to network 1 and have more than one stop (i.e.
+                                multi-quay areas). Yields rows as a generator.
+    - get_jore4_stop_points() — Fetches existing scheduled stop points from Jore4 via GraphQL. Returns them as a dict
+                                keyed by label.
 
 Data Mapping:
     - quayInputForJore3Stop() — Transforms a single Jore3 stop row into the GraphQL QuayInput format, mapping fields
@@ -208,7 +208,7 @@ def get_jore3_stop_areas():
             for row in cursor:
                 yield row
 
-def get_stop_points():
+def get_jore4_stop_points():
     query = """query {
         service_pattern_scheduled_stop_point {
             label
@@ -499,14 +499,14 @@ def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInp
 
 startTime = datetime.datetime.now()
 
-stopPoints = get_stop_points()
-print(f"Found {len(stopPoints)} stop points")
+j4stopPoints = get_jore4_stop_points()
+print(f"Found {len(j4stopPoints)} stop points")
 added = 0
 
-stopPlaces = get_jore3_stops()
+j3stopPlaces = get_jore3_stops()
 index = 0
 
-for stopArea in get_jore3_stop_areas():
+for j3StopArea in get_jore3_stop_areas():
     index += 1
     print(f"Handling stop area {index}")
     quayInput = []
@@ -514,26 +514,26 @@ for stopArea in get_jore3_stop_areas():
     lonCoords = []
     validityStarts = []
     validityEnds = []
-    lastStop = None
+    lastJ3Stop = None
     try:
-        for stop in stopPlaces[stopArea['pysalueid']]:
+        for j3stop in j3stopPlaces[j3StopArea['pysalueid']]:
             try:
-                stopLabel = stop['solkirjain'] + stop['sollistunnus']
-                if not stopLabel in stopPoints:
+                stopLabel = j3stop['solkirjain'] + j3stop['sollistunnus']
+                if not stopLabel in j4stopPoints:
                     continue
-                stopPoint = stopPoints[stopLabel][0]
-                lat = stopPoint['lat']
-                lon = stopPoint['lon']
-                validityStart = stopPoint['validity_start']
-                validityEnd = stopPoint['validity_end']
-                quayInput.append(quayInputForJore3Stop(stop, stopPoint['label'], validityStart, validityEnd , lon, lat))
+                j4stopPoint = j4stopPoints[stopLabel][0]
+                lat = j4stopPoint['lat']
+                lon = j4stopPoint['lon']
+                validityStart = j4stopPoint['validity_start']
+                validityEnd = j4stopPoint['validity_end']
+                quayInput.append(quayInputForJore3Stop(j3stop, j4stopPoint['label'], validityStart, validityEnd, lon, lat))
                 latCoords.append(lat)
                 lonCoords.append(lon)
                 validityStarts.append(validityStart)
                 validityEnds.append(validityEnd)
-                lastStop = stop
+                lastJ3Stop = j3stop
             except:
-                print(f"Failed to handle stop {stop['soltunnus']}: {stop['pysnimi']}")
+                print(f"Failed to handle stop {j3stop['soltunnus']}: {j3stop['pysnimi']}")
         if (len(lonCoords) > 0 and len(latCoords) > 0 and len(validityStarts) > 0 and len(validityEnds) > 0):
 
             # Average coordinates of quays for the stop place
@@ -544,14 +544,14 @@ for stopArea in get_jore3_stop_areas():
             stopPlaceValidityStart = min(validityStarts)
             stopPlaceValidityEnd = max(validityEnds)
 
-            netexIds = update_stop_place(stopPlaceLat, stopPlaceLon, stopPlaceValidityStart, stopPlaceValidityEnd, lastStop, quayInput)
+            netexIds = update_stop_place(stopPlaceLat, stopPlaceLon, stopPlaceValidityStart, stopPlaceValidityEnd, lastJ3Stop, quayInput)
             if (netexIds):
                 added += 1
                 for netexAssociation in netexIds:
                     update_stop_point(netexAssociation['publicCode'], netexAssociation['id'])
 
     except Exception as e:
-        print(f"Failed to handle stop area {stopArea['pysalueid']}")
+        print(f"Failed to handle stop area {j3StopArea['pysalueid']}")
         print(e)
 
 endTime = datetime.datetime.now()
