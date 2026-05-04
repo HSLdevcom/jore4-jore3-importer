@@ -409,7 +409,7 @@ The following configuration properties are to be defined for each environment:
 |                            | JORE4_DB_DATABASE          | jore4-db-database          | jore4e2e                                                                                       | The name of the jore4 target (if JORE4_DB_URL is not set)                      |
 | jore4.db.username          | JORE4_DB_USERNAME          | jore4-db-username          | dbimporter                                                                                     | Username for the jore4 target                                                  |
 | jore4.db.password          | JORE4_DB_PASSWORD          | jore4-db-password          | \*\*\*\*                                                                                       | Password for the jore4 target                                                  |
-| digiroad.stop.csv.file.url | DIGIROAD_STOP_CSV_FILE_URL | digiroad-stop-csv-file-url | https://jore4storage.blob.core.windows.net/jore4-digiroad/digiroad_stops_2022_06_08.csv        | Url of the digiroad stops csv file to be downloaded                            |
+| digiroad.stop.csv.file.url | DIGIROAD_STOP_CSV_FILE_URL | digiroad-stop-csv-file-url | https://stjore4dev001.blob.core.windows.net/jore4-digiroad/2025-09-18_digiroad_stops_2025_02.csv        | Url of the digiroad stops csv file to be downloaded                            |
 | jore.importer.migrate      | JORE_IMPORTER_MIGRATE      | jore-importer-migrate      | false                                                                                          | Should the importer should run its own migrations (for local development only) |
 | map.matching.api.baseUrl   | MAP_MATCHING_API_BASEURL   | map-matching-api-baseurl   | https://localhost:3005                                                                         | The base url of the map matching API.                                          |
 
@@ -453,9 +453,9 @@ Before you can run the application in your local development environment, you ha
          import these infrastructure links to the Jore 4 database (`import_infra_network_csv.sh`).
       4. Stop points are fetched from a remote URL during the import process.
          If needed, run the scheduled stop point CSV export (`export_stops_csv.sh`)
-         and upload the result CSV file eg. to `jore4storage` in Azure.
+         and upload the result CSV file eg. to `stjore4dev001` in Azure.
    2. In the profile-specific configuration file, set `digiroad.stop.csv.file.url` to the Digiroad stops CSV to use
-      (eg. from `hsl-jore4-common / jore4storage / jore4-digiroad / digiroad_stops_XXX.csv`)
+      (eg. from `hsl-jore4-common / stjore4dev001 / jore4-digiroad / digiroad_stops_XXX.csv`)
 
 ### Running the Tests
 
