@@ -202,7 +202,7 @@ seed_tram_infra_links() {
 }
 
 start_all() {
-  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-jore3importer jore4-mapmatchingdb jore4-mapmatching jore4-tiamat
+  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-jore3importer jore4-mapmatchingdb jore4-mapmatching jore4-tiamat jore4-auth jore4-idp
 }
 
 start_deps() {
@@ -212,7 +212,7 @@ start_deps() {
   # jore4-mssqltestdb - The Jore 3 MSSQL database which contains the source data which is read by the importer
   # jore4-hasura - Hasura. We have to start Hasura because it ensures that db migrations are run to the Jore 4 database.
   # jore4-testdb - Jore 4 database. This is the destination database of the import process.
-  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-mapmatchingdb jore4-mapmatching jore4-tiamat
+  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-mapmatchingdb jore4-mapmatching jore4-tiamat jore4-auth jore4-idp
 }
 
 stop() {
