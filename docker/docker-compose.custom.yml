@@ -38,16 +38,30 @@ services:
 
   jore4-tiamat:
     # Pin tiamat to a compatible version.
-    image: "hsldevcom/jore4-tiamat:main--20250317-1136ff34a5b6030b0e9c85b0373f5ddc02946267"
+    #image: "hsldevcom/jore4-tiamat:main--20250317-1136ff34a5b6030b0e9c85b0373f5ddc02946267"
+    depends_on:
+      jore4-testdb:
+        condition: service_healthy
 
   jore4-hasura:
     # pin compatible version of jore4 data model
-    image: "hsldevcom/jore4-hasura:hsl-main--20250317-60eaf1217447890591ca3bbe262c96f2cc68ba57"
+    #image: "hsldevcom/jore4-hasura:hsl-main--20250317-60eaf1217447890591ca3bbe262c96f2cc68ba57"
     depends_on:
       jore4-testdb:
         condition: service_healthy
       jore4-tiamat:
         condition: service_healthy
+      jore4-auth:
+        condition: service_healthy
+
+  jore4-auth:
+    environment:
+      LOGINPAGE_URL: "http://localhost:3300"
+      LOGOUTPAGE_URL: "http://localhost:3300"
+      SELF_PUBLIC_BASE_URL: "http://localhost:3300"
+    depends_on:
+        jore4-testdb:
+            condition: service_healthy
 
 networks:
   jore4:
