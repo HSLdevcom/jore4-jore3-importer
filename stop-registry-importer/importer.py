@@ -60,7 +60,7 @@ Jore4 Target (Hasura GraphQL — stop_registry.mutateStopPlace):
         avg(quay coords)     → geometry.coordinates           Centroid of all quays
         min(validity_start)  → keyValues["validityStart"]     Earliest stop point start
         max(validity_end)    → keyValues["validityEnd"]       Latest stop point end
-        (hardcoded)          → transportMode                  Always "bus"
+        verkko (via pa)      → transportMode                  mapTransportMode: 1→bus, 3→tram
 
     Quay level mapping (one quay per stop in the area):
         Jore3 column         → GraphQL field                  Notes
@@ -117,6 +117,9 @@ Jore4 Target (Hasura GraphQL — stop_registry.mutateStopPlace):
         (hardcoded)          → shelterFasciaBoardTaping        Always False
 
 Value Mappings:
+
+    mapTransportMode (verkko → transportMode):
+        1 → "bus"    2 → "metro"    3 → "tram"    4 → "rail"    5 → "water"    else → "unknown"
 
     mapStopModel (pysakin_malli → stopType):
         "1" → "pullOut"    "2" → "busBulb"    "4" → "inLane"    else → "other"
@@ -194,13 +197,13 @@ def get_jore3_stop_areas():
 
         with conn.cursor(as_dict=True) as cursor:
 
-            cursor.execute("""SELECT pa.nimi, pa.pysalueid, s.sollistunnus, s.solkirjain FROM jr_pysakki p
+            cursor.execute("""SELECT pa.nimi, pa.pysalueid, pa.verkko, s.sollistunnus, s.solkirjain FROM jr_pysakki p
             INNER JOIN jr_solmu s ON (s.soltunnus = p.soltunnus)
             INNER JOIN jr_lij_pysakkialue pa ON (p.pysalueid = pa.pysalueid)
             WHERE p.pysalueid IN (
             SELECT jp.pysalueid FROM jr_pysakki jp
             INNER JOIN jr_lij_pysakkialue jlp ON (jp.pysalueid = jlp.pysalueid)
-            WHERE jlp.verkko = 1
+            WHERE jlp.verkko IN (1, 3)
             GROUP BY jp.pysalueid
             HAVING COUNT(*) > 1);
             """)
@@ -263,16 +266,31 @@ def update_stop_point(label, netexid):
     else:
         print(f"Scheduled stop point {label} reference update failed")
 
+def mapTransportMode(verkko):
+    match verkko:
+        case 1:
+            return 'bus'
+        case 2:
+            return 'metro'
+        case 3:
+            return 'tram'
+        case 4:
+            return 'rail'
+        case 5:
+            return 'water'
+        case _:
+            return 'bus'
+
 def mapStopModel(jore3model):
     match jore3model:
         case '1':
-            return 'pullOut'
+            return 'pullOut' # syvennys
         case '2':
-            return 'busBulb'
+            return 'busBulb' # uloke
         case '4':
-            return 'inLane'
+            return 'inLane'  # ajorata
         case _:
-            return 'other'
+            return 'other'   # '3' muu
 
 def mapStopType(jore3type):
     match jore3type:
@@ -426,7 +444,7 @@ def quayInputForJore3Stop(jore3row, label, validityStart, validityEnd, lon, lat)
       }
     }
 
-def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInput):
+def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInput, transportMode):
   stopMutation2 = """
     mutation AddStopPlace(
         $privateCode: String!,
@@ -439,7 +457,8 @@ def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInp
         $validityStart: String,
         $validityEnd: String,
         $coordinates: stop_registry_Coordinates,
-        $quays: [stop_registry_QuayInput]
+        $quays: [stop_registry_QuayInput],
+        $transportMode: stop_registry_TransportModeType
     ) {
     stop_registry {
         mutateStopPlace(
@@ -457,7 +476,7 @@ def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInp
               { key: "validityEnd", values: [$validityEnd] }
             ],
             quays: $quays,
-            transportMode: bus
+            transportMode: $transportMode
         }) {
         id
         quays {
@@ -478,7 +497,8 @@ def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInp
       "coordinates": [lon, lat],
       "validityStart": validityStart,
       "validityEnd": validityEnd,
-      "quays": quayInput
+      "quays": quayInput,
+      "transportMode": transportMode
   }
 
   headers = {'content-type': 'application/json; charset=UTF-8',
@@ -526,7 +546,8 @@ for j3StopArea in get_jore3_stop_areas():
                 lon = j4stopPoint['lon']
                 validityStart = j4stopPoint['validity_start']
                 validityEnd = j4stopPoint['validity_end']
-                quayInput.append(quayInputForJore3Stop(j3stop, j4stopPoint['label'], validityStart, validityEnd, lon, lat))
+                quayInput.append(quayInputForJore3Stop(j3stop, j4stopPoint['label'], validityStart, validityEnd,
+                                                       lon, lat))
                 latCoords.append(lat)
                 lonCoords.append(lon)
                 validityStarts.append(validityStart)
@@ -544,7 +565,8 @@ for j3StopArea in get_jore3_stop_areas():
             stopPlaceValidityStart = min(validityStarts)
             stopPlaceValidityEnd = max(validityEnds)
 
-            netexIds = update_stop_place(stopPlaceLat, stopPlaceLon, stopPlaceValidityStart, stopPlaceValidityEnd, lastJ3Stop, quayInput)
+            netexIds = update_stop_place(stopPlaceLat, stopPlaceLon, stopPlaceValidityStart, stopPlaceValidityEnd,
+                                         lastJ3Stop, quayInput, mapTransportMode(j3StopArea['verkko']))
             if (netexIds):
                 added += 1
                 for netexAssociation in netexIds:
