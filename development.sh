@@ -19,12 +19,13 @@ export COMPOSE_PROJECT_NAME=jore3-importer
 INFRALINKS_URL="https://stjore4dev001.blob.core.windows.net/jore4-ui/2025-09-24-infraLinks.sql"
 TRAM_INFRALINKS_URL="https://stjore4dev001.blob.core.windows.net/jore4-ui/tram_infraLinks_2026-01-28.sql"
 ROUTES_DB_CONNECTION_STRING=postgresql://dbadmin:adminpassword@localhost:5432/jore4e2e
-DOCKER_COMPOSE_CMD="docker compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.testdb-volume.yml -f ./docker/docker-compose.custom.yml"
 
-# if the --no-volume parameter is set, the testdb volume will not be mounted
+DOCKER_COMPOSE_CMD="docker compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.custom.yml"
+
+# if the --volume parameter is set, the testdb volume will be mounted
 for i in "$@" ; do
-  if [[ $i == "--no-volume" ]] ; then
-    DOCKER_COMPOSE_CMD="docker compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.custom.yml"
+  if [[ $i == "--volume" ]] ; then
+    DOCKER_COMPOSE_CMD="docker compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.testdb-volume.yml -f ./docker/docker-compose.custom.yml"
     break
   fi
 done
@@ -38,10 +39,7 @@ print_usage() {
   start
     Start the dependencies and the dockerized application.
 
-    You can control which version of the Docker Compose bundle is downloaded by
-    passing a commit reference to the jore4-docker-compose-bundle repository via
-    the BUNDLE_REF environment variable. By default, the latest version is
-    downloaded.
+    See also start:deps.
 
   start:deps
     Start the dependencies only.
@@ -50,6 +48,9 @@ print_usage() {
     passing a commit reference to the jore4-docker-compose-bundle repository via
     the BUNDLE_REF environment variable. By default, the latest version is
     downloaded.
+
+    jore4-testdb is built by default without persistent database volume in docker/testdb.
+    Enable volume with --volume.
 
   generate:jooq
     Generate JOOQ classes.
