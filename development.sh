@@ -16,6 +16,9 @@ DOCKER_COMPOSE_BUNDLE_REF=${BUNDLE_REF:-main}
 # the docker environment of this project from others
 export COMPOSE_PROJECT_NAME=jore3-importer
 
+INFRALINKS_URL="https://stjore4dev001.blob.core.windows.net/jore4-ui/2025-09-24-infraLinks.sql"
+TRAM_INFRALINKS_URL="https://stjore4dev001.blob.core.windows.net/jore4-ui/tram_infraLinks_2026-01-28.sql"
+ROUTES_DB_CONNECTION_STRING=postgresql://dbadmin:adminpassword@localhost:5432/jore4e2e
 DOCKER_COMPOSE_CMD="docker compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.testdb-volume.yml -f ./docker/docker-compose.custom.yml"
 
 # if the --no-volume parameter is set, the testdb volume will not be mounted
@@ -62,6 +65,14 @@ print_usage() {
 
   list
     List running dependencies.
+
+  infralinks:download
+    Downloads the infrastructure links seed data SQL file (infraLinks.sql) from Azure
+    Blob Storage.
+
+  infralinks:seed
+    Downloads the infrastructure links seed data SQL file (infraLinks.sql) from Azure
+    Blob Storage. Applies the links to testdb.
   "
 }
 
@@ -133,6 +144,60 @@ download_docker_compose_bundle() {
   # Create a release version file containing the SHA digest of the referenced
   # commit.
   echo "$commit_sha" > ./docker/RELEASE_VERSION.txt
+}
+
+download_infralinks() {
+  download_bus_infralinks
+  download_tram_infralinks
+}
+
+download_bus_infralinks() {
+  if [ -f "infraLinks.sql" ]; then
+    echo "infraLinks.sql already exists, skipping download."
+  else
+    echo "Downloading infraLinks.sql..."
+    curl "$INFRALINKS_URL" -o "infraLinks.sql"
+  fi
+}
+
+download_tram_infralinks() {
+  if [ -f "tram_infraLinks.sql" ]; then
+    echo "tram_infraLinks.sql already exists, skipping download."
+  else
+    echo "Downloading tram_infraLinks.sql..."
+    curl "$TRAM_INFRALINKS_URL" -o "tram_infraLinks.sql"
+  fi
+}
+
+seed_infra_links() {
+  seed_bus_infra_links $1
+  seed_tram_infra_links $1
+}
+
+seed_bus_infra_links() {
+  download_bus_infralinks
+
+  echo "$1: Seeding Bus infrastructure links..."
+
+  wait_for_test_databases_to_be_ready
+
+  echo "$1: infraLinks.sql..."
+  docker exec -i "$1" psql $ROUTES_DB_CONNECTION_STRING < "infraLinks.sql";
+
+  echo "$1: Done Bus seeding infrastructure links."
+}
+
+seed_tram_infra_links() {
+  download_tram_infralinks
+
+  echo "$1: Seeding Tram infrastructure links..."
+
+  wait_for_test_databases_to_be_ready
+
+  echo "$1: tram_infraLinks.sql..."
+  docker exec -i "$1" psql $ROUTES_DB_CONNECTION_STRING < "tram_infraLinks.sql";
+
+  echo "$1: Done Tram seeding infrastructure links."
 }
 
 start_all() {
@@ -219,6 +284,15 @@ case $COMMAND in
 
   list)
     $DOCKER_COMPOSE_CMD config --services
+    ;;
+
+  infralinks:download)
+    download_infralinks
+    ;;
+
+  infralinks:seed)
+    download_infralinks
+    seed_infra_links testdb
     ;;
 
   *)
