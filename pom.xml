@@ -22,8 +22,8 @@
         <!-- Library versions -->
         <guava.version>33.6.0-jre</guava.version>
         <geojson-jackson.version>3.0</geojson-jackson.version>
-        <immutables.version>2.12.1</immutables.version>
-        <geotools.version>34.3</geotools.version>
+        <immutables.version>2.12.2</immutables.version>
+        <geotools.version>34.4</geotools.version>
         <mssql-jdbc.version>13.4.0.jre11</mssql-jdbc.version>
         <!-- Used as the DB for Spring Batch -->
         <hsqldb.version>2.7.4</hsqldb.version>
@@ -37,9 +37,9 @@
         <!-- Maven plugins -->
         <maven-compiler.plugin.version>3.15.0</maven-compiler.plugin.version>
         <maven-properties.plugin.version>1.3.0</maven-properties.plugin.version>
-        <maven-enforcer.plugin.version>3.6.2</maven-enforcer.plugin.version>
+        <maven-enforcer.plugin.version>3.6.3</maven-enforcer.plugin.version>
         <maven-build-helper.plugin.version>3.6.1</maven-build-helper.plugin.version>
-        <maven-spotless.plugin.version>3.4.0</maven-spotless.plugin.version>
+        <maven-spotless.plugin.version>3.6.0</maven-spotless.plugin.version>
 
         <!-- Packaging -->
         <build.profile.id>dev</build.profile.id>
