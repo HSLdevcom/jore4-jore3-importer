@@ -1,0 +1,3 @@
+# Override to re-enable TLSv1 and TLSv1.1 for SQL Server 2012 connectivity (azure importer db server)
+jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA, DH keySize < 1024, EC keySize < 224, 3DES_EDE_CBC, anon, NULL
+
