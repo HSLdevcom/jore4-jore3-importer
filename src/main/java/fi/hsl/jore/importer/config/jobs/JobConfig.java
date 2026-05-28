@@ -67,6 +67,7 @@ import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.timing_place.Timi
 import fi.hsl.jore.importer.feature.batch.stop_place.StopPlaceImportProcessor;
 import fi.hsl.jore.importer.feature.batch.stop_place.StopPlaceImportReader;
 import fi.hsl.jore.importer.feature.batch.stop_place.support.IStopPlaceImportRepository;
+import fi.hsl.jore.importer.feature.batch.stop_registry.RunStopRegistryImporterTasklet;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Jore3Link;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.Jore3LinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Jore3Node;
@@ -148,7 +149,9 @@ public class JobConfig {
             final Flow importScheduledStopPointsFlow,
             final Flow importStopPlacesFlow,
             // Export data from the importer staging DB to Jore 4 DB.
-            final Flow jore4ExportFlow) {
+            final Flow jore4ExportFlow,
+            // Final step: run the external Python stop-registry importer.
+            final Flow stopRegistryImportFlow) {
         return new JobBuilder(JOB_NAME, jobRepository)
                 .start(importNodesFlow)
                 .next(importLinksFlow)
@@ -162,7 +165,28 @@ public class JobConfig {
                 .next(importScheduledStopPointsFlow)
                 .next(importStopPlacesFlow)
                 .next(jore4ExportFlow)
+                .next(stopRegistryImportFlow)
                 .end()
+                .build();
+    }
+
+    @Bean
+    public Step runStopRegistryImporterStep() {
+        return new StepBuilder("runStopRegistryImporterStep", jobRepository)
+                .allowStartIfComplete(true)
+                .tasklet(
+                        new RunStopRegistryImporterTasklet(
+                                "/opt/stop-registry-importer/importer.py",
+                                "/opt/stop-registry-importer",
+                                2L),
+                        transactionManager)
+                .build();
+    }
+
+    @Bean
+    public Flow stopRegistryImportFlow(final Step runStopRegistryImporterStep) {
+        return new FlowBuilder<SimpleFlow>("stopRegistryImportFlow")
+                .start(runStopRegistryImporterStep)
                 .build();
     }
 
