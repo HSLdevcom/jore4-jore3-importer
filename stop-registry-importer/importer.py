@@ -148,6 +148,14 @@ import pymssql
 import requests
 import simplejson as json
 import environ
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
 env = environ.Env(
     GRAPHQL_URL=(str,'http://localhost:3201/v1/graphql'),
@@ -184,7 +192,7 @@ def get_jore3_stops():
 
             stopPlaces = cursor.fetchall()
 
-    print(f"Found {len(stopPlaces)} stop places")
+    logger.info(f"Found {len(stopPlaces)} stop places")
 
     stopPlacesByArea = {}
 
@@ -263,9 +271,9 @@ def update_stop_point(label, netexid):
     response = requests.post(graphql, headers=headers, json={"query": mutation, "variables": variables})
     formatted = response.json()
     if formatted['data']:
-        print(f"Scheduled stop point {label} reference updated")
+        logging.info(f"Scheduled stop point {label} reference updated")
     else:
-        print(f"Scheduled stop point {label} reference update failed")
+        logging.info(f"Scheduled stop point {label} reference update failed")
 
 def mapTransportMode(verkko):
     match verkko:
@@ -512,16 +520,16 @@ def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInp
     return formatted['data']['stop_registry']['mutateStopPlace'][0]['quays']
   if formatted['errors']:
     if formatted['errors'][0]['message']:
-        print(formatted['errors'][0]['message'])
+        logging.warn(f"Stop place {jore3result['pysalueid']} update failed: {formatted['errors'][0]['message']}")
     else:
-        print(f"Stop place {jore3result['pysalueid']} update failed!")
+        logging.warn(f"Stop place {jore3result['pysalueid']} update failed!")
 
   return {}
 
 startTime = datetime.datetime.now()
 
 j4stopPoints = get_jore4_stop_points()
-print(f"Found {len(j4stopPoints)} stop points")
+logging.info(f"Found {len(j4stopPoints)} stop points")
 added = 0
 
 j3stopPlaces = get_jore3_stops()
@@ -529,7 +537,8 @@ index = 0
 
 for j3StopArea in get_jore3_stop_areas():
     index += 1
-    print(f"Handling stop area {index}")
+    if index % 100 == 1:
+        logging.info(f"Handling stop area {index}...")
     quayInput = []
     latCoords = []
     lonCoords = []
@@ -541,6 +550,7 @@ for j3StopArea in get_jore3_stop_areas():
             try:
                 stopLabel = j3stop['solkirjain'] + j3stop['sollistunnus']
                 if not stopLabel in j4stopPoints:
+                    logging.info(f"no stop in jore4 stops: {stopLabel} of {j3StopArea['pysalueid']}")
                     continue
                 j4stopPoint = j4stopPoints[stopLabel][0]
                 lat = j4stopPoint['lat']
@@ -555,7 +565,7 @@ for j3StopArea in get_jore3_stop_areas():
                 validityEnds.append(validityEnd)
                 lastJ3Stop = j3stop
             except:
-                print(f"Failed to handle stop {j3stop['soltunnus']}: {j3stop['pysnimi']}")
+                logging.warn(f"Failed to handle stop {j3stop['soltunnus']}: {j3stop['pysnimi']}")
         if (len(lonCoords) > 0 and len(latCoords) > 0 and len(validityStarts) > 0 and len(validityEnds) > 0):
 
             # Average coordinates of quays for the stop place
@@ -574,11 +584,11 @@ for j3StopArea in get_jore3_stop_areas():
                     update_stop_point(netexAssociation['publicCode'], netexAssociation['id'])
 
     except Exception as e:
-        print(f"Failed to handle stop area {j3StopArea['pysalueid']}")
-        print(e)
+        logging.warn(f"Failed to handle stop area {j3StopArea['pysalueid']}")
+        logging.exception(e)
 
 endTime = datetime.datetime.now()
 duration = endTime - startTime
-print(f"Added {added} stop places")
+logging.info(f"Added {added} stop places")
 minutes = duration.seconds // 60
-print(f"Import took {minutes} minutes {duration.seconds - (minutes * 60)} seconds")
+logging.info(f"Import took {minutes} minutes {duration.seconds - (minutes * 60)} seconds")
