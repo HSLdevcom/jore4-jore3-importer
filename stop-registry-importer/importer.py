@@ -144,10 +144,19 @@ Post-import Linking:
 """
 
 import datetime
+import time
 import pymssql
 import requests
 import simplejson as json
 import environ
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
 env = environ.Env(
     GRAPHQL_URL=(str,'http://localhost:3201/v1/graphql'),
@@ -168,6 +177,8 @@ jore3Password = env('JORE3_PASSWORD')
 jore3DatabaseUrl = env('JORE3_DATABASE_URL')
 jore3DatabaseName = env('JORE3_DATABASE_NAME')
 
+logging.info(f"Jore3 db: {jore3DatabaseUrl}/{jore3DatabaseName} as {jore3Username}; hasura at {graphql}")
+
 def get_jore3_stops():
 
     stopPlaces = []
@@ -184,7 +195,7 @@ def get_jore3_stops():
 
             stopPlaces = cursor.fetchall()
 
-    print(f"Found {len(stopPlaces)} stop places")
+    logging.info(f"Found {len(stopPlaces)} jore3 stop places")
 
     stopPlacesByArea = {}
 
@@ -262,10 +273,13 @@ def update_stop_point(label, netexid):
              'x-hasura-admin-secret': secret}
     response = requests.post(graphql, headers=headers, json={"query": mutation, "variables": variables})
     formatted = response.json()
-    if formatted['data']:
-        print(f"Scheduled stop point {label} reference updated")
+
+    data = formatted.get("data") if isinstance(formatted, dict) else None
+    if data:
+        logging.info(f"Scheduled stop point {label} reference updated")
     else:
-        print(f"Scheduled stop point {label} reference update failed")
+        logging.info(f"Scheduled stop point {label} reference update failed")
+
 
 def mapTransportMode(verkko):
     match verkko:
@@ -504,32 +518,67 @@ def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInp
 
   headers = {'content-type': 'application/json; charset=UTF-8',
                 'x-hasura-admin-secret': secret}
-  response = requests.post(graphql, headers=headers, json={"query": stopMutation2, "variables": variables2})
 
-  formatted = response.json()
+  max_retries = 5
+  for attempt in range(max_retries):
+    try:
+      response = requests.post(graphql, headers=headers, json={"query": stopMutation2, "variables": variables2}, timeout=120)
+      formatted = response.json()
+    except requests.exceptions.Timeout:
+      if attempt < max_retries - 1:
+        wait = 2 ** (attempt + 1)
+        logging.warning(f"Request timeout for stop place {jore3result['pysalueid']}, retrying in {wait}s (attempt {attempt + 1}/{max_retries})")
+        time.sleep(wait)
+        continue
+      else:
+        logging.error(f"Stop place {jore3result['pysalueid']} failed after {max_retries} attempts (timeout)")
+        return {}
 
-  if formatted['data']:
-    return formatted['data']['stop_registry']['mutateStopPlace'][0]['quays']
-  if formatted['errors']:
-    if formatted['errors'][0]['message']:
-        print(formatted['errors'][0]['message'])
-    else:
-        print(f"Stop place {jore3result['pysalueid']} update failed!")
+    logging.info(f"Stop place {jore3result['pysalueid']} update response: {formatted}")
+
+    # Check for retryable errors (timeouts, remote schema errors)
+    errors = formatted.get("errors") if isinstance(formatted, dict) else None
+    if errors and any("timeout" in (e.get("message", "") or "").lower() or
+                      "remote-schema-error" in str(e.get("extensions", {}).get("code", "")).lower()
+                      for e in errors):
+      if attempt < max_retries - 1:
+        wait = 2 ** (attempt + 1)
+        logging.warning(f"Retryable error for stop place {jore3result['pysalueid']}, retrying in {wait}s (attempt {attempt + 1}/{max_retries})")
+        time.sleep(wait)
+        continue
+      else:
+        logging.error(f"Stop place {jore3result['pysalueid']} failed after {max_retries} attempts")
+        return {}
+
+    data = formatted.get("data") if isinstance(formatted, dict) else None
+    if data:
+      return data["stop_registry"]["mutateStopPlace"][0]["quays"]
+
+    if errors:
+      logging.info(errors[0].get("message", f"Stop place {jore3result['pysalueid']} update failed!"))
+
+    return {}
 
   return {}
 
+
 startTime = datetime.datetime.now()
 
+logging.info(f"Loading Jore4 stop points...")
 j4stopPoints = get_jore4_stop_points()
-print(f"Found {len(j4stopPoints)} stop points")
+logging.info(f"Found {len(j4stopPoints)} stop points")
 added = 0
 
+logging.info(f"Loading Jore3 stops...")
 j3stopPlaces = get_jore3_stops()
+numJ3StopAreas = len(j3stopPlaces)
+logging.info(f"Found {numJ3StopAreas} stop places grouped by area")
 index = 0
 
 for j3StopArea in get_jore3_stop_areas():
     index += 1
-    print(f"Handling stop area {index}")
+    if index % 100 == 1:
+        logging.info(f"Handling stop area {index} / {numJ3StopAreas}")
     quayInput = []
     latCoords = []
     lonCoords = []
@@ -539,9 +588,25 @@ for j3StopArea in get_jore3_stop_areas():
     try:
         for j3stop in j3stopPlaces[j3StopArea['pysalueid']]:
             try:
-                stopLabel = j3stop['solkirjain'] + j3stop['sollistunnus']
-                if not stopLabel in j4stopPoints:
+                solkirjain = j3stop.get('solkirjain')
+                sollistunnus = j3stop.get('sollistunnus')
+                if not solkirjain or not sollistunnus:
+                    logging.warning(f"Skipping stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: solkirjain={solkirjain}, sollistunnus={sollistunnus}")
                     continue
+                stopLabel = solkirjain + sollistunnus
+                if not stopLabel in j4stopPoints:
+                    logging.info(f"Stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: stop label {stopLabel} not found in jore4stopPoints")
+                    continue
+                if len(j4stopPoints[stopLabel]) > 1:
+                    candidate_lines = []
+                    for candidate in j4stopPoints[stopLabel]:
+                        candidate_lines.append(
+                            f"    prio={candidate.get('priority')} validity={candidate.get('validity_start')}..{candidate.get('validity_end')} loc=({candidate.get('lat')},{candidate.get('lon')})"
+                        )
+                    logging.warning(
+                        f"Stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: label {stopLabel} has {len(j4stopPoints[stopLabel])} jore4 matches\n"
+                        + "\n".join(candidate_lines)
+                    )
                 j4stopPoint = j4stopPoints[stopLabel][0]
                 lat = j4stopPoint['lat']
                 lon = j4stopPoint['lon']
@@ -554,8 +619,8 @@ for j3StopArea in get_jore3_stop_areas():
                 validityStarts.append(validityStart)
                 validityEnds.append(validityEnd)
                 lastJ3Stop = j3stop
-            except:
-                print(f"Failed to handle stop {j3stop['soltunnus']}: {j3stop['pysnimi']}")
+            except Exception as e:
+                logging.exception(f"Failed to handle stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: {j3stop['pysnimi']}")
         if (len(lonCoords) > 0 and len(latCoords) > 0 and len(validityStarts) > 0 and len(validityEnds) > 0):
 
             # Average coordinates of quays for the stop place
@@ -574,11 +639,10 @@ for j3StopArea in get_jore3_stop_areas():
                     update_stop_point(netexAssociation['publicCode'], netexAssociation['id'])
 
     except Exception as e:
-        print(f"Failed to handle stop area {j3StopArea['pysalueid']}")
-        print(e)
+        logging.exception(f"Failed to handle stop area {j3StopArea['pysalueid']}: {j3StopArea['nimi']}")
 
 endTime = datetime.datetime.now()
 duration = endTime - startTime
-print(f"Added {added} stop places")
+logging.info(f"Added {added} stop places")
 minutes = duration.seconds // 60
-print(f"Import took {minutes} minutes {duration.seconds - (minutes * 60)} seconds")
+logging.info(f"Import took {minutes} minutes {duration.seconds - (minutes * 60)} seconds")
