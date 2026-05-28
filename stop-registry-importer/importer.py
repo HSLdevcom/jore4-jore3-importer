@@ -145,6 +145,7 @@ Post-import Linking:
 
 import datetime
 import time
+import os
 import pymssql
 import requests
 import simplejson as json
@@ -159,23 +160,28 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 env = environ.Env(
-    GRAPHQL_URL=(str,'http://localhost:3201/v1/graphql'),
-    GRAPHQL_SECRET=(str,'hasura'),
-    JORE3_USERNAME=(str,'sa'),
-    JORE3_PASSWORD=(str,'P@ssw0rd'),
-    JORE3_DATABASE_URL=(str,'localhost:1433'),
-    JORE3_DATABASE_NAME=(str,'jore3testdb')
+    HASURA_API_URL=(str,'http://localhost:3201/v1/graphql'),
+    HASURA_ADMIN_SECRET=(str,'hasura'),
+    SOURCE_DB_USERNAME=(str,'sa'),
+    SOURCE_DB_PASSWORD=(str,'P@ssw0rd'),
+    SOURCE_DB_HOSTNAME=(str,'localhost'),
+    SOURCE_DB_PORT=(str,'1433'),
+    SOURCE_DB_DATABASE=(str,'jore3testdb')
 )
 
-environ.Env.read_env('.env')
+useDotenv = os.getenv("STOP_REGISTRY_IMPORTER_USE_DOTENV", "1").lower() not in ("0", "false", "no")
+if useDotenv:
+    environ.Env.read_env('.env')
 
-graphql = env('GRAPHQL_URL')
-secret = env('GRAPHQL_SECRET')
+graphql = env('HASURA_API_URL')
+secret = env('HASURA_ADMIN_SECRET')
 
-jore3Username = env('JORE3_USERNAME')
-jore3Password = env('JORE3_PASSWORD')
-jore3DatabaseUrl = env('JORE3_DATABASE_URL')
-jore3DatabaseName = env('JORE3_DATABASE_NAME')
+jore3Username = env('SOURCE_DB_USERNAME')
+jore3Password = env('SOURCE_DB_PASSWORD')
+jore3DatabaseHost = env('SOURCE_DB_HOSTNAME')
+jore3DatabasePort = env('SOURCE_DB_PORT')
+jore3DatabaseUrl = f"{jore3DatabaseHost}:{jore3DatabasePort}"
+jore3DatabaseName = env('SOURCE_DB_DATABASE')
 
 logging.info(f"Jore3 db: {jore3DatabaseUrl}/{jore3DatabaseName} as {jore3Username}; hasura at {graphql}")
 

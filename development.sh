@@ -12,6 +12,10 @@ cd "$(dirname "$0")" # Setting the working directory as the script directory
 # variable.
 DOCKER_COMPOSE_BUNDLE_REF=${BUNDLE_REF:-main}
 
+STOP_REGISTRY_IMPORTER_DIR="./stop-registry-importer"
+STOP_REGISTRY_VENV_DIR="${STOP_REGISTRY_IMPORTER_DIR}/.venv-stop-registry"
+STOP_REGISTRY_REQUIREMENTS_FILE="${STOP_REGISTRY_IMPORTER_DIR}/requirements.txt"
+
 # Define a Docker Compose project name to distinguish
 # the docker environment of this project from others
 export COMPOSE_PROJECT_NAME=jore3-importer
@@ -54,6 +58,9 @@ print_usage() {
 
   generate:jooq
     Generate JOOQ classes.
+
+  python:setup
+    Creates/updates Python virtualenv for stop-registry importer and installs dependencies.
 
   stop
     Stop the dependencies and the dockerized application.
@@ -202,7 +209,8 @@ seed_tram_infra_links() {
 }
 
 start_all() {
-  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-jore3importer jore4-mapmatchingdb jore4-mapmatching jore4-tiamat jore4-auth jore4-idp
+  start_deps
+  $DOCKER_COMPOSE_CMD up --build -d  jore4-jore3importer
 }
 
 start_deps() {
@@ -251,6 +259,15 @@ upload_zones() {
   curl --silent --output /dev/null --show-error --fail -X POST -H"Content-Type: application/xml" -d @netex/hsl-zones-netex.xml localhost:3010/services/stop_places/netex
 }
 
+setup_python() {
+  if [ ! -d "$STOP_REGISTRY_VENV_DIR" ]; then
+    python3 -m venv "$STOP_REGISTRY_VENV_DIR"
+  fi
+
+  "$STOP_REGISTRY_VENV_DIR/bin/pip" install --upgrade pip
+  "$STOP_REGISTRY_VENV_DIR/bin/pip" install -r "$STOP_REGISTRY_REQUIREMENTS_FILE"
+}
+
 ### Control flow
 
 COMMAND=${1:-}
@@ -263,12 +280,14 @@ fi
 case $COMMAND in
   start)
     download_docker_compose_bundle
+    setup_python
     start_all
     upload_zones
     ;;
 
   start:deps)
     download_docker_compose_bundle
+    setup_python
     start_deps
     upload_zones
     ;;
@@ -276,6 +295,10 @@ case $COMMAND in
   generate:jooq)
     wait_for_test_databases_to_be_ready
     generate_jooq
+    ;;
+
+  python:setup)
+    setup_python
     ;;
 
   stop)
@@ -288,6 +311,7 @@ case $COMMAND in
 
   recreate)
     remove
+    setup_python
     start_deps
     upload_zones
     ;;

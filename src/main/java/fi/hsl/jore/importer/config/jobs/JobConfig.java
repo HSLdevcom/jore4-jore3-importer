@@ -67,6 +67,7 @@ import fi.hsl.jore.importer.feature.batch.scheduled_stop_point.timing_place.Timi
 import fi.hsl.jore.importer.feature.batch.stop_place.StopPlaceImportProcessor;
 import fi.hsl.jore.importer.feature.batch.stop_place.StopPlaceImportReader;
 import fi.hsl.jore.importer.feature.batch.stop_place.support.IStopPlaceImportRepository;
+import fi.hsl.jore.importer.feature.batch.stop_registry.RunStopRegistryImporterTasklet;
 import fi.hsl.jore.importer.feature.infrastructure.link.dto.Jore3Link;
 import fi.hsl.jore.importer.feature.infrastructure.link_shape.dto.Jore3LinkShape;
 import fi.hsl.jore.importer.feature.infrastructure.node.dto.Jore3Node;
@@ -110,16 +111,19 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.skip.AlwaysSkipItemSkipPolicy;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.batch.autoconfigure.BatchTransactionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan(basePackages = "fi.hsl.jore.importer.feature")
+@PropertySource("classpath:application.properties")
 public class JobConfig {
     public static final String JOB_NAME = "importJoreJob";
 
@@ -148,7 +152,9 @@ public class JobConfig {
             final Flow importScheduledStopPointsFlow,
             final Flow importStopPlacesFlow,
             // Export data from the importer staging DB to Jore 4 DB.
-            final Flow jore4ExportFlow) {
+            final Flow jore4ExportFlow,
+            // Final step: run the external Python stop-registry importer.
+            final Flow stopRegistryImportFlow) {
         return new JobBuilder(JOB_NAME, jobRepository)
                 .start(importNodesFlow)
                 .next(importLinksFlow)
@@ -162,7 +168,29 @@ public class JobConfig {
                 .next(importScheduledStopPointsFlow)
                 .next(importStopPlacesFlow)
                 .next(jore4ExportFlow)
+                .next(stopRegistryImportFlow)
                 .end()
+                .build();
+    }
+
+    @Bean
+    public Step runStopRegistryImporterStep(
+            @Value("${stop.registry.importer.python.command:python3}") final String pythonCommand,
+            @Value("${stop.registry.importer.script.path:importer.py}") final String scriptPath,
+            @Value("${stop.registry.importer.working.directory:stop-registry-importer}") final String workingDir,
+            @Value("${stop.registry.importer.timeout.hours:2}") final long timeoutHours) {
+        return new StepBuilder("runStopRegistryImporterStep", jobRepository)
+                .allowStartIfComplete(true)
+                .tasklet(
+                        new RunStopRegistryImporterTasklet(pythonCommand, scriptPath, workingDir, timeoutHours),
+                        transactionManager)
+                .build();
+    }
+
+    @Bean
+    public Flow stopRegistryImportFlow(final Step runStopRegistryImporterStep) {
+        return new FlowBuilder<SimpleFlow>("stopRegistryImportFlow")
+                .start(runStopRegistryImporterStep)
                 .build();
     }
 
