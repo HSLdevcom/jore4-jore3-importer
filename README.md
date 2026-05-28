@@ -536,11 +536,15 @@ creates the source MSSQL database (_docker/mssql_init/populate.sql_) was changed
 
 ### Requirements
 
-You need to have Docker installed on your system to run the script
+You need to have Docker installed on your system to run the script.
+
+Also the python virtual environment must be set up to run the tests (´./developer.sh setup:python`).
 
 ### How to use
 
-To run the stop registry importer script you need to have a Jore 3 database, a populated Jore 4 routes database and the `jore4-hasura` and `jore4-tiamat` microservices running.
+The script is automatically run as part of the import process.
+
+To manually run the stop registry importer script you need to have a Jore 3 database, a populated Jore 4 routes database and the `jore4-hasura` and `jore4-tiamat` microservices running.
 
 By default the script runs from the local Jore 3 `mssqltestdb` database and uses the base local `jore4-hasura` service as the target.
 You can change the source database and target Hasura instance by creating a `.env` file in the same directory as the script.
@@ -548,12 +552,13 @@ You can change the source database and target Hasura instance by creating a `.en
 Set the values for variables you want to set:
 
 ```
-GRAPHQL_URL=
-GRAPHQL_SECRET=
-JORE3_USERNAME=
-JORE3_PASSWORD=
-JORE3_DATABASE_URL=
-JORE3_DATABASE_NAME=
+HASURA_API_URL=
+HASURA_ADMIN_SECRET=
+SOURCE_DB_USERNAME=
+SOURCE_DB_PASSWORD=
+SOURCE_DB_HOSTNAME=
+SOURCE_DB_PORT=
+SOURCE_DB_DATABASE=
 ```
 
 You should have run the base Jore 3 importer first which ensures the Jore 4 database has the required scheduled stop points. Then run the stop registry import script which will match scheduled stop points in the Jore 4 routes database with stops in the Jore 3 database and generate GraphQL mutations to Hasura/Tiamat according to the data. The script will also link the generated stop registry stops with the scheduled stop points by their NeTEx ID using Hasura for the mutation.
