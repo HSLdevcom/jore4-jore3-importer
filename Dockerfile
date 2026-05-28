@@ -22,6 +22,18 @@ ARG APPINSIGHTS_VERSION=3.7.7
 # expose server port
 EXPOSE 8080
 
+# install Python 3 + pip for the stop-registry importer script that is run as the
+# final step of the Spring Batch import job
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends python3 python3-pip \
+ && rm -rf /var/lib/apt/lists/*
+
+# install stop-registry importer Python dependencies and copy the script
+COPY ./stop-registry-importer/requirements.txt /opt/stop-registry-importer/requirements.txt
+RUN pip3 install --no-cache-dir --break-system-packages \
+        -r /opt/stop-registry-importer/requirements.txt
+COPY --chmod=444 ./stop-registry-importer/importer.py /opt/stop-registry-importer/importer.py
+
 # download script for reading Docker secrets
 ADD --chmod=555 https://raw.githubusercontent.com/HSLdevcom/jore4-tools/main/docker/read-secrets.sh /tmp/read-secrets.sh
 
