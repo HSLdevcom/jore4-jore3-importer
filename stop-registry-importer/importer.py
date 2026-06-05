@@ -18,8 +18,8 @@ Data Retrieval:
                                 keyed by label.
 
 Data Mapping:
-    - quayInputForJore3Stop() — Transforms a single Jore3 stop row into the GraphQL QuayInput format, mapping fields
-      like shelter type, electricity, condition, accessibility properties, and equipment using helper functions
+    - quayInputForJore4Stop() — Transforms a single Jore3 stop row into the Jore4 GraphQL QuayInput format, mapping
+      fields like shelter type, electricity, condition, accessibility properties, and equipment using helper functions
       (mapStopModel, mapStopType, mapStopElectricity, mapStopCondition, mapBoolean, toFloat).
 
 Import Loop (main logic):
@@ -361,7 +361,41 @@ def toFloat(value):
         return float(jsonval)
     return None
 
-def quayInputForJore3Stop(jore3row, label, validityStart, validityEnd, lon, lat):
+def getShelterEquipment(jore3row):
+    # Build the shared shelter payload once; first shelter gets shelterExternalId separately.
+    baseShelterEquipment = {
+        # "shelterNumber": ???,  # TODO: no candidate source confirmed yet
+        "enclosed": jore3row['pysakkityyppi'] == '01' or jore3row['pysakkityyppi'] == '02',
+        "shelterType": mapStopType(jore3row['pysakkityyppi']),
+        "shelterElectricity": mapStopElectricity(jore3row['sahko']),
+        # shelterLighting: primary jr_esteettomyys.valaistus, fallback inferred from jr_varustelutiedot_uusi.sahko
+        "shelterLighting": mapBoolean(jore3row.get('valaistus')) if jore3row.get('valaistus') is not None else False,
+        "shelterCondition": mapStopCondition(jore3row['katos_kunto']),
+        "timetableCabinets": toFloat(jore3row['kpl_lisavarusteet']) if jore3row['lisavarusteet'] == '01' else 0,
+        "trashCan": mapBoolean(jore3row['roska_astia']),
+        "shelterHasDisplay": mapBoolean(jore3row['nayttolaitteet']),
+        "bicycleParking": jore3row['lisavarusteet'] == '03' or jore3row['lisavarusteet'] == '04',
+        # leaningRail: jr_esteettomyys.takakaide_korkeus used as presence proxy
+        "leaningRail": jore3row.get('takakaide_korkeus') is not None,
+        # outsideBench: jr_esteettomyys.penkki
+        "outsideBench": mapBoolean(jore3row.get('penkki')),
+        # "shelterFasciaBoardTaping": ???,  # TODO: jr_varustelutiedot_uusi.ilme is potential proxy, pending code-value review
+        # stepFree: jr_esteettomyys.esteeton_kulku
+        "stepFree": mapBoolean(jore3row.get('esteeton_kulku')),
+        # "seats": ???,  # TODO: no numeric seat-count source; jr_esteettomyys.penkki is presence only
+    }
+
+    shelterCount = jore3row['kpl_pysakkityyppi'] or 0
+    shelterEquipment = None
+    if shelterCount > 0:
+        firstShelter = {
+            "shelterExternalId": jore3row['jcd_nro'] + jore3row['cc_nro'],
+            **baseShelterEquipment
+        }
+        shelterEquipment = [firstShelter] + [baseShelterEquipment.copy() for _ in range(shelterCount - 1)]
+    return shelterEquipment
+
+def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat):
     return {
       "publicCode": label,
       "privateCode": {
@@ -443,22 +477,7 @@ def quayInputForJore3Stop(jore3row, label, validityStart, validityEnd, lon, lat)
         }
       },
       "placeEquipments": {
-        "shelterEquipment": ([
-          {
-            "enclosed": jore3row['pysakkityyppi'] == '01' or jore3row['pysakkityyppi'] == '02',
-            "shelterType": mapStopType(jore3row['pysakkityyppi']),
-            "shelterElectricity": mapStopElectricity(jore3row['sahko']),
-            "shelterLighting": True,
-            "shelterCondition": mapStopCondition(jore3row['katos_kunto']),
-            "timetableCabinets": toFloat(jore3row['kpl_lisavarusteet']) if jore3row['lisavarusteet'] == '01' else 0,
-            "trashCan": mapBoolean(jore3row['roska_astia']),
-            "shelterHasDisplay": mapBoolean(jore3row['nayttolaitteet']),
-            "bicycleParking": jore3row['lisavarusteet'] == '03' or jore3row['lisavarusteet'] == '04',
-            "leaningRail": False,
-            "outsideBench": False,
-            "shelterFasciaBoardTaping": False
-          }
-          ] * jore3row['kpl_pysakkityyppi']) if jore3row['kpl_pysakkityyppi'] else None,
+        "shelterEquipment": getShelterEquipment(jore3row),
         "generalSign": {
           "numberOfFrames": toFloat(jore3row['kpl_kilvet'])
         }
@@ -618,7 +637,7 @@ for j3StopArea in get_jore3_stop_areas():
                 lon = j4stopPoint['lon']
                 validityStart = j4stopPoint['validity_start']
                 validityEnd = j4stopPoint['validity_end']
-                quayInput.append(quayInputForJore3Stop(j3stop, j4stopPoint['label'], validityStart, validityEnd,
+                quayInput.append(quayInputForJore4Stop(j3stop, j4stopPoint['label'], validityStart, validityEnd,
                                                        lon, lat))
                 latCoords.append(lat)
                 lonCoords.append(lon)
