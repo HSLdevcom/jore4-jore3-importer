@@ -31,6 +31,20 @@ jobs:
           distribution: temurin
           cache: maven
 
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Create stop-registry importer virtualenv
+        # The Spring Batch job runs the external stop-registry importer Python script as
+        # its final step. Create the virtualenv and install its dependencies so the step
+        # can run during the Java integration tests (see the `ci` profile config).
+        run: |
+          python -m venv stop-registry-importer/.venv-stop-registry
+          stop-registry-importer/.venv-stop-registry/bin/python -m pip install --upgrade pip
+          stop-registry-importer/.venv-stop-registry/bin/pip install -r stop-registry-importer/requirements.txt
+
       - name: Verify whether test postgresql db is up
         uses: HSLdevcom/jore4-tools/github-actions/healthcheck@healthcheck-v1
         with:
