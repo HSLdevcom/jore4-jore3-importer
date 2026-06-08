@@ -44,7 +44,7 @@ public class RunStopRegistryImporterTasklet implements Tasklet {
                 workingDir,
                 pythonCommand);
 
-        final ProcessBuilder pb = new ProcessBuilder(List.of(pythonCommand, "-u", scriptPath))
+        final ProcessBuilder pb = new ProcessBuilder(List.of(pythonCommand, scriptPath))
                 .directory(new File(workingDir))
                 .redirectErrorStream(true);
         // Force unbuffered output from Python so logs appear in near real time.
