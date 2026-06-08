@@ -349,11 +349,56 @@ def mapStopCondition(jore3condition):
             return 'bad'
 
 def mapBoolean(jore3value):
-    match jore3value:
-        case 1:
-            return True
-        case _:
-            return False
+    if jore3value is None:
+        return False
+    if isinstance(jore3value, bool):
+        return jore3value
+    normalized = str(jore3value).strip().lower()
+    return normalized in ('1', '01', 'true', 't', 'yes', 'y')
+
+def mapOptionalBoolean(jore3value):
+    if jore3value is None:
+        return None
+    return mapBoolean(jore3value)
+
+def mapLimitationStatus(jore3value):
+    if jore3value is None:
+        return 'UNKNOWN'
+    return 'TRUE' if mapBoolean(jore3value) else 'FALSE'
+
+def mapAccessibilityLevel(jore3row):
+    if jore3row.get('esteeton_kulku') is not None:
+        return 'mostlyAccessible' if mapBoolean(jore3row.get('esteeton_kulku')) else 'partiallyInaccessible'
+    if jore3row.get('esteettomyys') is not None:
+        return 'mostlyAccessible' if mapBoolean(jore3row.get('esteettomyys')) else 'inaccessible'
+    return 'unknown'
+
+def mapGuidanceType(jore3row):
+    if mapBoolean(jore3row.get('varoitusalue')) or mapBoolean(jore3row.get('erotus_varoitusalue')):
+        return 'other'
+    if jore3row.get('varoitusalue') is None and jore3row.get('erotus_varoitusalue') is None:
+        return None
+    return 'none'
+
+def mapMapType(jore3row):
+    if jore3row.get('kartat_hsl') is not None or jore3row.get('kartat_hkl') is not None:
+        return 'other'
+    return None
+
+def mapShelterWidthType(jore3row):
+    width = jore3row.get('max_leveys')
+    if width is None:
+        return None
+    return 'wide' if width >= 250 else 'narrow'
+
+def mapWheelchairLimitationStatus(jore3row):
+    if jore3row.get('esteettomyys') is not None:
+        return mapLimitationStatus(jore3row.get('esteettomyys'))
+    if jore3row.get('esteeton_kulku') is not None:
+        return mapLimitationStatus(jore3row.get('esteeton_kulku'))
+    if jore3row.get('luokka') is not None:
+        return 'PARTIAL'
+    return 'UNKNOWN'
 
 def toFloat(value):
     jsonval = json.dumps(value)
@@ -368,7 +413,6 @@ def getShelterEquipment(jore3row):
         "enclosed": jore3row['pysakkityyppi'] == '01' or jore3row['pysakkityyppi'] == '02',
         "shelterType": mapStopType(jore3row['pysakkityyppi']),
         "shelterElectricity": mapStopElectricity(jore3row['sahko']),
-        # shelterLighting: primary jr_esteettomyys.valaistus, fallback inferred from jr_varustelutiedot_uusi.sahko
         "shelterLighting": mapBoolean(jore3row.get('valaistus')) if jore3row.get('valaistus') is not None else False,
         "shelterCondition": mapStopCondition(jore3row['katos_kunto']),
         "timetableCabinets": toFloat(jore3row['kpl_lisavarusteet']) if jore3row['lisavarusteet'] == '01' else 0,
@@ -394,6 +438,50 @@ def getShelterEquipment(jore3row):
         }
         shelterEquipment = [firstShelter] + [baseShelterEquipment.copy() for _ in range(shelterCount - 1)]
     return shelterEquipment
+
+def getHslAccessibilityProperties(jore3row):
+    hslAccessibilityProperties = {
+        "accessibilityLevel": mapAccessibilityLevel(jore3row),
+        "curbBackOfRailDistance": toFloat(jore3row['korotus_ajorataan']),
+        "curbDriveSideOfRailDistance": None,
+        "curvedStop": None,
+        "endRampSlope": None,
+        "guidanceStripe": mapOptionalBoolean(jore3row.get('erotus_varoitusalue')),
+        "guidanceTiles": mapOptionalBoolean(jore3row.get('varoitusalue')),
+        "guidanceType": mapGuidanceType(jore3row),
+        #"id": None,
+        "lowerCleatHeight": toFloat(jore3row['alapiena_korkeus']),
+        "mapType": mapMapType(jore3row),
+        "pedestrianCrossingRampType": None,
+        "platformEdgeWarningArea": mapBoolean(jore3row['varoitusalue']),
+        "serviceAreaLength": toFloat(jore3row.get('syvyys')),
+        "serviceAreaStripes": mapOptionalBoolean(jore3row.get('erotus_odotusalue')),
+        "serviceAreaWidth": toFloat(jore3row.get('min_leveys')),
+        "shelterLaneDistance": None,
+        "shelterType": mapShelterWidthType(jore3row),
+        "sidewalkAccessibleConnection": mapOptionalBoolean(jore3row.get('esteeton_kulku')),
+        "stopAreaLengthwiseSlope": toFloat(jore3row['pituuskaltevuus']),
+        "stopAreaSideSlope": toFloat(jore3row['sivukaltevuus']),
+        "stopAreaSurroundingsAccessible": mapBoolean(jore3row['esteeton_kulku']),
+        "stopElevationFromRailTop": toFloat(jore3row.get('korotus_ajorataan')),
+        "stopElevationFromSidewalk": toFloat(jore3row['korotus_kaytavaan']),
+        "stopType": mapStopModel(jore3row['pysakin_malli']),
+        "structureLaneDistance": None
+    }
+
+    return hslAccessibilityProperties
+
+def getAccessibilityLimitations(jore3row):
+    limitations = {
+        "audibleSignalsAvailable": 'UNKNOWN',
+        "escalatorFreeAccess": 'UNKNOWN',
+        #"id": None,
+        "liftFreeAccess": 'UNKNOWN',
+        "stepFreeAccess": mapLimitationStatus(jore3row.get('esteeton_kulku')),
+        "wheelchairAccess": mapWheelchairLimitationStatus(jore3row)
+    }
+
+    return limitations
 
 def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat):
     return {
@@ -458,23 +546,9 @@ def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat)
         }
       ],
       "accessibilityAssessment": {
-        "hslAccessibilityProperties": {
-          "curbBackOfRailDistance": toFloat(jore3row['korotus_ajorataan']),
-          "lowerCleatHeight": toFloat(jore3row['alapiena_korkeus']),
-          "platformEdgeWarningArea": mapBoolean(jore3row['varoitusalue']),
-          "stopAreaLengthwiseSlope": toFloat(jore3row['pituuskaltevuus']),
-          "stopAreaSideSlope": toFloat(jore3row['sivukaltevuus']),
-          "stopAreaSurroundingsAccessible": mapBoolean(jore3row['esteeton_kulku']),
-          "stopElevationFromSidewalk": toFloat(jore3row['korotus_kaytavaan']),
-          "stopType": mapStopModel(jore3row['pysakin_malli'])
-        },
-        "limitations": {
-          "audibleSignalsAvailable": "FALSE",
-          "escalatorFreeAccess": "FALSE",
-          "liftFreeAccess": "FALSE",
-          "stepFreeAccess": "FALSE",
-          "wheelchairAccess": "FALSE"
-        }
+        #"id": None,
+        "hslAccessibilityProperties": getHslAccessibilityProperties(jore3row),
+        "limitations": getAccessibilityLimitations(jore3row)
       },
       "placeEquipments": {
         "shelterEquipment": getShelterEquipment(jore3row),
