@@ -15,6 +15,12 @@ DOCKER_COMPOSE_BUNDLE_REF=${BUNDLE_REF:-main}
 STOP_REGISTRY_IMPORTER_DIR="./stop-registry-importer"
 STOP_REGISTRY_VENV_DIR="${STOP_REGISTRY_IMPORTER_DIR}/.venv-stop-registry"
 STOP_REGISTRY_REQUIREMENTS_FILE="${STOP_REGISTRY_IMPORTER_DIR}/requirements.txt"
+STOP_REGISTRY_REQUIREMENTS_IN_FILE="${STOP_REGISTRY_IMPORTER_DIR}/requirements.in"
+
+# Python/pip executables inside the stop-registry virtualenv. These are
+# populated by `ensure_python_venv` so that every Python-related command uses
+# the correct interpreter and isolated environment.
+STOP_REGISTRY_VENV_PYTHON="${STOP_REGISTRY_VENV_DIR}/bin/python"
 
 # Define a Docker Compose project name to distinguish
 # the docker environment of this project from others
@@ -61,6 +67,11 @@ print_usage() {
 
   python:setup
     Creates/updates Python virtualenv for stop-registry importer and installs dependencies.
+
+  python:update-reqs
+    Recompiles stop-registry-importer/requirements.txt from requirements.in using
+    pip-tools (pip-compile). Run this after changing requirements.in. You must run python:setup
+    to install the updated dependencies after review.
 
   stop
     Stop the dependencies and the dockerized application.
@@ -260,12 +271,49 @@ upload_zones() {
 }
 
 setup_python() {
+  ensure_python_venv
+
+  echo "Installing dependencies from ${STOP_REGISTRY_REQUIREMENTS_FILE}..."
+  "$STOP_REGISTRY_VENV_PYTHON" -m pip install -r "$STOP_REGISTRY_REQUIREMENTS_FILE"
+}
+
+# Ensures the stop-registry virtualenv exists and that pip is up to date.
+#
+# This is the common entry point for all Python commands: it guarantees that
+# subsequent calls to "$STOP_REGISTRY_VENV_PYTHON" use the correct interpreter
+# and isolated environment regardless of the host Python setup.
+ensure_python_venv() {
   if [ ! -d "$STOP_REGISTRY_VENV_DIR" ]; then
+    echo "Creating Python virtualenv in ${STOP_REGISTRY_VENV_DIR}..."
     python3 -m venv "$STOP_REGISTRY_VENV_DIR"
   fi
 
-  "$STOP_REGISTRY_VENV_DIR/bin/pip" install --upgrade pip
-  "$STOP_REGISTRY_VENV_DIR/bin/pip" install -r "$STOP_REGISTRY_REQUIREMENTS_FILE"
+  if [ ! -x "$STOP_REGISTRY_VENV_PYTHON" ]; then
+    echo "ERROR: Python executable not found in virtualenv: ${STOP_REGISTRY_VENV_PYTHON}" >&2
+    echo "Try removing ${STOP_REGISTRY_VENV_DIR} and running 'python:setup' again." >&2
+    exit 1
+  fi
+
+  "$STOP_REGISTRY_VENV_PYTHON" -m pip install --upgrade pip
+}
+
+# Recompiles requirements.txt from requirements.in using pip-tools and installs
+# the resolved dependency set into the virtualenv.
+update_python_requirements() {
+  ensure_python_venv
+
+  if [ ! -f "$STOP_REGISTRY_REQUIREMENTS_IN_FILE" ]; then
+    echo "ERROR: requirements input file not found: ${STOP_REGISTRY_REQUIREMENTS_IN_FILE}" >&2
+    exit 1
+  fi
+
+  "$STOP_REGISTRY_VENV_PYTHON" -m pip install --upgrade pip-tools
+
+  echo "Compiling ${STOP_REGISTRY_REQUIREMENTS_FILE} from ${STOP_REGISTRY_REQUIREMENTS_IN_FILE}..."
+  "$STOP_REGISTRY_VENV_PYTHON" -m piptools compile \
+    --strip-extras \
+    --output-file "$STOP_REGISTRY_REQUIREMENTS_FILE" \
+    "$STOP_REGISTRY_REQUIREMENTS_IN_FILE"
 }
 
 ### Control flow
@@ -299,6 +347,10 @@ case $COMMAND in
 
   python:setup)
     setup_python
+    ;;
+
+  python:update-reqs)
+    update_python_requirements
     ;;
 
   stop)

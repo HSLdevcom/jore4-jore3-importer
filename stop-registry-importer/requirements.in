@@ -1,0 +1,15 @@
+# Top-level (direct) dependencies for the stop-registry importer.
+#
+# This file lists only the packages the importer directly imports/uses.
+# The fully pinned requirements.txt (including all transitive dependencies)
+# is generated from this file with pip-tools:
+#
+#   ./development.sh python:update-reqs
+#
+# (equivalent to: pip-compile requirements.in)
+
+django-environ
+pymssql
+requests
+simplejson
+
