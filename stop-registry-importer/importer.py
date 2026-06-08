@@ -509,6 +509,10 @@ def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat)
       ],
       "keyValues": [
         {
+            "key": "elyNumber",
+            "value": [jore3row['elynumero']]
+        },
+        {
             "key": "stopState",
             "values": "InOperation"
         },
