@@ -322,7 +322,8 @@ public class Tables {
      * new_measured_location geography DEFAULT NULL::geography, new_direction
      * text DEFAULT NULL::text, new_label text DEFAULT NULL::text,
      * new_validity_start date DEFAULT NULL::date, new_validity_end date DEFAULT
-     * NULL::date, new_priority integer DEFAULT NULL::integer
+     * NULL::date, new_priority integer DEFAULT NULL::integer, new_vehicle_mode
+     * text DEFAULT NULL::text
      */
     public static final NewScheduledStopPointIfIdGiven NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN = NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN;
 
@@ -345,6 +346,7 @@ public class Tables {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN.call(
               newScheduledStopPointId
@@ -355,6 +357,7 @@ public class Tables {
             , newValidityStart
             , newValidityEnd
             , newPriority
+            , newVehicleMode
         )).fetch();
     }
 
@@ -376,6 +379,7 @@ public class Tables {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN.call(
             newScheduledStopPointId,
@@ -385,7 +389,8 @@ public class Tables {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 
@@ -407,6 +412,7 @@ public class Tables {
         , Field<LocalDate> newValidityStart
         , Field<LocalDate> newValidityEnd
         , Field<Integer> newPriority
+        , Field<String> newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN.call(
             newScheduledStopPointId,
@@ -416,7 +422,8 @@ public class Tables {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 
@@ -433,7 +440,8 @@ public class Tables {
     public static final ScheduledStopPointInvariant SCHEDULED_STOP_POINT_INVARIANT = ScheduledStopPointInvariant.SCHEDULED_STOP_POINT_INVARIANT;
 
     /**
-     * Contains scheduled_stop_points enriched with some infra link data.
+     * Contains scheduled_stop_points enriched with some infra link data and
+     * vehicle_mode.
      */
     public static final ScheduledStopPointsWithInfraLinkData SCHEDULED_STOP_POINTS_WITH_INFRA_LINK_DATA = ScheduledStopPointsWithInfraLinkData.SCHEDULED_STOP_POINTS_WITH_INFRA_LINK_DATA;
 

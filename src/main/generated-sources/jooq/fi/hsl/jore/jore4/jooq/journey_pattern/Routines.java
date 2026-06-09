@@ -79,6 +79,7 @@ public class Routines {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
               replaceScheduledStopPointId
@@ -89,6 +90,7 @@ public class Routines {
             , newValidityStart
             , newValidityEnd
             , newPriority
+            , newVehicleMode
         )).fetch();
     }
 
@@ -110,6 +112,7 @@ public class Routines {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
             replaceScheduledStopPointId,
@@ -119,7 +122,8 @@ public class Routines {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 
@@ -141,6 +145,7 @@ public class Routines {
         , Field<LocalDate> newValidityStart
         , Field<LocalDate> newValidityEnd
         , Field<Integer> newPriority
+        , Field<String> newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
             replaceScheduledStopPointId,
@@ -150,7 +155,8 @@ public class Routines {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 
@@ -210,6 +216,7 @@ public class Routines {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.journey_pattern.tables.GetBrokenRouteJourneyPatterns.GET_BROKEN_ROUTE_JOURNEY_PATTERNS.call(
               filterRouteIds
@@ -221,6 +228,7 @@ public class Routines {
             , newValidityStart
             , newValidityEnd
             , newPriority
+            , newVehicleMode
         )).fetch();
     }
 
@@ -243,6 +251,7 @@ public class Routines {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.GetBrokenRouteJourneyPatterns.GET_BROKEN_ROUTE_JOURNEY_PATTERNS.call(
             filterRouteIds,
@@ -253,7 +262,8 @@ public class Routines {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 
@@ -276,6 +286,7 @@ public class Routines {
         , Field<LocalDate> newValidityStart
         , Field<LocalDate> newValidityEnd
         , Field<Integer> newPriority
+        , Field<String> newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.GetBrokenRouteJourneyPatterns.GET_BROKEN_ROUTE_JOURNEY_PATTERNS.call(
             filterRouteIds,
@@ -286,7 +297,8 @@ public class Routines {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 
@@ -315,6 +327,7 @@ public class Routines {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.journey_pattern.tables.MaximumPriorityValiditySpans.MAXIMUM_PRIORITY_VALIDITY_SPANS.call(
               entityType
@@ -331,6 +344,7 @@ public class Routines {
             , newValidityStart
             , newValidityEnd
             , newPriority
+            , newVehicleMode
         )).fetch();
     }
 
@@ -358,6 +372,7 @@ public class Routines {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.MaximumPriorityValiditySpans.MAXIMUM_PRIORITY_VALIDITY_SPANS.call(
             entityType,
@@ -373,7 +388,8 @@ public class Routines {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 
@@ -401,6 +417,7 @@ public class Routines {
         , Field<LocalDate> newValidityStart
         , Field<LocalDate> newValidityEnd
         , Field<Integer> newPriority
+        , Field<String> newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.MaximumPriorityValiditySpans.MAXIMUM_PRIORITY_VALIDITY_SPANS.call(
             entityType,
@@ -416,7 +433,8 @@ public class Routines {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 }

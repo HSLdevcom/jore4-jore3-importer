@@ -31,7 +31,8 @@ import org.locationtech.jts.geom.Point;
  * new_measured_location geography DEFAULT NULL::geography, new_direction text
  * DEFAULT NULL::text, new_label text DEFAULT NULL::text, new_validity_start
  * date DEFAULT NULL::date, new_validity_end date DEFAULT NULL::date,
- * new_priority integer DEFAULT NULL::integer
+ * new_priority integer DEFAULT NULL::integer, new_vehicle_mode text DEFAULT
+ * NULL::text
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class NewScheduledStopPointIfIdGiven extends TableImpl<Record> {
@@ -106,6 +107,12 @@ public class NewScheduledStopPointIfIdGiven extends TableImpl<Record> {
      */
     public final TableField<Record, Double> RELATIVE_DISTANCE_FROM_INFRASTRUCTURE_LINK_START = createField(DSL.name("relative_distance_from_infrastructure_link_start"), SQLDataType.DOUBLE, this, "");
 
+    /**
+     * The column
+     * <code>service_pattern.new_scheduled_stop_point_if_id_given.vehicle_mode</code>.
+     */
+    public final TableField<Record, String> VEHICLE_MODE = createField(DSL.name("vehicle_mode"), SQLDataType.CLOB, this, "");
+
     private NewScheduledStopPointIfIdGiven(Name alias, Table<Record> aliased) {
         this(alias, aliased, new Field[] {
             DSL.val(null, SQLDataType.UUID.defaultValue(DSL.field(DSL.raw("NULL::uuid"), SQLDataType.UUID))),
@@ -115,7 +122,8 @@ public class NewScheduledStopPointIfIdGiven extends TableImpl<Record> {
             DSL.val(null, SQLDataType.CLOB.defaultValue(DSL.field(DSL.raw("NULL::text"), SQLDataType.CLOB))),
             DSL.val(null, SQLDataType.LOCALDATE.defaultValue(DSL.field(DSL.raw("NULL::date"), SQLDataType.LOCALDATE))),
             DSL.val(null, SQLDataType.LOCALDATE.defaultValue(DSL.field(DSL.raw("NULL::date"), SQLDataType.LOCALDATE))),
-            DSL.val(null, SQLDataType.INTEGER.defaultValue(DSL.field(DSL.raw("NULL::integer"), SQLDataType.INTEGER)))
+            DSL.val(null, SQLDataType.INTEGER.defaultValue(DSL.field(DSL.raw("NULL::integer"), SQLDataType.INTEGER))),
+            DSL.val(null, SQLDataType.CLOB.defaultValue(DSL.field(DSL.raw("NULL::text"), SQLDataType.CLOB)))
         });
     }
 
@@ -124,7 +132,7 @@ public class NewScheduledStopPointIfIdGiven extends TableImpl<Record> {
     }
 
     private NewScheduledStopPointIfIdGiven(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
-        super(alias, null, aliased, parameters, DSL.comment("new_scheduled_stop_point_id uuid DEFAULT NULL::uuid, new_located_on_infrastructure_link_id uuid DEFAULT NULL::uuid, new_measured_location geography DEFAULT NULL::geography, new_direction text DEFAULT NULL::text, new_label text DEFAULT NULL::text, new_validity_start date DEFAULT NULL::date, new_validity_end date DEFAULT NULL::date, new_priority integer DEFAULT NULL::integer"), TableOptions.function(), where);
+        super(alias, null, aliased, parameters, DSL.comment("new_scheduled_stop_point_id uuid DEFAULT NULL::uuid, new_located_on_infrastructure_link_id uuid DEFAULT NULL::uuid, new_measured_location geography DEFAULT NULL::geography, new_direction text DEFAULT NULL::text, new_label text DEFAULT NULL::text, new_validity_start date DEFAULT NULL::date, new_validity_end date DEFAULT NULL::date, new_priority integer DEFAULT NULL::integer, new_vehicle_mode text DEFAULT NULL::text"), TableOptions.function(), where);
     }
 
     /**
@@ -210,6 +218,7 @@ public class NewScheduledStopPointIfIdGiven extends TableImpl<Record> {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         NewScheduledStopPointIfIdGiven result = new NewScheduledStopPointIfIdGiven(DSL.name("new_scheduled_stop_point_if_id_given"), null, new Field[] {
             DSL.val(newScheduledStopPointId, SQLDataType.UUID.defaultValue(DSL.field(DSL.raw("NULL::uuid"), SQLDataType.UUID))),
@@ -219,7 +228,8 @@ public class NewScheduledStopPointIfIdGiven extends TableImpl<Record> {
             DSL.val(newLabel, SQLDataType.CLOB.defaultValue(DSL.field(DSL.raw("NULL::text"), SQLDataType.CLOB))),
             DSL.val(newValidityStart, SQLDataType.LOCALDATE.defaultValue(DSL.field(DSL.raw("NULL::date"), SQLDataType.LOCALDATE))),
             DSL.val(newValidityEnd, SQLDataType.LOCALDATE.defaultValue(DSL.field(DSL.raw("NULL::date"), SQLDataType.LOCALDATE))),
-            DSL.val(newPriority, SQLDataType.INTEGER.defaultValue(DSL.field(DSL.raw("NULL::integer"), SQLDataType.INTEGER)))
+            DSL.val(newPriority, SQLDataType.INTEGER.defaultValue(DSL.field(DSL.raw("NULL::integer"), SQLDataType.INTEGER))),
+            DSL.val(newVehicleMode, SQLDataType.CLOB.defaultValue(DSL.field(DSL.raw("NULL::text"), SQLDataType.CLOB)))
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;
@@ -237,6 +247,7 @@ public class NewScheduledStopPointIfIdGiven extends TableImpl<Record> {
         , Field<LocalDate> newValidityStart
         , Field<LocalDate> newValidityEnd
         , Field<Integer> newPriority
+        , Field<String> newVehicleMode
     ) {
         NewScheduledStopPointIfIdGiven result = new NewScheduledStopPointIfIdGiven(DSL.name("new_scheduled_stop_point_if_id_given"), null, new Field[] {
             newScheduledStopPointId,
@@ -246,7 +257,8 @@ public class NewScheduledStopPointIfIdGiven extends TableImpl<Record> {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;

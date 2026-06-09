@@ -26,7 +26,8 @@ import org.jooq.impl.TableImpl;
 /**
  * replace_scheduled_stop_point_id uuid, new_located_on_infrastructure_link_id
  * uuid, new_measured_location geography, new_direction text, new_label text,
- * new_validity_start date, new_validity_end date, new_priority integer
+ * new_validity_start date, new_validity_end date, new_priority integer,
+ * new_vehicle_mode text DEFAULT NULL::text
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<Record> {
@@ -68,7 +69,8 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
             DSL.val(null, SQLDataType.CLOB),
             DSL.val(null, SQLDataType.LOCALDATE),
             DSL.val(null, SQLDataType.LOCALDATE),
-            DSL.val(null, SQLDataType.INTEGER)
+            DSL.val(null, SQLDataType.INTEGER),
+            DSL.val(null, SQLDataType.CLOB.defaultValue(DSL.field(DSL.raw("NULL::text"), SQLDataType.CLOB)))
         });
     }
 
@@ -77,7 +79,7 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
     }
 
     private CheckInfraLinkStopRefsWithNewScheduledStopPoint(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
-        super(alias, null, aliased, parameters, DSL.comment("replace_scheduled_stop_point_id uuid, new_located_on_infrastructure_link_id uuid, new_measured_location geography, new_direction text, new_label text, new_validity_start date, new_validity_end date, new_priority integer"), TableOptions.function(), where);
+        super(alias, null, aliased, parameters, DSL.comment("replace_scheduled_stop_point_id uuid, new_located_on_infrastructure_link_id uuid, new_measured_location geography, new_direction text, new_label text, new_validity_start date, new_validity_end date, new_priority integer, new_vehicle_mode text DEFAULT NULL::text"), TableOptions.function(), where);
     }
 
     /**
@@ -163,6 +165,7 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         CheckInfraLinkStopRefsWithNewScheduledStopPoint result = new CheckInfraLinkStopRefsWithNewScheduledStopPoint(DSL.name("check_infra_link_stop_refs_with_new_scheduled_stop_point"), null, new Field[] {
             DSL.val(replaceScheduledStopPointId, SQLDataType.UUID),
@@ -172,7 +175,8 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
             DSL.val(newLabel, SQLDataType.CLOB),
             DSL.val(newValidityStart, SQLDataType.LOCALDATE),
             DSL.val(newValidityEnd, SQLDataType.LOCALDATE),
-            DSL.val(newPriority, SQLDataType.INTEGER)
+            DSL.val(newPriority, SQLDataType.INTEGER),
+            DSL.val(newVehicleMode, SQLDataType.CLOB.defaultValue(DSL.field(DSL.raw("NULL::text"), SQLDataType.CLOB)))
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;
@@ -190,6 +194,7 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
         , Field<LocalDate> newValidityStart
         , Field<LocalDate> newValidityEnd
         , Field<Integer> newPriority
+        , Field<String> newVehicleMode
     ) {
         CheckInfraLinkStopRefsWithNewScheduledStopPoint result = new CheckInfraLinkStopRefsWithNewScheduledStopPoint(DSL.name("check_infra_link_stop_refs_with_new_scheduled_stop_point"), null, new Field[] {
             replaceScheduledStopPointId,
@@ -199,7 +204,8 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;

@@ -31,7 +31,8 @@ import org.locationtech.jts.geom.Point;
 
 
 /**
- * Contains scheduled_stop_points enriched with some infra link data.
+ * Contains scheduled_stop_points enriched with some infra link data and
+ * vehicle_mode.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class ScheduledStopPointsWithInfraLinkData extends TableImpl<Record> {
@@ -106,12 +107,18 @@ public class ScheduledStopPointsWithInfraLinkData extends TableImpl<Record> {
      */
     public final TableField<Record, Double> RELATIVE_DISTANCE_FROM_INFRASTRUCTURE_LINK_START = createField(DSL.name("relative_distance_from_infrastructure_link_start"), SQLDataType.DOUBLE, this, "");
 
+    /**
+     * The column
+     * <code>service_pattern.scheduled_stop_points_with_infra_link_data.vehicle_mode</code>.
+     */
+    public final TableField<Record, String> VEHICLE_MODE = createField(DSL.name("vehicle_mode"), SQLDataType.CLOB, this, "");
+
     private ScheduledStopPointsWithInfraLinkData(Name alias, Table<Record> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
 
     private ScheduledStopPointsWithInfraLinkData(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
-        super(alias, null, aliased, parameters, DSL.comment("Contains scheduled_stop_points enriched with some infra link data."), TableOptions.view("""
+        super(alias, null, aliased, parameters, DSL.comment("Contains scheduled_stop_points enriched with some infra link data and vehicle_mode."), TableOptions.view("""
         create view "scheduled_stop_points_with_infra_link_data" as  SELECT ssp.scheduled_stop_point_id,
          ssp.measured_location,
          ssp.located_on_infrastructure_link_id,
@@ -120,9 +127,11 @@ public class ScheduledStopPointsWithInfraLinkData extends TableImpl<Record> {
          ssp.validity_start,
          ssp.validity_end,
          ssp.priority,
-         internal_utils.st_linelocatepoint(il.shape, ssp.measured_location) AS relative_distance_from_infrastructure_link_start
-        FROM (service_pattern.scheduled_stop_point ssp
-          JOIN infrastructure_network.infrastructure_link il ON ((ssp.located_on_infrastructure_link_id = il.infrastructure_link_id)));
+         internal_utils.st_linelocatepoint(il.shape, ssp.measured_location) AS relative_distance_from_infrastructure_link_start,
+         vmossp.vehicle_mode
+        FROM ((service_pattern.scheduled_stop_point ssp
+          JOIN infrastructure_network.infrastructure_link il ON ((ssp.located_on_infrastructure_link_id = il.infrastructure_link_id)))
+          LEFT JOIN service_pattern.vehicle_mode_on_scheduled_stop_point vmossp ON ((ssp.scheduled_stop_point_id = vmossp.scheduled_stop_point_id)));
         """), where);
     }
 

@@ -42,7 +42,8 @@ public class JourneyPattern extends SchemaImpl {
      * replace_scheduled_stop_point_id uuid,
      * new_located_on_infrastructure_link_id uuid, new_measured_location
      * geography, new_direction text, new_label text, new_validity_start date,
-     * new_validity_end date, new_priority integer
+     * new_validity_end date, new_priority integer, new_vehicle_mode text
+     * DEFAULT NULL::text
      */
     public final CheckInfraLinkStopRefsWithNewScheduledStopPoint CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT = CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT;
 
@@ -65,6 +66,7 @@ public class JourneyPattern extends SchemaImpl {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
               replaceScheduledStopPointId
@@ -75,6 +77,7 @@ public class JourneyPattern extends SchemaImpl {
             , newValidityStart
             , newValidityEnd
             , newPriority
+            , newVehicleMode
         )).fetch();
     }
 
@@ -96,6 +99,7 @@ public class JourneyPattern extends SchemaImpl {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
             replaceScheduledStopPointId,
@@ -105,7 +109,8 @@ public class JourneyPattern extends SchemaImpl {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 
@@ -127,6 +132,7 @@ public class JourneyPattern extends SchemaImpl {
         , Field<LocalDate> newValidityStart
         , Field<LocalDate> newValidityEnd
         , Field<Integer> newPriority
+        , Field<String> newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.CheckInfraLinkStopRefsWithNewScheduledStopPoint.CHECK_INFRA_LINK_STOP_REFS_WITH_NEW_SCHEDULED_STOP_POINT.call(
             replaceScheduledStopPointId,
@@ -136,7 +142,8 @@ public class JourneyPattern extends SchemaImpl {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 
@@ -187,7 +194,8 @@ public class JourneyPattern extends SchemaImpl {
      * NULL::uuid, new_measured_location geography DEFAULT NULL::geography,
      * new_direction text DEFAULT NULL::text, new_label text DEFAULT NULL::text,
      * new_validity_start date DEFAULT NULL::date, new_validity_end date DEFAULT
-     * NULL::date, new_priority integer DEFAULT NULL::integer
+     * NULL::date, new_priority integer DEFAULT NULL::integer, new_vehicle_mode
+     * text DEFAULT NULL::text
      */
     public final GetBrokenRouteJourneyPatterns GET_BROKEN_ROUTE_JOURNEY_PATTERNS = GetBrokenRouteJourneyPatterns.GET_BROKEN_ROUTE_JOURNEY_PATTERNS;
 
@@ -211,6 +219,7 @@ public class JourneyPattern extends SchemaImpl {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.journey_pattern.tables.GetBrokenRouteJourneyPatterns.GET_BROKEN_ROUTE_JOURNEY_PATTERNS.call(
               filterRouteIds
@@ -222,6 +231,7 @@ public class JourneyPattern extends SchemaImpl {
             , newValidityStart
             , newValidityEnd
             , newPriority
+            , newVehicleMode
         )).fetch();
     }
 
@@ -244,6 +254,7 @@ public class JourneyPattern extends SchemaImpl {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.GetBrokenRouteJourneyPatterns.GET_BROKEN_ROUTE_JOURNEY_PATTERNS.call(
             filterRouteIds,
@@ -254,7 +265,8 @@ public class JourneyPattern extends SchemaImpl {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 
@@ -277,6 +289,7 @@ public class JourneyPattern extends SchemaImpl {
         , Field<LocalDate> newValidityStart
         , Field<LocalDate> newValidityEnd
         , Field<Integer> newPriority
+        , Field<String> newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.GetBrokenRouteJourneyPatterns.GET_BROKEN_ROUTE_JOURNEY_PATTERNS.call(
             filterRouteIds,
@@ -287,7 +300,8 @@ public class JourneyPattern extends SchemaImpl {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 
@@ -308,7 +322,8 @@ public class JourneyPattern extends SchemaImpl {
      * new_measured_location geography DEFAULT NULL::geography, new_direction
      * text DEFAULT NULL::text, new_label text DEFAULT NULL::text,
      * new_validity_start date DEFAULT NULL::date, new_validity_end date DEFAULT
-     * NULL::date, new_priority integer DEFAULT NULL::integer
+     * NULL::date, new_priority integer DEFAULT NULL::integer, new_vehicle_mode
+     * text DEFAULT NULL::text
      */
     public final MaximumPriorityValiditySpans MAXIMUM_PRIORITY_VALIDITY_SPANS = MaximumPriorityValiditySpans.MAXIMUM_PRIORITY_VALIDITY_SPANS;
 
@@ -337,6 +352,7 @@ public class JourneyPattern extends SchemaImpl {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.journey_pattern.tables.MaximumPriorityValiditySpans.MAXIMUM_PRIORITY_VALIDITY_SPANS.call(
               entityType
@@ -353,6 +369,7 @@ public class JourneyPattern extends SchemaImpl {
             , newValidityStart
             , newValidityEnd
             , newPriority
+            , newVehicleMode
         )).fetch();
     }
 
@@ -380,6 +397,7 @@ public class JourneyPattern extends SchemaImpl {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.MaximumPriorityValiditySpans.MAXIMUM_PRIORITY_VALIDITY_SPANS.call(
             entityType,
@@ -395,7 +413,8 @@ public class JourneyPattern extends SchemaImpl {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 
@@ -423,6 +442,7 @@ public class JourneyPattern extends SchemaImpl {
         , Field<LocalDate> newValidityStart
         , Field<LocalDate> newValidityEnd
         , Field<Integer> newPriority
+        , Field<String> newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.journey_pattern.tables.MaximumPriorityValiditySpans.MAXIMUM_PRIORITY_VALIDITY_SPANS.call(
             entityType,
@@ -438,7 +458,8 @@ public class JourneyPattern extends SchemaImpl {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 

@@ -423,6 +423,7 @@ public class Routines {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return configuration.dsl().selectFrom(fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN.call(
               newScheduledStopPointId
@@ -433,6 +434,7 @@ public class Routines {
             , newValidityStart
             , newValidityEnd
             , newPriority
+            , newVehicleMode
         )).fetch();
     }
 
@@ -454,6 +456,7 @@ public class Routines {
         , LocalDate newValidityStart
         , LocalDate newValidityEnd
         , Integer newPriority
+        , String newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN.call(
             newScheduledStopPointId,
@@ -463,7 +466,8 @@ public class Routines {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 
@@ -485,6 +489,7 @@ public class Routines {
         , Field<LocalDate> newValidityStart
         , Field<LocalDate> newValidityEnd
         , Field<Integer> newPriority
+        , Field<String> newVehicleMode
     ) {
         return fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN.call(
             newScheduledStopPointId,
@@ -494,7 +499,8 @@ public class Routines {
             newLabel,
             newValidityStart,
             newValidityEnd,
-            newPriority
+            newPriority,
+            newVehicleMode
         );
     }
 }
