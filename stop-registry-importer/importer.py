@@ -126,7 +126,6 @@ Jore4 Target (Hasura GraphQL — stop_registry.mutateStopPlace):
         nayttolaitteet       → shelterHasDisplay               mapBoolean
         lisavarusteet        → bicycleParking                  True if "03" or "04"
         kpl_kilvet           → generalSign.numberOfFrames      toFloat
-        sahko                → shelterLighting                 True if "01" or "02"
         (hardcoded)          → leaningRail                     Always False
         (hardcoded)          → shelterFasciaBoardTaping        Always False
         jdc_nro | cc_nro     → shelterExternalId               Only for the first shelter of the stop
@@ -303,15 +302,15 @@ def update_stop_point(label, netexid):
 
 def mapTransportMode(verkko):
     match verkko:
-        case 1:
+        case '1':
             return 'bus'
-        case 2:
+        case '2':
             return 'metro'
-        case 3:
+        case '3':
             return 'tram'
-        case 4:
+        case '4':
             return 'rail'
-        case 5:
+        case '5':
             return 'water'
         case _:
             return 'bus'
@@ -375,11 +374,6 @@ def mapOptionalBoolean(jore3value):
         return None
     return mapBoolean(jore3value)
 
-def mapLimitationStatus(jore3value):
-    if jore3value is None:
-        return 'UNKNOWN'
-    return 'TRUE' if mapBoolean(jore3value) else 'FALSE'
-
 def mapAccessibilityLevel(jore3row):
     if jore3row.get('esteeton_kulku') is not None:
         return 'mostlyAccessible' if mapBoolean(jore3row.get('esteeton_kulku')) else 'partiallyInaccessible'
@@ -399,20 +393,17 @@ def mapMapType(jore3row):
         return 'other'
     return None
 
-def mapShelterWidthType(jore3row):
-    width = jore3row.get('max_leveys')
-    if width is None:
+def mapShelterWidth(jore3row):
+    shelterType = jore3row.get('katos')
+    if shelterType is None:
         return None
-    return 'wide' if width >= 250 else 'narrow'
-
-def mapWheelchairLimitationStatus(jore3row):
-    if jore3row.get('esteettomyys') is not None:
-        return mapLimitationStatus(jore3row.get('esteettomyys'))
-    if jore3row.get('esteeton_kulku') is not None:
-        return mapLimitationStatus(jore3row.get('esteeton_kulku'))
-    if jore3row.get('luokka') is not None:
-        return 'PARTIAL'
-    return 'UNKNOWN'
+    match shelterType:
+            case '1':
+                return 'wide'
+            case '2':
+                return 'narrow'
+            case _:
+                return 'muu'
 
 def toFloat(value):
     jsonval = json.dumps(value)
@@ -423,34 +414,33 @@ def toFloat(value):
 def getShelterEquipment(jore3row):
     # Build the shared shelter payload once; first shelter gets shelterExternalId separately.
     baseShelterEquipment = {
-        # "shelterNumber": ???,  # TODO: no candidate source confirmed yet
         "enclosed": jore3row['pysakkityyppi'] == '01' or jore3row['pysakkityyppi'] == '02',
         "shelterType": mapStopType(jore3row['pysakkityyppi']),
         "shelterElectricity": mapStopElectricity(jore3row['sahko']),
-        "shelterLighting": mapBoolean(jore3row.get('valaistus')) if jore3row.get('valaistus') is not None else False,
+        "shelterLighting": mapBoolean(jore3row['valaistus']),
         "shelterCondition": mapStopCondition(jore3row['katos_kunto']),
         "timetableCabinets": toFloat(jore3row['kpl_lisavarusteet']) if jore3row['lisavarusteet'] == '01' else 0,
         "trashCan": mapBoolean(jore3row['roska_astia']),
         "shelterHasDisplay": mapBoolean(jore3row['nayttolaitteet']),
         "bicycleParking": jore3row['lisavarusteet'] == '03' or jore3row['lisavarusteet'] == '04',
-        # leaningRail: jr_esteettomyys.takakaide_korkeus used as presence proxy
         "leaningRail": jore3row.get('takakaide_korkeus') is not None,
-        # outsideBench: jr_esteettomyys.penkki
         "outsideBench": mapBoolean(jore3row.get('penkki')),
-        # "shelterFasciaBoardTaping": ???,  # TODO: jr_varustelutiedot_uusi.ilme is potential proxy, pending code-value review
-        # stepFree: jr_esteettomyys.esteeton_kulku
+        "shelterFasciaBoardTaping": "false",
         "stepFree": mapBoolean(jore3row.get('esteeton_kulku')),
-        # "seats": ???,  # TODO: no numeric seat-count source; jr_esteettomyys.penkki is presence only
+        # "seats": N/A,  # Not tracked in Jore4
     }
 
     shelterCount = jore3row['kpl_pysakkityyppi'] or 0
-    shelterEquipment = None
-    if shelterCount > 0:
-        firstShelter = {
-            "shelterExternalId": jore3row['jcd_nro'] + jore3row['cc_nro'],
-            **baseShelterEquipment
-        }
-        shelterEquipment = [firstShelter] + [baseShelterEquipment.copy() for _ in range(shelterCount - 1)]
+    if shelterCount == 0:
+        return None
+
+    firstShelter = {
+        "shelterExternalId": jore3row['jcd_nro'] + jore3row['cc_nro'],
+        **baseShelterEquipment
+    }
+    shelterEquipment = [firstShelter] + [baseShelterEquipment.copy() for _ in range(shelterCount - 1)]
+    for shelterNumber, shelter in enumerate(shelterEquipment, start = 1):
+        shelter["shelterNumber"] = shelterNumber
     return shelterEquipment
 
 def getHslAccessibilityProperties(jore3row):
@@ -472,7 +462,7 @@ def getHslAccessibilityProperties(jore3row):
         "serviceAreaStripes": mapOptionalBoolean(jore3row.get('erotus_odotusalue')),
         "serviceAreaWidth": toFloat(jore3row.get('min_leveys')),
         "shelterLaneDistance": None,
-        "shelterType": mapShelterWidthType(jore3row),
+        "shelterType": mapShelterWidth(jore3row),
         "sidewalkAccessibleConnection": mapOptionalBoolean(jore3row.get('esteeton_kulku')),
         "stopAreaLengthwiseSlope": toFloat(jore3row['pituuskaltevuus']),
         "stopAreaSideSlope": toFloat(jore3row['sivukaltevuus']),
@@ -486,18 +476,21 @@ def getHslAccessibilityProperties(jore3row):
     return hslAccessibilityProperties
 
 def getAccessibilityLimitations(jore3row):
+    luokkaIs1 = "true" if jore3row['luokka'] == 1 else "false"
     limitations = {
         "audibleSignalsAvailable": 'UNKNOWN',
         "escalatorFreeAccess": 'UNKNOWN',
         #"id": None,
         "liftFreeAccess": 'UNKNOWN',
-        "stepFreeAccess": mapLimitationStatus(jore3row.get('esteeton_kulku')),
-        "wheelchairAccess": mapWheelchairLimitationStatus(jore3row)
+        "stepFreeAccess": luokkaIs1,
+        "wheelchairAccess": luokkaIs1
     }
 
     return limitations
 
-def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat):
+def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat ):
+    pyslaituri = jore3row['pyslaituri']
+
     return {
       "publicCode": label,
       "privateCode": {
@@ -532,7 +525,7 @@ def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat)
         },
         {
             "key": "mainLine",
-            "values": "false"
+            "values": "true" if jore3row['runkolinjavarustus'] is not None else "false"
         },
         {
             "key": "virtual",
@@ -571,7 +564,12 @@ def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat)
       "placeEquipments": {
         "shelterEquipment": getShelterEquipment(jore3row),
         "generalSign": {
-          "numberOfFrames": toFloat(jore3row['kpl_kilvet'])
+          "numberOfFrames": toFloat(jore3row['kpl_kilvet']),
+          "signContentType": "transportModePoint" if pyslaituri is not None else None,
+          "note": jore3row['selite'],
+          "content": {
+            "value": pyslaituri
+          } if pyslaituri is not None else None
         }
       }
     }
