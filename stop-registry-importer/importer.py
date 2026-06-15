@@ -78,9 +78,16 @@ Jore4 Target (Hasura GraphQL — stop_registry.mutateStopPlace):
         (from Jore4 SP)      → keyValues["validityStart"]     From existing scheduled stop point
         (from Jore4 SP)      → keyValues["validityEnd"]       From existing scheduled stop point
         (hardcoded)          → keyValues["stopState"]         Always "InOperation"
-        (hardcoded)          → keyValues["mainLine"]          Always "false"
         (hardcoded)          → keyValues["virtual"]           Always "false"
         (hardcoded)          → keyValues["priority"]          Always "10"
+        pyslaituri           → generalSign[0].content.value   Content of platform sign
+        pyslaituri           → generalSign[0].signContentType "transportModePoint" if not NULL
+
+    Generic equipment infomration (from jr_varustelutiedot_uusi):
+        Jore3 column         → GraphQL field                  Notes
+        ─────────────────────────────────────────────────────────────────────
+        runkolinjavarustus   → keyValues["mainLine"]          "true" if not NULL
+        selite               → generalSign[0].note (lang:fin) value of the selite field
 
     Accessibility assessment (per quay, from jr_esteettomyys):
         Jore3 column         → GraphQL field                   Conversion
@@ -93,10 +100,17 @@ Jore4 Target (Hasura GraphQL — stop_registry.mutateStopPlace):
         esteeton_kulku       → stopAreaSurroundingsAccessible  mapBoolean
         korotus_kaytavaan    → stopElevationFromSidewalk       toFloat
         pysakin_malli        → stopType                        mapStopModel (see below)
+        luokka               → wheelchairAccess                True if luokka == 1, else False
+        luokka               → stepFreeAccess                  True if luokka == 1, else False
 
     Limitations (all hardcoded to FALSE):
         audibleSignalsAvailable, escalatorFreeAccess, liftFreeAccess,
-        stepFreeAccess, wheelchairAccess
+
+    Shelter equipment (per quay, from jr_esteettomyys):
+        Jore3 column         → GraphQL field                   Conversion
+        ─────────────────────────────────────────────────────────────────────
+        penkki               → outsideBench                    mapBoolean
+        valaistus            → shelterLighting                 mapBoolean
 
     Shelter equipment (per quay, from jr_varustelutiedot_uusi):
         Jore3 column         → GraphQL field                   Conversion
@@ -112,10 +126,10 @@ Jore4 Target (Hasura GraphQL — stop_registry.mutateStopPlace):
         nayttolaitteet       → shelterHasDisplay               mapBoolean
         lisavarusteet        → bicycleParking                  True if "03" or "04"
         kpl_kilvet           → generalSign.numberOfFrames      toFloat
-        (hardcoded)          → shelterLighting                 Always True
+        sahko                → shelterLighting                 True if "01" or "02"
         (hardcoded)          → leaningRail                     Always False
-        (hardcoded)          → outsideBench                    Always False
         (hardcoded)          → shelterFasciaBoardTaping        Always False
+        jdc_nro | cc_nro     → shelterExternalId               Only for the first shelter of the stop
 
 Value Mappings:
 
