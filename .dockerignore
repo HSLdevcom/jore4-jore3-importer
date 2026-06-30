@@ -8,3 +8,5 @@
 !/profiles
 !/pom.xml
 !/applicationinsights.json
+!/stop-registry-importer/importer.py
+!/stop-registry-importer/requirements.txt
