@@ -186,6 +186,15 @@ useDotenv = os.getenv("STOP_REGISTRY_IMPORTER_USE_DOTENV", "1").lower() not in (
 if useDotenv:
     environ.Env.read_env('.env')
 
+debugResultCounts = os.getenv("STOP_REGISTRY_IMPORTER_DEBUG_RESULT_COUNTS", "").strip().lower()
+
+
+def should_log_result_counts(kind):
+    if debugResultCounts in ("1", "true", "yes", "all", "both"):
+        return True
+    enabled_kinds = {value.strip() for value in debugResultCounts.split(",") if value.strip()}
+    return kind in enabled_kinds
+
 graphql = env('HASURA_API_URL')
 secret = env('HASURA_ADMIN_SECRET')
 
@@ -195,6 +204,33 @@ jore3DatabaseHost = env('SOURCE_DB_HOSTNAME')
 jore3DatabasePort = env('SOURCE_DB_PORT')
 jore3DatabaseUrl = f"{jore3DatabaseHost}:{jore3DatabasePort}"
 jore3DatabaseName = env('SOURCE_DB_DATABASE')
+
+required_organisations = [
+    "Helsinki",
+    "Espoo",
+    "HKL",
+    "Vantaa",
+    "Mediaterra",
+    "JDC",
+    "CC",
+    "Finavia",
+    "Sipoo",
+    "Kirkkonummi",
+    "Kauniainen",
+    "Kerava",
+    "HSL",
+    "VR",
+    "ELY",
+    "Tuusula",
+    "Nurmijärvi",
+    "Siuntio",
+    "PVP",
+    "BeStones",
+    "Prodecor",
+    "Järvenpää",
+    "Liikennevirasto",
+    "HKR"
+]
 
 logging.info(f"Jore3 db: {jore3DatabaseUrl}/{jore3DatabaseName} as {jore3Username}; hasura at {graphql}")
 
@@ -236,7 +272,7 @@ def get_jore3_stop_areas():
             INNER JOIN jr_lij_pysakkialue jlp ON (jp.pysalueid = jlp.pysalueid)
             WHERE jlp.verkko IN (1, 3)
             GROUP BY jp.pysalueid
-            HAVING COUNT(*) > 1);
+            HAVING COUNT(*) >= 1);
             """)
 
             for row in cursor:
@@ -295,9 +331,69 @@ def update_stop_point(label, netexid):
 
     data = formatted.get("data") if isinstance(formatted, dict) else None
     if data:
-        logging.info(f"Scheduled stop point {label} reference updated")
+        affected_rows = data.get("update_service_pattern_scheduled_stop_point", {}).get("affected_rows", 0)
+        if affected_rows > 0:
+            logging.info(f"Scheduled stop point {label} reference updated")
+            return True
+        logging.info(f"Scheduled stop point {label} reference update had no matching rows")
+        return False
     else:
         logging.info(f"Scheduled stop point {label} reference update failed")
+        return False
+
+def get_jore4_organisations():
+    query = """query {
+      stop_registry {
+        organisation {
+          id
+          name
+        }
+      }
+    }
+    """
+    headers = {'content-type': 'application/json; charset=UTF-8',
+             'x-hasura-admin-secret': secret}
+    response = requests.post(graphql, headers=headers, json={"query": query})
+    json_data = response.json()
+    if not json_data['data']:
+        return {}
+
+    organisations = json.loads(response.content)['data']['stop_registry']['organisation']
+    result_dict = {}
+
+    for x in organisations:
+        result_dict[x['name']] = x['id']
+
+    return result_dict
+
+def insert_missing_organisations(jore4_organisations):
+    for x in required_organisations:
+        if x not in jore4_organisations:
+            mutation = """mutation InsertOrganisation($name: String!) {
+              stop_registry {
+                mutateOrganisation(Organisation: {name: $name}) {
+                  returning {
+                    id
+                    name
+                  }
+                }
+              }
+            }
+            """
+            variables = {
+              "name": x
+            }
+            headers = {'content-type': 'application/json; charset=UTF-8',
+                     'x-hasura-admin-secret': secret}
+            response = requests.post(graphql, headers=headers, json={"query": mutation, "variables": variables})
+            formatted = response.json()
+            data = formatted.get("data") if isinstance(formatted, dict) else None
+
+            if data:
+                logging.info(f"Organisation {x} inserted")
+                jore4_organisations[x] = data['stop_registry']['mutateOrganisation'][0]['id']
+            else:
+                logging.info(f"Organisation {x} insertion failed")
 
 
 def mapTransportMode(verkko):
@@ -405,6 +501,140 @@ def mapShelterWidth(jore3row):
             case _:
                 return 'muu'
 
+def mapShelterOwner(ownerCode, organisations):
+    match ownerCode:
+        case '01':
+            return organisations['Helsinki']
+        case '02':
+            return organisations['Espoo']
+        case '03':
+            return organisations['Vantaa']
+        case '04':
+            return organisations['Kauniainen']
+        case '05':
+            return organisations['Kirkkonummi']
+        case '06':
+            return organisations['Kerava']
+        case '07':
+            return organisations['Sipoo']
+        case '08':
+            return organisations['Finavia']
+        case '09':
+            return organisations['ELY']
+        case '10':
+            return organisations['JDC']
+        case '11':
+            return organisations['CC']
+#        case '12':
+#            return organisations['Muu']
+        case '13':
+            return organisations['HKL']
+        case '14':
+            return organisations['Järvenpää']
+        case '15':
+            return organisations['Tuusula']
+        case _:
+            return None
+
+def mapInfoUpkeep(ownerCode, organisations):
+    match ownerCode:
+        case '01':
+            return organisations['Espoo']
+        case '02':
+            return organisations['HKL']
+        case '03':
+            return organisations['Vantaa']
+        case '04':
+            return organisations['Mediaterra']
+        case '05':
+            return organisations['JDC']
+        case '06':
+            return organisations['CC']
+        case '07':
+            return organisations['Finavia']
+        case '08':
+            return organisations['Sipoo']
+        case '09':
+            return organisations['Kirkkonummi']
+        case '10':
+            return organisations['Kauniainen']
+        case '11':
+            return organisations['Kerava']
+        case '12':
+            return organisations['HSL']
+        case '13':
+            return organisations['VR']
+        case '14':
+            return organisations['ELY']
+        case '15':
+            return organisations['Tuusula']
+        case '16':
+            return organisations['Nurmijärvi']
+        case '17':
+            return organisations['Siuntio']
+#        case '18':
+#            return organisations['Muu']
+        case '19':
+            return organisations['PVP']
+        case '20':
+            return organisations['BeStones']
+        case '21':
+            return organisations['Prodecor']
+        case _:
+            return None
+
+def mapShelterUpkeep(ownerCode, organisations):
+    match ownerCode:
+        case '01':
+            return organisations['Espoo']
+        case '02':
+            return organisations['Vantaa']
+        case '03':
+            return organisations['Kirkkonummi']
+        case '04':
+            return organisations['Sipoo']
+        case '05':
+            return organisations['Kauniainen']
+        case '06':
+            return organisations['Kerava']
+        case '07':
+            return organisations['Finavia']
+        case '08':
+            return organisations['HKL']
+        case '09':
+            return organisations['HKR']
+        case '10':
+            return organisations['VR']
+        case '11':
+            return organisations['ELY']
+        case '12':
+            return organisations['Tuusula']
+        case '13':
+            return organisations['Nurmijärvi']
+        case '14':
+            return organisations['Siuntio']
+#        case '15':
+#            return organisations['Muu']
+        case '16':
+            return organisations['Liikennevirasto']
+        case '17':
+            return organisations['Järvenpää']
+#        case '18':
+#            return organisations['Yksityistie']
+        case _:
+            return None
+
+def mapStopOwner(ownerCode):
+    match ownerCode:
+        case '01' | '02' | '03' | '04' | '05' | '06' | '07' | '14' | '15':
+            return 'municipality'
+        case '08':
+            return 'finavia'
+        case '09':
+            return 'ely'
+        case _:
+            return 'other'
+
 def toFloat(value):
     jsonval = json.dumps(value)
     if jsonval != 'null':
@@ -425,7 +655,7 @@ def getShelterEquipment(jore3row):
         "bicycleParking": jore3row['lisavarusteet'] == '03' or jore3row['lisavarusteet'] == '04',
         "leaningRail": jore3row.get('takakaide_korkeus') is not None,
         "outsideBench": mapBoolean(jore3row.get('penkki')),
-        "shelterFasciaBoardTaping": "false",
+        "shelterFasciaBoardTaping": jore3row['runkolinjavarustus'] is not None and jore3row['ilme'] == '02',
         "stepFree": mapBoolean(jore3row.get('esteeton_kulku')),
         # "seats": N/A,  # Not tracked in Jore4
     }
@@ -488,7 +718,29 @@ def getAccessibilityLimitations(jore3row):
 
     return limitations
 
-def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat ):
+def getOrganisations(jore3row, jore4_organisations):
+    organisations = []
+    ownerOrgId = mapShelterOwner(jore3row['katoksen_omistaja'], jore4_organisations)
+    if ownerOrgId:
+        organisations.append({
+            "organisationId": ownerOrgId,
+            "relationshipType": "owner"
+        })
+    upkeepOrgId = mapShelterUpkeep(jore3row['kunnossapito'], jore4_organisations)
+    if upkeepOrgId:
+        organisations.append({
+            "organisationId": upkeepOrgId,
+            "relationshipType": "shelterMaintenance"
+        })
+    infoUpkeepOrgId = mapInfoUpkeep(jore3row['infonhoito'], jore4_organisations)
+    if infoUpkeepOrgId:
+        organisations.append({
+            "organisationId": infoUpkeepOrgId,
+            "relationshipType": "infoUpkeep"
+        })
+    return organisations
+
+def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat, organisations):
     pyslaituri = jore3row['pyslaituri']
 
     return {
@@ -517,19 +769,19 @@ def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat 
       "keyValues": [
         {
             "key": "elyNumber",
-            "value": [jore3row['elynumero']]
+            "values": [jore3row['elynumero']]
         },
         {
             "key": "stopState",
-            "values": "InOperation"
+            "values": ["OutOfOperation"] if jore3row['selite'] == 'ei käytössä' else ["InOperation"]
         },
         {
             "key": "mainLine",
-            "values": "true" if jore3row['runkolinjavarustus'] is not None else "false"
+            "values": ["true"] if jore3row['runkolinjavarustus'] is not None else ["false"]
         },
         {
             "key": "virtual",
-            "values": "false"
+            "values": ["false"]
         },
         {
             "key": "postalCode",
@@ -542,6 +794,10 @@ def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat 
         {
             "key": "streetAddress",
             "values": [jore3row['pysosoite']]
+        },
+        {
+            "key": "stopOwner",
+            "values": [mapStopOwner(jore3row['katoksen_omistaja'])]
         },
         {
             "key": "priority",
@@ -571,7 +827,8 @@ def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat 
             "value": pyslaituri
           } if pyslaituri is not None else None
         }
-      }
+      },
+      "organisations": getOrganisations(jore3row, organisations)
     }
 
 def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInput, transportMode):
@@ -677,87 +934,134 @@ def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInp
   return {}
 
 
-startTime = datetime.datetime.now()
+def run_import():
+    startTime = datetime.datetime.now()
 
-logging.info(f"Loading Jore4 stop points...")
-j4stopPoints = get_jore4_stop_points()
-logging.info(f"Found {len(j4stopPoints)} stop points")
-added = 0
+    logging.info(f"Loading Jore4 stop points...")
+    j4stopPoints = get_jore4_stop_points()
+    logging.info(f"Found {len(j4stopPoints)} stop points")
+    numJ4StopPointsRead = sum(len(points) for points in j4stopPoints.values())
+    added = 0
 
-logging.info(f"Loading Jore3 stops...")
-j3stopPlaces = get_jore3_stops()
-numJ3StopAreas = len(j3stopPlaces)
-logging.info(f"Found {numJ3StopAreas} stop places grouped by area")
-index = 0
+    logging.info(f"Loading Jore3 stops...")
+    j3stopPlaces = get_jore3_stops()
+    numJ3StopAreas = len(j3stopPlaces)
+    numJ3StopsRead = sum(len(stops) for stops in j3stopPlaces.values())
+    logging.info(f"Found {numJ3StopAreas} stop places grouped by area")
+    index = 0
+    stopPlaceUpdateAttempts = 0
+    stopPlaceUpdateSuccesses = 0
+    stopPointUpdateAttempts = 0
+    stopPointUpdateSuccesses = 0
+    stopPointUpdateFailures = 0
 
-for j3StopArea in get_jore3_stop_areas():
-    index += 1
-    if index % 100 == 1:
-        logging.info(f"Handling stop area {index} / {numJ3StopAreas}")
-    quayInput = []
-    latCoords = []
-    lonCoords = []
-    validityStarts = []
-    validityEnds = []
-    lastJ3Stop = None
-    try:
-        for j3stop in j3stopPlaces[j3StopArea['pysalueid']]:
-            try:
-                solkirjain = j3stop.get('solkirjain')
-                sollistunnus = j3stop.get('sollistunnus')
-                if not solkirjain or not sollistunnus:
-                    logging.warning(f"Skipping stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: solkirjain={solkirjain}, sollistunnus={sollistunnus}")
-                    continue
-                stopLabel = solkirjain + sollistunnus
-                if not stopLabel in j4stopPoints:
-                    logging.info(f"Stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: stop label {stopLabel} not found in jore4stopPoints")
-                    continue
-                if len(j4stopPoints[stopLabel]) > 1:
-                    candidate_lines = []
-                    for candidate in j4stopPoints[stopLabel]:
-                        candidate_lines.append(
-                            f"    prio={candidate.get('priority')} validity={candidate.get('validity_start')}..{candidate.get('validity_end')} loc=({candidate.get('lat')},{candidate.get('lon')})"
+    organisations = get_jore4_organisations()
+    insert_missing_organisations(organisations)
+
+    for j3StopArea in get_jore3_stop_areas():
+        index += 1
+        if index % 100 == 1:
+            logging.info(f"Handling stop area {index} / {numJ3StopAreas}")
+        quayInput = []
+        latCoords = []
+        lonCoords = []
+        validityStarts = []
+        validityEnds = []
+        lastJ3Stop = None
+        try:
+            for j3stop in j3stopPlaces[j3StopArea['pysalueid']]:
+                try:
+                    solkirjain = j3stop.get('solkirjain')
+                    sollistunnus = j3stop.get('sollistunnus')
+                    if not solkirjain or not sollistunnus:
+                        logging.warning(f"Skipping stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: solkirjain={solkirjain}, sollistunnus={sollistunnus}")
+                        continue
+                    stopLabel = solkirjain + sollistunnus
+                    if not stopLabel in j4stopPoints:
+                        logging.info(f"Stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: stop label {stopLabel} not found in jore4stopPoints")
+                        continue
+                    if len(j4stopPoints[stopLabel]) > 1:
+                        candidate_lines = []
+                        for candidate in j4stopPoints[stopLabel]:
+                            candidate_lines.append(
+                                f"    prio={candidate.get('priority')} validity={candidate.get('validity_start')}..{candidate.get('validity_end')} loc=({candidate.get('lat')},{candidate.get('lon')})"
+                            )
+                        logging.warning(
+                            f"Stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: label {stopLabel} has {len(j4stopPoints[stopLabel])} jore4 matches\n"
+                            + "\n".join(candidate_lines)
                         )
-                    logging.warning(
-                        f"Stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: label {stopLabel} has {len(j4stopPoints[stopLabel])} jore4 matches\n"
-                        + "\n".join(candidate_lines)
-                    )
-                j4stopPoint = j4stopPoints[stopLabel][0]
-                lat = j4stopPoint['lat']
-                lon = j4stopPoint['lon']
-                validityStart = j4stopPoint['validity_start']
-                validityEnd = j4stopPoint['validity_end']
-                quayInput.append(quayInputForJore4Stop(j3stop, j4stopPoint['label'], validityStart, validityEnd,
-                                                       lon, lat))
-                latCoords.append(lat)
-                lonCoords.append(lon)
-                validityStarts.append(validityStart)
-                validityEnds.append(validityEnd)
-                lastJ3Stop = j3stop
-            except Exception as e:
-                logging.exception(f"Failed to handle stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: {j3stop['pysnimi']}")
-        if (len(lonCoords) > 0 and len(latCoords) > 0 and len(validityStarts) > 0 and len(validityEnds) > 0):
+                    j4stopPoint = j4stopPoints[stopLabel][0]
+                    lat = j4stopPoint['lat']
+                    lon = j4stopPoint['lon']
+                    validityStart = j4stopPoint['validity_start']
+                    validityEnd = j4stopPoint['validity_end']
+                    quayInput.append(quayInputForJore4Stop(j3stop, j4stopPoint['label'], validityStart, validityEnd,
+                                                           lon, lat, organisations))
+                    latCoords.append(lat)
+                    lonCoords.append(lon)
+                    validityStarts.append(validityStart)
+                    validityEnds.append(validityEnd)
+                    lastJ3Stop = j3stop
+                except Exception as e:
+                    logging.exception(f"Failed to handle stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: {j3stop['pysnimi']}")
+            if (len(lonCoords) > 0 and len(latCoords) > 0 and len(validityStarts) > 0 and len(validityEnds) > 0):
 
-            # Average coordinates of quays for the stop place
-            stopPlaceLon = sum(lonCoords) / len(lonCoords)
-            stopPlaceLat = sum(latCoords) / len(latCoords)
+                # Average coordinates of quays for the stop place
+                stopPlaceLon = sum(lonCoords) / len(lonCoords)
+                stopPlaceLat = sum(latCoords) / len(latCoords)
 
-            # Use min / max validity period of the stop points for the stop place
-            stopPlaceValidityStart = min(validityStarts)
-            stopPlaceValidityEnd = max(validityEnds)
+                # Use min / max validity period of the stop points for the stop place
+                stopPlaceValidityStart = min(validityStarts)
+                stopPlaceValidityEnd = max(validityEnds)
 
-            netexIds = update_stop_place(stopPlaceLat, stopPlaceLon, stopPlaceValidityStart, stopPlaceValidityEnd,
-                                         lastJ3Stop, quayInput, mapTransportMode(j3StopArea['verkko']))
-            if (netexIds):
-                added += 1
-                for netexAssociation in netexIds:
-                    update_stop_point(netexAssociation['publicCode'], netexAssociation['id'])
+                stopPlaceUpdateAttempts += 1
+                netexIds = update_stop_place(stopPlaceLat, stopPlaceLon, stopPlaceValidityStart, stopPlaceValidityEnd,
+                                             lastJ3Stop, quayInput, mapTransportMode(j3StopArea['verkko']))
+                if (netexIds):
+                    stopPlaceUpdateSuccesses += 1
+                    added += 1
+                    for netexAssociation in netexIds:
+                        stopPointUpdateAttempts += 1
+                        if update_stop_point(netexAssociation['publicCode'], netexAssociation['id']):
+                            stopPointUpdateSuccesses += 1
+                        else:
+                            stopPointUpdateFailures += 1
 
-    except Exception as e:
-        logging.exception(f"Failed to handle stop area {j3StopArea['pysalueid']}: {j3StopArea['nimi']}")
+        except Exception as e:
+            logging.exception(f"Failed to handle stop area {j3StopArea['pysalueid']}: {j3StopArea['nimi']}")
 
-endTime = datetime.datetime.now()
-duration = endTime - startTime
-logging.info(f"Added {added} stop places")
-minutes = duration.seconds // 60
-logging.info(f"Import took {minutes} minutes {duration.seconds - (minutes * 60)} seconds")
+    endTime = datetime.datetime.now()
+    duration = endTime - startTime
+    logging.info(f"Added {added} stop places")
+    minutes = duration.seconds // 60
+    logging.info(f"Import took {minutes} minutes {duration.seconds - (minutes * 60)} seconds")
+
+    if should_log_result_counts("read"):
+        logging.info(
+            "Debug read counts: jore4_stop_point_labels=%s jore4_stop_points=%s jore3_stop_areas=%s jore3_stops=%s iterated_stop_areas=%s",
+            len(j4stopPoints),
+            numJ4StopPointsRead,
+            numJ3StopAreas,
+            numJ3StopsRead,
+            index,
+        )
+
+    if should_log_result_counts("updated"):
+        logging.info(
+            "Debug update counts: stop_place_attempts=%s stop_place_successes=%s stop_point_attempts=%s stop_point_successes=%s stop_point_failures=%s",
+            stopPlaceUpdateAttempts,
+            stopPlaceUpdateSuccesses,
+            stopPointUpdateAttempts,
+            stopPointUpdateSuccesses,
+            stopPointUpdateFailures,
+        )
+
+    return added
+
+
+def main():
+    run_import()
+
+
+if __name__ == "__main__":
+    main()
