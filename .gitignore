@@ -49,3 +49,7 @@ jore3dump/*
 
 #stop place import script environment file
 .env
+
+#infrastructure link files used when seeding database
+infraLinks.sql
+tram_infraLinks.sql
