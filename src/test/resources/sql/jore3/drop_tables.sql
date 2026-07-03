@@ -10,3 +10,5 @@ TRUNCATE TABLE jr_via_nimet
 TRUNCATE TABLE jr_pysakki
 TRUNCATE TABLE jr_lij_pysakkialue
 TRUNCATE TABLE jr_paikka
+TRUNCATE TABLE jr_varustelutiedot_uusi
+TRUNCATE TABLE jr_esteettomyys
