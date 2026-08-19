@@ -179,7 +179,8 @@ env = environ.Env(
     SOURCE_DB_PASSWORD=(str,'P@ssw0rd'),
     SOURCE_DB_HOSTNAME=(str,'localhost'),
     SOURCE_DB_PORT=(str,'1433'),
-    SOURCE_DB_DATABASE=(str,'jore3testdb')
+    SOURCE_DB_DATABASE=(str,'jore3testdb'),
+    SOURCE_DB_ENCRYPTION=(str,'off')
 )
 
 useDotenv = os.getenv("STOP_REGISTRY_IMPORTER_USE_DOTENV", "1").lower() not in ("0", "false", "no")
@@ -204,6 +205,10 @@ jore3DatabaseHost = env('SOURCE_DB_HOSTNAME')
 jore3DatabasePort = env('SOURCE_DB_PORT')
 jore3DatabaseUrl = f"{jore3DatabaseHost}:{jore3DatabasePort}"
 jore3DatabaseName = env('SOURCE_DB_DATABASE')
+jore3DatabaseEncryption = env('SOURCE_DB_ENCRYPTION').strip().lower()
+
+if jore3DatabaseEncryption not in ('off', 'request', 'require'):
+    raise ValueError("SOURCE_DB_ENCRYPTION must be one of: off, request, require")
 
 required_organisations = [
     "Helsinki",
@@ -234,10 +239,20 @@ required_organisations = [
 
 logging.info(f"Jore3 db: {jore3DatabaseUrl}/{jore3DatabaseName} as {jore3Username}; hasura at {graphql}")
 
+
+def connect_to_jore3():
+    return pymssql.connect(
+        server=jore3DatabaseUrl,
+        user=jore3Username,
+        password=jore3Password,
+        database=jore3DatabaseName,
+        encryption=jore3DatabaseEncryption,
+    )
+
 def get_jore3_stops():
 
     stopPlaces = []
-    with pymssql.connect(jore3DatabaseUrl, jore3Username, jore3Password, jore3DatabaseName) as conn:
+    with connect_to_jore3() as conn:
 
         with conn.cursor(as_dict=True) as cursor:
 
@@ -260,7 +275,7 @@ def get_jore3_stops():
     return stopPlacesByArea
 
 def get_jore3_stop_areas():
-    with pymssql.connect(jore3DatabaseUrl, jore3Username, jore3Password, jore3DatabaseName) as conn:
+    with connect_to_jore3() as conn:
 
         with conn.cursor(as_dict=True) as cursor:
 
