@@ -1,0 +1,17 @@
+# Local compatibility policy for the legacy Jore3 SQL Server 2012 connection.
+# This file is supplied only to the Python pymssql/FreeTDS subprocess by
+# RunStopRegistryImporterTasklet when source.db.url has encrypt=true.
+openssl_conf = openssl_init
+
+[openssl_init]
+ssl_conf = ssl_sect
+
+[ssl_sect]
+system_default = system_default_sect
+
+[system_default_sect]
+# Permit the TLS 1.0/1.1 protocols offered by the legacy SQL Server instance.
+MinProtocol = TLSv1
+# Permit its legacy certificate and cipher suite. Do not use outside this local migration.
+CipherString = DEFAULT@SECLEVEL=0
+

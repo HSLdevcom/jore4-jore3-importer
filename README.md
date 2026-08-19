@@ -473,7 +473,8 @@ Spring Boot Maven plugin. This is useful if you want to get an easy access to th
 If you want to use this option, you have to follow these steps:
 
 1. Run the dependencies of this application by running the command: `./development.sh start:deps`.
-   (This will bind a volume for the testdb container so that the imported data won't be lost during sessions. If you wish not to do so, run with with `--no-volume` parameter)
+   (If you want to retain imported data across sessions, run the development.sh with the --volume switch.
+    This will bind a volume for the testdb container so that the imported data won't be lost during sessions.)
 2. Run the application by running the command: `./run-local.sh`.
 
 **Second**, you can run everything with Docker. If you want to use this option, you have to run the command:
