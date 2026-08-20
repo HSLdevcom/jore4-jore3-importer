@@ -315,7 +315,7 @@ class StopRegistryImporterGraphqlCaptureTest(unittest.TestCase):
                 timeout_seconds=180,
             )
 
-            populate_jore4_from_sql_fixtures(TESTDB_CONTAINER_NAME, "jore4e2e")
+            populate_jore4_from_sql_fixtures(TESTDB_CONTAINER_NAME, "jore4main")
 
             populate_jore3_from_sql_fixtures(MSSQL_CONTAINER_NAME, mssql_database)
 
