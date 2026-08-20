@@ -1,6 +1,6 @@
 BEGIN;
 
-INSERT INTO route.route (
+INSERT INTO network.route (
     route_id,
     name_i18n,
     description_i18n,
@@ -25,7 +25,7 @@ VALUES (
     10
 );
 
-INSERT INTO route.infrastructure_link_along_route (
+INSERT INTO network.infrastructure_link_along_route (
     route_id,
     infrastructure_link_id,
     infrastructure_link_sequence,

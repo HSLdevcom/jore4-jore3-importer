@@ -7,18 +7,18 @@ BEGIN;
     -- Table truncation is done in a single statement to avoid cascading.
     -- Tables are ordered based on foreign key references (referred last).
     TRUNCATE TABLE
-        journey_pattern.scheduled_stop_point_in_journey_pattern,
-        journey_pattern.journey_pattern,
+        network.scheduled_stop_point_in_journey_pattern,
+        network.journey_pattern,
 
-        route.infrastructure_link_along_route,
-        route.route,
-        route.line,
+        network.infrastructure_link_along_route,
+        network.route,
+        network.line,
 
-        service_pattern.vehicle_mode_on_scheduled_stop_point,
-        service_pattern.scheduled_stop_point,
-        service_pattern.scheduled_stop_point_invariant,
+        network.vehicle_mode_on_scheduled_stop_point,
+        network.scheduled_stop_point,
+        network.scheduled_stop_point_invariant,
 
-        timing_pattern.timing_place,
+        network.timing_place,
 
         infrastructure_network.vehicle_submode_on_infrastructure_link,
         infrastructure_network.infrastructure_link;

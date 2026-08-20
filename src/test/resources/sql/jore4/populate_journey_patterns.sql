@@ -1,4 +1,4 @@
-INSERT INTO journey_pattern.journey_pattern (
+INSERT INTO network.journey_pattern (
     journey_pattern_id,
     on_route_id
 )
