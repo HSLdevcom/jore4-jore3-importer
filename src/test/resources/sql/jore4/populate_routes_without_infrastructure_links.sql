@@ -1,4 +1,4 @@
-INSERT INTO route.route (
+INSERT INTO network.route (
     route_id,
     name_i18n,
     description_i18n,

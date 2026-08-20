@@ -1,13 +1,13 @@
 BEGIN;
 
-INSERT INTO service_pattern.scheduled_stop_point_invariant (label)
+INSERT INTO network.scheduled_stop_point_invariant (label)
 VALUES
     ('H1234'),
     ('H4321'),
     ('H5678')
 ON CONFLICT DO NOTHING;
 
-INSERT INTO service_pattern.scheduled_stop_point (
+INSERT INTO network.scheduled_stop_point (
     scheduled_stop_point_id,
     measured_location,
     located_on_infrastructure_link_id,
@@ -31,7 +31,7 @@ VALUES
         10
     );
 
-INSERT INTO service_pattern.vehicle_mode_on_scheduled_stop_point (
+INSERT INTO network.vehicle_mode_on_scheduled_stop_point (
     scheduled_stop_point_id,
     vehicle_mode
 )

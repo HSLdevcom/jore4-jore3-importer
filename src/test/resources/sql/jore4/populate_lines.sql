@@ -1,4 +1,4 @@
-INSERT INTO route.line (
+INSERT INTO network.line (
     line_id,
     name_i18n,
     short_name_i18n,
