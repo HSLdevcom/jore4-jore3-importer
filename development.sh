@@ -32,7 +32,7 @@ export COMPOSE_PROJECT_NAME=jore3-importer
 
 INFRALINKS_URL="https://stjore4dev001.blob.core.windows.net/jore4-ui/infraLinks_digiroad_r_2026-01_mml_2026-08-04.sql"
 BASE_DB_CONNECTION_STRING=postgresql://dbadmin:adminpassword@localhost:5432
-JORE4_DB_CONNECTION_STRING=$BASE_DB_CONNECTION_STRING/jore4e2e
+JORE4_DB_CONNECTION_STRING=$BASE_DB_CONNECTION_STRING/jore4main
 
 DOCKER_COMPOSE_COMMAND="docker compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.custom.yml"
 DOCKER_COMPOSE_TIAMAT_FLYWAY_COMMAND="docker compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.tiamat-flyway-baseline.yml -f ./docker/docker-compose.custom.yml"
