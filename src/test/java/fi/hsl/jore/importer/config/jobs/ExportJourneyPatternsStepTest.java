@@ -42,8 +42,8 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
 
     private static final fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections IMPORTER_ROUTE_DIRECTIONS =
             fi.hsl.jore.importer.jooq.network.Tables.NETWORK_ROUTE_DIRECTIONS;
-    private static final fi.hsl.jore.jore4.jooq.journey_pattern.tables.JourneyPattern JORE4_JOURNEY_PATTERN =
-            fi.hsl.jore.jore4.jooq.journey_pattern.Tables.JOURNEY_PATTERN_;
+    private static final fi.hsl.jore.jore4.jooq.network.tables.JourneyPattern JORE4_JOURNEY_PATTERN =
+            fi.hsl.jore.jore4.jooq.network.Tables.JOURNEY_PATTERN_;
 
     private final AssertDbConnection importerConnection;
     private final AssertDbConnection jore4Connection;

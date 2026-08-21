@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.config.jobs;
 
 import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
-import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
+import static fi.hsl.jore.jore4.jooq.network.Tables.ROUTE_;
 import static org.assertj.db.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
@@ -67,8 +67,8 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
 
     private static final fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections IMPORTER_ROUTE_DIRECTION =
             fi.hsl.jore.importer.jooq.network.Tables.NETWORK_ROUTE_DIRECTIONS;
-    private static final fi.hsl.jore.jore4.jooq.route.tables.Route JORE4_ROUTE =
-            fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
+    private static final fi.hsl.jore.jore4.jooq.network.tables.Route JORE4_ROUTE =
+            fi.hsl.jore.jore4.jooq.network.Tables.ROUTE_;
 
     private final AssertDbConnection importerConnection;
     private final AssertDbConnection jore4Connection;

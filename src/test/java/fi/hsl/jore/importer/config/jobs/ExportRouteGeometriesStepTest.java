@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.config.jobs;
 
-import static fi.hsl.jore.jore4.jooq.route.Tables.INFRASTRUCTURE_LINK_ALONG_ROUTE;
+import static fi.hsl.jore.jore4.jooq.network.Tables.INFRASTRUCTURE_LINK_ALONG_ROUTE;
 import static org.assertj.db.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
