@@ -56,7 +56,7 @@ class ExportLineStepTest extends BatchIntegrationTest {
 
     private static final fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders IMPORTER_LINE_HEADER =
             Tables.NETWORK_LINE_HEADERS;
-    private static final fi.hsl.jore.jore4.jooq.route.tables.Line JORE4_LINE = fi.hsl.jore.jore4.jooq.route.Tables.LINE;
+    private static final fi.hsl.jore.jore4.jooq.network.tables.Line JORE4_LINE = fi.hsl.jore.jore4.jooq.network.Tables.LINE;
 
     private final AssertDbConnection importerConnection;
     private final AssertDbConnection jore4Connection;

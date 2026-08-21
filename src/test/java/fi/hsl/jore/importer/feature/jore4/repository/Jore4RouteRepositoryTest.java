@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.jore4.repository;
 
 import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
 import static fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil.createMultilingualString;
-import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
+import static fi.hsl.jore.jore4.jooq.network.Tables.ROUTE_;
 import static org.assertj.db.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.IntTest;
