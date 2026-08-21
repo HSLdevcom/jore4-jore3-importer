@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
 import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
-import static fi.hsl.jore.jore4.jooq.timing_pattern.Tables.TIMING_PLACE;
+import static fi.hsl.jore.jore4.jooq.network.Tables.TIMING_PLACE;
 import static org.assertj.db.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.IntTest;

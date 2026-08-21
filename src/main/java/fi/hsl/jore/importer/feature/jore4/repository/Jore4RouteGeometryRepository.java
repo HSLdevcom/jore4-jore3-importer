@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
 import static fi.hsl.jore.jore4.jooq.infrastructure_network.Tables.INFRASTRUCTURE_LINK;
-import static fi.hsl.jore.jore4.jooq.route.Tables.INFRASTRUCTURE_LINK_ALONG_ROUTE;
+import static fi.hsl.jore.jore4.jooq.network.Tables.INFRASTRUCTURE_LINK_ALONG_ROUTE;
 
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteGeometry;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteInfrastructureLink;
