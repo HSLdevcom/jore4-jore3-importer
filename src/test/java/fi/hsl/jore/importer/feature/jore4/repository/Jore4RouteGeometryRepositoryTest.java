@@ -57,7 +57,7 @@ class Jore4RouteGeometryRepositoryTest {
             void shouldNotInsertAnyRowsIntoTargetTable() {
                 repository.insert(List.of());
                 assertThat(connection
-                                .table("route.infrastructure_link_along_route")
+                                .table("network.infrastructure_link_along_route")
                                 .build())
                         .isEmpty();
             }
@@ -91,7 +91,7 @@ class Jore4RouteGeometryRepositoryTest {
             void shouldInsertOneRowIntoTargetTable() {
                 repository.insert(List.of(input));
                 assertThat(connection
-                                .table("route.infrastructure_link_along_route")
+                                .table("network.infrastructure_link_along_route")
                                 .build())
                         .hasNumberOfRows(1);
             }
@@ -101,7 +101,7 @@ class Jore4RouteGeometryRepositoryTest {
             void shouldSaveNewRouteInfrastructureLinkWithCorrectRouteId() {
                 repository.insert(List.of(input));
                 assertThat(connection
-                                .table("route.infrastructure_link_along_route")
+                                .table("network.infrastructure_link_along_route")
                                 .build())
                         .row()
                         .value(INFRASTRUCTURE_LINK_ALONG_ROUTE.ROUTE_ID.getName())
@@ -113,7 +113,7 @@ class Jore4RouteGeometryRepositoryTest {
             void shouldSaveNewRouteInfrastructureLinkWithCorrectInfrastructureLinkId() {
                 repository.insert(List.of(input));
                 assertThat(connection
-                                .table("route.infrastructure_link_along_route")
+                                .table("network.infrastructure_link_along_route")
                                 .build())
                         .row()
                         .value(INFRASTRUCTURE_LINK_ALONG_ROUTE.INFRASTRUCTURE_LINK_ID.getName())
@@ -125,7 +125,7 @@ class Jore4RouteGeometryRepositoryTest {
             void shouldSaveNewRouteInfrastructureLinkWithCorrectInfrastructureLinkSequence() {
                 repository.insert(List.of(input));
                 assertThat(connection
-                                .table("route.infrastructure_link_along_route")
+                                .table("network.infrastructure_link_along_route")
                                 .build())
                         .row()
                         .value(INFRASTRUCTURE_LINK_ALONG_ROUTE.INFRASTRUCTURE_LINK_SEQUENCE.getName())
@@ -137,7 +137,7 @@ class Jore4RouteGeometryRepositoryTest {
             void shouldSaveNewRouteInfrastructureLinkWithCorrectTraversalDirection() {
                 repository.insert(List.of(input));
                 assertThat(connection
-                                .table("route.infrastructure_link_along_route")
+                                .table("network.infrastructure_link_along_route")
                                 .build())
                         .row()
                         .value(INFRASTRUCTURE_LINK_ALONG_ROUTE.IS_TRAVERSAL_FORWARDS.getName())
