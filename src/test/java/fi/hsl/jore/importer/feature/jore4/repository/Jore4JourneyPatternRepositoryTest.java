@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
-import static fi.hsl.jore.jore4.jooq.network.Tables.JOURNEY_PATTERN_;
+import static fi.hsl.jore.jore4.jooq.network.Tables.JOURNEY_PATTERN;
 import static org.assertj.db.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.IntTest;
@@ -58,8 +58,7 @@ class Jore4JourneyPatternRepositoryTest {
         void shouldInsertOneJourneyPatternIntoDatabase() {
             repository.insert(List.of(INPUT));
 
-            assertThat(connection.table("journey_pattern.journey_pattern").build())
-                    .hasNumberOfRows(1);
+            assertThat(connection.table("network.journey_pattern").build()).hasNumberOfRows(1);
         }
 
         @Test
@@ -67,9 +66,9 @@ class Jore4JourneyPatternRepositoryTest {
         void shouldSaveNewJourneyPatternWithCorrectId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(connection.table("journey_pattern.journey_pattern").build())
+            assertThat(connection.table("network.journey_pattern").build())
                     .row()
-                    .value(JOURNEY_PATTERN_.JOURNEY_PATTERN_ID.getName())
+                    .value(JOURNEY_PATTERN.JOURNEY_PATTERN_ID.getName())
                     .isEqualTo(JOURNEY_PATTERN_ID);
         }
 
@@ -78,9 +77,9 @@ class Jore4JourneyPatternRepositoryTest {
         void shouldSaveNewJourneyPatternWithCorrectRouteId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(connection.table("journey_pattern.journey_pattern").build())
+            assertThat(connection.table("network.journey_pattern").build())
                     .row()
-                    .value(JOURNEY_PATTERN_.ON_ROUTE_ID.getName())
+                    .value(JOURNEY_PATTERN.ON_ROUTE_ID.getName())
                     .isEqualTo(ROUTE_ID);
         }
     }

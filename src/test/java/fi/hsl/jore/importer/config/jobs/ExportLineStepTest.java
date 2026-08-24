@@ -56,7 +56,8 @@ class ExportLineStepTest extends BatchIntegrationTest {
 
     private static final fi.hsl.jore.importer.jooq.network.tables.NetworkLineHeaders IMPORTER_LINE_HEADER =
             Tables.NETWORK_LINE_HEADERS;
-    private static final fi.hsl.jore.jore4.jooq.network.tables.Line JORE4_LINE = fi.hsl.jore.jore4.jooq.network.Tables.LINE;
+    private static final fi.hsl.jore.jore4.jooq.network.tables.Line JORE4_LINE =
+            fi.hsl.jore.jore4.jooq.network.Tables.LINE;
 
     private final AssertDbConnection importerConnection;
     private final AssertDbConnection jore4Connection;
@@ -77,7 +78,7 @@ class ExportLineStepTest extends BatchIntegrationTest {
     void shouldInsertOneLineIntoJoreDatabase() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("route.line").build()).hasNumberOfRows(1);
+        assertThat(jore4Connection.table("network.line").build()).hasNumberOfRows(1);
     }
 
     @Test
@@ -85,7 +86,7 @@ class ExportLineStepTest extends BatchIntegrationTest {
     void shouldGenerateNewIdForExportedLine() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("route.line").build())
+        assertThat(jore4Connection.table("network.line").build())
                 .row()
                 .value(JORE4_LINE.LINE_ID.getName())
                 .isNotNull();
@@ -99,37 +100,37 @@ class ExportLineStepTest extends BatchIntegrationTest {
         final SoftAssertions softAssertions = new SoftAssertions();
 
         softAssertions
-                .assertThat(jore4Connection.table("route.line").build())
+                .assertThat(jore4Connection.table("network.line").build())
                 .row()
                 .value(JORE4_LINE.NAME_I18N.getName())
                 .is(equalJson(EXPECTED_NAME));
 
         softAssertions
-                .assertThat(jore4Connection.table("route.line").build())
+                .assertThat(jore4Connection.table("network.line").build())
                 .row()
                 .value(JORE4_LINE.LABEL.getName())
                 .isEqualTo(EXPECTED_LABEL);
 
         softAssertions
-                .assertThat(jore4Connection.table("route.line").build())
+                .assertThat(jore4Connection.table("network.line").build())
                 .row()
                 .value(JORE4_LINE.SHORT_NAME_I18N.getName())
                 .is(equalJson(EXPECTED_SHORT_NAME));
 
         softAssertions
-                .assertThat(jore4Connection.table("route.line").build())
+                .assertThat(jore4Connection.table("network.line").build())
                 .row()
                 .value(JORE4_LINE.PRIMARY_VEHICLE_MODE.getName())
                 .isEqualTo(EXPECTED_PRIMARY_VEHICLE_MODE.getValue());
 
         softAssertions
-                .assertThat(jore4Connection.table("route.line").build())
+                .assertThat(jore4Connection.table("network.line").build())
                 .row()
                 .value(JORE4_LINE.PRIORITY.getName())
                 .isEqualTo(EXPECTED_PRIORITY);
 
         softAssertions
-                .assertThat(jore4Connection.table("route.line").build())
+                .assertThat(jore4Connection.table("network.line").build())
                 .row()
                 .value(JORE4_LINE.LEGACY_HSL_MUNICIPALITY_CODE.getName())
                 .isEqualTo(EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE.getJore4Value());

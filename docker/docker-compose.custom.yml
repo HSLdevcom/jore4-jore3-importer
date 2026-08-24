@@ -38,7 +38,9 @@ services:
 
   jore4-tiamat:
     # Pin tiamat to a compatible version.
-    #image: "hsldevcom/jore4-tiamat:main--20250317-1136ff34a5b6030b0e9c85b0373f5ddc02946267"
+    image: crjore4prod001.azurecr.io/jore4-tiamat:use-main-database-2026-09-02-04255da908190fa6be95701b440f5c94397ae523
+    environment:
+      - TIAMAT_DB_MAIN_DATABASE=jore4main
     depends_on:
       jore4-testdb:
         condition: service_healthy
