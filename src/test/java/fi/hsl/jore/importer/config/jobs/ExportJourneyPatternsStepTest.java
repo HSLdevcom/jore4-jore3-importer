@@ -43,7 +43,7 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
     private static final fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections IMPORTER_ROUTE_DIRECTIONS =
             fi.hsl.jore.importer.jooq.network.Tables.NETWORK_ROUTE_DIRECTIONS;
     private static final fi.hsl.jore.jore4.jooq.network.tables.JourneyPattern JORE4_JOURNEY_PATTERN =
-            fi.hsl.jore.jore4.jooq.network.Tables.JOURNEY_PATTERN_;
+            fi.hsl.jore.jore4.jooq.network.Tables.JOURNEY_PATTERN;
 
     private final AssertDbConnection importerConnection;
     private final AssertDbConnection jore4Connection;
@@ -62,8 +62,7 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
     void shouldInsertOneJourneyPatternIntoJoreDatabase() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("journey_pattern.journey_pattern").build())
-                .hasNumberOfRows(1);
+        assertThat(jore4Connection.table("network.journey_pattern").build()).hasNumberOfRows(1);
     }
 
     @Test
@@ -71,7 +70,7 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
     void shouldGenerateNewIdForExportedJourneyPattern() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("journey_pattern.journey_pattern").build())
+        assertThat(jore4Connection.table("network.journey_pattern").build())
                 .row()
                 .value(JORE4_JOURNEY_PATTERN.JOURNEY_PATTERN_ID.getName())
                 .isNotNull();
@@ -82,7 +81,7 @@ public class ExportJourneyPatternsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedJourneyPatternWithCorrectRouteId() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("journey_pattern.journey_pattern").build())
+        assertThat(jore4Connection.table("network.journey_pattern").build())
                 .row()
                 .value(JORE4_JOURNEY_PATTERN.ON_ROUTE_ID.getName())
                 .isEqualTo(EXPECTED_ROUTE_ID);

@@ -63,7 +63,7 @@ public class ExportRouteGeometriesStepTest extends BatchIntegrationTest {
     @DisplayName("Should insert one row into the target table")
     void shouldInsertOneRowIntoTargetTable() {
         runSteps(STEPS);
-        assertThat(connection.table("route.infrastructure_link_along_route").build())
+        assertThat(connection.table("network.infrastructure_link_along_route").build())
                 .hasNumberOfRows(1);
     }
 
@@ -71,7 +71,7 @@ public class ExportRouteGeometriesStepTest extends BatchIntegrationTest {
     @DisplayName("Should save a new route infrastructure link with the correct route id")
     void shouldSaveNewRouteInfrastructureLinkWithCorrectRouteId() {
         runSteps(STEPS);
-        assertThat(connection.table("route.infrastructure_link_along_route").build())
+        assertThat(connection.table("network.infrastructure_link_along_route").build())
                 .row()
                 .value(INFRASTRUCTURE_LINK_ALONG_ROUTE.ROUTE_ID.getName())
                 .isEqualTo(EXPECTED_ROUTE_ID);
@@ -81,7 +81,7 @@ public class ExportRouteGeometriesStepTest extends BatchIntegrationTest {
     @DisplayName("Should save a new route infrastructure link with the correct infrastructure link id")
     void shouldSaveNewRouteInfrastructureLinkWithCorrectInfrastructureLinkId() {
         runSteps(STEPS);
-        assertThat(connection.table("route.infrastructure_link_along_route").build())
+        assertThat(connection.table("network.infrastructure_link_along_route").build())
                 .row()
                 .value(INFRASTRUCTURE_LINK_ALONG_ROUTE.INFRASTRUCTURE_LINK_ID.getName())
                 .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ID);
@@ -91,7 +91,7 @@ public class ExportRouteGeometriesStepTest extends BatchIntegrationTest {
     @DisplayName("Should save a new route infrastructure link with the correct infrastructure link sequence")
     void shouldSaveNewRouteInfrastructureLinkWithCorrectInfrastructureLinkSequence() {
         runSteps(STEPS);
-        assertThat(connection.table("route.infrastructure_link_along_route").build())
+        assertThat(connection.table("network.infrastructure_link_along_route").build())
                 .row()
                 .value(INFRASTRUCTURE_LINK_ALONG_ROUTE.INFRASTRUCTURE_LINK_SEQUENCE.getName())
                 .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_SEQUENCE);
@@ -101,7 +101,7 @@ public class ExportRouteGeometriesStepTest extends BatchIntegrationTest {
     @DisplayName("Should save a new route infrastructure link with correct traversal direction")
     void shouldSaveNewRouteInfrastructureLinkWithCorrectTraversalDirection() {
         runSteps(STEPS);
-        assertThat(connection.table("route.infrastructure_link_along_route").build())
+        assertThat(connection.table("network.infrastructure_link_along_route").build())
                 .row()
                 .value(INFRASTRUCTURE_LINK_ALONG_ROUTE.IS_TRAVERSAL_FORWARDS.getName())
                 .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS);

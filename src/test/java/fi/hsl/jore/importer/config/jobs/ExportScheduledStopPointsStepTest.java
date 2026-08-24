@@ -83,7 +83,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldInsertOneScheduledStopPointToJore4Database() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("service_pattern.scheduled_stop_point").build())
+        assertThat(jore4Connection.table("network.scheduled_stop_point").build())
                 .hasNumberOfRows(1);
     }
 
@@ -92,7 +92,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldGenerateNewIdForInsertedScheduledStopPoint() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("service_pattern.scheduled_stop_point").build())
+        assertThat(jore4Connection.table("network.scheduled_stop_point").build())
                 .row()
                 .value(JORE4_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID.getName())
                 .isNotNull();
@@ -103,7 +103,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedScheduledStopPointWithCorrectDirection() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("service_pattern.scheduled_stop_point").build())
+        assertThat(jore4Connection.table("network.scheduled_stop_point").build())
                 .row()
                 .value(JORE4_SCHEDULED_STOP_POINT.DIRECTION.getName())
                 .isEqualTo(DIRECTION_ON_INFRALINK.getValue());
@@ -114,7 +114,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedScheduledStopPointWithCorrectInfrastructureLinkId() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("service_pattern.scheduled_stop_point").build())
+        assertThat(jore4Connection.table("network.scheduled_stop_point").build())
                 .row()
                 .value(JORE4_SCHEDULED_STOP_POINT.LOCATED_ON_INFRASTRUCTURE_LINK_ID.getName())
                 .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ID);
@@ -125,7 +125,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedScheduledStopPointWithCorrectLabel() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("service_pattern.scheduled_stop_point").build())
+        assertThat(jore4Connection.table("network.scheduled_stop_point").build())
                 .row()
                 .value(JORE4_SCHEDULED_STOP_POINT.LABEL.getName())
                 .isEqualTo(LABEL);
@@ -155,7 +155,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
     void shouldSaveExportedScheduledStopPointWithCorrectPriority() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("service_pattern.scheduled_stop_point").build())
+        assertThat(jore4Connection.table("network.scheduled_stop_point").build())
                 .row()
                 .value(JORE4_SCHEDULED_STOP_POINT.PRIORITY.getName())
                 .isEqualTo(EXPECTED_PRIORITY);
@@ -200,7 +200,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
         runSteps(STEPS);
 
         assertThat(jore4Connection
-                        .table("service_pattern.vehicle_mode_on_scheduled_stop_point")
+                        .table("network.vehicle_mode_on_scheduled_stop_point")
                         .build())
                 .hasNumberOfRows(1);
     }
@@ -212,7 +212,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
         runSteps(STEPS);
 
         assertThat(jore4Connection
-                        .table("service_pattern.vehicle_mode_on_scheduled_stop_point")
+                        .table("network.vehicle_mode_on_scheduled_stop_point")
                         .build())
                 .row()
                 .value(VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID.getName())
@@ -225,7 +225,7 @@ class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
         runSteps(STEPS);
 
         assertThat(jore4Connection
-                        .table("service_pattern.vehicle_mode_on_scheduled_stop_point")
+                        .table("network.vehicle_mode_on_scheduled_stop_point")
                         .build())
                 .row()
                 .value(VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.VEHICLE_MODE.getName())

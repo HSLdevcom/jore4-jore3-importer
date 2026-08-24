@@ -2,7 +2,7 @@ package fi.hsl.jore.importer.feature.jore4.repository;
 
 import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
 import static fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil.createMultilingualString;
-import static fi.hsl.jore.jore4.jooq.network.Tables.ROUTE_;
+import static fi.hsl.jore.jore4.jooq.network.Tables.ROUTE;
 import static org.assertj.db.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.IntTest;
@@ -88,16 +88,16 @@ class Jore4RouteRepositoryTest {
         @DisplayName("Should insert one route into the database")
         void shouldInsertOneRouteIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.route").build()).hasNumberOfRows(1);
+            assertThat(connection.table("network.route").build()).hasNumberOfRows(1);
         }
 
         @Test
         @DisplayName("Should save a new route with correct id")
         void shouldSaveNewRouteWithCorrectId() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.route").build())
+            assertThat(connection.table("network.route").build())
                     .row()
-                    .value(ROUTE_.ROUTE_ID.getName())
+                    .value(ROUTE.ROUTE_ID.getName())
                     .isEqualTo(ROUTE_ID);
         }
 
@@ -105,9 +105,9 @@ class Jore4RouteRepositoryTest {
         @DisplayName("Should save a new route with the correct description")
         void shouldSaveNewRouteWithCorrectDescription() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.route").build())
+            assertThat(connection.table("network.route").build())
                     .row()
-                    .value(ROUTE_.DESCRIPTION_I18N.getName())
+                    .value(ROUTE.DESCRIPTION_I18N.getName())
                     .is(equalJson(EXPECTED_DESCRIPTION));
         }
 
@@ -115,9 +115,9 @@ class Jore4RouteRepositoryTest {
         @DisplayName("Should save a new route with the correct direction")
         void shouldSaveNewRouteWithCorrectDirection() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.route").build())
+            assertThat(connection.table("network.route").build())
                     .row()
-                    .value(ROUTE_.DIRECTION.getName())
+                    .value(ROUTE.DIRECTION.getName())
                     .isEqualTo(ROUTE_DIRECTION.getValue());
         }
 
@@ -125,9 +125,9 @@ class Jore4RouteRepositoryTest {
         @DisplayName("Should save a new route with the correct label")
         void shouldSaveNewRouteWithCorrectLabel() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.route").build())
+            assertThat(connection.table("network.route").build())
                     .row()
-                    .value(ROUTE_.LABEL.getName())
+                    .value(ROUTE.LABEL.getName())
                     .isEqualTo(LABEL);
         }
 
@@ -135,9 +135,9 @@ class Jore4RouteRepositoryTest {
         @DisplayName("Should save a new route with the correct hidden variant")
         void shouldSaveNewRouteWithCorrectHiddenVariant() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.route").build())
+            assertThat(connection.table("network.route").build())
                     .row()
-                    .value(ROUTE_.VARIANT.getName())
+                    .value(ROUTE.VARIANT.getName())
                     .isEqualTo(HIDDEN_VARIANT);
         }
 
@@ -145,9 +145,9 @@ class Jore4RouteRepositoryTest {
         @DisplayName("Should save a new route with the correct line id")
         void shouldSaveNewRouteWithCorrectLineId() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.route").build())
+            assertThat(connection.table("network.route").build())
                     .row()
-                    .value(ROUTE_.ON_LINE_ID.getName())
+                    .value(ROUTE.ON_LINE_ID.getName())
                     .isEqualTo(LINE_ID);
         }
 
@@ -155,9 +155,9 @@ class Jore4RouteRepositoryTest {
         @DisplayName("Should save a new route with the correct priority")
         void shouldSaveNewRouteWithCorrectPriority() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.route").build())
+            assertThat(connection.table("network.route").build())
                     .row()
-                    .value(ROUTE_.PRIORITY.getName())
+                    .value(ROUTE.PRIORITY.getName())
                     .isEqualTo(PRIORITY);
         }
 
@@ -166,9 +166,9 @@ class Jore4RouteRepositoryTest {
         void shouldSaveNewRouteWithCorrectLegacyHslMunicipalityCode() {
             repository.insert(List.of(INPUT));
 
-            assertThat(connection.table("route.route").build())
+            assertThat(connection.table("network.route").build())
                     .row()
-                    .value(ROUTE_.LEGACY_HSL_MUNICIPALITY_CODE.getName())
+                    .value(ROUTE.LEGACY_HSL_MUNICIPALITY_CODE.getName())
                     .isEqualTo(LegacyHslMunicipalityCode.HELSINKI.getJore4Value());
         }
 
@@ -179,7 +179,7 @@ class Jore4RouteRepositoryTest {
 
             final LocalDate validityPeriodStart = testRepository.findValidityPeriodStartDate();
             Assertions.assertThat(validityPeriodStart)
-                    .as(ROUTE_.VALIDITY_START.getName())
+                    .as(ROUTE.VALIDITY_START.getName())
                     .isEqualTo(VALIDITY_PERIOD_START_TIME_AT_FINNISH_TIME_ZONE);
         }
 
@@ -190,7 +190,7 @@ class Jore4RouteRepositoryTest {
 
             final LocalDate validityPeriodEnd = testRepository.findValidityPeriodEndDate();
             Assertions.assertThat(validityPeriodEnd)
-                    .as(ROUTE_.VALIDITY_END.getName())
+                    .as(ROUTE.VALIDITY_END.getName())
                     .isEqualTo(VALIDITY_PERIOD_END_TIME_AT_FINNISH_TIME_ZONE);
         }
     }

@@ -95,8 +95,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldInsertNewScheduledStopPointIntoDatabase() {
             repository.insert(List.of(INPUT));
 
-            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
-                    .hasNumberOfRows(1);
+            assertThat(connection.table("network.scheduled_stop_point").build()).hasNumberOfRows(1);
         }
 
         @Test
@@ -104,7 +103,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
+            assertThat(connection.table("network.scheduled_stop_point").build())
                     .row()
                     .value(SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID.getName())
                     .isEqualTo(SCHEDULED_STOP_POINT_ID);
@@ -115,7 +114,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectDirection() {
             repository.insert(List.of(INPUT));
 
-            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
+            assertThat(connection.table("network.scheduled_stop_point").build())
                     .row()
                     .value(SCHEDULED_STOP_POINT.DIRECTION.getName())
                     .isEqualTo(DIRECTION_ON_INFRALINK.getValue());
@@ -126,7 +125,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectInfrastructureLinkId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
+            assertThat(connection.table("network.scheduled_stop_point").build())
                     .row()
                     .value(SCHEDULED_STOP_POINT.LOCATED_ON_INFRASTRUCTURE_LINK_ID.getName())
                     .isEqualTo(EXPECTED_INFRASTRUCTURE_LINK_ID);
@@ -137,7 +136,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectLabel() {
             repository.insert(List.of(INPUT));
 
-            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
+            assertThat(connection.table("network.scheduled_stop_point").build())
                     .row()
                     .value(SCHEDULED_STOP_POINT.LABEL.getName())
                     .isEqualTo(LABEL);
@@ -167,7 +166,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectTimingPlaceId() {
             repository.insert(List.of(INPUT));
 
-            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
+            assertThat(connection.table("network.scheduled_stop_point").build())
                     .row()
                     .value(SCHEDULED_STOP_POINT.TIMING_PLACE_ID.getName())
                     .isEqualTo(EXPECTED_TIMING_PLACE_ID);
@@ -178,7 +177,7 @@ class Jore4ScheduledStopPointRepositoryTest {
         void shouldSaveNewScheduledStopPointWithCorrectPriority() {
             repository.insert(List.of(INPUT));
 
-            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
+            assertThat(connection.table("network.scheduled_stop_point").build())
                     .row()
                     .value(SCHEDULED_STOP_POINT.PRIORITY.getName())
                     .isEqualTo(PRIORITY);
@@ -212,7 +211,7 @@ class Jore4ScheduledStopPointRepositoryTest {
             repository.insert(List.of(INPUT));
 
             assertThat(connection
-                            .table("service_pattern.vehicle_mode_on_scheduled_stop_point")
+                            .table("network.vehicle_mode_on_scheduled_stop_point")
                             .build())
                     .hasNumberOfRows(1);
         }
@@ -223,7 +222,7 @@ class Jore4ScheduledStopPointRepositoryTest {
             repository.insert(List.of(INPUT));
 
             assertThat(connection
-                            .table("service_pattern.vehicle_mode_on_scheduled_stop_point")
+                            .table("network.vehicle_mode_on_scheduled_stop_point")
                             .build())
                     .row()
                     .value(VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.SCHEDULED_STOP_POINT_ID.getName())
@@ -236,7 +235,7 @@ class Jore4ScheduledStopPointRepositoryTest {
             repository.insert(List.of(INPUT));
 
             assertThat(connection
-                            .table("service_pattern.vehicle_mode_on_scheduled_stop_point")
+                            .table("network.vehicle_mode_on_scheduled_stop_point")
                             .build())
                     .row()
                     .value(VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.VEHICLE_MODE.getName())
