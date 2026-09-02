@@ -1,0 +1,8 @@
+services:
+  jore4-tiamat:
+    extends:
+      file: docker-compose.base.yml
+      service: jore4-tiamat-base
+    environment:
+      - SPRING_FLYWAY_BASELINE_ON_MIGRATE=true
+      - SPRING_FLYWAY_BASELINE_VERSION=0

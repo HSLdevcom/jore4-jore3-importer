@@ -480,6 +480,8 @@ If you want to use this option, you have to follow these steps:
 **Second**, you can run everything with Docker. If you want to use this option, you have to run the command:
 `./development.sh start`.
 
+After running the importer, consider cleaning the database from orpahns with `scripts/orphan-removal.sh`
+
 ### Packaging the Application
 
 If you want to create a package that can be used for deployment, you have run the command: `mvn clean package spring-boot:repackage -P prod`

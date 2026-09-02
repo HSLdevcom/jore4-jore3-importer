@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.config.jobs;
 
+import fi.hsl.jore.importer.config.properties.DataSourceConfigDto;
 import fi.hsl.jore.importer.feature.batch.common.GenericCleanupTasklet;
 import fi.hsl.jore.importer.feature.batch.common.GenericCommitTasklet;
 import fi.hsl.jore.importer.feature.batch.common.GenericImportWriter;
@@ -111,6 +112,7 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.skip.AlwaysSkipItemSkipPolicy;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.batch.autoconfigure.BatchTransactionManager;
@@ -179,9 +181,7 @@ public class JobConfig {
             @Value("${stop.registry.importer.script.path:importer.py}") final String scriptPath,
             @Value("${stop.registry.importer.working.directory:stop-registry-importer}") final String workingDir,
             @Value("${stop.registry.importer.timeout.hours:2}") final long timeoutHours,
-            @Value("${source.db.url}") final String sourceDbUrl,
-            @Value("${source.db.username}") final String sourceDbUsername,
-            @Value("${source.db.password}") final String sourceDbPassword) {
+            @Qualifier("sourceDataSourceConfig") final DataSourceConfigDto sourceDataSourceConfig) {
         return new StepBuilder("runStopRegistryImporterStep", jobRepository)
                 .allowStartIfComplete(true)
                 .tasklet(
@@ -190,9 +190,9 @@ public class JobConfig {
                                 scriptPath,
                                 workingDir,
                                 timeoutHours,
-                                sourceDbUrl,
-                                sourceDbUsername,
-                                sourceDbPassword),
+                                sourceDataSourceConfig.jdbcUrl(),
+                                sourceDataSourceConfig.username(),
+                                sourceDataSourceConfig.password()),
                         transactionManager)
                 .build();
     }

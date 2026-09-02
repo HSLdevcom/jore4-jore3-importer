@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.stop_registry;
 
+import com.google.common.net.HostAndPort;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -19,6 +20,10 @@ import org.springframework.batch.infrastructure.repeat.RepeatStatus;
  * stdout/stderr line-by-line through SLF4J so that its output is intermixed with the Java application's normal logs.
  */
 public class RunStopRegistryImporterTasklet implements Tasklet {
+
+    record SourceDatabaseConnection(String hostname, String port, String database, String encryption) {}
+
+    private record HostAndPort(String hostname, String port) {}
 
     private static final Logger LOG = LoggerFactory.getLogger("stop-registry-importer");
     private static final String LEGACY_TLS_OPENSSL_CONFIG = "openssl-legacy-tls.cnf";
@@ -201,8 +206,4 @@ public class RunStopRegistryImporterTasklet implements Tasklet {
         // mssql-jdbc 13.x defaults encrypt to true; preserve that effective setting for pymssql.
         return "require";
     }
-
-    record SourceDatabaseConnection(String hostname, String port, String database, String encryption) {}
-
-    private record HostAndPort(String hostname, String port) {}
 }

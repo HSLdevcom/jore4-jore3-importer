@@ -11,6 +11,7 @@ import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPoin
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPattern;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPatterns;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.PointType;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPoint;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPointInvariant;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPointsWithInfraLinkData;
@@ -426,6 +427,11 @@ public class Tables {
             newVehicleMode
         );
     }
+
+    /**
+     * The table <code>service_pattern.point_type</code>.
+     */
+    public static final PointType POINT_TYPE = PointType.POINT_TYPE;
 
     /**
      * The scheduled stop points:
