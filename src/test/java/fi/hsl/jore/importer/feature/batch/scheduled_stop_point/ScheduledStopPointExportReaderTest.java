@@ -195,6 +195,27 @@ class ScheduledStopPointExportReaderTest {
     }
 
     @Nested
+    @DisplayName("When the source table has a scheduled stop point with a missing ELY number")
+    @Sql(
+            scripts = {
+                "/sql/importer/drop_tables.sql",
+                "/sql/importer/populate_infrastructure_nodes.sql",
+                "/sql/importer/populate_places.sql",
+                "/sql/importer/populate_scheduled_stop_points_with_missing_ely_number.sql"
+            })
+    class WhenSourceTableHasScheduledStopPointWithMissingElyNumber {
+
+        @Test
+        @DisplayName("The complete external ID and ELY number pair must be returned")
+        void completePairMustBeReturned() throws Exception {
+            final ImporterScheduledStopPoint found = reader.read();
+
+            assertThat(found.externalIds()).isEqualTo(List.of(ExternalId.of("d")));
+            assertThat(found.elyNumbers()).isEqualTo(List.of(9876543211L));
+        }
+    }
+
+    @Nested
     @DisplayName("When the source table has one scheduled stop point with no place ID")
     @Sql(
             scripts = {

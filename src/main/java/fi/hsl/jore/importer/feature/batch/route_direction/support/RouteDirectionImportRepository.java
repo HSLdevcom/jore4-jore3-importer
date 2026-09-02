@@ -1,5 +1,6 @@
 package fi.hsl.jore.importer.feature.batch.route_direction.support;
 
+import static org.jooq.impl.DSL.condition;
 import static org.jooq.impl.DSL.selectOne;
 
 import fi.hsl.jore.importer.feature.batch.common.AbstractImportRepository;
@@ -15,6 +16,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -27,7 +30,10 @@ public class RouteDirectionImportRepository extends AbstractImportRepository<Jor
     private static final NetworkRouteDirectionsStaging STAGING_TABLE =
             NetworkRouteDirectionsStaging.NETWORK_ROUTE_DIRECTIONS_STAGING;
     private static final NetworkRouteDirections TARGET_TABLE = NetworkRouteDirections.NETWORK_ROUTE_DIRECTIONS;
+    private static final NetworkRouteDirections CONFLICTING_TARGET_TABLE = TARGET_TABLE.as("conflicting_target");
+    private static final NetworkRouteDirections EXISTING_EXTERNAL_ID_TABLE = TARGET_TABLE.as("existing_external_id");
     private static final NetworkRoutes ROUTES_TABLE = NetworkRoutes.NETWORK_ROUTES;
+    private static final Logger LOG = LoggerFactory.getLogger(RouteDirectionImportRepository.class);
 
     private final DSLContext db;
     private final IJsonbConverter jsonbConverter;
@@ -128,6 +134,8 @@ public class RouteDirectionImportRepository extends AbstractImportRepository<Jor
     }
 
     protected Set<RouteDirectionPK> insert() {
+        logConflictingInsertCandidates();
+
         return db
                 .insertInto(TARGET_TABLE)
                 .columns(
@@ -157,11 +165,46 @@ public class RouteDirectionImportRepository extends AbstractImportRepository<Jor
                                 .from(TARGET_TABLE)
                                 .where(TARGET_TABLE.NETWORK_ROUTE_DIRECTION_EXT_ID.eq(
                                         STAGING_TABLE.NETWORK_ROUTE_DIRECTION_EXT_ID))))
+                .onConflictDoNothing()
                 .returningResult(TARGET_TABLE.NETWORK_ROUTE_DIRECTION_ID)
                 .fetch()
                 .stream()
                 .map(row -> RouteDirectionPK.of(row.value1()))
                 .collect(Collectors.toUnmodifiableSet());
+    }
+
+    private void logConflictingInsertCandidates() {
+        db.select(
+                        STAGING_TABLE.NETWORK_ROUTE_DIRECTION_EXT_ID,
+                        STAGING_TABLE.NETWORK_ROUTE_EXT_ID,
+                        STAGING_TABLE.NETWORK_ROUTE_DIRECTION_TYPE,
+                        STAGING_TABLE.NETWORK_ROUTE_DIRECTION_VALID_DATE_RANGE,
+                        CONFLICTING_TARGET_TABLE.NETWORK_ROUTE_DIRECTION_EXT_ID,
+                        CONFLICTING_TARGET_TABLE.NETWORK_ROUTE_DIRECTION_VALID_DATE_RANGE)
+                .from(STAGING_TABLE)
+                .join(ROUTES_TABLE)
+                .on(ROUTES_TABLE.NETWORK_ROUTE_EXT_ID.eq(STAGING_TABLE.NETWORK_ROUTE_EXT_ID))
+                .join(CONFLICTING_TARGET_TABLE)
+                .on(CONFLICTING_TARGET_TABLE.NETWORK_ROUTE_ID.eq(ROUTES_TABLE.NETWORK_ROUTE_ID))
+                .and(CONFLICTING_TARGET_TABLE.NETWORK_ROUTE_DIRECTION_TYPE.eq(
+                        STAGING_TABLE.NETWORK_ROUTE_DIRECTION_TYPE))
+                .and(condition(
+                        "{0} && {1}",
+                        CONFLICTING_TARGET_TABLE.NETWORK_ROUTE_DIRECTION_VALID_DATE_RANGE,
+                        STAGING_TABLE.NETWORK_ROUTE_DIRECTION_VALID_DATE_RANGE))
+                .whereNotExists(selectOne()
+                        .from(EXISTING_EXTERNAL_ID_TABLE)
+                        .where(EXISTING_EXTERNAL_ID_TABLE.NETWORK_ROUTE_DIRECTION_EXT_ID.eq(
+                                STAGING_TABLE.NETWORK_ROUTE_DIRECTION_EXT_ID)))
+                .fetch()
+                .forEach(conflict -> LOG.warn(
+                        "Skipping route direction insert with external ID {} for route {}, direction {}, and validity {} because it overlaps existing external ID {} with validity {}",
+                        conflict.value1(),
+                        conflict.value2(),
+                        conflict.value3(),
+                        conflict.value4(),
+                        conflict.value5(),
+                        conflict.value6()));
     }
 
     @Transactional

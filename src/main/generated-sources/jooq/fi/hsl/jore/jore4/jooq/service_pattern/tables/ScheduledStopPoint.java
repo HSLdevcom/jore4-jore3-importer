@@ -128,6 +128,11 @@ public class ScheduledStopPoint extends TableImpl<Record> {
      */
     public final TableField<Record, String> STOP_PLACE_REF = createField(DSL.name("stop_place_ref"), SQLDataType.CLOB, this, "The id of the related stop place in stop registry database.");
 
+    /**
+     * The column <code>service_pattern.scheduled_stop_point.point_type</code>.
+     */
+    public final TableField<Record, String> POINT_TYPE = createField(DSL.name("point_type"), SQLDataType.CLOB.nullable(false).defaultValue(DSL.field(DSL.raw("'timing_point'::text"), SQLDataType.CLOB)), this, "");
+
     private ScheduledStopPoint(Name alias, Table<Record> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

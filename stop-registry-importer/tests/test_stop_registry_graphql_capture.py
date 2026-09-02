@@ -498,7 +498,11 @@ class StopRegistryImporterGraphqlCaptureTest(unittest.TestCase):
                 generalSign = placeEquipments.get("generalSign", {})
                 self.assertEqual(generalSign.get("numberOfFrames"), 2, "Quay mutation placeEquipments generalSign numberOfFrames mismatch")
                 self.assertEqual(generalSign.get("signContentType"), None, "Quay mutation placeEquipments generalSign signContentType mismatch")
-                self.assertEqual(generalSign.get("note"), "Additional maintenance info", "Quay mutation placeEquipments generalSign note mismatch")
+                self.assertEqual(
+                    generalSign.get("note"),
+                    {"lang": "fin", "value": "Additional maintenance info"},
+                    "Quay mutation placeEquipments generalSign note mismatch",
+                )
                 self.assertEqual(generalSign.get("content"), None, "Quay mutation placeEquipments generalSign contnet mismatch")
 
                 organisations = quay.get("organisations", [])
@@ -513,8 +517,8 @@ class StopRegistryImporterGraphqlCaptureTest(unittest.TestCase):
                 accessibilityAssessment = quay.get("accessibilityAssessment", {})
 
                 accessibilityLimitations = accessibilityAssessment.get("limitations", {})
-                self.assertEqual(accessibilityLimitations.get("stepFreeAccess"), "false", "Quay mutation accessibilityAssessment accessibilityLimitations stepFreeAccess mismatch")
-                self.assertEqual(accessibilityLimitations.get("wheelchairAccess"), "false", "Quay mutation accessibilityAssessment accessibilityLimitations wheelchairAccess mismatch")
+                self.assertEqual(accessibilityLimitations.get("stepFreeAccess"), "FALSE", "Quay mutation accessibilityAssessment accessibilityLimitations stepFreeAccess mismatch")
+                self.assertEqual(accessibilityLimitations.get("wheelchairAccess"), "FALSE", "Quay mutation accessibilityAssessment accessibilityLimitations wheelchairAccess mismatch")
 
                 hslAccessibilityProperties = accessibilityAssessment.get("hslAccessibilityProperties", {})
                 self.assertEqual(hslAccessibilityProperties.get("accessibilityLevel"), "mostlyAccessible", "Quay mutation accessibilityAssessment hslAccessibilityProperties accessibilityLevel mismatch")

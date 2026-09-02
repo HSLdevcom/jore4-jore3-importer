@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import fi.hsl.jore.importer.IntTest;
 import fi.hsl.jore.importer.config.jooq.converter.date_range.DateRange;
 import fi.hsl.jore.importer.feature.batch.util.RowStatus;
+import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
 import fi.hsl.jore.importer.feature.network.direction_type.field.DirectionType;
 import fi.hsl.jore.importer.feature.network.route_direction.dto.PersistableJourneyPatternIdMapping;
@@ -462,6 +463,32 @@ class RouteDirectionImportRepositoryTest {
                                     "Expected the valid data range to be: %s but was: %s",
                                     EXPECTED_VALID_DATE_RANGE, updated.validTime())
                             .isEqualTo(EXPECTED_VALID_DATE_RANGE);
+                }
+            }
+
+            @Nested
+            @DisplayName("When a new route direction overlaps an existing route direction")
+            @Sql(
+                    scripts = {
+                        "/sql/importer/drop_tables.sql",
+                        "/sql/importer/populate_lines.sql",
+                        "/sql/importer/populate_routes.sql",
+                        "/sql/importer/populate_route_directions.sql",
+                        "/sql/importer/populate_route_directions_staging_with_conflict.sql"
+                    })
+            class WhenNewRouteDirectionOverlapsExistingRouteDirection {
+
+                @Test
+                @DisplayName("Should skip the conflicting row and insert the non-conflicting row")
+                void shouldSkipConflictingRowAndInsertNonConflictingRow() {
+                    final Map<RowStatus, Set<RouteDirectionPK>> result = importRepository.commitStagingToTarget();
+
+                    assertThat(result.get(RowStatus.INSERTED)).hasSize(1);
+                    assertThat(targetRepository.count()).isEqualTo(2);
+                    assertThat(targetRepository.findByExternalId(ExternalId.of("conflicting-direction")))
+                            .isEmpty();
+                    assertThat(targetRepository.findByExternalId(ExternalId.of("non-conflicting-direction")))
+                            .isPresent();
                 }
             }
         }

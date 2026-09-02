@@ -37,7 +37,7 @@ public class MapMatchingProcessor implements ItemProcessor<ImporterRouteGeometry
 
     @Override
     public Jore4RouteGeometry process(final ImporterRouteGeometry routeGeometryInput) throws Exception {
-        LOGGER.debug(
+        LOGGER.info(
                 "Processing route geometry with routeDirectionId: {} and routeDirectionExtId: {}",
                 routeGeometryInput.routeDirectionId(),
                 routeGeometryInput.routeDirectionExtId());

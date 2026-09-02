@@ -81,7 +81,7 @@ Jore4 Target (Hasura GraphQL — stop_registry.mutateStopPlace):
         (hardcoded)          → keyValues["virtual"]           Always "false"
         (hardcoded)          → keyValues["priority"]          Always "10"
         pyslaituri           → generalSign[0].content.value   Content of platform sign
-        pyslaituri           → generalSign[0].signContentType "transportModePoint" if not NULL
+        pyslaituri           → generalSign[0].signContentType "TransportModePoint" if not NULL
 
     Generic equipment infomration (from jr_varustelutiedot_uusi):
         Jore3 column         → GraphQL field                  Notes
@@ -156,7 +156,6 @@ Post-import Linking:
         WHERE label = <quay publicCode>
 """
 
-import datetime
 import time
 import os
 import pymssql
@@ -353,7 +352,16 @@ def update_stop_point(label, netexid):
         logging.info(f"Scheduled stop point {label} reference update had no matching rows")
         return False
     else:
-        logging.info(f"Scheduled stop point {label} reference update failed")
+        errors = formatted.get("errors") if isinstance(formatted, dict) else None
+        messages = [
+            str(error.get("message"))
+            for error in errors or []
+            if isinstance(error, dict) and error.get("message")
+        ]
+        if messages:
+            logging.error(f"Scheduled stop point {label} reference update failed: {'; '.join(messages)}")
+        else:
+            logging.error(f"Scheduled stop point {label} reference update failed:", formatted)
         return False
 
 def get_jore4_organisations():
@@ -381,16 +389,23 @@ def get_jore4_organisations():
 
     return result_dict
 
+
+def first_mutation_result(result):
+    if isinstance(result, dict):
+        return result
+    if isinstance(result, list):
+        return next((item for item in result if isinstance(item, dict)), None)
+    return None
+
+
 def insert_missing_organisations(jore4_organisations):
     for x in required_organisations:
         if x not in jore4_organisations:
             mutation = """mutation InsertOrganisation($name: String!) {
               stop_registry {
                 mutateOrganisation(Organisation: {name: $name}) {
-                  returning {
-                    id
-                    name
-                  }
+                  id
+                  name
                 }
               }
             }
@@ -405,10 +420,25 @@ def insert_missing_organisations(jore4_organisations):
             data = formatted.get("data") if isinstance(formatted, dict) else None
 
             if data:
-                logging.info(f"Organisation {x} inserted")
-                jore4_organisations[x] = data['stop_registry']['mutateOrganisation'][0]['id']
+                organisation = first_mutation_result(
+                    data.get('stop_registry', {}).get('mutateOrganisation')
+                )
+                if organisation and organisation.get('id'):
+                    logging.info(f"Organisation {x} inserted")
+                    jore4_organisations[x] = organisation['id']
+                else:
+                    logging.error(f"Organisation {x} insertion returned no organisation id: {formatted}")
             else:
-                logging.info(f"Organisation {x} insertion failed")
+                errors = formatted.get("errors") if isinstance(formatted, dict) else None
+                messages = [
+                    str(error.get("message"))
+                    for error in errors or []
+                    if isinstance(error, dict) and error.get("message")
+                ]
+                if messages:
+                    logging.error(f"Organisation {x} insertion failed: {'; '.join(messages)}")
+                else:
+                    logging.error(f"Organisation {x} insertion failed:", formatted)
 
 
 def mapTransportMode(verkko):
@@ -514,7 +544,7 @@ def mapShelterWidth(jore3row):
             case '2':
                 return 'narrow'
             case _:
-                return 'muu'
+                return 'other'
 
 def mapShelterOwner(ownerCode, organisations):
     match ownerCode:
@@ -680,7 +710,7 @@ def getShelterEquipment(jore3row):
         return None
 
     firstShelter = {
-        "shelterExternalId": jore3row['jcd_nro'] + jore3row['cc_nro'],
+        "shelterExternalId": str(jore3row.get('jcd_nro') or '') + str(jore3row.get('cc_nro') or ''),
         **baseShelterEquipment
     }
     shelterEquipment = [firstShelter] + [baseShelterEquipment.copy() for _ in range(shelterCount - 1)]
@@ -721,7 +751,7 @@ def getHslAccessibilityProperties(jore3row):
     return hslAccessibilityProperties
 
 def getAccessibilityLimitations(jore3row):
-    luokkaIs1 = "true" if jore3row['luokka'] == 1 else "false"
+    luokkaIs1 = "TRUE" if jore3row['luokka'] == 1 else "FALSE"
     limitations = {
         "audibleSignalsAvailable": 'UNKNOWN',
         "escalatorFreeAccess": 'UNKNOWN',
@@ -738,19 +768,19 @@ def getOrganisations(jore3row, jore4_organisations):
     ownerOrgId = mapShelterOwner(jore3row['katoksen_omistaja'], jore4_organisations)
     if ownerOrgId:
         organisations.append({
-            "organisationId": ownerOrgId,
+            "organisationRef": [ownerOrgId],
             "relationshipType": "owner"
         })
     upkeepOrgId = mapShelterUpkeep(jore3row['kunnossapito'], jore4_organisations)
     if upkeepOrgId:
         organisations.append({
-            "organisationId": upkeepOrgId,
+            "organisationRef": [upkeepOrgId],
             "relationshipType": "shelterMaintenance"
         })
     infoUpkeepOrgId = mapInfoUpkeep(jore3row['infonhoito'], jore4_organisations)
     if infoUpkeepOrgId:
         organisations.append({
-            "organisationId": infoUpkeepOrgId,
+            "organisationRef": [infoUpkeepOrgId],
             "relationshipType": "infoUpkeep"
         })
     return organisations
@@ -836,8 +866,11 @@ def quayInputForJore4Stop(jore3row, label, validityStart, validityEnd, lon, lat,
         "shelterEquipment": getShelterEquipment(jore3row),
         "generalSign": {
           "numberOfFrames": toFloat(jore3row['kpl_kilvet']),
-          "signContentType": "transportModePoint" if pyslaituri is not None else None,
-          "note": jore3row['selite'],
+          "signContentType": "TransportModePoint" if pyslaituri is not None else None,
+          "note": {
+            "lang": "fin",
+            "value": jore3row['selite']
+          },
           "content": {
             "value": pyslaituri
           } if pyslaituri is not None else None
@@ -921,28 +954,39 @@ def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInp
         logging.error(f"Stop place {jore3result['pysalueid']} failed after {max_retries} attempts (timeout)")
         return {}
 
-    logging.info(f"Stop place {jore3result['pysalueid']} update response: {formatted}")
 
     # Check for retryable errors (timeouts, remote schema errors)
     errors = formatted.get("errors") if isinstance(formatted, dict) else None
-    if errors and any("timeout" in (e.get("message", "") or "").lower() or
+    if errors:
+      if any("timeout" in (e.get("message", "") or "").lower() or
                       "remote-schema-error" in str(e.get("extensions", {}).get("code", "")).lower()
                       for e in errors):
-      if attempt < max_retries - 1:
-        wait = 2 ** (attempt + 1)
-        logging.warning(f"Retryable error for stop place {jore3result['pysalueid']}, retrying in {wait}s (attempt {attempt + 1}/{max_retries})")
-        time.sleep(wait)
-        continue
-      else:
-        logging.error(f"Stop place {jore3result['pysalueid']} failed after {max_retries} attempts")
-        return {}
+        if attempt < max_retries - 1:
+          wait = 2 ** (attempt + 1)
+          logging.warning(f"Retryable error for stop place {jore3result['pysalueid']}, retrying in {wait}s (attempt {attempt + 1}/{max_retries})")
+          time.sleep(wait)
+          continue
+        else:
+          logging.error(f"Stop place {jore3result['pysalueid']} failed after {max_retries} attempts; response: {formatted}")
+          return {}
+
+      logging.error(f"Stop place {jore3result['pysalueid']} update failed; response: {formatted}")
+      return {}
+
 
     data = formatted.get("data") if isinstance(formatted, dict) else None
     if data:
-      return data["stop_registry"]["mutateStopPlace"][0]["quays"]
+      stop_place = first_mutation_result(
+          data.get("stop_registry", {}).get("mutateStopPlace")
+      )
+      if stop_place:
+        return stop_place.get("quays", [])
+
+      logging.error(f"Stop place {jore3result['pysalueid']} update returned no stop place: {formatted}")
+      return {}
 
     if errors:
-      logging.info(errors[0].get("message", f"Stop place {jore3result['pysalueid']} update failed!"))
+      logging.error(errors[0].get("message", f"Stop place {jore3result['pysalueid']} update failed!"))
 
     return {}
 
@@ -950,7 +994,7 @@ def update_stop_place(lat, lon, validityStart, validityEnd, jore3result, quayInp
 
 
 def run_import():
-    startTime = datetime.datetime.now()
+    startTime = time.perf_counter()
 
     logging.info(f"Loading Jore4 stop points...")
     j4stopPoints = get_jore4_stop_points()
@@ -1018,7 +1062,7 @@ def run_import():
                     validityEnds.append(validityEnd)
                     lastJ3Stop = j3stop
                 except Exception as e:
-                    logging.exception(f"Failed to handle stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: {j3stop['pysnimi']}")
+                    logging.exception(f"Failed to handle stop {index} {j3StopArea['pysalueid']} / {j3stop['soltunnus']}: {j3stop['pysnimi']}:\n{e}")
             if (len(lonCoords) > 0 and len(latCoords) > 0 and len(validityStarts) > 0 and len(validityEnds) > 0):
 
                 # Average coordinates of quays for the stop place
@@ -1045,11 +1089,10 @@ def run_import():
         except Exception as e:
             logging.exception(f"Failed to handle stop area {j3StopArea['pysalueid']}: {j3StopArea['nimi']}")
 
-    endTime = datetime.datetime.now()
-    duration = endTime - startTime
     logging.info(f"Added {added} stop places")
-    minutes = duration.seconds // 60
-    logging.info(f"Import took {minutes} minutes {duration.seconds - (minutes * 60)} seconds")
+    duration = time.perf_counter() - startTime
+    minutes, seconds = divmod(int(duration), 60)
+    logging.info(f"Import took {minutes} minutes {seconds} seconds")
 
     if should_log_result_counts("read"):
         logging.info(

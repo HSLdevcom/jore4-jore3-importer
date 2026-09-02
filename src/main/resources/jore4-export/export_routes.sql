@@ -7,7 +7,7 @@
 -- ("testing, not used") are also filtered out, because they are not real lines
 -- and can cause the mentioned constraint violations.
 
--- Currently, only bus and ferry routes are exported to Jore4. Also, we only take
+-- Currently, only bus, tram and ferry routes are exported to Jore4. Also, we only take
 -- routes that are valid on or after 1.1.2021.
 
 -- See the `export_lines.sql` file for more information on line and route export
@@ -40,7 +40,7 @@ JOIN LATERAL (
     LIMIT 1
 ) lh USING (network_line_id)
 WHERE
-    l.infrastructure_network_type IN ('road', 'waterway')
+    l.infrastructure_network_type IN ('road', 'waterway', 'tram_track')
     AND l.network_line_legacy_hsl_municipality_code NOT IN ('LEGACY_NOT_USED', 'TESTING_NOT_USED')
     AND rd.network_route_direction_valid_date_range && '[2021-01-01, 2050-01-01)'::daterange
 ORDER BY rd.network_route_direction_valid_date_range DESC;
