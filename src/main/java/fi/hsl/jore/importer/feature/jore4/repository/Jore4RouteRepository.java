@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
-import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
+import static fi.hsl.jore.jore4.jooq.network.Tables.ROUTE;
 
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4Route;
@@ -28,18 +28,18 @@ public class Jore4RouteRepository implements IJore4RouteRepository {
     @Override
     public void insert(final Iterable<? extends Jore4Route> routes) {
         BatchBindStep batch = db.batch(db.insertInto(
-                        ROUTE_,
-                        ROUTE_.ROUTE_ID,
-                        ROUTE_.NAME_I18N,
-                        ROUTE_.DESCRIPTION_I18N,
-                        ROUTE_.DIRECTION,
-                        ROUTE_.LABEL,
-                        ROUTE_.VARIANT,
-                        ROUTE_.ON_LINE_ID,
-                        ROUTE_.PRIORITY,
-                        ROUTE_.VALIDITY_START,
-                        ROUTE_.VALIDITY_END,
-                        ROUTE_.LEGACY_HSL_MUNICIPALITY_CODE)
+                        ROUTE,
+                        ROUTE.ROUTE_ID,
+                        ROUTE.NAME_I18N,
+                        ROUTE.DESCRIPTION_I18N,
+                        ROUTE.DIRECTION,
+                        ROUTE.LABEL,
+                        ROUTE.VARIANT,
+                        ROUTE.ON_LINE_ID,
+                        ROUTE.PRIORITY,
+                        ROUTE.VALIDITY_START,
+                        ROUTE.VALIDITY_END,
+                        ROUTE.LEGACY_HSL_MUNICIPALITY_CODE)
                 .values((UUID) null, null, null, null, null, null, null, null, null, null, null));
 
         for (final Jore4Route route : routes) {

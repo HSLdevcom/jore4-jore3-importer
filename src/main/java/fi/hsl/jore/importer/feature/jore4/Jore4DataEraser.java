@@ -1,12 +1,12 @@
 package fi.hsl.jore.importer.feature.jore4;
 
-import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.JOURNEY_PATTERN_;
-import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN;
-import static fi.hsl.jore.jore4.jooq.route.Tables.INFRASTRUCTURE_LINK_ALONG_ROUTE;
-import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
-import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
-import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.SCHEDULED_STOP_POINT;
-import static fi.hsl.jore.jore4.jooq.timing_pattern.Tables.TIMING_PLACE;
+import static fi.hsl.jore.jore4.jooq.network.Tables.INFRASTRUCTURE_LINK_ALONG_ROUTE;
+import static fi.hsl.jore.jore4.jooq.network.Tables.JOURNEY_PATTERN;
+import static fi.hsl.jore.jore4.jooq.network.Tables.LINE;
+import static fi.hsl.jore.jore4.jooq.network.Tables.ROUTE;
+import static fi.hsl.jore.jore4.jooq.network.Tables.SCHEDULED_STOP_POINT;
+import static fi.hsl.jore.jore4.jooq.network.Tables.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN;
+import static fi.hsl.jore.jore4.jooq.network.Tables.TIMING_PLACE;
 
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +30,14 @@ public class Jore4DataEraser implements IJore4DataEraser {
         db.truncateTable(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN)
                 .restartIdentity()
                 .execute();
-        db.truncateTable(JOURNEY_PATTERN_).restartIdentity().cascade().execute();
+        db.truncateTable(JOURNEY_PATTERN).restartIdentity().cascade().execute();
     }
 
     @Transactional
     @Override
     public void deleteRoutesAndLines() {
         db.truncateTable(INFRASTRUCTURE_LINK_ALONG_ROUTE).restartIdentity().execute();
-        db.truncateTable(ROUTE_).restartIdentity().cascade().execute();
+        db.truncateTable(ROUTE).restartIdentity().cascade().execute();
         db.truncateTable(LINE).restartIdentity().cascade().execute();
     }
 

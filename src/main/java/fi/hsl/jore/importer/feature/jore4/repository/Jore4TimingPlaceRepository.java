@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
-import static fi.hsl.jore.jore4.jooq.timing_pattern.Tables.TIMING_PLACE;
+import static fi.hsl.jore.jore4.jooq.network.Tables.TIMING_PLACE;
 
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4TimingPlace;

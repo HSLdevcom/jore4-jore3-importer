@@ -11,7 +11,7 @@ public class ScheduledStopPointTestLocation {
     public static final String SQL_QUERY_GET_MEASURED_LOCATION = """
             SELECT ST_X(measured_location::geometry) AS x,
                    ST_Y(measured_location::geometry) AS y
-            FROM service_pattern.scheduled_stop_point
+                FROM network.scheduled_stop_point
             """;
 
     final double x;

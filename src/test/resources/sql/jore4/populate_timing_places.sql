@@ -1,4 +1,4 @@
-INSERT INTO timing_pattern.timing_place (
+INSERT INTO network.timing_place (
     timing_place_id,
     label,
     description
