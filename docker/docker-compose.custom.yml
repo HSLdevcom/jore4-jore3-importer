@@ -1,5 +1,4 @@
 ---
-version: "3.8"
 services:
   jore4-jore3importer:
     # build and run the docker image from the local repo
@@ -35,6 +34,12 @@ services:
     # volume to easily use jore3 database dump
     volumes:
       - ../jore3dump:/mnt/jore3dump
+
+  jore4-testdb:
+    # Local files used by psql and \copy during infrastructure imports.
+    volumes:
+      - ../sql:/mnt/jore3importer/sql:ro
+      - ../workdir:/mnt/jore3importer/workdir:ro
 
   jore4-tiamat:
     # Pin tiamat to a compatible version.
