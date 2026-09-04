@@ -4,19 +4,19 @@
 #
 #    pip-compile --output-file=./stop-registry-importer/requirements.txt --strip-extras ./stop-registry-importer/requirements.in
 #
-certifi==2026.5.20
+certifi==2026.7.22
     # via requests
 charset-normalizer==3.4.7
     # via requests
-django-environ==0.13.0
+django-environ==0.14.0
     # via -r stop-registry-importer/requirements.in
-idna==3.17
+idna==3.19
     # via requests
-pymssql==2.3.13
+pymssql==2.4.0
     # via -r stop-registry-importer/requirements.in
 requests==2.34.2
     # via -r stop-registry-importer/requirements.in
-simplejson==4.1.1
+simplejson==4.1.2
     # via -r stop-registry-importer/requirements.in
 urllib3==2.7.0
     # via requests
