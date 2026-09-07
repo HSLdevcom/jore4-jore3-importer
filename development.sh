@@ -95,6 +95,10 @@ print_usage() {
     Downloads the infrastructure links seed data SQL file (infraLinks.sql) from Azure
     Blob Storage. Applies the links to testdb.
 
+  jore3:import_sql_files
+    Imports every jore3dump/jr_*.sql file into the running jore3testdb MSSQL
+    database. Files are discovered and ordered by filename on every run.
+
   infralinks:import_infra_links_from_csv:wipe_database <MML_TRAM_IMPORT_DATE>
     Completely clears the database, runs migrations and imports infrastructure from the digiroad material.
     Expects the workdir of jore4-digiroad-import to be copied or linked to the project root:
@@ -390,6 +394,44 @@ seed_tram_infra_links() {
   echo "$1: Done Tram seeding infrastructure links."
 }
 
+import_jore3_sql_files() {
+  local sql_file
+  local -a sql_files
+
+  shopt -s nullglob
+  sql_files=(jore3dump/jr_*.sql)
+  shopt -u nullglob
+
+  if (( ${#sql_files[@]} == 0 )); then
+    echo "No SQL files matching jore3dump/jr_*.sql were found." >&2
+    exit 1
+  fi
+
+  if ! command -v sqlcmd > /dev/null 2>&1; then
+    echo "sqlcmd must be installed on the host to import Jore 3 SQL files." >&2
+    exit 1
+  fi
+
+  echo "Ensuring the dbo schema exists in jore3testdb..."
+  SQLCMDPASSWORD="${SA_PASSWORD:-P@ssw0rd}" \
+    sqlcmd -b -r 1 -C -S localhost,1433 -U SA -d jore3testdb \
+    -Q "IF SCHEMA_ID(N'dbo') IS NULL EXEC(N'CREATE SCHEMA [dbo]');"
+
+  for sql_file in "${sql_files[@]}"; do
+    if [[ ! -f "$sql_file" ]]; then
+      echo "Expected a regular file but found: $sql_file" >&2
+      exit 1
+    fi
+
+    echo "Importing $sql_file into jore3testdb..."
+    SQLCMDPASSWORD="${SA_PASSWORD:-P@ssw0rd}" \
+      sqlcmd -b -r 1 -C -S localhost,1433 -U SA -d jore3testdb \
+      -i "$sql_file"
+  done
+
+  echo "Imported ${#sql_files[@]} Jore 3 SQL file(s) into jore3testdb."
+}
+
 start_all() {
   start_deps
   $DOCKER_COMPOSE_CMD up --build -d  jore4-jore3importer
@@ -555,6 +597,10 @@ case $COMMAND in
   infralinks:seed)
     download_infralinks
     seed_infra_links testdb
+    ;;
+
+  jore3:import_sql_files)
+    import_jore3_sql_files
     ;;
 
   infralinks:import_infra_links_from_csv:wipe_database)
