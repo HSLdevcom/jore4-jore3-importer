@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
 import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
-import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
+import static fi.hsl.jore.jore4.jooq.network.Tables.LINE;
 import static org.assertj.db.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.IntTest;
@@ -88,14 +88,14 @@ class Jore4LineRepositoryTest {
         @DisplayName("Should insert one line into the database")
         void shouldInsertOneLineIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.line").build()).hasNumberOfRows(1);
+            assertThat(connection.table("network.line").build()).hasNumberOfRows(1);
         }
 
         @Test
         @DisplayName("Should insert the correct id into the database")
         void shouldInsertCorrectIdIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.line").build())
+            assertThat(connection.table("network.line").build())
                     .row()
                     .value(LINE.LINE_ID.getName())
                     .isEqualTo(LINE_ID);
@@ -105,7 +105,7 @@ class Jore4LineRepositoryTest {
         @DisplayName("Should insert the correct label into the database")
         void shouldInsertCorrectLabelIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.line").build())
+            assertThat(connection.table("network.line").build())
                     .row()
                     .value(LINE.LABEL.getName())
                     .isEqualTo(LABEL);
@@ -115,7 +115,7 @@ class Jore4LineRepositoryTest {
         @DisplayName("Should insert the correct name into the database")
         void shouldInsertCorrectNameIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.line").build())
+            assertThat(connection.table("network.line").build())
                     .row()
                     .value(LINE.NAME_I18N.getName())
                     .is(equalJson(EXPECTED_JORE4_NAME));
@@ -125,7 +125,7 @@ class Jore4LineRepositoryTest {
         @DisplayName("Should insert the correct short name into the database")
         void shouldInsertCorrectShortNameIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.line").build())
+            assertThat(connection.table("network.line").build())
                     .row()
                     .value(LINE.SHORT_NAME_I18N.getName())
                     .is(equalJson(EXPECTED_JORE4_SHORT_NAME));
@@ -135,7 +135,7 @@ class Jore4LineRepositoryTest {
         @DisplayName("Should insert the correct primary vehicle mode into the database")
         void shouldInsertCorrectPrimaryVehicleModeIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.line").build())
+            assertThat(connection.table("network.line").build())
                     .row()
                     .value(LINE.PRIMARY_VEHICLE_MODE.getName())
                     .isEqualTo(PRIMARY_VEHICLE_MODE.getValue());
@@ -145,7 +145,7 @@ class Jore4LineRepositoryTest {
         @DisplayName("Should insert the correct priority into the database")
         void shouldInsertCorrectPriorityIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.line").build())
+            assertThat(connection.table("network.line").build())
                     .row()
                     .value(LINE.PRIORITY.getName())
                     .isEqualTo(PRIORITY);
@@ -175,7 +175,7 @@ class Jore4LineRepositoryTest {
         @DisplayName("Should insert the correct legacy HSL municipality code")
         void shouldInsertCorrectLegacyHslMunicipalityCodeIntoDatabase() {
             repository.insert(List.of(INPUT));
-            assertThat(connection.table("route.line").build())
+            assertThat(connection.table("network.line").build())
                     .row()
                     .value(LINE.LEGACY_HSL_MUNICIPALITY_CODE.getName())
                     .isEqualTo(LEGACY_HSL_MUNICIPALITY_CODE.getJore4Value());

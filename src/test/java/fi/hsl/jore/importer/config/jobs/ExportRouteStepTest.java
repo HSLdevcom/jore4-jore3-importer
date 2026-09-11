@@ -1,7 +1,7 @@
 package fi.hsl.jore.importer.config.jobs;
 
 import static fi.hsl.jore.importer.TestJsonUtil.equalJson;
-import static fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
+import static fi.hsl.jore.jore4.jooq.network.Tables.ROUTE;
 import static org.assertj.db.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.BatchIntegrationTest;
@@ -67,8 +67,8 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
 
     private static final fi.hsl.jore.importer.jooq.network.tables.NetworkRouteDirections IMPORTER_ROUTE_DIRECTION =
             fi.hsl.jore.importer.jooq.network.Tables.NETWORK_ROUTE_DIRECTIONS;
-    private static final fi.hsl.jore.jore4.jooq.route.tables.Route JORE4_ROUTE =
-            fi.hsl.jore.jore4.jooq.route.Tables.ROUTE_;
+    private static final fi.hsl.jore.jore4.jooq.network.tables.Route JORE4_ROUTE =
+            fi.hsl.jore.jore4.jooq.network.Tables.ROUTE;
 
     private final AssertDbConnection importerConnection;
     private final AssertDbConnection jore4Connection;
@@ -89,7 +89,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldInsertOneLineIntoJoreDatabase() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("route.route").build()).hasNumberOfRows(1);
+        assertThat(jore4Connection.table("network.route").build()).hasNumberOfRows(1);
     }
 
     @Test
@@ -97,7 +97,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldGenerateNewIdForExportedLine() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("route.route").build())
+        assertThat(jore4Connection.table("network.route").build())
                 .row()
                 .value(JORE4_ROUTE.ROUTE_ID.getName())
                 .isNotNull();
@@ -108,7 +108,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportLineWithCorrectDescription() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("route.route").build())
+        assertThat(jore4Connection.table("network.route").build())
                 .row()
                 .value(JORE4_ROUTE.DESCRIPTION_I18N.getName())
                 .is(equalJson(EXPECTED_DESCRIPTION));
@@ -119,7 +119,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectDirection() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("route.route").build())
+        assertThat(jore4Connection.table("network.route").build())
                 .row()
                 .value(JORE4_ROUTE.DIRECTION.getName())
                 .isEqualTo(EXPECTED_DIRECTION);
@@ -130,7 +130,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectLabel() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("route.route").build())
+        assertThat(jore4Connection.table("network.route").build())
                 .row()
                 .value(JORE4_ROUTE.LABEL.getName())
                 .isEqualTo(EXPECTED_LABEL);
@@ -141,7 +141,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectLineId() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("route.route").build())
+        assertThat(jore4Connection.table("network.route").build())
                 .row()
                 .value(JORE4_ROUTE.ON_LINE_ID.getName())
                 .isEqualTo(EXPECTED_JORE4_ID_OF_LINE);
@@ -152,7 +152,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectPriority() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("route.route").build())
+        assertThat(jore4Connection.table("network.route").build())
                 .row()
                 .value(JORE4_ROUTE.PRIORITY.getName())
                 .isEqualTo(EXPECTED_PRIORITY);
@@ -165,7 +165,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
 
         final LocalDate validityPeriodStart = testRepository.findValidityPeriodStartDate();
         Assertions.assertThat(validityPeriodStart)
-                .as(ROUTE_.VALIDITY_START.getName())
+                .as(ROUTE.VALIDITY_START.getName())
                 .isEqualTo(VALIDITY_PERIOD_START);
     }
 
@@ -176,7 +176,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
 
         final LocalDate validityPeriodEnd = testRepository.findValidityPeriodEndDate();
         Assertions.assertThat(validityPeriodEnd)
-                .as(ROUTE_.VALIDITY_END.getName())
+                .as(ROUTE.VALIDITY_END.getName())
                 .isEqualTo(VALIDITY_PERIOD_END);
     }
 
@@ -185,7 +185,7 @@ public class ExportRouteStepTest extends BatchIntegrationTest {
     void shouldSaveExportedRouteWithCorrectLegacyHslMunicipalityCode() {
         runSteps(STEPS);
 
-        assertThat(jore4Connection.table("route.route").build())
+        assertThat(jore4Connection.table("network.route").build())
                 .row()
                 .value(JORE4_ROUTE.LEGACY_HSL_MUNICIPALITY_CODE.getName())
                 .isEqualTo(EXPECTED_LEGACY_HSL_MUNICIPALITY_CODE.getJore4Value());

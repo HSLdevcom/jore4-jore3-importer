@@ -5,12 +5,7 @@ package fi.hsl.jore.jore4.jooq;
 
 
 import fi.hsl.jore.jore4.jooq.infrastructure_network.InfrastructureNetwork;
-import fi.hsl.jore.jore4.jooq.internal_service_pattern.InternalServicePattern;
-import fi.hsl.jore.jore4.jooq.journey_pattern.JourneyPattern;
-import fi.hsl.jore.jore4.jooq.reusable_components.ReusableComponents;
-import fi.hsl.jore.jore4.jooq.route.Route;
-import fi.hsl.jore.jore4.jooq.service_pattern.ServicePattern;
-import fi.hsl.jore.jore4.jooq.timing_pattern.TimingPattern;
+import fi.hsl.jore.jore4.jooq.network.Network;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,34 +34,9 @@ public class DefaultCatalog extends CatalogImpl {
     public final InfrastructureNetwork INFRASTRUCTURE_NETWORK = InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
 
     /**
-     * The schema <code>internal_service_pattern</code>.
+     * The schema <code>network</code>.
      */
-    public final InternalServicePattern INTERNAL_SERVICE_PATTERN = InternalServicePattern.INTERNAL_SERVICE_PATTERN;
-
-    /**
-     * The schema <code>journey_pattern</code>.
-     */
-    public final JourneyPattern JOURNEY_PATTERN = JourneyPattern.JOURNEY_PATTERN;
-
-    /**
-     * The schema <code>reusable_components</code>.
-     */
-    public final ReusableComponents REUSABLE_COMPONENTS = ReusableComponents.REUSABLE_COMPONENTS;
-
-    /**
-     * The schema <code>route</code>.
-     */
-    public final Route ROUTE = Route.ROUTE;
-
-    /**
-     * The schema <code>service_pattern</code>.
-     */
-    public final ServicePattern SERVICE_PATTERN = ServicePattern.SERVICE_PATTERN;
-
-    /**
-     * The schema <code>timing_pattern</code>.
-     */
-    public final TimingPattern TIMING_PATTERN = TimingPattern.TIMING_PATTERN;
+    public final Network NETWORK = Network.NETWORK;
 
     /**
      * No further instances allowed
@@ -79,12 +49,7 @@ public class DefaultCatalog extends CatalogImpl {
     public final List<Schema> getSchemas() {
         return Arrays.asList(
             InfrastructureNetwork.INFRASTRUCTURE_NETWORK,
-            InternalServicePattern.INTERNAL_SERVICE_PATTERN,
-            JourneyPattern.JOURNEY_PATTERN,
-            ReusableComponents.REUSABLE_COMPONENTS,
-            Route.ROUTE,
-            ServicePattern.SERVICE_PATTERN,
-            TimingPattern.TIMING_PATTERN
+            Network.NETWORK
         );
     }
 

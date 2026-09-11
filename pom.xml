@@ -555,13 +555,7 @@
                                     <name>${jooq.generator.db.dialect}</name>
                                     <includes>
                                         infrastructure_network.*
-                                        | internal_service_pattern.*
-                                        | journey_pattern.*
-                                        | reusable_components.*
-                                        | route.*
-                                        | service_pattern.*
-                                        | timing_pattern.*
-                                        | stop_places.*
+                                        | network.*
                                     </includes>
                                     <excludes>
                                         AUTH_SESSION.*
@@ -570,15 +564,17 @@
                                         | infrastructure_network.resolve_point_to_closest_link
                                         | IMPORT_JORE3.*
                                         | internal_utils.*
-                                        | journey_pattern.verify_route_journey_pattern_refs
+                                        | network.verify_route_journey_pattern_refs
                                         | SKEYS
                                         | SVALS
                                         | EACH
                                         | PUBLIC.*
-                                        | route.verify_route_start_end_stop_points
+                                        | network.verify_route_start_end_stop_points
                                         | TIGER.*
                                         | TIGER_DATA.*
                                         | TOPOLOGY.*
+                                        | dssview.*
+                                        | pg_catalog.*
                                     </excludes>
                                     <!-- <inputSchema>${jooq.generator.input.schema}</inputSchema> -->
                                     <includeTables>true</includeTables>

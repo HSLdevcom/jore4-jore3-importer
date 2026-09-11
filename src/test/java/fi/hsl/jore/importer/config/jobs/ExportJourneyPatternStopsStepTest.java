@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.config.jobs;
 
-import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN;
+import static fi.hsl.jore.jore4.jooq.network.Tables.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN;
 import static org.assertj.db.api.Assertions.assertThat;
 
 import com.google.common.collect.ImmutableMap;
@@ -89,7 +89,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
         runSteps(STEPS);
 
         assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .hasNumberOfRows(3);
     }
@@ -102,7 +102,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
         final SoftAssertions softAssertions = new SoftAssertions();
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(0)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.JOURNEY_PATTERN_ID.getName())
@@ -110,7 +110,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_JOURNEY_PATTERN_ID);
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(0)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_LABEL.getName())
@@ -118,7 +118,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_FIRST_SCHEDULED_STOP_POINT_LABEL);
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(0)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_SEQUENCE.getName())
@@ -126,7 +126,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_FIRST_SCHEDULED_STOP_POINT_SEQUENCE);
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(0)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_USED_AS_TIMING_POINT.getName())
@@ -134,7 +134,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_FIRST_IS_USED_AS_TIMING_POINT);
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(0)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_VIA_POINT.getName())
@@ -151,7 +151,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
         final SoftAssertions softAssertions = new SoftAssertions();
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(1)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.JOURNEY_PATTERN_ID.getName())
@@ -159,7 +159,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_JOURNEY_PATTERN_ID);
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(1)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_LABEL.getName())
@@ -167,7 +167,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_SECOND_SCHEDULED_STOP_POINT_LABEL);
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(1)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_SEQUENCE.getName())
@@ -175,7 +175,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_SECOND_SCHEDULED_STOP_POINT_SEQUENCE);
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(1)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_USED_AS_TIMING_POINT.getName())
@@ -183,7 +183,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_SECOND_IS_USED_AS_TIMING_POINT);
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(1)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_VIA_POINT.getName())
@@ -191,7 +191,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_SECOND_IS_VIA_POINT);
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(1)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.VIA_POINT_NAME_I18N.getName())
@@ -217,7 +217,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
         final SoftAssertions softAssertions = new SoftAssertions();
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(2)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.JOURNEY_PATTERN_ID.getName())
@@ -225,7 +225,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_JOURNEY_PATTERN_ID);
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(2)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_LABEL.getName())
@@ -233,7 +233,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_THIRD_SCHEDULED_STOP_POINT_LABEL);
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(2)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_SEQUENCE.getName())
@@ -241,7 +241,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_THIRD_SCHEDULED_STOP_POINT_SEQUENCE);
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(2)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_USED_AS_TIMING_POINT.getName())
@@ -249,7 +249,7 @@ public class ExportJourneyPatternStopsStepTest extends BatchIntegrationTest {
                 .isEqualTo(EXPECTED_THIRD_IS_USED_AS_TIMING_POINT);
         softAssertions
                 .assertThat(connection
-                        .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                        .table("network.scheduled_stop_point_in_journey_pattern")
                         .build())
                 .row(2)
                 .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_VIA_POINT.getName())
