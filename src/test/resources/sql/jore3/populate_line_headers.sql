@@ -12,3 +12,19 @@ VALUES ('1001',
         N'Central torget',
         N'Etelä-Hervanta',
         N'Södra Hervanta');
+
+
+INSERT INTO jr_linjannimet
+(lintunnus, linalkupvm, linloppupvm, linnimi, linnimilyh, linnimir, linnimilyhr, linlahtop1, linlahtop1r, linlahtop2,
+ linlahtop2r)
+VALUES ('1001',
+        '2018-01-01 00:00:00',
+        '2019-12-31 00:00:00',
+        N'Expired line header',
+        N'Expired',
+        N'Expired Swedish header',
+        N'Expired Swedish',
+        N'Origin',
+        N'Origin Swedish',
+        N'Destination',
+        N'Destination Swedish');
