@@ -17,6 +17,10 @@ STOP_REGISTRY_VENV_DIR="${STOP_REGISTRY_IMPORTER_DIR}/.venv-stop-registry"
 STOP_REGISTRY_REQUIREMENTS_FILE="${STOP_REGISTRY_IMPORTER_DIR}/requirements.txt"
 STOP_REGISTRY_REQUIREMENTS_IN_FILE="${STOP_REGISTRY_IMPORTER_DIR}/requirements.in"
 
+HASURA_API_URL="${HASURA_API_URL:-http://localhost:3201}"
+HASURA_METADATA_URL="${HASURA_METADATA_URL:-$HASURA_API_URL/v1/metadata}"
+HASURA_ADMIN_SECRET="${HASURA_ADMIN_SECRET:-hasura}"
+
 # Python/pip executables inside the stop-registry virtualenv. These are
 # populated by `ensure_python_venv` so that every Python-related command uses
 # the correct interpreter and isolated environment.
@@ -121,13 +125,7 @@ sleepf() {
     sleep 1
     echo -ne "\b \b"
   done
-  echo -ne "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
-  if [[ $seconds -gt 9 ]]; then
-    echo -ne "\b"
-  fi
-  if [[ $seconds -gt 99 ]]; then
-    echo -ne "\b"
-  fi
+  printf '\r\033[K'
 }
 
 docker_stop_service() {
@@ -149,11 +147,52 @@ docker_start_service() {
   sleepf 2
 }
 
+reload_hasura_metadata() {
+  local response
+
+  echo "Reloading Hasura metadata, database sources, and remote schemas..."
+  if ! response=$(curl --fail-with-body --silent --show-error \
+    -X POST "$HASURA_METADATA_URL" \
+    -H 'Content-Type: application/json' \
+    -H "x-hasura-admin-secret: $HASURA_ADMIN_SECRET" \
+    --data '{
+      "type": "reload_metadata",
+      "args": {
+        "reload_sources": true,
+        "reload_remote_schemas": true,
+        "recreate_event_triggers": true
+      }
+    }'); then
+    echo "ERROR: Hasura metadata reload request failed: ${response:-no response body}" >&2
+    return 1
+  fi
+
+  if ! printf '%s' "$response" | python3 -c '
+import json
+import sys
+
+try:
+    result = json.load(sys.stdin)
+except json.JSONDecodeError:
+    print("ERROR: Hasura metadata reload returned invalid JSON", file=sys.stderr)
+    sys.exit(1)
+
+if result.get("message") == "success" and result.get("is_consistent", True):
+    print("OK: Hasura metadata, database sources, and remote schemas reloaded")
+    sys.exit(0)
+
+print(f"ERROR: Hasura metadata reload returned: {json.dumps(result)}", file=sys.stderr)
+sys.exit(1)
+'; then
+    return 1
+  fi
+}
+
 import_infrastructure_wipe_database() {
   MML_TRAM_IMPORT_DATE="$1"
   if [[ ! "$MML_TRAM_IMPORT_DATE" =~ ^20[2-9][0-9]-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$ ]]; then
     echo "Invalid date: $MML_TRAM_IMPORT_DATE"
-    usage
+    print_usage
     exit 1
   fi
 
@@ -172,18 +211,22 @@ import_infrastructure_wipe_database() {
     exit 1
   fi
 
-  read -p "Delete all tables and data in jore4e2e, stopdb, and timetablesdb on BASE_DB_CONNECTION_STRING? [y/N]: " TRUNCATE_ALL_DATABASES
+  read -p "Delete all tables and data in jore4e2e, stopdb, and timetablesdb on $BASE_DB_CONNECTION_STRING? and mapmatchingdb [y/N]: " TRUNCATE_ALL_DATABASES
   if [[ ! "$TRUNCATE_ALL_DATABASES" =~ ^[Yy]$ ]]; then
     echo "Aborting."
     exit 1
   fi
 
+  read -p "Do you wish to reinitialize the Jore3 mssql database from sql files in jore3dump/? [y/N]: " REINITIALIZE_JORE3
+
   docker_stop_service jore4-hasura
   docker_stop_service jore4-tiamat
   docker_stop_service jore4-mapmatching
   docker compose rm -f jore4-tiamat
+  docker_stop_service importer-jooq-database
+  docker compose rm -f importer-jooq-database
 
-  sleepf 5
+  sleepf 2
 
   echo "Deleting all tables and data in jore4e2e, stopdb, and timetablesdb on $BASE_DB_CONNECTION_STRING"
   for DATABASE in jore4e2e stopdb timetablesdb; do
@@ -192,27 +235,39 @@ import_infrastructure_wipe_database() {
   done
   docker exec -i testdb psql $BASE_DB_CONNECTION_STRING/stopdb < "scripts/drop-tiamat-views-sequences.sql";
   docker exec -i testdb psql $BASE_DB_CONNECTION_STRING/jore4e2e < "scripts/drop-hasura-resources.sql";
-  docker exec -i testdb psql $BASE_DB_CONNECTION_STRING/jore4main < "scripts/drop-hasura-resources.sql";
   docker exec -i testdb psql $BASE_DB_CONNECTION_STRING/timetablesdb < "scripts/drop-hasura-resources.sql";
+  docker exec -i testdb psql $BASE_DB_CONNECTION_STRING/jore4main < "scripts/drop-hasura-resources.sql";
 
-  sleepf 5
+  sleepf 2
 
   echo "Restarting tiamat..."
-  #docker run jore4-tiamat -e SPRING_FLYWAY_BASELINE_ON_MIGRATE=false
-  $DOCKER_COMPOSE_TIAMAT_FLYWAY_CMD --project-name "$COMPOSE_PROJECT_NAME" up --build -d jore4-tiamat
-  while ! curl --fail http://localhost:3010/actuator/health --silent | grep --fixed-strings --quiet '{"status":"UP"}'
+    $DOCKER_COMPOSE_TIAMAT_FLYWAY_CMD --project-name "$COMPOSE_PROJECT_NAME" up --build -d jore4-tiamat
+
+  echo "Restarting importer-database..."
+  docker_start_service importer-jooq-database
+
+  echo "Restarting mapmatching..."
+  docker_start_service jore4-mapmatching
+
+  while ! curl --fail http://localhost:3010/actuator/health --silent | grep --fixed-strings --quiet '"status":"UP"'
   do
     echo "waiting for tiamat db migrations to execute"
     sleepf 2;
   done
 
-  echo "Restarting mapmatching..."
-  docker_start_service jore4-mapmatching
-  while ! curl --fail http://localhost:3005/actuator/health --silent | grep --fixed-strings --quiet '{"groups":["liveness","readiness"],"status":"UP"'
+  while ! pg_isready -h localhost -p 16000
+  do
+    echo "waiting for importer-database to spin up"
+    sleep 2;
+  done
+
+  while ! curl --fail http://localhost:3005/actuator/health --silent | grep --fixed-strings --quiet '"status":"UP"'
   do
     echo "waiting for mapmatching db migrations to execute"
     sleepf 2;
   done
+
+  sleep 2
 
   echo "Restarting hasura..."
   docker_start_service jore4-hasura
@@ -225,35 +280,48 @@ import_infrastructure_wipe_database() {
   echo "Stopping services again to drive in infrastructure network"
   docker_stop_service jore4-hasura
   docker_stop_service jore4-tiamat
-  docker rm -f jore4-tiamat
   docker_stop_service jore4-mapmatching
 
-  sleepf 5
+  sleepf 3
 
   echo "Importing infrastructure data from CSV file to jore4e2e on $BASE_DB_CONNECTION_STRING..."
   # Import dump from csv file.
   docker exec -i testdb psql "$BASE_DB_CONNECTION_STRING/jore4e2e" \
     -v ON_ERROR_STOP=1 -f /mnt/jore3importer/sql/import_infra_links_from_csv.sql \
     -v csvfile="/mnt/jore3importer/workdir/csv/${INPUT_FILENAME}"
-  echo "Importing infrastructure data from CSV file to jore4main on $BASE_DB_CONNECTION_STRING..."
+#  echo "Importing infrastructure data from CSV file to jore4main on $BASE_DB_CONNECTION_STRING..."
   # Import dump from csv file.
-  docker exec -i testdb psql "$BASE_DB_CONNECTION_STRING/jore4main" \
-    -v ON_ERROR_STOP=1 -f /mnt/jore3importer/sql/import_infra_links_from_csv.sql \
-    -v csvfile="/mnt/jore3importer/workdir/csv/${INPUT_FILENAME}"
+#  docker exec -i testdb psql "$BASE_DB_CONNECTION_STRING/jore4main" \
+#    -v ON_ERROR_STOP=1 -f /mnt/jore3importer/sql/import_infra_links_from_csv.sql \
+#    -v csvfile="/mnt/jore3importer/workdir/csv/${INPUT_FILENAME}"
 
-  sleepf 5
+  echo "Importing routing schema from pgdump to jore4mapmatching on localhost:6433..."
+  PGPASSWORD=password psql -h localhost -p 6433 -d jore4mapmatching -U mapmatching \
+    -c 'TRUNCATE routing.infrastructure_source CASCADE;'
+  PGPASSWORD=password psql -h localhost -p 6433 -d jore4mapmatching -U mapmatching \
+      -c 'TRUNCATE routing.infrastructure_link_vertices_pgr CASCADE;'
+  PGPASSWORD=password pg_restore -1 -a --use-list=workdir/pgdump/2026-08-04_create_routing_schema_digiroad_r_2026-01_mml_2026-08-04.pgdump.no-enums.links-and-stops.list -h localhost -p 6433 -d jore4mapmatching -U mapmatching workdir/pgdump/2026-08-04_create_routing_schema_digiroad_r_2026-01_mml_2026-08-04.pgdump
+
+  sleepf 2
 
   echo "Restarting tiamat..."
   docker_start_service jore4-tiamat
-  while ! curl --fail http://localhost:3010/actuator/health --silent | grep --fixed-strings --quiet '{"status":"UP"}'
+
+  echo "Restarting mapmatching..."
+  docker_start_service jore4-mapmatching
+
+  if [[ "$REINITIALIZE_JORE3" =~ ^[Yy]$ ]]; then
+    echo "Reinitializing Jore3 mssql database from sql files in jore3dump/..."
+    import_jore3_sql_files
+  fi
+
+  while ! curl --fail http://localhost:3010/actuator/health --silent | grep --fixed-strings --quiet '"status":"UP"'
   do
     echo "waiting for tiamat db migrations to execute"
     sleepf 2;
   done
 
-  echo "Restarting mapmatching..."
-  docker_start_service jore4-mapmatching
-  while ! curl --fail http://localhost:3005/actuator/health --silent | grep --fixed-strings --quiet '{"groups":["liveness","readiness"],"status":"UP"'
+  while ! curl --fail http://localhost:3005/actuator/health --silent | grep --fixed-strings --quiet '"status":"UP"'
   do
     echo "waiting for mapmatching db migrations to execute"
     sleepf 2;
@@ -261,11 +329,14 @@ import_infrastructure_wipe_database() {
 
   echo "Restarting hasura..."
   docker_start_service jore4-hasura
+
   while ! curl --fail http://localhost:3201/healthz --output /dev/null --silent
   do
     echo "waiting for hasura db migrations to execute"
     sleepf 2;
   done
+
+  reload_hasura_metadata
 
   echo "All done."
 }
@@ -586,6 +657,10 @@ case $COMMAND in
     upload_zones
     ;;
 
+  upload_zones)
+    upload_zones
+    ;;
+
   list)
     $DOCKER_COMPOSE_CMD config --services
     ;;
@@ -605,6 +680,10 @@ case $COMMAND in
 
   infralinks:import_infra_links_from_csv:wipe_database)
     import_infrastructure_wipe_database "$2"
+    ;;
+
+  sleepf)
+    sleepf "$2"
     ;;
 
   *)

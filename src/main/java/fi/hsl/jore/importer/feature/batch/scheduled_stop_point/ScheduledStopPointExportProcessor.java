@@ -63,36 +63,46 @@ public class ScheduledStopPointExportProcessor
             final Long elyNumber = elyNumbers.get(index);
 
             final Optional<DigiroadStop> digiroadStopContainer = digiroadStopService.findByNationalId(elyNumber);
-            if (digiroadStopContainer.isPresent()) {
-                final DigiroadStop digiroadStop = digiroadStopContainer.get();
-                LOGGER.info("Found Digiroad stop: {}", digiroadStop);
-
-                if (digiroadStop.digiroadLinkId().isBlank()) {
-                    LOGGER.error(
-                            "Stop point with short ID: {}, elyNumber {}, Digiroad stop {} doesn't have a digiroad link id",
-                            importerStop.shortId().get(),
-                            elyNumber,
-                            digiroadStop.digiroadStopId());
-                    LOGGER.error("Failing Digiroad stop: {}", digiroadStop);
-                    continue;
-                }
-
-                final Jore4ScheduledStopPoint jore4Stop = Jore4ScheduledStopPoint.of(
-                        UUID.randomUUID(),
-                        externalId.value(),
-                        digiroadStop.digiroadLinkId(),
-                        Jore4ScheduledStopPointDirection.valueOf(
-                                digiroadStop.directionOnInfraLink().name()),
-                        importerStop.shortId().get(),
-                        importerStop.location(),
-                        importerStop.placeExternalId(),
-                        DEFAULT_PRIORITY,
-                        Optional.of(DEFAULT_VALIDITY_START),
-                        Optional.of(DEFAULT_VALIDITY_END));
-
-                LOGGER.info("Created scheduled stop point: {}", jore4Stop);
-                return jore4Stop;
+            if (!digiroadStopContainer.isPresent()) {
+                continue;
             }
+
+            final DigiroadStop digiroadStop = digiroadStopContainer.get();
+            LOGGER.info("Found Digiroad stop: {}", digiroadStop);
+
+            if (externalId.value().isBlank()) {
+                LOGGER.info(
+                        "Stop point with short ID: {}, elyNumber {}, Digiroad stop {} doesn't have an external id",
+                        importerStop.shortId().get(),
+                        elyNumber,
+                        digiroadStop.digiroadStopId());
+                continue;
+            }
+
+            if (digiroadStop.digiroadLinkId().isBlank()) {
+                LOGGER.info(
+                        "Stop point with short ID: {}, elyNumber {}, Digiroad stop {} doesn't have a digiroad link id",
+                        importerStop.shortId().get(),
+                        elyNumber,
+                        digiroadStop.digiroadStopId());
+                continue;
+            }
+
+            final Jore4ScheduledStopPoint jore4Stop = Jore4ScheduledStopPoint.of(
+                    UUID.randomUUID(),
+                    externalId.value(),
+                    digiroadStop.digiroadLinkId(),
+                    Jore4ScheduledStopPointDirection.valueOf(
+                            digiroadStop.directionOnInfraLink().name()),
+                    importerStop.shortId().get(),
+                    importerStop.location(),
+                    importerStop.placeExternalId(),
+                    DEFAULT_PRIORITY,
+                    Optional.of(DEFAULT_VALIDITY_START),
+                    Optional.of(DEFAULT_VALIDITY_END));
+
+            LOGGER.info("Created scheduled stop point: {}", jore4Stop);
+            return jore4Stop;
         }
 
         LOGGER.error(

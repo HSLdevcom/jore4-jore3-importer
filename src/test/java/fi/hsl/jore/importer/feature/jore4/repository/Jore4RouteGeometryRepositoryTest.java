@@ -143,6 +143,25 @@ class Jore4RouteGeometryRepositoryTest {
                         .value(INFRASTRUCTURE_LINK_ALONG_ROUTE.IS_TRAVERSAL_FORWARDS.getName())
                         .isEqualTo(INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS);
             }
+
+            @Test
+            @DisplayName("Should skip an infrastructure link that cannot be found")
+            void shouldSkipInfrastructureLinkThatCannotBeFound() {
+                final Jore4RouteGeometry geometryWithUnknownInfrastructureLink = Jore4RouteGeometry.of(
+                        ROUTE_ID,
+                        List.of(Jore4RouteInfrastructureLink.of(
+                                INFRASTRUCTURE_LINK_SOURCE,
+                                "unknown-external-link-id",
+                                INFRASTRUCTURE_LINK_SEQUENCE,
+                                INFRASTRUCTURE_LINK_IS_TRAVERSAL_FORWARDS)));
+
+                repository.insert(List.of(geometryWithUnknownInfrastructureLink));
+
+                assertThat(connection
+                                .table("route.infrastructure_link_along_route")
+                                .build())
+                        .isEmpty();
+            }
         }
     }
 }

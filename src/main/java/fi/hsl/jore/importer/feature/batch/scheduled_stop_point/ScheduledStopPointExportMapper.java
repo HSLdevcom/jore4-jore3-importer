@@ -10,6 +10,7 @@ import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImporterSch
 import jakarta.annotation.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -33,31 +34,40 @@ public class ScheduledStopPointExportMapper implements RowMapper<ImporterSchedul
 
     @Override
     public ImporterScheduledStopPoint mapRow(final ResultSet resultSet, final int rowNumber) throws SQLException {
+        final List<String> externalIdValues = csvToValues(resultSet.getString("external_id"));
+        final List<String> elyNumberValues = csvToValues(resultSet.getString("ely_number"));
+        if (externalIdValues.size() != elyNumberValues.size()) {
+            throw new SQLException("External ID and ELY number CSV values have different lengths");
+        }
+
+        final List<ExternalId> externalIds = new ArrayList<>();
+        final List<Long> elyNumbers = new ArrayList<>();
+        for (int index = 0; index < externalIdValues.size(); index++) {
+            final String externalIdValue = externalIdValues.get(index);
+            final String elyNumberValue = elyNumberValues.get(index);
+            if (StringUtils.isBlank(externalIdValue) || StringUtils.isBlank(elyNumberValue)) {
+                continue;
+            }
+
+            externalIds.add(ExternalId.of(externalIdValue.trim()));
+            elyNumbers.add(Long.parseLong(elyNumberValue.trim()));
+        }
+
         return ImporterScheduledStopPoint.of(
-                csvToExternalIds(resultSet.getString("external_id")),
-                csvToElyNumbers(resultSet.getString("ely_number")),
+                externalIds,
+                elyNumbers,
                 pointFromDatabaseObject(resultSet.getObject("location")),
                 jsonConverter.fromJson(resultSet.getString("name"), MultilingualString.class),
                 getOptionalString(resultSet, "short_id"),
                 getOptionalString(resultSet, "timing_place_label"));
     }
 
-    private static List<ExternalId> csvToExternalIds(final String csvString) {
+    private static List<String> csvToValues(final String csvString) {
         if (StringUtils.isBlank(csvString)) {
             return Collections.emptyList();
         }
 
-        final String[] inputValues = csvString.split(",");
-        return Arrays.stream(inputValues).map(i -> ExternalId.of(i.trim())).toList();
-    }
-
-    private static List<Long> csvToElyNumbers(final String csvString) {
-        if (StringUtils.isBlank(csvString)) {
-            return Collections.emptyList();
-        }
-
-        final String[] inputValues = csvString.split(",");
-        return Arrays.stream(inputValues).map(i -> Long.parseLong(i.trim())).toList();
+        return Arrays.asList(csvString.split(",", -1));
     }
 
     private Point pointFromDatabaseObject(@Nullable final Object databaseObject) throws SQLException {
