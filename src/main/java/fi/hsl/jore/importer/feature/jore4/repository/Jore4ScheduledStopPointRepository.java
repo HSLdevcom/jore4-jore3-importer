@@ -1,11 +1,11 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
 import static fi.hsl.jore.jore4.jooq.infrastructure_network.Tables.INFRASTRUCTURE_LINK;
-import static fi.hsl.jore.jore4.jooq.timing_pattern.Tables.TIMING_PLACE;
+import static fi.hsl.jore.jore4.jooq.network.Tables.TIMING_PLACE;
 
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPoint;
 import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
-import fi.hsl.jore.jore4.jooq.internal_service_pattern.Routines;
+import fi.hsl.jore.jore4.jooq.network.Routines;
 import java.util.UUID;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;

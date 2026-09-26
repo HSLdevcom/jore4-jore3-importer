@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
-import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN;
+import static fi.hsl.jore.jore4.jooq.network.Tables.SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN;
 import static org.assertj.db.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.IntTest;
@@ -84,7 +84,7 @@ class Jore4JourneyPatternStopRepositoryTest {
             repository.insert(List.of(INPUT));
 
             assertThat(connection
-                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .table("network.scheduled_stop_point_in_journey_pattern")
                             .build())
                     .hasNumberOfRows(1);
         }
@@ -95,7 +95,7 @@ class Jore4JourneyPatternStopRepositoryTest {
             repository.insert(List.of(INPUT));
 
             assertThat(connection
-                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .table("network.scheduled_stop_point_in_journey_pattern")
                             .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.JOURNEY_PATTERN_ID.getName())
@@ -108,7 +108,7 @@ class Jore4JourneyPatternStopRepositoryTest {
             repository.insert(List.of(INPUT));
 
             assertThat(connection
-                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .table("network.scheduled_stop_point_in_journey_pattern")
                             .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_SEQUENCE.getName())
@@ -121,7 +121,7 @@ class Jore4JourneyPatternStopRepositoryTest {
             repository.insert(List.of(INPUT));
 
             assertThat(connection
-                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .table("network.scheduled_stop_point_in_journey_pattern")
                             .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.SCHEDULED_STOP_POINT_LABEL.getName())
@@ -134,7 +134,7 @@ class Jore4JourneyPatternStopRepositoryTest {
             repository.insert(List.of(INPUT));
 
             assertThat(connection
-                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .table("network.scheduled_stop_point_in_journey_pattern")
                             .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_USED_AS_TIMING_POINT.getName())
@@ -147,7 +147,7 @@ class Jore4JourneyPatternStopRepositoryTest {
             repository.insert(List.of(INPUT));
 
             assertThat(connection
-                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .table("network.scheduled_stop_point_in_journey_pattern")
                             .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_REGULATED_TIMING_POINT.getName())
@@ -160,7 +160,7 @@ class Jore4JourneyPatternStopRepositoryTest {
             repository.insert(List.of(INPUT));
 
             assertThat(connection
-                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .table("network.scheduled_stop_point_in_journey_pattern")
                             .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_LOADING_TIME_ALLOWED.getName())
@@ -173,7 +173,7 @@ class Jore4JourneyPatternStopRepositoryTest {
             repository.insert(List.of(INPUT));
 
             assertThat(connection
-                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .table("network.scheduled_stop_point_in_journey_pattern")
                             .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.IS_VIA_POINT.getName())
@@ -193,14 +193,14 @@ class Jore4JourneyPatternStopRepositoryTest {
                     expectedJsonString);
 
             assertThat(connection
-                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .table("network.scheduled_stop_point_in_journey_pattern")
                             .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.VIA_POINT_NAME_I18N.getName())
                     .is(testJsonValueCondition);
 
             assertThat(connection
-                            .table("journey_pattern.scheduled_stop_point_in_journey_pattern")
+                            .table("network.scheduled_stop_point_in_journey_pattern")
                             .build())
                     .row()
                     .value(SCHEDULED_STOP_POINT_IN_JOURNEY_PATTERN.VIA_POINT_SHORT_NAME_I18N.getName())

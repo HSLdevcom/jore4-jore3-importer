@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
-import static fi.hsl.jore.jore4.jooq.journey_pattern.Tables.JOURNEY_PATTERN_;
+import static fi.hsl.jore.jore4.jooq.network.Tables.JOURNEY_PATTERN;
 
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4JourneyPattern;
 import java.util.UUID;
@@ -22,8 +22,8 @@ public class Jore4JourneyPatternRepository implements IJore4JourneyPatternReposi
 
     @Override
     public void insert(final Iterable<? extends Jore4JourneyPattern> journeyPatterns) {
-        BatchBindStep batch = db.batch(
-                db.insertInto(JOURNEY_PATTERN_, JOURNEY_PATTERN_.JOURNEY_PATTERN_ID, JOURNEY_PATTERN_.ON_ROUTE_ID)
+        BatchBindStep batch =
+                db.batch(db.insertInto(JOURNEY_PATTERN, JOURNEY_PATTERN.JOURNEY_PATTERN_ID, JOURNEY_PATTERN.ON_ROUTE_ID)
                         .values((UUID) null, null));
 
         for (final Jore4JourneyPattern journeyPattern : journeyPatterns) {

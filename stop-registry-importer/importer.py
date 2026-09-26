@@ -355,10 +355,10 @@ def get_jore4_organisations():
              'x-hasura-admin-secret': secret}
     response = requests.post(graphql, headers=headers, json={"query": query})
     json_data = response.json()
-    if not json_data['data']:
+    if not 'data' in json_data or not json_data['data']:
         return {}
 
-    organisations = json.loads(response.content)['data']['stop_registry']['organisation']
+    organisations = json_data['data']['stop_registry']['organisation']
     result_dict = {}
 
     for x in organisations:

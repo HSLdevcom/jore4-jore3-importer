@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
-import static fi.hsl.jore.jore4.jooq.route.Tables.LINE;
+import static fi.hsl.jore.jore4.jooq.network.Tables.LINE;
 
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4Line;
