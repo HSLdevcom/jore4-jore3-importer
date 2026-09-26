@@ -8,12 +8,16 @@ import fi.hsl.jore.importer.feature.jore4.entity.Jore4RouteInfrastructureLink;
 import java.util.UUID;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class Jore4RouteGeometryRepository implements IJore4RouteGeometryRepository {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Jore4RouteGeometryRepository.class);
+
     private final DSLContext db;
 
     @Autowired
@@ -33,15 +37,24 @@ public class Jore4RouteGeometryRepository implements IJore4RouteGeometryReposito
 
         for (final Jore4RouteGeometry routeGeometry : routeGeometries) {
             for (final Jore4RouteInfrastructureLink infrastructureLink : routeGeometry.infrastructureLinks()) {
+                final UUID infrastructureLinkId = db.select(INFRASTRUCTURE_LINK.INFRASTRUCTURE_LINK_ID)
+                        .from(INFRASTRUCTURE_LINK)
+                        .where(
+                                INFRASTRUCTURE_LINK.EXTERNAL_LINK_SOURCE.eq(
+                                        infrastructureLink.infrastructureLinkSource()),
+                                INFRASTRUCTURE_LINK.EXTERNAL_LINK_ID.eq(infrastructureLink.infrastructureLinkExtId()))
+                        .fetchOneInto(UUID.class);
+
+                if (infrastructureLinkId == null) {
+                    LOGGER.error(
+                            "Skipping route infrastructure link because no infrastructure link was found: externalLinkSource={}, externalLinkId={}",
+                            infrastructureLink.infrastructureLinkSource(),
+                            infrastructureLink.infrastructureLinkExtId());
+                    continue;
+                }
+
                 batch = batch.bind(
-                        db.select(INFRASTRUCTURE_LINK.INFRASTRUCTURE_LINK_ID)
-                                .from(INFRASTRUCTURE_LINK)
-                                .where(
-                                        INFRASTRUCTURE_LINK.EXTERNAL_LINK_SOURCE.eq(
-                                                infrastructureLink.infrastructureLinkSource()),
-                                        INFRASTRUCTURE_LINK.EXTERNAL_LINK_ID.eq(
-                                                infrastructureLink.infrastructureLinkExtId()))
-                                .fetchOneInto(UUID.class),
+                        infrastructureLinkId,
                         routeGeometry.routeId(),
                         infrastructureLink.infrastructureLinkSequence(),
                         infrastructureLink.isTraversalForwards());

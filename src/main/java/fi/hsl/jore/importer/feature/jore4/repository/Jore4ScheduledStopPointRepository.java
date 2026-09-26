@@ -8,6 +8,9 @@ import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.Routines;
 import java.util.UUID;
 import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -15,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class Jore4ScheduledStopPointRepository implements IJore4ScheduledStopPointRepository {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Jore4ScheduledStopPointRepository.class);
 
     private final DSLContext db;
 
@@ -40,18 +45,28 @@ public class Jore4ScheduledStopPointRepository implements IJore4ScheduledStopPoi
                             .fetchOneInto(UUID.class))
                     .orElse(null);
 
-            Routines.insertScheduledStopPointWithVehicleMode(
-                    db.configuration(),
-                    stopPoint.scheduledStopPointId(),
-                    stopPoint.measuredLocation(),
-                    infrastructureLinkId,
-                    stopPoint.directionOnInfraLink().getValue(),
-                    stopPoint.label(),
-                    stopPoint.validityStart().orElse(null),
-                    stopPoint.validityEnd().orElse(null),
-                    stopPoint.priority(),
-                    VehicleMode.BUS.getValue(),
-                    timingPlaceId);
+            try {
+                Routines.insertScheduledStopPointWithVehicleMode(
+                        db.configuration(),
+                        stopPoint.scheduledStopPointId(),
+                        stopPoint.measuredLocation(),
+                        infrastructureLinkId,
+                        stopPoint.directionOnInfraLink().getValue(),
+                        stopPoint.label(),
+                        stopPoint.validityStart().orElse(null),
+                        stopPoint.validityEnd().orElse(null),
+                        stopPoint.priority(),
+                        VehicleMode.BUS.getValue(),
+                        timingPlaceId);
+            } catch (final DataAccessException exception) {
+                LOG.error(
+                        "Failed to insert scheduled stop point: timingPlaceId={}, scheduledStopPointId={}, infrastructureLinkId={}, message={}",
+                        timingPlaceId,
+                        stopPoint.scheduledStopPointId(),
+                        infrastructureLinkId,
+                        exception.getMessage());
+                throw exception;
+            }
         }
     }
 }

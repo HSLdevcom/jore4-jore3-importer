@@ -12,6 +12,7 @@ import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPoin
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPattern;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.GetDistancesBetweenStopPointsInJourneyPatterns;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.NewScheduledStopPointIfIdGiven;
+import fi.hsl.jore.jore4.jooq.service_pattern.tables.PointType;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPoint;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPointInvariant;
 import fi.hsl.jore.jore4.jooq.service_pattern.tables.ScheduledStopPointsWithInfraLinkData;
@@ -441,6 +442,11 @@ public class ServicePattern extends SchemaImpl {
     }
 
     /**
+     * The table <code>service_pattern.point_type</code>.
+     */
+    public final PointType POINT_TYPE = PointType.POINT_TYPE;
+
+    /**
      * The scheduled stop points:
      * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:845 .
      * Colloquially known as stops from the perspective of timetable planning.
@@ -486,6 +492,7 @@ public class ServicePattern extends SchemaImpl {
             GetDistancesBetweenStopPointsInJourneyPattern.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN,
             GetDistancesBetweenStopPointsInJourneyPatterns.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS,
             NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN,
+            PointType.POINT_TYPE,
             ScheduledStopPoint.SCHEDULED_STOP_POINT,
             ScheduledStopPointInvariant.SCHEDULED_STOP_POINT_INVARIANT,
             ScheduledStopPointsWithInfraLinkData.SCHEDULED_STOP_POINTS_WITH_INFRA_LINK_DATA,

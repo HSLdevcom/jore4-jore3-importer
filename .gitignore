@@ -39,6 +39,7 @@ profiles/dev/config.*.properties
 docker/*
 !docker/docker-compose.custom.yml
 !docker/docker-compose.testdb-volume.yml
+!docker/docker-compose.tiamat-flyway-baseline.yml
 
 #digiroad stops csv file
 digiroad_stops*.csv

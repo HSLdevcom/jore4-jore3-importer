@@ -17,6 +17,10 @@ STOP_REGISTRY_VENV_DIR="${STOP_REGISTRY_IMPORTER_DIR}/.venv-stop-registry"
 STOP_REGISTRY_REQUIREMENTS_FILE="${STOP_REGISTRY_IMPORTER_DIR}/requirements.txt"
 STOP_REGISTRY_REQUIREMENTS_IN_FILE="${STOP_REGISTRY_IMPORTER_DIR}/requirements.in"
 
+HASURA_API_URL="${HASURA_API_URL:-http://localhost:3201}"
+HASURA_METADATA_URL="${HASURA_METADATA_URL:-$HASURA_API_URL/v1/metadata}"
+HASURA_ADMIN_SECRET="${HASURA_ADMIN_SECRET:-hasura}"
+
 # Python/pip executables inside the stop-registry virtualenv. These are
 # populated by `ensure_python_venv` so that every Python-related command uses
 # the correct interpreter and isolated environment.
@@ -28,9 +32,11 @@ export COMPOSE_PROJECT_NAME=jore3-importer
 
 INFRALINKS_URL="https://stjore4dev001.blob.core.windows.net/jore4-ui/2025-09-24-infraLinks.sql"
 TRAM_INFRALINKS_URL="https://stjore4dev001.blob.core.windows.net/jore4-ui/tram_infraLinks_2026-01-28.sql"
-ROUTES_DB_CONNECTION_STRING=postgresql://dbadmin:adminpassword@localhost:5432/jore4e2e
+BASE_DB_CONNECTION_STRING=postgresql://dbadmin:adminpassword@localhost:5432
+JORE4_DB_CONNECTION_STRING=$BASE_DB_CONNECTION_STRING/jore4e2e
 
 DOCKER_COMPOSE_CMD="docker compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.custom.yml"
+DOCKER_COMPOSE_TIAMAT_FLYWAY_CMD="docker compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.tiamat-flyway-baseline.yml -f ./docker/docker-compose.custom.yml"
 
 # if the --volume parameter is set, the testdb volume will be mounted
 for i in "$@" ; do
@@ -92,7 +98,247 @@ print_usage() {
   infralinks:seed
     Downloads the infrastructure links seed data SQL file (infraLinks.sql) from Azure
     Blob Storage. Applies the links to testdb.
+
+  jore3:import_sql_files
+    Imports every jore3dump/jr_*.sql file into the running jore3testdb MSSQL
+    database. Files are discovered and ordered by filename on every run.
+
+  infralinks:import_infra_links_from_csv:wipe_database <MML_TRAM_IMPORT_DATE>
+    Completely clears the database, runs migrations and imports infrastructure from the digiroad material.
+    Expects the workdir of jore4-digiroad-import to be copied or linked to the project root:
+    ln -s ../jore4-digiroad-import/workdir workdir
+    MML_TRAM_IMPORT_DATE is the date of the tram import in YYYY-MM-DD format.
   "
+}
+
+sleepf() {
+  local seconds="$1"
+  echo -n "Sleeping for $seconds seconds"
+
+  for ((i=1; i <= seconds ; i++))
+  do
+    echo -n "."
+  done
+
+  for ((i=1; i <= seconds ; i++))
+  do
+    sleep 1
+    echo -ne "\b \b"
+  done
+  printf '\r\033[K'
+}
+
+docker_stop_service() {
+  local service_name="$1"
+  echo "Stopping $service_name..."
+  $DOCKER_COMPOSE_CMD --project-name "$COMPOSE_PROJECT_NAME" stop "$service_name"
+  sleepf 1
+}
+
+docker_start_service() {
+  local service_name="$1"
+  local service_env="";
+  local se=${2:-}
+  if [[ -n $se ]]; then
+    service_env="-e $2"
+  fi
+  echo "Starting $service_name..."
+  $DOCKER_COMPOSE_CMD --project-name "$COMPOSE_PROJECT_NAME" up --build -d "$service_name" ${service_env}
+  sleepf 2
+}
+
+reload_hasura_metadata() {
+  local response
+
+  echo "Reloading Hasura metadata, database sources, and remote schemas..."
+  if ! response=$(curl --fail-with-body --silent --show-error \
+    -X POST "$HASURA_METADATA_URL" \
+    -H 'Content-Type: application/json' \
+    -H "x-hasura-admin-secret: $HASURA_ADMIN_SECRET" \
+    --data '{
+      "type": "reload_metadata",
+      "args": {
+        "reload_sources": true,
+        "reload_remote_schemas": true,
+        "recreate_event_triggers": true
+      }
+    }'); then
+    echo "ERROR: Hasura metadata reload request failed: ${response:-no response body}" >&2
+    return 1
+  fi
+
+  if ! printf '%s' "$response" | python3 -c '
+import json
+import sys
+
+try:
+    result = json.load(sys.stdin)
+except json.JSONDecodeError:
+    print("ERROR: Hasura metadata reload returned invalid JSON", file=sys.stderr)
+    sys.exit(1)
+
+if result.get("message") == "success" and result.get("is_consistent", True):
+    print("OK: Hasura metadata, database sources, and remote schemas reloaded")
+    sys.exit(0)
+
+print(f"ERROR: Hasura metadata reload returned: {json.dumps(result)}", file=sys.stderr)
+sys.exit(1)
+'; then
+    return 1
+  fi
+}
+
+import_infrastructure_wipe_database() {
+  MML_TRAM_IMPORT_DATE="$1"
+  if [[ ! "$MML_TRAM_IMPORT_DATE" =~ ^20[2-9][0-9]-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$ ]]; then
+    echo "Invalid date: $MML_TRAM_IMPORT_DATE"
+    print_usage
+    exit 1
+  fi
+
+  export DIGIROAD_IRROTUS_NRO=""
+  if [[ -f "workdir/zip/digiroad_irrotus_nro.txt" ]]; then
+    DIGIROAD_IRROTUS_NRO=$(cat "workdir/zip/digiroad_irrotus_nro.txt")
+  fi
+  if [[ -z "$DIGIROAD_IRROTUS_NRO" ]]; then
+    echo "digiroad_irrotus_nro.txt not found in workdir/zip or empty. Is jore4-digiroad-importer's workdir copied/linked and digiroad-importer ran?"
+    exit 1
+  fi
+
+  INPUT_FILENAME="infra_network_digiroad_r_${DIGIROAD_IRROTUS_NRO}_mml_${MML_TRAM_IMPORT_DATE}.csv"
+  if [[ ! -f "workdir/csv/${INPUT_FILENAME}" ]]; then
+    echo "Input file workdir/csv/${INPUT_FILENAME} does not exist. Is jore4-digiroad-importer's workdir copied/linked and digiroad-importer ran?"
+    exit 1
+  fi
+
+  read -p "Delete all tables and data in jore4e2e, stopdb, and timetablesdb on $BASE_DB_CONNECTION_STRING? and mapmatchingdb [y/N]: " TRUNCATE_ALL_DATABASES
+  if [[ ! "$TRUNCATE_ALL_DATABASES" =~ ^[Yy]$ ]]; then
+    echo "Aborting."
+    exit 1
+  fi
+
+  read -p "Do you wish to reinitialize the Jore3 mssql database from sql files in jore3dump/? [y/N]: " REINITIALIZE_JORE3
+
+  docker_stop_service jore4-hasura
+  docker_stop_service jore4-tiamat
+  docker_stop_service jore4-mapmatching
+  docker compose rm -f jore4-tiamat
+  docker_stop_service importer-jooq-database
+  docker compose rm -f importer-jooq-database
+
+  sleepf 2
+
+  echo "Deleting all tables and data in jore4e2e, stopdb, and timetablesdb on $BASE_DB_CONNECTION_STRING"
+  for DATABASE in jore4e2e stopdb timetablesdb; do
+    docker exec -i testdb psql "$BASE_DB_CONNECTION_STRING/$DATABASE" \
+      -v ON_ERROR_STOP=1 -f - < "scripts/drop-tables.sql"
+  done
+  docker exec -i testdb psql $BASE_DB_CONNECTION_STRING/stopdb < "scripts/drop-tiamat-views-sequences.sql";
+  docker exec -i testdb psql $BASE_DB_CONNECTION_STRING/jore4e2e < "scripts/drop-hasura-resources.sql";
+  docker exec -i testdb psql $BASE_DB_CONNECTION_STRING/timetablesdb < "scripts/drop-hasura-resources.sql";
+  docker exec -i testdb psql $BASE_DB_CONNECTION_STRING/jore4main < "scripts/drop-hasura-resources.sql";
+
+  sleepf 2
+
+  echo "Restarting tiamat..."
+    $DOCKER_COMPOSE_TIAMAT_FLYWAY_CMD --project-name "$COMPOSE_PROJECT_NAME" up --build -d jore4-tiamat
+
+  echo "Restarting importer-database..."
+  docker_start_service importer-jooq-database
+
+  echo "Restarting mapmatching..."
+  docker_start_service jore4-mapmatching
+
+  while ! curl --fail http://localhost:3010/actuator/health --silent | grep --fixed-strings --quiet '"status":"UP"'
+  do
+    echo "waiting for tiamat db migrations to execute"
+    sleepf 2;
+  done
+
+  while ! pg_isready -h localhost -p 16000
+  do
+    echo "waiting for importer-database to spin up"
+    sleep 2;
+  done
+
+  while ! curl --fail http://localhost:3005/actuator/health --silent | grep --fixed-strings --quiet '"status":"UP"'
+  do
+    echo "waiting for mapmatching db migrations to execute"
+    sleepf 2;
+  done
+
+  sleep 2
+
+  echo "Restarting hasura..."
+  docker_start_service jore4-hasura
+  while ! curl --fail http://localhost:3201/healthz --output /dev/null --silent
+  do
+    echo "waiting for hasura db migrations to execute"
+    sleepf 2;
+  done
+
+  echo "Stopping services again to drive in infrastructure network"
+  docker_stop_service jore4-hasura
+  docker_stop_service jore4-tiamat
+  docker_stop_service jore4-mapmatching
+
+  sleepf 3
+
+  echo "Importing infrastructure data from CSV file to jore4e2e on $BASE_DB_CONNECTION_STRING..."
+  # Import dump from csv file.
+  docker exec -i testdb psql "$BASE_DB_CONNECTION_STRING/jore4e2e" \
+    -v ON_ERROR_STOP=1 -f /mnt/jore3importer/sql/import_infra_links_from_csv.sql \
+    -v csvfile="/mnt/jore3importer/workdir/csv/${INPUT_FILENAME}"
+#  echo "Importing infrastructure data from CSV file to jore4main on $BASE_DB_CONNECTION_STRING..."
+  # Import dump from csv file.
+#  docker exec -i testdb psql "$BASE_DB_CONNECTION_STRING/jore4main" \
+#    -v ON_ERROR_STOP=1 -f /mnt/jore3importer/sql/import_infra_links_from_csv.sql \
+#    -v csvfile="/mnt/jore3importer/workdir/csv/${INPUT_FILENAME}"
+
+  echo "Importing routing schema from pgdump to jore4mapmatching on localhost:6433..."
+  PGPASSWORD=password psql -h localhost -p 6433 -d jore4mapmatching -U mapmatching \
+    -c 'TRUNCATE routing.infrastructure_source CASCADE;'
+  PGPASSWORD=password psql -h localhost -p 6433 -d jore4mapmatching -U mapmatching \
+      -c 'TRUNCATE routing.infrastructure_link_vertices_pgr CASCADE;'
+  PGPASSWORD=password pg_restore -1 -a --use-list=workdir/pgdump/2026-08-04_create_routing_schema_digiroad_r_2026-01_mml_2026-08-04.pgdump.no-enums.links-and-stops.list -h localhost -p 6433 -d jore4mapmatching -U mapmatching workdir/pgdump/2026-08-04_create_routing_schema_digiroad_r_2026-01_mml_2026-08-04.pgdump
+
+  sleepf 2
+
+  echo "Restarting tiamat..."
+  docker_start_service jore4-tiamat
+
+  echo "Restarting mapmatching..."
+  docker_start_service jore4-mapmatching
+
+  if [[ "$REINITIALIZE_JORE3" =~ ^[Yy]$ ]]; then
+    echo "Reinitializing Jore3 mssql database from sql files in jore3dump/..."
+    import_jore3_sql_files
+  fi
+
+  while ! curl --fail http://localhost:3010/actuator/health --silent | grep --fixed-strings --quiet '"status":"UP"'
+  do
+    echo "waiting for tiamat db migrations to execute"
+    sleepf 2;
+  done
+
+  while ! curl --fail http://localhost:3005/actuator/health --silent | grep --fixed-strings --quiet '"status":"UP"'
+  do
+    echo "waiting for mapmatching db migrations to execute"
+    sleepf 2;
+  done
+
+  echo "Restarting hasura..."
+  docker_start_service jore4-hasura
+
+  while ! curl --fail http://localhost:3201/healthz --output /dev/null --silent
+  do
+    echo "waiting for hasura db migrations to execute"
+    sleepf 2;
+  done
+
+  reload_hasura_metadata
+
+  echo "All done."
 }
 
 # Download Docker Compose bundle from the "jore4-docker-compose-bundle"
@@ -201,7 +447,7 @@ seed_bus_infra_links() {
   wait_for_test_databases_to_be_ready
 
   echo "$1: infraLinks.sql..."
-  docker exec -i "$1" psql $ROUTES_DB_CONNECTION_STRING < "infraLinks.sql";
+  docker exec -i "$1" psql $JORE4_DB_CONNECTION_STRING < "infraLinks.sql";
 
   echo "$1: Done Bus seeding infrastructure links."
 }
@@ -214,9 +460,47 @@ seed_tram_infra_links() {
   wait_for_test_databases_to_be_ready
 
   echo "$1: tram_infraLinks.sql..."
-  docker exec -i "$1" psql $ROUTES_DB_CONNECTION_STRING < "tram_infraLinks.sql";
+  docker exec -i "$1" psql $JORE4_DB_CONNECTION_STRING < "tram_infraLinks.sql";
 
   echo "$1: Done Tram seeding infrastructure links."
+}
+
+import_jore3_sql_files() {
+  local sql_file
+  local -a sql_files
+
+  shopt -s nullglob
+  sql_files=(jore3dump/jr_*.sql)
+  shopt -u nullglob
+
+  if (( ${#sql_files[@]} == 0 )); then
+    echo "No SQL files matching jore3dump/jr_*.sql were found." >&2
+    exit 1
+  fi
+
+  if ! command -v sqlcmd > /dev/null 2>&1; then
+    echo "sqlcmd must be installed on the host to import Jore 3 SQL files." >&2
+    exit 1
+  fi
+
+  echo "Ensuring the dbo schema exists in jore3testdb..."
+  SQLCMDPASSWORD="${SA_PASSWORD:-P@ssw0rd}" \
+    sqlcmd -b -r 1 -C -S localhost,1433 -U SA -d jore3testdb \
+    -Q "IF SCHEMA_ID(N'dbo') IS NULL EXEC(N'CREATE SCHEMA [dbo]');"
+
+  for sql_file in "${sql_files[@]}"; do
+    if [[ ! -f "$sql_file" ]]; then
+      echo "Expected a regular file but found: $sql_file" >&2
+      exit 1
+    fi
+
+    echo "Importing $sql_file into jore3testdb..."
+    SQLCMDPASSWORD="${SA_PASSWORD:-P@ssw0rd}" \
+      sqlcmd -b -r 1 -C -S localhost,1433 -U SA -d jore3testdb \
+      -i "$sql_file"
+  done
+
+  echo "Imported ${#sql_files[@]} Jore 3 SQL file(s) into jore3testdb."
 }
 
 start_all() {
@@ -225,13 +509,18 @@ start_all() {
 }
 
 start_deps() {
+  if [[ ! -d "workdir" ]]; then
+    echo "ERROR: workdir must be a copy of or a symlink to jore4-digiroad-importer's workdir" >&2
+    exit 1
+  fi
+
   # Runs the following services:
   # importer-jooq-database - The database which contains the information imported and transformed from Jore 3
   # importer-test-destination-database - The test database which contains the information imported and transformed from Jore 3
   # jore4-mssqltestdb - The Jore 3 MSSQL database which contains the source data which is read by the importer
   # jore4-hasura - Hasura. We have to start Hasura because it ensures that db migrations are run to the Jore 4 database.
   # jore4-testdb - Jore 4 database. This is the destination database of the import process.
-  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-mapmatchingdb jore4-mapmatching jore4-tiamat jore4-auth jore4-idp
+  $DOCKER_COMPOSE_CMD up --build -d importer-jooq-database importer-test-database jore4-mssqltestdb jore4-hasura jore4-testdb jore4-mapmatchingdb jore4-mapmatching jore4-tiamat jore4-auth jore4-idp jore4-mbtiles jore4-hastus jore4-timetablesapi jore4-ui
 }
 
 stop() {
@@ -368,6 +657,10 @@ case $COMMAND in
     upload_zones
     ;;
 
+  upload_zones)
+    upload_zones
+    ;;
+
   list)
     $DOCKER_COMPOSE_CMD config --services
     ;;
@@ -379,6 +672,18 @@ case $COMMAND in
   infralinks:seed)
     download_infralinks
     seed_infra_links testdb
+    ;;
+
+  jore3:import_sql_files)
+    import_jore3_sql_files
+    ;;
+
+  infralinks:import_infra_links_from_csv:wipe_database)
+    import_infrastructure_wipe_database "$2"
+    ;;
+
+  sleepf)
+    sleepf "$2"
     ;;
 
   *)
