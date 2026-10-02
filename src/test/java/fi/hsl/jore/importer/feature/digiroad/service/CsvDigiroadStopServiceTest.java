@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStopDirection;
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -101,6 +102,13 @@ class CsvDigiroadStopServiceTest {
             void shouldReturnStopWhichHasCorrectSwedishName() {
                 final DigiroadStop stop = service.findByNationalId(NATIONAL_ID).get();
                 assertThat(stop.nameSwedish()).as("nameSwedish").isNotEmpty().contains(EXPECTED_SWEDISH_NAME);
+            }
+
+            @Test
+            @DisplayName("Should return a stop which has the correct vehicle modes")
+            void shouldReturnStopWhichHasCorrectVehicleModes() {
+                final DigiroadStop stop = service.findByNationalId(NATIONAL_ID).get();
+                assertThat(stop.vehicleModes()).as("vehicleModes").containsExactly(VehicleMode.TRAM, VehicleMode.BUS);
             }
         }
 
