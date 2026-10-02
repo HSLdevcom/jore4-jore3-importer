@@ -5,13 +5,71 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStopDirection;
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayName("Parse Digiroad stop from a CSV line")
 public class DigiroadStopFactoryTest {
+
+    @Nested
+    @DisplayName("Parse vehicle modes from pys_tyyppi")
+    class ParseVehicleModes {
+
+        @ParameterizedTest(name = "pys_tyyppi {0} -> {1}")
+        @CsvSource({
+            "1, TRAM",
+            "2, BUS",
+            "3, BUS",
+            "4, BUS",
+            "5, BUS",
+            "6, BUS",
+            "7, UNKNOWN",
+            "8, BUS",
+            "9, BUS",
+            "10, BUS",
+            "11, BUS"
+        })
+        @DisplayName("Should map each stop type to the correct vehicle mode")
+        void shouldMapStopTypeToVehicleMode(final int stopType, final VehicleMode expected) {
+            assertThat(DigiroadStopFactory.parseVehicleModes("[" + stopType + "]"))
+                    .containsExactly(expected);
+        }
+
+        @Test
+        @DisplayName("Should parse a list without spaces after commas")
+        void shouldParseListWithoutSpaces() {
+            assertThat(DigiroadStopFactory.parseVehicleModes("[1,2,7]"))
+                    .containsExactly(VehicleMode.TRAM, VehicleMode.BUS, VehicleMode.UNKNOWN);
+        }
+
+        @Test
+        @DisplayName("Should parse a list with spaces after commas")
+        void shouldParseListWithSpaces() {
+            assertThat(DigiroadStopFactory.parseVehicleModes("[1, 2, 7]"))
+                    .containsExactly(VehicleMode.TRAM, VehicleMode.BUS, VehicleMode.UNKNOWN);
+        }
+
+        @ParameterizedTest(name = "pys_tyyppi \"{0}\"")
+        @ValueSource(strings = {"1", " 1 ", "[1]", " [1] "})
+        @DisplayName("Should parse a single value with or without brackets as a list of one")
+        void shouldParseSingleValueWithOrWithoutBrackets(final String value) {
+            assertThat(DigiroadStopFactory.parseVehicleModes(value)).containsExactly(VehicleMode.TRAM);
+        }
+
+        @ParameterizedTest(name = "pys_tyyppi \"{0}\"")
+        @ValueSource(strings = {"", "[]", "[2", "2]", "[2,]", "[,2]", "[a]", "a", "1,2", "[0]", "0", "[12]", "12"})
+        @DisplayName("Should throw an exception for an invalid value")
+        void shouldThrowExceptionForInvalidValue(final String value) {
+            assertThatThrownBy(() -> DigiroadStopFactory.parseVehicleModes(value))
+                    .isExactlyInstanceOf(IllegalArgumentException.class);
+        }
+    }
 
     @Nested
     @DisplayName("When the CSV line is invalid")
@@ -48,7 +106,7 @@ public class DigiroadStopFactoryTest {
         class WhenDigiroadStopIdIsEmpty {
 
             private static final String CSV_LINE =
-                    ";133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r_mml";
+                    ";133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;[2];digiroad_r_mml";
 
             @Test
             @DisplayName("Should throw an exception")
@@ -63,7 +121,7 @@ public class DigiroadStopFactoryTest {
         class WhenDigiroadLinkIdIsEmpty {
 
             private static final String CSV_LINE =
-                    "111;;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r_mml";
+                    "111;;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;[2];digiroad_r_mml";
 
             @Test
             @DisplayName("Should throw an exception")
@@ -78,7 +136,7 @@ public class DigiroadStopFactoryTest {
         class WhenNationalIdIsEmpty {
 
             private static final String CSV_LINE =
-                    "111;133202;;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r_mml";
+                    "111;133202;;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;[2];digiroad_r_mml";
 
             @Test
             @DisplayName("Should throw an exception")
@@ -93,7 +151,7 @@ public class DigiroadStopFactoryTest {
         class WhenNationalIdIsContainsNonNumericalCharacters {
 
             private static final String CSV_LINE =
-                    "111;133202;12d3;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r_mml";
+                    "111;133202;12d3;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;[2];digiroad_r_mml";
 
             @Test
             @DisplayName("Should throw an exception")
@@ -108,7 +166,7 @@ public class DigiroadStopFactoryTest {
         class WhenStopDirectionIsInvalid {
 
             private static final String CSV_LINE =
-                    "111;133202;168626;invalid;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r_mml";
+                    "111;133202;168626;invalid;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;[2];digiroad_r_mml";
 
             @Test
             @DisplayName("Should throw an exception")
@@ -123,7 +181,7 @@ public class DigiroadStopFactoryTest {
         class WhenStopLocationIsInvalid {
 
             private static final String CSV_LINE =
-                    "111;133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801])\";Ullanmäki;Ullasbacken;digiroad_r_mml";
+                    "111;133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801])\";Ullanmäki;Ullasbacken;[2];digiroad_r_mml";
 
             @Test
             @DisplayName("Should throw an exception")
@@ -152,7 +210,7 @@ public class DigiroadStopFactoryTest {
         class WhenAllValuesAreGiven {
 
             private static final String CSV_LINE =
-                    "111;133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;digiroad_r_mml";
+                    "111;133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;[2];digiroad_r_mml";
 
             @Test
             @DisplayName("Should return an optional which contains the parsed stop")
@@ -226,6 +284,30 @@ public class DigiroadStopFactoryTest {
                         DigiroadStopFactory.fromCsvLine(CSV_LINE).get();
                 assertThat(stop.nameSwedish()).as("nameSwedish").isNotEmpty().contains(EXPECTED_SWEDISH_NAME);
             }
+
+            @Test
+            @DisplayName("Should return a stop which has the correct vehicle modes")
+            void shouldReturnStopWhichHasCorrectVehicleModes() {
+                final DigiroadStop stop =
+                        DigiroadStopFactory.fromCsvLine(CSV_LINE).get();
+                assertThat(stop.vehicleModes()).as("vehicleModes").containsExactly(VehicleMode.BUS);
+            }
+        }
+
+        @Nested
+        @DisplayName("When pys_tyyppi is a single value without brackets")
+        class WhenPysTyyppiIsSingleValueWithoutBrackets {
+
+            private static final String CSV_LINE =
+                    "111;133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";Ullanmäki;Ullasbacken;1;digiroad_r_mml";
+
+            @Test
+            @DisplayName("Should return a stop which has a single vehicle mode")
+            void shouldReturnStopWhichHasSingleVehicleMode() {
+                final DigiroadStop stop =
+                        DigiroadStopFactory.fromCsvLine(CSV_LINE).get();
+                assertThat(stop.vehicleModes()).as("vehicleModes").containsExactly(VehicleMode.TRAM);
+            }
         }
 
         @Nested
@@ -233,7 +315,7 @@ public class DigiroadStopFactoryTest {
         class WhenNamesAreEmptyStrings {
 
             private static final String CSV_LINE =
-                    "111;133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";;;digiroad_r_mml";
+                    "111;133202;168626;backward;\"{\"\"type\"\": \"\"Point\"\", \"\"coordinates\"\": [24.696376131, 60.207149801]}\";;;[2];digiroad_r_mml";
 
             @Test
             @DisplayName("Should return an optional which contains the parsed stop")

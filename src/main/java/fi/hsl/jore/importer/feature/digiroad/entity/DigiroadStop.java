@@ -1,5 +1,7 @@
 package fi.hsl.jore.importer.feature.digiroad.entity;
 
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
+import java.util.List;
 import java.util.Optional;
 import org.immutables.value.Value;
 import org.locationtech.jts.geom.Point;
@@ -22,6 +24,9 @@ public interface DigiroadStop {
 
     Optional<String> nameSwedish();
 
+    /** The vehicle modes of the stop, derived from the Digiroad column 'pys_tyyppi'. */
+    List<VehicleMode> vehicleModes();
+
     static ImmutableDigiroadStop of(
             String digiroadStopId,
             String digiroadLinkId,
@@ -29,7 +34,8 @@ public interface DigiroadStop {
             long nationalId,
             Point location,
             Optional<String> nameFinnish,
-            Optional<String> nameSwedish) {
+            Optional<String> nameSwedish,
+            List<VehicleMode> vehicleModes) {
         return ImmutableDigiroadStop.builder()
                 .directionOnInfraLink(directionOnInfralink)
                 .digiroadStopId(digiroadStopId)
@@ -38,6 +44,7 @@ public interface DigiroadStop {
                 .location(location)
                 .nameFinnish(nameFinnish)
                 .nameSwedish(nameSwedish)
+                .vehicleModes(vehicleModes)
                 .build();
     }
 }

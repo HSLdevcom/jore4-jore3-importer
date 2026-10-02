@@ -4,7 +4,12 @@ import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStop;
 import fi.hsl.jore.importer.feature.digiroad.entity.DigiroadStopDirection;
 import fi.hsl.jore.importer.feature.jore3.util.JoreGeometryUtil;
 import fi.hsl.jore.importer.feature.jore3.util.StringParserUtil;
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.geojson.GeoJsonObject;
 import org.geojson.LngLatAlt;
 import org.locationtech.jts.geom.Point;
@@ -17,7 +22,15 @@ class DigiroadStopFactory {
     private static final String CSV_SEPARATOR_CHARACTER = ";";
     private static final String DIRECTION_AGAINST_DIGITIZING_DIRECTION = "backward";
     private static final String DIRECTION_IN_DIGITIZING_DIRECTION = "forward";
-    private static final int VALID_LINE_COLUMN_COUNT = 8;
+    private static final int VALID_LINE_COLUMN_COUNT = 9;
+
+    /**
+     * Matches either a bracketed list of one or more integers, e.g. "[2]" or "[1, 2]" (optional whitespace after the
+     * commas), or a single integer without brackets, e.g. "2".
+     */
+    private static final Pattern VEHICLE_MODES_PATTERN = Pattern.compile("^(?:\\[(\\d+(?:,\\s*\\d+)*)]|(\\d+))$");
+
+    private static final Pattern VEHICLE_MODES_SEPARATOR = Pattern.compile(",\\s*");
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -33,6 +46,7 @@ class DigiroadStopFactory {
      *   <li>The location of the stop
      *   <li>The Finnish name of the stop
      *   <li>The Swedish name of the stop
+     *   <li>The Digiroad stop types (pys_tyyppi), e.g. "[2]", "[1, 2]" or "2"
      *   <li>The source system
      * </ul>
      *
@@ -57,8 +71,45 @@ class DigiroadStopFactory {
                 StringParserUtil.parseRequiredLong("elyNumber", columns[2]),
                 parseLocation(columns[4]),
                 getStringContainer(columns[5]),
-                getStringContainer(columns[6]));
+                getStringContainer(columns[6]),
+                parseVehicleModes(columns[7]));
         return Optional.of(stop);
+    }
+
+    /**
+     * Parses the vehicle modes from the Digiroad column 'pys_tyyppi'. Accepts a bracketed list of one or more integers
+     * (e.g. "[2]", "[1,2]" or "[1, 2]") or a single integer without brackets (e.g. "2"), which is handled as a list of
+     * one item.
+     *
+     * @throws IllegalArgumentException if the value is malformed or contains an unknown stop type
+     */
+    static List<VehicleMode> parseVehicleModes(final String value) {
+        if (value == null) {
+            throw new IllegalArgumentException("pys_tyyppi cannot be null");
+        }
+
+        final Matcher matcher = VEHICLE_MODES_PATTERN.matcher(value.trim());
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException(String.format("Invalid pys_tyyppi value: %s", value));
+        }
+
+        final String items = matcher.group(1) != null ? matcher.group(1) : matcher.group(2);
+        return Arrays.stream(VEHICLE_MODES_SEPARATOR.split(items))
+                .map(item -> toVehicleMode(Integer.parseInt(item.trim())))
+                .toList();
+    }
+
+    private static VehicleMode toVehicleMode(final int stopType) {
+        if (stopType == 1) {
+            return VehicleMode.TRAM;
+        } else if (stopType >= 2 && stopType <= 6) {
+            return VehicleMode.BUS;
+        } else if (stopType == 7) {
+            return VehicleMode.UNKNOWN;
+        } else if (stopType >= 8 && stopType <= 11) {
+            return VehicleMode.BUS;
+        }
+        throw new IllegalArgumentException(String.format("Unknown pys_tyyppi value: %d", stopType));
     }
 
     private static Optional<String> getStringContainer(final String value) {
