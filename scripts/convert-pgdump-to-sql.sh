@@ -6,8 +6,8 @@ set -eu
 # It is jore-data/database_dumps, where jore-data is next to the project directory.
 # The three dirname calls each remove a segment from the end of the path; first the script name, then 'scripts'
 # directory, and finally the project directory.
-TARGET_DIR="$(dirname "$(dirname "$(dirname "$(realpath "$0")")")")/jore-data/database_dumps"
 FILE_DATE=$(date "+%Y-%m-%d")
+TARGET_DIR="$(dirname "$(dirname "$(dirname "$(realpath "$0")")")")/jore-data/database_dumps/${FILE_DATE}"
 SUFFIX=""
 
 # Function to print usage information
@@ -117,3 +117,4 @@ pg_restore \
 sed -i '' "s/dbadmin/dbadmin${SUFFIX}/g" "$TARGET_FILE"
 sed -i '' "s/dbhasura/dbhasura${SUFFIX}/g" "$TARGET_FILE"
 sed -i '' "s/dbimporter/dbjore3importer${SUFFIX}/g" "$TARGET_FILE"
+sed -i '' "s/dbtimetablesapi/dbtimetablesapi${SUFFIX}/g" "$TARGET_FILE"

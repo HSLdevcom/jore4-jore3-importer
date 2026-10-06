@@ -1,2 +1,5 @@
 external_stop_id;external_link_id;national_stop_id;direction_on_infra_link;location;finnish_name;swedish_name;pys_tyyppi;external_stop_source
-111;133202;1234567890;backward;"{""type"": ""Point"", ""coordinates"": [24.696376131, 60.207149801]}";Ullanmäki;Ullasbacken;[1, 2];digiroad_r_mml
+111;133202;1234567890;forward;"{""type"": ""Point"", ""coordinates"": [24.696376131, 60.207149801]}";Ullanmäki;Ullasbacken;[2];digiroad_r_mml
+112;133202;2000000001;forward;"{""type"": ""Point"", ""coordinates"": [24.946376131, 60.177149801]}";Raitiovaunu ja bussi;Spårvagn och buss;[1, 2];digiroad_r_mml
+113;133203;2000000002;forward;"{""type"": ""Point"", ""coordinates"": [24.946476131, 60.177249801]}";Raitiovaunu;Spårvagn;[1];hsl_tram
+114;133202;2000000003;backward;"{""type"": ""Point"", ""coordinates"": [24.696476131, 60.207249801]}";Bussi;Buss;2;digiroad_r_mml
