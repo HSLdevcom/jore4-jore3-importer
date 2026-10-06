@@ -81,8 +81,10 @@ class Jore4ScheduledStopPointRepositoryTest {
         private final Jore4ScheduledStopPoint INPUT = Jore4ScheduledStopPoint.of(
                 SCHEDULED_STOP_POINT_ID,
                 SCHEDULED_STOP_POINT_EXTERNAL_ID,
+                UUID.fromString(EXPECTED_INFRASTRUCTURE_LINK_ID),
                 INFRASTRUCTURE_LINK_EXTERNAL_ID,
                 DIRECTION_ON_INFRALINK,
+                VehicleMode.BUS,
                 LABEL,
                 JoreGeometryUtil.fromDbCoordinates(Y_COORDINATE, X_COORDINATE),
                 Optional.of(HASTUS_PLACE_ID),
@@ -241,6 +243,62 @@ class Jore4ScheduledStopPointRepositoryTest {
                     .row()
                     .value(VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.VEHICLE_MODE.getName())
                     .isEqualTo(SCHEDULED_STOP_POINT_VEHICLE_MODE);
+        }
+    }
+
+    @Nested
+    @DisplayName("Insert tram scheduled stop point into the database")
+    @Sql(
+            scripts = {
+                "/sql/jore4/drop_tables.sql",
+                "/sql/jore4/populate_tram_infrastructure_links.sql",
+                "/sql/jore4/populate_timing_places.sql"
+            },
+            config = @SqlConfig(dataSource = "jore4DataSource", transactionManager = "jore4TransactionManager"))
+    class InsertTramScheduledStopPointIntoDatabase {
+
+        // See populate_tram_infrastructure_links.sql
+        private static final String TRAM_LINK_ID = "a1b2c3d4-0000-4000-8000-000000000001";
+        private static final String TRAM_LINK_EXTERNAL_ID = "tram-1";
+
+        private final Jore4ScheduledStopPoint INPUT = Jore4ScheduledStopPoint.of(
+                SCHEDULED_STOP_POINT_ID,
+                SCHEDULED_STOP_POINT_EXTERNAL_ID,
+                UUID.fromString(TRAM_LINK_ID),
+                TRAM_LINK_EXTERNAL_ID,
+                Jore4ScheduledStopPointDirection.FORWARD,
+                VehicleMode.TRAM,
+                LABEL,
+                JoreGeometryUtil.fromDbCoordinates(60.1699, 24.945),
+                Optional.of(HASTUS_PLACE_ID),
+                PRIORITY,
+                Optional.of(VALIDITY_PERIOD_START),
+                Optional.of(VALIDITY_PERIOD_END));
+
+        @Test
+        @DisplayName("Should save the scheduled stop point on the tram link")
+        void shouldSaveScheduledStopPointOnTramLink() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(connection.table("service_pattern.scheduled_stop_point").build())
+                    .hasNumberOfRows(1)
+                    .row()
+                    .value(SCHEDULED_STOP_POINT.LOCATED_ON_INFRASTRUCTURE_LINK_ID.getName())
+                    .isEqualTo(TRAM_LINK_ID);
+        }
+
+        @Test
+        @DisplayName("Should save the scheduled stop point vehicle mode as tram")
+        void shouldSaveScheduledStopPointVehicleModeAsTram() {
+            repository.insert(List.of(INPUT));
+
+            assertThat(connection
+                            .table("service_pattern.vehicle_mode_on_scheduled_stop_point")
+                            .build())
+                    .hasNumberOfRows(1)
+                    .row()
+                    .value(VEHICLE_MODE_ON_SCHEDULED_STOP_POINT.VEHICLE_MODE.getName())
+                    .isEqualTo(VehicleMode.TRAM.getValue());
         }
     }
 }

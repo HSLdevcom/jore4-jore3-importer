@@ -33,7 +33,7 @@ class CsvDigiroadStopServiceTest {
             private final String EXPECTED_DIGIROAD_STOP_ID = "111";
             private final String EXPECTED_DIGIROAD_LINK_ID = "133202";
             private final int NATIONAL_ID = 1234567890;
-            private final DigiroadStopDirection EXPECTED_DIRECTION_ON_INFRALINK = DigiroadStopDirection.BACKWARD;
+            private final DigiroadStopDirection EXPECTED_DIRECTION_ON_INFRALINK = DigiroadStopDirection.FORWARD;
             private final double EXPECTED_X_COORDINATE = 24.696376131;
             private final double EXPECTED_Y_COORDINATE = 60.207149801;
             private final String EXPECTED_FINNISH_NAME = "Ullanmäki";
@@ -108,7 +108,33 @@ class CsvDigiroadStopServiceTest {
             @DisplayName("Should return a stop which has the correct vehicle modes")
             void shouldReturnStopWhichHasCorrectVehicleModes() {
                 final DigiroadStop stop = service.findByNationalId(NATIONAL_ID).get();
+                assertThat(stop.vehicleModes()).as("vehicleModes").containsExactly(VehicleMode.BUS);
+            }
+        }
+
+        @Nested
+        @DisplayName("When the digiroad stops have different vehicle modes")
+        class WhenDigiroadStopsHaveDifferentVehicleModes {
+
+            @Test
+            @DisplayName("Should parse '[1, 2]' as tram and bus")
+            void shouldParseTramAndBus() {
+                final DigiroadStop stop = service.findByNationalId(2000000001L).get();
                 assertThat(stop.vehicleModes()).as("vehicleModes").containsExactly(VehicleMode.TRAM, VehicleMode.BUS);
+            }
+
+            @Test
+            @DisplayName("Should parse '[1]' as tram")
+            void shouldParseTram() {
+                final DigiroadStop stop = service.findByNationalId(2000000002L).get();
+                assertThat(stop.vehicleModes()).as("vehicleModes").containsExactly(VehicleMode.TRAM);
+            }
+
+            @Test
+            @DisplayName("Should parse '2' without brackets as bus")
+            void shouldParseBusWithoutBrackets() {
+                final DigiroadStop stop = service.findByNationalId(2000000003L).get();
+                assertThat(stop.vehicleModes()).as("vehicleModes").containsExactly(VehicleMode.BUS);
             }
         }
 

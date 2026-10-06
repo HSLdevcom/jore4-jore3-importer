@@ -1,6 +1,6 @@
 package fi.hsl.jore.importer.config.jobs;
 
-import static fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPointDirection.BACKWARD;
+import static fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPointDirection.FORWARD;
 import static fi.hsl.jore.jore4.jooq.service_pattern.Tables.VEHICLE_MODE_ON_SCHEDULED_STOP_POINT;
 import static org.assertj.db.api.Assertions.assertThat;
 
@@ -42,7 +42,9 @@ import org.springframework.test.context.jdbc.SqlConfig;
 @ExtendWith(SoftAssertionsExtension.class)
 class ExportScheduledStopPointsStepTest extends BatchIntegrationTest {
 
-    private static final Jore4ScheduledStopPointDirection DIRECTION_ON_INFRALINK = BACKWARD;
+    // Must be compatible with the traversal direction of MockMapMatchingService (forwards), because
+    // ImportJobBatchTest adds this stop to a journey pattern on a route traversing the same link.
+    private static final Jore4ScheduledStopPointDirection DIRECTION_ON_INFRALINK = FORWARD;
     private static final String EXPECTED_INFRASTRUCTURE_LINK_ID = "554c63e6-87b2-4dc8-a032-b6b0e2607696";
     private static final String LABEL = "H1234";
     private static final int EXPECTED_PRIORITY = 10;
