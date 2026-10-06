@@ -1,10 +1,8 @@
 package fi.hsl.jore.importer.feature.jore4.repository;
 
-import static fi.hsl.jore.jore4.jooq.infrastructure_network.Tables.INFRASTRUCTURE_LINK;
 import static fi.hsl.jore.jore4.jooq.timing_pattern.Tables.TIMING_PLACE;
 
 import fi.hsl.jore.importer.feature.jore4.entity.Jore4ScheduledStopPoint;
-import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import fi.hsl.jore.jore4.jooq.internal_service_pattern.Routines;
 import java.util.UUID;
 import org.jooq.DSLContext;
@@ -32,10 +30,8 @@ public class Jore4ScheduledStopPointRepository implements IJore4ScheduledStopPoi
     @Override
     public void insert(final Iterable<? extends Jore4ScheduledStopPoint> stopPoints) {
         for (final Jore4ScheduledStopPoint stopPoint : stopPoints) {
-            final UUID infrastructureLinkId = db.select(INFRASTRUCTURE_LINK.INFRASTRUCTURE_LINK_ID)
-                    .from(INFRASTRUCTURE_LINK)
-                    .where(INFRASTRUCTURE_LINK.EXTERNAL_LINK_ID.eq(stopPoint.externalInfrastructureLinkId()))
-                    .fetchOneInto(UUID.class);
+            final UUID infrastructureLinkId = stopPoint.infrastructureLinkId();
+            final String vehicleMode = stopPoint.vehicleMode().getValue();
 
             final UUID timingPlaceId = stopPoint
                     .timingPlaceLabel()
@@ -56,14 +52,15 @@ public class Jore4ScheduledStopPointRepository implements IJore4ScheduledStopPoi
                         stopPoint.validityStart().orElse(null),
                         stopPoint.validityEnd().orElse(null),
                         stopPoint.priority(),
-                        VehicleMode.BUS.getValue(),
+                        vehicleMode,
                         timingPlaceId);
             } catch (final DataAccessException exception) {
                 LOG.error(
-                        "Failed to insert scheduled stop point: timingPlaceId={}, scheduledStopPointId={}, infrastructureLinkId={}, message={}",
+                        "Failed to insert scheduled stop point: timingPlaceId={}, scheduledStopPointId={}, infrastructureLinkId={}, vehicleMode={}, message={}",
                         timingPlaceId,
                         stopPoint.scheduledStopPointId(),
                         infrastructureLinkId,
+                        vehicleMode,
                         exception.getMessage());
                 throw exception;
             }
