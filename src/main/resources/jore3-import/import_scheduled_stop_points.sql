@@ -1,6 +1,7 @@
 SELECT
        p.soltunnus AS soltunnus,
        p.elynumero AS elynumero,
+       p.pystyyppi AS pystyyppi,
        p.pysnimi AS pysnimi,
        p.pysnimir AS pysnimir,
        s.sollistunnus AS sollistunnus,
@@ -15,5 +16,5 @@ LEFT OUTER JOIN (
     INNER JOIN jr_reitti r ON (r.reitunnus = rl.reitunnus)
     WHERE r.reiviimpvm >= '01.01.2021 00:00:00' -- Only current routes are relevant
 ) v ON v.lnkalkusolmu = p.soltunnus OR v.lnkloppusolmu = p.soltunnus
-GROUP BY p.soltunnus, p.elynumero, p.pysnimi, p.pysnimir, s.sollistunnus, s.solkirjain, p.paitunnus
+GROUP BY p.soltunnus, p.elynumero, p.pystyyppi, p.pysnimi, p.pysnimir, s.sollistunnus, s.solkirjain, p.paitunnus
 ORDER BY p.soltunnus ASC;

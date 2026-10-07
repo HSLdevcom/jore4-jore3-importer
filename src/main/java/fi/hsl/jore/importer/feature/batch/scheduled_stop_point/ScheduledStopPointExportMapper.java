@@ -6,6 +6,7 @@ import fi.hsl.jore.importer.config.jooq.converter.geometry.GeometryConverter;
 import fi.hsl.jore.importer.feature.common.converter.IJsonbConverter;
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ImporterScheduledStopPoint;
 import jakarta.annotation.Nullable;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.locationtech.jts.geom.Geometry;
@@ -59,7 +61,8 @@ public class ScheduledStopPointExportMapper implements RowMapper<ImporterSchedul
                 pointFromDatabaseObject(resultSet.getObject("location")),
                 jsonConverter.fromJson(resultSet.getString("name"), MultilingualString.class),
                 getOptionalString(resultSet, "short_id"),
-                getOptionalString(resultSet, "timing_place_label"));
+                getOptionalString(resultSet, "timing_place_label"),
+                VehicleMode.valueOf(resultSet.getString("vehicle_mode").toUpperCase(Locale.ROOT)));
     }
 
     private static List<String> csvToValues(final String csvString) {

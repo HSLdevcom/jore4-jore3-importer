@@ -181,6 +181,22 @@ public class ScheduledStopPointsHistoryRecord extends TableRecordImpl<ScheduledS
         return (UUID) get(9);
     }
 
+    /**
+     * Setter for
+     * <code>network.scheduled_stop_points_history.vehicle_mode</code>.
+     */
+    public void setVehicleMode(String value) {
+        set(10, value);
+    }
+
+    /**
+     * Getter for
+     * <code>network.scheduled_stop_points_history.vehicle_mode</code>.
+     */
+    public String getVehicleMode() {
+        return (String) get(10);
+    }
+
     // -------------------------------------------------------------------------
     // Constructors
     // -------------------------------------------------------------------------
@@ -195,7 +211,7 @@ public class ScheduledStopPointsHistoryRecord extends TableRecordImpl<ScheduledS
     /**
      * Create a detached, initialised ScheduledStopPointsHistoryRecord
      */
-    public ScheduledStopPointsHistoryRecord(UUID scheduledStopPointId, String scheduledStopPointExtId, UUID infrastructureNodeId, Long scheduledStopPointElyNumber, JSONB scheduledStopPointName, TimeRange scheduledStopPointSysPeriod, String scheduledStopPointShortId, UUID scheduledStopPointJore4Id, Integer usageInRoutes, UUID networkPlaceId) {
+    public ScheduledStopPointsHistoryRecord(UUID scheduledStopPointId, String scheduledStopPointExtId, UUID infrastructureNodeId, Long scheduledStopPointElyNumber, JSONB scheduledStopPointName, TimeRange scheduledStopPointSysPeriod, String scheduledStopPointShortId, UUID scheduledStopPointJore4Id, Integer usageInRoutes, UUID networkPlaceId, String vehicleMode) {
         super(ScheduledStopPointsHistory.SCHEDULED_STOP_POINTS_HISTORY);
 
         setScheduledStopPointId(scheduledStopPointId);
@@ -208,6 +224,7 @@ public class ScheduledStopPointsHistoryRecord extends TableRecordImpl<ScheduledS
         setScheduledStopPointJore4Id(scheduledStopPointJore4Id);
         setUsageInRoutes(usageInRoutes);
         setNetworkPlaceId(networkPlaceId);
+        setVehicleMode(vehicleMode);
         resetTouchedOnNotNull();
     }
 }

@@ -114,6 +114,12 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
      */
     public final TableField<ScheduledStopPointsHistoryRecord, UUID> NETWORK_PLACE_ID = createField(DSL.name("network_place_id"), SQLDataType.UUID, this, "");
 
+    /**
+     * The column
+     * <code>network.scheduled_stop_points_history.vehicle_mode</code>.
+     */
+    public final TableField<ScheduledStopPointsHistoryRecord, String> VEHICLE_MODE = createField(DSL.name("vehicle_mode"), SQLDataType.VARCHAR(7).nullable(false).defaultValue(DSL.field(DSL.raw("'bus'::character varying"), SQLDataType.VARCHAR)), this, "");
+
     private ScheduledStopPointsHistory(Name alias, Table<ScheduledStopPointsHistoryRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

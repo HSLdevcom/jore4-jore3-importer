@@ -16,6 +16,7 @@ SELECT
     n.infrastructure_node_location AS location,
     s.scheduled_stop_point_name AS name,
     s.scheduled_stop_point_short_id AS short_id,
+    s.vehicle_mode AS vehicle_mode,
     np.network_place_ext_id AS timing_place_label
 FROM network.scheduled_stop_points s
 JOIN infrastructure_network.infrastructure_nodes n USING (infrastructure_node_id)

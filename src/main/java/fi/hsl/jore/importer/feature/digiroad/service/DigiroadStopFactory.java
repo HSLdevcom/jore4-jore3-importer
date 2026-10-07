@@ -95,21 +95,8 @@ class DigiroadStopFactory {
 
         final String items = matcher.group(1) != null ? matcher.group(1) : matcher.group(2);
         return Arrays.stream(VEHICLE_MODES_SEPARATOR.split(items))
-                .map(item -> toVehicleMode(Integer.parseInt(item.trim())))
+                .map(item -> VehicleMode.ofStopType(item.trim()))
                 .toList();
-    }
-
-    private static VehicleMode toVehicleMode(final int stopType) {
-        if (stopType == 1) {
-            return VehicleMode.TRAM;
-        } else if (stopType >= 2 && stopType <= 6) {
-            return VehicleMode.BUS;
-        } else if (stopType == 7) {
-            return VehicleMode.UNKNOWN;
-        } else if (stopType >= 8 && stopType <= 11) {
-            return VehicleMode.BUS;
-        }
-        throw new IllegalArgumentException(String.format("Unknown pys_tyyppi value: %d", stopType));
     }
 
     private static Optional<String> getStringContainer(final String value) {

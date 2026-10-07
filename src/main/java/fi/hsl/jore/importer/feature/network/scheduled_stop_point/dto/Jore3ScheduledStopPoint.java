@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto;
 
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import java.util.Optional;
 import org.immutables.value.Value;
 
@@ -9,6 +10,8 @@ import org.immutables.value.Value;
 @Value.Immutable
 public interface Jore3ScheduledStopPoint extends CommonFields<Jore3ScheduledStopPoint> {
     Optional<ExternalId> placeExternalId();
+
+    VehicleMode vehicleMode();
 
     /** Number of times used in routes */
     int usageInRoutes();
@@ -19,7 +22,8 @@ public interface Jore3ScheduledStopPoint extends CommonFields<Jore3ScheduledStop
             final MultilingualString name,
             final Optional<String> shortId,
             final Optional<ExternalId> placeExternalId,
-            final int usageInRoutes) {
+            final int usageInRoutes,
+            final VehicleMode vehicleMode) {
         return ImmutableJore3ScheduledStopPoint.builder()
                 .externalId(stopPointExternalId)
                 .elyNumber(elynumber)
@@ -27,6 +31,7 @@ public interface Jore3ScheduledStopPoint extends CommonFields<Jore3ScheduledStop
                 .shortId(shortId)
                 .placeExternalId(placeExternalId)
                 .usageInRoutes(usageInRoutes)
+                .vehicleMode(vehicleMode)
                 .build();
     }
 }

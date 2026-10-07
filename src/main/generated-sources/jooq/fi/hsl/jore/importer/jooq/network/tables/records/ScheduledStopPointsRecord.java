@@ -178,6 +178,20 @@ public class ScheduledStopPointsRecord extends UpdatableRecordImpl<ScheduledStop
         return (UUID) get(9);
     }
 
+    /**
+     * Setter for <code>network.scheduled_stop_points.vehicle_mode</code>.
+     */
+    public void setVehicleMode(String value) {
+        set(10, value);
+    }
+
+    /**
+     * Getter for <code>network.scheduled_stop_points.vehicle_mode</code>.
+     */
+    public String getVehicleMode() {
+        return (String) get(10);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -201,7 +215,7 @@ public class ScheduledStopPointsRecord extends UpdatableRecordImpl<ScheduledStop
     /**
      * Create a detached, initialised ScheduledStopPointsRecord
      */
-    public ScheduledStopPointsRecord(UUID scheduledStopPointId, String scheduledStopPointExtId, UUID infrastructureNodeId, Long scheduledStopPointElyNumber, JSONB scheduledStopPointName, TimeRange scheduledStopPointSysPeriod, String scheduledStopPointShortId, UUID scheduledStopPointJore4Id, Integer usageInRoutes, UUID networkPlaceId) {
+    public ScheduledStopPointsRecord(UUID scheduledStopPointId, String scheduledStopPointExtId, UUID infrastructureNodeId, Long scheduledStopPointElyNumber, JSONB scheduledStopPointName, TimeRange scheduledStopPointSysPeriod, String scheduledStopPointShortId, UUID scheduledStopPointJore4Id, Integer usageInRoutes, UUID networkPlaceId, String vehicleMode) {
         super(ScheduledStopPoints.SCHEDULED_STOP_POINTS);
 
         setScheduledStopPointId(scheduledStopPointId);
@@ -214,6 +228,7 @@ public class ScheduledStopPointsRecord extends UpdatableRecordImpl<ScheduledStop
         setScheduledStopPointJore4Id(scheduledStopPointJore4Id);
         setUsageInRoutes(usageInRoutes);
         setNetworkPlaceId(networkPlaceId);
+        setVehicleMode(vehicleMode);
         resetTouchedOnNotNull();
     }
 }

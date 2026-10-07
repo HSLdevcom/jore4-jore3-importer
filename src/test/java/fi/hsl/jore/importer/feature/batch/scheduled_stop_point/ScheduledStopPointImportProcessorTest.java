@@ -1,16 +1,21 @@
 package fi.hsl.jore.importer.feature.batch.scheduled_stop_point;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.jore3.entity.JrScheduledStopPoint;
 import fi.hsl.jore.importer.feature.jore3.field.generated.NodeId;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.Jore3ScheduledStopPoint;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class ScheduledStopPointImportProcessorTest {
 
@@ -26,6 +31,49 @@ class ScheduledStopPointImportProcessorTest {
 
     private final ScheduledStopPointImportProcessor processor = new ScheduledStopPointImportProcessor();
 
+    @ParameterizedTest
+    @CsvSource({
+        "01, TRAM",
+        "02, BUS",
+        "03, BUS",
+        "04, BUS",
+        "05, BUS",
+        "06, BUS",
+        "07, UNKNOWN",
+        "08, BUS",
+        "09, BUS",
+        "10, BUS",
+        "11, BUS"
+    })
+    void shouldDeriveVehicleModeFromStopType(final String stopType, final VehicleMode expected) throws Exception {
+        assertThat(processor.process(stopWithType(stopType)).vehicleMode()).isEqualTo(expected);
+    }
+
+    @Test
+    void shouldDefaultMissingStopTypeToBus() throws Exception {
+        assertThat(processor.process(stopWithType(null)).vehicleMode()).isEqualTo(VehicleMode.BUS);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "00", "12", "99", "abc"})
+    void shouldRejectInvalidStopType(final String stopType) {
+        assertThatThrownBy(() -> processor.process(stopWithType(stopType)))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    private static JrScheduledStopPoint stopWithType(final String stopType) {
+        return JrScheduledStopPoint.of(
+                NodeId.of(EXTERNAL_ID),
+                Optional.of(ELY_NUMBER),
+                Optional.of(FINNISH_NAME),
+                Optional.of(SWEDISH_NAME),
+                Optional.of(JORE3_SHORT_ID),
+                Optional.of(JORE3_SHORT_LETTER),
+                Optional.of(PLACE_EXTERNAL_ID),
+                USAGE_IN_ROUTES,
+                Optional.ofNullable(stopType));
+    }
+
     @Nested
     @DisplayName("Process")
     class Process {
@@ -38,7 +86,8 @@ class ScheduledStopPointImportProcessorTest {
                 Optional.of(JORE3_SHORT_ID),
                 Optional.of(JORE3_SHORT_LETTER),
                 Optional.of(PLACE_EXTERNAL_ID),
-                USAGE_IN_ROUTES);
+                USAGE_IN_ROUTES,
+                Optional.empty());
 
         @Test
         @DisplayName("Should return a scheduled stop point with the correct external id")
@@ -89,7 +138,8 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.empty(),
                     Optional.empty(),
                     Optional.of(PLACE_EXTERNAL_ID),
-                    USAGE_IN_ROUTES);
+                    USAGE_IN_ROUTES,
+                    Optional.empty());
 
             @Test
             @DisplayName("Should return a scheduled stop point with empty shortId")
@@ -111,7 +161,8 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.empty(),
                     Optional.of(JORE3_SHORT_LETTER),
                     Optional.of(PLACE_EXTERNAL_ID),
-                    USAGE_IN_ROUTES);
+                    USAGE_IN_ROUTES,
+                    Optional.empty());
 
             @Test
             @DisplayName("Should return a scheduled stop point with the correct shortId")
@@ -133,7 +184,8 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.of(JORE3_SHORT_ID),
                     Optional.empty(),
                     Optional.of(PLACE_EXTERNAL_ID),
-                    USAGE_IN_ROUTES);
+                    USAGE_IN_ROUTES,
+                    Optional.empty());
 
             @Test
             @DisplayName("Should return a scheduled stop point with the correct shortId")
@@ -155,7 +207,8 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.of(JORE3_SHORT_ID),
                     Optional.of(JORE3_SHORT_LETTER),
                     Optional.of(PLACE_EXTERNAL_ID),
-                    USAGE_IN_ROUTES);
+                    USAGE_IN_ROUTES,
+                    Optional.empty());
 
             @Test
             @DisplayName("Should return a scheduled stop point with the correct shortId")
@@ -177,7 +230,8 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.of(JORE3_SHORT_ID),
                     Optional.of(JORE3_SHORT_LETTER),
                     Optional.of(""),
-                    USAGE_IN_ROUTES);
+                    USAGE_IN_ROUTES,
+                    Optional.empty());
 
             @Test
             @DisplayName("Should return a scheduled stop point with empty place external ID")
@@ -199,7 +253,8 @@ class ScheduledStopPointImportProcessorTest {
                     Optional.of(JORE3_SHORT_ID),
                     Optional.of(JORE3_SHORT_LETTER),
                     Optional.of(" \t"),
-                    USAGE_IN_ROUTES);
+                    USAGE_IN_ROUTES,
+                    Optional.empty());
 
             @Test
             @DisplayName("Should return a scheduled stop point with empty place external ID")
