@@ -9,12 +9,17 @@ import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.ScheduledSt
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.repository.IScheduledStopPointTestRepository;
 import java.util.List;
 import java.util.UUID;
+import javax.sql.DataSource;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -52,15 +57,36 @@ class ImportScheduledStopPointsStepTest extends BatchIntegrationTest {
             List.of("prepareScheduledStopPointsStep", "importScheduledStopPointsStep", "commitScheduledStopPointsStep");
 
     private final IScheduledStopPointTestRepository repository;
+    private final JdbcTemplate sourceJdbc;
+    private final JdbcTemplate importerJdbc;
 
     @Autowired
-    ImportScheduledStopPointsStepTest(final IScheduledStopPointTestRepository repository) {
+    ImportScheduledStopPointsStepTest(
+            final IScheduledStopPointTestRepository repository,
+            @Qualifier("sourceDataSource") final DataSource sourceDataSource,
+            @Qualifier("importerDataSource") final DataSource importerDataSource) {
         this.repository = repository;
+        this.sourceJdbc = new JdbcTemplate(sourceDataSource);
+        this.importerJdbc = new JdbcTemplate(importerDataSource);
     }
 
     @BeforeEach
     void ensureThatTargetDbIsEmpty() {
         assertThat(repository.empty()).isTrue();
+    }
+
+    @ParameterizedTest
+    @CsvSource({"01, tram", "07, unknown", "02, bus"})
+    void shouldImportVehicleModeFromStopType(final String stopType, final String expectedMode) {
+        sourceJdbc.update("UPDATE jr_pysakki SET pystyyppi = ? WHERE soltunnus = ?", stopType, EXPECTED_EXTERNAL_ID);
+
+        runSteps(STEPS);
+
+        assertThat(importerJdbc.queryForObject(
+                        "SELECT vehicle_mode FROM network.scheduled_stop_points WHERE scheduled_stop_point_ext_id = ?",
+                        String.class,
+                        EXPECTED_EXTERNAL_ID))
+                .isEqualTo(expectedMode);
     }
 
     @Test

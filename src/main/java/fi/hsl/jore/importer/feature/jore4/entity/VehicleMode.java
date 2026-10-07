@@ -23,6 +23,33 @@ public enum VehicleMode {
     }
 
     /**
+     * Maps a Jore 3 or Digiroad stop type to a vehicle mode.
+     *
+     * @throws IllegalArgumentException if the stop type is outside the supported range 1–11
+     */
+    public static VehicleMode ofStopType(final int stopType) {
+        if (stopType == 1) {
+            return TRAM;
+        } else if (stopType >= 2 && stopType <= 6) {
+            return BUS;
+        } else if (stopType == 7) {
+            return UNKNOWN;
+        } else if (stopType >= 8 && stopType <= 11) {
+            return BUS;
+        }
+        throw new IllegalArgumentException(String.format("Unknown stop type (pys_tyyppi/pystyyppi): %d", stopType));
+    }
+
+    /**
+     * Parses a numeric stop type (including zero-padded Jore 3 values) and delegates to {@link #ofStopType(int)}.
+     *
+     * @throws IllegalArgumentException if the value is null, non-numeric, or outside the supported range 1–11
+     */
+    public static VehicleMode ofStopType(final String stopType) {
+        return ofStopType(Integer.parseInt(stopType));
+    }
+
+    /**
      * Returns the Jore 4 vehicle submode whose infrastructure links are used for scheduled stop points of this vehicle
      * mode. Only bus and tram are supported; other modes return an empty optional and are treated as unresolvable.
      */

@@ -115,6 +115,22 @@ public class ScheduledStopPointsStagingRecord extends UpdatableRecordImpl<Schedu
         return (String) get(5);
     }
 
+    /**
+     * Setter for
+     * <code>network.scheduled_stop_points_staging.vehicle_mode</code>.
+     */
+    public void setVehicleMode(String value) {
+        set(6, value);
+    }
+
+    /**
+     * Getter for
+     * <code>network.scheduled_stop_points_staging.vehicle_mode</code>.
+     */
+    public String getVehicleMode() {
+        return (String) get(6);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -138,7 +154,7 @@ public class ScheduledStopPointsStagingRecord extends UpdatableRecordImpl<Schedu
     /**
      * Create a detached, initialised ScheduledStopPointsStagingRecord
      */
-    public ScheduledStopPointsStagingRecord(String scheduledStopPointExtId, Long scheduledStopPointElyNumber, JSONB scheduledStopPointName, String scheduledStopPointShortId, Integer usageInRoutes, String networkPlaceExtId) {
+    public ScheduledStopPointsStagingRecord(String scheduledStopPointExtId, Long scheduledStopPointElyNumber, JSONB scheduledStopPointName, String scheduledStopPointShortId, Integer usageInRoutes, String networkPlaceExtId, String vehicleMode) {
         super(ScheduledStopPointsStaging.SCHEDULED_STOP_POINTS_STAGING);
 
         setScheduledStopPointExtId(scheduledStopPointExtId);
@@ -147,6 +163,7 @@ public class ScheduledStopPointsStagingRecord extends UpdatableRecordImpl<Schedu
         setScheduledStopPointShortId(scheduledStopPointShortId);
         setUsageInRoutes(usageInRoutes);
         setNetworkPlaceExtId(networkPlaceExtId);
+        setVehicleMode(vehicleMode);
         resetTouchedOnNotNull();
     }
 }

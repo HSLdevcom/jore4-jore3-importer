@@ -94,7 +94,8 @@ class ScheduledStopPointExportProcessorTest {
                 jore3Location(),
                 JoreLocaleUtil.createMultilingualString(JORE_3_STOP_FINNISH_NAME, JORE_3_STOP_SWEDISH_NAME),
                 Optional.of(IMPORTER_SHORT_ID),
-                Optional.of(JORE_3_STOP_PLACE_EXT_ID));
+                Optional.of(JORE_3_STOP_PLACE_EXT_ID),
+                VehicleMode.BUS);
     }
 
     private void givenBusLinkExists() {

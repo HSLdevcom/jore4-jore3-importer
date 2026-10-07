@@ -4,6 +4,7 @@ import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
 import fi.hsl.jore.importer.feature.jore3.entity.JrScheduledStopPoint;
 import fi.hsl.jore.importer.feature.jore3.util.JoreLocaleUtil;
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto.Jore3ScheduledStopPoint;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +26,8 @@ public class ScheduledStopPointImportProcessor implements ItemProcessor<JrSchedu
                 constructShortId(input),
                 // trim whitespace entries to empty (null)
                 input.placeExternalId().filter(StringUtils::isNotBlank).map(ExternalId::of),
-                input.usageInRoutes());
+                input.usageInRoutes(),
+                input.stopType().map(VehicleMode::ofStopType).orElse(VehicleMode.BUS));
     }
 
     private Optional<String> constructShortId(final JrScheduledStopPoint input) {

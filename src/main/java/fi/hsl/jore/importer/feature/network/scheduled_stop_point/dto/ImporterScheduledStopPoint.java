@@ -2,6 +2,7 @@ package fi.hsl.jore.importer.feature.network.scheduled_stop_point.dto;
 
 import fi.hsl.jore.importer.feature.common.dto.field.MultilingualString;
 import fi.hsl.jore.importer.feature.common.dto.field.generated.ExternalId;
+import fi.hsl.jore.importer.feature.jore4.entity.VehicleMode;
 import java.util.List;
 import java.util.Optional;
 import org.immutables.value.Value;
@@ -36,13 +37,17 @@ public interface ImporterScheduledStopPoint {
 
     Optional<String> placeExternalId();
 
+    /** Vehicle mode derived from the representative Jore 3 stop's pystyyppi. */
+    VehicleMode vehicleMode();
+
     static ImmutableImporterScheduledStopPoint of(
             final List<ExternalId> externalIds,
             final List<Long> elynumbers,
             final Point location,
             final MultilingualString name,
             final Optional<String> shortId,
-            final Optional<String> placeExternalId) {
+            final Optional<String> placeExternalId,
+            final VehicleMode vehicleMode) {
         return ImmutableImporterScheduledStopPoint.builder()
                 .externalIds(externalIds)
                 .elyNumbers(elynumbers)
@@ -50,6 +55,7 @@ public interface ImporterScheduledStopPoint {
                 .name(name)
                 .shortId(shortId)
                 .placeExternalId(placeExternalId)
+                .vehicleMode(vehicleMode)
                 .build();
     }
 }

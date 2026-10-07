@@ -114,6 +114,12 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
      */
     public final TableField<ScheduledStopPointsWithHistoryRecord, UUID> NETWORK_PLACE_ID = createField(DSL.name("network_place_id"), SQLDataType.UUID, this, "");
 
+    /**
+     * The column
+     * <code>network.scheduled_stop_points_with_history.vehicle_mode</code>.
+     */
+    public final TableField<ScheduledStopPointsWithHistoryRecord, String> VEHICLE_MODE = createField(DSL.name("vehicle_mode"), SQLDataType.VARCHAR(7), this, "");
+
     private ScheduledStopPointsWithHistory(Name alias, Table<ScheduledStopPointsWithHistoryRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
@@ -129,7 +135,8 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
             scheduled_stop_points.scheduled_stop_point_short_id,
             scheduled_stop_points.scheduled_stop_point_jore4_id,
             scheduled_stop_points.usage_in_routes,
-            scheduled_stop_points.network_place_id
+            scheduled_stop_points.network_place_id,
+            scheduled_stop_points.vehicle_mode
            FROM network.scheduled_stop_points
         UNION ALL
          SELECT scheduled_stop_points_history.scheduled_stop_point_id,
@@ -141,7 +148,8 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
             scheduled_stop_points_history.scheduled_stop_point_short_id,
             scheduled_stop_points_history.scheduled_stop_point_jore4_id,
             scheduled_stop_points_history.usage_in_routes,
-            scheduled_stop_points_history.network_place_id
+            scheduled_stop_points_history.network_place_id,
+            scheduled_stop_points_history.vehicle_mode
            FROM network.scheduled_stop_points_history;
         """), where);
     }

@@ -69,7 +69,8 @@ public class ScheduledStopPointImportRepository
                         TARGET_TABLE.SCHEDULED_STOP_POINT_NAME,
                         TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID,
                         TARGET_TABLE.NETWORK_PLACE_ID,
-                        TARGET_TABLE.USAGE_IN_ROUTES)
+                        TARGET_TABLE.USAGE_IN_ROUTES,
+                        TARGET_TABLE.VEHICLE_MODE)
                 .select(db.select(
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_EXT_ID,
                                 INFRASTRUCTURE_NODES.INFRASTRUCTURE_NODE_ID,
@@ -77,7 +78,8 @@ public class ScheduledStopPointImportRepository
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_NAME,
                                 STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID,
                                 NETWORK_PLACES.NETWORK_PLACE_ID,
-                                STAGING_TABLE.USAGE_IN_ROUTES)
+                                STAGING_TABLE.USAGE_IN_ROUTES,
+                                STAGING_TABLE.VEHICLE_MODE)
                         .from(STAGING_TABLE)
 
                         // An infrastructure node and a scheduled stop point use the same external identifier
@@ -111,6 +113,7 @@ public class ScheduledStopPointImportRepository
                 .set(TARGET_TABLE.SCHEDULED_STOP_POINT_SHORT_ID, STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID)
                 .set(TARGET_TABLE.NETWORK_PLACE_ID, NETWORK_PLACES.NETWORK_PLACE_ID)
                 .set(TARGET_TABLE.USAGE_IN_ROUTES, STAGING_TABLE.USAGE_IN_ROUTES)
+                .set(TARGET_TABLE.VEHICLE_MODE, STAGING_TABLE.VEHICLE_MODE)
                 .from(STAGING_TABLE
                         .leftJoin(NETWORK_PLACES)
                         .on(NETWORK_PLACES.NETWORK_PLACE_EXT_ID.eq(STAGING_TABLE.NETWORK_PLACE_EXT_ID)))
@@ -135,7 +138,10 @@ public class ScheduledStopPointImportRepository
                                 .or(TARGET_TABLE.NETWORK_PLACE_ID.isDistinctFrom(NETWORK_PLACES.NETWORK_PLACE_ID))
 
                                 // Usage in routes was changed.
-                                .or(TARGET_TABLE.USAGE_IN_ROUTES.notEqual(STAGING_TABLE.USAGE_IN_ROUTES))))
+                                .or(TARGET_TABLE.USAGE_IN_ROUTES.notEqual(STAGING_TABLE.USAGE_IN_ROUTES))
+
+                                // Vehicle mode was changed.
+                                .or(TARGET_TABLE.VEHICLE_MODE.notEqual(STAGING_TABLE.VEHICLE_MODE))))
                 .returningResult(TARGET_TABLE.SCHEDULED_STOP_POINT_ID)
                 .fetch()
                 .stream()
@@ -153,8 +159,9 @@ public class ScheduledStopPointImportRepository
                         STAGING_TABLE.SCHEDULED_STOP_POINT_NAME,
                         STAGING_TABLE.SCHEDULED_STOP_POINT_SHORT_ID,
                         STAGING_TABLE.NETWORK_PLACE_EXT_ID,
-                        STAGING_TABLE.USAGE_IN_ROUTES)
-                .values(null, null, null, null, null, 0));
+                        STAGING_TABLE.USAGE_IN_ROUTES,
+                        STAGING_TABLE.VEHICLE_MODE)
+                .values(null, null, null, null, null, 0, null));
 
         items.forEach(item -> batch.bind(
                 item.externalId().value(),
@@ -162,7 +169,8 @@ public class ScheduledStopPointImportRepository
                 jsonbConverter.asJson(item.name()),
                 item.shortId().orElse(null),
                 item.placeExternalId().map(ExternalId::value).orElse(null),
-                item.usageInRoutes()));
+                item.usageInRoutes(),
+                item.vehicleMode().getValue()));
 
         if (batch.size() > 0) {
             batch.execute();
