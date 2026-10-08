@@ -46,7 +46,7 @@ jobs:
           stop-registry-importer/.venv-stop-registry/bin/pip install -r stop-registry-importer/requirements.txt
 
       - name: Verify whether test postgresql db is up
-        uses: HSLdevcom/jore4-tools/github-actions/healthcheck@healthcheck-v1
+        uses: HSLdevcom/jore4-tools/github-actions/healthcheck@main
         with:
           # testing whether tcp port 17000 responds
           command: "pg_isready -h localhost -p 17000"
