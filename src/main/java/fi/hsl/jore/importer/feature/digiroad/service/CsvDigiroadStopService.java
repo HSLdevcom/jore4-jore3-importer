@@ -17,6 +17,9 @@ public class CsvDigiroadStopService implements DigiroadStopService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CsvDigiroadStopService.class);
 
+    /** The header row of the Digiroad CSV file starts with this prefix. */
+    private static final String CSV_HEADER_PREFIX = "external_stop_id;";
+
     private final Resource csvResource;
 
     private final HashMap<Long, DigiroadStop> digiroadStops = new HashMap<>();
@@ -43,6 +46,9 @@ public class CsvDigiroadStopService implements DigiroadStopService {
         try (final BufferedReader reader = new BufferedReader(getReader())) {
             String line;
             while ((line = reader.readLine()) != null) {
+                if (line.isBlank() || line.startsWith(CSV_HEADER_PREFIX)) {
+                    continue;
+                }
                 try {
                     final Optional<DigiroadStop> stopContainer = DigiroadStopFactory.fromCsvLine(line);
 
