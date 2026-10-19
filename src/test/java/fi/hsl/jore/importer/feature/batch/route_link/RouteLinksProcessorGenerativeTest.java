@@ -70,18 +70,20 @@ public class RouteLinksProcessorGenerativeTest extends GenerativeTest {
     }
 
     public Gen<List<JrRouteLink>> routeLinkListGen() {
-        return lists().of(routeLinkGen()).ofSizeBetween(1, 100).map(listOfLinks -> listOfLinks.stream()
-                // raw list of route links is in random order and might contain duplicate order numbers
-                .sorted(Comparator.comparing(IHasOrderNumber::orderNumber))
-                .filter(new Predicate<>() {
-                    private final Set<Integer> orderNumbers = new HashSet<>();
+        return lists().of(routeLinkGen())
+                .ofSizeBetween(1, 100)
+                .map(listOfLinks -> listOfLinks.stream()
+                        // raw list of route links is in random order and might contain duplicate order numbers
+                        .sorted(Comparator.comparing(IHasOrderNumber::orderNumber))
+                        .filter(new Predicate<>() {
+                            private final Set<Integer> orderNumbers = new HashSet<>();
 
-                    @Override
-                    public boolean test(final JrRouteLink jrRouteLink) {
-                        return orderNumbers.add(jrRouteLink.orderNumber());
-                    }
-                })
-                .toList());
+                            @Override
+                            public boolean test(final JrRouteLink jrRouteLink) {
+                                return orderNumbers.add(jrRouteLink.orderNumber());
+                            }
+                        })
+                        .toList());
     }
 
     public Gen<LastLinkAttributes> lastLinkAttributesGen() {

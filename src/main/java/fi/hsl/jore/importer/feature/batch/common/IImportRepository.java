@@ -49,7 +49,8 @@ public interface IImportRepository<ENTITY, KEY extends PK> {
      * @return A map describing how many rows were inserted/updated/deleted/..
      */
     static <KEY extends PK> Map<RowStatus, Integer> commitCounts(final Map<RowStatus, Set<KEY>> commitStatus) {
-        return commitStatus.entrySet().stream().collect(Collectors.toUnmodifiableMap(Entry::getKey, it -> it.getValue()
-                .size()));
+        return commitStatus.entrySet().stream()
+                .collect(Collectors.toUnmodifiableMap(
+                        Entry::getKey, it -> it.getValue().size()));
     }
 }
