@@ -147,6 +147,6 @@ public class NetworkRoutePointsRecord extends UpdatableRecordImpl<NetworkRoutePo
         setNetworkRoutePointExtId(networkRoutePointExtId);
         setNetworkRoutePointOrder(networkRoutePointOrder);
         setNetworkRoutePointSysPeriod(networkRoutePointSysPeriod);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

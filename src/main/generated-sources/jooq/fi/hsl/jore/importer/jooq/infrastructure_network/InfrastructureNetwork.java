@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.jooq.Catalog;
 import org.jooq.Table;
+import org.jooq.impl.DSL;
 import org.jooq.impl.SchemaImpl;
 
 
@@ -125,7 +126,7 @@ public class InfrastructureNetwork extends SchemaImpl {
      * No further instances allowed
      */
     private InfrastructureNetwork() {
-        super("infrastructure_network", null);
+        super(DSL.name("infrastructure_network"), null, DSL.comment(""));
     }
 
 

@@ -155,6 +155,6 @@ public class StopPlacesRecord extends UpdatableRecordImpl<StopPlacesRecord> {
         setStopsStopPlaceLocation(stopsStopPlaceLocation);
         setStopsStopPlaceSysPeriod(stopsStopPlaceSysPeriod);
         setStopsStopPlaceTransportMode(stopsStopPlaceTransportMode);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

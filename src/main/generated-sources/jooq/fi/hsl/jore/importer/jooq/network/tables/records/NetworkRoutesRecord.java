@@ -172,6 +172,6 @@ public class NetworkRoutesRecord extends UpdatableRecordImpl<NetworkRoutesRecord
         setNetworkRouteSysPeriod(networkRouteSysPeriod);
         setNetworkRouteHiddenVariant(networkRouteHiddenVariant);
         setNetworkRouteLegacyHslMunicipalityCode(networkRouteLegacyHslMunicipalityCode);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

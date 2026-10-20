@@ -24,10 +24,15 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * replace_scheduled_stop_point_id uuid, new_located_on_infrastructure_link_id
- * uuid, new_measured_location geography, new_direction text, new_label text,
- * new_validity_start date, new_validity_end date, new_priority integer,
- * new_vehicle_mode text DEFAULT NULL::text
+ * Check whether the journey pattern's / route's links and stop points still
+ * correspond to each other
+ *      if a new stop point would be inserted (defined by arguments new_xxx). If
+ * replace_scheduled_stop_point_id
+ *      is specified, the new stop point is thought to replace the stop point
+ * with that ID.
+ *      This function returns a list of journey pattern and route ids, in which
+ * the links
+ *      and stop points would conflict with each other.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<Record> {
@@ -79,7 +84,7 @@ public class CheckInfraLinkStopRefsWithNewScheduledStopPoint extends TableImpl<R
     }
 
     private CheckInfraLinkStopRefsWithNewScheduledStopPoint(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
-        super(alias, null, aliased, parameters, DSL.comment("replace_scheduled_stop_point_id uuid, new_located_on_infrastructure_link_id uuid, new_measured_location geography, new_direction text, new_label text, new_validity_start date, new_validity_end date, new_priority integer, new_vehicle_mode text DEFAULT NULL::text"), TableOptions.function(), where);
+        super(alias, null, aliased, parameters, DSL.comment("Check whether the journey pattern's / route's links and stop points still correspond to each other\n     if a new stop point would be inserted (defined by arguments new_xxx). If replace_scheduled_stop_point_id\n     is specified, the new stop point is thought to replace the stop point with that ID.\n     This function returns a list of journey pattern and route ids, in which the links\n     and stop points would conflict with each other."), TableOptions.function(), where);
     }
 
     /**

@@ -48,6 +48,7 @@ import java.util.List;
 
 import org.jooq.Catalog;
 import org.jooq.Table;
+import org.jooq.impl.DSL;
 import org.jooq.impl.SchemaImpl;
 
 
@@ -253,7 +254,7 @@ public class Network extends SchemaImpl {
      * No further instances allowed
      */
     private Network() {
-        super("network", null);
+        super(DSL.name("network"), null, DSL.comment(""));
     }
 
 

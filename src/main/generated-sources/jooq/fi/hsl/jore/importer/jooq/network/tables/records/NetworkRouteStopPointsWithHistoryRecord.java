@@ -191,6 +191,6 @@ public class NetworkRouteStopPointsWithHistoryRecord extends TableRecordImpl<Net
         setNetworkRouteStopPointViaPoint(networkRouteStopPointViaPoint);
         setNetworkRouteStopPointViaName(networkRouteStopPointViaName);
         setNetworkRouteStopPointRegulatedTimingPointStatus(networkRouteStopPointRegulatedTimingPointStatus);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

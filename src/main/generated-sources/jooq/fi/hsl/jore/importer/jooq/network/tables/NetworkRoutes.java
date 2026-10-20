@@ -29,14 +29,15 @@ import org.jooq.QueryPart;
 import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDataType;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -251,7 +252,7 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
      */
     @Override
     public NetworkRoutes where(Condition condition) {
-        return new NetworkRoutes(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new NetworkRoutes(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -318,7 +319,7 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public NetworkRoutes whereExists(Select<?> select) {
+    public NetworkRoutes whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -326,7 +327,7 @@ public class NetworkRoutes extends TableImpl<NetworkRoutesRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public NetworkRoutes whereNotExists(Select<?> select) {
+    public NetworkRoutes whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

@@ -157,6 +157,6 @@ public class InfrastructureLinksWithHistoryRecord extends TableRecordImpl<Infras
         setInfrastructureLinkSysPeriod(infrastructureLinkSysPeriod);
         setInfrastructureLinkStartNode(infrastructureLinkStartNode);
         setInfrastructureLinkEndNode(infrastructureLinkEndNode);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

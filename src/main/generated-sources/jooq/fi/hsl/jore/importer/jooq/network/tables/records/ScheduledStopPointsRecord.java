@@ -214,6 +214,6 @@ public class ScheduledStopPointsRecord extends UpdatableRecordImpl<ScheduledStop
         setScheduledStopPointJore4Id(scheduledStopPointJore4Id);
         setUsageInRoutes(usageInRoutes);
         setNetworkPlaceId(networkPlaceId);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

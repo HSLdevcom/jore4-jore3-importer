@@ -123,6 +123,6 @@ public class InfrastructureLinkShapesWithHistoryRecord extends TableRecordImpl<I
         setInfrastructureLinkId(infrastructureLinkId);
         setInfrastructureLinkShape(infrastructureLinkShape);
         setInfrastructureLinkShapeSysPeriod(infrastructureLinkShapeSysPeriod);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

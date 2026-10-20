@@ -20,13 +20,14 @@ import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDataType;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -107,7 +108,7 @@ public class NetworkRoutesWithHistory extends TableImpl<NetworkRoutesWithHistory
 
     private NetworkRoutesWithHistory(Name alias, Table<NetworkRoutesWithHistoryRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-         create view "network_routes_with_history" as  SELECT network_routes.network_route_id,
+         CREATE VIEW "network_routes_with_history" AS  SELECT network_routes.network_route_id,
             network_routes.network_line_id,
             network_routes.network_route_ext_id,
             network_routes.network_route_number,
@@ -201,7 +202,7 @@ public class NetworkRoutesWithHistory extends TableImpl<NetworkRoutesWithHistory
      */
     @Override
     public NetworkRoutesWithHistory where(Condition condition) {
-        return new NetworkRoutesWithHistory(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new NetworkRoutesWithHistory(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -268,7 +269,7 @@ public class NetworkRoutesWithHistory extends TableImpl<NetworkRoutesWithHistory
      * Create an inline derived table from this table
      */
     @Override
-    public NetworkRoutesWithHistory whereExists(Select<?> select) {
+    public NetworkRoutesWithHistory whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -276,7 +277,7 @@ public class NetworkRoutesWithHistory extends TableImpl<NetworkRoutesWithHistory
      * Create an inline derived table from this table
      */
     @Override
-    public NetworkRoutesWithHistory whereNotExists(Select<?> select) {
+    public NetworkRoutesWithHistory whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

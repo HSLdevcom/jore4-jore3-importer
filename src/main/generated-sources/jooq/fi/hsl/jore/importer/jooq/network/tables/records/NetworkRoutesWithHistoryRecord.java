@@ -174,6 +174,6 @@ public class NetworkRoutesWithHistoryRecord extends TableRecordImpl<NetworkRoute
         setNetworkRouteSysPeriod(networkRouteSysPeriod);
         setNetworkRouteHiddenVariant(networkRouteHiddenVariant);
         setNetworkRouteLegacyHslMunicipalityCode(networkRouteLegacyHslMunicipalityCode);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

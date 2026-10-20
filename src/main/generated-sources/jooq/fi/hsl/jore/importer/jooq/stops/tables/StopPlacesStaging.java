@@ -25,12 +25,13 @@ import org.jooq.QueryPart;
 import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -214,7 +215,7 @@ public class StopPlacesStaging extends TableImpl<StopPlacesStagingRecord> {
      */
     @Override
     public StopPlacesStaging where(Condition condition) {
-        return new StopPlacesStaging(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new StopPlacesStaging(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -281,7 +282,7 @@ public class StopPlacesStaging extends TableImpl<StopPlacesStagingRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public StopPlacesStaging whereExists(Select<?> select) {
+    public StopPlacesStaging whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -289,7 +290,7 @@ public class StopPlacesStaging extends TableImpl<StopPlacesStagingRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public StopPlacesStaging whereNotExists(Select<?> select) {
+    public StopPlacesStaging whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

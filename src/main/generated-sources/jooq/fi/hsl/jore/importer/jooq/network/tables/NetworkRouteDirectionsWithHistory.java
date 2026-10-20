@@ -22,13 +22,14 @@ import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDataType;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -139,7 +140,7 @@ public class NetworkRouteDirectionsWithHistory extends TableImpl<NetworkRouteDir
 
     private NetworkRouteDirectionsWithHistory(Name alias, Table<NetworkRouteDirectionsWithHistoryRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-         create view "network_route_directions_with_history" as  SELECT network_route_directions.network_route_direction_id,
+         CREATE VIEW "network_route_directions_with_history" AS  SELECT network_route_directions.network_route_direction_id,
             network_route_directions.network_route_id,
             network_route_directions.network_route_direction_type,
             network_route_directions.network_route_direction_ext_id,
@@ -246,7 +247,7 @@ public class NetworkRouteDirectionsWithHistory extends TableImpl<NetworkRouteDir
      */
     @Override
     public NetworkRouteDirectionsWithHistory where(Condition condition) {
-        return new NetworkRouteDirectionsWithHistory(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new NetworkRouteDirectionsWithHistory(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -313,7 +314,7 @@ public class NetworkRouteDirectionsWithHistory extends TableImpl<NetworkRouteDir
      * Create an inline derived table from this table
      */
     @Override
-    public NetworkRouteDirectionsWithHistory whereExists(Select<?> select) {
+    public NetworkRouteDirectionsWithHistory whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -321,7 +322,7 @@ public class NetworkRouteDirectionsWithHistory extends TableImpl<NetworkRouteDir
      * Create an inline derived table from this table
      */
     @Override
-    public NetworkRouteDirectionsWithHistory whereNotExists(Select<?> select) {
+    public NetworkRouteDirectionsWithHistory whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

@@ -23,7 +23,8 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * filter_route_ids uuid[]
+ * Gather the filter parameters (route labels and validity range to check) for
+ * the broken route check.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class GetBrokenRouteCheckFilters extends TableImpl<Record> {
@@ -73,7 +74,7 @@ public class GetBrokenRouteCheckFilters extends TableImpl<Record> {
     }
 
     private GetBrokenRouteCheckFilters(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
-        super(alias, null, aliased, parameters, DSL.comment("filter_route_ids uuid[]"), TableOptions.function(), where);
+        super(alias, null, aliased, parameters, DSL.comment("Gather the filter parameters (route labels and validity range to check) for the broken route check."), TableOptions.function(), where);
     }
 
     /**

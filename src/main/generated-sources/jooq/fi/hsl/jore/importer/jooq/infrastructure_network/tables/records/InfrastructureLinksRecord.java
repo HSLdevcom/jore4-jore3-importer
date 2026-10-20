@@ -167,6 +167,6 @@ public class InfrastructureLinksRecord extends UpdatableRecordImpl<Infrastructur
         setInfrastructureLinkSysPeriod(infrastructureLinkSysPeriod);
         setInfrastructureLinkStartNode(infrastructureLinkStartNode);
         setInfrastructureLinkEndNode(infrastructureLinkEndNode);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

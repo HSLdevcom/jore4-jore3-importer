@@ -24,8 +24,7 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * filter_journey_pattern_id uuid, observation_date date, include_draft_stops
- * boolean
+ * Find effective scheduled stop points in journey/service pattern.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class FindEffectiveScheduledStopPointsInJourneyPattern extends TableImpl<Record> {
@@ -113,7 +112,7 @@ public class FindEffectiveScheduledStopPointsInJourneyPattern extends TableImpl<
     }
 
     private FindEffectiveScheduledStopPointsInJourneyPattern(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
-        super(alias, null, aliased, parameters, DSL.comment("filter_journey_pattern_id uuid, observation_date date, include_draft_stops boolean"), TableOptions.function(), where);
+        super(alias, null, aliased, parameters, DSL.comment("Find effective scheduled stop points in journey/service pattern."), TableOptions.function(), where);
     }
 
     /**

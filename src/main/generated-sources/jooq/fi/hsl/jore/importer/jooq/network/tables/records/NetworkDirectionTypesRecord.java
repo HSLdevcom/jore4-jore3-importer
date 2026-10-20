@@ -61,6 +61,6 @@ public class NetworkDirectionTypesRecord extends UpdatableRecordImpl<NetworkDire
         super(NetworkDirectionTypes.NETWORK_DIRECTION_TYPES);
 
         setNetworkDirectionType(networkDirectionType);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

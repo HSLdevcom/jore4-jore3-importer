@@ -199,6 +199,6 @@ public class NetworkRouteDirectionsStagingRecord extends UpdatableRecordImpl<Net
         setNetworkRouteDirectionOrigin(networkRouteDirectionOrigin);
         setNetworkRouteDirectionDestination(networkRouteDirectionDestination);
         setNetworkRouteDirectionValidDateRange(networkRouteDirectionValidDateRange);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

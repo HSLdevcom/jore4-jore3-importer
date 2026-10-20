@@ -40,8 +40,7 @@ public class Tables {
     public static final DistanceBetweenStopsCalculation DISTANCE_BETWEEN_STOPS_CALCULATION = DistanceBetweenStopsCalculation.DISTANCE_BETWEEN_STOPS_CALCULATION;
 
     /**
-     * filter_journey_pattern_id uuid, observation_date date,
-     * include_draft_stops boolean
+     * Find effective scheduled stop points in journey/service pattern.
      */
     public static final FindEffectiveScheduledStopPointsInJourneyPattern FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN = FindEffectiveScheduledStopPointsInJourneyPattern.FIND_EFFECTIVE_SCHEDULED_STOP_POINTS_IN_JOURNEY_PATTERN;
 
@@ -97,8 +96,8 @@ public class Tables {
     }
 
     /**
-     * filter_journey_pattern_id uuid, observation_date date,
-     * include_draft_stops boolean
+     * Find location information for scheduled stop points in journey/service
+     * pattern.
      */
     public static final FindScheduledStopPointLocationsInJourneyPattern FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN = FindScheduledStopPointLocationsInJourneyPattern.FIND_SCHEDULED_STOP_POINT_LOCATIONS_IN_JOURNEY_PATTERN;
 
@@ -154,7 +153,8 @@ public class Tables {
     }
 
     /**
-     * route_ids uuid[], observation_date date
+     * Get the distances between scheduled stop points (in metres) for the
+     * journey/service patterns resolved from the route identifiers.
      */
     public static final GetDistancesBetweenStopPointsByRoutes GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES = GetDistancesBetweenStopPointsByRoutes.GET_DISTANCES_BETWEEN_STOP_POINTS_BY_ROUTES;
 
@@ -204,8 +204,8 @@ public class Tables {
     }
 
     /**
-     * journey_pattern_id uuid, observation_date date, include_draft_stops
-     * boolean
+     * Get the distances between scheduled stop points (in metres) for the given
+     * journey/service pattern.
      */
     public static final GetDistancesBetweenStopPointsInJourneyPattern GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN = GetDistancesBetweenStopPointsInJourneyPattern.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERN;
 
@@ -261,8 +261,8 @@ public class Tables {
     }
 
     /**
-     * journey_pattern_ids uuid[], observation_date date, include_draft_stops
-     * boolean
+     * Get the distances between scheduled stop points (in metres) for the given
+     * journey/service patterns.
      */
     public static final GetDistancesBetweenStopPointsInJourneyPatterns GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS = GetDistancesBetweenStopPointsInJourneyPatterns.GET_DISTANCES_BETWEEN_STOP_POINTS_IN_JOURNEY_PATTERNS;
 
@@ -318,13 +318,16 @@ public class Tables {
     }
 
     /**
-     * new_scheduled_stop_point_id uuid DEFAULT NULL::uuid,
-     * new_located_on_infrastructure_link_id uuid DEFAULT NULL::uuid,
-     * new_measured_location geography DEFAULT NULL::geography, new_direction
-     * text DEFAULT NULL::text, new_label text DEFAULT NULL::text,
-     * new_validity_start date DEFAULT NULL::date, new_validity_end date DEFAULT
-     * NULL::date, new_priority integer DEFAULT NULL::integer, new_vehicle_mode
-     * text DEFAULT NULL::text
+     * Conditionally returns a row representing a new scheduled_stop_point, or
+     * nothing.
+     *   Intended to be used in conjunction with
+     * service_pattern.scheduled_stop_points_with_infra_link_data view.
+     *   If value for new_scheduled_stop_point_id parameter is given,
+     *   returns a row representing that scheduled_stop_point.
+     *   The structure matches the
+     * service_pattern.scheduled_stop_points_with_infra_link_data view.
+     *   In case new_scheduled_stop_point_id is null, returns nothing.
+
      */
     public static final NewScheduledStopPointIfIdGiven NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN = NewScheduledStopPointIfIdGiven.NEW_SCHEDULED_STOP_POINT_IF_ID_GIVEN;
 

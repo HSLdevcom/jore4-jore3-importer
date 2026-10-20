@@ -129,6 +129,6 @@ public class NetworkLinesStagingRecord extends UpdatableRecordImpl<NetworkLinesS
         setInfrastructureNetworkType(infrastructureNetworkType);
         setNetworkLineTypeOfLine(networkLineTypeOfLine);
         setNetworkLineLegacyHslMunicipalityCode(networkLineLegacyHslMunicipalityCode);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

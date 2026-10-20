@@ -140,6 +140,6 @@ public class InfrastructureNodesHistoryRecord extends TableRecordImpl<Infrastruc
         setInfrastructureNodeLocation(infrastructureNodeLocation);
         setInfrastructureNodeProjectedLocation(infrastructureNodeProjectedLocation);
         setInfrastructureNodeSysPeriod(infrastructureNodeSysPeriod);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

@@ -147,6 +147,6 @@ public class NetworkRoutesStagingRecord extends UpdatableRecordImpl<NetworkRoute
         setNetworkRouteName(networkRouteName);
         setNetworkRouteHiddenVariant(networkRouteHiddenVariant);
         setNetworkRouteLegacyHslMunicipalityCode(networkRouteLegacyHslMunicipalityCode);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

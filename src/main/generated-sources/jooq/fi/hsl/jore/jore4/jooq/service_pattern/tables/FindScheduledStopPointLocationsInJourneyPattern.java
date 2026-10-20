@@ -25,8 +25,8 @@ import org.locationtech.jts.geom.Point;
 
 
 /**
- * filter_journey_pattern_id uuid, observation_date date, include_draft_stops
- * boolean
+ * Find location information for scheduled stop points in journey/service
+ * pattern.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class FindScheduledStopPointLocationsInJourneyPattern extends TableImpl<Record> {
@@ -114,7 +114,7 @@ public class FindScheduledStopPointLocationsInJourneyPattern extends TableImpl<R
     }
 
     private FindScheduledStopPointLocationsInJourneyPattern(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
-        super(alias, null, aliased, parameters, DSL.comment("filter_journey_pattern_id uuid, observation_date date, include_draft_stops boolean"), TableOptions.function(), where);
+        super(alias, null, aliased, parameters, DSL.comment("Find location information for scheduled stop points in journey/service pattern."), TableOptions.function(), where);
     }
 
     /**

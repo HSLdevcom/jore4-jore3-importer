@@ -139,6 +139,6 @@ public class NetworkRoutePointsHistoryRecord extends TableRecordImpl<NetworkRout
         setNetworkRoutePointExtId(networkRoutePointExtId);
         setNetworkRoutePointOrder(networkRoutePointOrder);
         setNetworkRoutePointSysPeriod(networkRoutePointSysPeriod);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

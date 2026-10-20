@@ -107,6 +107,6 @@ public class NetworkPlacesRecord extends UpdatableRecordImpl<NetworkPlacesRecord
         setNetworkPlaceExtId(networkPlaceExtId);
         setNetworkPlaceName(networkPlaceName);
         setNetworkPlaceSysPeriod(networkPlaceSysPeriod);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

@@ -19,12 +19,13 @@ import org.jooq.QueryPart;
 import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 import org.locationtech.jts.geom.Point;
@@ -119,7 +120,7 @@ public class ScheduledStopPointsWithInfraLinkData extends TableImpl<Record> {
 
     private ScheduledStopPointsWithInfraLinkData(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment("Contains scheduled_stop_points enriched with some infra link data and vehicle_mode."), TableOptions.view("""
-        create view "scheduled_stop_points_with_infra_link_data" as  SELECT ssp.scheduled_stop_point_id,
+        CREATE VIEW "scheduled_stop_points_with_infra_link_data" AS  SELECT ssp.scheduled_stop_point_id,
          ssp.measured_location,
          ssp.located_on_infrastructure_link_id,
          ssp.direction,
@@ -211,7 +212,7 @@ public class ScheduledStopPointsWithInfraLinkData extends TableImpl<Record> {
      */
     @Override
     public ScheduledStopPointsWithInfraLinkData where(Condition condition) {
-        return new ScheduledStopPointsWithInfraLinkData(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new ScheduledStopPointsWithInfraLinkData(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -278,7 +279,7 @@ public class ScheduledStopPointsWithInfraLinkData extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public ScheduledStopPointsWithInfraLinkData whereExists(Select<?> select) {
+    public ScheduledStopPointsWithInfraLinkData whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -286,7 +287,7 @@ public class ScheduledStopPointsWithInfraLinkData extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public ScheduledStopPointsWithInfraLinkData whereNotExists(Select<?> select) {
+    public ScheduledStopPointsWithInfraLinkData whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

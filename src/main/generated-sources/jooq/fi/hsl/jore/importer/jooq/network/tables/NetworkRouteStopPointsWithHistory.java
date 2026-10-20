@@ -20,13 +20,14 @@ import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDataType;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -113,7 +114,7 @@ public class NetworkRouteStopPointsWithHistory extends TableImpl<NetworkRouteSto
 
     private NetworkRouteStopPointsWithHistory(Name alias, Table<NetworkRouteStopPointsWithHistoryRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-         create view "network_route_stop_points_with_history" as  SELECT network_route_stop_points.network_route_point_id,
+         CREATE VIEW "network_route_stop_points_with_history" AS  SELECT network_route_stop_points.network_route_point_id,
             network_route_stop_points.network_route_stop_point_ext_id,
             network_route_stop_points.network_route_stop_point_order,
             network_route_stop_points.network_route_stop_point_hastus_point,
@@ -212,7 +213,7 @@ public class NetworkRouteStopPointsWithHistory extends TableImpl<NetworkRouteSto
      */
     @Override
     public NetworkRouteStopPointsWithHistory where(Condition condition) {
-        return new NetworkRouteStopPointsWithHistory(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new NetworkRouteStopPointsWithHistory(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -279,7 +280,7 @@ public class NetworkRouteStopPointsWithHistory extends TableImpl<NetworkRouteSto
      * Create an inline derived table from this table
      */
     @Override
-    public NetworkRouteStopPointsWithHistory whereExists(Select<?> select) {
+    public NetworkRouteStopPointsWithHistory whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -287,7 +288,7 @@ public class NetworkRouteStopPointsWithHistory extends TableImpl<NetworkRouteSto
      * Create an inline derived table from this table
      */
     @Override
-    public NetworkRouteStopPointsWithHistory whereNotExists(Select<?> select) {
+    public NetworkRouteStopPointsWithHistory whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

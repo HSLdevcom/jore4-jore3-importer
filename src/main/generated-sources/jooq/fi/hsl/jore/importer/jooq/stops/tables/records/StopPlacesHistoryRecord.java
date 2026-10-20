@@ -153,6 +153,6 @@ public class StopPlacesHistoryRecord extends TableRecordImpl<StopPlacesHistoryRe
         setStopsStopPlaceLocation(stopsStopPlaceLocation);
         setStopsStopPlaceSysPeriod(stopsStopPlaceSysPeriod);
         setStopsStopPlaceTransportMode(stopsStopPlaceTransportMode);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

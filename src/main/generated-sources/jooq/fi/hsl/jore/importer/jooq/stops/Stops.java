@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.jooq.Catalog;
 import org.jooq.Table;
+import org.jooq.impl.DSL;
 import org.jooq.impl.SchemaImpl;
 
 
@@ -55,7 +56,7 @@ public class Stops extends SchemaImpl {
      * No further instances allowed
      */
     private Stops() {
-        super("stops", null);
+        super(DSL.name("stops"), null, DSL.comment(""));
     }
 
 

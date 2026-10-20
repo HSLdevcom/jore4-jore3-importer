@@ -34,7 +34,8 @@ public class DefaultCatalog extends CatalogImpl {
     public static final DefaultCatalog DEFAULT_CATALOG = new DefaultCatalog();
 
     /**
-     * The schema <code>infrastructure_network</code>.
+     * The infrastructure network model adapted from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:1:1:445
      */
     public final InfrastructureNetwork INFRASTRUCTURE_NETWORK = InfrastructureNetwork.INFRASTRUCTURE_NETWORK;
 
@@ -44,27 +45,32 @@ public class DefaultCatalog extends CatalogImpl {
     public final InternalServicePattern INTERNAL_SERVICE_PATTERN = InternalServicePattern.INTERNAL_SERVICE_PATTERN;
 
     /**
-     * The schema <code>journey_pattern</code>.
+     * The journey pattern model adapted from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:1:799
      */
     public final JourneyPattern JOURNEY_PATTERN = JourneyPattern.JOURNEY_PATTERN;
 
     /**
-     * The schema <code>reusable_components</code>.
+     * The reusable components model adapted from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=1:6:260
      */
     public final ReusableComponents REUSABLE_COMPONENTS = ReusableComponents.REUSABLE_COMPONENTS;
 
     /**
-     * The schema <code>route</code>.
+     * The route model adapted from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:1:3:475
      */
     public final Route ROUTE = Route.ROUTE;
 
     /**
-     * The schema <code>service_pattern</code>.
+     * The service pattern model adapted from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:4:840
      */
     public final ServicePattern SERVICE_PATTERN = ServicePattern.SERVICE_PATTERN;
 
     /**
-     * The schema <code>timing_pattern</code>.
+     * The timing pattern model adapted from Transmodel:
+     * https://www.transmodel-cen.eu/model/index.htm?goto=2:3:2:703 
      */
     public final TimingPattern TIMING_PATTERN = TimingPattern.TIMING_PATTERN;
 
@@ -89,10 +95,10 @@ public class DefaultCatalog extends CatalogImpl {
     }
 
     /**
-     * A reference to the 3.19 minor release of the code generator. If this
+     * A reference to the 3.21 minor release of the code generator. If this
      * doesn't compile, it's because the runtime library uses an older minor
-     * release, namely: 3.19. You can turn off the generation of this reference
+     * release, namely: 3.21. You can turn off the generation of this reference
      * by specifying /configuration/generator/generate/jooqVersionReference
      */
-    private static final String REQUIRE_RUNTIME_JOOQ_VERSION = Constants.VERSION_3_19;
+    private static final String REQUIRE_RUNTIME_JOOQ_VERSION = Constants.VERSION_3_21;
 }

@@ -201,6 +201,6 @@ public class NetworkRouteStopPointsRecord extends UpdatableRecordImpl<NetworkRou
         setNetworkRouteStopPointViaPoint(networkRouteStopPointViaPoint);
         setNetworkRouteStopPointViaName(networkRouteStopPointViaName);
         setNetworkRouteStopPointRegulatedTimingPointStatus(networkRouteStopPointRegulatedTimingPointStatus);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

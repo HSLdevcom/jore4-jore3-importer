@@ -31,14 +31,15 @@ import org.jooq.QueryPart;
 import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDataType;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 import org.locationtech.jts.geom.Point;
@@ -293,7 +294,7 @@ public class InfrastructureNodes extends TableImpl<InfrastructureNodesRecord> {
      */
     @Override
     public InfrastructureNodes where(Condition condition) {
-        return new InfrastructureNodes(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new InfrastructureNodes(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -360,7 +361,7 @@ public class InfrastructureNodes extends TableImpl<InfrastructureNodesRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public InfrastructureNodes whereExists(Select<?> select) {
+    public InfrastructureNodes whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -368,7 +369,7 @@ public class InfrastructureNodes extends TableImpl<InfrastructureNodesRecord> {
      * Create an inline derived table from this table
      */
     @Override
-    public InfrastructureNodes whereNotExists(Select<?> select) {
+    public InfrastructureNodes whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }
