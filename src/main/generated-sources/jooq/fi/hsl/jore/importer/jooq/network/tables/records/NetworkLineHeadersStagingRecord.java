@@ -165,6 +165,6 @@ public class NetworkLineHeadersStagingRecord extends UpdatableRecordImpl<Network
         setNetworkLineHeaderOrigin_1(networkLineHeaderOrigin_1);
         setNetworkLineHeaderOrigin_2(networkLineHeaderOrigin_2);
         setNetworkLineHeaderValidDateRange(networkLineHeaderValidDateRange);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

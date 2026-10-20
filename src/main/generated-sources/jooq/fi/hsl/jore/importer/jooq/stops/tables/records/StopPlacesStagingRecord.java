@@ -118,6 +118,6 @@ public class StopPlacesStagingRecord extends TableRecordImpl<StopPlacesStagingRe
         setStopsStopPlaceLongName(stopsStopPlaceLongName);
         setStopsStopPlaceLocation(stopsStopPlaceLocation);
         setStopsStopPlaceTransportMode(stopsStopPlaceTransportMode);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

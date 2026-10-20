@@ -19,13 +19,14 @@ import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDataType;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -94,7 +95,7 @@ public class NetworkRouteLinksWithHistory extends TableImpl<NetworkRouteLinksWit
 
     private NetworkRouteLinksWithHistory(Name alias, Table<NetworkRouteLinksWithHistoryRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-         create view "network_route_links_with_history" as  SELECT network_route_links.network_route_link_id,
+         CREATE VIEW "network_route_links_with_history" AS  SELECT network_route_links.network_route_link_id,
             network_route_links.network_route_direction_id,
             network_route_links.infrastructure_link_id,
             network_route_links.network_route_link_ext_id,
@@ -185,7 +186,7 @@ public class NetworkRouteLinksWithHistory extends TableImpl<NetworkRouteLinksWit
      */
     @Override
     public NetworkRouteLinksWithHistory where(Condition condition) {
-        return new NetworkRouteLinksWithHistory(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new NetworkRouteLinksWithHistory(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -252,7 +253,7 @@ public class NetworkRouteLinksWithHistory extends TableImpl<NetworkRouteLinksWit
      * Create an inline derived table from this table
      */
     @Override
-    public NetworkRouteLinksWithHistory whereExists(Select<?> select) {
+    public NetworkRouteLinksWithHistory whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -260,7 +261,7 @@ public class NetworkRouteLinksWithHistory extends TableImpl<NetworkRouteLinksWit
      * Create an inline derived table from this table
      */
     @Override
-    public NetworkRouteLinksWithHistory whereNotExists(Select<?> select) {
+    public NetworkRouteLinksWithHistory whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

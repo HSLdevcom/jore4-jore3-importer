@@ -23,7 +23,8 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * route_ids uuid[], observation_date date
+ * Get the distances between scheduled stop points (in metres) for the
+ * journey/service patterns resolved from the route identifiers.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class GetDistancesBetweenStopPointsByRoutes extends TableImpl<Record> {
@@ -104,7 +105,7 @@ public class GetDistancesBetweenStopPointsByRoutes extends TableImpl<Record> {
     }
 
     private GetDistancesBetweenStopPointsByRoutes(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
-        super(alias, null, aliased, parameters, DSL.comment("route_ids uuid[], observation_date date"), TableOptions.function(), where);
+        super(alias, null, aliased, parameters, DSL.comment("Get the distances between scheduled stop points (in metres) for the journey/service patterns resolved from the route identifiers."), TableOptions.function(), where);
     }
 
     /**

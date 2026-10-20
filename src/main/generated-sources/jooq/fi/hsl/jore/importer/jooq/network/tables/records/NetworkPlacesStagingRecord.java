@@ -78,6 +78,6 @@ public class NetworkPlacesStagingRecord extends UpdatableRecordImpl<NetworkPlace
 
         setNetworkPlaceExtId(networkPlaceExtId);
         setNetworkPlaceName(networkPlaceName);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

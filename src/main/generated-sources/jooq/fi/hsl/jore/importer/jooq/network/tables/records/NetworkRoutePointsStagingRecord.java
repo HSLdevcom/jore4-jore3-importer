@@ -112,6 +112,6 @@ public class NetworkRoutePointsStagingRecord extends UpdatableRecordImpl<Network
         setNetworkRouteDirectionExtId(networkRouteDirectionExtId);
         setInfrastructureNodeExtId(infrastructureNodeExtId);
         setNetworkRoutePointOrder(networkRoutePointOrder);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

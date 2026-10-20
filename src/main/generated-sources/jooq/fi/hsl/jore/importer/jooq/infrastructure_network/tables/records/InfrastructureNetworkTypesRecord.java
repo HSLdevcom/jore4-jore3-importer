@@ -61,6 +61,6 @@ public class InfrastructureNetworkTypesRecord extends UpdatableRecordImpl<Infras
         super(InfrastructureNetworkTypes.INFRASTRUCTURE_NETWORK_TYPES);
 
         setInfrastructureNetworkType(infrastructureNetworkType);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

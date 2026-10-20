@@ -112,6 +112,6 @@ public class NetworkRouteLinksStagingRecord extends UpdatableRecordImpl<NetworkR
         setNetworkRouteDirectionExtId(networkRouteDirectionExtId);
         setInfrastructureLinkExtId(infrastructureLinkExtId);
         setNetworkRouteLinkOrder(networkRouteLinkOrder);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

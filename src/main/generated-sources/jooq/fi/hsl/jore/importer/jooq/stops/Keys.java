@@ -16,6 +16,7 @@ import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
+import org.jooq.impl.QOM.ForeignKeyRule;
 
 
 /**
@@ -35,6 +36,6 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<StopPlacesRecord, InfrastructureNetworkTypesRecord> STOP_PLACES__STOP_PLACES_STOPS_STOP_PLACE_TRANSPORT_MODE_FKEY = Internal.createForeignKey(StopPlaces.STOP_PLACES, DSL.name("stop_places_stops_stop_place_transport_mode_fkey"), new TableField[] { StopPlaces.STOP_PLACES.STOPS_STOP_PLACE_TRANSPORT_MODE }, fi.hsl.jore.importer.jooq.infrastructure_network.Keys.INFRASTRUCTURE_NETWORK_TYPES_PKEY, new TableField[] { InfrastructureNetworkTypes.INFRASTRUCTURE_NETWORK_TYPES.INFRASTRUCTURE_NETWORK_TYPE }, true);
-    public static final ForeignKey<StopPlacesStagingRecord, InfrastructureNetworkTypesRecord> STOP_PLACES_STAGING__STOP_PLACES_STAGING_STOPS_STOP_PLACE_TRANSPORT_MODE_FKEY = Internal.createForeignKey(StopPlacesStaging.STOP_PLACES_STAGING, DSL.name("stop_places_staging_stops_stop_place_transport_mode_fkey"), new TableField[] { StopPlacesStaging.STOP_PLACES_STAGING.STOPS_STOP_PLACE_TRANSPORT_MODE }, fi.hsl.jore.importer.jooq.infrastructure_network.Keys.INFRASTRUCTURE_NETWORK_TYPES_PKEY, new TableField[] { InfrastructureNetworkTypes.INFRASTRUCTURE_NETWORK_TYPES.INFRASTRUCTURE_NETWORK_TYPE }, true);
+    public static final ForeignKey<StopPlacesRecord, InfrastructureNetworkTypesRecord> STOP_PLACES__STOP_PLACES_STOPS_STOP_PLACE_TRANSPORT_MODE_FKEY = Internal.createForeignKey(StopPlaces.STOP_PLACES, DSL.name("stop_places_stops_stop_place_transport_mode_fkey"), new TableField[] { StopPlaces.STOP_PLACES.STOPS_STOP_PLACE_TRANSPORT_MODE }, fi.hsl.jore.importer.jooq.infrastructure_network.Keys.INFRASTRUCTURE_NETWORK_TYPES_PKEY, new TableField[] { InfrastructureNetworkTypes.INFRASTRUCTURE_NETWORK_TYPES.INFRASTRUCTURE_NETWORK_TYPE }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
+    public static final ForeignKey<StopPlacesStagingRecord, InfrastructureNetworkTypesRecord> STOP_PLACES_STAGING__STOP_PLACES_STAGING_STOPS_STOP_PLACE_TRANSPORT_MODE_FKEY = Internal.createForeignKey(StopPlacesStaging.STOP_PLACES_STAGING, DSL.name("stop_places_staging_stops_stop_place_transport_mode_fkey"), new TableField[] { StopPlacesStaging.STOP_PLACES_STAGING.STOPS_STOP_PLACE_TRANSPORT_MODE }, fi.hsl.jore.importer.jooq.infrastructure_network.Keys.INFRASTRUCTURE_NETWORK_TYPES_PKEY, new TableField[] { InfrastructureNetworkTypes.INFRASTRUCTURE_NETWORK_TYPES.INFRASTRUCTURE_NETWORK_TYPE }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
 }

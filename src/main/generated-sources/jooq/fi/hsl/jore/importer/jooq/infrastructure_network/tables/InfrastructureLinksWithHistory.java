@@ -20,13 +20,14 @@ import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDataType;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 import org.locationtech.jts.geom.LineString;
@@ -102,7 +103,7 @@ public class InfrastructureLinksWithHistory extends TableImpl<InfrastructureLink
 
     private InfrastructureLinksWithHistory(Name alias, Table<InfrastructureLinksWithHistoryRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-         create view "infrastructure_links_with_history" as  SELECT infrastructure_links.infrastructure_link_id,
+         CREATE VIEW "infrastructure_links_with_history" AS  SELECT infrastructure_links.infrastructure_link_id,
             infrastructure_links.infrastructure_link_ext_id,
             infrastructure_links.infrastructure_link_geog,
             infrastructure_links.infrastructure_network_type,
@@ -198,7 +199,7 @@ public class InfrastructureLinksWithHistory extends TableImpl<InfrastructureLink
      */
     @Override
     public InfrastructureLinksWithHistory where(Condition condition) {
-        return new InfrastructureLinksWithHistory(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new InfrastructureLinksWithHistory(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -265,7 +266,7 @@ public class InfrastructureLinksWithHistory extends TableImpl<InfrastructureLink
      * Create an inline derived table from this table
      */
     @Override
-    public InfrastructureLinksWithHistory whereExists(Select<?> select) {
+    public InfrastructureLinksWithHistory whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -273,7 +274,7 @@ public class InfrastructureLinksWithHistory extends TableImpl<InfrastructureLink
      * Create an inline derived table from this table
      */
     @Override
-    public InfrastructureLinksWithHistory whereNotExists(Select<?> select) {
+    public InfrastructureLinksWithHistory whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

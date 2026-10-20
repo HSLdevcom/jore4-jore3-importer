@@ -79,6 +79,6 @@ public class InfrastructureLinkShapesStagingRecord extends UpdatableRecordImpl<I
 
         setInfrastructureLinkExtId(infrastructureLinkExtId);
         setInfrastructureLinkShape(infrastructureLinkShape);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

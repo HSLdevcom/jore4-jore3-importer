@@ -133,6 +133,6 @@ public class InfrastructureLinkShapesRecord extends UpdatableRecordImpl<Infrastr
         setInfrastructureLinkId(infrastructureLinkId);
         setInfrastructureLinkShape(infrastructureLinkShape);
         setInfrastructureLinkShapeSysPeriod(infrastructureLinkShapeSysPeriod);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

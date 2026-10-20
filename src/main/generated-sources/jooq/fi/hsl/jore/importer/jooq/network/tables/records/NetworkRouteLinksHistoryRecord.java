@@ -139,6 +139,6 @@ public class NetworkRouteLinksHistoryRecord extends TableRecordImpl<NetworkRoute
         setNetworkRouteLinkExtId(networkRouteLinkExtId);
         setNetworkRouteLinkOrder(networkRouteLinkOrder);
         setNetworkRouteLinkSysPeriod(networkRouteLinkSysPeriod);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

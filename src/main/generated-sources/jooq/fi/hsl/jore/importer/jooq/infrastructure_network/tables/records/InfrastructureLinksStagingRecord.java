@@ -130,6 +130,6 @@ public class InfrastructureLinksStagingRecord extends UpdatableRecordImpl<Infras
         setInfrastructureNetworkType(infrastructureNetworkType);
         setInfrastructureLinkStartNodeExtId(infrastructureLinkStartNodeExtId);
         setInfrastructureLinkEndNodeExtId(infrastructureLinkEndNodeExtId);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

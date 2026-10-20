@@ -260,6 +260,6 @@ public class NetworkRouteDirectionsWithHistoryRecord extends TableRecordImpl<Net
         setNetworkRouteDirectionSysPeriod(networkRouteDirectionSysPeriod);
         setNetworkRouteJore4Id(networkRouteJore4Id);
         setJourneyPatternJore4Id(journeyPatternJore4Id);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

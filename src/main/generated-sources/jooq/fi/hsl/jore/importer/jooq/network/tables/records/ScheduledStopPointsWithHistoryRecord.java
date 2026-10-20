@@ -208,6 +208,6 @@ public class ScheduledStopPointsWithHistoryRecord extends TableRecordImpl<Schedu
         setScheduledStopPointJore4Id(scheduledStopPointJore4Id);
         setUsageInRoutes(usageInRoutes);
         setNetworkPlaceId(networkPlaceId);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

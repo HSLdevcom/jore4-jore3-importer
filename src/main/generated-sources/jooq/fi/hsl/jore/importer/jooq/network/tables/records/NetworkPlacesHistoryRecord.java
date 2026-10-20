@@ -103,6 +103,6 @@ public class NetworkPlacesHistoryRecord extends TableRecordImpl<NetworkPlacesHis
         setNetworkPlaceExtId(networkPlaceExtId);
         setNetworkPlaceName(networkPlaceName);
         setNetworkPlaceSysPeriod(networkPlaceSysPeriod);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

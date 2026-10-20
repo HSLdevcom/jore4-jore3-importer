@@ -7,6 +7,7 @@ package fi.hsl.jore.jore4.jooq.internal_service_pattern;
 import fi.hsl.jore.jore4.jooq.DefaultCatalog;
 
 import org.jooq.Catalog;
+import org.jooq.impl.DSL;
 import org.jooq.impl.SchemaImpl;
 
 
@@ -27,7 +28,7 @@ public class InternalServicePattern extends SchemaImpl {
      * No further instances allowed
      */
     private InternalServicePattern() {
-        super("internal_service_pattern", null);
+        super(DSL.name("internal_service_pattern"), null, DSL.comment(""));
     }
 
 

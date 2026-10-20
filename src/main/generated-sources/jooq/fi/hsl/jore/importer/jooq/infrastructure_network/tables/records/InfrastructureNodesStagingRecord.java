@@ -113,6 +113,6 @@ public class InfrastructureNodesStagingRecord extends UpdatableRecordImpl<Infras
         setInfrastructureNodeType(infrastructureNodeType);
         setInfrastructureNodeLocation(infrastructureNodeLocation);
         setInfrastructureNodeProjectedLocation(infrastructureNodeProjectedLocation);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

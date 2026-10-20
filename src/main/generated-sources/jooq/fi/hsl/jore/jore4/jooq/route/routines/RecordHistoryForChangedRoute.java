@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import org.jooq.Parameter;
 import org.jooq.impl.AbstractRoutine;
+import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 
@@ -26,19 +27,19 @@ public class RecordHistoryForChangedRoute extends AbstractRoutine<java.lang.Void
      * The parameter
      * <code>route.record_history_for_changed_route.tgoperation</code>.
      */
-    public static final Parameter<String> TGOPERATION = Internal.createParameter("tgoperation", SQLDataType.CLOB, false, false);
+    public static final Parameter<String> TGOPERATION = Internal.createParameter("tgoperation", SQLDataType.CLOB, false);
 
     /**
      * The parameter
      * <code>route.record_history_for_changed_route.routeid</code>.
      */
-    public static final Parameter<UUID> ROUTEID = Internal.createParameter("routeid", SQLDataType.UUID, false, false);
+    public static final Parameter<UUID> ROUTEID = Internal.createParameter("routeid", SQLDataType.UUID, false);
 
     /**
      * Create a new routine call instance
      */
     public RecordHistoryForChangedRoute() {
-        super("record_history_for_changed_route", Route.ROUTE);
+        super("record_history_for_changed_route", Route.ROUTE, DSL.comment(""));
 
         addInParameter(TGOPERATION);
         addInParameter(ROUTEID);

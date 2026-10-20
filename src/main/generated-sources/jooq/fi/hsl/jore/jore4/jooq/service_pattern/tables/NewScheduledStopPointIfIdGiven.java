@@ -26,13 +26,16 @@ import org.locationtech.jts.geom.Point;
 
 
 /**
- * new_scheduled_stop_point_id uuid DEFAULT NULL::uuid,
- * new_located_on_infrastructure_link_id uuid DEFAULT NULL::uuid,
- * new_measured_location geography DEFAULT NULL::geography, new_direction text
- * DEFAULT NULL::text, new_label text DEFAULT NULL::text, new_validity_start
- * date DEFAULT NULL::date, new_validity_end date DEFAULT NULL::date,
- * new_priority integer DEFAULT NULL::integer, new_vehicle_mode text DEFAULT
- * NULL::text
+ * Conditionally returns a row representing a new scheduled_stop_point, or
+ * nothing.
+ *   Intended to be used in conjunction with
+ * service_pattern.scheduled_stop_points_with_infra_link_data view.
+ *   If value for new_scheduled_stop_point_id parameter is given,
+ *   returns a row representing that scheduled_stop_point.
+ *   The structure matches the
+ * service_pattern.scheduled_stop_points_with_infra_link_data view.
+ *   In case new_scheduled_stop_point_id is null, returns nothing.
+
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class NewScheduledStopPointIfIdGiven extends TableImpl<Record> {
@@ -132,7 +135,7 @@ public class NewScheduledStopPointIfIdGiven extends TableImpl<Record> {
     }
 
     private NewScheduledStopPointIfIdGiven(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
-        super(alias, null, aliased, parameters, DSL.comment("new_scheduled_stop_point_id uuid DEFAULT NULL::uuid, new_located_on_infrastructure_link_id uuid DEFAULT NULL::uuid, new_measured_location geography DEFAULT NULL::geography, new_direction text DEFAULT NULL::text, new_label text DEFAULT NULL::text, new_validity_start date DEFAULT NULL::date, new_validity_end date DEFAULT NULL::date, new_priority integer DEFAULT NULL::integer, new_vehicle_mode text DEFAULT NULL::text"), TableOptions.function(), where);
+        super(alias, null, aliased, parameters, DSL.comment("Conditionally returns a row representing a new scheduled_stop_point, or nothing.\n  Intended to be used in conjunction with service_pattern.scheduled_stop_points_with_infra_link_data view.\n  If value for new_scheduled_stop_point_id parameter is given,\n  returns a row representing that scheduled_stop_point.\n  The structure matches the service_pattern.scheduled_stop_points_with_infra_link_data view.\n  In case new_scheduled_stop_point_id is null, returns nothing.\n"), TableOptions.function(), where);
     }
 
     /**

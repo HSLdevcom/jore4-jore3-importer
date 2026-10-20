@@ -150,6 +150,6 @@ public class InfrastructureNodesRecord extends UpdatableRecordImpl<Infrastructur
         setInfrastructureNodeLocation(infrastructureNodeLocation);
         setInfrastructureNodeProjectedLocation(infrastructureNodeProjectedLocation);
         setInfrastructureNodeSysPeriod(infrastructureNodeSysPeriod);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

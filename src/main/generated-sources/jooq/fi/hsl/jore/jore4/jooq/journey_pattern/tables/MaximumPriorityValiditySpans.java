@@ -24,17 +24,40 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * entity_type text, filter_route_labels text[], filter_validity_start date
- * DEFAULT NULL::date, filter_validity_end date DEFAULT NULL::date,
- * upper_priority_limit integer DEFAULT NULL::integer,
- * replace_scheduled_stop_point_id uuid DEFAULT NULL::uuid,
- * new_scheduled_stop_point_id uuid DEFAULT NULL::uuid,
- * new_located_on_infrastructure_link_id uuid DEFAULT NULL::uuid,
- * new_measured_location geography DEFAULT NULL::geography, new_direction text
- * DEFAULT NULL::text, new_label text DEFAULT NULL::text, new_validity_start
- * date DEFAULT NULL::date, new_validity_end date DEFAULT NULL::date,
- * new_priority integer DEFAULT NULL::integer, new_vehicle_mode text DEFAULT
- * NULL::text
+ * Find the validity time spans of highest priority in the given time span for
+ * entities of the given type (routes or
+ *     scheduled stop points), which are related to routes with any of the given
+ * labels.
+ * 
+ *     Consider the validity times of two overlapping route instances with label
+ * A:
+ *     A* (prio 20):        |--------|
+ *     A (prio 10):   |---------|
+ * 
+ *     These would be split into the following maximum priority validity time
+ * spans:
+ *                    |--A--|--A*----|
+ * 
+ *     Similarly, the following route instances with label B
+ *     B* (prio 20):        |-------|
+ *     B (prio 10):   |-------------------------|
+ * 
+ *     would be split into the following maximum priority validity time spans:
+ *                    |--B--|--B*---|----B------|
+ * 
+ *     For scheduled stop points the splitting is performed in the same fashion,
+ * except that if
+ *     replace_scheduled_stop_point_id is not null, the stop with that id is
+ * left out. If the new_xxx arguments are
+ *     specified, the check is also performed for a stop defined by those
+ * arguments, which is not yet present in the
+ *     table data.
+ * 
+ *     The new_vehicle_mode parameter defines the vehicle mode of the new
+ * hypothetical scheduled stop point. Vehicle
+ *     mode affects route validity checks: a scheduled stop point is only
+ * considered to belong to a route if its
+ *     vehicle_mode matches the route line's primary_vehicle_mode.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class MaximumPriorityValiditySpans extends TableImpl<Record> {
@@ -98,7 +121,7 @@ public class MaximumPriorityValiditySpans extends TableImpl<Record> {
     }
 
     private MaximumPriorityValiditySpans(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
-        super(alias, null, aliased, parameters, DSL.comment("entity_type text, filter_route_labels text[], filter_validity_start date DEFAULT NULL::date, filter_validity_end date DEFAULT NULL::date, upper_priority_limit integer DEFAULT NULL::integer, replace_scheduled_stop_point_id uuid DEFAULT NULL::uuid, new_scheduled_stop_point_id uuid DEFAULT NULL::uuid, new_located_on_infrastructure_link_id uuid DEFAULT NULL::uuid, new_measured_location geography DEFAULT NULL::geography, new_direction text DEFAULT NULL::text, new_label text DEFAULT NULL::text, new_validity_start date DEFAULT NULL::date, new_validity_end date DEFAULT NULL::date, new_priority integer DEFAULT NULL::integer, new_vehicle_mode text DEFAULT NULL::text"), TableOptions.function(), where);
+        super(alias, null, aliased, parameters, DSL.comment("Find the validity time spans of highest priority in the given time span for entities of the given type (routes or\n    scheduled stop points), which are related to routes with any of the given labels.\n\n    Consider the validity times of two overlapping route instances with label A:\n    A* (prio 20):        |--------|\n    A (prio 10):   |---------|\n\n    These would be split into the following maximum priority validity time spans:\n                   |--A--|--A*----|\n\n    Similarly, the following route instances with label B\n    B* (prio 20):        |-------|\n    B (prio 10):   |-------------------------|\n\n    would be split into the following maximum priority validity time spans:\n                   |--B--|--B*---|----B------|\n\n    For scheduled stop points the splitting is performed in the same fashion, except that if\n    replace_scheduled_stop_point_id is not null, the stop with that id is left out. If the new_xxx arguments are\n    specified, the check is also performed for a stop defined by those arguments, which is not yet present in the\n    table data.\n\n    The new_vehicle_mode parameter defines the vehicle mode of the new hypothetical scheduled stop point. Vehicle\n    mode affects route validity checks: a scheduled stop point is only considered to belong to a route if its\n    vehicle_mode matches the route line's primary_vehicle_mode."), TableOptions.function(), where);
     }
 
     /**

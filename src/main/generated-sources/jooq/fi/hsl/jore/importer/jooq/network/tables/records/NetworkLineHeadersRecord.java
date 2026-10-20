@@ -215,6 +215,6 @@ public class NetworkLineHeadersRecord extends UpdatableRecordImpl<NetworkLineHea
         setNetworkLineHeaderValidDateRange(networkLineHeaderValidDateRange);
         setNetworkLineHeaderSysPeriod(networkLineHeaderSysPeriod);
         setJore4LineId(jore4LineId);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

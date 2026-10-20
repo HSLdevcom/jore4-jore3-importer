@@ -12,6 +12,7 @@ import org.jooq.Field;
 import org.jooq.JSONB;
 import org.jooq.Parameter;
 import org.jooq.impl.AbstractRoutine;
+import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 
@@ -28,18 +29,18 @@ public class CollectLineInfoForHistory extends AbstractRoutine<JSONB> {
      * The parameter
      * <code>route.collect_line_info_for_history.RETURN_VALUE</code>.
      */
-    public static final Parameter<JSONB> RETURN_VALUE = Internal.createParameter("RETURN_VALUE", SQLDataType.JSONB, false, false);
+    public static final Parameter<JSONB> RETURN_VALUE = Internal.createParameter("RETURN_VALUE", SQLDataType.JSONB, false);
 
     /**
      * The parameter <code>route.collect_line_info_for_history.lineid</code>.
      */
-    public static final Parameter<UUID> LINEID = Internal.createParameter("lineid", SQLDataType.UUID, false, false);
+    public static final Parameter<UUID> LINEID = Internal.createParameter("lineid", SQLDataType.UUID, false);
 
     /**
      * Create a new routine call instance
      */
     public CollectLineInfoForHistory() {
-        super("collect_line_info_for_history", Route.ROUTE, SQLDataType.JSONB);
+        super("collect_line_info_for_history", Route.ROUTE, DSL.comment(""), SQLDataType.JSONB);
 
         setReturnParameter(RETURN_VALUE);
         addInParameter(LINEID);

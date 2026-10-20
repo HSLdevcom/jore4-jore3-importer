@@ -10,6 +10,7 @@ import org.jooq.Field;
 import org.jooq.Parameter;
 import org.jooq.Record;
 import org.jooq.impl.AbstractRoutine;
+import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.Internal;
 
@@ -37,18 +38,18 @@ public class RouteShape extends AbstractRoutine<Object> {
      * configuration.
      */
     @Deprecated
-    public static final Parameter<Object> RETURN_VALUE = Internal.createParameter("RETURN_VALUE", DefaultDataType.getDefaultDataType("\"public\".\"geography\""), false, false);
+    public static final Parameter<Object> RETURN_VALUE = Internal.createParameter("RETURN_VALUE", DefaultDataType.getDefaultDataType("\"public\".\"geography\""), false);
 
     /**
      * The parameter <code>route.route_shape.route_row</code>.
      */
-    public static final Parameter<Record> ROUTE_ROW = Internal.createParameter("route_row", fi.hsl.jore.jore4.jooq.route.tables.Route.ROUTE_.getDataType(), false, false);
+    public static final Parameter<Record> ROUTE_ROW = Internal.createParameter("route_row", fi.hsl.jore.jore4.jooq.route.tables.Route.ROUTE_.getDataType(), false);
 
     /**
      * Create a new routine call instance
      */
     public RouteShape() {
-        super("route_shape", Route.ROUTE, DefaultDataType.getDefaultDataType("\"public\".\"geography\""));
+        super("route_shape", Route.ROUTE, DSL.comment(""), DefaultDataType.getDefaultDataType("\"public\".\"geography\""));
 
         setReturnParameter(RETURN_VALUE);
         addInParameter(ROUTE_ROW);

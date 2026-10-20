@@ -24,13 +24,25 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * filter_route_ids uuid[], replace_scheduled_stop_point_id uuid DEFAULT
- * NULL::uuid, new_located_on_infrastructure_link_id uuid DEFAULT NULL::uuid,
- * new_measured_location geography DEFAULT NULL::geography, new_direction text
- * DEFAULT NULL::text, new_label text DEFAULT NULL::text, new_validity_start
- * date DEFAULT NULL::date, new_validity_end date DEFAULT NULL::date,
- * new_priority integer DEFAULT NULL::integer, new_vehicle_mode text DEFAULT
- * NULL::text
+ * Check if it is possible to visit all stops of journey patterns in such a
+ * fashion that all links, on which
+ *      the stops reside, are visited in an order matching the corresponding
+ * routes' link order. Additionally it is
+ *      checked that there are no stop points on the route's journey pattern,
+ * whose validity span does not overlap with
+ *      the route's validity span at all. Only the links / stops on the routes
+ * with the specified filter_route_ids are
+ *      taken into account for the checks.
+ * 
+ *      If replace_scheduled_stop_point_id is not null, the stop with that id is
+ * left out of the check.
+ *      If the new_xxx arguments are specified, the check is also performed for
+ * an imaginary stop defined by those
+ *      arguments, which is not yet present in the table data.
+ * 
+ *      This functions returns those journey pattern / route combinations, which
+ * are broken (either in actual
+ *      table data or with the proposed scheduled stop point changes).
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class GetBrokenRouteJourneyPatterns extends TableImpl<Record> {
@@ -83,7 +95,7 @@ public class GetBrokenRouteJourneyPatterns extends TableImpl<Record> {
     }
 
     private GetBrokenRouteJourneyPatterns(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
-        super(alias, null, aliased, parameters, DSL.comment("filter_route_ids uuid[], replace_scheduled_stop_point_id uuid DEFAULT NULL::uuid, new_located_on_infrastructure_link_id uuid DEFAULT NULL::uuid, new_measured_location geography DEFAULT NULL::geography, new_direction text DEFAULT NULL::text, new_label text DEFAULT NULL::text, new_validity_start date DEFAULT NULL::date, new_validity_end date DEFAULT NULL::date, new_priority integer DEFAULT NULL::integer, new_vehicle_mode text DEFAULT NULL::text"), TableOptions.function(), where);
+        super(alias, null, aliased, parameters, DSL.comment("Check if it is possible to visit all stops of journey patterns in such a fashion that all links, on which\n     the stops reside, are visited in an order matching the corresponding routes' link order. Additionally it is\n     checked that there are no stop points on the route's journey pattern, whose validity span does not overlap with\n     the route's validity span at all. Only the links / stops on the routes with the specified filter_route_ids are\n     taken into account for the checks.\n\n     If replace_scheduled_stop_point_id is not null, the stop with that id is left out of the check.\n     If the new_xxx arguments are specified, the check is also performed for an imaginary stop defined by those\n     arguments, which is not yet present in the table data.\n\n     This functions returns those journey pattern / route combinations, which are broken (either in actual\n     table data or with the proposed scheduled stop point changes)."), TableOptions.function(), where);
     }
 
     /**

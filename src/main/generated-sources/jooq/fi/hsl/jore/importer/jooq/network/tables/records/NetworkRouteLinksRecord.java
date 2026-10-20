@@ -149,6 +149,6 @@ public class NetworkRouteLinksRecord extends UpdatableRecordImpl<NetworkRouteLin
         setNetworkRouteLinkExtId(networkRouteLinkExtId);
         setNetworkRouteLinkOrder(networkRouteLinkOrder);
         setNetworkRouteLinkSysPeriod(networkRouteLinkSysPeriod);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

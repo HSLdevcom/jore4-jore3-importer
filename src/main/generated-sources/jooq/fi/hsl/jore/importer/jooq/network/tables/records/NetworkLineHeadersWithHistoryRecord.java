@@ -209,6 +209,6 @@ public class NetworkLineHeadersWithHistoryRecord extends TableRecordImpl<Network
         setNetworkLineHeaderValidDateRange(networkLineHeaderValidDateRange);
         setNetworkLineHeaderSysPeriod(networkLineHeaderSysPeriod);
         setJore4LineId(jore4LineId);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

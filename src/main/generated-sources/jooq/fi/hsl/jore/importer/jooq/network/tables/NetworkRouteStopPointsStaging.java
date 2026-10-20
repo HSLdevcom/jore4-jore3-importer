@@ -18,13 +18,14 @@ import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -179,7 +180,7 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
      */
     @Override
     public NetworkRouteStopPointsStaging where(Condition condition) {
-        return new NetworkRouteStopPointsStaging(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new NetworkRouteStopPointsStaging(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -246,7 +247,7 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
      * Create an inline derived table from this table
      */
     @Override
-    public NetworkRouteStopPointsStaging whereExists(Select<?> select) {
+    public NetworkRouteStopPointsStaging whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -254,7 +255,7 @@ public class NetworkRouteStopPointsStaging extends TableImpl<NetworkRouteStopPoi
      * Create an inline derived table from this table
      */
     @Override
-    public NetworkRouteStopPointsStaging whereNotExists(Select<?> select) {
+    public NetworkRouteStopPointsStaging whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

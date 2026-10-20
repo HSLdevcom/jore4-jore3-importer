@@ -78,6 +78,6 @@ public class InfrastructureNodeTypesRecord extends UpdatableRecordImpl<Infrastru
 
         setInfrastructureNodeTypeValue(infrastructureNodeTypeValue);
         setInfrastructureNodeTypeComment(infrastructureNodeTypeComment);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

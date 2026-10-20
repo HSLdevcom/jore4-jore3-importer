@@ -20,13 +20,14 @@ import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDataType;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -194,7 +195,7 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
      */
     @Override
     public ScheduledStopPointsHistory where(Condition condition) {
-        return new ScheduledStopPointsHistory(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new ScheduledStopPointsHistory(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -261,7 +262,7 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
      * Create an inline derived table from this table
      */
     @Override
-    public ScheduledStopPointsHistory whereExists(Select<?> select) {
+    public ScheduledStopPointsHistory whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -269,7 +270,7 @@ public class ScheduledStopPointsHistory extends TableImpl<ScheduledStopPointsHis
      * Create an inline derived table from this table
      */
     @Override
-    public ScheduledStopPointsHistory whereNotExists(Select<?> select) {
+    public ScheduledStopPointsHistory whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

@@ -18,12 +18,13 @@ import org.jooq.QueryPart;
 import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 import org.locationtech.jts.geom.LineString;
@@ -174,7 +175,7 @@ public class InfrastructureLink extends TableImpl<Record> {
      */
     @Override
     public InfrastructureLink where(Condition condition) {
-        return new InfrastructureLink(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new InfrastructureLink(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -241,7 +242,7 @@ public class InfrastructureLink extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public InfrastructureLink whereExists(Select<?> select) {
+    public InfrastructureLink whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -249,7 +250,7 @@ public class InfrastructureLink extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public InfrastructureLink whereNotExists(Select<?> select) {
+    public InfrastructureLink whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

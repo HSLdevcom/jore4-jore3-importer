@@ -8,6 +8,7 @@ import fi.hsl.jore.jore4.jooq.service_pattern.ServicePattern;
 
 import org.jooq.Parameter;
 import org.jooq.impl.AbstractRoutine;
+import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 
@@ -24,13 +25,13 @@ public class InsertScheduledStopPointLabel extends AbstractRoutine<java.lang.Voi
      * The parameter
      * <code>service_pattern.insert_scheduled_stop_point_label.new_label</code>.
      */
-    public static final Parameter<String> NEW_LABEL = Internal.createParameter("new_label", SQLDataType.CLOB, false, false);
+    public static final Parameter<String> NEW_LABEL = Internal.createParameter("new_label", SQLDataType.CLOB, false);
 
     /**
      * Create a new routine call instance
      */
     public InsertScheduledStopPointLabel() {
-        super("insert_scheduled_stop_point_label", ServicePattern.SERVICE_PATTERN);
+        super("insert_scheduled_stop_point_label", ServicePattern.SERVICE_PATTERN, DSL.comment(""));
 
         addInParameter(NEW_LABEL);
     }

@@ -154,6 +154,6 @@ public class NetworkLinesHistoryRecord extends TableRecordImpl<NetworkLinesHisto
         setNetworkLineSysPeriod(networkLineSysPeriod);
         setNetworkLineTypeOfLine(networkLineTypeOfLine);
         setNetworkLineLegacyHslMunicipalityCode(networkLineLegacyHslMunicipalityCode);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }

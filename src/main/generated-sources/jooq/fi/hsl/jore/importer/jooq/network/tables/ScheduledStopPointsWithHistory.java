@@ -20,13 +20,14 @@ import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
 import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.Select;
 import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDataType;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -119,7 +120,7 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
 
     private ScheduledStopPointsWithHistory(Name alias, Table<ScheduledStopPointsWithHistoryRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-         create view "scheduled_stop_points_with_history" as  SELECT scheduled_stop_points.scheduled_stop_point_id,
+         CREATE VIEW "scheduled_stop_points_with_history" AS  SELECT scheduled_stop_points.scheduled_stop_point_id,
             scheduled_stop_points.scheduled_stop_point_ext_id,
             scheduled_stop_points.infrastructure_node_id,
             scheduled_stop_points.scheduled_stop_point_ely_number,
@@ -218,7 +219,7 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
      */
     @Override
     public ScheduledStopPointsWithHistory where(Condition condition) {
-        return new ScheduledStopPointsWithHistory(getQualifiedName(), aliased() ? this : null, null, condition);
+        return new ScheduledStopPointsWithHistory(getQualifiedName(), aliased() ? this : null, null, Internal.condition(this, condition));
     }
 
     /**
@@ -285,7 +286,7 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
      * Create an inline derived table from this table
      */
     @Override
-    public ScheduledStopPointsWithHistory whereExists(Select<?> select) {
+    public ScheduledStopPointsWithHistory whereExists(TableLike<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -293,7 +294,7 @@ public class ScheduledStopPointsWithHistory extends TableImpl<ScheduledStopPoint
      * Create an inline derived table from this table
      */
     @Override
-    public ScheduledStopPointsWithHistory whereNotExists(Select<?> select) {
+    public ScheduledStopPointsWithHistory whereNotExists(TableLike<?> select) {
         return where(DSL.notExists(select));
     }
 }

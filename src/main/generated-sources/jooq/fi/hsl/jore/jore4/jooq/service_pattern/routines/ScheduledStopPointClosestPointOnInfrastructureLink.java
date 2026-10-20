@@ -11,6 +11,7 @@ import org.jooq.Field;
 import org.jooq.Parameter;
 import org.jooq.Record;
 import org.jooq.impl.AbstractRoutine;
+import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDataType;
 import org.jooq.impl.Internal;
 
@@ -38,19 +39,19 @@ public class ScheduledStopPointClosestPointOnInfrastructureLink extends Abstract
      * configuration.
      */
     @Deprecated
-    public static final Parameter<Object> RETURN_VALUE = Internal.createParameter("RETURN_VALUE", DefaultDataType.getDefaultDataType("\"public\".\"geography\""), false, false);
+    public static final Parameter<Object> RETURN_VALUE = Internal.createParameter("RETURN_VALUE", DefaultDataType.getDefaultDataType("\"public\".\"geography\""), false);
 
     /**
      * The parameter
      * <code>service_pattern.scheduled_stop_point_closest_point_on_infrastructure_link.ssp</code>.
      */
-    public static final Parameter<Record> SSP = Internal.createParameter("ssp", ScheduledStopPoint.SCHEDULED_STOP_POINT.getDataType(), false, false);
+    public static final Parameter<Record> SSP = Internal.createParameter("ssp", ScheduledStopPoint.SCHEDULED_STOP_POINT.getDataType(), false);
 
     /**
      * Create a new routine call instance
      */
     public ScheduledStopPointClosestPointOnInfrastructureLink() {
-        super("scheduled_stop_point_closest_point_on_infrastructure_link", ServicePattern.SERVICE_PATTERN, DefaultDataType.getDefaultDataType("\"public\".\"geography\""));
+        super("scheduled_stop_point_closest_point_on_infrastructure_link", ServicePattern.SERVICE_PATTERN, DSL.comment("The point on the infrastructure link closest to measured_location. A PostGIS PointZ geography in EPSG:4326."), DefaultDataType.getDefaultDataType("\"public\".\"geography\""));
 
         setReturnParameter(RETURN_VALUE);
         addInParameter(SSP);

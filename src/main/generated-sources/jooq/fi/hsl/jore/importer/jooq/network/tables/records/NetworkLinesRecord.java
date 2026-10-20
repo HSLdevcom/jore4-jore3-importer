@@ -156,6 +156,6 @@ public class NetworkLinesRecord extends UpdatableRecordImpl<NetworkLinesRecord> 
         setNetworkLineSysPeriod(networkLineSysPeriod);
         setNetworkLineTypeOfLine(networkLineTypeOfLine);
         setNetworkLineLegacyHslMunicipalityCode(networkLineLegacyHslMunicipalityCode);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 }
