@@ -92,7 +92,7 @@ print_usage() {
     jore4-testdb and jore4-mapmatchingdb are built by default without persistent database volumes in docker.
     Enable persistent volumes with --volumes.
 
-    To clear persited volumes, run with --delete-volumes.
+    To clear persisted volumes, run with --delete-volumes.
 
     If you want to run tiamat migrations from ground up, use --flyway-baseline. This is needed for an empty stopdb.
 
@@ -424,8 +424,8 @@ download_docker_compose_bundle() {
   unzip -q "$zip_file" -d /tmp
 
   # Clean untracked files from the `docker` directory even if they are
-  # git-ignored. Exclude the `testdb` directory, which we want to keep.
-  git clean -fx -e testdb ./docker
+  # git-ignored. Keep persistent databases.
+  git clean -fx -e dbs -e 'dbs_*' ./docker
 
   echo "Copying JORE4 Docker Compose bundle files to ./docker directory..."
 

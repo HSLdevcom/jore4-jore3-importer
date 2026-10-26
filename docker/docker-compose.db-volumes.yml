@@ -1,10 +1,12 @@
 services:
   jore4-testdb:
     # preserve db's state to local disk to avoid data loss if db container is removed
+    # PostgreSQL 18+ stores data in a version-specific subdirectory (18/docker).
+    # Mount the parent directory, not the pre-18 /var/lib/postgresql/data path.
     volumes:
-      - './dbs/testdb:/var/lib/postgresql/data'
+      - './dbs/testdb:/var/lib/postgresql'
 
   jore4-mapmatchingdb:
     # preserve db's state to local disk to avoid data loss if db container is removed
     volumes:
-      - './dbs/mapmatchingdb:/var/lib/postgresql/data'
+      - './dbs/mapmatchingdb:/var/lib/postgresql'
