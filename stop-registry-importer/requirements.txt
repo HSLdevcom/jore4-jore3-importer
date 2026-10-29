@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=./stop-registry-importer/requirements.txt --strip-extras ./stop-registry-importer/requirements.in
 #
-certifi==2026.10.18
+certifi==2026.10.23
     # via requests
 charset-normalizer==3.5.2
     # via requests
@@ -12,7 +12,7 @@ django-environ==0.14.0
     # via -r stop-registry-importer/requirements.in
 idna==3.20
     # via requests
-pymssql==2.4.4
+pymssql==2.4.6
     # via -r stop-registry-importer/requirements.in
 requests==2.34.2
     # via -r stop-registry-importer/requirements.in
