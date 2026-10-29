@@ -9,14 +9,16 @@ set -eu
 FILE_DATE=$(date "+%Y-%m-%d")
 TARGET_DIR="$(dirname "$(dirname "$(dirname "$(realpath "$0")")")")/jore-data/database_dumps/${FILE_DATE}"
 SUFFIX=""
+ZIP=false
 
 # Function to print usage information
 print_usage() {
-  echo "Usage: $0 --database|--db DATABASE_NAME [--target-dir|-t TARGET_DIRECTORY] [--suffix|-s dev|test]"
+  echo "Usage: $0 --database|--db DATABASE_NAME [--target-dir|-t TARGET_DIRECTORY] [--suffix|-s dev|test] [--zip|-z]"
   echo "  --database, -db      Name of dumped database to convert (required)"
   echo "  --target-dir, -t     Target directory for dump file (optional, default: ${TARGET_DIR})"
   echo "  --suffix, -s         Suffix to append to database environment names (optional, dev | test, default: empty)"
   echo "  --date, -d           Date to use in the filename (optional, default: ${FILE_DATE})"
+  echo "  --zip, -z            Create a ZIP archive with maximum compression, keeping the SQL file"
   echo "  -h, --help           Show this help message"
 }
 
@@ -63,6 +65,11 @@ while [[ $# -gt 0 ]]; do
           exit 1
           ;;
       esac
+      ;;
+
+    --zip|-z)
+      ZIP=true
+      shift
       ;;
 
     -h|--help)
@@ -118,3 +125,7 @@ sed -i '' "s/dbadmin/dbadmin${SUFFIX}/g" "$TARGET_FILE"
 sed -i '' "s/dbhasura/dbhasura${SUFFIX}/g" "$TARGET_FILE"
 sed -i '' "s/dbimporter/dbjore3importer${SUFFIX}/g" "$TARGET_FILE"
 sed -i '' "s/dbtimetablesapi/dbtimetablesapi${SUFFIX}/g" "$TARGET_FILE"
+
+if [[ "$ZIP" == true ]]; then
+  zip -v9 -j "${TARGET_FILE}.zip" "$TARGET_FILE"
+fi

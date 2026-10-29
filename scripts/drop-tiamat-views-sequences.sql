@@ -16,6 +16,8 @@ DROP VIEW IF EXISTS place_equipment;
 
 DROP VIEW IF EXISTS group_of_stop_places_newest_version;
 
+DROP VIEW IF EXISTS resolve_current_jore_stop_key_values;
+
 
 -- ============================================================================
 -- DROP SEQUENCES (in any order since they're independent)
@@ -83,3 +85,26 @@ DROP SEQUENCE IF EXISTS organisation_seq;
 -- Sequences from V46.6__add_info_spots.sql
 DROP SEQUENCE IF EXISTS info_spot_seq;
 DROP SEQUENCE IF EXISTS info_spot_poster_seq;
+
+-- Sequences from V51__create_table_local_services.sql
+DROP SEQUENCE IF EXISTS local_service_seq;
+
+-- Sequences from V52__create_table_quay_facilities.sql
+DROP SEQUENCE IF EXISTS site_facility_set_seq;
+
+-- Sequences from V53__add_stop_place_postal_address.sql
+DROP SEQUENCE IF EXISTS postal_address_seq;
+
+-- Sequences from V59__add_multi_surface_support.sql
+DROP SEQUENCE IF EXISTS persistable_multi_polygon_seq;
+
+-- Sequences from V68__add_parking_entrance_for_vehicles.sql
+DROP SEQUENCE IF EXISTS parking_entrance_for_vehicles_seq;
+
+
+-- ============================================================================
+-- DROP FUNCTIONS
+-- ============================================================================
+
+-- Function from V73__id_generator_position.sql
+DROP FUNCTION IF EXISTS next_gapless_id(character varying, integer, text, integer);
