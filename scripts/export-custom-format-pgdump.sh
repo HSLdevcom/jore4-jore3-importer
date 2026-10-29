@@ -6,13 +6,14 @@ set -eu
 # It is jore-data/database_dumps, where jore-data is next to the project directory.
 # The three dirname calls each remove a segment from the end of the path; first the script name, then 'scripts'
 # directory, and finally the project directory.
-TARGET_DIR="$(dirname "$(dirname "$(dirname "$(realpath "$0")")")")/jore-data/database_dumps"
+TARGET_BASE_DIR="$(dirname "$(dirname "$(dirname "$(realpath "$0")")")")/jore-data/database_dumps"
 
 # Function to print usage information
 print_usage() {
-  echo "Usage: $0 --database|--db DATABASE_NAME [--target-dir|-t TARGET_DIRECTORY]"
+  echo "Usage: $0 --database|--db DATABASE_NAME [--target-dir|-t TARGET_DIRECTORY] [--date|-d DATE_STRING] [--user|-u DATABASE_USER] [--container|-c DOCKER_CONTAINER_NAME] [-h]"
   echo "  --database, -db      Database name to dump (required)"
   echo "  --target-dir, -t     Target directory for dump file (optional, default: ${TARGET_DIR})"
+  echo "  --date, -d           Date to use in directory and dump file names. Default: today"
   echo "  --user, -u           Database user (optional, default: dbadmin)"
   echo "  --container, -c      Docker container name (optional, default: testdb)"
   echo "  -h, --help           Show this help message"
@@ -21,6 +22,9 @@ print_usage() {
 DATABASE=""
 USER="dbadmin"
 CONTAINER="testdb"
+DATE=$(date +%Y-%m-%d)
+TARGET_DIR="${TARGET_BASE_DIR}/${DATE}"
+TARGET_DIR_EXPLICIT=false
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -42,6 +46,15 @@ while [[ $# -gt 0 ]]; do
 
     --target-dir|-t)
       TARGET_DIR="$2"
+      TARGET_DIR_EXPLICIT=true
+      shift 2
+      ;;
+
+    --date|-d)
+      DATE="$2"
+      if [[ "$TARGET_DIR_EXPLICIT" = false ]]; then
+        TARGET_DIR="${TARGET_BASE_DIR}/${DATE}"
+      fi
       shift 2
       ;;
 
@@ -65,7 +78,7 @@ if [[ -z "$DATABASE" ]]; then
   exit 1
 fi
 
-TARGET_FILE_BASENAME=$(date "+%Y-%m-%d")-jore4-local-"$DATABASE"
+TARGET_FILE_BASENAME=${DATE}-jore4-local-"$DATABASE"
 
 echo Target directory: "$TARGET_DIR"
 mkdir -p "$TARGET_DIR"

@@ -11,28 +11,31 @@ TARGET_BASE_DIR="$(dirname "$(dirname "${SCRIPT_DIR}")")/jore-data/database_dump
 
 # Function to print usage information
 print_usage() {
-  echo "Usage: $0 [--date DATE_STRING] [-h] [--target-dir|-t TARGET_DIRECTORY]"
-  echo "  --date               Date to use in directory and dump file names. Default: today"
+  echo "Usage: $0 [--date|-d DATE_STRING] [-h] [--target-dir|-t TARGET_DIRECTORY]"
+  echo "  --date, -d           Date to use in directory and dump file names. Default: today"
   echo "  --target-dir, -t     Target directory for dump file (optional, default: ${TARGET_DIR})"
-  echo "  -h, --help           Show this help message"
+  echo "  --help, -h           Show this help message"
 }
 
-DATE=`date +%Y-%m-%d`
+DATE=$(date +%Y-%m-%d)
+TARGET_DIR="${TARGET_BASE_DIR}/${DATE}"
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --date)
+    --date|-d)
       DATE="$2"
+      TARGET_DIR="${TARGET_BASE_DIR}/${DATE}"
       shift 2
       ;;
 
     --target-dir|-t)
       TARGET_BASE_DIR="$2"
+      TARGET_DIR="${TARGET_BASE_DIR}/${DATE}"
       shift 2
       ;;
 
-    -h|--help)
+    --help|-h)
       print_usage
       exit 0
       ;;
@@ -45,26 +48,28 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-TARGET_DIR="${TARGET_BASE_DIR}/${DATE}"
-
 run_cmd() {
   echo ""
   echo "Running command: $*"
   "$@"
 }
 
-run_cmd ${SCRIPT_DIR}/export-custom-format-pgdump.sh --target-dir "${TARGET_DIR}" --database jore4e2e
-run_cmd ${SCRIPT_DIR}/export-custom-format-pgdump.sh --target-dir "${TARGET_DIR}" --database timetablesdb
-run_cmd ${SCRIPT_DIR}/export-custom-format-pgdump.sh --target-dir "${TARGET_DIR}" --database stopdb
+echo Target date: "$DATE"
+echo Target directory: "$TARGET_DIR"
+mkdir -p "$TARGET_DIR"
 
-run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --database jore4e2e
-run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --database timetablesdb
-run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --database stopdb
+run_cmd ${SCRIPT_DIR}/export-custom-format-pgdump.sh --target-dir "${TARGET_DIR}" --date "${DATE}" --database jore4e2e
+run_cmd ${SCRIPT_DIR}/export-custom-format-pgdump.sh --target-dir "${TARGET_DIR}" --date "${DATE}" --database timetablesdb
+run_cmd ${SCRIPT_DIR}/export-custom-format-pgdump.sh --target-dir "${TARGET_DIR}" --date "${DATE}" --database stopdb
 
-run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --database jore4e2e -s dev
-run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --database timetablesdb -s dev
-run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --database stopdb -s dev
+run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --target-dir "${TARGET_DIR}" --date "${DATE}" --zip --database jore4e2e
+run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --target-dir "${TARGET_DIR}" --date "${DATE}" --database timetablesdb
+run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --target-dir "${TARGET_DIR}" --date "${DATE}" --database stopdb
 
-run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --database jore4e2e -s test
-run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --database timetablesdb -s test
-run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --database stopdb -s test
+run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --target-dir "${TARGET_DIR}" --date "${DATE}" --zip --database jore4e2e -s dev
+run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --target-dir "${TARGET_DIR}" --date "${DATE}" --database timetablesdb -s dev
+run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --target-dir "${TARGET_DIR}" --date "${DATE}" --database stopdb -s dev
+
+run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --target-dir "${TARGET_DIR}" --date "${DATE}" --zip --database jore4e2e -s test
+run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --target-dir "${TARGET_DIR}" --date "${DATE}" --database timetablesdb -s test
+run_cmd ${SCRIPT_DIR}/convert-pgdump-to-sql.sh --target-dir "${TARGET_DIR}" --date "${DATE}" --database stopdb -s test

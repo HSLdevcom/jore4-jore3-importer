@@ -104,7 +104,7 @@ Jore4 Target (Hasura GraphQL — stop_registry.mutateStopPlace):
         luokka               → stepFreeAccess                  True if luokka == 1, else False
 
     Limitations (all hardcoded to FALSE):
-        audibleSignalsAvailable, escalatorFreeAccess, liftFreeAccess,
+        visualSignsAvailable, audibleSignalsAvailable, escalatorFreeAccess, liftFreeAccess,
 
     Shelter equipment (per quay, from jr_esteettomyys):
         Jore3 column         → GraphQL field                   Conversion
@@ -753,6 +753,7 @@ def getHslAccessibilityProperties(jore3row):
 def getAccessibilityLimitations(jore3row):
     luokkaIs1 = "TRUE" if jore3row['luokka'] == 1 else "FALSE"
     limitations = {
+        'visualSignsAvailable': 'UNKNOWN',
         "audibleSignalsAvailable": 'UNKNOWN',
         "escalatorFreeAccess": 'UNKNOWN',
         #"id": None,

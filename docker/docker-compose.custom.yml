@@ -2,6 +2,16 @@
 services:
   jore4-ui:
     platform: linux/amd64
+    depends_on:
+      jore4-hasura:
+        condition: service_healthy
+
+  jore4-auth:
+    # Manually overwrite the https return address for auth so that it works when running without a proxy locally
+    environment:
+      LOGINPAGE_URL: "http://localhost:3300"
+      LOGOUTPAGE_URL: "http://localhost:3300"
+      SELF_PUBLIC_BASE_URL: "http://localhost:3300"
 
   jore4-jore3importer:
     # build and run the docker image from the local repo
