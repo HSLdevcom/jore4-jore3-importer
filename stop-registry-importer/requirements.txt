@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=./stop-registry-importer/requirements.txt --strip-extras ./stop-registry-importer/requirements.in
 #
-certifi==2026.10.23
+certifi==2026.11.20
     # via requests
 charset-normalizer==3.5.2
     # via requests
@@ -16,7 +16,7 @@ pymssql==2.4.6
     # via -r stop-registry-importer/requirements.in
 requests==2.34.2
     # via -r stop-registry-importer/requirements.in
-simplejson==4.2.0
+simplejson==4.3.0
     # via -r stop-registry-importer/requirements.in
 urllib3==2.8.0
     # via requests
